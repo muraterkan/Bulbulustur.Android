@@ -1,0 +1,14 @@
+package com.bulbulustur.android.features.wholesale
+
+object WholesaleRoutes {
+    const val Home = "wholesale/home"
+    const val CategoryHome = "wholesale/category-home"
+    const val CategoryDetail = "wholesale/category-detail"
+    const val ProductList = "wholesale/product-list"
+    const val ProductDetail = "wholesale/product-detail"
+    const val Search = "wholesale/search"
+    const val LastPriceRequest = "wholesale/last-price-request"
+    const val SampleRequest = "wholesale/sample-request"
+    const val CustomizationRequest = "wholesale/customization-request"
+    const val Menu = "wholesale/menu"
+}

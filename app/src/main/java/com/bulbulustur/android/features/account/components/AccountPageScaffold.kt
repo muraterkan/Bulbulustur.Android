@@ -1,8 +1,8 @@
 package com.bulbulustur.android.features.account.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -13,138 +13,148 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Surface
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.bulbulustur.android.ui.components.BbButton
+import com.bulbulustur.android.ui.components.BbButtonSize
+import com.bulbulustur.android.ui.components.BbButtonVariant
+import com.bulbulustur.android.ui.components.BbCard
+import com.bulbulustur.android.ui.components.BbCardPadding
+import com.bulbulustur.android.ui.components.BbCardVariant
 import com.bulbulustur.android.ui.theme.BbColors
 import com.bulbulustur.android.ui.theme.BbSpacing
-import com.bulbulustur.android.ui.theme.BbTypography
 
 @Composable
 fun AccountPageScaffold(
     title: String,
-    subtitle: String? = null,
-    showBackButton: Boolean = true,
-    onBackClick: () -> Unit = {},
-    contentPadding: PaddingValues = PaddingValues(horizontal = BbSpacing.md),
-    verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(BbSpacing.md),
+    modifier: Modifier = Modifier,
+    kicker: String? = null,
+    description: String? = null,
+    backButtonText: String? = null,
+    onBackClick: (() -> Unit)? = null,
+    actionContent: (@Composable () -> Unit)? = null,
+    contentPadding: PaddingValues = PaddingValues(
+        horizontal = BbSpacing.PageHorizontal,
+        vertical = BbSpacing.PageTopCompact
+    ),
     content: @Composable () -> Unit
 ) {
-    Column(
-        modifier = Modifier
+    Box(
+        modifier = modifier
             .fillMaxSize()
-            .background(BbColors.SurfaceMuted)
+            .background(MaterialTheme.colorScheme.background)
             .statusBarsPadding()
             .navigationBarsPadding()
-            .padding(contentPadding)
     ) {
-        AccountPageTopBar(
-            title = title,
-            subtitle = subtitle,
-            showBackButton = showBackButton,
-            onBackClick = onBackClick
-        )
-
-        Spacer(modifier = Modifier.height(BbSpacing.md))
-
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = verticalArrangement
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(contentPadding),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.SectionGapCompact)
         ) {
-            item {
-                content()
-            }
-
-            item {
-                Spacer(modifier = Modifier.height(BbSpacing.md))
-            }
-        }
-    }
-}
-
-@Composable
-private fun AccountPageTopBar(
-    title: String,
-    subtitle: String?,
-    showBackButton: Boolean,
-    onBackClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = BbSpacing.sm),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        if (showBackButton) {
-            AccountBackButton(
-                onBackClick = onBackClick
+            AccountPageHeader(
+                title = title,
+                kicker = kicker,
+                description = description,
+                backButtonText = backButtonText,
+                onBackClick = onBackClick,
+                actionContent = actionContent
             )
-        }
 
-        AccountPageTitleBlock(
-            title = title,
-            subtitle = subtitle,
-            hasBackButton = showBackButton
-        )
+            content()
+        }
     }
 }
 
 @Composable
-private fun AccountBackButton(
-    onBackClick: () -> Unit
-) {
-    Surface(
-        shape = CircleShape,
-        color = BbColors.SurfaceMuted,
-        modifier = Modifier.clickable {
-            onBackClick()
-        }
-    ) {
-        Icon(
-            imageVector = Icons.Outlined.ArrowBack,
-            contentDescription = "Geri dön",
-            tint = BbColors.TextStrong,
-            modifier = Modifier.padding(BbSpacing.sm)
-        )
-    }
-}
-
-@Composable
-private fun AccountPageTitleBlock(
+private fun AccountPageHeader(
     title: String,
-    subtitle: String?,
-    hasBackButton: Boolean
+    kicker: String?,
+    description: String?,
+    backButtonText: String?,
+    onBackClick: (() -> Unit)?,
+    actionContent: (@Composable () -> Unit)?
 ) {
-    val titleModifier = if (hasBackButton) {
-        Modifier.padding(start = BbSpacing.md)
-    } else {
-        Modifier
-    }
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+        ) {
+            if (backButtonText != null && onBackClick != null) {
+                BbButton(
+                    text = backButtonText,
+                    onClick = onBackClick,
+                    variant = BbButtonVariant.Light,
+                    size = BbButtonSize.Small
+                )
 
-    Column(
-        modifier = titleModifier
+                Spacer(modifier = Modifier.height(BbSpacing.Space1))
+            }
+
+            if (kicker != null) {
+                AccountPageKicker(
+                    text = kicker
+                )
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
+                verticalAlignment = Alignment.Top
+            ) {
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+                ) {
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+
+                    if (description != null) {
+                        Text(
+                            text = description,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+
+                if (actionContent != null) {
+                    actionContent()
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun AccountPageKicker(
+    text: String
+) {
+    Box(
+        modifier = Modifier
+            .background(
+                color = BbColors.Yellow.Yellow100,
+                shape = com.bulbulustur.android.ui.theme.BbRadius.Chip
+            )
+            .padding(
+                horizontal = BbSpacing.ChipPaddingHorizontal,
+                vertical = BbSpacing.ChipPaddingVertical
+            )
     ) {
         Text(
-            text = title,
-            style = BbTypography.titleMedium,
-            color = BbColors.TextStrong
+            text = text,
+            style = MaterialTheme.typography.labelSmall,
+            color = BbColors.Yellow.Yellow800
         )
-
-        if (!subtitle.isNullOrBlank()) {
-            Spacer(modifier = Modifier.height(BbSpacing.xs))
-
-            Text(
-                text = subtitle,
-                style = BbTypography.bodySmall,
-                color = BbColors.TextMuted
-            )
-        }
     }
 }

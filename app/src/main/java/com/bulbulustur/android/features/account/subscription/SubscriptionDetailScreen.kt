@@ -1,254 +1,252 @@
 package com.bulbulustur.android.features.account.subscription
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.bulbulustur.android.features.account.components.AccountPageScaffold
 import com.bulbulustur.android.ui.components.BbButton
+import com.bulbulustur.android.ui.components.BbButtonSize
 import com.bulbulustur.android.ui.components.BbButtonVariant
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
-import com.bulbulustur.android.ui.components.BbChip
+import com.bulbulustur.android.ui.theme.BbColors
+import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
-
-data class SubscriptionDetailUiState(
-    val subscriptionId: Int,
-    val subscriptionName: String,
-    val subscriptionType: String,
-    val planType: String,
-    val startDateText: String,
-    val endDateText: String,
-    val planPriceText: String,
-    val isActive: Boolean
-)
 
 @Composable
 fun SubscriptionDetailScreen(
-    subscriptionDetail: SubscriptionDetailUiState = createSampleSubscriptionDetail(),
-    onBackClick: () -> Unit = {}
+    subscriptionId: Int = 1,
+    onBackClick: () -> Unit = {},
+    onCancelSubscriptionClick: (Int) -> Unit = {}
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(
-                horizontal = BbSpacing.PageHorizontal,
-                vertical = BbSpacing.PageTop
-            ),
-        verticalArrangement = Arrangement.spacedBy(BbSpacing.SectionGap)
-    ) {
-        SubscriptionDetailHeroCard(
-            subscriptionDetail = subscriptionDetail,
-            onBackClick = onBackClick
-        )
+    val subscription = getDemoSubscriptionDetail(subscriptionId)
 
-        SubscriptionMetricCards(
-            subscriptionDetail = subscriptionDetail
-        )
-
-        SubscriptionPlanInfoCard(
-            subscriptionDetail = subscriptionDetail
-        )
-    }
-}
-
-@Composable
-private fun SubscriptionDetailHeroCard(
-    subscriptionDetail: SubscriptionDetailUiState,
-    onBackClick: () -> Unit
-) {
-    BbCard(
-        modifier = Modifier.fillMaxWidth(),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Large
+    AccountPageScaffold(
+        title = "Abonelik Detayı",
+        kicker = "Paket Bilgisi",
+        description = "Seçili abonelik paketine ait dönem, ödeme ve durum bilgilerini buradan inceleyebilirsiniz.",
+        backButtonText = "Aboneliklerime Dön",
+        onBackClick = onBackClick
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
         ) {
-            BbChip(
-                text = if (subscriptionDetail.isActive) {
-                    "Aktif Abonelik"
-                } else {
-                    "Pasif Abonelik"
-                }
-            )
-
-            Text(
-                text = subscriptionDetail.subscriptionName,
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-
-            Text(
-                text = "Abonelik dönemin ve plan ücretin aşağıdaki bilgilerle kayıtlıdır.",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-
-            BbButton(
-                text = "Aboneliklerime Dön",
-                onClick = onBackClick,
+            BbCard(
                 modifier = Modifier.fillMaxWidth(),
-                variant = BbButtonVariant.Outline
-            )
+                variant = BbCardVariant.Outlined,
+                padding = BbCardPadding.Medium
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
+                ) {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+                    ) {
+                        Text(
+                            text = subscription.title,
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+
+                        Text(
+                            text = subscription.description,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+
+                    SubscriptionDetailStatusBox(
+                        statusText = subscription.statusText,
+                        active = subscription.active
+                    )
+                }
+            }
+
+            BbCard(
+                modifier = Modifier.fillMaxWidth(),
+                variant = BbCardVariant.Outlined,
+                padding = BbCardPadding.Medium
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+                ) {
+                    SubscriptionDetailRow(
+                        label = "Abonelik No",
+                        value = subscription.subscriptionNumber
+                    )
+
+                    SubscriptionDetailRow(
+                        label = "Başlangıç Tarihi",
+                        value = subscription.startDate
+                    )
+
+                    SubscriptionDetailRow(
+                        label = "Bitiş Tarihi",
+                        value = subscription.endDate
+                    )
+
+                    SubscriptionDetailRow(
+                        label = "Paket Ücreti",
+                        value = subscription.priceText
+                    )
+
+                    SubscriptionDetailRow(
+                        label = "Yenileme",
+                        value = subscription.renewalText
+                    )
+                }
+            }
+
+            BbCard(
+                modifier = Modifier.fillMaxWidth(),
+                variant = BbCardVariant.Outlined,
+                padding = BbCardPadding.Medium
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+                ) {
+                    Text(
+                        text = "Paket Kapsamı",
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+
+                    subscription.features.forEach { feature ->
+                        SubscriptionFeatureText(
+                            text = feature
+                        )
+                    }
+                }
+            }
+
+            if (subscription.active) {
+                BbButton(
+                    text = "Aboneliği İptal Et",
+                    onClick = {
+                        onCancelSubscriptionClick(subscription.subscriptionId)
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    variant = BbButtonVariant.Danger,
+                    size = BbButtonSize.Medium
+                )
+            }
         }
     }
 }
 
 @Composable
-private fun SubscriptionMetricCards(
-    subscriptionDetail: SubscriptionDetailUiState
-) {
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
-    ) {
-        SubscriptionMetricCard(
-            title = "Başlangıç Tarihi",
-            value = subscriptionDetail.startDateText
-        )
-
-        SubscriptionMetricCard(
-            title = "Bitiş Tarihi",
-            value = subscriptionDetail.endDateText
-        )
-
-        SubscriptionMetricCard(
-            title = "Plan Ücreti",
-            value = subscriptionDetail.planPriceText
-        )
-    }
-}
-
-@Composable
-private fun SubscriptionMetricCard(
-    title: String,
-    value: String
-) {
-    BbCard(
-        modifier = Modifier.fillMaxWidth(),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium
-    ) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
-        ) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-
-            Text(
-                text = value,
-                style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-        }
-    }
-}
-
-@Composable
-private fun SubscriptionPlanInfoCard(
-    subscriptionDetail: SubscriptionDetailUiState
-) {
-    BbCard(
-        modifier = Modifier.fillMaxWidth(),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Large
-    ) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
-        ) {
-            Text(
-                text = "Plan Bilgileri",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-
-            Text(
-                text = "Aboneliğinin temel plan, dönem ve ücret bilgileri.",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-
-            SubscriptionInfoRow(
-                label = "Abonelik Tipi",
-                value = subscriptionDetail.subscriptionType
-            )
-
-            SubscriptionInfoRow(
-                label = "Plan Tipi",
-                value = subscriptionDetail.planType
-            )
-
-            SubscriptionInfoRow(
-                label = "Başlangıç Tarihi",
-                value = subscriptionDetail.startDateText
-            )
-
-            SubscriptionInfoRow(
-                label = "Bitiş Tarihi",
-                value = subscriptionDetail.endDateText
-            )
-
-            SubscriptionInfoRow(
-                label = "Plan Fiyatı",
-                value = subscriptionDetail.planPriceText
-            )
-        }
-    }
-}
-
-@Composable
-private fun SubscriptionInfoRow(
+private fun SubscriptionDetailRow(
     label: String,
     value: String
 ) {
-    BbCard(
+    Column(
         modifier = Modifier.fillMaxWidth(),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium
+        verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
     ) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
-        ) {
-            Text(
-                text = label,
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
 
-            Text(
-                text = value,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-        }
+        Text(
+            text = value,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface
+        )
     }
 }
 
-private fun createSampleSubscriptionDetail(): SubscriptionDetailUiState {
-    return SubscriptionDetailUiState(
-        subscriptionId = 3,
-        subscriptionName = "B2B e-marketplace / Free",
-        subscriptionType = "B2B e-marketplace",
-        planType = "Free",
-        startDateText = "25.09.2025",
-        endDateText = "25.09.2026",
-        planPriceText = "0,00 TL",
-        isActive = true
+@Composable
+private fun SubscriptionDetailStatusBox(
+    statusText: String,
+    active: Boolean
+) {
+    val backgroundColor = if (active) {
+        BbColors.Green.Green50
+    } else {
+        BbColors.Gray.Gray100
+    }
+
+    val textColor = if (active) {
+        BbColors.Green.Green700
+    } else {
+        BbColors.Gray.Gray700
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                color = backgroundColor,
+                shape = BbRadius.LgShape
+            )
+            .padding(BbSpacing.CardPaddingCompact)
+    ) {
+        Text(
+            text = statusText,
+            style = MaterialTheme.typography.labelLarge,
+            color = textColor
+        )
+    }
+}
+
+@Composable
+private fun SubscriptionFeatureText(
+    text: String
+) {
+    Text(
+        text = "• $text",
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant
     )
 }
+
+private fun getDemoSubscriptionDetail(
+    subscriptionId: Int
+): SubscriptionDetailUiModel {
+    return SubscriptionDetailUiModel(
+        subscriptionId = subscriptionId,
+        subscriptionNumber = "SUB-2026-000$subscriptionId",
+        title = "Bulbulustur Standart Paket",
+        description = "Bulbulustur üzerinde daha görünür olmak ve temel avantajlardan yararlanmak için kullanılan örnek abonelik paketi.",
+        priceText = "₺249,90 / ay",
+        startDate = "01 Mayıs 2026",
+        endDate = "01 Haziran 2026",
+        renewalText = "Aylık yenileme",
+        statusText = "Aktif abonelik",
+        active = true,
+        features = listOf(
+            "Hesap görünürlüğü",
+            "Temel destek önceliği",
+            "Standart ilan ve vitrin kullanım hakları",
+            "Mobil uygulama üzerinden abonelik takibi"
+        )
+    )
+}
+
+private data class SubscriptionDetailUiModel(
+    val subscriptionId: Int,
+    val subscriptionNumber: String,
+    val title: String,
+    val description: String,
+    val priceText: String,
+    val startDate: String,
+    val endDate: String,
+    val renewalText: String,
+    val statusText: String,
+    val active: Boolean,
+    val features: List<String>
+)

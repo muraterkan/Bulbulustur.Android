@@ -1,355 +1,409 @@
 package com.bulbulustur.android.features.account.security
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
+import com.bulbulustur.android.features.account.components.AccountPageScaffold
 import com.bulbulustur.android.ui.components.BbButton
+import com.bulbulustur.android.ui.components.BbButtonSize
 import com.bulbulustur.android.ui.components.BbButtonVariant
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
-import com.bulbulustur.android.ui.components.BbChip
-import com.bulbulustur.android.ui.components.form.BbFormSection
-import com.bulbulustur.android.ui.components.form.BbPasswordInput
+import com.bulbulustur.android.ui.theme.BbColors
+import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
-
-data class ChangePasswordFormState(
-    val currentPassword: String = "",
-    val newPassword: String = "",
-    val repeatedNewPassword: String = "",
-    val validationMessage: String? = null
-) {
-    val hasMinimumLength: Boolean
-        get() {
-            return newPassword.length >= 8
-        }
-
-    val hasLetter: Boolean
-        get() {
-            return newPassword.any { character ->
-                character.isLetter()
-            }
-        }
-
-    val hasDigit: Boolean
-        get() {
-            return newPassword.any { character ->
-                character.isDigit()
-            }
-        }
-
-    val hasSpecialCharacter: Boolean
-        get() {
-            return newPassword.any { character ->
-                !character.isLetterOrDigit()
-            }
-        }
-
-    val passwordsMatch: Boolean
-        get() {
-            return newPassword.isNotBlank() && newPassword == repeatedNewPassword
-        }
-
-    val strengthScore: Int
-        get() {
-            var score = 0
-
-            if (hasMinimumLength) {
-                score += 1
-            }
-
-            if (hasLetter) {
-                score += 1
-            }
-
-            if (hasDigit) {
-                score += 1
-            }
-
-            if (hasSpecialCharacter) {
-                score += 1
-            }
-
-            return score
-        }
-
-    val strengthProgress: Float
-        get() {
-            return strengthScore / 4f
-        }
-
-    val strengthLabel: String
-        get() {
-            return when (strengthScore) {
-                0, 1 -> "Zayıf şifre"
-                2 -> "Orta seviye şifre"
-                3 -> "Güçlü şifre"
-                else -> "Çok güçlü şifre"
-            }
-        }
-
-    val canSubmit: Boolean
-        get() {
-            return currentPassword.isNotBlank() &&
-                    hasMinimumLength &&
-                    hasLetter &&
-                    hasDigit &&
-                    passwordsMatch
-        }
-}
 
 @Composable
 fun ChangePasswordScreen(
+    isLoading: Boolean = false,
+    errorMessage: String? = null,
+    successMessage: String? = null,
     onBackClick: () -> Unit = {},
-    onPasswordChangeClick: (ChangePasswordFormState) -> Unit = {},
-    onLoginActivitiesClick: () -> Unit = {},
-    onChangeEmailClick: () -> Unit = {},
-    onDeactivateAccountClick: () -> Unit = {},
-    isSubmitting: Boolean = false
+    onSaveClick: (
+        oldPassword: String,
+        newPassword: String,
+        newPasswordAgain: String
+    ) -> Unit = { _, _, _ -> }
 ) {
-    val formState = remember {
-        mutableStateOf(ChangePasswordFormState())
+    val oldPasswordState = remember {
+        mutableStateOf("")
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(
-                horizontal = BbSpacing.PageHorizontal,
-                vertical = BbSpacing.PageTop
-            ),
-        verticalArrangement = Arrangement.spacedBy(BbSpacing.SectionGap)
+    val newPasswordState = remember {
+        mutableStateOf("")
+    }
+
+    val newPasswordAgainState = remember {
+        mutableStateOf("")
+    }
+
+    val showOldPasswordState = remember {
+        mutableStateOf(false)
+    }
+
+    val showNewPasswordState = remember {
+        mutableStateOf(false)
+    }
+
+    val showNewPasswordAgainState = remember {
+        mutableStateOf(false)
+    }
+
+    val passwordValidationState = remember(
+        oldPasswordState.value,
+        newPasswordState.value,
+        newPasswordAgainState.value
     ) {
-        BbButton(
-            text = "Hesabıma Dön",
-            onClick = onBackClick,
-            variant = BbButtonVariant.Outline
-        )
-
-        Column(
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            BbChip(
-                text = "Şifre Güvenliği"
-            )
-
-            Text(
-                text = "Şifre Değiştir",
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-
-            Text(
-                text = "Hesabın için güçlü, tahmin edilmesi zor ve daha önce kullanmadığın yeni bir şifre belirle.",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+        derivedStateOf {
+            validatePasswordForm(
+                oldPassword = oldPasswordState.value,
+                newPassword = newPasswordState.value,
+                newPasswordAgain = newPasswordAgainState.value
             )
         }
+    }
 
-        BbFormSection(
-            title = "Yeni şifreni belirle"
+    val canSubmit = passwordValidationState.value.canSubmit && !isLoading
+
+    AccountPageScaffold(
+        title = "Şifre Değiştir",
+        kicker = "Hesap Güvenliği",
+        description = "Hesabınızın şifresini güçlü ve size özel bir şifreyle güncelleyin.",
+        backButtonText = "Güvenliğe Dön",
+        onBackClick = onBackClick
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
         ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap),
-                modifier = Modifier.fillMaxWidth()
+            BbCard(
+                modifier = Modifier.fillMaxWidth(),
+                variant = BbCardVariant.Outlined,
+                padding = BbCardPadding.Medium
             ) {
-                Text(
-                    text = "Hesabını korumak için en az 8 karakterli, harf ve rakam içeren bir şifre kullan.",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-
-                BbPasswordInput(
-                    value = formState.value.currentPassword,
-                    onValueChange = { currentPassword ->
-                        formState.value = formState.value.copy(
-                            currentPassword = currentPassword,
-                            validationMessage = null
-                        )
-                    },
-                    label = "Mevcut Şifre",
-                    placeholder = "Mevcut şifren"
-                )
-
-                BbPasswordInput(
-                    value = formState.value.newPassword,
-                    onValueChange = { newPassword ->
-                        formState.value = formState.value.copy(
-                            newPassword = newPassword,
-                            validationMessage = null
-                        )
-                    },
-                    label = "Yeni Şifre",
-                    placeholder = "Yeni şifren"
-                )
-
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
                 ) {
-                    LinearProgressIndicator(
-                        progress = {
-                            formState.value.strengthProgress
+                    PasswordTextField(
+                        value = oldPasswordState.value,
+                        onValueChange = { value ->
+                            oldPasswordState.value = value
+                        },
+                        label = "Mevcut Şifre",
+                        visible = showOldPasswordState.value,
+                        onVisibilityChange = {
+                            showOldPasswordState.value = !showOldPasswordState.value
+                        }
+                    )
+
+                    PasswordTextField(
+                        value = newPasswordState.value,
+                        onValueChange = { value ->
+                            newPasswordState.value = value
+                        },
+                        label = "Yeni Şifre",
+                        visible = showNewPasswordState.value,
+                        onVisibilityChange = {
+                            showNewPasswordState.value = !showNewPasswordState.value
+                        }
+                    )
+
+                    PasswordTextField(
+                        value = newPasswordAgainState.value,
+                        onValueChange = { value ->
+                            newPasswordAgainState.value = value
+                        },
+                        label = "Yeni Şifre Tekrar",
+                        visible = showNewPasswordAgainState.value,
+                        onVisibilityChange = {
+                            showNewPasswordAgainState.value = !showNewPasswordAgainState.value
+                        }
+                    )
+
+                    PasswordRuleBox(
+                        validation = passwordValidationState.value
+                    )
+
+                    errorMessage?.takeIf { message ->
+                        message.isNotBlank()
+                    }?.let { message ->
+                        PasswordMessageBox(
+                            title = "İşlem Tamamlanamadı",
+                            message = message,
+                            type = PasswordMessageType.Error
+                        )
+                    }
+
+                    successMessage?.takeIf { message ->
+                        message.isNotBlank()
+                    }?.let { message ->
+                        PasswordMessageBox(
+                            title = "Şifre Güncellendi",
+                            message = message,
+                            type = PasswordMessageType.Success
+                        )
+                    }
+
+                    BbButton(
+                        text = "Şifreyi Güncelle",
+                        onClick = {
+                            onSaveClick(
+                                oldPasswordState.value,
+                                newPasswordState.value,
+                                newPasswordAgainState.value
+                            )
                         },
                         modifier = Modifier.fillMaxWidth(),
-                        color = MaterialTheme.colorScheme.error,
-                        trackColor = MaterialTheme.colorScheme.surfaceVariant
-                    )
-
-                    Text(
-                        text = formState.value.strengthLabel,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        variant = BbButtonVariant.Primary,
+                        size = BbButtonSize.Medium,
+                        enabled = canSubmit,
+                        isLoading = isLoading
                     )
                 }
-
-                BbPasswordInput(
-                    value = formState.value.repeatedNewPassword,
-                    onValueChange = { repeatedNewPassword ->
-                        formState.value = formState.value.copy(
-                            repeatedNewPassword = repeatedNewPassword,
-                            validationMessage = null
-                        )
-                    },
-                    label = "Yeniden Yeni Şifre",
-                    placeholder = "Yeni şifreni tekrar gir"
-                )
-
-                ChangePasswordRuleGrid(
-                    formState = formState.value
-                )
-
-                BbCard(
-                    modifier = Modifier.fillMaxWidth(),
-                    variant = BbCardVariant.Outlined,
-                    padding = BbCardPadding.Medium
-                ) {
-                    Text(
-                        text = "Şifreni değiştirdikten sonra hesabında güvenlik kontrolü yapılabilir. Şifreni kimseyle paylaşma.",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-
-                if (formState.value.validationMessage != null) {
-                    Text(
-                        text = formState.value.validationMessage.orEmpty(),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.error
-                    )
-                }
-
-                BbButton(
-                    text = "Değiştir",
-                    onClick = {
-                        if (formState.value.canSubmit) {
-                            onPasswordChangeClick(formState.value)
-                        } else {
-                            formState.value = formState.value.copy(
-                                validationMessage = "Yeni şifre en az 8 karakter olmalı, harf ve rakam içermeli ve tekrar alanı ile eşleşmelidir."
-                            )
-                        }
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    variant = BbButtonVariant.Primary,
-                    enabled = formState.value.canSubmit,
-                    isLoading = isSubmitting
-                )
             }
         }
+    }
+}
 
-        AccountSecurityBottomMenu(
-            selectedItem = AccountSecurityMenuItem.ChangePassword,
-            onLoginActivitiesClick = onLoginActivitiesClick,
-            onChangePasswordClick = {},
-            onChangeEmailClick = onChangeEmailClick,
-            onDeactivateAccountClick = onDeactivateAccountClick,
-            modifier = Modifier.fillMaxWidth()
+@Composable
+private fun PasswordTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    visible: Boolean,
+    onVisibilityChange: () -> Unit
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = { newValue ->
+            onValueChange(newValue)
+        },
+        modifier = Modifier.fillMaxWidth(),
+        label = {
+            Text(text = label)
+        },
+        singleLine = true,
+        shape = BbRadius.Input,
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Password
+        ),
+        visualTransformation = if (visible) {
+            VisualTransformation.None
+        } else {
+            PasswordVisualTransformation()
+        },
+        trailingIcon = {
+            IconButton(
+                onClick = onVisibilityChange
+            ) {
+                Text(
+                    text = if (visible) {
+                        "Gizle"
+                    } else {
+                        "Göster"
+                    },
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+        },
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = MaterialTheme.colorScheme.surface,
+            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+            unfocusedIndicatorColor = MaterialTheme.colorScheme.outline,
+            focusedLabelColor = MaterialTheme.colorScheme.primary,
+            unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
         )
-    }
+    )
 }
 
 @Composable
-private fun ChangePasswordRuleGrid(
-    formState: ChangePasswordFormState
+private fun PasswordRuleBox(
+    validation: PasswordValidationState
 ) {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2),
-        modifier = Modifier.fillMaxWidth()
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                color = BbColors.Yellow.Yellow50,
+                shape = BbRadius.LgShape
+            )
+            .padding(BbSpacing.CardPaddingCompact)
     ) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2),
-            modifier = Modifier.fillMaxWidth()
+        Column(
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
         ) {
-            ChangePasswordRuleCard(
-                title = "En az 8 karakter",
-                completed = formState.hasMinimumLength,
-                modifier = Modifier.weight(1f)
+            Text(
+                text = "Güçlü Şifre Kontrolü",
+                style = MaterialTheme.typography.labelLarge,
+                color = BbColors.Yellow.Yellow800
             )
 
-            ChangePasswordRuleCard(
-                title = "Harf içermeli",
-                completed = formState.hasLetter,
-                modifier = Modifier.weight(1f)
-            )
-        }
-
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            ChangePasswordRuleCard(
-                title = "Rakam içermeli",
-                completed = formState.hasDigit,
-                modifier = Modifier.weight(1f)
+            PasswordRuleRow(
+                text = "Mevcut şifre girilmeli",
+                valid = validation.hasOldPassword
             )
 
-            ChangePasswordRuleCard(
-                title = "Özel karakter önerilir",
-                completed = formState.hasSpecialCharacter,
-                modifier = Modifier.weight(1f)
+            PasswordRuleRow(
+                text = "Yeni şifre en az 8 karakter olmalı",
+                valid = validation.hasMinimumLength
+            )
+
+            PasswordRuleRow(
+                text = "Yeni şifre büyük harf, küçük harf ve rakam içermeli",
+                valid = validation.hasStrongPattern
+            )
+
+            PasswordRuleRow(
+                text = "Yeni şifre ve tekrar şifre aynı olmalı",
+                valid = validation.passwordsMatch
             )
         }
     }
 }
 
 @Composable
-private fun ChangePasswordRuleCard(
-    title: String,
-    completed: Boolean,
-    modifier: Modifier = Modifier
+private fun PasswordRuleRow(
+    text: String,
+    valid: Boolean
 ) {
-    BbCard(
-        modifier = modifier,
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Small
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
     ) {
         Text(
-            text = if (completed) {
-                "✓ $title"
+            text = if (valid) {
+                "✓"
             } else {
-                "○ $title"
+                "•"
             },
-            style = MaterialTheme.typography.labelMedium,
-            color = if (completed) {
-                MaterialTheme.colorScheme.primary
+            style = MaterialTheme.typography.labelLarge,
+            color = if (valid) {
+                BbColors.Green.Green700
+            } else {
+                MaterialTheme.colorScheme.onSurfaceVariant
+            }
+        )
+
+        Text(
+            text = text,
+            style = MaterialTheme.typography.bodySmall,
+            color = if (valid) {
+                BbColors.Green.Green700
             } else {
                 MaterialTheme.colorScheme.onSurfaceVariant
             }
         )
     }
+}
+
+@Composable
+private fun PasswordMessageBox(
+    title: String,
+    message: String,
+    type: PasswordMessageType
+) {
+    val backgroundColor = when (type) {
+        PasswordMessageType.Success -> BbColors.Green.Green50
+        PasswordMessageType.Error -> BbColors.Red.Red50
+    }
+
+    val titleColor = when (type) {
+        PasswordMessageType.Success -> BbColors.Green.Green700
+        PasswordMessageType.Error -> BbColors.Red.Red700
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                color = backgroundColor,
+                shape = BbRadius.LgShape
+            )
+            .padding(BbSpacing.CardPaddingCompact)
+    ) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+        ) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.labelLarge,
+                color = titleColor
+            )
+
+            Text(
+                text = message,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+private fun validatePasswordForm(
+    oldPassword: String,
+    newPassword: String,
+    newPasswordAgain: String
+): PasswordValidationState {
+    val hasOldPassword = oldPassword.isNotBlank()
+    val hasMinimumLength = newPassword.length >= 8
+    val hasUppercase = newPassword.any { character ->
+        character.isUpperCase()
+    }
+    val hasLowercase = newPassword.any { character ->
+        character.isLowerCase()
+    }
+    val hasDigit = newPassword.any { character ->
+        character.isDigit()
+    }
+    val hasStrongPattern = hasUppercase && hasLowercase && hasDigit
+    val passwordsMatch = newPassword.isNotBlank() && newPassword == newPasswordAgain
+
+    return PasswordValidationState(
+        hasOldPassword = hasOldPassword,
+        hasMinimumLength = hasMinimumLength,
+        hasStrongPattern = hasStrongPattern,
+        passwordsMatch = passwordsMatch
+    )
+}
+
+private enum class PasswordMessageType {
+    Success,
+    Error
+}
+
+private data class PasswordValidationState(
+    val hasOldPassword: Boolean,
+    val hasMinimumLength: Boolean,
+    val hasStrongPattern: Boolean,
+    val passwordsMatch: Boolean
+) {
+    val canSubmit: Boolean
+        get() {
+            return hasOldPassword &&
+                    hasMinimumLength &&
+                    hasStrongPattern &&
+                    passwordsMatch
+        }
 }

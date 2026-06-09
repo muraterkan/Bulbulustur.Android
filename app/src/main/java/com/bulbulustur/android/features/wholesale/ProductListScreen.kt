@@ -1,533 +1,533 @@
 package com.bulbulustur.android.features.wholesale
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Business
-import androidx.compose.material.icons.outlined.Category
-import androidx.compose.material.icons.outlined.ChevronRight
-import androidx.compose.material.icons.outlined.FilterList
 import androidx.compose.material.icons.outlined.Inventory2
-import androidx.compose.material.icons.outlined.LocalShipping
-import androidx.compose.material.icons.outlined.RequestQuote
-import androidx.compose.material.icons.outlined.Verified
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.bulbulustur.android.features.wholesale.components.WholesaleBottomNavigation
+import com.bulbulustur.android.features.wholesale.components.WholesaleBottomNavigationItem
+import com.bulbulustur.android.features.wholesale.components.WholesaleSearchHeader
+import com.bulbulustur.android.ui.commercecomponents.BbProductGrid
 import com.bulbulustur.android.ui.components.BbCard
-import com.bulbulustur.android.ui.components.BbCardPadding
-import com.bulbulustur.android.ui.components.BbCardVariant
 import com.bulbulustur.android.ui.components.BbChip
-import com.bulbulustur.android.ui.components.BbSearchBar
+import com.bulbulustur.android.ui.components.BbSectionHeader
+import com.bulbulustur.android.ui.theme.BbColors
+import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
 import com.bulbulustur.android.ui.theme.BbTheme
 
 @Composable
 fun ProductListScreen(
-    categoryId: Int? = null,
-    searchQuery: String? = null,
-    onProductClick: (Int) -> Unit = {},
-    onCompanyClick: (Int) -> Unit = {},
-    onCategoryClick: (Int) -> Unit = {},
-    onQuoteRequestClick: (Int) -> Unit = {},
-    onFilterClick: () -> Unit = {},
-    onSearchClick: (String) -> Unit = {}
+    onSearchClick: (String) -> Unit = {},
+    onMenuClick: () -> Unit = {},
+    onFavoriteClick: () -> Unit = {},
+    onHomeClick: () -> Unit = {},
+    onMessageClick: () -> Unit = {},
+    onBasketClick: () -> Unit = {},
+    onAccountClick: () -> Unit = {},
+    onProductDetailClick: () -> Unit = {}
 ) {
-    var searchText by remember {
-        mutableStateOf(searchQuery.orEmpty())
+    val products = remember {
+        getWholesaleProductListItems()
     }
 
-    val products = remember {
-        getWholesaleProducts()
+    val categories = remember {
+        listOf(
+            "Tümü",
+            "Ambalaj",
+            "Makine",
+            "Elektronik",
+            "Tekstil",
+            "Gıda"
+        )
+    }
+
+    val sortOptions = remember {
+        listOf(
+            "Öne çıkan",
+            "Min. sipariş",
+            "Yeni tedarik",
+            "Hızlı teklif"
+        )
+    }
+
+    var searchText by remember {
+        mutableStateOf("")
+    }
+
+    var selectedCategory by remember {
+        mutableStateOf("Tümü")
+    }
+
+    var selectedSortOption by remember {
+        mutableStateOf("Öne çıkan")
+    }
+
+    val filteredProducts = remember(
+        searchText,
+        selectedCategory,
+        selectedSortOption,
+        products
+    ) {
+        val searchFilteredProducts = if (searchText.isBlank()) {
+            products
+        } else {
+            products.filter { product ->
+                product.name.contains(searchText, ignoreCase = true) ||
+                        product.companyName.contains(searchText, ignoreCase = true) ||
+                        product.categoryName.contains(searchText, ignoreCase = true)
+            }
+        }
+
+        val categoryFilteredProducts = if (selectedCategory == "Tümü") {
+            searchFilteredProducts
+        } else {
+            searchFilteredProducts.filter { product ->
+                product.categoryName == selectedCategory
+            }
+        }
+
+        when (selectedSortOption) {
+            "Min. sipariş" -> categoryFilteredProducts.sortedBy { product ->
+                product.minimumOrderValue
+            }
+
+            "Yeni tedarik" -> categoryFilteredProducts.filter { product ->
+                product.isNew
+            }
+
+            "Hızlı teklif" -> categoryFilteredProducts.filter { product ->
+                product.hasFastQuote
+            }
+
+            else -> categoryFilteredProducts
+        }
     }
 
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.background
-    ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(
-                start = BbSpacing.PageHorizontal,
-                top = innerPadding.calculateTopPadding() + BbSpacing.PageTopCompact,
-                end = BbSpacing.PageHorizontal,
-                bottom = innerPadding.calculateBottomPadding() + BbSpacing.PageBottom
-            ),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.SectionGapCompact)
-        ) {
-            item {
-                WholesaleProductListHeader(
-                    categoryId = categoryId,
-                    searchQuery = searchQuery
-                )
-            }
-
-            item {
-                BbSearchBar(
-                    value = searchText,
-                    onValueChange = {
-                        searchText = it
-                        onSearchClick(it)
-                    },
-                    placeholder = "Toptan ürün ara"
-                )
-            }
-
-            item {
-                WholesaleProductListQuickFilters(
-                    onCategoryClick = onCategoryClick,
-                    onFilterClick = onFilterClick
-                )
-            }
-
-            item {
-                WholesaleProductListSummary(
-                    totalProductCount = products.size,
-                    onFilterClick = onFilterClick
-                )
-            }
-
-            items(
-                items = products,
-                key = { product ->
-                    product.productId
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            WholesaleSearchHeader(
+                searchText = searchText,
+                onSearchTextChange = {
+                    searchText = it
+                },
+                onMenuClick = onMenuClick,
+                onFavoriteClick = onFavoriteClick,
+                onSearchClick = {
+                    onSearchClick(searchText)
+                },
+                onClearClick = {
+                    searchText = ""
                 }
-            ) { product ->
-                WholesaleProductCard(
-                    product = product,
-                    onProductClick = {
-                        onProductClick(product.productId)
-                    },
-                    onCompanyClick = {
-                        onCompanyClick(product.companyId)
-                    },
-                    onQuoteRequestClick = {
-                        onQuoteRequestClick(product.productId)
+            )
+        },
+        bottomBar = {
+            WholesaleBottomNavigation(
+                selectedItem = WholesaleBottomNavigationItem.Menu,
+                onItemClick = { selectedItem ->
+                    when (selectedItem) {
+                        WholesaleBottomNavigationItem.Home -> onHomeClick()
+                        WholesaleBottomNavigationItem.Menu -> onMenuClick()
+                        WholesaleBottomNavigationItem.Messages -> onMessageClick()
+                        WholesaleBottomNavigationItem.Basket -> onBasketClick()
+                        WholesaleBottomNavigationItem.Account -> onAccountClick()
                     }
-                )
-            }
-
-            item {
-                Spacer(modifier = Modifier.height(BbSpacing.Space4))
-            }
+                }
+            )
         }
-    }
-}
-
-@Composable
-private fun WholesaleProductListHeader(
-    categoryId: Int?,
-    searchQuery: String?
-) {
-    BbCard(
-        modifier = Modifier.fillMaxWidth(),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Large
-    ) {
+    ) { innerPadding ->
         Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(innerPadding)
         ) {
-            WholesaleProductIconTitleRow(
-                icon = Icons.Outlined.Inventory2,
-                title = "Toptan Ürünler"
+            BbSectionHeader(
+                title = "Toptan Ürünler",
+                subtitle = "Sektörlerden, tedarikçilerden ve teklif akışlarından ürün keşfet"
             )
 
-            Text(
-                text = getWholesaleProductHeaderTitle(
-                    categoryId = categoryId,
-                    searchQuery = searchQuery
+            Spacer(
+                modifier = Modifier.height(BbSpacing.Space2)
+            )
+
+            WholesaleProductListHorizontalFilters(
+                items = categories,
+                selectedItem = selectedCategory,
+                onItemClick = {
+                    selectedCategory = it
+                }
+            )
+
+            Spacer(
+                modifier = Modifier.height(BbSpacing.Space2)
+            )
+
+            WholesaleProductListHorizontalFilters(
+                items = sortOptions,
+                selectedItem = selectedSortOption,
+                onItemClick = {
+                    selectedSortOption = it
+                }
+            )
+
+            Spacer(
+                modifier = Modifier.height(BbSpacing.Space2)
+            )
+
+            WholesaleProductListResultHeader(
+                productCount = filteredProducts.size,
+                selectedCategory = selectedCategory
+            )
+
+            BbProductGrid(
+                contentPadding = PaddingValues(
+                    start = BbSpacing.PageHorizontal,
+                    top = BbSpacing.Space3,
+                    end = BbSpacing.PageHorizontal,
+                    bottom = BbSpacing.PageBottom
                 ),
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-
-            Text(
-                text = "Minimum sipariş, firma, kategori ve teklif akışıyla toptan ürün keşfi.",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-private fun WholesaleProductListQuickFilters(
-    onCategoryClick: (Int) -> Unit,
-    onFilterClick: () -> Unit
-) {
-    FlowRow(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(BbSpacing.ChipGap),
-        verticalArrangement = Arrangement.spacedBy(BbSpacing.ChipGap)
-    ) {
-        BbChip(
-            text = "Tüm filtreler",
-            selected = false,
-            onClick = onFilterClick
-        )
-
-        getWholesaleProductFilterCategories().forEach { category ->
-            BbChip(
-                text = category.name,
-                selected = false,
-                onClick = {
-                    onCategoryClick(category.categoryId)
-                }
-            )
-        }
-    }
-}
-
-@Composable
-private fun WholesaleProductListSummary(
-    totalProductCount: Int,
-    onFilterClick: () -> Unit
-) {
-    BbCard(
-        modifier = Modifier.fillMaxWidth(),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium,
-        onClick = onFilterClick
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
-        ) {
-            Icon(
-                imageVector = Icons.Outlined.FilterList,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary
-            )
-
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+                horizontalSpacing = BbSpacing.Space3,
+                verticalSpacing = BbSpacing.Space4
             ) {
-                Text(
-                    text = "$totalProductCount toptan ürün grubu gösteriliyor",
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-
-                Text(
-                    text = "Kategori, minimum sipariş, şehir ve firma filtresi eklenecek.",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-
-            Icon(
-                imageVector = Icons.Outlined.ChevronRight,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-private fun WholesaleProductCard(
-    product: WholesaleProductListItem,
-    onProductClick: () -> Unit,
-    onCompanyClick: () -> Unit,
-    onQuoteRequestClick: () -> Unit
-) {
-    BbCard(
-        modifier = Modifier.fillMaxWidth(),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium,
-        onClick = onProductClick
-    ) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.Top,
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
-            ) {
-                Icon(
-                    imageVector = product.icon,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary
-                )
-
-                Column(
-                    modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
-                ) {
-                    Text(
-                        text = product.name,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-
-                    Text(
-                        text = product.description,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-
-                    Text(
-                        text = "Min. ${product.minimumOrderQuantity} adet • ${product.city}",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-
-                Icon(
-                    imageVector = Icons.Outlined.ChevronRight,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-
-            FlowRow(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.ChipGap),
-                verticalArrangement = Arrangement.spacedBy(BbSpacing.ChipGap)
-            ) {
-                BbChip(
-                    text = product.categoryName,
-                    selected = false,
-                    onClick = {}
-                )
-
-                BbChip(
-                    text = product.priceLabel,
-                    selected = false,
-                    onClick = {}
-                )
-
-                if (product.isVerifiedCompany) {
-                    BbChip(
-                        text = "Doğrulanmış firma",
-                        selected = false,
-                        onClick = {}
+                items(
+                    items = filteredProducts,
+                    key = { product ->
+                        product.id
+                    }
+                ) { product ->
+                    WholesaleProductListCard(
+                        product = product,
+                        onClick = onProductDetailClick
                     )
                 }
             }
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.CardGapCompact)
-            ) {
-                WholesaleProductSmallAction(
-                    title = product.companyName,
-                    icon = Icons.Outlined.Business,
-                    modifier = Modifier.weight(1f),
-                    onClick = onCompanyClick
-                )
-
-                WholesaleProductSmallAction(
-                    title = "Teklif iste",
-                    icon = Icons.Outlined.RequestQuote,
-                    modifier = Modifier.weight(1f),
-                    onClick = onQuoteRequestClick
-                )
-            }
         }
     }
 }
 
 @Composable
-private fun WholesaleProductSmallAction(
-    title: String,
-    icon: ImageVector,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit
-) {
-    BbCard(
-        modifier = modifier,
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Small,
-        onClick = onClick
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(BbSpacing.IconTextGap)
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary
-            )
-
-            Text(
-                text = title,
-                style = MaterialTheme.typography.labelMedium,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onSurface,
-                maxLines = 1
-            )
-        }
-    }
-}
-
-@Composable
-private fun WholesaleProductIconTitleRow(
-    icon: ImageVector,
-    title: String
+private fun WholesaleProductListHorizontalFilters(
+    items: List<String>,
+    selectedItem: String,
+    onItemClick: (String) -> Unit
 ) {
     Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(BbSpacing.IconTextGap)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = BbSpacing.PageHorizontal),
+        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+    ) {
+        items.take(4).forEach { item ->
+            BbChip(
+                text = item,
+                selected = selectedItem == item,
+                onClick = {
+                    onItemClick(item)
+                }
+            )
+        }
+    }
+}
+
+@Composable
+private fun WholesaleProductListResultHeader(
+    productCount: Int,
+    selectedCategory: String
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                start = BbSpacing.PageHorizontal,
+                end = BbSpacing.PageHorizontal,
+                top = BbSpacing.Space1,
+                bottom = BbSpacing.Space1
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
+            Text(
+                text = if (selectedCategory == "Tümü") {
+                    "Tüm toptan ürünler"
+                } else {
+                    selectedCategory
+                },
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.Bold,
+                color = BbColors.TextStrong
+            )
+
+            Text(
+                text = "$productCount ürün grubu listeleniyor",
+                style = MaterialTheme.typography.bodySmall,
+                color = BbColors.TextMuted
+            )
+        }
+
+        Text(
+            text = "Filtrele",
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = FontWeight.Bold,
+            color = BbColors.Primary
+        )
+    }
+}
+
+@Composable
+private fun WholesaleProductListCard(
+    product: WholesaleProductListItem,
+    onClick: () -> Unit
+) {
+    BbCard {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    onClick()
+                },
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+        ) {
+            WholesaleProductImagePlaceholder(
+                imageText = product.imageText,
+                badgeText = product.badgeText
+            )
+
+            Text(
+                text = product.name,
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.SemiBold,
+                color = BbColors.TextStrong,
+                maxLines = 2
+            )
+
+            Text(
+                text = product.companyName,
+                style = MaterialTheme.typography.bodySmall,
+                color = BbColors.TextMuted,
+                maxLines = 1
+            )
+
+            Text(
+                text = product.priceText,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = BbColors.Primary
+            )
+
+            Text(
+                text = product.minimumOrderText,
+                style = MaterialTheme.typography.bodySmall,
+                color = BbColors.TextMuted,
+                maxLines = 1
+            )
+
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space1),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                WholesaleProductSmallPill(
+                    text = product.locationText
+                )
+
+                if (product.hasFastQuote) {
+                    WholesaleProductSmallPill(
+                        text = "Hızlı teklif"
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun WholesaleProductImagePlaceholder(
+    imageText: String,
+    badgeText: String
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(BbSpacing.Space16 + BbSpacing.Space8)
+            .clip(RoundedCornerShape(BbRadius.lg))
+            .background(MaterialTheme.colorScheme.surfaceVariant),
+        contentAlignment = Alignment.Center
     ) {
         Icon(
-            imageVector = icon,
+            imageVector = Icons.Outlined.Inventory2,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.primary
+            tint = BbColors.TextMuted
         )
 
         Text(
-            text = title,
-            style = MaterialTheme.typography.labelLarge,
-            color = MaterialTheme.colorScheme.primary,
-            fontWeight = FontWeight.SemiBold
+            text = imageText,
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold,
+            color = BbColors.TextMuted,
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
+
+        if (badgeText.isNotBlank()) {
+            Box(
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .padding(BbSpacing.Space1)
+                    .clip(RoundedCornerShape(BbRadius.pill))
+                    .background(BbColors.Primary)
+                    .padding(
+                        horizontal = BbSpacing.Space2,
+                        vertical = BbSpacing.Space1
+                    )
+            ) {
+                Text(
+                    text = badgeText,
+                    style = MaterialTheme.typography.labelSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = BbColors.TextStrong
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun WholesaleProductSmallPill(
+    text: String
+) {
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(BbRadius.pill))
+            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .padding(
+                horizontal = BbSpacing.Space2,
+                vertical = BbSpacing.Space1
+            )
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.labelSmall,
+            color = BbColors.TextMuted
         )
     }
 }
 
+@Immutable
 data class WholesaleProductListItem(
-    val productId: Int,
-    val companyId: Int,
+    val id: Int,
     val name: String,
-    val description: String,
     val companyName: String,
     val categoryName: String,
-    val city: String,
-    val minimumOrderQuantity: Int,
-    val priceLabel: String,
-    val isVerifiedCompany: Boolean,
-    val icon: ImageVector
+    val priceText: String,
+    val minimumOrderText: String,
+    val minimumOrderValue: Int,
+    val locationText: String,
+    val badgeText: String,
+    val imageText: String,
+    val isNew: Boolean,
+    val hasFastQuote: Boolean
 )
 
-data class WholesaleProductFilterCategory(
-    val categoryId: Int,
-    val name: String
-)
-
-private fun getWholesaleProductHeaderTitle(
-    categoryId: Int?,
-    searchQuery: String?
-): String {
-    if (!searchQuery.isNullOrBlank()) {
-        return "\"$searchQuery\" arama sonuçları"
-    }
-
-    if (categoryId != null) {
-        return "Kategori ürünleri"
-    }
-
-    return "Toptan ürün listesi"
-}
-
-private fun getWholesaleProductFilterCategories(): List<WholesaleProductFilterCategory> {
-    return listOf(
-        WholesaleProductFilterCategory(
-            categoryId = 1,
-            name = "Ambalaj"
-        ),
-        WholesaleProductFilterCategory(
-            categoryId = 2,
-            name = "Makine"
-        ),
-        WholesaleProductFilterCategory(
-            categoryId = 3,
-            name = "Gıda"
-        ),
-        WholesaleProductFilterCategory(
-            categoryId = 4,
-            name = "Tekstil"
-        ),
-        WholesaleProductFilterCategory(
-            categoryId = 5,
-            name = "Medikal"
-        )
-    )
-}
-
-private fun getWholesaleProducts(): List<WholesaleProductListItem> {
+private fun getWholesaleProductListItems(): List<WholesaleProductListItem> {
     return listOf(
         WholesaleProductListItem(
-            productId = 1,
-            companyId = 101,
-            name = "E-ticaret Kargo Kolisi",
-            description = "Farklı ölçülerde, dayanıklı, toptan koli grubu.",
+            id = 1,
+            name = "Endüstriyel karton koli seti",
             companyName = "Anadolu Ambalaj",
             categoryName = "Ambalaj",
-            city = "İstanbul",
-            minimumOrderQuantity = 100,
-            priceLabel = "Teklif ile fiyat",
-            isVerifiedCompany = true,
-            icon = Icons.Outlined.Inventory2
+            priceText = "₺12,40 / adet",
+            minimumOrderText = "Min. sipariş: 1.000 adet",
+            minimumOrderValue = 1000,
+            locationText = "İstanbul",
+            badgeText = "Toptan",
+            imageText = "W1",
+            isNew = true,
+            hasFastQuote = true
         ),
         WholesaleProductListItem(
-            productId = 2,
-            companyId = 102,
-            name = "Baskılı Mağaza Poşeti",
-            description = "Logo baskılı, farklı gramaj ve ebat seçenekli poşet.",
-            companyName = "Marmara Tedarik",
-            categoryName = "Ambalaj",
-            city = "Kocaeli",
-            minimumOrderQuantity = 500,
-            priceLabel = "₺2,40+",
-            isVerifiedCompany = true,
-            icon = Icons.Outlined.LocalShipping
+            id = 2,
+            name = "Paslanmaz makine yedek parçası",
+            companyName = "Delta Makine",
+            categoryName = "Makine",
+            priceText = "Teklif iste",
+            minimumOrderText = "Min. sipariş: 50 adet",
+            minimumOrderValue = 50,
+            locationText = "Konya",
+            badgeText = "RFQ",
+            imageText = "W2",
+            isNew = true,
+            hasFastQuote = true
         ),
         WholesaleProductListItem(
-            productId = 3,
-            companyId = 103,
-            name = "Endüstriyel Streç Film",
-            description = "Paletleme ve depo operasyonları için güçlü sarım filmi.",
-            companyName = "Ege Paketleme",
-            categoryName = "Depolama",
-            city = "İzmir",
-            minimumOrderQuantity = 50,
-            priceLabel = "₺145,00+",
-            isVerifiedCompany = false,
-            icon = Icons.Outlined.Category
+            id = 3,
+            name = "Elektronik güç modülü",
+            companyName = "Tekno Bileşen",
+            categoryName = "Elektronik",
+            priceText = "₺84,90 / adet",
+            minimumOrderText = "Min. sipariş: 250 adet",
+            minimumOrderValue = 250,
+            locationText = "İzmir",
+            badgeText = "Yeni",
+            imageText = "W3",
+            isNew = true,
+            hasFastQuote = false
         ),
         WholesaleProductListItem(
-            productId = 4,
-            companyId = 104,
-            name = "Barkod ve Kargo Etiketi",
-            description = "Termal baskıya uygun rulo etiket ürün grubu.",
-            companyName = "Etiket Merkezi",
-            categoryName = "Etiket",
-            city = "Bursa",
-            minimumOrderQuantity = 200,
-            priceLabel = "₺38,00+",
-            isVerifiedCompany = true,
-            icon = Icons.Outlined.Verified
+            id = 4,
+            name = "Toptan pamuklu kumaş rulosu",
+            companyName = "Mira Tekstil",
+            categoryName = "Tekstil",
+            priceText = "₺68,00 / metre",
+            minimumOrderText = "Min. sipariş: 500 metre",
+            minimumOrderValue = 500,
+            locationText = "Denizli",
+            badgeText = "",
+            imageText = "W4",
+            isNew = false,
+            hasFastQuote = true
+        ),
+        WholesaleProductListItem(
+            id = 5,
+            name = "Gıda ambalaj poşeti",
+            companyName = "Ege Paket",
+            categoryName = "Gıda",
+            priceText = "₺0,92 / adet",
+            minimumOrderText = "Min. sipariş: 5.000 adet",
+            minimumOrderValue = 5000,
+            locationText = "Manisa",
+            badgeText = "Popüler",
+            imageText = "W5",
+            isNew = false,
+            hasFastQuote = true
         )
     )
 }

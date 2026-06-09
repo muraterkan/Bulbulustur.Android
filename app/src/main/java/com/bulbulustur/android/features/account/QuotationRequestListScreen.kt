@@ -1,87 +1,347 @@
 package com.bulbulustur.android.features.account
 
 import androidx.compose.foundation.background
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AddBusiness
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.LocalOffer
 import androidx.compose.material.icons.outlined.RequestQuote
+import androidx.compose.material.icons.outlined.Tag
+import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.bulbulustur.android.features.account.components.AccountPageScaffold
 import com.bulbulustur.android.ui.components.BbButton
+import com.bulbulustur.android.ui.components.BbButtonSize
+import com.bulbulustur.android.ui.components.BbButtonVariant
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
-import com.bulbulustur.android.ui.components.BbChip
-import com.bulbulustur.android.ui.components.BbSectionHeader
+import com.bulbulustur.android.ui.components.BbCardVariant
 import com.bulbulustur.android.ui.theme.BbColors
+import com.bulbulustur.android.ui.theme.BbIcon
+import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
 import com.bulbulustur.android.ui.theme.BbTypography
 
 @Composable
-fun QuotationRequestListScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surfaceVariant)
-            .padding(BbSpacing.md),
-        verticalArrangement = Arrangement.spacedBy(BbSpacing.md)
-    ) {
-        BbSectionHeader(
-            title = "Fiyat Teklifi İsteklerim",
-            subtitle = "Oluşturduğunuz teklif taleplerini ve gelen yanıtları takip edin"
-        )
+fun QuotationRequestListScreen(
+    onBackClick: () -> Unit = {},
+    onDiscoverWholesaleClick: () -> Unit = {},
+    onOffersClick: (Int) -> Unit = {},
+    onDetailClick: (Int) -> Unit = {},
+    onDeleteClick: (Int) -> Unit = {}
+) {
+    val rfqRequests = getDemoRfqRequests()
 
-        QuotationRequestEmptyState()
+    AccountPageScaffold(
+        title = "Fiyat Teklifi İstekleri",
+        kicker = "RFQ Yönetimi",
+        description = "Oluşturduğunuz fiyat teklifi isteklerini görüntüleyin, detaylarını inceleyin veya gelen tekliflere ulaşın.",
+        backButtonText = "Hesabıma Dön",
+        onBackClick = onBackClick
+    ) {
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
+        ) {
+            if (rfqRequests.isEmpty()) {
+                item {
+                    RfqEmptyState(
+                        onDiscoverWholesaleClick = onDiscoverWholesaleClick
+                    )
+                }
+            }
+
+            items(
+                items = rfqRequests,
+                key = { item -> item.buyerRequestId }
+            ) { item ->
+                RfqRequestCard(
+                    item = item,
+                    onOffersClick = onOffersClick,
+                    onDetailClick = onDetailClick,
+                    onDeleteClick = onDeleteClick
+                )
+            }
+        }
     }
 }
 
 @Composable
-private fun QuotationRequestEmptyState() {
+private fun RfqRequestCard(
+    item: RfqRequestUiModel,
+    onOffersClick: (Int) -> Unit,
+    onDetailClick: (Int) -> Unit,
+    onDeleteClick: (Int) -> Unit
+) {
     BbCard(
-        padding = BbCardPadding.Large
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.None
     ) {
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.md)
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(BbColors.Surface)
         ) {
-            Icon(
-                imageVector = Icons.Outlined.RequestQuote,
-                contentDescription = null,
-                tint = BbColors.Primary
+            RfqRequestCardHeader(
+                item = item
             )
 
-            BbChip(
-                text = "Teklif Yok"
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(BbSpacing.CardPadding),
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+            ) {
+                RfqMetaBox(
+                    buyerRequestId = item.buyerRequestId
+                )
+
+                Text(
+                    text = item.description,
+                    style = BbTypography.bodySmall,
+                    color = BbColors.TextMuted
+                )
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+                ) {
+                    BbButton(
+                        text = "Teklifler",
+                        onClick = {
+                            onOffersClick(item.buyerRequestId)
+                        },
+                        modifier = Modifier.weight(1f),
+                        variant = BbButtonVariant.Primary,
+                        size = BbButtonSize.Small,
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Outlined.LocalOffer,
+                                contentDescription = null,
+                                tint = BbColors.TextStrong,
+                                modifier = Modifier.size(BbIcon.ButtonIcon)
+                            )
+                        }
+                    )
+
+                    BbButton(
+                        text = "Detay",
+                        onClick = {
+                            onDetailClick(item.buyerRequestId)
+                        },
+                        modifier = Modifier.weight(1f),
+                        variant = BbButtonVariant.Light,
+                        size = BbButtonSize.Small,
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Outlined.Visibility,
+                                contentDescription = null,
+                                tint = BbColors.TextStrong,
+                                modifier = Modifier.size(BbIcon.ButtonIcon)
+                            )
+                        }
+                    )
+                }
+
+                BbButton(
+                    text = "Sil",
+                    onClick = {
+                        onDeleteClick(item.buyerRequestId)
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    variant = BbButtonVariant.Danger,
+                    size = BbButtonSize.Small,
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Outlined.Delete,
+                            contentDescription = null,
+                            tint = BbColors.White,
+                            modifier = Modifier.size(BbIcon.ButtonIcon)
+                        )
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun RfqRequestCardHeader(
+    item: RfqRequestUiModel
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(BbColors.Yellow.Yellow50)
+            .padding(BbSpacing.CardPadding),
+        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        RfqIconBox()
+
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+        ) {
+            Text(
+                text = "FİYAT TEKLİFİ İSTEĞİ",
+                style = BbTypography.labelSmall,
+                color = BbColors.Yellow.Yellow800
             )
 
             Text(
-                text = "Henüz fiyat teklifi isteğiniz yok!",
-                style = BbTypography.headlineSmall,
+                text = item.productName,
+                style = BbTypography.titleSmall,
                 color = BbColors.TextStrong
             )
 
             Text(
-                text = "Toptan ürünler veya tedarikçi profilleri üzerinden fiyat teklifi isteği oluşturabilirsiniz.",
+                text = item.createdDate,
+                style = BbTypography.bodySmall,
+                color = BbColors.TextMuted
+            )
+        }
+    }
+}
+
+@Composable
+private fun RfqMetaBox(
+    buyerRequestId: Int
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                color = BbColors.SurfaceMuted,
+                shape = BbRadius.LgShape
+            )
+            .padding(BbSpacing.CardPaddingCompact),
+        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = Icons.Outlined.Tag,
+            contentDescription = null,
+            tint = BbColors.Yellow.Yellow800,
+            modifier = Modifier.size(BbIcon.Ui)
+        )
+
+        Text(
+            text = "RFQ No: $buyerRequestId",
+            style = BbTypography.bodyMedium,
+            color = BbColors.TextStrong
+        )
+    }
+}
+
+@Composable
+private fun RfqEmptyState(
+    onDiscoverWholesaleClick: () -> Unit
+) {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Large
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+        ) {
+            RfqIconBox()
+
+            Box(
+                modifier = Modifier
+                    .background(
+                        color = BbColors.Yellow.Yellow100,
+                        shape = BbRadius.Badge
+                    )
+                    .padding(
+                        horizontal = BbSpacing.BadgePaddingHorizontal,
+                        vertical = BbSpacing.BadgePaddingVertical
+                    )
+            ) {
+                Text(
+                    text = "RFQ Yok",
+                    style = BbTypography.labelSmall,
+                    color = BbColors.Yellow.Yellow800
+                )
+            }
+
+            Text(
+                text = "Henüz bir fiyat teklifi isteği oluşturmadınız!",
+                style = BbTypography.titleMedium,
+                color = BbColors.TextStrong
+            )
+
+            Text(
+                text = "Tedarikçilerden fiyat teklifi alarak ihtiyaçlarınıza en uygun çözümleri keşfedin.",
                 style = BbTypography.bodySmall,
                 color = BbColors.TextMuted
             )
 
             BbButton(
-                text = "Teklif Oluştur",
-                onClick = {},
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Outlined.AddBusiness,
-                        contentDescription = null
-                    )
-                }
+                text = "Toptan Ürünleri Keşfet",
+                onClick = onDiscoverWholesaleClick,
+                variant = BbButtonVariant.Primary,
+                size = BbButtonSize.Medium
             )
         }
     }
 }
+
+@Composable
+private fun RfqIconBox() {
+    Box(
+        modifier = Modifier
+            .size(BbIcon.BoxLg)
+            .background(
+                color = BbColors.Yellow.Yellow100,
+                shape = BbRadius.LgShape
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            imageVector = Icons.Outlined.RequestQuote,
+            contentDescription = null,
+            tint = BbColors.Yellow.Yellow800,
+            modifier = Modifier.size(BbIcon.Section)
+        )
+    }
+}
+
+private fun getDemoRfqRequests(): List<RfqRequestUiModel> {
+    return listOf(
+        RfqRequestUiModel(
+            buyerRequestId = 1001,
+            productName = "Endüstriyel ambalaj ürünleri için teklif",
+            createdDate = "10 Mayıs 2026",
+            description = "Bu kayıt için gelen teklifleri inceleyebilir veya istek detayına geçebilirsiniz."
+        ),
+        RfqRequestUiModel(
+            buyerRequestId = 1002,
+            productName = "Toptan ayakkabı alımı",
+            createdDate = "12 Mayıs 2026",
+            description = "Tedarikçilerden gelen fiyat tekliflerini karşılaştırabilirsiniz."
+        )
+    )
+}
+
+private data class RfqRequestUiModel(
+    val buyerRequestId: Int,
+    val productName: String,
+    val createdDate: String,
+    val description: String
+)

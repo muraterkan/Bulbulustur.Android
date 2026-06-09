@@ -30,8 +30,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import com.bulbulustur.android.ui.components.BbBottomNavigation
-import com.bulbulustur.android.ui.components.BbBottomNavigationItem
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbSectionHeader
 import com.bulbulustur.android.ui.theme.BbColors
@@ -43,8 +41,7 @@ fun BasketScreen(
     onBackClick: () -> Unit = {},
     onCheckoutClick: (List<BasketLineItem>) -> Unit = {},
     onProductClick: (BasketLineItem) -> Unit = {},
-    onStoreClick: (BasketStoreGroup) -> Unit = {},
-    onBottomNavigationClick: (BbBottomNavigationItem) -> Unit = {}
+    onStoreClick: (BasketStoreGroup) -> Unit = {}
 ) {
     val basketLines = remember {
         mutableStateListOf<BasketLineItem>().apply {
@@ -80,12 +77,7 @@ fun BasketScreen(
 
     Scaffold(
         bottomBar = {
-            BbBottomNavigation(
-                selectedItem = BbBottomNavigationItem.Basket,
-                onItemClick = {
-                    onBottomNavigationClick(it)
-                }
-            )
+
         }
     ) { innerPadding ->
         Column(

@@ -40,7 +40,6 @@ import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
 import com.bulbulustur.android.ui.components.BbChip
-import com.bulbulustur.android.ui.components.BbSearchBar
 import com.bulbulustur.android.ui.components.BbSectionHeader
 import com.bulbulustur.android.ui.theme.BbSpacing
 import com.bulbulustur.android.ui.theme.BbTheme
@@ -82,14 +81,7 @@ fun CategoryDetailScreen(
             }
 
             item {
-                BbSearchBar(
-                    value = searchText,
-                    onValueChange = {
-                        searchText = it
-                        onSearchClick(it)
-                    },
-                    placeholder = "${category.name} içinde ara"
-                )
+
             }
 
             item {

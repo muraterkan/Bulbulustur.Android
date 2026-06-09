@@ -33,7 +33,7 @@ enum class BbCardPadding {
 @Composable
 fun BbCard(
     modifier: Modifier = Modifier,
-    variant: BbCardVariant = BbCardVariant.Default,
+    variant: BbCardVariant = BbCardVariant.Outlined,
     padding: BbCardPadding = BbCardPadding.Medium,
     enabled: Boolean = true,
     onClick: (() -> Unit)? = null,

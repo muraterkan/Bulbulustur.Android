@@ -222,7 +222,7 @@ private fun CheckoutProgressCard(
 ) {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
-        variant = BbCardVariant.Default,
+        variant = BbCardVariant.Outlined,
         padding = BbCardPadding.Medium
     ) {
         Row(

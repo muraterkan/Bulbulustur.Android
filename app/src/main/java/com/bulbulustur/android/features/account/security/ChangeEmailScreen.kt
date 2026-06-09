@@ -1,260 +1,349 @@
 package com.bulbulustur.android.features.account.security
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
+import com.bulbulustur.android.features.account.components.AccountPageScaffold
 import com.bulbulustur.android.ui.components.BbButton
+import com.bulbulustur.android.ui.components.BbButtonSize
 import com.bulbulustur.android.ui.components.BbButtonVariant
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
-import com.bulbulustur.android.ui.components.BbChip
-import com.bulbulustur.android.ui.components.form.BbFormSection
-import com.bulbulustur.android.ui.components.form.BbPasswordInput
-import com.bulbulustur.android.ui.components.form.BbTextInput
+import com.bulbulustur.android.ui.theme.BbColors
+import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
-
-data class ChangeEmailFormState(
-    val currentEmailAddress: String = "murat@example.com",
-    val newEmailAddress: String = "",
-    val password: String = "",
-    val validationMessage: String? = null
-) {
-    val hasValidEmailFormat: Boolean
-        get() {
-            return newEmailAddress.contains("@") &&
-                    newEmailAddress.contains(".") &&
-                    newEmailAddress.length >= 6
-        }
-
-    val isDifferentEmailAddress: Boolean
-        get() {
-            return newEmailAddress.isNotBlank() &&
-                    !newEmailAddress.equals(currentEmailAddress, ignoreCase = true)
-        }
-
-    val canSubmit: Boolean
-        get() {
-            return hasValidEmailFormat &&
-                    isDifferentEmailAddress &&
-                    password.isNotBlank()
-        }
-}
 
 @Composable
 fun ChangeEmailScreen(
-    currentEmailAddress: String = "murat@example.com",
+    currentEmail: String = "murat@example.com",
+    isLoading: Boolean = false,
+    errorMessage: String? = null,
+    successMessage: String? = null,
     onBackClick: () -> Unit = {},
-    onEmailChangeClick: (ChangeEmailFormState) -> Unit = {},
-    onLoginActivitiesClick: () -> Unit = {},
-    onChangePasswordClick: () -> Unit = {},
-    onDeactivateAccountClick: () -> Unit = {},
-    isSubmitting: Boolean = false
+    onSaveClick: (String) -> Unit = {}
 ) {
-    val formState = remember(currentEmailAddress) {
-        mutableStateOf(
-            ChangeEmailFormState(
-                currentEmailAddress = currentEmailAddress
-            )
-        )
+    val newEmailState = remember {
+        mutableStateOf("")
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(
-                horizontal = BbSpacing.PageHorizontal,
-                vertical = BbSpacing.PageTop
-            ),
-        verticalArrangement = Arrangement.spacedBy(BbSpacing.SectionGap)
+    val emailValidationState = remember(
+        currentEmail,
+        newEmailState.value
     ) {
-        BbButton(
-            text = "Hesabıma Dön",
-            onClick = onBackClick,
-            variant = BbButtonVariant.Outline
-        )
+        derivedStateOf {
+            validateEmailForm(
+                currentEmail = currentEmail,
+                newEmail = newEmailState.value
+            )
+        }
+    }
 
+    val canSubmit = emailValidationState.value.canSubmit && !isLoading
+
+    AccountPageScaffold(
+        title = "E-posta Değiştir",
+        kicker = "Hesap Güvenliği",
+        description = "Hesabınıza bağlı e-posta adresini güncelleyin. Yeni e-posta için doğrulama süreci gerekebilir.",
+        backButtonText = "Güvenliğe Dön",
+        onBackClick = onBackClick
+    ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
         ) {
-            BbChip(
-                text = "E-posta Güvenliği"
+            BbCard(
+                modifier = Modifier.fillMaxWidth(),
+                variant = BbCardVariant.Outlined,
+                padding = BbCardPadding.Medium
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
+                ) {
+                    CurrentEmailBox(
+                        currentEmail = currentEmail
+                    )
+
+                    OutlinedTextField(
+                        value = newEmailState.value,
+                        onValueChange = { value ->
+                            newEmailState.value = value
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        label = {
+                            Text(text = "Yeni E-posta")
+                        },
+                        placeholder = {
+                            Text(text = "ornek@bulbulustur.com")
+                        },
+                        singleLine = true,
+                        shape = BbRadius.Input,
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Email
+                        ),
+                        isError = newEmailState.value.isNotBlank() && !emailValidationState.value.isValidEmailFormat,
+                        supportingText = {
+                            EmailSupportingText(
+                                validation = emailValidationState.value,
+                                newEmail = newEmailState.value
+                            )
+                        },
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = MaterialTheme.colorScheme.surface,
+                            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+                            unfocusedIndicatorColor = MaterialTheme.colorScheme.outline,
+                            errorIndicatorColor = MaterialTheme.colorScheme.error,
+                            focusedLabelColor = MaterialTheme.colorScheme.primary,
+                            unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                            errorLabelColor = MaterialTheme.colorScheme.error
+                        )
+                    )
+
+                    ChangeEmailInfoBox()
+
+                    errorMessage?.takeIf { message ->
+                        message.isNotBlank()
+                    }?.let { message ->
+                        EmailMessageBox(
+                            title = "İşlem Tamamlanamadı",
+                            message = message,
+                            type = EmailMessageType.Error
+                        )
+                    }
+
+                    successMessage?.takeIf { message ->
+                        message.isNotBlank()
+                    }?.let { message ->
+                        EmailMessageBox(
+                            title = "E-posta Güncellendi",
+                            message = message,
+                            type = EmailMessageType.Success
+                        )
+                    }
+
+                    BbButton(
+                        text = "E-postayı Güncelle",
+                        onClick = {
+                            onSaveClick(newEmailState.value)
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        variant = BbButtonVariant.Primary,
+                        size = BbButtonSize.Medium,
+                        enabled = canSubmit,
+                        isLoading = isLoading
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun CurrentEmailBox(
+    currentEmail: String
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                shape = BbRadius.LgShape
+            )
+            .padding(BbSpacing.CardPaddingCompact)
+    ) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+        ) {
+            Text(
+                text = "Mevcut E-posta",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Text(
-                text = "E-posta Değişimi",
-                style = MaterialTheme.typography.headlineSmall,
+                text = currentEmail,
+                style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface
             )
+        }
+    }
+}
+
+@Composable
+private fun EmailSupportingText(
+    validation: EmailValidationState,
+    newEmail: String
+) {
+    if (newEmail.isBlank()) {
+        Text(
+            text = "Yeni e-posta adresinizi yazın.",
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
+        return
+    }
+
+    if (!validation.isValidEmailFormat) {
+        Text(
+            text = "Geçerli bir e-posta adresi girin.",
+            color = MaterialTheme.colorScheme.error
+        )
+
+        return
+    }
+
+    if (validation.isSameEmail) {
+        Text(
+            text = "Yeni e-posta mevcut e-posta ile aynı olamaz.",
+            color = MaterialTheme.colorScheme.error
+        )
+
+        return
+    }
+
+    Text(
+        text = "E-posta formatı uygun görünüyor.",
+        color = BbColors.Green.Green700
+    )
+}
+
+@Composable
+private fun ChangeEmailInfoBox() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                color = BbColors.Blue.Blue50,
+                shape = BbRadius.LgShape
+            )
+            .padding(BbSpacing.CardPaddingCompact)
+    ) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+        ) {
+            Text(
+                text = "Doğrulama Gerekebilir",
+                style = MaterialTheme.typography.labelLarge,
+                color = BbColors.Blue.Blue700
+            )
 
             Text(
-                text = "Hesabına bağlı e-posta adresini değiştirmek için yeni adresini ve mevcut şifreni gir.",
+                text = "E-posta değişikliğinden sonra hesabınızın güvenliği için yeni adresin doğrulanması istenebilir.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
-
-        BbCard(
-            modifier = Modifier.fillMaxWidth(),
-            variant = BbCardVariant.Outlined,
-            padding = BbCardPadding.Large
-        ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = "Mevcut E-posta",
-                    style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-
-                Text(
-                    text = formState.value.currentEmailAddress,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-
-                Text(
-                    text = "Yeni e-posta adresin doğrulama sonrasında hesabına tanımlanır.",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-        }
-
-        BbFormSection(
-            title = "Yeni e-posta bilgileri"
-        ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = "Güvenlik için bu işlemde mevcut şifren de istenir. Yeni e-posta adresine doğrulama bağlantısı gönderilebilir.",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-
-                BbTextInput(
-                    value = formState.value.newEmailAddress,
-                    onValueChange = { newEmailAddress ->
-                        formState.value = formState.value.copy(
-                            newEmailAddress = newEmailAddress,
-                            validationMessage = null
-                        )
-                    },
-                    label = "Yeni E-posta",
-                    placeholder = "ornek@bulbulustur.com"
-                )
-
-                BbPasswordInput(
-                    value = formState.value.password,
-                    onValueChange = { password ->
-                        formState.value = formState.value.copy(
-                            password = password,
-                            validationMessage = null
-                        )
-                    },
-                    label = "Mevcut Şifre",
-                    placeholder = "Mevcut şifren"
-                )
-
-                BbCard(
-                    modifier = Modifier.fillMaxWidth(),
-                    variant = BbCardVariant.Outlined,
-                    padding = BbCardPadding.Medium
-                ) {
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(
-                            text = "E-posta değişikliği sonrası",
-                            style = MaterialTheme.typography.labelLarge,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-
-                        Text(
-                            text = "Yeni adres doğrulanana kadar bazı güvenlik işlemleri mevcut e-posta üzerinden devam edebilir.",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                }
-
-                if (formState.value.validationMessage != null) {
-                    Text(
-                        text = formState.value.validationMessage.orEmpty(),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.error
-                    )
-                }
-
-                BbButton(
-                    text = "Değiştir",
-                    onClick = {
-                        if (formState.value.canSubmit) {
-                            onEmailChangeClick(formState.value)
-                        } else {
-                            formState.value = formState.value.copy(
-                                validationMessage = getChangeEmailValidationMessage(formState.value)
-                            )
-                        }
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    variant = BbButtonVariant.Primary,
-                    enabled = formState.value.canSubmit,
-                    isLoading = isSubmitting
-                )
-
-                BbButton(
-                    text = "Vazgeç",
-                    onClick = onBackClick,
-                    modifier = Modifier.fillMaxWidth(),
-                    variant = BbButtonVariant.Outline,
-                    enabled = !isSubmitting
-                )
-            }
-        }
-
-        AccountSecurityBottomMenu(
-            selectedItem = AccountSecurityMenuItem.ChangeEmail,
-            onLoginActivitiesClick = onLoginActivitiesClick,
-            onChangePasswordClick = onChangePasswordClick,
-            onChangeEmailClick = {},
-            onDeactivateAccountClick = onDeactivateAccountClick,
-            modifier = Modifier.fillMaxWidth()
-        )
     }
 }
 
-private fun getChangeEmailValidationMessage(
-    formState: ChangeEmailFormState
-): String {
-    if (!formState.hasValidEmailFormat) {
-        return "Geçerli bir e-posta adresi girmelisin."
+@Composable
+private fun EmailMessageBox(
+    title: String,
+    message: String,
+    type: EmailMessageType
+) {
+    val backgroundColor = when (type) {
+        EmailMessageType.Success -> BbColors.Green.Green50
+        EmailMessageType.Error -> BbColors.Red.Red50
     }
 
-    if (!formState.isDifferentEmailAddress) {
-        return "Yeni e-posta adresi mevcut e-posta adresinden farklı olmalıdır."
+    val titleColor = when (type) {
+        EmailMessageType.Success -> BbColors.Green.Green700
+        EmailMessageType.Error -> BbColors.Red.Red700
     }
 
-    if (formState.password.isBlank()) {
-        return "Devam etmek için mevcut şifreni girmelisin."
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                color = backgroundColor,
+                shape = BbRadius.LgShape
+            )
+            .padding(BbSpacing.CardPaddingCompact)
+    ) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+        ) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.labelLarge,
+                color = titleColor
+            )
+
+            Text(
+                text = message,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+private fun validateEmailForm(
+    currentEmail: String,
+    newEmail: String
+): EmailValidationState {
+    val trimmedCurrentEmail = currentEmail.trim()
+    val trimmedNewEmail = newEmail.trim()
+
+    val hasEmail = trimmedNewEmail.isNotBlank()
+    val isValidEmailFormat = isValidEmailAddress(trimmedNewEmail)
+    val isSameEmail = trimmedCurrentEmail.equals(
+        other = trimmedNewEmail,
+        ignoreCase = true
+    )
+
+    return EmailValidationState(
+        hasEmail = hasEmail,
+        isValidEmailFormat = isValidEmailFormat,
+        isSameEmail = isSameEmail
+    )
+}
+
+private fun isValidEmailAddress(
+    email: String
+): Boolean {
+    if (email.isBlank()) {
+        return false
     }
 
-    return "E-posta değişikliği için gerekli alanları kontrol etmelisin."
+    val emailRegex = Regex(
+        pattern = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
+    )
+
+    return emailRegex.matches(email)
+}
+
+private enum class EmailMessageType {
+    Success,
+    Error
+}
+
+private data class EmailValidationState(
+    val hasEmail: Boolean,
+    val isValidEmailFormat: Boolean,
+    val isSameEmail: Boolean
+) {
+    val canSubmit: Boolean
+        get() {
+            return hasEmail &&
+                    isValidEmailFormat &&
+                    !isSameEmail
+        }
 }

@@ -1,4 +1,4 @@
-package com.bulbulustur.app.features.checkout
+package com.bulbulustur.android.features.checkout
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

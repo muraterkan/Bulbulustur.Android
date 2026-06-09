@@ -33,8 +33,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.bulbulustur.android.ui.commercecomponents.BbProductGrid
-import com.bulbulustur.android.ui.components.BbBottomNavigation
-import com.bulbulustur.android.ui.components.BbBottomNavigationItem
 import com.bulbulustur.android.ui.components.BbButton
 import com.bulbulustur.android.ui.components.BbButtonSize
 import com.bulbulustur.android.ui.components.BbButtonVariant
@@ -51,8 +49,7 @@ import com.bulbulustur.android.ui.theme.BbTheme
 fun ProductHistoryScreen(
     onBackClick: () -> Unit = {},
     onProductClick: (ProductHistoryItem) -> Unit = {},
-    onGoProductsClick: () -> Unit = {},
-    onBottomNavigationClick: (BbBottomNavigationItem) -> Unit = {}
+    onGoProductsClick: () -> Unit = {}
 ) {
     val historyItems = remember {
         mutableStateListOf<ProductHistoryItem>().apply {
@@ -90,12 +87,6 @@ fun ProductHistoryScreen(
 
     Scaffold(
         bottomBar = {
-            BbBottomNavigation(
-                selectedItem = BbBottomNavigationItem.Account,
-                onItemClick = {
-                    onBottomNavigationClick(it)
-                }
-            )
         },
         containerColor = MaterialTheme.colorScheme.background
     ) { innerPadding ->

@@ -34,10 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import com.bulbulustur.android.ui.components.BbBottomNavigation
-import com.bulbulustur.android.ui.components.BbBottomNavigationItem
 import com.bulbulustur.android.ui.components.BbCard
-import com.bulbulustur.android.ui.components.BbSearchBar
 import com.bulbulustur.android.ui.components.BbSectionHeader
 import com.bulbulustur.android.ui.theme.BbColors
 import com.bulbulustur.android.ui.theme.BbRadius
@@ -49,7 +46,6 @@ fun StoreListScreen(
     onStoreClick: (StoreListItem) -> Unit = {},
     onOpenStoreClick: () -> Unit = {},
     onHowItWorksClick: () -> Unit = {},
-    onBottomNavigationClick: (BbBottomNavigationItem) -> Unit = {}
 ) {
     val stores = remember {
         getStoreListItems()
@@ -118,12 +114,6 @@ fun StoreListScreen(
 
     Scaffold(
         bottomBar = {
-            BbBottomNavigation(
-                selectedItem = BbBottomNavigationItem.Categories,
-                onItemClick = {
-                    onBottomNavigationClick(it)
-                }
-            )
         }
     ) { innerPadding ->
         Column(
@@ -156,13 +146,7 @@ fun StoreListScreen(
                 }
 
                 item {
-                    BbSearchBar(
-                        value = searchText,
-                        placeholder = "Mağaza ara",
-                        onValueChange = {
-                            searchText = it
-                        }
-                    )
+
                 }
 
                 item {

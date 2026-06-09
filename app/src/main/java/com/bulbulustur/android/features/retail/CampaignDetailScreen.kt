@@ -1,4 +1,4 @@
-package com.bulbulustur.app.features.retail
+package com.bulbulustur.android.features.retail
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

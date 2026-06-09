@@ -1,137 +1,131 @@
 package com.bulbulustur.android.features.account
 
 import androidx.compose.foundation.background
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material.icons.outlined.Phone
-import androidx.compose.material.icons.outlined.Save
-import androidx.compose.material.icons.outlined.Security
-import androidx.compose.material.icons.outlined.Sms
-import androidx.compose.material.icons.outlined.Tune
-import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.bulbulustur.android.features.account.components.AccountPageScaffold
 import com.bulbulustur.android.ui.components.BbButton
+import com.bulbulustur.android.ui.components.BbButtonSize
+import com.bulbulustur.android.ui.components.BbButtonVariant
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
-import com.bulbulustur.android.ui.components.BbSectionHeader
+import com.bulbulustur.android.ui.components.BbCardVariant
 import com.bulbulustur.android.ui.theme.BbColors
+import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
-import com.bulbulustur.android.ui.theme.BbTypography
 
 @Composable
-fun CommunicationPreferenceScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surfaceVariant)
-            .padding(BbSpacing.md),
-        verticalArrangement = Arrangement.spacedBy(BbSpacing.md)
-    ) {
-        BbSectionHeader(
-            title = "İletişim Tercihleri",
-            subtitle = "Bulbulustur’un sizinle hangi kanallar üzerinden iletişime geçebileceğini yönetin"
-        )
-
-        BbCard(
-            padding = BbCardPadding.Medium
-        ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(BbSpacing.md)
-            ) {
-                CommunicationPreferenceHeader()
-
-                CommunicationPreferenceRow(
-                    title = "E-posta",
-                    description = "Kampanya, hesap, sipariş ve platform duyuruları için e-posta iletişimini yönetir.",
-                    checked = false,
-                    icon = {
-                        Icon(
-                            imageVector = Icons.Outlined.Email,
-                            contentDescription = null,
-                            tint = BbColors.Primary
-                        )
-                    }
-                )
-
-                CommunicationPreferenceRow(
-                    title = "SMS",
-                    description = "Kısa bilgilendirme, güvenlik ve işlem mesajları için SMS iletişim tercihinizi belirler.",
-                    checked = false,
-                    icon = {
-                        Icon(
-                            imageVector = Icons.Outlined.Sms,
-                            contentDescription = null,
-                            tint = BbColors.Primary
-                        )
-                    }
-                )
-
-                CommunicationPreferenceRow(
-                    title = "Telefon",
-                    description = "Gerekli durumlarda telefon üzerinden iletişim kurulup kurulamayacağını belirler.",
-                    checked = false,
-                    icon = {
-                        Icon(
-                            imageVector = Icons.Outlined.Phone,
-                            contentDescription = null,
-                            tint = BbColors.Primary
-                        )
-                    }
-                )
-
-                CommunicationPreferenceInfoBox()
-
-                BbButton(
-                    text = "Güncelle",
-                    onClick = {},
-                    modifier = Modifier.fillMaxWidth(),
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Outlined.Save,
-                            contentDescription = null
-                        )
-                    }
-                )
-            }
-        }
+fun CommunicationPreferenceScreen(
+    onBackClick: () -> Unit = {},
+    onSaveClick: (
+        emailAllowed: Boolean,
+        smsAllowed: Boolean,
+        phoneAllowed: Boolean,
+        appNotificationAllowed: Boolean
+    ) -> Unit = { _, _, _, _ -> }
+) {
+    val emailAllowedState = remember {
+        mutableStateOf(true)
     }
-}
 
-@Composable
-private fun CommunicationPreferenceHeader() {
-    Row(
-        verticalAlignment = Alignment.CenterVertically
+    val smsAllowedState = remember {
+        mutableStateOf(false)
+    }
+
+    val phoneAllowedState = remember {
+        mutableStateOf(false)
+    }
+
+    val appNotificationAllowedState = remember {
+        mutableStateOf(true)
+    }
+
+    AccountPageScaffold(
+        title = "İletişim Tercihlerim",
+        kicker = "Bildirim ve İzinler",
+        description = "E-posta, SMS, telefon ve uygulama bildirimleri için iletişim tercihlerinizi buradan yönetebilirsiniz.",
+        backButtonText = "Hesabıma Dön",
+        onBackClick = onBackClick
     ) {
-        Icon(
-            imageVector = Icons.Outlined.Tune,
-            contentDescription = null,
-            tint = BbColors.Primary
-        )
-
         Column(
-            modifier = Modifier.padding(start = BbSpacing.md)
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
         ) {
-            Text(
-                text = "Bildirim kanalları",
-                style = BbTypography.titleMedium,
-                color = BbColors.TextStrong
-            )
+            CommunicationInfoBox()
 
-            Text(
-                text = "Bulbulustur’un sizinle hangi kanallar üzerinden iletişime geçebileceğini buradan yönetebilirsiniz.",
-                style = BbTypography.bodySmall,
-                color = BbColors.TextMuted
+            BbCard(
+                modifier = Modifier.fillMaxWidth(),
+                variant = BbCardVariant.Outlined,
+                padding = BbCardPadding.Medium
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
+                ) {
+                    CommunicationPreferenceRow(
+                        title = "E-posta Bildirimleri",
+                        description = "Sipariş, kampanya ve hesap bilgilendirmeleri e-posta ile gönderilebilir.",
+                        checked = emailAllowedState.value,
+                        onCheckedChange = { value ->
+                            emailAllowedState.value = value
+                        }
+                    )
+
+                    CommunicationPreferenceRow(
+                        title = "SMS Bildirimleri",
+                        description = "Kısa bilgilendirme ve doğrulama mesajları SMS ile gönderilebilir.",
+                        checked = smsAllowedState.value,
+                        onCheckedChange = { value ->
+                            smsAllowedState.value = value
+                        }
+                    )
+
+                    CommunicationPreferenceRow(
+                        title = "Telefon Araması",
+                        description = "Gerekli durumlarda hesabınızla ilgili telefonla iletişim kurulabilir.",
+                        checked = phoneAllowedState.value,
+                        onCheckedChange = { value ->
+                            phoneAllowedState.value = value
+                        }
+                    )
+
+                    CommunicationPreferenceRow(
+                        title = "Uygulama Bildirimleri",
+                        description = "Mobil uygulama üzerinden bildirim almayı yönetebilirsiniz.",
+                        checked = appNotificationAllowedState.value,
+                        onCheckedChange = { value ->
+                            appNotificationAllowedState.value = value
+                        }
+                    )
+                }
+            }
+
+            BbButton(
+                text = "Tercihleri Kaydet",
+                onClick = {
+                    onSaveClick(
+                        emailAllowedState.value,
+                        smsAllowedState.value,
+                        phoneAllowedState.value,
+                        appNotificationAllowedState.value
+                    )
+                },
+                modifier = Modifier.fillMaxWidth(),
+                variant = BbButtonVariant.Primary,
+                size = BbButtonSize.Medium
             )
         }
     }
@@ -142,62 +136,69 @@ private fun CommunicationPreferenceRow(
     title: String,
     description: String,
     checked: Boolean,
-    icon: @Composable () -> Unit
+    onCheckedChange: (Boolean) -> Unit
 ) {
-    BbCard(
-        padding = BbCardPadding.Medium
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
         ) {
-            icon()
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurface
+            )
 
-            Column(
-                modifier = Modifier
-                    .padding(start = BbSpacing.md)
-                    .weight(1f)
-            ) {
-                Text(
-                    text = title,
-                    style = BbTypography.titleSmall,
-                    color = BbColors.TextStrong
-                )
-
-                Text(
-                    text = description,
-                    style = BbTypography.bodySmall,
-                    color = BbColors.TextMuted
-                )
-            }
-
-            Switch(
-                checked = checked,
-                onCheckedChange = {}
+            Text(
+                text = description,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
+
+        Switch(
+            checked = checked,
+            onCheckedChange = { value ->
+                onCheckedChange(value)
+            },
+            colors = SwitchDefaults.colors(
+                checkedThumbColor = MaterialTheme.colorScheme.onPrimary,
+                checkedTrackColor = MaterialTheme.colorScheme.primary,
+                uncheckedThumbColor = MaterialTheme.colorScheme.surface,
+                uncheckedTrackColor = MaterialTheme.colorScheme.outlineVariant
+            )
+        )
     }
 }
 
 @Composable
-private fun CommunicationPreferenceInfoBox() {
-    BbCard(
-        padding = BbCardPadding.Medium
+private fun CommunicationInfoBox() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                color = BbColors.Blue.Blue50,
+                shape = BbRadius.LgShape
+            )
+            .padding(BbSpacing.CardPaddingCompact)
     ) {
-        Row(
-            verticalAlignment = Alignment.Top
+        Column(
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
         ) {
-            Icon(
-                imageVector = Icons.Outlined.Security,
-                contentDescription = null,
-                tint = BbColors.Warning
+            Text(
+                text = "İletişim İzinleri",
+                style = MaterialTheme.typography.labelLarge,
+                color = BbColors.Blue.Blue700
             )
 
             Text(
-                text = "Bu tercihler hesabınıza ait bilgilendirme kanallarını yönetir. Zorunlu güvenlik ve işlem bildirimleri ayrıca gönderilebilir.",
-                style = BbTypography.bodySmall,
-                color = BbColors.TextMuted,
-                modifier = Modifier.padding(start = BbSpacing.md)
+                text = "Zorunlu hesap, güvenlik ve sipariş bildirimleri yasal süreçler kapsamında ayrıca gönderilebilir.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }

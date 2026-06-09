@@ -1,36 +1,52 @@
 package com.bulbulustur.android.features.account
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ChevronRight
-import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.History
-import androidx.compose.material.icons.outlined.Lock
-import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.Key
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.PhoneIphone
 import androidx.compose.material.icons.outlined.Security
-import androidx.compose.material.icons.outlined.Tune
+import androidx.compose.material.icons.outlined.Shield
+import androidx.compose.material.icons.outlined.VerifiedUser
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Surface
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.bulbulustur.android.features.account.components.AccountPageScaffold
+import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.ui.components.BbButton
+import com.bulbulustur.android.ui.components.BbButtonSize
+import com.bulbulustur.android.ui.components.BbButtonVariant
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
-import com.bulbulustur.android.ui.theme.BbColors
+import com.bulbulustur.android.ui.components.BbCardVariant
+import com.bulbulustur.android.ui.theme.BbIcon
+import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
 import com.bulbulustur.android.ui.theme.BbTypography
 
@@ -40,104 +56,162 @@ fun AccountSecurityScreen(
     onProfileInfoClick: () -> Unit = {},
     onEmailChangeClick: () -> Unit = {},
     onPasswordChangeClick: () -> Unit = {},
+    onPhonesClick: () -> Unit = {},
     onLoginActivitiesClick: () -> Unit = {},
     onCommunicationPreferencesClick: () -> Unit = {}
 ) {
-    AccountPageScaffold(
-        title = "Hesap ve Güvenlik",
-        subtitle = "Ad, e-posta, şifre ve iletişim tercihlerini yönet",
-        onBackClick = onBackClick
+    val pageBackground = Brush.verticalGradient(
+        colors = listOf(
+            MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.55f),
+            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.80f),
+            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.95f)
+        )
+    )
+
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(pageBackground)
+            .statusBarsPadding()
+            .navigationBarsPadding(),
+        contentPadding = PaddingValues(
+            horizontal = BbSpacing.PageHorizontal,
+            vertical = BbSpacing.PageTopCompact
+        ),
+        verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
     ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.md)
-        ) {
-            AccountSecuritySection(
-                title = "Profil Bilgileri",
-                subtitle = "Ad soyad ve temel profil bilgilerini yönetin.",
-                icon = Icons.Outlined.Person,
-                rows = listOf(
-                    AccountSecurityRowModel(
-                        title = "İsim Soyisim",
-                        value = "Murat Erkan",
-                        actionText = "Düzenle",
-                        icon = Icons.Outlined.Edit,
-                        onClick = onProfileInfoClick
-                    )
-                )
+        item {
+            AccountSecurityHeroCard(
+                onBackClick = onBackClick
             )
+        }
 
-            AccountSecuritySection(
-                title = "Güvenlik",
-                subtitle = "E-posta, şifre ve oturum güvenliği ayarlarını güncel tutun.",
-                icon = Icons.Outlined.Security,
-                rows = listOf(
-                    AccountSecurityRowModel(
-                        title = "E-Posta",
-                        value = "muraterkan500@gmail.com",
-                        actionText = "Değiştir",
-                        icon = Icons.Outlined.Email,
-                        onClick = onEmailChangeClick
-                    ),
-                    AccountSecurityRowModel(
-                        title = "Şifre",
-                        value = "Şifre hesabınıza giriş yapmak için kullanılır",
-                        actionText = "Değiştir",
-                        icon = Icons.Outlined.Lock,
-                        onClick = onPasswordChangeClick
-                    ),
-                    AccountSecurityRowModel(
-                        title = "Giriş Etkinlikleri",
-                        value = "Oturum hareketlerinizi ve hesap erişim geçmişinizi inceleyin.",
-                        actionText = "Tüm liste",
-                        icon = Icons.Outlined.History,
-                        onClick = onLoginActivitiesClick
-                    )
-                )
-            )
+        item {
+            AccountSecurityStrengthCard()
+        }
 
+        item {
             AccountSecuritySection(
-                title = "Tercihler",
-                subtitle = "İletişim izinleri ve bildirim tercihlerinizi düzenleyin.",
-                icon = Icons.Outlined.Tune,
-                rows = listOf(
-                    AccountSecurityRowModel(
-                        title = "İletişim Tercihleri",
-                        value = "E-posta, SMS ve platform bildirim tercihlerinizi yönetin.",
-                        actionText = "Düzenle",
-                        icon = Icons.Outlined.Notifications,
-                        onClick = onCommunicationPreferencesClick
-                    )
+                title = "Profil",
+                description = "Hesabınızda görünen temel bilgileri yönetin.",
+                icon = Icons.Outlined.Person
+            ) {
+                AccountSecurityRow(
+                    title = "Profil Bilgileri",
+                    value = "Ad soyad, hesap ID ve temel profil bilgileri",
+                    icon = Icons.Outlined.Person,
+                    onClick = onProfileInfoClick
                 )
-            )
+            }
+        }
+
+        item {
+            AccountSecuritySection(
+                title = "Giriş ve Güvenlik",
+                description = "E-posta, şifre ve giriş güvenliği ayarları.",
+                icon = Icons.Outlined.Security
+            ) {
+                AccountSecurityRow(
+                    title = "E-posta",
+                    value = "muraterkan500@gmail.com",
+                    icon = Icons.Outlined.Email,
+                    onClick = onEmailChangeClick
+                )
+
+                AccountSecurityDashedDivider()
+
+                AccountSecurityRow(
+                    title = "Şifre",
+                    value = "Hesabınıza giriş yapmak için kullanılır",
+                    icon = Icons.Outlined.Key,
+                    onClick = onPasswordChangeClick
+                )
+
+                AccountSecurityDashedDivider()
+
+                AccountSecurityRow(
+                    title = "Telefonlarım",
+                    value = "SMS doğrulama ve güvenlik işlemleri",
+                    icon = Icons.Outlined.PhoneIphone,
+                    onClick = onPhonesClick
+                )
+            }
+        }
+
+        item {
+            AccountSecuritySection(
+                title = "Oturum Geçmişi",
+                description = "Hesabınıza yapılan erişimleri kontrol edin.",
+                icon = Icons.Outlined.History
+            ) {
+                AccountSecurityRow(
+                    title = "Giriş Etkinlikleri",
+                    value = "Oturum hareketleri ve erişim geçmişi",
+                    icon = Icons.Outlined.History,
+                    onClick = onLoginActivitiesClick
+                )
+            }
         }
     }
 }
 
 @Composable
-private fun AccountSecuritySection(
-    title: String,
-    subtitle: String,
-    icon: ImageVector,
-    rows: List<AccountSecurityRowModel>
+private fun AccountSecurityHeroCard(
+    onBackClick: () -> Unit
 ) {
-    BbCard(
-        padding = BbCardPadding.Medium
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                color = MaterialTheme.colorScheme.inverseSurface,
+                shape = BbRadius.XlShape
+            )
+            .padding(BbSpacing.CardPadding)
     ) {
-        Column {
-            AccountSecuritySectionHeader(
-                title = title,
-                subtitle = subtitle,
-                icon = icon
+        Column(
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
+        ) {
+            BbButton(
+                text = "Hesabıma Dön",
+                onClick = onBackClick,
+                variant = BbButtonVariant.Light,
+                size = BbButtonSize.Small
             )
 
-            Spacer(modifier = Modifier.height(BbSpacing.md))
-
-            Column(
-                verticalArrangement = Arrangement.spacedBy(BbSpacing.sm)
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                rows.forEach { row ->
-                    AccountSecurityRow(
-                        row = row
+                Box(
+                    modifier = Modifier
+                        .size(BbIcon.BoxXl)
+                        .background(
+                            color = MaterialTheme.colorScheme.primary,
+                            shape = BbRadius.XlShape
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Shield,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimary,
+                        modifier = Modifier.size(BbIcon.Section)
+                    )
+                }
+
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+                ) {
+                    Text(
+                        text = "Hesap ve Güvenlik",
+                        style = BbTypography.titleLarge,
+                        color = MaterialTheme.colorScheme.inverseOnSurface
+                    )
+
+                    Text(
+                        text = "Profil, giriş ve doğrulama bilgilerinizi güvenle yönetin.",
+                        style = BbTypography.bodySmall,
+                        color = MaterialTheme.colorScheme.inverseOnSurface.copy(alpha = 0.72f)
                     )
                 }
             }
@@ -146,101 +220,230 @@ private fun AccountSecuritySection(
 }
 
 @Composable
-private fun AccountSecuritySectionHeader(
-    title: String,
-    subtitle: String,
-    icon: ImageVector
-) {
-    Row(
-        verticalAlignment = Alignment.Top
+private fun AccountSecurityStrengthCard() {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
     ) {
-        Surface(
-            shape = CircleShape,
-            color = BbColors.PrimarySoft
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = BbColors.Primary,
-                modifier = Modifier.padding(BbSpacing.sm)
-            )
-        }
-
         Column(
-            modifier = Modifier.padding(start = BbSpacing.md)
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
         ) {
-            Text(
-                text = title,
-                style = BbTypography.titleSmall,
-                color = BbColors.TextStrong
-            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(BbIcon.BoxMd)
+                        .background(
+                            color = MaterialTheme.colorScheme.primaryContainer,
+                            shape = BbRadius.PillShape
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.VerifiedUser,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                        modifier = Modifier.size(BbIcon.Ui)
+                    )
+                }
 
-            Spacer(modifier = Modifier.height(BbSpacing.xs))
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+                ) {
+                    Text(
+                        text = "Hesap güvenliği",
+                        style = BbTypography.titleSmall,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
 
-            Text(
-                text = subtitle,
-                style = BbTypography.bodySmall,
-                color = BbColors.TextMuted
+                    Text(
+                        text = "Telefon doğrulaması tamamlandığında güvenlik seviyeniz artar.",
+                        style = BbTypography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+
+                Text(
+                    text = "%80",
+                    style = BbTypography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+
+            LinearProgressIndicator(
+                progress = {
+                    0.80f
+                },
+                modifier = Modifier.fillMaxWidth(),
+                color = MaterialTheme.colorScheme.primary,
+                trackColor = MaterialTheme.colorScheme.surfaceVariant,
+                strokeCap = ProgressIndicatorDefaults.LinearStrokeCap
             )
         }
     }
 }
 
 @Composable
+private fun AccountSecuritySection(
+    title: String,
+    description: String,
+    icon: ImageVector,
+    content: @Composable ColumnScope.() -> Unit
+) {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.None
+    ) {
+        Column(
+            modifier = Modifier.background(MaterialTheme.colorScheme.surface)
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(BbSpacing.CardPadding),
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(BbIcon.BoxMd)
+                        .background(
+                            color = MaterialTheme.colorScheme.primaryContainer,
+                            shape = BbRadius.LgShape
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                        modifier = Modifier.size(BbIcon.Ui)
+                    )
+                }
+
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+                ) {
+                    Text(
+                        text = title,
+                        style = BbTypography.titleSmall,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+
+                    Text(
+                        text = description,
+                        style = BbTypography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+
+            AccountSecurityDashedDivider()
+
+            Column {
+                content()
+            }
+        }
+    }
+}
+
+@Composable
 private fun AccountSecurityRow(
-    row: AccountSecurityRowModel
+    title: String,
+    value: String,
+    icon: ImageVector,
+    onClick: () -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(BbColors.SurfaceMuted)
             .clickable {
-                row.onClick()
+                onClick()
             }
-            .padding(
-                horizontal = BbSpacing.md,
-                vertical = BbSpacing.md
-            ),
+            .padding(BbSpacing.CardPadding),
+        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(
-            imageVector = row.icon,
-            contentDescription = null,
-            tint = BbColors.TextMuted
-        )
-
-        Column(
+        Box(
             modifier = Modifier
-                .padding(start = BbSpacing.md)
-                .weight(1f)
+                .size(BbIcon.BoxMd)
+                .background(
+                    color = MaterialTheme.colorScheme.surfaceVariant,
+                    shape = BbRadius.PillShape
+                ),
+            contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = row.title,
-                style = BbTypography.labelSmall,
-                color = BbColors.TextMuted
-            )
-
-            Spacer(modifier = Modifier.height(BbSpacing.xs))
-
-            Text(
-                text = row.value,
-                style = BbTypography.bodyMedium,
-                color = BbColors.TextStrong
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.size(BbIcon.Ui)
             )
         }
 
-        Icon(
-            imageVector = Icons.Outlined.ChevronRight,
-            contentDescription = null,
-            tint = BbColors.Primary
-        )
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+        ) {
+            Text(
+                text = title,
+                style = BbTypography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+
+            Text(
+                text = value,
+                style = BbTypography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        }
+
+        Box(
+            modifier = Modifier
+                .size(BbIcon.BoxSm)
+                .background(
+                    color = MaterialTheme.colorScheme.surfaceVariant,
+                    shape = BbRadius.PillShape
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.ChevronRight,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.size(BbIcon.SizeSm)
+            )
+        }
     }
 }
 
-private data class AccountSecurityRowModel(
-    val title: String,
-    val value: String,
-    val actionText: String,
-    val icon: ImageVector,
-    val onClick: () -> Unit
-)
+@Composable
+private fun AccountSecurityDashedDivider() {
+    val dividerColor = MaterialTheme.colorScheme.outlineVariant
+
+    Canvas(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                start = BbSpacing.Space4,
+                end = BbSpacing.Space4
+            )
+            .size(height = 1.dp, width = 1.dp)
+    ) {
+        drawLine(
+            color = dividerColor,
+            start = Offset(0f, 0f),
+            end = Offset(size.width, 0f),
+            strokeWidth = 1.dp.toPx(),
+            pathEffect = PathEffect.dashPathEffect(
+                intervals = floatArrayOf(10f, 8f),
+                phase = 0f
+            )
+        )
+    }
+}

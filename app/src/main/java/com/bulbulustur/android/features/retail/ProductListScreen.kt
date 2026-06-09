@@ -2,27 +2,25 @@ package com.bulbulustur.android.features.retail
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.FilterChip
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ShoppingBasket
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,20 +30,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.material3.Icon
+import com.bulbulustur.android.features.retail.components.RetailBottomNavigation
+import com.bulbulustur.android.features.retail.components.RetailBottomNavigationItem
+import com.bulbulustur.android.features.retail.components.RetailSearchHeader
 import com.bulbulustur.android.ui.commercecomponents.BbProductGrid
-import com.bulbulustur.android.ui.components.BbBottomNavigation
-import com.bulbulustur.android.ui.components.BbBottomNavigationItem
 import com.bulbulustur.android.ui.components.BbCard
-import com.bulbulustur.android.ui.components.BbSearchBar
+import com.bulbulustur.android.ui.components.BbChip
 import com.bulbulustur.android.ui.components.BbSectionHeader
 import com.bulbulustur.android.ui.theme.BbColors
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
+import com.bulbulustur.android.ui.theme.BbTheme
 
 @Composable
 fun ProductListScreen(
-    onProductClick: (RetailProductListItem) -> Unit = {},
-    onBottomNavigationClick: (BbBottomNavigationItem) -> Unit = {}
+    onSearchClick: (String) -> Unit = {},
+    onMenuClick: () -> Unit = {},
+    onFavoriteClick: () -> Unit = {},
+    onHomeClick: () -> Unit = {},
+    onMessageClick: () -> Unit = {},
+    onBasketClick: () -> Unit = {},
+    onAccountClick: () -> Unit = {},
+    onProductDetailClick: () -> Unit = {}
 ) {
     val products = remember {
         getRetailProductListItems()
@@ -92,32 +99,32 @@ fun ProductListScreen(
         val searchFilteredProducts = if (searchText.isBlank()) {
             products
         } else {
-            products.filter {
-                it.name.contains(searchText, ignoreCase = true) ||
-                        it.storeName.contains(searchText, ignoreCase = true) ||
-                        it.categoryName.contains(searchText, ignoreCase = true)
+            products.filter { product ->
+                product.name.contains(searchText, ignoreCase = true) ||
+                        product.storeName.contains(searchText, ignoreCase = true) ||
+                        product.categoryName.contains(searchText, ignoreCase = true)
             }
         }
 
         val categoryFilteredProducts = if (selectedCategory == "Tümü") {
             searchFilteredProducts
         } else {
-            searchFilteredProducts.filter {
-                it.categoryName == selectedCategory
+            searchFilteredProducts.filter { product ->
+                product.categoryName == selectedCategory
             }
         }
 
         when (selectedSortOption) {
-            "En düşük fiyat" -> categoryFilteredProducts.sortedBy {
-                it.priceValue
+            "En düşük fiyat" -> categoryFilteredProducts.sortedBy { product ->
+                product.priceValue
             }
 
-            "En yüksek fiyat" -> categoryFilteredProducts.sortedByDescending {
-                it.priceValue
+            "En yüksek fiyat" -> categoryFilteredProducts.sortedByDescending { product ->
+                product.priceValue
             }
 
-            "Yeni gelenler" -> categoryFilteredProducts.filter {
-                it.isNew
+            "Yeni gelenler" -> categoryFilteredProducts.filter { product ->
+                product.isNew
             }
 
             else -> categoryFilteredProducts
@@ -125,38 +132,54 @@ fun ProductListScreen(
     }
 
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            RetailSearchHeader(
+                searchText = searchText,
+                onSearchTextChange = {
+                    searchText = it
+                },
+                onMenuClick = onMenuClick,
+                onFavoriteClick = onFavoriteClick,
+                onSearchClick = {
+                    onSearchClick(searchText)
+                },
+                onClearClick = {
+                    searchText = ""
+                }
+            )
+        },
         bottomBar = {
-            BbBottomNavigation(
-                selectedItem = BbBottomNavigationItem.Categories,
-                onItemClick = {
-                    onBottomNavigationClick(it)
+            RetailBottomNavigation(
+                selectedItem = RetailBottomNavigationItem.Menu,
+                onItemClick = { selectedItem ->
+                    when (selectedItem) {
+                        RetailBottomNavigationItem.Home -> onHomeClick()
+                        RetailBottomNavigationItem.Menu -> onMenuClick()
+                        RetailBottomNavigationItem.Messages -> onMessageClick()
+                        RetailBottomNavigationItem.Basket -> onBasketClick()
+                        RetailBottomNavigationItem.Account -> onAccountClick()
+                    }
                 }
             )
         }
     ) { innerPadding ->
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.background)
                 .padding(innerPadding)
         ) {
-            BbSearchBar(
-                value = searchText,
-                placeholder = "Perakende ürün ara",
-                onValueChange = {
-                    searchText = it
-                },
-                modifier = Modifier.padding(BbSpacing.md)
-            )
-
             BbSectionHeader(
                 title = "Perakende Ürünler",
                 subtitle = "Kategorilerden, mağazalardan ve kampanyalardan ürün keşfet"
             )
 
-            Spacer(modifier = Modifier.height(BbSpacing.sm))
+            Spacer(
+                modifier = Modifier.height(BbSpacing.Space2)
+            )
 
-            ProductListHorizontalFilters(
+            RetailProductListHorizontalFilters(
                 items = categories,
                 selectedItem = selectedCategory,
                 onItemClick = {
@@ -164,9 +187,11 @@ fun ProductListScreen(
                 }
             )
 
-            Spacer(modifier = Modifier.height(BbSpacing.sm))
+            Spacer(
+                modifier = Modifier.height(BbSpacing.Space2)
+            )
 
-            ProductListHorizontalFilters(
+            RetailProductListHorizontalFilters(
                 items = sortOptions,
                 selectedItem = selectedSortOption,
                 onItemClick = {
@@ -174,24 +199,34 @@ fun ProductListScreen(
                 }
             )
 
-            Spacer(modifier = Modifier.height(BbSpacing.sm))
+            Spacer(
+                modifier = Modifier.height(BbSpacing.Space2)
+            )
 
-            ProductListResultHeader(
+            RetailProductListResultHeader(
                 productCount = filteredProducts.size,
                 selectedCategory = selectedCategory
             )
 
             BbProductGrid(
-                contentPadding = PaddingValues(BbSpacing.md),
-                horizontalSpacing = BbSpacing.sm,
-                verticalSpacing = BbSpacing.md
+                contentPadding = PaddingValues(
+                    start = BbSpacing.PageHorizontal,
+                    top = BbSpacing.Space3,
+                    end = BbSpacing.PageHorizontal,
+                    bottom = BbSpacing.PageBottom
+                ),
+                horizontalSpacing = BbSpacing.Space3,
+                verticalSpacing = BbSpacing.Space4
             ) {
-                items(filteredProducts) { product ->
+                items(
+                    items = filteredProducts,
+                    key = { product ->
+                        product.id
+                    }
+                ) { product ->
                     RetailProductListCard(
                         product = product,
-                        onClick = {
-                            onProductClick(product)
-                        }
+                        onClick = onProductDetailClick
                     )
                 }
             }
@@ -200,7 +235,7 @@ fun ProductListScreen(
 }
 
 @Composable
-private fun ProductListHorizontalFilters(
+private fun RetailProductListHorizontalFilters(
     items: List<String>,
     selectedItem: String,
     onItemClick: (String) -> Unit
@@ -208,18 +243,15 @@ private fun ProductListHorizontalFilters(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .horizontalScroll(rememberScrollState())
-            .padding(horizontal = BbSpacing.md),
-        horizontalArrangement = Arrangement.spacedBy(BbSpacing.sm)
+            .padding(horizontal = BbSpacing.PageHorizontal),
+        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
     ) {
-        items.forEach { item ->
-            FilterChip(
+        items.take(4).forEach { item ->
+            BbChip(
+                text = item,
                 selected = selectedItem == item,
                 onClick = {
                     onItemClick(item)
-                },
-                label = {
-                    Text(text = item)
                 }
             )
         }
@@ -227,7 +259,7 @@ private fun ProductListHorizontalFilters(
 }
 
 @Composable
-private fun ProductListResultHeader(
+private fun RetailProductListResultHeader(
     productCount: Int,
     selectedCategory: String
 ) {
@@ -235,10 +267,10 @@ private fun ProductListResultHeader(
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                start = BbSpacing.md,
-                end = BbSpacing.md,
-                top = BbSpacing.xs,
-                bottom = BbSpacing.xs
+                start = BbSpacing.PageHorizontal,
+                end = BbSpacing.PageHorizontal,
+                top = BbSpacing.Space1,
+                bottom = BbSpacing.Space1
             ),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -259,7 +291,7 @@ private fun ProductListResultHeader(
             Text(
                 text = "$productCount ürün listeleniyor",
                 style = MaterialTheme.typography.bodySmall,
-                color = BbColors.TextStrong.copy(alpha = 0.62f)
+                color = BbColors.TextMuted
             )
         }
 
@@ -284,9 +316,9 @@ private fun RetailProductListCard(
                 .clickable {
                     onClick()
                 },
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.sm)
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
         ) {
-            ProductImagePlaceholder(
+            RetailProductImagePlaceholder(
                 imageText = product.imageText,
                 badgeText = product.badgeText
             )
@@ -302,7 +334,7 @@ private fun RetailProductListCard(
             Text(
                 text = product.storeName,
                 style = MaterialTheme.typography.bodySmall,
-                color = BbColors.TextStrong.copy(alpha = 0.62f),
+                color = BbColors.TextMuted,
                 maxLines = 1
             )
 
@@ -317,26 +349,28 @@ private fun RetailProductListCard(
                 )
 
                 if (product.oldPriceText.isNotBlank()) {
-                    Spacer(modifier = Modifier.width(BbSpacing.xs))
+                    Spacer(
+                        modifier = Modifier.width(BbSpacing.Space1)
+                    )
 
                     Text(
                         text = product.oldPriceText,
                         style = MaterialTheme.typography.labelSmall,
-                        color = BbColors.TextStrong.copy(alpha = 0.48f)
+                        color = BbColors.TextMuted
                     )
                 }
             }
 
             Row(
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.xs),
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space1),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                ProductSmallPill(
+                RetailProductSmallPill(
                     text = product.ratingText
                 )
 
                 if (product.cargoText.isNotBlank()) {
-                    ProductSmallPill(
+                    RetailProductSmallPill(
                         text = product.cargoText
                     )
                 }
@@ -346,42 +380,49 @@ private fun RetailProductListCard(
 }
 
 @Composable
-private fun ProductImagePlaceholder(
+private fun RetailProductImagePlaceholder(
     imageText: String,
     badgeText: String
 ) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(BbSpacing.Space16 + BbSpacing.xl)
+            .height(BbSpacing.Space16 + BbSpacing.Space8)
             .clip(RoundedCornerShape(BbRadius.lg))
             .background(MaterialTheme.colorScheme.surfaceVariant),
         contentAlignment = Alignment.Center
     ) {
+        Icon(
+            imageVector = Icons.Outlined.ShoppingBasket,
+            contentDescription = null,
+            tint = BbColors.TextMuted
+        )
+
         Text(
             text = imageText,
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
-            color = BbColors.TextStrong.copy(alpha = 0.46f)
+            color = BbColors.TextMuted,
+            modifier = Modifier.align(Alignment.BottomCenter)
         )
 
         if (badgeText.isNotBlank()) {
             Box(
                 modifier = Modifier
                     .align(Alignment.TopStart)
-                    .padding(BbSpacing.xs)
+                    .padding(BbSpacing.Space1)
                     .clip(RoundedCornerShape(BbRadius.pill))
                     .background(BbColors.Success)
                     .padding(
-                        horizontal = BbSpacing.sm,
-                        vertical = BbSpacing.xs
+                        horizontal = BbSpacing.Space2,
+                        vertical = BbSpacing.Space1
                     )
             ) {
                 Text(
                     text = badgeText,
                     style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.surfaceVariant
+                    color = BbColors.White
                 )
             }
         }
@@ -389,7 +430,7 @@ private fun ProductImagePlaceholder(
 }
 
 @Composable
-private fun ProductSmallPill(
+private fun RetailProductSmallPill(
     text: String
 ) {
     Box(
@@ -397,18 +438,19 @@ private fun ProductSmallPill(
             .clip(RoundedCornerShape(BbRadius.pill))
             .background(MaterialTheme.colorScheme.surfaceVariant)
             .padding(
-                horizontal = BbSpacing.sm,
-                vertical = BbSpacing.xs
+                horizontal = BbSpacing.Space2,
+                vertical = BbSpacing.Space1
             )
     ) {
         Text(
             text = text,
             style = MaterialTheme.typography.labelSmall,
-            color = BbColors.TextStrong.copy(alpha = 0.68f)
+            color = BbColors.TextMuted
         )
     }
 }
 
+@Immutable
 data class RetailProductListItem(
     val id: Int,
     val name: String,
@@ -509,34 +551,6 @@ private fun getRetailProductListItems(): List<RetailProductListItem> {
             badgeText = "Popüler",
             imageText = "P6",
             isNew = false
-        ),
-        RetailProductListItem(
-            id = 7,
-            name = "Minimal bileklik seti",
-            storeName = "Urban Touch",
-            categoryName = "Çanta",
-            priceText = "₺219,90",
-            oldPriceText = "",
-            priceValue = 219.90,
-            ratingText = "★ 4.3",
-            cargoText = "Hızlı kargo",
-            badgeText = "",
-            imageText = "P7",
-            isNew = true
-        ),
-        RetailProductListItem(
-            id = 8,
-            name = "Pamuklu erkek basic sweatshirt",
-            storeName = "Moda Nova",
-            categoryName = "Giyim",
-            priceText = "₺529,90",
-            oldPriceText = "₺649,90",
-            priceValue = 529.90,
-            ratingText = "★ 4.5",
-            cargoText = "",
-            badgeText = "%18",
-            imageText = "P8",
-            isNew = false
         )
     )
 }
@@ -544,5 +558,7 @@ private fun getRetailProductListItems(): List<RetailProductListItem> {
 @Preview(showBackground = true)
 @Composable
 private fun ProductListScreenPreview() {
-    ProductListScreen()
+    BbTheme {
+        ProductListScreen()
+    }
 }

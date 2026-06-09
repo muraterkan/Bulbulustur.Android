@@ -288,7 +288,7 @@ private fun MessageBubbleCard(
     }
 
     val cardVariant = if (message.isMine) {
-        BbCardVariant.Default
+        BbCardVariant.Outlined
     } else {
         BbCardVariant.Outlined
     }

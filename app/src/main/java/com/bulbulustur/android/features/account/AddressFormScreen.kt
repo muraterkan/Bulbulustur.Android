@@ -1,167 +1,468 @@
 package com.bulbulustur.android.features.account
 
 import androidx.compose.foundation.background
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Badge
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.LocationOn
-import androidx.compose.material.icons.outlined.Phone
-import androidx.compose.material.icons.outlined.Save
-import androidx.compose.material3.Icon
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
+import com.bulbulustur.android.features.account.components.AccountPageScaffold
 import com.bulbulustur.android.ui.components.BbButton
+import com.bulbulustur.android.ui.components.BbButtonSize
+import com.bulbulustur.android.ui.components.BbButtonVariant
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
-import com.bulbulustur.android.ui.components.BbSectionHeader
+import com.bulbulustur.android.ui.components.BbCardVariant
 import com.bulbulustur.android.ui.theme.BbColors
+import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
 import com.bulbulustur.android.ui.theme.BbTypography
 
 @Composable
-fun AddressFormScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surfaceVariant)
-            .padding(BbSpacing.md),
-        verticalArrangement = Arrangement.spacedBy(BbSpacing.md)
+fun AddressFormScreen(
+    addressId: Int? = null,
+    isLoading: Boolean = false,
+    onBackClick: () -> Unit = {},
+    onSaveClick: (AddressFormSubmitModel) -> Unit = {}
+) {
+    val isEditMode = addressId != null
+
+    val nameState = remember {
+        mutableStateOf(if (isEditMode) "Murat" else "")
+    }
+
+    val surnameState = remember {
+        mutableStateOf(if (isEditMode) "Erkan" else "")
+    }
+
+    val phoneState = remember {
+        mutableStateOf(if (isEditMode) "5557106417" else "")
+    }
+
+    val postalCodeState = remember {
+        mutableStateOf(if (isEditMode) "34394" else "")
+    }
+
+    val countryState = remember {
+        mutableStateOf("Türkiye")
+    }
+
+    val cityState = remember {
+        mutableStateOf(if (isEditMode) "İstanbul" else "")
+    }
+
+    val districtState = remember {
+        mutableStateOf(if (isEditMode) "Şişli" else "")
+    }
+
+    val addressTextState = remember {
+        mutableStateOf(if (isEditMode) "Fulya mah. Aytekinkotil cad. No: 11/1" else "")
+    }
+
+    val addressTitleState = remember {
+        mutableStateOf(if (isEditMode) "Ev Adresim" else "")
+    }
+
+    val defaultAddressState = remember {
+        mutableStateOf(isEditMode)
+    }
+
+    val validationState = remember(
+        nameState.value,
+        surnameState.value,
+        phoneState.value,
+        cityState.value,
+        districtState.value,
+        addressTextState.value,
+        addressTitleState.value
     ) {
-        BbSectionHeader(
-            title = "Adresinizi Düzenleyin",
-            subtitle = "Teslimatın doğru ilerlemesi için adres bilgilerini güncelle"
-        )
+        derivedStateOf {
+            validateAddressForm(
+                name = nameState.value,
+                surname = surnameState.value,
+                phone = phoneState.value,
+                city = cityState.value,
+                district = districtState.value,
+                addressText = addressTextState.value,
+                addressTitle = addressTitleState.value
+            )
+        }
+    }
 
-        BbCard(
-            padding = BbCardPadding.Medium
+    val canSubmit = validationState.value.canSubmit && !isLoading
+
+    AccountPageScaffold(
+        title = if (isEditMode) "Adresinizi Düzenleyin" else "Yeni Adres Ekle",
+        kicker = "Adres Bilgileri",
+        description = "Siparişlerinizde kullanmak üzere teslimat adresi oluşturun. Teslimatın doğru ilerlemesi için adres bilgilerini eksiksiz girin.",
+        backButtonText = "Adreslerime Dön",
+        onBackClick = onBackClick
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
         ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(BbSpacing.md)
+            AddressFormSectionCard(
+                title = "Alıcı Bilgileri",
+                description = "Teslimat alıcısı için ad, soyad ve iletişim bilgilerini girin."
             ) {
-                AddressFormSectionTitle(
-                    title = "Alıcı Bilgileri",
-                    description = "Teslimatı alacak kişi ve iletişim bilgileri"
+                BbAddressTextField(
+                    value = nameState.value,
+                    onValueChange = { value ->
+                        nameState.value = value
+                    },
+                    label = "Adınız",
+                    placeholder = "Ad"
                 )
 
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(BbSpacing.sm)
-                ) {
-                    AddressTextField(
-                        label = "Adınız",
-                        value = "Murat",
-                        modifier = Modifier.weight(1f)
-                    )
-
-                    AddressTextField(
-                        label = "Soyadınız",
-                        value = "Erkan",
-                        modifier = Modifier.weight(1f)
-                    )
-                }
-
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(BbSpacing.sm)
-                ) {
-                    AddressTextField(
-                        label = "Telefon",
-                        value = "5323779918",
-                        modifier = Modifier.weight(1f)
-                    )
-
-                    AddressTextField(
-                        label = "Posta Kodu",
-                        value = "34394",
-                        modifier = Modifier.weight(1f)
-                    )
-                }
-
-                AddressFormSectionTitle(
-                    title = "Konum Bilgileri",
-                    description = "Ülke, şehir ve ilçe bilgilerini seç"
+                BbAddressTextField(
+                    value = surnameState.value,
+                    onValueChange = { value ->
+                        surnameState.value = value
+                    },
+                    label = "Soyadınız",
+                    placeholder = "Soyad"
                 )
 
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(BbSpacing.sm)
-                ) {
-                    AddressTextField(
-                        label = "Ülke",
-                        value = "Türkiye",
-                        modifier = Modifier.weight(1f)
-                    )
+                BbAddressTextField(
+                    value = phoneState.value,
+                    onValueChange = { value ->
+                        phoneState.value = value
+                    },
+                    label = "Telefon",
+                    placeholder = "5xx xxx xx xx",
+                    keyboardType = KeyboardType.Phone
+                )
 
-                    AddressTextField(
-                        label = "Şehir",
-                        value = "İstanbul",
-                        modifier = Modifier.weight(1f)
-                    )
-                }
+                BbAddressTextField(
+                    value = postalCodeState.value,
+                    onValueChange = { value ->
+                        postalCodeState.value = value
+                    },
+                    label = "Posta Kodu",
+                    placeholder = "Posta kodu",
+                    keyboardType = KeyboardType.Number
+                )
+            }
 
-                AddressTextField(
+            AddressFormSectionCard(
+                title = "Konum Bilgileri",
+                description = "Ülke, şehir ve ilçe bilgilerini seçin."
+            ) {
+                BbAddressTextField(
+                    value = countryState.value,
+                    onValueChange = { value ->
+                        countryState.value = value
+                    },
+                    label = "Ülke",
+                    placeholder = "Ülke"
+                )
+
+                BbAddressTextField(
+                    value = cityState.value,
+                    onValueChange = { value ->
+                        cityState.value = value
+                    },
+                    label = "Şehir",
+                    placeholder = "Şehir seçiniz"
+                )
+
+                BbAddressTextField(
+                    value = districtState.value,
+                    onValueChange = { value ->
+                        districtState.value = value
+                    },
                     label = "İlçe",
-                    value = "Şişli",
-                    modifier = Modifier.fillMaxWidth()
+                    placeholder = "İlçe seçiniz"
                 )
+            }
 
-                AddressFormSectionTitle(
-                    title = "Adres Detayı",
-                    description = "Açık adresinizi girin"
-                )
-
-                AddressTextField(
+            AddressFormSectionCard(
+                title = "Adres Detayı",
+                description = "Açık adresinizi ve bu adres için kullanacağınız başlığı yazın."
+            ) {
+                BbAddressTextArea(
+                    value = addressTextState.value,
+                    onValueChange = { value ->
+                        addressTextState.value = value
+                    },
                     label = "Açık Adresiniz",
-                    value = "Fulya mah., Aytekinkotil cad., No: 11/1",
-                    modifier = Modifier.fillMaxWidth(),
-                    minLines = 4
+                    placeholder = "Mahalle, cadde, sokak, bina, kat ve daire bilgisi"
                 )
 
-                AddressTextField(
-                    label = "Adres Başlığı",
-                    value = "Ev Adresim",
-                    modifier = Modifier.fillMaxWidth()
+                BbAddressTextField(
+                    value = addressTitleState.value,
+                    onValueChange = { value ->
+                        addressTitleState.value = value
+                    },
+                    label = "Bu adrese bir başlık verin",
+                    placeholder = "Ev Adresim"
                 )
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "Varsayılan adresim olarak kaydet",
-                        style = BbTypography.bodySmall,
-                        color = BbColors.TextStrong,
-                        modifier = Modifier.weight(1f)
-                    )
-
-                    Switch(
-                        checked = true,
-                        onCheckedChange = {}
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(BbSpacing.sm))
-
-                BbButton(
-                    text = "Adresi Güncelle",
-                    onClick = {},
-                    modifier = Modifier.fillMaxWidth(),
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Outlined.Save,
-                            contentDescription = null
-                        )
+                DefaultAddressBox(
+                    checked = defaultAddressState.value,
+                    onCheckedChange = { value ->
+                        defaultAddressState.value = value
                     }
+                )
+            }
+
+            AddressFormInfoBox(
+                validation = validationState.value
+            )
+
+            BbButton(
+                text = if (isEditMode) "Adresi Güncelle" else "Adresi Kaydet",
+                onClick = {
+                    onSaveClick(
+                        AddressFormSubmitModel(
+                            addressId = addressId,
+                            name = nameState.value,
+                            surname = surnameState.value,
+                            phone = phoneState.value,
+                            postalCode = postalCodeState.value,
+                            country = countryState.value,
+                            city = cityState.value,
+                            district = districtState.value,
+                            addressText = addressTextState.value,
+                            addressTitle = addressTitleState.value,
+                            isDefault = defaultAddressState.value
+                        )
+                    )
+                },
+                modifier = Modifier.fillMaxWidth(),
+                variant = BbButtonVariant.Primary,
+                size = BbButtonSize.Medium,
+                enabled = canSubmit,
+                isLoading = isLoading
+            )
+        }
+    }
+}
+
+@Composable
+private fun AddressFormSectionCard(
+    title: String,
+    description: String,
+    content: @Composable ColumnScope.() -> Unit
+) {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
+        ) {
+            SectionHeaderBox(
+                title = title,
+                description = description
+            )
+
+            content()
+        }
+    }
+}
+
+@Composable
+private fun SectionHeaderBox(
+    title: String,
+    description: String
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                color = BbColors.Yellow.Yellow50,
+                shape = BbRadius.LgShape
+            )
+            .padding(BbSpacing.CardPaddingCompact)
+    ) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+        ) {
+            Text(
+                text = title,
+                style = BbTypography.titleSmall,
+                color = BbColors.TextStrong
+            )
+
+            Text(
+                text = description,
+                style = BbTypography.bodySmall,
+                color = BbColors.TextMuted
+            )
+        }
+    }
+}
+
+@Composable
+private fun BbAddressTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    placeholder: String,
+    keyboardType: KeyboardType = KeyboardType.Text
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = { newValue ->
+            onValueChange(newValue)
+        },
+        modifier = Modifier.fillMaxWidth(),
+        label = {
+            Text(
+                text = label,
+                style = BbTypography.labelSmall
+            )
+        },
+        placeholder = {
+            Text(
+                text = placeholder,
+                style = BbTypography.bodySmall
+            )
+        },
+        singleLine = true,
+        shape = BbRadius.Input,
+        keyboardOptions = KeyboardOptions(
+            keyboardType = keyboardType
+        ),
+        textStyle = BbTypography.bodyMedium,
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = BbColors.Surface,
+            unfocusedContainerColor = BbColors.Surface,
+            disabledContainerColor = BbColors.SurfaceMuted,
+            focusedIndicatorColor = BbColors.Primary,
+            unfocusedIndicatorColor = BbColors.Border,
+            disabledIndicatorColor = BbColors.Border,
+            errorIndicatorColor = BbColors.Red.Red500,
+            focusedLabelColor = BbColors.Primary,
+            unfocusedLabelColor = BbColors.TextMuted,
+            disabledLabelColor = BbColors.TextMuted,
+            errorLabelColor = BbColors.Red.Red600,
+            focusedTextColor = BbColors.TextStrong,
+            unfocusedTextColor = BbColors.TextStrong,
+            disabledTextColor = BbColors.TextMuted,
+            focusedPlaceholderColor = BbColors.TextMuted,
+            unfocusedPlaceholderColor = BbColors.TextMuted,
+            disabledPlaceholderColor = BbColors.TextMuted,
+            cursorColor = BbColors.Primary
+        )
+    )
+}
+
+@Composable
+private fun BbAddressTextArea(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    placeholder: String
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = { newValue ->
+            onValueChange(newValue)
+        },
+        modifier = Modifier.fillMaxWidth(),
+        label = {
+            Text(
+                text = label,
+                style = BbTypography.labelSmall
+            )
+        },
+        placeholder = {
+            Text(
+                text = placeholder,
+                style = BbTypography.bodySmall
+            )
+        },
+        minLines = 4,
+        shape = BbRadius.Input,
+        textStyle = BbTypography.bodyMedium,
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = BbColors.Surface,
+            unfocusedContainerColor = BbColors.Surface,
+            disabledContainerColor = BbColors.SurfaceMuted,
+            focusedIndicatorColor = BbColors.Primary,
+            unfocusedIndicatorColor = BbColors.Border,
+            disabledIndicatorColor = BbColors.Border,
+            errorIndicatorColor = BbColors.Red.Red500,
+            focusedLabelColor = BbColors.Primary,
+            unfocusedLabelColor = BbColors.TextMuted,
+            disabledLabelColor = BbColors.TextMuted,
+            errorLabelColor = BbColors.Red.Red600,
+            focusedTextColor = BbColors.TextStrong,
+            unfocusedTextColor = BbColors.TextStrong,
+            disabledTextColor = BbColors.TextMuted,
+            focusedPlaceholderColor = BbColors.TextMuted,
+            unfocusedPlaceholderColor = BbColors.TextMuted,
+            disabledPlaceholderColor = BbColors.TextMuted,
+            cursorColor = BbColors.Primary
+        )
+    )
+}
+
+@Composable
+private fun DefaultAddressBox(
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                color = BbColors.SurfaceMuted,
+                shape = BbRadius.LgShape
+            )
+            .padding(BbSpacing.CardPaddingCompact)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Checkbox(
+                checked = checked,
+                onCheckedChange = { value ->
+                    onCheckedChange(value)
+                },
+                colors = CheckboxDefaults.colors(
+                    checkedColor = BbColors.Primary,
+                    uncheckedColor = BbColors.BorderStrong,
+                    checkmarkColor = BbColors.TextStrong
+                )
+            )
+
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+            ) {
+                Text(
+                    text = "Varsayılan adresim olarak kaydet",
+                    style = BbTypography.labelLarge,
+                    color = BbColors.TextStrong
+                )
+
+                Text(
+                    text = "Siparişlerde bu adres öncelikli olarak kullanılabilir.",
+                    style = BbTypography.bodySmall,
+                    color = BbColors.TextMuted
                 )
             }
         }
@@ -169,40 +470,105 @@ fun AddressFormScreen() {
 }
 
 @Composable
-private fun AddressFormSectionTitle(
-    title: String,
-    description: String
+private fun AddressFormInfoBox(
+    validation: AddressFormValidationState
 ) {
-    Column {
-        Text(
-            text = title,
-            style = BbTypography.titleSmall,
-            color = BbColors.TextStrong
-        )
+    val backgroundColor = if (validation.canSubmit) {
+        BbColors.Green.Green50
+    } else {
+        BbColors.Yellow.Yellow50
+    }
 
-        Text(
-            text = description,
-            style = BbTypography.bodySmall,
-            color = BbColors.TextMuted
-        )
+    val titleColor = if (validation.canSubmit) {
+        BbColors.Green.Green700
+    } else {
+        BbColors.Yellow.Yellow800
+    }
+
+    val title = if (validation.canSubmit) {
+        "Adres bilgileri uygun görünüyor."
+    } else {
+        "Zorunlu adres bilgilerini tamamlayın."
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                color = backgroundColor,
+                shape = BbRadius.LgShape
+            )
+            .padding(BbSpacing.CardPaddingCompact)
+    ) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+        ) {
+            Text(
+                text = title,
+                style = BbTypography.labelLarge,
+                color = titleColor
+            )
+
+            Text(
+                text = "Bu bilgiler sipariş teslimatı ve fatura süreçlerinde kullanılacaktır.",
+                style = BbTypography.bodySmall,
+                color = BbColors.TextMuted
+            )
+        }
     }
 }
 
-@Composable
-private fun AddressTextField(
-    label: String,
-    value: String,
-    modifier: Modifier = Modifier,
-    minLines: Int = 1
-) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = {},
-        label = {
-            Text(text = label)
-        },
-        modifier = modifier,
-        minLines = minLines,
-        singleLine = minLines == 1
+private fun validateAddressForm(
+    name: String,
+    surname: String,
+    phone: String,
+    city: String,
+    district: String,
+    addressText: String,
+    addressTitle: String
+): AddressFormValidationState {
+    return AddressFormValidationState(
+        hasName = name.isNotBlank(),
+        hasSurname = surname.isNotBlank(),
+        hasPhone = phone.trim().length >= 10,
+        hasCity = city.isNotBlank(),
+        hasDistrict = district.isNotBlank(),
+        hasAddressText = addressText.trim().length >= 10,
+        hasAddressTitle = addressTitle.isNotBlank()
     )
+}
+
+data class AddressFormSubmitModel(
+    val addressId: Int?,
+    val name: String,
+    val surname: String,
+    val phone: String,
+    val postalCode: String,
+    val country: String,
+    val city: String,
+    val district: String,
+    val addressText: String,
+    val addressTitle: String,
+    val isDefault: Boolean
+)
+
+private data class AddressFormValidationState(
+    val hasName: Boolean,
+    val hasSurname: Boolean,
+    val hasPhone: Boolean,
+    val hasCity: Boolean,
+    val hasDistrict: Boolean,
+    val hasAddressText: Boolean,
+    val hasAddressTitle: Boolean
+) {
+    val canSubmit: Boolean
+        get() {
+            return hasName &&
+                    hasSurname &&
+                    hasPhone &&
+                    hasCity &&
+                    hasDistrict &&
+                    hasAddressText &&
+                    hasAddressTitle
+        }
 }

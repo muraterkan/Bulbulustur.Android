@@ -1,6 +1,6 @@
 package com.bulbulustur.android.ui.shell
 
-enum class BuyerMode.kt {
+enum class BuyerMode {
     Retail,
     Wholesale
 }

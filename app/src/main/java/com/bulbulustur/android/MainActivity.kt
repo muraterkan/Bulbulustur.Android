@@ -6,10 +6,15 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.bulbulustur.android.features.account.AccountRoutes
@@ -81,6 +86,8 @@ import com.bulbulustur.android.features.wholesale.WholesaleCategoryHomeScreen
 import com.bulbulustur.android.features.wholesale.WholesaleHomeScreen
 import com.bulbulustur.android.features.wholesale.WholesaleRoutes
 import com.bulbulustur.android.features.wholesale.menu.WholesaleMenuScreen
+import com.bulbulustur.android.ui.shell.BuyerMode
+import com.bulbulustur.android.ui.shell.BuyerModeSheet
 import com.bulbulustur.android.ui.theme.BbTheme
 
 class MainActivity : ComponentActivity() {
@@ -98,8 +105,52 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
 
+                    var showBuyerModeSheet by remember {
+                        mutableStateOf(false)
+                    }
+
+                    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+                    val currentRoute = currentBackStackEntry?.destination?.route
+
+                    val currentBuyerMode = when {
+                        currentRoute?.startsWith("wholesale/") == true -> BuyerMode.Wholesale
+                        else -> BuyerMode.Retail
+                    }
+
+                    fun openBuyerModeSheet() {
+                        showBuyerModeSheet = true
+                    }
+
+                    fun closeBuyerModeSheet() {
+                        showBuyerModeSheet = false
+                    }
+
                     fun navigateBackToAccount() {
                         navController.navigate(AccountRoutes.AccountHome) {
+                            launchSingleTop = true
+                        }
+                    }
+
+                    fun navigateToRetailHome() {
+                        closeBuyerModeSheet()
+
+                        navController.navigate(RetailRoutes.Home) {
+                            launchSingleTop = true
+                        }
+                    }
+
+                    fun navigateToWholesaleHome() {
+                        closeBuyerModeSheet()
+
+                        navController.navigate(WholesaleRoutes.Home) {
+                            launchSingleTop = true
+                        }
+                    }
+
+                    fun navigateToAppearanceSettings() {
+                        closeBuyerModeSheet()
+
+                        navController.navigate(SettingsRoutes.Appearance) {
                             launchSingleTop = true
                         }
                     }
@@ -174,6 +225,7 @@ class MainActivity : ComponentActivity() {
                                     navController.navigate(StoreRoutes.StoreList)
                                 },
                                 onMessageClick = {
+                                    openBuyerModeSheet()
                                 },
                                 onBasketClick = {
                                 },
@@ -230,6 +282,7 @@ class MainActivity : ComponentActivity() {
                                     }
                                 },
                                 onMessageClick = {
+                                    openBuyerModeSheet()
                                 },
                                 onBasketClick = {
                                 },
@@ -270,6 +323,37 @@ class MainActivity : ComponentActivity() {
                                     }
                                 },
                                 onMessageClick = {
+                                    openBuyerModeSheet()
+                                },
+                                onBasketClick = {
+                                },
+                                onAccountClick = {
+                                    navController.navigate(AccountRoutes.AccountHome)
+                                }
+                            )
+                        }
+
+                        composable(RetailRoutes.Search) {
+                            RetailProductListScreen(
+                                onSearchClick = {
+                                    navController.navigate(RetailRoutes.Search)
+                                },
+                                onMenuClick = {
+                                    navController.navigate(RetailRoutes.Menu)
+                                },
+                                onFavoriteClick = {
+                                    navController.navigate(AccountRoutes.Favorites)
+                                },
+                                onProductDetailClick = {
+                                    navController.navigate(RetailRoutes.ProductDetail)
+                                },
+                                onHomeClick = {
+                                    navController.navigate(RetailRoutes.Home) {
+                                        launchSingleTop = true
+                                    }
+                                },
+                                onMessageClick = {
+                                    openBuyerModeSheet()
                                 },
                                 onBasketClick = {
                                 },
@@ -398,35 +482,6 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
-                        composable(RetailRoutes.Search) {
-                            RetailProductListScreen(
-                                onSearchClick = {
-                                    navController.navigate(RetailRoutes.Search)
-                                },
-                                onMenuClick = {
-                                    navController.navigate(RetailRoutes.Menu)
-                                },
-                                onFavoriteClick = {
-                                    navController.navigate(AccountRoutes.Favorites)
-                                },
-                                onProductDetailClick = {
-                                    navController.navigate(RetailRoutes.ProductDetail)
-                                },
-                                onHomeClick = {
-                                    navController.navigate(RetailRoutes.Home) {
-                                        launchSingleTop = true
-                                    }
-                                },
-                                onMessageClick = {
-                                },
-                                onBasketClick = {
-                                },
-                                onAccountClick = {
-                                    navController.navigate(AccountRoutes.AccountHome)
-                                }
-                            )
-                        }
-
                         composable(WholesaleRoutes.Home) {
                             WholesaleHomeScreen(
                                 onSearchClick = {
@@ -460,6 +515,7 @@ class MainActivity : ComponentActivity() {
                                     navController.navigate(WholesaleRoutes.CustomizationRequest)
                                 },
                                 onMessageClick = {
+                                    openBuyerModeSheet()
                                 },
                                 onBasketClick = {
                                 },
@@ -518,6 +574,7 @@ class MainActivity : ComponentActivity() {
                                     }
                                 },
                                 onMessageClick = {
+                                    openBuyerModeSheet()
                                 },
                                 onBasketClick = {
                                 },
@@ -647,6 +704,7 @@ class MainActivity : ComponentActivity() {
                                     navController.navigate(SettingsRoutes.Home)
                                 },
                                 onMessagesClick = {
+                                    openBuyerModeSheet()
                                 },
                                 onSupportClick = {
                                 },
@@ -1104,6 +1162,21 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         }
+                    }
+
+                    if (showBuyerModeSheet) {
+                        BuyerModeSheet(
+                            currentMode = currentBuyerMode,
+                            onDismissRequest = {
+                                closeBuyerModeSheet()
+                            },
+                            onRetailClick = {
+                                navigateToRetailHome()
+                            },
+                            onWholesaleClick = {
+                                navigateToWholesaleHome()
+                            }
+                        )
                     }
                 }
             }

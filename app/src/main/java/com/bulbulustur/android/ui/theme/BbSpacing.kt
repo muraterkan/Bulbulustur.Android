@@ -7,6 +7,10 @@ object BbSpacing {
 
     val None: Dp = 0.dp
 
+    val Hairline: Dp = 1.dp
+    val BorderThin: Dp = 1.dp
+    val BorderNormal: Dp = 2.dp
+
     val xs: Dp = 4.dp
     val sm: Dp = 8.dp
     val md: Dp = 16.dp

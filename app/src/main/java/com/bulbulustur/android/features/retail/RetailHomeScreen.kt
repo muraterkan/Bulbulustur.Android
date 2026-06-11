@@ -68,6 +68,7 @@ fun RetailHomeScreen(
     onFavoriteClick: () -> Unit = {},
     onStoreClick: () -> Unit = {},
     onMessageClick: () -> Unit = {},
+    onModeSwitchClick: () -> Unit = {},
     onBasketClick: () -> Unit = {},
     onAccountClick: () -> Unit = {},
     onMenuClick: () -> Unit = {}
@@ -86,6 +87,7 @@ fun RetailHomeScreen(
                 },
                 onMenuClick = onMenuClick,
                 onFavoriteClick = onFavoriteClick,
+                onMessageClick = onMessageClick,
                 onSearchClick = {
                     onSearchClick(searchText)
                 },
@@ -101,7 +103,7 @@ fun RetailHomeScreen(
                     when (selectedItem) {
                         RetailBottomNavigationItem.Home -> Unit
                         RetailBottomNavigationItem.Menu -> onMenuClick()
-                        RetailBottomNavigationItem.Messages -> onMessageClick()
+                        RetailBottomNavigationItem.ModeSwitch -> onModeSwitchClick()
                         RetailBottomNavigationItem.Basket -> onBasketClick()
                         RetailBottomNavigationItem.Account -> onAccountClick()
                     }

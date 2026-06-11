@@ -1,10 +1,12 @@
-package com.bulbulustur.android.features.rfq
+package com.bulbulustur.android.features.wholesale.rfq
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -22,6 +24,7 @@ import androidx.compose.material.icons.outlined.Verified
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -32,11 +35,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.bulbulustur.android.features.wholesale.components.WholesaleBottomNavigation
+import com.bulbulustur.android.features.wholesale.components.WholesaleBottomNavigationItem
+import com.bulbulustur.android.ui.components.BbButton
+import com.bulbulustur.android.ui.components.BbButtonSize
+import com.bulbulustur.android.ui.components.BbButtonVariant
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbChip
 import com.bulbulustur.android.ui.components.BbSectionHeader
 import com.bulbulustur.android.ui.theme.BbColors
-import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
 import com.bulbulustur.android.ui.theme.BbTheme
 
@@ -45,7 +52,15 @@ fun RfqCreateScreen(
     productId: Int? = null,
     companyId: Int? = null,
     initialProductName: String = "",
-    onSendClick: () -> Unit = {}
+    onBackClick: () -> Unit = {},
+    onSendClick: () -> Unit = {},
+
+    // Bottom navigation
+    onHomeClick: () -> Unit = {},
+    onMenuClick: () -> Unit = {},
+    onModeSwitchClick: () -> Unit = {},
+    onBasketClick: () -> Unit = {},
+    onAccountClick: () -> Unit = {}
 ) {
     val productName = remember {
         mutableStateOf(initialProductName)
@@ -91,192 +106,219 @@ fun RfqCreateScreen(
         mutableStateOf("")
     }
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(BbSpacing.md),
-        verticalArrangement = Arrangement.spacedBy(BbSpacing.md)
-    ) {
-        item {
-            RfqCreateHeader(
-                productId = productId,
-                companyId = companyId
-            )
-        }
-
-        item {
-            RfqCreateHintPanel()
-        }
-
-        item {
-            BbSectionHeader(
-                title = "Talep bilgileri",
-                subtitle = "Tedarikçilere neye ihtiyacınız olduğunu net anlatın"
-            )
-        }
-
-        item {
-            RfqTextField(
-                value = productName.value,
-                onValueChange = {
-                    productName.value = it
-                },
-                label = "Ürün adı",
-                placeholder = "Örn. Endüstriyel vana",
-                icon = Icons.Outlined.Inventory2
-            )
-        }
-
-        item {
-            RfqTextField(
-                value = categoryName.value,
-                onValueChange = {
-                    categoryName.value = it
-                },
-                label = "Kategori",
-                placeholder = "Örn. Kök / Endüstriyel ürünler",
-                icon = Icons.Outlined.Category
-            )
-        }
-
-        item {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.sm)
-            ) {
-                RfqTextField(
-                    value = quantity.value,
-                    onValueChange = {
-                        quantity.value = it
-                    },
-                    label = "Satın alma miktarı",
-                    placeholder = "0",
-                    icon = Icons.Outlined.Straighten,
-                    modifier = Modifier.weight(1f)
-                )
-
-                RfqTextField(
-                    value = unitName.value,
-                    onValueChange = {
-                        unitName.value = it
-                    },
-                    label = "Birim",
-                    placeholder = "Varil",
-                    icon = Icons.Outlined.Inventory2,
-                    modifier = Modifier.weight(1f)
-                )
-            }
-        }
-
-        item {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.sm)
-            ) {
-                RfqTextField(
-                    value = unitPrice.value,
-                    onValueChange = {
-                        unitPrice.value = it
-                    },
-                    label = "Birim fiyat",
-                    placeholder = "0",
-                    icon = Icons.Outlined.Payments,
-                    modifier = Modifier.weight(1f)
-                )
-
-                RfqTextField(
-                    value = currencyName.value,
-                    onValueChange = {
-                        currencyName.value = it
-                    },
-                    label = "Para birimi",
-                    placeholder = "TL / USD / EUR",
-                    icon = Icons.Outlined.CurrencyLira,
-                    modifier = Modifier.weight(1f)
-                )
-            }
-        }
-
-        item {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.sm)
-            ) {
-                RfqTextField(
-                    value = materialName.value,
-                    onValueChange = {
-                        materialName.value = it
-                    },
-                    label = "Malzeme",
-                    placeholder = "Titanyum",
-                    icon = Icons.Outlined.Verified,
-                    modifier = Modifier.weight(1f)
-                )
-
-                RfqTextField(
-                    value = paymentTerm.value,
-                    onValueChange = {
-                        paymentTerm.value = it
-                    },
-                    label = "Ödeme şartı",
-                    placeholder = "Peşin / vadeli",
-                    icon = Icons.Outlined.Payments,
-                    modifier = Modifier.weight(1f)
-                )
-            }
-        }
-
-        item {
-            RfqTextField(
-                value = tradeTerm.value,
-                onValueChange = {
-                    tradeTerm.value = it
-                },
-                label = "Ticaret şartları",
-                placeholder = "Örn. FOB, CIF, EXW veya özel şartlar",
-                icon = Icons.Outlined.RequestQuote
-            )
-        }
-
-        item {
-            RfqTextField(
-                value = shippingTarget.value,
-                onValueChange = {
-                    shippingTarget.value = it
-                },
-                label = "Nakliye hedefi",
-                placeholder = "Örn. Türkiye / İstanbul / Ambarlı Port",
-                icon = Icons.Outlined.LocalShipping
-            )
-        }
-
-        item {
-            RfqLongTextField(
-                value = description.value,
-                onValueChange = {
-                    description.value = it
-                },
-                label = "Ürün açıklaması",
-                placeholder = "Aradığınız ürünü açıklayın. Renk, malzeme, boyut, ambalaj, paketleme ve sertifika gerekliliklerini yazın."
-            )
-        }
-
-        item {
-            RfqSuggestionChips(
-                onSuggestionClick = {
-                    description.value = it
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+        bottomBar = {
+            WholesaleBottomNavigation(
+                selectedItem = WholesaleBottomNavigationItem.Basket,
+                onItemClick = { selectedItem ->
+                    when (selectedItem) {
+                        WholesaleBottomNavigationItem.Home -> onHomeClick()
+                        WholesaleBottomNavigationItem.Menu -> onMenuClick()
+                        WholesaleBottomNavigationItem.ModeSwitch -> onModeSwitchClick()
+                        WholesaleBottomNavigationItem.Basket -> onBasketClick()
+                        WholesaleBottomNavigationItem.Account -> onAccountClick()
+                    }
                 }
             )
         }
+    ) { innerPadding ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
+            contentPadding = PaddingValues(
+                start = BbSpacing.PageHorizontal,
+                top = BbSpacing.PageTopCompact,
+                end = BbSpacing.PageHorizontal,
+                bottom = BbSpacing.PageBottom
+            ),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
+        ) {
+            item {
+                RfqCreateHeader(
+                    productId = productId,
+                    companyId = companyId,
+                    onBackClick = onBackClick
+                )
+            }
 
-        item {
-            RfqSendCard(
-                onSendClick = onSendClick
-            )
-        }
+            item {
+                RfqCreateHintPanel()
+            }
 
-        item {
-            Spacer(modifier = Modifier.height(BbSpacing.xl))
+            item {
+                BbSectionHeader(
+                    title = "Talep bilgileri",
+                    subtitle = "Tedarikçilere neye ihtiyacınız olduğunu net anlatın"
+                )
+            }
+
+            item {
+                RfqTextField(
+                    value = productName.value,
+                    onValueChange = {
+                        productName.value = it
+                    },
+                    label = "Ürün adı",
+                    placeholder = "Örn. Endüstriyel vana",
+                    icon = Icons.Outlined.Inventory2
+                )
+            }
+
+            item {
+                RfqTextField(
+                    value = categoryName.value,
+                    onValueChange = {
+                        categoryName.value = it
+                    },
+                    label = "Kategori",
+                    placeholder = "Örn. Kök / Endüstriyel ürünler",
+                    icon = Icons.Outlined.Category
+                )
+            }
+
+            item {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+                ) {
+                    RfqTextField(
+                        value = quantity.value,
+                        onValueChange = {
+                            quantity.value = it
+                        },
+                        label = "Satın alma miktarı",
+                        placeholder = "0",
+                        icon = Icons.Outlined.Straighten,
+                        modifier = Modifier.weight(1f)
+                    )
+
+                    RfqTextField(
+                        value = unitName.value,
+                        onValueChange = {
+                            unitName.value = it
+                        },
+                        label = "Birim",
+                        placeholder = "Varil",
+                        icon = Icons.Outlined.Inventory2,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+            }
+
+            item {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+                ) {
+                    RfqTextField(
+                        value = unitPrice.value,
+                        onValueChange = {
+                            unitPrice.value = it
+                        },
+                        label = "Birim fiyat",
+                        placeholder = "0",
+                        icon = Icons.Outlined.Payments,
+                        modifier = Modifier.weight(1f)
+                    )
+
+                    RfqTextField(
+                        value = currencyName.value,
+                        onValueChange = {
+                            currencyName.value = it
+                        },
+                        label = "Para birimi",
+                        placeholder = "TL / USD / EUR",
+                        icon = Icons.Outlined.CurrencyLira,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+            }
+
+            item {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+                ) {
+                    RfqTextField(
+                        value = materialName.value,
+                        onValueChange = {
+                            materialName.value = it
+                        },
+                        label = "Malzeme",
+                        placeholder = "Titanyum",
+                        icon = Icons.Outlined.Verified,
+                        modifier = Modifier.weight(1f)
+                    )
+
+                    RfqTextField(
+                        value = paymentTerm.value,
+                        onValueChange = {
+                            paymentTerm.value = it
+                        },
+                        label = "Ödeme şartı",
+                        placeholder = "Peşin / vadeli",
+                        icon = Icons.Outlined.Payments,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+            }
+
+            item {
+                RfqTextField(
+                    value = tradeTerm.value,
+                    onValueChange = {
+                        tradeTerm.value = it
+                    },
+                    label = "Ticaret şartları",
+                    placeholder = "Örn. FOB, CIF, EXW veya özel şartlar",
+                    icon = Icons.Outlined.RequestQuote
+                )
+            }
+
+            item {
+                RfqTextField(
+                    value = shippingTarget.value,
+                    onValueChange = {
+                        shippingTarget.value = it
+                    },
+                    label = "Nakliye hedefi",
+                    placeholder = "Örn. Türkiye / İstanbul / Ambarlı Port",
+                    icon = Icons.Outlined.LocalShipping
+                )
+            }
+
+            item {
+                RfqLongTextField(
+                    value = description.value,
+                    onValueChange = {
+                        description.value = it
+                    },
+                    label = "Ürün açıklaması",
+                    placeholder = "Aradığınız ürünü açıklayın. Renk, malzeme, boyut, ambalaj, paketleme ve sertifika gerekliliklerini yazın."
+                )
+            }
+
+            item {
+                RfqSuggestionChips(
+                    onSuggestionClick = {
+                        description.value = it
+                    }
+                )
+            }
+
+            item {
+                RfqSendCard(
+                    onSendClick = onSendClick
+                )
+            }
+
+            item {
+                Spacer(
+                    modifier = Modifier.height(BbSpacing.Space8)
+                )
+            }
         }
     }
 }
@@ -284,18 +326,19 @@ fun RfqCreateScreen(
 @Composable
 private fun RfqCreateHeader(
     productId: Int?,
-    companyId: Int?
+    companyId: Int?,
+    onBackClick: () -> Unit
 ) {
     BbCard(
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
-            modifier = Modifier.padding(BbSpacing.lg),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.sm)
+            modifier = Modifier.padding(BbSpacing.CardPadding),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.sm)
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
             ) {
                 Icon(
                     imageVector = Icons.Outlined.RequestQuote,
@@ -326,8 +369,8 @@ private fun RfqCreateHeader(
 
             FlowRow(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.sm),
-                verticalArrangement = Arrangement.spacedBy(BbSpacing.sm)
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2),
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
             ) {
                 BbChip(
                     text = "Net talep",
@@ -363,6 +406,14 @@ private fun RfqCreateHeader(
                     )
                 }
             }
+
+            BbButton(
+                text = "Toptana Dön",
+                onClick = onBackClick,
+                modifier = Modifier.fillMaxWidth(),
+                variant = BbButtonVariant.Light,
+                size = BbButtonSize.Small
+            )
         }
     }
 }
@@ -373,12 +424,12 @@ private fun RfqCreateHintPanel() {
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
-            modifier = Modifier.padding(BbSpacing.md),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.sm)
+            modifier = Modifier.padding(BbSpacing.CardPaddingCompact),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.sm)
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Verified,
@@ -481,7 +532,7 @@ private fun RfqSuggestionChips(
     onSuggestionClick: (String) -> Unit
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(BbSpacing.sm)
+        verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
     ) {
         Text(
             text = "Hazır talep notları",
@@ -492,8 +543,8 @@ private fun RfqSuggestionChips(
 
         FlowRow(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(BbSpacing.sm),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.sm)
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
         ) {
             rfqSuggestionTexts().forEach { suggestion ->
                 BbChip(
@@ -519,9 +570,9 @@ private fun RfqSendCard(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(BbSpacing.lg),
+                .padding(BbSpacing.CardPadding),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(BbSpacing.md)
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
         ) {
             Icon(
                 imageVector = Icons.Outlined.Send,
@@ -531,7 +582,7 @@ private fun RfqSendCard(
 
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BbSpacing.xs)
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
             ) {
                 Text(
                     text = "Gönder",

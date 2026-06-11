@@ -88,6 +88,8 @@ fun ProductDetailScreen(
     onBackClick: () -> Unit = {},
     onSearchClick: (String) -> Unit = {},
     onFavoriteClick: () -> Unit = {},
+    onMessageClick: () -> Unit = {},
+    onModeSwitchClick: () -> Unit = {},
     onAddToBasketClick: (RetailProductDetailSelection) -> Unit = {},
     onBuyNowClick: (RetailProductDetailSelection) -> Unit = {},
     onStockAlarmClick: (RetailProductDetailSelection) -> Unit = {},
@@ -161,6 +163,7 @@ fun ProductDetailScreen(
                 },
                 onMenuClick = onBackClick,
                 onFavoriteClick = onFavoriteClick,
+                onMessageClick = onMessageClick,
                 placeholder = product.searchPlaceholder,
                 onSearchClick = {
                     onSearchClick(searchText)

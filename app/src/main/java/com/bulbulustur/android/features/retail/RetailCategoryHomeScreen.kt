@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,13 +18,14 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Category
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.LocalOffer
 import androidx.compose.material.icons.outlined.NewReleases
-import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.ShoppingBasket
 import androidx.compose.material.icons.outlined.Storefront
 import androidx.compose.material.icons.outlined.Verified
+import androidx.compose.material.icons.outlined.WorkspacePremium
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -45,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import com.bulbulustur.android.features.retail.components.RetailBottomNavigation
 import com.bulbulustur.android.features.retail.components.RetailBottomNavigationItem
 import com.bulbulustur.android.features.retail.components.RetailSearchHeader
+import com.bulbulustur.android.features.retail.components.RetailSearchHeaderLeadingAction
 import com.bulbulustur.android.ui.components.BbButton
 import com.bulbulustur.android.ui.components.BbButtonSize
 import com.bulbulustur.android.ui.components.BbButtonVariant
@@ -60,11 +63,13 @@ import com.bulbulustur.android.ui.theme.BbTheme
 
 @Composable
 fun RetailCategoryHomeScreen(
+    onBackClick: () -> Unit = {},
     onSearchClick: (String) -> Unit = {},
     onMenuClick: () -> Unit = {},
     onFavoriteClick: () -> Unit = {},
-    onHomeClick: () -> Unit = {},
     onMessageClick: () -> Unit = {},
+    onHomeClick: () -> Unit = {},
+    onModeSwitchClick: () -> Unit = {},
     onBasketClick: () -> Unit = {},
     onAccountClick: () -> Unit = {},
     onProductListClick: () -> Unit = {},
@@ -85,12 +90,16 @@ fun RetailCategoryHomeScreen(
                 },
                 onMenuClick = onMenuClick,
                 onFavoriteClick = onFavoriteClick,
+                onMessageClick = onMessageClick,
+                placeholder = "Ürün, kategori veya marka ara",
                 onSearchClick = {
                     onSearchClick(searchText)
                 },
                 onClearClick = {
                     searchText = ""
-                }
+                },
+                leadingAction = RetailSearchHeaderLeadingAction.Back,
+                onBackClick = onBackClick
             )
         },
         bottomBar = {
@@ -99,8 +108,8 @@ fun RetailCategoryHomeScreen(
                 onItemClick = { selectedItem ->
                     when (selectedItem) {
                         RetailBottomNavigationItem.Home -> onHomeClick()
-                        RetailBottomNavigationItem.Menu -> onMenuClick()
-                        RetailBottomNavigationItem.Messages -> onMessageClick()
+                        RetailBottomNavigationItem.Menu -> Unit
+                        RetailBottomNavigationItem.ModeSwitch -> onModeSwitchClick()
                         RetailBottomNavigationItem.Basket -> onBasketClick()
                         RetailBottomNavigationItem.Account -> onAccountClick()
                     }
@@ -109,7 +118,9 @@ fun RetailCategoryHomeScreen(
         }
     ) { innerPadding ->
         LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background),
             contentPadding = PaddingValues(
                 start = BbSpacing.PageHorizontal,
                 top = innerPadding.calculateTopPadding() + BbSpacing.PageTopCompact,
@@ -119,34 +130,38 @@ fun RetailCategoryHomeScreen(
             verticalArrangement = Arrangement.spacedBy(BbSpacing.SectionGapCompact)
         ) {
             item {
-                RetailCategoryHeroCard(
-                    onProductListClick = onProductListClick,
-                    onSubCategoryClick = onSubCategoryClick
-                )
-            }
-
-            item {
-                RetailCategoryQuickStartRow(
-                    onSubCategoryClick = onSubCategoryClick,
+                RetailCategoryHomeHeroCard(
                     onProductListClick = onProductListClick,
                     onStoreClick = onStoreClick
                 )
             }
 
             item {
+                RetailCategoryHomeGatewayRow(
+                    onProductListClick = onProductListClick,
+                    onStoreClick = onStoreClick,
+                    onFavoriteClick = onFavoriteClick
+                )
+            }
+
+            item {
+                RetailCategoryHomeTrustStrip()
+            }
+
+            item {
                 BbSectionHeader(
                     title = "Alt Kategoriler",
-                    subtitle = "Bu ana kategori içindeki alt kırılımları keşfet."
+                    subtitle = "Bu kategori altındaki alışveriş kırılımlarını incele."
                 )
             }
 
             items(
-                items = getRetailSubCategories(),
+                items = getRetailCategoryHomeSubCategories(),
                 key = { item ->
                     item.title
                 }
             ) { item ->
-                RetailSubCategoryCard(
+                RetailCategoryHomeSubCategoryCard(
                     item = item,
                     onClick = onSubCategoryClick
                 )
@@ -155,26 +170,27 @@ fun RetailCategoryHomeScreen(
             item {
                 BbSectionHeader(
                     title = "Kategori vitrinleri",
-                    subtitle = "Perakende kategori ana sayfasından ürün akışına geç."
+                    subtitle = "Ürün, mağaza ve kampanya akışlarına hızlı geç."
                 )
             }
 
             item {
-                RetailCategoryShowcaseRow(
+                RetailCategoryHomeShowcaseRow(
                     onProductListClick = onProductListClick,
-                    onStoreClick = onStoreClick
+                    onStoreClick = onStoreClick,
+                    onFavoriteClick = onFavoriteClick
                 )
             }
 
             item {
                 BbSectionHeader(
                     title = "Popüler aramalar",
-                    subtitle = "Bu kategori içinde sık keşfedilen alanlar"
+                    subtitle = "Bu kategoride sık kullanılan başlıklar."
                 )
             }
 
             item {
-                RetailPopularSearchChipRow(
+                RetailCategoryHomePopularSearchChipRow(
                     onProductListClick = onProductListClick
                 )
             }
@@ -189,9 +205,9 @@ fun RetailCategoryHomeScreen(
 }
 
 @Composable
-private fun RetailCategoryHeroCard(
+private fun RetailCategoryHomeHeroCard(
     onProductListClick: () -> Unit,
-    onSubCategoryClick: () -> Unit
+    onStoreClick: () -> Unit
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
@@ -224,14 +240,14 @@ private fun RetailCategoryHeroCard(
             }
 
             Text(
-                text = "Elektronik Parçalar",
+                text = "Elektronik",
                 style = MaterialTheme.typography.headlineSmall,
                 color = BbColors.TextStrong,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
-                text = "Alt kategorileri incele, ürün vitrinlerine göz at ve seçili kategori içinde alışverişe başla.",
+                text = "Alt kategorileri, ürün vitrinlerini ve mağaza geçişlerini bu alandan keşfet.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = BbColors.TextSubtle
             )
@@ -249,8 +265,8 @@ private fun RetailCategoryHeroCard(
                 )
 
                 BbButton(
-                    text = "Alt Kategoriler",
-                    onClick = onSubCategoryClick,
+                    text = "Mağazalar",
+                    onClick = onStoreClick,
                     modifier = Modifier.weight(1f),
                     variant = BbButtonVariant.Light,
                     size = BbButtonSize.Medium
@@ -261,27 +277,27 @@ private fun RetailCategoryHeroCard(
 }
 
 @Composable
-private fun RetailCategoryQuickStartRow(
-    onSubCategoryClick: () -> Unit,
+private fun RetailCategoryHomeGatewayRow(
     onProductListClick: () -> Unit,
-    onStoreClick: () -> Unit
+    onStoreClick: () -> Unit,
+    onFavoriteClick: () -> Unit
 ) {
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
     ) {
         items(
-            items = getRetailQuickStartItems(),
+            items = getRetailCategoryHomeGateways(),
             key = { item ->
                 item.title
             }
         ) { item ->
-            RetailCategoryQuickStartCard(
+            RetailCategoryHomeGatewayCard(
                 item = item,
                 onClick = {
                     when (item.target) {
-                        RetailCategoryQuickStartTarget.SubCategories -> onSubCategoryClick()
-                        RetailCategoryQuickStartTarget.Products -> onProductListClick()
-                        RetailCategoryQuickStartTarget.Stores -> onStoreClick()
+                        RetailCategoryHomeGatewayTarget.Products -> onProductListClick()
+                        RetailCategoryHomeGatewayTarget.Stores -> onStoreClick()
+                        RetailCategoryHomeGatewayTarget.Favorites -> onFavoriteClick()
                     }
                 }
             )
@@ -290,8 +306,8 @@ private fun RetailCategoryQuickStartRow(
 }
 
 @Composable
-private fun RetailCategoryQuickStartCard(
-    item: RetailCategoryQuickStartItem,
+private fun RetailCategoryHomeGatewayCard(
+    item: RetailCategoryHomeGatewayItem,
     onClick: () -> Unit
 ) {
     BbCard(
@@ -337,8 +353,66 @@ private fun RetailCategoryQuickStartCard(
 }
 
 @Composable
-private fun RetailSubCategoryCard(
-    item: RetailSubCategoryItem,
+private fun RetailCategoryHomeTrustStrip() {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+        ) {
+            RetailCategoryHomeTrustItem(
+                icon = Icons.Outlined.Verified,
+                title = "Güvenli",
+                modifier = Modifier.weight(1f)
+            )
+
+            RetailCategoryHomeTrustItem(
+                icon = Icons.Outlined.WorkspacePremium,
+                title = "Seçili",
+                modifier = Modifier.weight(1f)
+            )
+
+            RetailCategoryHomeTrustItem(
+                icon = Icons.Outlined.Storefront,
+                title = "Mağazalar",
+                modifier = Modifier.weight(1f)
+            )
+        }
+    }
+}
+
+@Composable
+private fun RetailCategoryHomeTrustItem(
+    icon: ImageVector,
+    title: String,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = BbColors.Primary
+        )
+
+        Text(
+            text = title,
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onSurface,
+            fontWeight = FontWeight.SemiBold
+        )
+    }
+}
+
+@Composable
+private fun RetailCategoryHomeSubCategoryCard(
+    item: RetailCategoryHomeSubCategoryItem,
     onClick: () -> Unit
 ) {
     BbCard(
@@ -397,25 +471,27 @@ private fun RetailSubCategoryCard(
 }
 
 @Composable
-private fun RetailCategoryShowcaseRow(
+private fun RetailCategoryHomeShowcaseRow(
     onProductListClick: () -> Unit,
-    onStoreClick: () -> Unit
+    onStoreClick: () -> Unit,
+    onFavoriteClick: () -> Unit
 ) {
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
     ) {
         items(
-            items = getRetailCategoryShowcases(),
+            items = getRetailCategoryHomeShowcases(),
             key = { item ->
                 item.title
             }
         ) { item ->
-            RetailCategoryShowcaseCard(
+            RetailCategoryHomeShowcaseCard(
                 item = item,
                 onClick = {
                     when (item.target) {
-                        RetailCategoryShowcaseTarget.Products -> onProductListClick()
-                        RetailCategoryShowcaseTarget.Stores -> onStoreClick()
+                        RetailCategoryHomeShowcaseTarget.Products -> onProductListClick()
+                        RetailCategoryHomeShowcaseTarget.Stores -> onStoreClick()
+                        RetailCategoryHomeShowcaseTarget.Favorites -> onFavoriteClick()
                     }
                 }
             )
@@ -424,8 +500,8 @@ private fun RetailCategoryShowcaseRow(
 }
 
 @Composable
-private fun RetailCategoryShowcaseCard(
-    item: RetailCategoryShowcaseItem,
+private fun RetailCategoryHomeShowcaseCard(
+    item: RetailCategoryHomeShowcaseItem,
     onClick: () -> Unit
 ) {
     Surface(
@@ -465,14 +541,14 @@ private fun RetailCategoryShowcaseCard(
 }
 
 @Composable
-private fun RetailPopularSearchChipRow(
+private fun RetailCategoryHomePopularSearchChipRow(
     onProductListClick: () -> Unit
 ) {
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
     ) {
         items(
-            items = getRetailPopularSearches(),
+            items = getRetailCategoryHomePopularSearches(),
             key = { item ->
                 item
             }
@@ -487,23 +563,23 @@ private fun RetailPopularSearchChipRow(
 }
 
 @Immutable
-private data class RetailCategoryQuickStartItem(
+private data class RetailCategoryHomeGatewayItem(
     val title: String,
     val description: String,
     val icon: ImageVector,
     val backgroundColor: Color,
     val iconColor: Color,
-    val target: RetailCategoryQuickStartTarget
+    val target: RetailCategoryHomeGatewayTarget
 )
 
-private enum class RetailCategoryQuickStartTarget {
-    SubCategories,
+private enum class RetailCategoryHomeGatewayTarget {
     Products,
-    Stores
+    Stores,
+    Favorites
 }
 
 @Immutable
-private data class RetailSubCategoryItem(
+private data class RetailCategoryHomeSubCategoryItem(
     val title: String,
     val description: String,
     val icon: ImageVector,
@@ -512,75 +588,76 @@ private data class RetailSubCategoryItem(
 )
 
 @Immutable
-private data class RetailCategoryShowcaseItem(
+private data class RetailCategoryHomeShowcaseItem(
     val title: String,
     val description: String,
     val icon: ImageVector,
     val backgroundColor: Color,
     val iconColor: Color,
-    val target: RetailCategoryShowcaseTarget
+    val target: RetailCategoryHomeShowcaseTarget
 )
 
-private enum class RetailCategoryShowcaseTarget {
+private enum class RetailCategoryHomeShowcaseTarget {
     Products,
-    Stores
+    Stores,
+    Favorites
 }
 
-private fun getRetailQuickStartItems(): List<RetailCategoryQuickStartItem> {
+private fun getRetailCategoryHomeGateways(): List<RetailCategoryHomeGatewayItem> {
     return listOf(
-        RetailCategoryQuickStartItem(
-            title = "Alt Kategoriler",
-            description = "Kategori ağacında ilerle",
-            icon = Icons.Outlined.Category,
-            backgroundColor = BbColors.Yellow.Yellow50,
-            iconColor = BbColors.Navy.Navy900,
-            target = RetailCategoryQuickStartTarget.SubCategories
-        ),
-        RetailCategoryQuickStartItem(
-            title = "Ürün Vitrini",
-            description = "Seçili ürünlere bak",
+        RetailCategoryHomeGatewayItem(
+            title = "Ürünler",
+            description = "Bu kategorideki ürünler",
             icon = Icons.Outlined.ShoppingBasket,
             backgroundColor = BbColors.Blue.Blue50,
             iconColor = BbColors.Blue.Blue700,
-            target = RetailCategoryQuickStartTarget.Products
+            target = RetailCategoryHomeGatewayTarget.Products
         ),
-        RetailCategoryQuickStartItem(
+        RetailCategoryHomeGatewayItem(
             title = "Mağazalar",
-            description = "Bu kategorideki mağazalar",
+            description = "Kategori mağazaları",
             icon = Icons.Outlined.Storefront,
             backgroundColor = BbColors.Green.Green50,
             iconColor = BbColors.Green.Green700,
-            target = RetailCategoryQuickStartTarget.Stores
+            target = RetailCategoryHomeGatewayTarget.Stores
+        ),
+        RetailCategoryHomeGatewayItem(
+            title = "Favoriler",
+            description = "Beğenilen ürünler",
+            icon = Icons.Outlined.FavoriteBorder,
+            backgroundColor = BbColors.Pink.Pink50,
+            iconColor = BbColors.Pink.Pink700,
+            target = RetailCategoryHomeGatewayTarget.Favorites
         )
     )
 }
 
-private fun getRetailSubCategories(): List<RetailSubCategoryItem> {
+private fun getRetailCategoryHomeSubCategories(): List<RetailCategoryHomeSubCategoryItem> {
     return listOf(
-        RetailSubCategoryItem(
-            title = "Transistörler, Diyotlar ve Tüpler",
-            description = "Elektronik devre parçaları",
+        RetailCategoryHomeSubCategoryItem(
+            title = "Telefonlar",
+            description = "Akıllı telefon ve aksesuarları",
             icon = Icons.Outlined.Category,
             backgroundColor = BbColors.Yellow.Yellow50,
             iconColor = BbColors.Navy.Navy900
         ),
-        RetailSubCategoryItem(
-            title = "Piller ve Aksesuarlar",
-            description = "Pil, batarya ve güç aksesuarları",
+        RetailCategoryHomeSubCategoryItem(
+            title = "Bilgisayar",
+            description = "Notebook, masaüstü ve çevre birimleri",
             icon = Icons.Outlined.Category,
             backgroundColor = BbColors.Blue.Blue50,
             iconColor = BbColors.Blue.Blue700
         ),
-        RetailSubCategoryItem(
-            title = "Elektromekanik Bileşenler",
-            description = "Bağlantı, anahtar ve mekanik parçalar",
+        RetailCategoryHomeSubCategoryItem(
+            title = "Akıllı Ev",
+            description = "Ev otomasyonu ve güvenlik ürünleri",
             icon = Icons.Outlined.Category,
             backgroundColor = BbColors.Green.Green50,
             iconColor = BbColors.Green.Green700
         ),
-        RetailSubCategoryItem(
-            title = "Entegre Devreler",
-            description = "Çip, modül ve devre çözümleri",
+        RetailCategoryHomeSubCategoryItem(
+            title = "Ses ve Görüntü",
+            description = "Kulaklık, hoparlör ve medya ürünleri",
             icon = Icons.Outlined.Category,
             backgroundColor = BbColors.Purple.Purple50,
             iconColor = BbColors.Purple.Purple700
@@ -588,45 +665,45 @@ private fun getRetailSubCategories(): List<RetailSubCategoryItem> {
     )
 }
 
-private fun getRetailCategoryShowcases(): List<RetailCategoryShowcaseItem> {
+private fun getRetailCategoryHomeShowcases(): List<RetailCategoryHomeShowcaseItem> {
     return listOf(
-        RetailCategoryShowcaseItem(
-            title = "Yeni Ürünler",
-            description = "Bu kategoride yeni eklenen ürünleri keşfet.",
+        RetailCategoryHomeShowcaseItem(
+            title = "Yeni gelenler",
+            description = "Bu kategoriye yeni eklenen ürünleri keşfet.",
             icon = Icons.Outlined.NewReleases,
             backgroundColor = BbColors.Yellow.Yellow50,
             iconColor = BbColors.Navy.Navy900,
-            target = RetailCategoryShowcaseTarget.Products
+            target = RetailCategoryHomeShowcaseTarget.Products
         ),
-        RetailCategoryShowcaseItem(
-            title = "Kategori Mağazaları",
-            description = "Bu kategoride satış yapan mağazalara göz at.",
-            icon = Icons.Outlined.Storefront,
-            backgroundColor = BbColors.Blue.Blue50,
-            iconColor = BbColors.Blue.Blue700,
-            target = RetailCategoryShowcaseTarget.Stores
-        ),
-        RetailCategoryShowcaseItem(
-            title = "Fırsatlar",
-            description = "Kategori içindeki kampanya ve vitrinleri incele.",
+        RetailCategoryHomeShowcaseItem(
+            title = "Kampanyalar",
+            description = "Seçili indirim ve fırsat vitrinlerine bak.",
             icon = Icons.Outlined.LocalOffer,
             backgroundColor = BbColors.Green.Green50,
             iconColor = BbColors.Green.Green700,
-            target = RetailCategoryShowcaseTarget.Products
+            target = RetailCategoryHomeShowcaseTarget.Products
+        ),
+        RetailCategoryHomeShowcaseItem(
+            title = "Mağaza keşfi",
+            description = "Bu kategoride öne çıkan mağazaları incele.",
+            icon = Icons.Outlined.Storefront,
+            backgroundColor = BbColors.Blue.Blue50,
+            iconColor = BbColors.Blue.Blue700,
+            target = RetailCategoryHomeShowcaseTarget.Stores
         )
     )
 }
 
-private fun getRetailPopularSearches(): List<String> {
+private fun getRetailCategoryHomePopularSearches(): List<String> {
     return listOf(
-        "Arduino",
-        "Sensör",
-        "Batarya",
-        "Adaptör",
-        "Kablo",
-        "Devre kartı",
-        "Modül",
-        "Güç kaynağı"
+        "Telefon",
+        "Bluetooth kulaklık",
+        "Notebook",
+        "Akıllı saat",
+        "Tablet",
+        "Şarj adaptörü",
+        "Oyuncu ekipmanı",
+        "Ev elektroniği"
     )
 }
 

@@ -24,7 +24,6 @@ import com.bulbulustur.android.features.account.AddressFormScreen
 import com.bulbulustur.android.features.account.AddressListScreen
 import com.bulbulustur.android.features.account.CommunicationPreferenceScreen
 import com.bulbulustur.android.features.account.CouponListScreen
-import com.bulbulustur.android.features.account.QuotationRequestListScreen
 import com.bulbulustur.android.features.account.RequestListScreen
 import com.bulbulustur.android.features.account.ReviewListScreen
 import com.bulbulustur.android.features.account.bank.BankAccountCreateScreen
@@ -55,6 +54,10 @@ import com.bulbulustur.android.features.account.settings.LanguageSettingsScreen
 import com.bulbulustur.android.features.account.settings.LegalPoliciesScreen
 import com.bulbulustur.android.features.account.settings.RegionSettingsScreen
 import com.bulbulustur.android.features.account.settings.SettingsRoutes
+import com.bulbulustur.android.features.basket.BasketRoutes
+import com.bulbulustur.android.features.basket.BasketScreen
+import com.bulbulustur.android.features.message.MessageInboxScreen
+import com.bulbulustur.android.features.message.MessageRoutes
 import com.bulbulustur.android.features.order.OrderDetailScreen
 import com.bulbulustur.android.features.order.OrderListScreen
 import com.bulbulustur.android.features.retail.CampaignDetailScreen
@@ -86,6 +89,8 @@ import com.bulbulustur.android.features.wholesale.WholesaleCategoryHomeScreen
 import com.bulbulustur.android.features.wholesale.WholesaleHomeScreen
 import com.bulbulustur.android.features.wholesale.WholesaleRoutes
 import com.bulbulustur.android.features.wholesale.menu.WholesaleMenuScreen
+import com.bulbulustur.android.features.wholesale.rfq.RfqCreateScreen
+import com.bulbulustur.android.features.wholesale.rfq.RfqListScreen
 import com.bulbulustur.android.ui.shell.BuyerMode
 import com.bulbulustur.android.ui.shell.BuyerModeSheet
 import com.bulbulustur.android.ui.theme.BbTheme
@@ -125,6 +130,54 @@ class MainActivity : ComponentActivity() {
                         showBuyerModeSheet = false
                     }
 
+                    fun navigateToInbox() {
+                        navController.navigate(MessageRoutes.Inbox) {
+                            launchSingleTop = true
+                        }
+                    }
+
+                    fun navigateToRetailBasket() {
+                        navController.navigate(BasketRoutes.Basket) {
+                            launchSingleTop = true
+                        }
+                    }
+
+                    fun navigateToFavorites() {
+                        navController.navigate(AccountRoutes.Favorites) {
+                            launchSingleTop = true
+                        }
+                    }
+
+                    fun navigateToRetailCategories() {
+                        navController.navigate(RetailRoutes.CategoryHome) {
+                            launchSingleTop = true
+                        }
+                    }
+
+                    fun navigateToWholesaleCategories() {
+                        navController.navigate(WholesaleRoutes.CategoryHome) {
+                            launchSingleTop = true
+                        }
+                    }
+
+                    fun navigateToWholesaleOffers() {
+                        navController.navigate(WholesaleRoutes.QuotationRequests) {
+                            launchSingleTop = true
+                        }
+                    }
+
+                    fun navigateToWholesaleRfqCreate() {
+                        navController.navigate(WholesaleRoutes.RfqCreate) {
+                            launchSingleTop = true
+                        }
+                    }
+
+                    fun navigateToAccount() {
+                        navController.navigate(AccountRoutes.AccountHome) {
+                            launchSingleTop = true
+                        }
+                    }
+
                     fun navigateBackToAccount() {
                         navController.navigate(AccountRoutes.AccountHome) {
                             launchSingleTop = true
@@ -136,6 +189,12 @@ class MainActivity : ComponentActivity() {
 
                         navController.navigate(RetailRoutes.Home) {
                             launchSingleTop = true
+                            restoreState = true
+
+                            popUpTo(SplashRoutes.ModeSelection) {
+                                inclusive = false
+                                saveState = true
+                            }
                         }
                     }
 
@@ -143,14 +202,6 @@ class MainActivity : ComponentActivity() {
                         closeBuyerModeSheet()
 
                         navController.navigate(WholesaleRoutes.Home) {
-                            launchSingleTop = true
-                        }
-                    }
-
-                    fun navigateToAppearanceSettings() {
-                        closeBuyerModeSheet()
-
-                        navController.navigate(SettingsRoutes.Appearance) {
                             launchSingleTop = true
                         }
                     }
@@ -204,13 +255,70 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
+                        composable(MessageRoutes.Inbox) {
+                            MessageInboxScreen(
+                                onBackClick = {
+                                    val previousRoute = navController.previousBackStackEntry
+                                        ?.destination
+                                        ?.route
+                                        .orEmpty()
+
+                                    val didPop = navController.popBackStack()
+
+                                    if (!didPop) {
+                                        if (previousRoute.startsWith("wholesale/")) {
+                                            navController.navigate(WholesaleRoutes.Home) {
+                                                launchSingleTop = true
+                                            }
+                                        } else {
+                                            navController.navigate(RetailRoutes.Home) {
+                                                launchSingleTop = true
+                                            }
+                                        }
+                                    }
+                                },
+                                onMessageClick = {
+                                }
+                            )
+                        }
+
+                        composable(BasketRoutes.Basket) {
+                            BasketScreen(
+                                onBackClick = {
+                                    navController.popBackStack()
+                                },
+                                onCheckoutClick = {
+                                },
+                                onProductClick = {
+                                    navController.navigate(RetailRoutes.ProductDetail)
+                                },
+                                onStoreClick = {
+                                    navController.navigate(StoreRoutes.StoreDetail)
+                                },
+                                onHomeClick = {
+                                    navController.navigate(RetailRoutes.Home) {
+                                        launchSingleTop = true
+                                    }
+                                },
+                                onMenuClick = {
+                                    navigateToRetailCategories()
+                                },
+                                onModeSwitchClick = {
+                                    openBuyerModeSheet()
+                                },
+                                onAccountClick = {
+                                    navigateToAccount()
+                                }
+                            )
+                        }
+
                         composable(RetailRoutes.Home) {
                             RetailHomeScreen(
                                 onSearchClick = {
                                     navController.navigate(RetailRoutes.Search)
                                 },
                                 onCategoryClick = {
-                                    navController.navigate(RetailRoutes.Menu)
+                                    navigateToRetailCategories()
                                 },
                                 onProductListClick = {
                                     navController.navigate(RetailRoutes.ProductList)
@@ -219,21 +327,25 @@ class MainActivity : ComponentActivity() {
                                     navController.navigate(RetailRoutes.ProductDetail)
                                 },
                                 onFavoriteClick = {
-                                    navController.navigate(AccountRoutes.Favorites)
+                                    navigateToFavorites()
                                 },
                                 onStoreClick = {
                                     navController.navigate(StoreRoutes.StoreList)
                                 },
                                 onMessageClick = {
+                                    navigateToInbox()
+                                },
+                                onModeSwitchClick = {
                                     openBuyerModeSheet()
                                 },
                                 onBasketClick = {
+                                    navigateToRetailBasket()
                                 },
                                 onAccountClick = {
-                                    navController.navigate(AccountRoutes.AccountHome)
+                                    navigateToAccount()
                                 },
                                 onMenuClick = {
-                                    navController.navigate(RetailRoutes.Menu)
+                                    navigateToRetailCategories()
                                 }
                             )
                         }
@@ -249,12 +361,13 @@ class MainActivity : ComponentActivity() {
                                     navController.navigate(RetailRoutes.Search)
                                 },
                                 onBasketClick = {
+                                    navigateToRetailBasket()
                                 },
                                 onAccountClick = {
-                                    navController.navigate(AccountRoutes.AccountHome)
+                                    navigateToAccount()
                                 },
                                 onCategoryClick = {
-                                    navController.navigate(RetailRoutes.CategoryHome)
+                                    navigateToRetailCategories()
                                 },
                                 onCampaignsClick = {
                                     navController.navigate(RetailRoutes.CampaignList)
@@ -267,27 +380,32 @@ class MainActivity : ComponentActivity() {
 
                         composable(RetailRoutes.CategoryHome) {
                             RetailCategoryHomeScreen(
+                                onBackClick = {
+                                    navigateToRetailHome()
+                                },
                                 onSearchClick = {
                                     navController.navigate(RetailRoutes.Search)
                                 },
                                 onMenuClick = {
-                                    navController.navigate(RetailRoutes.Menu)
+                                    navigateToRetailHome()
                                 },
                                 onFavoriteClick = {
-                                    navController.navigate(AccountRoutes.Favorites)
-                                },
-                                onHomeClick = {
-                                    navController.navigate(RetailRoutes.Home) {
-                                        launchSingleTop = true
-                                    }
+                                    navigateToFavorites()
                                 },
                                 onMessageClick = {
+                                    navigateToInbox()
+                                },
+                                onHomeClick = {
+                                    navigateToRetailHome()
+                                },
+                                onModeSwitchClick = {
                                     openBuyerModeSheet()
                                 },
                                 onBasketClick = {
+                                    navigateToRetailBasket()
                                 },
                                 onAccountClick = {
-                                    navController.navigate(AccountRoutes.AccountHome)
+                                    navigateToAccount()
                                 },
                                 onProductListClick = {
                                     navController.navigate(RetailRoutes.ProductList)
@@ -309,10 +427,10 @@ class MainActivity : ComponentActivity() {
                                     navController.navigate(RetailRoutes.Search)
                                 },
                                 onMenuClick = {
-                                    navController.navigate(RetailRoutes.Menu)
+                                    navigateToRetailCategories()
                                 },
                                 onFavoriteClick = {
-                                    navController.navigate(AccountRoutes.Favorites)
+                                    navigateToFavorites()
                                 },
                                 onProductDetailClick = {
                                     navController.navigate(RetailRoutes.ProductDetail)
@@ -323,12 +441,16 @@ class MainActivity : ComponentActivity() {
                                     }
                                 },
                                 onMessageClick = {
+                                    navigateToInbox()
+                                },
+                                onModeSwitchClick = {
                                     openBuyerModeSheet()
                                 },
                                 onBasketClick = {
+                                    navigateToRetailBasket()
                                 },
                                 onAccountClick = {
-                                    navController.navigate(AccountRoutes.AccountHome)
+                                    navigateToAccount()
                                 }
                             )
                         }
@@ -339,10 +461,10 @@ class MainActivity : ComponentActivity() {
                                     navController.navigate(RetailRoutes.Search)
                                 },
                                 onMenuClick = {
-                                    navController.navigate(RetailRoutes.Menu)
+                                    navigateToRetailCategories()
                                 },
                                 onFavoriteClick = {
-                                    navController.navigate(AccountRoutes.Favorites)
+                                    navigateToFavorites()
                                 },
                                 onProductDetailClick = {
                                     navController.navigate(RetailRoutes.ProductDetail)
@@ -353,12 +475,16 @@ class MainActivity : ComponentActivity() {
                                     }
                                 },
                                 onMessageClick = {
+                                    navigateToInbox()
+                                },
+                                onModeSwitchClick = {
                                     openBuyerModeSheet()
                                 },
                                 onBasketClick = {
+                                    navigateToRetailBasket()
                                 },
                                 onAccountClick = {
-                                    navController.navigate(AccountRoutes.AccountHome)
+                                    navigateToAccount()
                                 }
                             )
                         }
@@ -372,11 +498,16 @@ class MainActivity : ComponentActivity() {
                                     navController.navigate(RetailRoutes.Search)
                                 },
                                 onFavoriteClick = {
-                                    navController.navigate(AccountRoutes.Favorites)
+                                    navigateToFavorites()
+                                },
+                                onMessageClick = {
+                                    navigateToInbox()
                                 },
                                 onAddToBasketClick = {
+                                    navigateToRetailBasket()
                                 },
                                 onBuyNowClick = {
+                                    navigateToRetailBasket()
                                 },
                                 onStockAlarmClick = {
                                 },
@@ -482,13 +613,51 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
+                        composable(WholesaleRoutes.QuotationRequests) {
+                            RfqListScreen(
+                                onBackClick = {
+                                    navController.navigate(WholesaleRoutes.Home) {
+                                        launchSingleTop = true
+                                    }
+                                },
+                                onHomeClick = {
+                                    navController.navigate(WholesaleRoutes.Home) {
+                                        launchSingleTop = true
+                                    }
+                                },
+                                onMenuClick = {
+                                    navigateToWholesaleCategories()
+                                },
+                                onModeSwitchClick = {
+                                    openBuyerModeSheet()
+                                },
+                                onBasketClick = {
+                                    navigateToWholesaleOffers()
+                                },
+                                onAccountClick = {
+                                    navigateToAccount()
+                                },
+                                onCreateRfqClick = {
+                                    navigateToWholesaleRfqCreate()
+                                }
+                            )
+                        }
+
+                        composable(WholesaleRoutes.RfqCreate) {
+                            RfqCreateScreen(
+                                onBackClick = {
+                                    navController.popBackStack()
+                                }
+                            )
+                        }
+
                         composable(WholesaleRoutes.Home) {
                             WholesaleHomeScreen(
                                 onSearchClick = {
                                     navController.navigate(WholesaleRoutes.Search)
                                 },
                                 onCategoryClick = {
-                                    navController.navigate(WholesaleRoutes.Menu)
+                                    navigateToWholesaleCategories()
                                 },
                                 onProductListClick = {
                                     navController.navigate(WholesaleRoutes.ProductList)
@@ -499,11 +668,13 @@ class MainActivity : ComponentActivity() {
                                 onCompanyListClick = {
                                 },
                                 onRfqListClick = {
+                                    navigateToWholesaleOffers()
                                 },
                                 onRfqCreateClick = {
+                                    navigateToWholesaleRfqCreate()
                                 },
                                 onFavoriteClick = {
-                                    navController.navigate(AccountRoutes.Favorites)
+                                    navigateToFavorites()
                                 },
                                 onLastPriceRequestClick = {
                                     navController.navigate(WholesaleRoutes.LastPriceRequest)
@@ -515,15 +686,19 @@ class MainActivity : ComponentActivity() {
                                     navController.navigate(WholesaleRoutes.CustomizationRequest)
                                 },
                                 onMessageClick = {
+                                    navigateToInbox()
+                                },
+                                onModeSwitchClick = {
                                     openBuyerModeSheet()
                                 },
                                 onBasketClick = {
+                                    navigateToWholesaleOffers()
                                 },
                                 onAccountClick = {
-                                    navController.navigate(AccountRoutes.AccountHome)
+                                    navigateToAccount()
                                 },
                                 onMenuClick = {
-                                    navController.navigate(WholesaleRoutes.Menu)
+                                    navigateToWholesaleCategories()
                                 }
                             )
                         }
@@ -539,47 +714,66 @@ class MainActivity : ComponentActivity() {
                                     navController.navigate(WholesaleRoutes.Search)
                                 },
                                 onBasketClick = {
+                                    navigateToWholesaleOffers()
                                 },
                                 onAccountClick = {
-                                    navController.navigate(AccountRoutes.AccountHome)
+                                    navigateToAccount()
                                 },
                                 onCategoryClick = {
-                                    navController.navigate(WholesaleRoutes.CategoryHome)
+                                    navigateToWholesaleCategories()
                                 },
                                 onCompanyListClick = {
-                                    navController.navigate(WholesaleRoutes.CategoryHome) {
-                                        launchSingleTop = true
-                                    }
+                                    navigateToWholesaleCategories()
                                 },
                                 onRfqClick = {
-                                    navController.navigate(WholesaleRoutes.LastPriceRequest)
+                                    navigateToWholesaleRfqCreate()
                                 }
                             )
                         }
 
                         composable(WholesaleRoutes.CategoryHome) {
                             WholesaleCategoryHomeScreen(
+                                onBackClick = {
+                                    navController.navigate(WholesaleRoutes.Home) {
+                                        launchSingleTop = true
+                                        popUpTo(WholesaleRoutes.Home) {
+                                            inclusive = false
+                                        }
+                                    }
+                                },
                                 onSearchClick = {
                                     navController.navigate(WholesaleRoutes.Search)
                                 },
                                 onMenuClick = {
-                                    navController.navigate(WholesaleRoutes.Menu)
+                                    navController.navigate(WholesaleRoutes.Home) {
+                                        launchSingleTop = true
+                                        popUpTo(WholesaleRoutes.Home) {
+                                            inclusive = false
+                                        }
+                                    }
                                 },
                                 onFavoriteClick = {
-                                    navController.navigate(AccountRoutes.Favorites)
+                                    navigateToFavorites()
+                                },
+                                onMessageClick = {
+                                    navigateToInbox()
                                 },
                                 onHomeClick = {
                                     navController.navigate(WholesaleRoutes.Home) {
                                         launchSingleTop = true
+                                        popUpTo(WholesaleRoutes.Home) {
+                                            inclusive = false
+                                        }
                                     }
                                 },
-                                onMessageClick = {
+                                onModeSwitchClick = {
                                     openBuyerModeSheet()
                                 },
                                 onBasketClick = {
+                                    navigateToWholesaleOffers()
                                 },
                                 onAccountClick = {
-                                    navController.navigate(AccountRoutes.AccountHome)
+                                    navigateToAccount()
                                 },
                                 onProductListClick = {
                                     navController.navigate(WholesaleRoutes.ProductList)
@@ -590,12 +784,10 @@ class MainActivity : ComponentActivity() {
                                     }
                                 },
                                 onCompanyListClick = {
-                                    navController.navigate(WholesaleRoutes.CategoryHome) {
-                                        launchSingleTop = true
-                                    }
+                                    navigateToWholesaleCategories()
                                 },
                                 onRfqClick = {
-                                    navController.navigate(WholesaleRoutes.LastPriceRequest)
+                                    navigateToWholesaleRfqCreate()
                                 },
                                 onLastPriceRequestClick = {
                                     navController.navigate(WholesaleRoutes.LastPriceRequest)
@@ -626,7 +818,7 @@ class MainActivity : ComponentActivity() {
                                     navController.navigate(WholesaleRoutes.Search)
                                 },
                                 onFavoriteClick = {
-                                    navController.navigate(AccountRoutes.Favorites)
+                                    navigateToFavorites()
                                 },
                                 onLastPriceRequestClick = {
                                     navController.navigate(WholesaleRoutes.LastPriceRequest)
@@ -677,13 +869,13 @@ class MainActivity : ComponentActivity() {
                                     navController.navigate(AccountRoutes.FollowedStores)
                                 },
                                 onQuotationRequestsClick = {
-                                    navController.navigate(AccountRoutes.QuotationRequests)
+                                    navigateToWholesaleOffers()
                                 },
                                 onOrdersClick = {
                                     navController.navigate(AccountRoutes.Orders)
                                 },
                                 onFavoritesClick = {
-                                    navController.navigate(AccountRoutes.Favorites)
+                                    navigateToFavorites()
                                 },
                                 onReviewsClick = {
                                     navController.navigate(AccountRoutes.Reviews)
@@ -704,7 +896,7 @@ class MainActivity : ComponentActivity() {
                                     navController.navigate(SettingsRoutes.Home)
                                 },
                                 onMessagesClick = {
-                                    openBuyerModeSheet()
+                                    navigateToInbox()
                                 },
                                 onSupportClick = {
                                 },
@@ -715,6 +907,20 @@ class MainActivity : ComponentActivity() {
                                 },
                                 onUsagePurposeClick = {
                                     navController.navigate(AccountRoutes.UsagePurpose)
+                                },
+                                onHomeClick = {
+                                    navController.navigate(RetailRoutes.Home) {
+                                        launchSingleTop = true
+                                    }
+                                },
+                                onMenuClick = {
+                                    navigateToRetailCategories()
+                                },
+                                onModeSwitchClick = {
+                                    openBuyerModeSheet()
+                                },
+                                onBasketClick = {
+                                    navigateToRetailBasket()
                                 }
                             )
                         }
@@ -951,14 +1157,6 @@ class MainActivity : ComponentActivity() {
 
                         composable(AccountRoutes.FollowedStores) {
                             FollowedStoreListScreen(
-                                onBackClick = {
-                                    navController.popBackStack()
-                                }
-                            )
-                        }
-
-                        composable(AccountRoutes.QuotationRequests) {
-                            QuotationRequestListScreen(
                                 onBackClick = {
                                     navController.popBackStack()
                                 }

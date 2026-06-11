@@ -50,6 +50,7 @@ fun ProductListScreen(
     onFavoriteClick: () -> Unit = {},
     onHomeClick: () -> Unit = {},
     onMessageClick: () -> Unit = {},
+    onModeSwitchClick: () -> Unit = {},
     onBasketClick: () -> Unit = {},
     onAccountClick: () -> Unit = {},
     onProductDetailClick: () -> Unit = {}
@@ -156,7 +157,7 @@ fun ProductListScreen(
                     when (selectedItem) {
                         WholesaleBottomNavigationItem.Home -> onHomeClick()
                         WholesaleBottomNavigationItem.Menu -> onMenuClick()
-                        WholesaleBottomNavigationItem.Messages -> onMessageClick()
+                        WholesaleBottomNavigationItem.ModeSwitch -> onModeSwitchClick()
                         WholesaleBottomNavigationItem.Basket -> onBasketClick()
                         WholesaleBottomNavigationItem.Account -> onAccountClick()
                     }

@@ -8,7 +8,7 @@ import com.bulbulustur.android.ui.shell.BuyerMode
 enum class WholesaleBottomNavigationItem {
     Home,
     Menu,
-    Messages,
+    ModeSwitch,
     Basket,
     Account
 }
@@ -31,7 +31,7 @@ private fun WholesaleBottomNavigationItem.toBuyerItem(): BuyerBottomNavigationIt
     return when (this) {
         WholesaleBottomNavigationItem.Home -> BuyerBottomNavigationItem.Home
         WholesaleBottomNavigationItem.Menu -> BuyerBottomNavigationItem.Menu
-        WholesaleBottomNavigationItem.Messages -> BuyerBottomNavigationItem.Switch
+        WholesaleBottomNavigationItem.ModeSwitch -> BuyerBottomNavigationItem.Switch
         WholesaleBottomNavigationItem.Basket -> BuyerBottomNavigationItem.Basket
         WholesaleBottomNavigationItem.Account -> BuyerBottomNavigationItem.Account
     }
@@ -41,7 +41,7 @@ private fun BuyerBottomNavigationItem.toWholesaleItem(): WholesaleBottomNavigati
     return when (this) {
         BuyerBottomNavigationItem.Home -> WholesaleBottomNavigationItem.Home
         BuyerBottomNavigationItem.Menu -> WholesaleBottomNavigationItem.Menu
-        BuyerBottomNavigationItem.Switch -> WholesaleBottomNavigationItem.Messages
+        BuyerBottomNavigationItem.Switch -> WholesaleBottomNavigationItem.ModeSwitch
         BuyerBottomNavigationItem.Basket -> WholesaleBottomNavigationItem.Basket
         BuyerBottomNavigationItem.Account -> WholesaleBottomNavigationItem.Account
     }

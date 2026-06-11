@@ -104,7 +104,7 @@ fun RetailMenuScreen(
                     when (selectedItem) {
                         RetailBottomNavigationItem.Home -> onHomeClick()
                         RetailBottomNavigationItem.Menu -> Unit
-                        RetailBottomNavigationItem.Messages -> Unit
+                        RetailBottomNavigationItem.ModeSwitch -> Unit
                         RetailBottomNavigationItem.Basket -> onBasketClick()
                         RetailBottomNavigationItem.Account -> onAccountClick()
                     }

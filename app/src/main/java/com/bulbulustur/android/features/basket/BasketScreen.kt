@@ -30,6 +30,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.bulbulustur.android.features.retail.components.RetailBottomNavigation
+import com.bulbulustur.android.features.retail.components.RetailBottomNavigationItem
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbSectionHeader
 import com.bulbulustur.android.ui.theme.BbColors
@@ -41,7 +43,13 @@ fun BasketScreen(
     onBackClick: () -> Unit = {},
     onCheckoutClick: (List<BasketLineItem>) -> Unit = {},
     onProductClick: (BasketLineItem) -> Unit = {},
-    onStoreClick: (BasketStoreGroup) -> Unit = {}
+    onStoreClick: (BasketStoreGroup) -> Unit = {},
+
+    // Bottom navigation
+    onHomeClick: () -> Unit = {},
+    onMenuClick: () -> Unit = {},
+    onModeSwitchClick: () -> Unit = {},
+    onAccountClick: () -> Unit = {}
 ) {
     val basketLines = remember {
         mutableStateListOf<BasketLineItem>().apply {
@@ -76,103 +84,116 @@ fun BasketScreen(
     val payableTotal = productTotal + cargoTotal - discountTotal
 
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         bottomBar = {
+            Column(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                if (basketLines.isNotEmpty()) {
+                    BasketCheckoutBar(
+                        payableTotalText = formatPrice(payableTotal),
+                        onCheckoutClick = {
+                            onCheckoutClick(basketLines.toList())
+                        }
+                    )
+                }
 
+                RetailBottomNavigation(
+                    selectedItem = RetailBottomNavigationItem.Basket,
+                    onItemClick = { selectedItem ->
+                        when (selectedItem) {
+                            RetailBottomNavigationItem.Home -> onHomeClick()
+                            RetailBottomNavigationItem.Menu -> onMenuClick()
+                            RetailBottomNavigationItem.ModeSwitch -> onModeSwitchClick()
+                            RetailBottomNavigationItem.Basket -> Unit
+                            RetailBottomNavigationItem.Account -> onAccountClick()
+                        }
+                    }
+                )
+            }
         }
     ) { innerPadding ->
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.surfaceVariant)
-                .padding(innerPadding)
+                .padding(innerPadding),
+            contentPadding = PaddingValues(
+                start = BbSpacing.PageHorizontal,
+                top = BbSpacing.PageTopCompact,
+                end = BbSpacing.PageHorizontal,
+                bottom = BbSpacing.PageBottom
+            ),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
         ) {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                contentPadding = PaddingValues(
-                    start = BbSpacing.md,
-                    top = BbSpacing.md,
-                    end = BbSpacing.md,
-                    bottom = BbSpacing.md
-                ),
-                verticalArrangement = Arrangement.spacedBy(BbSpacing.md)
-            ) {
-                item {
-                    BasketTopBar(
-                        onBackClick = onBackClick
-                    )
-                }
-
-                item {
-                    BasketHeaderCard(
-                        lineCount = basketLines.size,
-                        storeCount = storeGroups.size
-                    )
-                }
-
-                if (basketLines.isEmpty()) {
-                    item {
-                        BasketEmptyCard()
-                    }
-                } else {
-                    items(storeGroups) { storeGroup ->
-                        BasketStoreGroupCard(
-                            storeGroup = storeGroup,
-                            onStoreClick = {
-                                onStoreClick(storeGroup)
-                            },
-                            onProductClick = onProductClick,
-                            onIncreaseQuantityClick = { line ->
-                                val index = basketLines.indexOfFirst {
-                                    it.id == line.id
-                                }
-
-                                if (index >= 0) {
-                                    basketLines[index] = basketLines[index].copy(
-                                        quantity = basketLines[index].quantity + 1
-                                    )
-                                }
-                            },
-                            onDecreaseQuantityClick = { line ->
-                                val index = basketLines.indexOfFirst {
-                                    it.id == line.id
-                                }
-
-                                if (index >= 0) {
-                                    if (basketLines[index].quantity > 1) {
-                                        basketLines[index] = basketLines[index].copy(
-                                            quantity = basketLines[index].quantity - 1
-                                        )
-                                    }
-                                }
-                            },
-                            onRemoveClick = { line ->
-                                basketLines.removeAll {
-                                    it.id == line.id
-                                }
-                            }
-                        )
-                    }
-
-                    item {
-                        BasketSummaryCard(
-                            productTotalText = formatPrice(productTotal),
-                            cargoTotalText = formatPrice(cargoTotal),
-                            discountTotalText = "-${formatPrice(discountTotal)}",
-                            payableTotalText = formatPrice(payableTotal)
-                        )
-                    }
-                }
+            item {
+                BasketTopBar(
+                    onBackClick = onBackClick
+                )
             }
 
-            if (basketLines.isNotEmpty()) {
-                BasketBottomBar(
-                    payableTotalText = formatPrice(payableTotal),
-                    onCheckoutClick = {
-                        onCheckoutClick(basketLines.toList())
-                    }
+            item {
+                BasketHeaderCard(
+                    lineCount = basketLines.size,
+                    storeCount = storeGroups.size
                 )
+            }
+
+            if (basketLines.isEmpty()) {
+                item {
+                    BasketEmptyCard()
+                }
+            } else {
+                items(
+                    items = storeGroups,
+                    key = { storeGroup ->
+                        storeGroup.storeId
+                    }
+                ) { storeGroup ->
+                    BasketStoreGroupCard(
+                        storeGroup = storeGroup,
+                        onStoreClick = {
+                            onStoreClick(storeGroup)
+                        },
+                        onProductClick = onProductClick,
+                        onIncreaseQuantityClick = { line ->
+                            val index = basketLines.indexOfFirst {
+                                it.id == line.id
+                            }
+
+                            if (index >= 0) {
+                                basketLines[index] = basketLines[index].copy(
+                                    quantity = basketLines[index].quantity + 1
+                                )
+                            }
+                        },
+                        onDecreaseQuantityClick = { line ->
+                            val index = basketLines.indexOfFirst {
+                                it.id == line.id
+                            }
+
+                            if (index >= 0 && basketLines[index].quantity > 1) {
+                                basketLines[index] = basketLines[index].copy(
+                                    quantity = basketLines[index].quantity - 1
+                                )
+                            }
+                        },
+                        onRemoveClick = { line ->
+                            basketLines.removeAll {
+                                it.id == line.id
+                            }
+                        }
+                    )
+                }
+
+                item {
+                    BasketSummaryCard(
+                        productTotalText = formatPrice(productTotal),
+                        cargoTotalText = formatPrice(cargoTotal),
+                        discountTotalText = "-${formatPrice(discountTotal)}",
+                        payableTotalText = formatPrice(payableTotal)
+                    )
+                }
             }
         }
     }
@@ -188,7 +209,7 @@ private fun BasketTopBar(
     ) {
         Box(
             modifier = Modifier
-                .size(BbSpacing.xl)
+                .size(BbIconSizeTopBar())
                 .clip(CircleShape)
                 .background(MaterialTheme.colorScheme.surface)
                 .clickable {
@@ -203,7 +224,9 @@ private fun BasketTopBar(
             )
         }
 
-        Spacer(modifier = Modifier.width(BbSpacing.md))
+        Spacer(
+            modifier = Modifier.width(BbSpacing.Space3)
+        )
 
         Column(
             modifier = Modifier.weight(1f)
@@ -218,7 +241,7 @@ private fun BasketTopBar(
             Text(
                 text = "Ürünleri kontrol et ve checkout adımına geç",
                 style = MaterialTheme.typography.bodySmall,
-                color = BbColors.TextStrong.copy(alpha = 0.62f)
+                color = BbColors.TextMuted
             )
         }
     }
@@ -235,7 +258,7 @@ private fun BasketHeaderCard(
         ) {
             Box(
                 modifier = Modifier
-                    .size(BbSpacing.xxl)
+                    .size(BbSpacing.Space12)
                     .clip(RoundedCornerShape(BbRadius.md))
                     .background(BbColors.Success),
                 contentAlignment = Alignment.Center
@@ -248,7 +271,9 @@ private fun BasketHeaderCard(
                 )
             }
 
-            Spacer(modifier = Modifier.width(BbSpacing.md))
+            Spacer(
+                modifier = Modifier.width(BbSpacing.Space3)
+            )
 
             Column(
                 modifier = Modifier.weight(1f)
@@ -263,7 +288,7 @@ private fun BasketHeaderCard(
                 Text(
                     text = "$storeCount mağazadan gönderim yapılacak",
                     style = MaterialTheme.typography.bodySmall,
-                    color = BbColors.TextStrong.copy(alpha = 0.62f)
+                    color = BbColors.TextMuted
                 )
             }
         }
@@ -276,7 +301,7 @@ private fun BasketEmptyCard() {
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.sm)
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
         ) {
             Box(
                 modifier = Modifier
@@ -301,7 +326,7 @@ private fun BasketEmptyCard() {
             Text(
                 text = "Ürün keşfine dönüp sepetini doldurabilirsin.",
                 style = MaterialTheme.typography.bodySmall,
-                color = BbColors.TextStrong.copy(alpha = 0.62f)
+                color = BbColors.TextMuted
             )
         }
     }
@@ -318,7 +343,7 @@ private fun BasketStoreGroupCard(
 ) {
     BbCard {
         Column(
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.md)
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
         ) {
             BasketStoreHeader(
                 storeGroup = storeGroup,
@@ -361,7 +386,7 @@ private fun BasketStoreHeader(
     ) {
         Box(
             modifier = Modifier
-                .size(BbSpacing.xl)
+                .size(BbSpacing.Space8)
                 .clip(RoundedCornerShape(BbRadius.md))
                 .background(MaterialTheme.colorScheme.surfaceVariant),
             contentAlignment = Alignment.Center
@@ -374,7 +399,9 @@ private fun BasketStoreHeader(
             )
         }
 
-        Spacer(modifier = Modifier.width(BbSpacing.sm))
+        Spacer(
+            modifier = Modifier.width(BbSpacing.Space2)
+        )
 
         Column(
             modifier = Modifier.weight(1f)
@@ -389,14 +416,14 @@ private fun BasketStoreHeader(
             Text(
                 text = storeGroup.cargoText,
                 style = MaterialTheme.typography.bodySmall,
-                color = BbColors.TextStrong.copy(alpha = 0.62f)
+                color = BbColors.TextMuted
             )
         }
 
         Text(
             text = "›",
             style = MaterialTheme.typography.headlineSmall,
-            color = BbColors.TextStrong.copy(alpha = 0.52f)
+            color = BbColors.TextMuted
         )
     }
 }
@@ -417,7 +444,7 @@ private fun BasketLineCard(
             .clickable {
                 onProductClick()
             }
-            .padding(BbSpacing.sm),
+            .padding(BbSpacing.Space2),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
@@ -431,15 +458,17 @@ private fun BasketLineCard(
                 text = line.imageText,
                 style = MaterialTheme.typography.labelLarge,
                 fontWeight = FontWeight.Bold,
-                color = BbColors.TextStrong.copy(alpha = 0.52f)
+                color = BbColors.TextMuted
             )
         }
 
-        Spacer(modifier = Modifier.width(BbSpacing.sm))
+        Spacer(
+            modifier = Modifier.width(BbSpacing.Space2)
+        )
 
         Column(
             modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.xs)
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
         ) {
             Text(
                 text = line.productName,
@@ -452,7 +481,7 @@ private fun BasketLineCard(
             Text(
                 text = line.variantText,
                 style = MaterialTheme.typography.bodySmall,
-                color = BbColors.TextStrong.copy(alpha = 0.62f),
+                color = BbColors.TextMuted,
                 maxLines = 1
             )
 
@@ -473,7 +502,7 @@ private fun BasketLineCard(
 
                 Text(
                     text = line.quantity.toString(),
-                    modifier = Modifier.padding(horizontal = BbSpacing.sm),
+                    modifier = Modifier.padding(horizontal = BbSpacing.Space2),
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
                     color = BbColors.TextStrong
@@ -484,7 +513,9 @@ private fun BasketLineCard(
                     onClick = onIncreaseQuantityClick
                 )
 
-                Spacer(modifier = Modifier.weight(1f))
+                Spacer(
+                    modifier = Modifier.weight(1f)
+                )
 
                 Text(
                     text = "Sil",
@@ -493,7 +524,7 @@ private fun BasketLineCard(
                     },
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold,
-                    color = BbColors.TextStrong.copy(alpha = 0.58f)
+                    color = BbColors.TextMuted
                 )
             }
         }
@@ -507,7 +538,7 @@ private fun BasketQuantityButton(
 ) {
     Box(
         modifier = Modifier
-            .size(BbSpacing.lg)
+            .size(BbSpacing.Space6)
             .clip(CircleShape)
             .background(MaterialTheme.colorScheme.surface)
             .clickable {
@@ -533,7 +564,7 @@ private fun BasketSummaryCard(
 ) {
     BbCard {
         Column(
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.sm)
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
         ) {
             BbSectionHeader(
                 title = "Sepet özeti",
@@ -558,7 +589,7 @@ private fun BasketSummaryCard(
             Spacer(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(BbSpacing.xs)
+                    .height(BbSpacing.Divider)
                     .background(MaterialTheme.colorScheme.surfaceVariant)
             )
 
@@ -615,19 +646,22 @@ private fun BasketSummaryRow(
 }
 
 @Composable
-private fun BasketBottomBar(
+private fun BasketCheckoutBar(
     payableTotalText: String,
     onCheckoutClick: () -> Unit
 ) {
     Surface(
         color = MaterialTheme.colorScheme.surface,
-        tonalElevation = BbSpacing.xs,
-        shadowElevation = BbSpacing.sm
+        tonalElevation = BbSpacing.Space1,
+        shadowElevation = BbSpacing.Space2
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(BbSpacing.md),
+                .padding(
+                    horizontal = BbSpacing.PageHorizontal,
+                    vertical = BbSpacing.Space3
+                ),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(
@@ -636,7 +670,7 @@ private fun BasketBottomBar(
                 Text(
                     text = "Toplam",
                     style = MaterialTheme.typography.labelSmall,
-                    color = BbColors.TextStrong.copy(alpha = 0.62f)
+                    color = BbColors.TextMuted
                 )
 
                 Text(
@@ -655,8 +689,8 @@ private fun BasketBottomBar(
                         onCheckoutClick()
                     }
                     .padding(
-                        horizontal = BbSpacing.lg,
-                        vertical = BbSpacing.sm
+                        horizontal = BbSpacing.Space6,
+                        vertical = BbSpacing.Space3
                     ),
                 contentAlignment = Alignment.Center
             ) {
@@ -752,6 +786,9 @@ private fun getBasketLineItems(): List<BasketLineItem> {
 private fun formatPrice(value: Double): String {
     return "₺${String.format("%.2f", value).replace(".", ",")}"
 }
+
+@Composable
+private fun BbIconSizeTopBar() = BbSpacing.Space8
 
 @Preview(showBackground = true)
 @Composable

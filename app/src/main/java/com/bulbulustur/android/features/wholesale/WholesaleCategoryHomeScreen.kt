@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -47,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import com.bulbulustur.android.features.wholesale.components.WholesaleBottomNavigation
 import com.bulbulustur.android.features.wholesale.components.WholesaleBottomNavigationItem
 import com.bulbulustur.android.features.wholesale.components.WholesaleSearchHeader
+import com.bulbulustur.android.features.wholesale.components.WholesaleSearchHeaderLeadingAction
 import com.bulbulustur.android.ui.components.BbButton
 import com.bulbulustur.android.ui.components.BbButtonSize
 import com.bulbulustur.android.ui.components.BbButtonVariant
@@ -62,11 +64,13 @@ import com.bulbulustur.android.ui.theme.BbTheme
 
 @Composable
 fun WholesaleCategoryHomeScreen(
+    onBackClick: () -> Unit = {},
     onSearchClick: (String) -> Unit = {},
     onMenuClick: () -> Unit = {},
     onFavoriteClick: () -> Unit = {},
-    onHomeClick: () -> Unit = {},
     onMessageClick: () -> Unit = {},
+    onHomeClick: () -> Unit = {},
+    onModeSwitchClick: () -> Unit = {},
     onBasketClick: () -> Unit = {},
     onAccountClick: () -> Unit = {},
     onProductListClick: () -> Unit = {},
@@ -91,12 +95,16 @@ fun WholesaleCategoryHomeScreen(
                 },
                 onMenuClick = onMenuClick,
                 onFavoriteClick = onFavoriteClick,
+                onMessageClick = onMessageClick,
+                placeholder = "Toptan ürün, kategori veya tedarikçi ara",
                 onSearchClick = {
                     onSearchClick(searchText)
                 },
                 onClearClick = {
                     searchText = ""
-                }
+                },
+                leadingAction = WholesaleSearchHeaderLeadingAction.Back,
+                onBackClick = onBackClick
             )
         },
         bottomBar = {
@@ -105,8 +113,8 @@ fun WholesaleCategoryHomeScreen(
                 onItemClick = { selectedItem ->
                     when (selectedItem) {
                         WholesaleBottomNavigationItem.Home -> onHomeClick()
-                        WholesaleBottomNavigationItem.Menu -> onMenuClick()
-                        WholesaleBottomNavigationItem.Messages -> onMessageClick()
+                        WholesaleBottomNavigationItem.Menu -> Unit
+                        WholesaleBottomNavigationItem.ModeSwitch -> onModeSwitchClick()
                         WholesaleBottomNavigationItem.Basket -> onBasketClick()
                         WholesaleBottomNavigationItem.Account -> onAccountClick()
                     }
@@ -115,7 +123,9 @@ fun WholesaleCategoryHomeScreen(
         }
     ) { innerPadding ->
         LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background),
             contentPadding = PaddingValues(
                 start = BbSpacing.PageHorizontal,
                 top = innerPadding.calculateTopPadding() + BbSpacing.PageTopCompact,

@@ -11,6 +11,8 @@ object BbSpacing {
     val BorderThin: Dp = 1.dp
     val BorderNormal: Dp = 2.dp
 
+    val Divider: Dp = 1.dp
+
     val xs: Dp = 4.dp
     val sm: Dp = 8.dp
     val md: Dp = 16.dp

@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -46,6 +45,7 @@ import androidx.compose.material.icons.outlined.Tune
 import androidx.compose.material.icons.outlined.Wallet
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -55,6 +55,8 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.features.retail.components.RetailBottomNavigation
+import com.bulbulustur.android.features.retail.components.RetailBottomNavigationItem
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
@@ -84,7 +86,13 @@ fun AccountScreen(
     onSupportClick: () -> Unit = {},
     onLogoutClick: () -> Unit = {},
     onQuestionsClick: () -> Unit = {},
-    onUsagePurposeClick: () -> Unit = {}
+    onUsagePurposeClick: () -> Unit = {},
+
+    // Bottom navigation
+    onHomeClick: () -> Unit = {},
+    onMenuClick: () -> Unit = {},
+    onModeSwitchClick: () -> Unit = {},
+    onBasketClick: () -> Unit = {}
 ) {
     val pageBackground = Brush.verticalGradient(
         colors = listOf(
@@ -94,218 +102,242 @@ fun AccountScreen(
         )
     )
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(pageBackground)
-            .statusBarsPadding()
-            .navigationBarsPadding(),
-        contentPadding = PaddingValues(
-            horizontal = BbSpacing.PageHorizontal,
-            vertical = BbSpacing.PageTopCompact
-        ),
-        verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
-    ) {
-        item {
-            AccountHeaderCard(
-                userName = "Murat Erkan",
-                subtitle = "Bulbulustur hesabın hazır",
-                initials = "ME",
-                onProfileClick = onSecurityClick,
-                onNotificationClick = onNotificationClick,
-                onMessagesClick = onMessagesClick,
-                onSettingsClick = onSettingsClick
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+        bottomBar = {
+            RetailBottomNavigation(
+                selectedItem = RetailBottomNavigationItem.Account,
+                onItemClick = { selectedItem ->
+                    when (selectedItem) {
+                        RetailBottomNavigationItem.Home -> onHomeClick()
+                        RetailBottomNavigationItem.Menu -> onMenuClick()
+                        RetailBottomNavigationItem.ModeSwitch -> onModeSwitchClick()
+                        RetailBottomNavigationItem.Basket -> onBasketClick()
+                        RetailBottomNavigationItem.Account -> Unit
+                    }
+                }
             )
         }
-
-        item {
-            AccountStatsRow(
-                onOrdersClick = onOrdersClick,
-                onFavoritesClick = onFavoritesClick,
-                onQuotationRequestsClick = onQuotationRequestsClick,
-                onAddressClick = onAddressClick
-            )
-        }
-
-        item {
-            AccountMiniActionScroller(
-                onQuotationRequestsClick = onQuotationRequestsClick,
-                onCompanyInfoClick = onCompanyInfoClick,
-                onOrdersClick = onOrdersClick,
-                onBankAccountsClick = onBankAccountsClick
-            )
-        }
-
-        item {
-            AccountUsagePurposeCard(
-                onClick = onUsagePurposeClick
-            )
-        }
-
-        item {
-            AccountCommerceHeroCard(
-                onOrdersClick = onOrdersClick,
-                onQuotationRequestsClick = onQuotationRequestsClick,
-                onBankAccountsClick = onBankAccountsClick
-            )
-        }
-
-        item {
-            AccountMenuSection(
-                title = "Kişisel"
-            ) {
-                AccountMenuRow(
-                    title = "Hesap ve Güvenlik",
-                    description = "Profil, şifre ve güvenlik ayarlarını yönet",
-                    icon = Icons.Outlined.Security,
-                    onClick = onSecurityClick
-                )
-
-                AccountDashedDivider()
-
-                AccountMenuRow(
-                    title = "Adreslerim",
-                    description = "Teslimat ve fatura adreslerini düzenle",
-                    icon = Icons.Outlined.Home,
-                    onClick = onAddressClick
+    ) { innerPadding ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(pageBackground)
+                .statusBarsPadding()
+                .padding(innerPadding),
+            contentPadding = PaddingValues(
+                horizontal = BbSpacing.PageHorizontal,
+                vertical = BbSpacing.PageTopCompact
+            ),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
+        ) {
+            item {
+                AccountHeaderCard(
+                    userName = "Murat Erkan",
+                    subtitle = "Bulbulustur hesabın hazır",
+                    initials = "ME",
+                    onProfileClick = onSecurityClick,
+                    onNotificationClick = onNotificationClick,
+                    onMessagesClick = onMessagesClick,
+                    onSettingsClick = onSettingsClick
                 )
             }
-        }
 
-        item {
-            AccountMenuSection(
-                title = "Ticari"
-            ) {
-                AccountMenuRow(
-                    title = "Şirket Bilgileri",
-                    description = "Firma ve ticari hesap bilgilerini yönet",
-                    icon = Icons.Outlined.Business,
-                    onClick = onCompanyInfoClick
-                )
-
-                AccountDashedDivider()
-
-                AccountMenuRow(
-                    title = "Takip Ettiğim Mağazalar",
-                    description = "Takip ettiğin mağaza ve firmaları görüntüle",
-                    icon = Icons.Outlined.Storefront,
-                    onClick = onFollowedStoresClick
-                )
-
-                AccountDashedDivider()
-
-                AccountMenuRow(
-                    title = "Fiyat Teklifi İstekleri",
-                    description = "Toptan teklif ve RFQ süreçlerini takip et",
-                    icon = Icons.Outlined.RequestQuote,
-                    onClick = onQuotationRequestsClick
+            item {
+                AccountStatsRow(
+                    onOrdersClick = onOrdersClick,
+                    onFavoritesClick = onFavoritesClick,
+                    onQuotationRequestsClick = onQuotationRequestsClick,
+                    onAddressClick = onAddressClick
                 )
             }
-        }
 
-        item {
-            AccountMenuSection(
-                title = "Alışveriş"
-            ) {
-                AccountMenuRow(
-                    title = "Siparişlerim",
-                    description = "Geçmiş ve aktif siparişlerini görüntüle",
-                    icon = Icons.Outlined.ProductionQuantityLimits,
-                    onClick = onOrdersClick
-                )
-
-                AccountDashedDivider()
-
-                AccountMenuRow(
-                    title = "Favorilerim",
-                    description = "Perakende ve toptan favorilerini yönet",
-                    icon = Icons.Outlined.FavoriteBorder,
-                    onClick = onFavoritesClick
-                )
-
-                AccountDashedDivider()
-
-                AccountMenuRow(
-                    title = "Soru ve Cevaplarım",
-                    description = "Ürün sorularını ve satıcı cevaplarını takip et",
-                    icon = Icons.Outlined.QuestionAnswer,
-                    onClick = onQuestionsClick
-                )
-
-                AccountDashedDivider()
-
-                AccountMenuRow(
-                    title = "Değerlendirmelerim",
-                    description = "Yorum ve ürün değerlendirmelerini görüntüle",
-                    icon = Icons.Outlined.Reviews,
-                    onClick = onReviewsClick
-                )
-
-                AccountDashedDivider()
-
-                AccountMenuRow(
-                    title = "Kuponlarım",
-                    description = "Tanımlı kampanya ve kuponlarını incele",
-                    icon = Icons.Outlined.LocalOffer,
-                    onClick = onCouponsClick
-                )
-
-                AccountDashedDivider()
-
-                AccountMenuRow(
-                    title = "Taleplerim",
-                    description = "İade, destek ve işlem taleplerini takip et",
-                    icon = Icons.Outlined.HelpOutline,
-                    onClick = onRequestsClick
+            item {
+                AccountMiniActionScroller(
+                    onQuotationRequestsClick = onQuotationRequestsClick,
+                    onCompanyInfoClick = onCompanyInfoClick,
+                    onOrdersClick = onOrdersClick,
+                    onBankAccountsClick = onBankAccountsClick
                 )
             }
-        }
 
-        item {
-            AccountMenuSection(
-                title = "Finansal"
-            ) {
-                AccountMenuRow(
-                    title = "Abonelikler",
-                    description = "Paket ve üyelik süreçlerini görüntüle",
-                    icon = Icons.Outlined.CreditCard,
-                    onClick = onSubscriptionsClick
-                )
-
-                AccountDashedDivider()
-
-                AccountMenuRow(
-                    title = "Banka Hesaplarım",
-                    description = "IBAN ve banka hesap bilgilerini yönet",
-                    icon = Icons.Outlined.AccountBalance,
-                    onClick = onBankAccountsClick
+            item {
+                AccountUsagePurposeCard(
+                    onClick = onUsagePurposeClick
                 )
             }
-        }
 
-        item {
-            AccountMenuSection(
-                title = "Ayarlar"
-            ) {
-                AccountMenuRow(
-                    title = "Uygulama Ayarları",
-                    description = "Dil, görünüm, bildirim ve uygulama tercihleri",
-                    icon = Icons.Outlined.Settings,
-                    onClick = onSettingsClick
+            item {
+                AccountCommerceHeroCard(
+                    onOrdersClick = onOrdersClick,
+                    onQuotationRequestsClick = onQuotationRequestsClick,
+                    onBankAccountsClick = onBankAccountsClick
                 )
             }
-        }
 
-        item {
-            AccountSupportCard(
-                onSupportClick = onSupportClick
-            )
-        }
+            item {
+                AccountMenuSection(
+                    title = "Kişisel"
+                ) {
+                    AccountMenuRow(
+                        title = "Hesap ve Güvenlik",
+                        description = "Profil, şifre ve güvenlik ayarlarını yönet",
+                        icon = Icons.Outlined.Security,
+                        onClick = onSecurityClick
+                    )
 
-        item {
-            AccountLogoutCard(
-                onLogoutClick = onLogoutClick
-            )
+                    AccountDashedDivider()
+
+                    AccountMenuRow(
+                        title = "Adreslerim",
+                        description = "Teslimat ve fatura adreslerini düzenle",
+                        icon = Icons.Outlined.Home,
+                        onClick = onAddressClick
+                    )
+                }
+            }
+
+            item {
+                AccountMenuSection(
+                    title = "Ticari"
+                ) {
+                    AccountMenuRow(
+                        title = "Şirket Bilgileri",
+                        description = "Firma ve ticari hesap bilgilerini yönet",
+                        icon = Icons.Outlined.Business,
+                        onClick = onCompanyInfoClick
+                    )
+
+                    AccountDashedDivider()
+
+                    AccountMenuRow(
+                        title = "Takip Ettiğim Mağazalar",
+                        description = "Takip ettiğin mağaza ve firmaları görüntüle",
+                        icon = Icons.Outlined.Storefront,
+                        onClick = onFollowedStoresClick
+                    )
+
+                    AccountDashedDivider()
+
+                    AccountMenuRow(
+                        title = "Fiyat Teklifi İstekleri",
+                        description = "Toptan teklif ve RFQ süreçlerini takip et",
+                        icon = Icons.Outlined.RequestQuote,
+                        onClick = onQuotationRequestsClick
+                    )
+                }
+            }
+
+            item {
+                AccountMenuSection(
+                    title = "Alışveriş"
+                ) {
+                    AccountMenuRow(
+                        title = "Siparişlerim",
+                        description = "Geçmiş ve aktif siparişlerini görüntüle",
+                        icon = Icons.Outlined.ProductionQuantityLimits,
+                        onClick = onOrdersClick
+                    )
+
+                    AccountDashedDivider()
+
+                    AccountMenuRow(
+                        title = "Favorilerim",
+                        description = "Perakende ve toptan favorilerini yönet",
+                        icon = Icons.Outlined.FavoriteBorder,
+                        onClick = onFavoritesClick
+                    )
+
+                    AccountDashedDivider()
+
+                    AccountMenuRow(
+                        title = "Soru ve Cevaplarım",
+                        description = "Ürün sorularını ve satıcı cevaplarını takip et",
+                        icon = Icons.Outlined.QuestionAnswer,
+                        onClick = onQuestionsClick
+                    )
+
+                    AccountDashedDivider()
+
+                    AccountMenuRow(
+                        title = "Değerlendirmelerim",
+                        description = "Yorum ve ürün değerlendirmelerini görüntüle",
+                        icon = Icons.Outlined.Reviews,
+                        onClick = onReviewsClick
+                    )
+
+                    AccountDashedDivider()
+
+                    AccountMenuRow(
+                        title = "Kuponlarım",
+                        description = "Tanımlı kampanya ve kuponlarını incele",
+                        icon = Icons.Outlined.LocalOffer,
+                        onClick = onCouponsClick
+                    )
+
+                    AccountDashedDivider()
+
+                    AccountMenuRow(
+                        title = "Taleplerim",
+                        description = "İade, destek ve işlem taleplerini takip et",
+                        icon = Icons.Outlined.HelpOutline,
+                        onClick = onRequestsClick
+                    )
+                }
+            }
+
+            item {
+                AccountMenuSection(
+                    title = "Finansal"
+                ) {
+                    AccountMenuRow(
+                        title = "Abonelikler",
+                        description = "Paket ve üyelik süreçlerini görüntüle",
+                        icon = Icons.Outlined.CreditCard,
+                        onClick = onSubscriptionsClick
+                    )
+
+                    AccountDashedDivider()
+
+                    AccountMenuRow(
+                        title = "Banka Hesaplarım",
+                        description = "IBAN ve banka hesap bilgilerini yönet",
+                        icon = Icons.Outlined.AccountBalance,
+                        onClick = onBankAccountsClick
+                    )
+                }
+            }
+
+            item {
+                AccountMenuSection(
+                    title = "Ayarlar"
+                ) {
+                    AccountMenuRow(
+                        title = "Uygulama Ayarları",
+                        description = "Dil, görünüm, bildirim ve uygulama tercihleri",
+                        icon = Icons.Outlined.Settings,
+                        onClick = onSettingsClick
+                    )
+                }
+            }
+
+            item {
+                AccountSupportCard(
+                    onSupportClick = onSupportClick
+                )
+            }
+
+            item {
+                AccountLogoutCard(
+                    onLogoutClick = onLogoutClick
+                )
+            }
+
+            item {
+                Spacer(
+                    modifier = Modifier.size(BbSpacing.Space4)
+                )
+            }
         }
     }
 }

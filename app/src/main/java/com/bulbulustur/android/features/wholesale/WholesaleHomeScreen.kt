@@ -1,74 +1,64 @@
 package com.bulbulustur.android.features.wholesale
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.Message
-import androidx.compose.material.icons.outlined.Business
+import androidx.compose.material.icons.outlined.Apartment
 import androidx.compose.material.icons.outlined.Category
 import androidx.compose.material.icons.outlined.Factory
+import androidx.compose.material.icons.outlined.GppGood
+import androidx.compose.material.icons.outlined.Inventory2
 import androidx.compose.material.icons.outlined.Language
-import androidx.compose.material.icons.outlined.LocalShipping
+import androidx.compose.material.icons.outlined.LocalOffer
 import androidx.compose.material.icons.outlined.RequestQuote
-import androidx.compose.material.icons.outlined.Security
-import androidx.compose.material.icons.outlined.ShoppingBasket
+import androidx.compose.material.icons.outlined.Shield
 import androidx.compose.material.icons.outlined.Storefront
-import androidx.compose.material.icons.outlined.Tune
-import androidx.compose.material.icons.outlined.Verified
-import androidx.compose.material.icons.outlined.WorkspacePremium
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.bulbulustur.android.features.wholesale.components.WholesaleBottomNavigation
 import com.bulbulustur.android.features.wholesale.components.WholesaleBottomNavigationItem
 import com.bulbulustur.android.features.wholesale.components.WholesaleSearchHeader
+import com.bulbulustur.android.features.wholesale.components.WholesaleSearchHeaderLeadingAction
 import com.bulbulustur.android.ui.components.BbButton
 import com.bulbulustur.android.ui.components.BbButtonSize
 import com.bulbulustur.android.ui.components.BbButtonVariant
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
-import com.bulbulustur.android.ui.components.BbChip
 import com.bulbulustur.android.ui.components.BbSectionHeader
 import com.bulbulustur.android.ui.theme.BbColors
+import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
-import com.bulbulustur.android.ui.theme.BbTheme
+import com.bulbulustur.android.ui.theme.BbTypography
 
 @Composable
 fun WholesaleHomeScreen(
     onSearchClick: (String) -> Unit = {},
-    onProductDetailClick: () -> Unit = {},
     onCategoryClick: () -> Unit = {},
     onProductListClick: () -> Unit = {},
+    onProductDetailClick: () -> Unit = {},
     onCompanyListClick: () -> Unit = {},
     onRfqListClick: () -> Unit = {},
     onRfqCreateClick: () -> Unit = {},
@@ -77,6 +67,7 @@ fun WholesaleHomeScreen(
     onSampleRequestClick: () -> Unit = {},
     onCustomizationRequestClick: () -> Unit = {},
     onMessageClick: () -> Unit = {},
+    onModeSwitchClick: () -> Unit = {},
     onBasketClick: () -> Unit = {},
     onAccountClick: () -> Unit = {},
     onMenuClick: () -> Unit = {}
@@ -86,7 +77,7 @@ fun WholesaleHomeScreen(
     }
 
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = BbColors.SurfaceMuted,
         topBar = {
             WholesaleSearchHeader(
                 searchText = searchText,
@@ -95,12 +86,15 @@ fun WholesaleHomeScreen(
                 },
                 onMenuClick = onMenuClick,
                 onFavoriteClick = onFavoriteClick,
+                onMessageClick = onMessageClick,
+                placeholder = "Toptan ürün, kategori veya tedarikçi ara",
                 onSearchClick = {
                     onSearchClick(searchText)
                 },
                 onClearClick = {
                     searchText = ""
-                }
+                },
+                leadingAction = WholesaleSearchHeaderLeadingAction.Menu
             )
         },
         bottomBar = {
@@ -109,8 +103,8 @@ fun WholesaleHomeScreen(
                 onItemClick = { selectedItem ->
                     when (selectedItem) {
                         WholesaleBottomNavigationItem.Home -> Unit
-                        WholesaleBottomNavigationItem.Menu -> onMenuClick()
-                        WholesaleBottomNavigationItem.Messages -> onMessageClick()
+                        WholesaleBottomNavigationItem.Menu -> onCategoryClick()
+                        WholesaleBottomNavigationItem.ModeSwitch -> onModeSwitchClick()
                         WholesaleBottomNavigationItem.Basket -> onBasketClick()
                         WholesaleBottomNavigationItem.Account -> onAccountClick()
                     }
@@ -119,35 +113,37 @@ fun WholesaleHomeScreen(
         }
     ) { innerPadding ->
         LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(BbColors.SurfaceMuted)
+                .padding(innerPadding),
             contentPadding = PaddingValues(
                 start = BbSpacing.PageHorizontal,
-                top = innerPadding.calculateTopPadding() + BbSpacing.PageTopCompact,
+                top = BbSpacing.PageTopCompact,
                 end = BbSpacing.PageHorizontal,
-                bottom = innerPadding.calculateBottomPadding() + BbSpacing.PageBottom
+                bottom = BbSpacing.PageBottomLoose
             ),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.SectionGapCompact)
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
         ) {
             item {
-                WholesaleHomeHeroCard(
-                    onMenuClick = onMenuClick,
+                WholesaleHeroCard(
+                    onCategoryClick = onCategoryClick,
                     onRfqCreateClick = onRfqCreateClick,
                     onCompanyListClick = onCompanyListClick
                 )
             }
 
             item {
-                WholesaleHomeGatewayRow(
-                    onMenuClick = onMenuClick,
+                WholesaleQuickAccessRow(
+                    onCategoryClick = onCategoryClick,
                     onProductListClick = onProductListClick,
                     onCompanyListClick = onCompanyListClick,
-                    onRfqCreateClick = onRfqCreateClick,
-                    onLastPriceRequestClick = onLastPriceRequestClick
+                    onRfqCreateClick = onRfqCreateClick
                 )
             }
 
             item {
-                WholesaleHomeTrustStrip()
+                WholesaleTrustStrip()
             }
 
             item {
@@ -158,9 +154,22 @@ fun WholesaleHomeScreen(
             }
 
             item {
-                WholesaleHomeSectorChipRow(
-                    onCategoryClick = onCategoryClick
-                )
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
+                    contentPadding = PaddingValues(end = BbSpacing.PageHorizontal)
+                ) {
+                    items(
+                        items = getWholesaleCategoryCards(),
+                        key = { item ->
+                            item.title
+                        }
+                    ) { item ->
+                        WholesaleCategoryCard(
+                            item = item,
+                            onClick = onCategoryClick
+                        )
+                    }
+                }
             }
 
             item {
@@ -171,35 +180,10 @@ fun WholesaleHomeScreen(
             }
 
             item {
-                WholesaleHomeShowcaseRow(
+                WholesaleActionGrid(
                     onProductListClick = onProductListClick,
                     onCompanyListClick = onCompanyListClick,
-                    onRfqListClick = onRfqListClick
-                )
-            }
-
-            item {
-                BbSectionHeader(
-                    title = "Öne çıkan toptan ürünler",
-                    subtitle = "Toptan ürün detayını incelemek için kartlara dokun."
-                )
-            }
-
-            item {
-                WholesaleHomeFeaturedProductRow(
-                    onProductClick = onProductDetailClick
-                )
-            }
-
-            item {
-                BbSectionHeader(
-                    title = "Ticaret işlemleri",
-                    subtitle = "Teklif, son fiyat, numune ve özel üretim talepleri."
-                )
-            }
-
-            item {
-                WholesaleHomeTradeFlowRow(
+                    onRfqListClick = onRfqListClick,
                     onRfqCreateClick = onRfqCreateClick,
                     onLastPriceRequestClick = onLastPriceRequestClick,
                     onSampleRequestClick = onSampleRequestClick,
@@ -209,20 +193,20 @@ fun WholesaleHomeScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Öne çıkan tedarikçiler",
-                    subtitle = "Doğrulanmış firma vitrinleri."
+                    title = "Öne çıkan toptan ürünler",
+                    subtitle = "Demo ürün akışı. API sonrası gerçek ürünlerle beslenecek."
                 )
             }
 
-            item {
-                WholesaleHomeCompanyRow(
-                    onCompanyListClick = onCompanyListClick
-                )
-            }
-
-            item {
-                Spacer(
-                    modifier = Modifier.height(BbSpacing.Space4)
+            items(
+                items = getWholesaleProducts(),
+                key = { item ->
+                    item.id
+                }
+            ) { item ->
+                WholesaleProductRow(
+                    item = item,
+                    onClick = onProductDetailClick
                 )
             }
         }
@@ -230,61 +214,60 @@ fun WholesaleHomeScreen(
 }
 
 @Composable
-private fun WholesaleHomeHeroCard(
-    onMenuClick: () -> Unit,
+private fun WholesaleHeroCard(
+    onCategoryClick: () -> Unit,
     onRfqCreateClick: () -> Unit,
     onCompanyListClick: () -> Unit
 ) {
-    Surface(
+    BbCard(
         modifier = Modifier.fillMaxWidth(),
-        shape = BbRadius.XlShape,
-        color = BbColors.Navy.Navy900
+        variant = BbCardVariant.Default,
+        padding = BbCardPadding.Large
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(BbColors.Navy.Navy900)
+                .background(BbColors.Navy.Navy900, shape = BbRadius.XlShape)
                 .padding(BbSpacing.Space5),
             verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
         ) {
             Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Factory,
                     contentDescription = null,
-                    tint = BbColors.Primary
+                    tint = BbColors.Primary,
+                    modifier = Modifier.size(BbIcon.SizeLg)
                 )
 
                 Text(
                     text = "Toptan ticaret kokpiti",
-                    style = MaterialTheme.typography.labelLarge,
-                    color = BbColors.Primary,
-                    fontWeight = FontWeight.SemiBold
+                    style = BbTypography.titleSmall,
+                    color = BbColors.Primary
                 )
             }
 
             Text(
                 text = "Sektörleri, tedarikçileri ve teklif akışını tek yerden yönet.",
                 style = MaterialTheme.typography.headlineSmall,
-                color = BbColors.White,
-                fontWeight = FontWeight.Bold
+                color = BbColors.White
             )
 
             Text(
                 text = "Bulbulustur Toptan; ürün listesinden önce doğru sektöre, doğru firmaya ve doğru talebe ulaşma alanıdır.",
-                style = MaterialTheme.typography.bodyMedium,
+                style = BbTypography.bodyMedium,
                 color = BbColors.Gray.Gray200
             )
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
             ) {
                 BbButton(
                     text = "Kategoriler",
-                    onClick = onMenuClick,
+                    onClick = onCategoryClick,
                     modifier = Modifier.weight(1f),
                     variant = BbButtonVariant.Primary,
                     size = BbButtonSize.Medium
@@ -311,87 +294,124 @@ private fun WholesaleHomeHeroCard(
 }
 
 @Composable
-private fun WholesaleHomeGatewayRow(
-    onMenuClick: () -> Unit,
+private fun WholesaleQuickAccessRow(
+    onCategoryClick: () -> Unit,
     onProductListClick: () -> Unit,
     onCompanyListClick: () -> Unit,
-    onRfqCreateClick: () -> Unit,
-    onLastPriceRequestClick: () -> Unit
+    onRfqCreateClick: () -> Unit
 ) {
     LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
+        contentPadding = PaddingValues(end = BbSpacing.PageHorizontal)
     ) {
-        items(
-            items = getWholesaleHomeGateways(),
-            key = { item ->
-                item.title
-            }
-        ) { item ->
-            WholesaleHomeGatewayCard(
-                item = item,
-                onClick = {
-                    when (item.target) {
-                        WholesaleHomeGatewayTarget.Menu -> onMenuClick()
-                        WholesaleHomeGatewayTarget.Products -> onProductListClick()
-                        WholesaleHomeGatewayTarget.Companies -> onCompanyListClick()
-                        WholesaleHomeGatewayTarget.Rfq -> onRfqCreateClick()
-                        WholesaleHomeGatewayTarget.LastPrice -> onLastPriceRequestClick()
-                    }
-                }
+        item {
+            WholesaleQuickAccessCard(
+                title = "Kategoriler",
+                subtitle = "Ana sektör kapısından başla",
+                iconType = WholesaleQuickIcon.Category,
+                onClick = onCategoryClick
+            )
+        }
+
+        item {
+            WholesaleQuickAccessCard(
+                title = "Ürünler",
+                subtitle = "Toptan ürün akışına gir",
+                iconType = WholesaleQuickIcon.Product,
+                onClick = onProductListClick
+            )
+        }
+
+        item {
+            WholesaleQuickAccessCard(
+                title = "Tedarikçiler",
+                subtitle = "Firmaları keşfet",
+                iconType = WholesaleQuickIcon.Company,
+                onClick = onCompanyListClick
+            )
+        }
+
+        item {
+            WholesaleQuickAccessCard(
+                title = "Teklif İste",
+                subtitle = "İhtiyacını firmalara ilet",
+                iconType = WholesaleQuickIcon.Rfq,
+                onClick = onRfqCreateClick
             )
         }
     }
 }
 
 @Composable
-private fun WholesaleHomeGatewayCard(
-    item: WholesaleHomeGatewayItem,
+private fun WholesaleQuickAccessCard(
+    title: String,
+    subtitle: String,
+    iconType: WholesaleQuickIcon,
     onClick: () -> Unit
 ) {
     BbCard(
-        modifier = Modifier.width(168.dp),
+        modifier = Modifier
+            .size(
+                width = BbSpacing.Space20 + BbSpacing.Space16,
+                height = BbSpacing.Space20 + BbSpacing.Space8
+            ),
         variant = BbCardVariant.Outlined,
         padding = BbCardPadding.Medium,
         onClick = onClick
     ) {
         Column(
+            modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
         ) {
             Box(
                 modifier = Modifier
-                    .width(44.dp)
-                    .height(44.dp)
+                    .size(BbIcon.BoxLg)
                     .background(
-                        color = item.backgroundColor,
+                        color = when (iconType) {
+                            WholesaleQuickIcon.Category -> BbColors.Yellow.Yellow100
+                            WholesaleQuickIcon.Product -> BbColors.Blue.Blue50
+                            WholesaleQuickIcon.Company -> BbColors.Green.Green50
+                            WholesaleQuickIcon.Rfq -> BbColors.Orange.Orange100
+                        },
                         shape = BbRadius.LgShape
                     ),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    imageVector = item.icon,
+                    imageVector = when (iconType) {
+                        WholesaleQuickIcon.Category -> Icons.Outlined.Category
+                        WholesaleQuickIcon.Product -> Icons.Outlined.Inventory2
+                        WholesaleQuickIcon.Company -> Icons.Outlined.Apartment
+                        WholesaleQuickIcon.Rfq -> Icons.Outlined.RequestQuote
+                    },
                     contentDescription = null,
-                    tint = item.iconColor
+                    tint = when (iconType) {
+                        WholesaleQuickIcon.Category -> BbColors.TextStrong
+                        WholesaleQuickIcon.Product -> BbColors.Blue.Blue700
+                        WholesaleQuickIcon.Company -> BbColors.Green.Green700
+                        WholesaleQuickIcon.Rfq -> BbColors.Orange.Orange700
+                    },
+                    modifier = Modifier.size(BbIcon.SizeLg)
                 )
             }
 
             Text(
-                text = item.title,
-                style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.SemiBold
+                text = title,
+                style = BbTypography.titleSmall,
+                color = BbColors.TextStrong
             )
 
             Text(
-                text = item.description,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                text = subtitle,
+                style = BbTypography.bodySmall,
+                color = BbColors.TextMuted
             )
         }
     }
 }
 
 @Composable
-private fun WholesaleHomeTrustStrip() {
+private fun WholesaleTrustStrip() {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
@@ -399,188 +419,79 @@ private fun WholesaleHomeTrustStrip() {
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            WholesaleHomeTrustItem(
-                icon = Icons.Outlined.Verified,
+            WholesaleTrustItem(
                 title = "Doğrulanmış",
-                modifier = Modifier.weight(1f)
+                iconType = WholesaleTrustIcon.Verified
             )
 
-            WholesaleHomeTrustItem(
-                icon = Icons.Outlined.Language,
+            WholesaleTrustItem(
                 title = "41 Dil",
-                modifier = Modifier.weight(1f)
+                iconType = WholesaleTrustIcon.Language
             )
 
-            WholesaleHomeTrustItem(
-                icon = Icons.Outlined.Security,
+            WholesaleTrustItem(
                 title = "Güvenli",
-                modifier = Modifier.weight(1f)
+                iconType = WholesaleTrustIcon.Safe
             )
         }
     }
 }
 
 @Composable
-private fun WholesaleHomeTrustItem(
-    icon: ImageVector,
+private fun WholesaleTrustItem(
     title: String,
-    modifier: Modifier = Modifier
+    iconType: WholesaleTrustIcon
 ) {
     Column(
-        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
     ) {
         Icon(
-            imageVector = icon,
+            imageVector = when (iconType) {
+                WholesaleTrustIcon.Verified -> Icons.Outlined.GppGood
+                WholesaleTrustIcon.Language -> Icons.Outlined.Language
+                WholesaleTrustIcon.Safe -> Icons.Outlined.Shield
+            },
             contentDescription = null,
-            tint = BbColors.Primary
+            tint = BbColors.Primary,
+            modifier = Modifier.size(BbIcon.SizeLg)
         )
 
         Text(
             text = title,
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurface,
-            fontWeight = FontWeight.SemiBold
+            style = BbTypography.labelMedium,
+            color = BbColors.TextStrong
         )
     }
 }
 
 @Composable
-private fun WholesaleHomeSectorChipRow(
-    onCategoryClick: () -> Unit
-) {
-    LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
-    ) {
-        items(
-            items = getWholesaleHomeSectorNames(),
-            key = { item ->
-                item
-            }
-        ) { item ->
-            BbChip(
-                text = item,
-                selected = false,
-                onClick = onCategoryClick
-            )
-        }
-    }
-}
-
-@Composable
-private fun WholesaleHomeShowcaseRow(
-    onProductListClick: () -> Unit,
-    onCompanyListClick: () -> Unit,
-    onRfqListClick: () -> Unit
-) {
-    LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
-    ) {
-        items(
-            items = getWholesaleHomeShowcases(),
-            key = { item ->
-                item.title
-            }
-        ) { item ->
-            WholesaleHomeShowcaseCard(
-                item = item,
-                onClick = {
-                    when (item.target) {
-                        WholesaleHomeShowcaseTarget.Products -> onProductListClick()
-                        WholesaleHomeShowcaseTarget.Companies -> onCompanyListClick()
-                        WholesaleHomeShowcaseTarget.Rfq -> onRfqListClick()
-                    }
-                }
-            )
-        }
-    }
-}
-
-@Composable
-private fun WholesaleHomeShowcaseCard(
-    item: WholesaleHomeShowcaseItem,
-    onClick: () -> Unit
-) {
-    Surface(
-        modifier = Modifier.width(236.dp),
-        shape = BbRadius.XlShape,
-        color = item.backgroundColor,
-        border = BorderStroke(
-            width = 1.dp,
-            color = BbColors.Border
-        ),
-        onClick = onClick
-    ) {
-        Column(
-            modifier = Modifier.padding(BbSpacing.Space4),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
-        ) {
-            Icon(
-                imageVector = item.icon,
-                contentDescription = null,
-                tint = item.iconColor
-            )
-
-            Text(
-                text = item.title,
-                style = MaterialTheme.typography.titleMedium,
-                color = BbColors.TextStrong,
-                fontWeight = FontWeight.SemiBold
-            )
-
-            Text(
-                text = item.description,
-                style = MaterialTheme.typography.bodySmall,
-                color = BbColors.TextSubtle
-            )
-        }
-    }
-}
-
-@Composable
-private fun WholesaleHomeFeaturedProductRow(
-    onProductClick: () -> Unit
-) {
-    LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
-    ) {
-        items(
-            items = getWholesaleHomeFeaturedProducts(),
-            key = { item ->
-                item.name
-            }
-        ) { item ->
-            WholesaleHomeFeaturedProductCard(
-                item = item,
-                onClick = onProductClick
-            )
-        }
-    }
-}
-
-@Composable
-private fun WholesaleHomeFeaturedProductCard(
-    item: WholesaleHomeFeaturedProductItem,
+private fun WholesaleCategoryCard(
+    item: WholesaleCategoryCardUiModel,
     onClick: () -> Unit
 ) {
     BbCard(
-        modifier = Modifier.width(220.dp),
+        modifier = Modifier
+            .size(
+                width = BbSpacing.Space24 + BbSpacing.Space16,
+                height = BbSpacing.Space16 + BbSpacing.Space8
+            ),
         variant = BbCardVariant.Outlined,
         padding = BbCardPadding.Medium,
         onClick = onClick
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
         ) {
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(116.dp)
+                    .size(BbIcon.BoxLg)
                     .background(
-                        color = item.imageBackgroundColor,
+                        color = item.iconBackground,
                         shape = BbRadius.LgShape
                     ),
                 contentAlignment = Alignment.Center
@@ -589,501 +500,330 @@ private fun WholesaleHomeFeaturedProductCard(
                     imageVector = item.icon,
                     contentDescription = null,
                     tint = item.iconColor,
-                    modifier = Modifier.width(42.dp)
-                )
-            }
-
-            Column(
-                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
-            ) {
-                Text(
-                    text = item.categoryName,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = BbColors.TextMuted,
-                    fontWeight = FontWeight.SemiBold
-                )
-
-                Text(
-                    text = item.name,
-                    style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 2
-                )
-            }
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
-            ) {
-                WholesaleHomeProductPill(
-                    text = item.priceLabel
-                )
-
-                WholesaleHomeProductPill(
-                    text = item.minimumOrderLabel
-                )
-            }
-
-            Text(
-                text = item.companyName,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 1
-            )
-        }
-    }
-}
-
-@Composable
-private fun WholesaleHomeProductPill(
-    text: String
-) {
-    Surface(
-        shape = BbRadius.PillShape,
-        color = BbColors.PrimarySoft,
-        border = BorderStroke(
-            width = 1.dp,
-            color = BbColors.Primary
-        )
-    ) {
-        Text(
-            modifier = Modifier.padding(
-                horizontal = BbSpacing.Space2,
-                vertical = BbSpacing.Space1
-            ),
-            text = text,
-            style = MaterialTheme.typography.labelSmall,
-            color = BbColors.TextStrong,
-            fontWeight = FontWeight.Bold
-        )
-    }
-}
-
-@Composable
-private fun WholesaleHomeTradeFlowRow(
-    onRfqCreateClick: () -> Unit,
-    onLastPriceRequestClick: () -> Unit,
-    onSampleRequestClick: () -> Unit,
-    onCustomizationRequestClick: () -> Unit
-) {
-    LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
-    ) {
-        items(
-            items = getWholesaleHomeTradeFlows(),
-            key = { item ->
-                item.title
-            }
-        ) { item ->
-            WholesaleHomeTradeFlowCard(
-                item = item,
-                onClick = {
-                    when (item.target) {
-                        WholesaleHomeTradeFlowTarget.Rfq -> onRfqCreateClick()
-                        WholesaleHomeTradeFlowTarget.LastPrice -> onLastPriceRequestClick()
-                        WholesaleHomeTradeFlowTarget.Sample -> onSampleRequestClick()
-                        WholesaleHomeTradeFlowTarget.Customization -> onCustomizationRequestClick()
-                    }
-                }
-            )
-        }
-    }
-}
-
-@Composable
-private fun WholesaleHomeTradeFlowCard(
-    item: WholesaleHomeTradeFlowItem,
-    onClick: () -> Unit
-) {
-    BbCard(
-        modifier = Modifier.width(180.dp),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium,
-        onClick = onClick
-    ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
-        ) {
-            Box(
-                modifier = Modifier
-                    .width(44.dp)
-                    .height(44.dp)
-                    .background(
-                        color = item.backgroundColor,
-                        shape = BbRadius.LgShape
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = item.icon,
-                    contentDescription = null,
-                    tint = item.iconColor
+                    modifier = Modifier.size(BbIcon.SizeLg)
                 )
             }
 
             Text(
                 text = item.title,
-                style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.SemiBold
+                style = BbTypography.titleSmall,
+                color = BbColors.TextStrong
             )
 
             Text(
-                text = item.description,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                text = item.subtitle,
+                style = BbTypography.bodySmall,
+                color = BbColors.TextMuted
             )
         }
     }
 }
 
 @Composable
-private fun WholesaleHomeCompanyRow(
-    onCompanyListClick: () -> Unit
+private fun WholesaleActionGrid(
+    onProductListClick: () -> Unit,
+    onCompanyListClick: () -> Unit,
+    onRfqListClick: () -> Unit,
+    onRfqCreateClick: () -> Unit,
+    onLastPriceRequestClick: () -> Unit,
+    onSampleRequestClick: () -> Unit,
+    onCustomizationRequestClick: () -> Unit
 ) {
-    LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+    Column(
+        verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
     ) {
-        items(
-            items = getWholesaleHomeCompanies(),
-            key = { item ->
-                item.name
-            }
-        ) { item ->
-            WholesaleHomeCompanyCard(
-                item = item,
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+        ) {
+            WholesaleActionCard(
+                modifier = Modifier.weight(1f),
+                title = "Ürün Akışı",
+                subtitle = "Toptan ürünleri listele",
+                iconType = WholesaleQuickIcon.Product,
+                onClick = onProductListClick
+            )
+
+            WholesaleActionCard(
+                modifier = Modifier.weight(1f),
+                title = "Firmalar",
+                subtitle = "Tedarikçileri incele",
+                iconType = WholesaleQuickIcon.Company,
                 onClick = onCompanyListClick
             )
         }
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+        ) {
+            WholesaleActionCard(
+                modifier = Modifier.weight(1f),
+                title = "Teklifler",
+                subtitle = "RFQ kayıtlarını gör",
+                iconType = WholesaleQuickIcon.Rfq,
+                onClick = onRfqListClick
+            )
+
+            WholesaleActionCard(
+                modifier = Modifier.weight(1f),
+                title = "RFQ Oluştur",
+                subtitle = "Yeni teklif iste",
+                iconType = WholesaleQuickIcon.Rfq,
+                onClick = onRfqCreateClick
+            )
+        }
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+        ) {
+            WholesaleActionCard(
+                modifier = Modifier.weight(1f),
+                title = "Son Fiyat",
+                subtitle = "Fiyat pazarlığı başlat",
+                iconType = WholesaleQuickIcon.Rfq,
+                onClick = onLastPriceRequestClick
+            )
+
+            WholesaleActionCard(
+                modifier = Modifier.weight(1f),
+                title = "Numune",
+                subtitle = "Numune talebi gönder",
+                iconType = WholesaleQuickIcon.Product,
+                onClick = onSampleRequestClick
+            )
+        }
+
+        WholesaleActionCard(
+            modifier = Modifier.fillMaxWidth(),
+            title = "Özelleştirme Talebi",
+            subtitle = "Logo, ambalaj, renk ve üretim detayı için talep oluştur",
+            iconType = WholesaleQuickIcon.Rfq,
+            onClick = onCustomizationRequestClick
+        )
     }
 }
 
 @Composable
-private fun WholesaleHomeCompanyCard(
-    item: WholesaleHomeCompanyItem,
+private fun WholesaleActionCard(
+    modifier: Modifier,
+    title: String,
+    subtitle: String,
+    iconType: WholesaleQuickIcon,
     onClick: () -> Unit
 ) {
     BbCard(
-        modifier = Modifier.width(220.dp),
+        modifier = modifier,
         variant = BbCardVariant.Outlined,
         padding = BbCardPadding.Medium,
         onClick = onClick
     ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = BbSpacing.Space16),
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+            Box(
+                modifier = Modifier
+                    .size(BbIcon.BoxMd)
+                    .background(
+                        color = when (iconType) {
+                            WholesaleQuickIcon.Category -> BbColors.Yellow.Yellow100
+                            WholesaleQuickIcon.Product -> BbColors.Blue.Blue50
+                            WholesaleQuickIcon.Company -> BbColors.Green.Green50
+                            WholesaleQuickIcon.Rfq -> BbColors.Orange.Orange100
+                        },
+                        shape = BbRadius.LgShape
+                    ),
+                contentAlignment = Alignment.Center
             ) {
-                Box(
-                    modifier = Modifier
-                        .width(42.dp)
-                        .height(42.dp)
-                        .background(
-                            color = BbColors.PrimarySoft,
-                            shape = BbRadius.LgShape
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Business,
-                        contentDescription = null,
-                        tint = BbColors.TextStrong
-                    )
-                }
-
-                Column {
-                    Text(
-                        text = item.name,
-                        style = MaterialTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        fontWeight = FontWeight.SemiBold
-                    )
-
-                    Text(
-                        text = item.city,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
+                Icon(
+                    imageVector = when (iconType) {
+                        WholesaleQuickIcon.Category -> Icons.Outlined.Category
+                        WholesaleQuickIcon.Product -> Icons.Outlined.Inventory2
+                        WholesaleQuickIcon.Company -> Icons.Outlined.Storefront
+                        WholesaleQuickIcon.Rfq -> Icons.Outlined.LocalOffer
+                    },
+                    contentDescription = null,
+                    tint = when (iconType) {
+                        WholesaleQuickIcon.Category -> BbColors.TextStrong
+                        WholesaleQuickIcon.Product -> BbColors.Blue.Blue700
+                        WholesaleQuickIcon.Company -> BbColors.Green.Green700
+                        WholesaleQuickIcon.Rfq -> BbColors.Orange.Orange700
+                    },
+                    modifier = Modifier.size(BbIcon.SizeMd)
+                )
             }
 
-            Text(
-                text = item.description,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+            ) {
+                Text(
+                    text = title,
+                    style = BbTypography.titleSmall,
+                    color = BbColors.TextStrong
+                )
+
+                Text(
+                    text = subtitle,
+                    style = BbTypography.bodySmall,
+                    color = BbColors.TextMuted
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun WholesaleProductRow(
+    item: WholesaleProductUiModel,
+    onClick: () -> Unit
+) {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium,
+        onClick = onClick
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(BbIcon.Box2Xl)
+                    .background(
+                        color = BbColors.SurfaceMuted,
+                        shape = BbRadius.LgShape
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Inventory2,
+                    contentDescription = null,
+                    tint = BbColors.Blue.Blue700,
+                    modifier = Modifier.size(BbIcon.Size2Xl)
+                )
+            }
+
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+            ) {
+                Text(
+                    text = item.title,
+                    style = BbTypography.titleSmall,
+                    color = BbColors.TextStrong
+                )
+
+                Text(
+                    text = item.company,
+                    style = BbTypography.bodySmall,
+                    color = BbColors.TextMuted
+                )
+
+                Text(
+                    text = item.priceText,
+                    style = BbTypography.titleSmall,
+                    color = BbColors.Success
+                )
+            }
+
+            BbButton(
+                text = "Detay",
+                onClick = onClick,
+                variant = BbButtonVariant.Light,
+                size = BbButtonSize.Small
             )
         }
     }
 }
 
-@Immutable
-private data class WholesaleHomeGatewayItem(
-    val title: String,
-    val description: String,
-    val icon: ImageVector,
-    val backgroundColor: Color,
-    val iconColor: Color,
-    val target: WholesaleHomeGatewayTarget
-)
-
-@Immutable
-private data class WholesaleHomeFeaturedProductItem(
-    val name: String,
-    val categoryName: String,
-    val companyName: String,
-    val priceLabel: String,
-    val minimumOrderLabel: String,
-    val icon: ImageVector,
-    val imageBackgroundColor: Color,
-    val iconColor: Color
-)
-
-private enum class WholesaleHomeGatewayTarget {
-    Menu,
-    Products,
-    Companies,
-    Rfq,
-    LastPrice
-}
-
-@Immutable
-private data class WholesaleHomeShowcaseItem(
-    val title: String,
-    val description: String,
-    val icon: ImageVector,
-    val backgroundColor: Color,
-    val iconColor: Color,
-    val target: WholesaleHomeShowcaseTarget
-)
-
-private enum class WholesaleHomeShowcaseTarget {
-    Products,
-    Companies,
+private enum class WholesaleQuickIcon {
+    Category,
+    Product,
+    Company,
     Rfq
 }
 
-@Immutable
-private data class WholesaleHomeTradeFlowItem(
+private enum class WholesaleTrustIcon {
+    Verified,
+    Language,
+    Safe
+}
+
+private data class WholesaleCategoryCardUiModel(
     val title: String,
-    val description: String,
-    val icon: ImageVector,
-    val backgroundColor: Color,
-    val iconColor: Color,
-    val target: WholesaleHomeTradeFlowTarget
+    val subtitle: String,
+    val icon: androidx.compose.ui.graphics.vector.ImageVector,
+    val iconBackground: androidx.compose.ui.graphics.Color,
+    val iconColor: androidx.compose.ui.graphics.Color
 )
 
-private enum class WholesaleHomeTradeFlowTarget {
-    Rfq,
-    LastPrice,
-    Sample,
-    Customization
-}
-
-@Immutable
-private data class WholesaleHomeCompanyItem(
-    val name: String,
-    val city: String,
-    val description: String
+private data class WholesaleProductUiModel(
+    val id: Int,
+    val title: String,
+    val company: String,
+    val priceText: String
 )
 
-private fun getWholesaleHomeGateways(): List<WholesaleHomeGatewayItem> {
+private fun getWholesaleCategoryCards(): List<WholesaleCategoryCardUiModel> {
     return listOf(
-        WholesaleHomeGatewayItem(
-            title = "Kategoriler",
-            description = "Ana sektör kapısından başla",
-            icon = Icons.Outlined.Category,
-            backgroundColor = BbColors.Yellow.Yellow50,
-            iconColor = BbColors.Navy.Navy900,
-            target = WholesaleHomeGatewayTarget.Menu
-        ),
-        WholesaleHomeGatewayItem(
-            title = "Ürünler",
-            description = "Toptan ürün akışına gir",
-            icon = Icons.Outlined.ShoppingBasket,
-            backgroundColor = BbColors.Blue.Blue50,
-            iconColor = BbColors.Blue.Blue700,
-            target = WholesaleHomeGatewayTarget.Products
-        ),
-        WholesaleHomeGatewayItem(
-            title = "Tedarikçiler",
-            description = "Firma vitrinlerini keşfet",
-            icon = Icons.Outlined.Business,
-            backgroundColor = BbColors.Green.Green50,
-            iconColor = BbColors.Green.Green700,
-            target = WholesaleHomeGatewayTarget.Companies
-        ),
-        WholesaleHomeGatewayItem(
-            title = "Teklif İste",
-            description = "RFQ akışını başlat",
-            icon = Icons.Outlined.RequestQuote,
-            backgroundColor = BbColors.Purple.Purple50,
-            iconColor = BbColors.Purple.Purple700,
-            target = WholesaleHomeGatewayTarget.Rfq
-        ),
-        WholesaleHomeGatewayItem(
-            title = "Son Fiyat",
-            description = "Tedarikçiden fiyat sor",
-            icon = Icons.AutoMirrored.Outlined.Message,
-            backgroundColor = BbColors.Orange.Orange50,
-            iconColor = BbColors.Orange.Orange700,
-            target = WholesaleHomeGatewayTarget.LastPrice
-        )
-    )
-}
-
-private fun getWholesaleHomeSectorNames(): List<String> {
-    return listOf(
-        "Ambalaj",
-        "Makine",
-        "Gıda",
-        "Tekstil",
-        "Medikal",
-        "Kimya",
-        "Elektrik",
-        "Yapı",
-        "Otomotiv",
-        "Mobilya"
-    )
-}
-
-private fun getWholesaleHomeShowcases(): List<WholesaleHomeShowcaseItem> {
-    return listOf(
-        WholesaleHomeShowcaseItem(
-            title = "Yeni tedarikçiler",
-            description = "Bu hafta eklenen firma vitrinleri.",
-            icon = Icons.Outlined.Business,
-            backgroundColor = BbColors.Yellow.Yellow50,
-            iconColor = BbColors.Navy.Navy900,
-            target = WholesaleHomeShowcaseTarget.Companies
-        ),
-        WholesaleHomeShowcaseItem(
-            title = "Toptan ürünler",
-            description = "Ana kategorilerden seçilmiş ürün akışı.",
-            icon = Icons.Outlined.ShoppingBasket,
-            backgroundColor = BbColors.Blue.Blue50,
-            iconColor = BbColors.Blue.Blue700,
-            target = WholesaleHomeShowcaseTarget.Products
-        ),
-        WholesaleHomeShowcaseItem(
-            title = "Açık talepler",
-            description = "Teklif toplanabilecek RFQ akışları.",
-            icon = Icons.Outlined.RequestQuote,
-            backgroundColor = BbColors.Green.Green50,
-            iconColor = BbColors.Green.Green700,
-            target = WholesaleHomeShowcaseTarget.Rfq
-        )
-    )
-}
-
-private fun getWholesaleHomeTradeFlows(): List<WholesaleHomeTradeFlowItem> {
-    return listOf(
-        WholesaleHomeTradeFlowItem(
-            title = "Teklif talebi",
-            description = "İhtiyacını yaz, teklif topla",
-            icon = Icons.Outlined.RequestQuote,
-            backgroundColor = BbColors.Yellow.Yellow50,
-            iconColor = BbColors.Navy.Navy900,
-            target = WholesaleHomeTradeFlowTarget.Rfq
-        ),
-        WholesaleHomeTradeFlowItem(
-            title = "Son fiyat",
-            description = "Güncel toptan fiyat sor",
-            icon = Icons.AutoMirrored.Outlined.Message,
-            backgroundColor = BbColors.Blue.Blue50,
-            iconColor = BbColors.Blue.Blue700,
-            target = WholesaleHomeTradeFlowTarget.LastPrice
-        ),
-        WholesaleHomeTradeFlowItem(
-            title = "Numune",
-            description = "Sipariş öncesi örnek iste",
-            icon = Icons.Outlined.LocalShipping,
-            backgroundColor = BbColors.Green.Green50,
-            iconColor = BbColors.Green.Green700,
-            target = WholesaleHomeTradeFlowTarget.Sample
-        ),
-        WholesaleHomeTradeFlowItem(
-            title = "Özel üretim",
-            description = "Logo, ölçü veya renk talebi",
-            icon = Icons.Outlined.Tune,
-            backgroundColor = BbColors.Purple.Purple50,
-            iconColor = BbColors.Purple.Purple700,
-            target = WholesaleHomeTradeFlowTarget.Customization
-        )
-    )
-}
-
-private fun getWholesaleHomeCompanies(): List<WholesaleHomeCompanyItem> {
-    return listOf(
-        WholesaleHomeCompanyItem(
-            name = "Anadolu Ambalaj",
-            city = "İstanbul",
-            description = "Karton, koli ve özel baskılı ambalaj çözümleri."
-        ),
-        WholesaleHomeCompanyItem(
-            name = "Delta Makine",
-            city = "Konya",
-            description = "Endüstriyel üretim hatları ve yedek parça."
-        ),
-        WholesaleHomeCompanyItem(
-            name = "Mira Tekstil",
-            city = "Denizli",
-            description = "Toptan ev tekstili ve üretici koleksiyonları."
-        )
-    )
-}
-
-private fun getWholesaleHomeFeaturedProducts(): List<WholesaleHomeFeaturedProductItem> {
-    return listOf(
-        WholesaleHomeFeaturedProductItem(
-            name = "BSCI özelleştirilebilir çocuk okul çantası",
-            categoryName = "Çanta ve tekstil",
-            companyName = "Ortobella Comfort",
-            priceLabel = "Teklif ile",
-            minimumOrderLabel = "499 adet",
-            icon = Icons.Outlined.LocalShipping,
-            imageBackgroundColor = BbColors.Yellow.Yellow50,
-            iconColor = BbColors.Navy.Navy900
-        ),
-        WholesaleHomeFeaturedProductItem(
-            name = "Baskılı e-ticaret kargo kolisi",
-            categoryName = "Ambalaj",
-            companyName = "Anadolu Ambalaj",
-            priceLabel = "Teklif ile",
-            minimumOrderLabel = "1.000 adet",
-            icon = Icons.Outlined.LocalShipping,
-            imageBackgroundColor = BbColors.Blue.Blue50,
+        WholesaleCategoryCardUiModel(
+            title = "Elektronik Parçalar",
+            subtitle = "Bileşen ve ekipman",
+            icon = Icons.Outlined.Inventory2,
+            iconBackground = BbColors.Blue.Blue50,
             iconColor = BbColors.Blue.Blue700
         ),
-        WholesaleHomeFeaturedProductItem(
-            name = "Logo baskılı pamuklu promosyon çanta",
-            categoryName = "Promosyon",
-            companyName = "Mira Tekstil",
-            priceLabel = "Teklif ile",
-            minimumOrderLabel = "300 adet",
-            icon = Icons.Outlined.WorkspacePremium,
-            imageBackgroundColor = BbColors.Green.Green50,
+        WholesaleCategoryCardUiModel(
+            title = "Ambalaj",
+            subtitle = "Koli, kutu, poşet",
+            icon = Icons.Outlined.Category,
+            iconBackground = BbColors.Yellow.Yellow100,
+            iconColor = BbColors.Yellow.Yellow800
+        ),
+        WholesaleCategoryCardUiModel(
+            title = "Tekstil",
+            subtitle = "Kumaş ve üretim",
+            icon = Icons.Outlined.Storefront,
+            iconBackground = BbColors.Green.Green50,
             iconColor = BbColors.Green.Green700
         ),
-        WholesaleHomeFeaturedProductItem(
-            name = "Endüstriyel yedek parça taşıma kutusu",
-            categoryName = "Sanayi ekipmanı",
-            companyName = "Delta Makine",
-            priceLabel = "Teklif ile",
-            minimumOrderLabel = "100 adet",
+        WholesaleCategoryCardUiModel(
+            title = "Endüstriyel",
+            subtitle = "Makine ve sarf",
             icon = Icons.Outlined.Factory,
-            imageBackgroundColor = BbColors.Purple.Purple50,
-            iconColor = BbColors.Purple.Purple700
+            iconBackground = BbColors.Orange.Orange100,
+            iconColor = BbColors.Orange.Orange700
         )
     )
 }
 
-@Preview(showBackground = true)
-@Composable
-private fun WholesaleHomeScreenPreview() {
-    BbTheme {
-        WholesaleHomeScreen()
-    }
+private fun getWholesaleProducts(): List<WholesaleProductUiModel> {
+    return listOf(
+        WholesaleProductUiModel(
+            id = 1,
+            title = "Endüstriyel ambalaj koli seti",
+            company = "Anadolu Ambalaj Sanayi",
+            priceText = "₺84,90 / adet"
+        ),
+        WholesaleProductUiModel(
+            id = 2,
+            title = "Toptan sneaker üretim paketi",
+            company = "Ortobella Üretim",
+            priceText = "₺680,00 / çift"
+        ),
+        WholesaleProductUiModel(
+            id = 3,
+            title = "Elektronik komponent tedarik paketi",
+            company = "Marmara Elektronik",
+            priceText = "₺12,40 / adet"
+        )
+    )
 }

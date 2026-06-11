@@ -1,120 +1,155 @@
 package com.bulbulustur.android.features.message
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Business
-import androidx.compose.material.icons.outlined.ChevronRight
-import androidx.compose.material.icons.outlined.Inbox
+import androidx.compose.material.icons.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Mail
 import androidx.compose.material.icons.outlined.MarkEmailRead
+import androidx.compose.material.icons.outlined.MarkEmailUnread
 import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.outlined.RequestQuote
-import androidx.compose.material.icons.outlined.Storefront
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
-import com.bulbulustur.android.ui.components.BbChip
-
-import com.bulbulustur.android.ui.components.BbSectionHeader
+import com.bulbulustur.android.ui.theme.BbColors
+import com.bulbulustur.android.ui.theme.BbIcon
+import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
-import com.bulbulustur.android.ui.theme.BbTheme
+import com.bulbulustur.android.ui.theme.BbTypography
 
 @Composable
 fun MessageInboxScreen(
-    onMessageClick: (Int) -> Unit = {},
-    onSearchClick: (String) -> Unit = {}
+    onBackClick: () -> Unit = {},
+    onMessageClick: (Int) -> Unit = {}
 ) {
-    var searchText by remember {
-        mutableStateOf("")
-    }
-
-    val messages = remember {
-        getMessageInboxItems()
-    }
+    val messages = getDemoMessages()
 
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.background
+        containerColor = BbColors.Surface
     ) { innerPadding ->
         LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(BbColors.Surface)
+                .windowInsetsPadding(WindowInsets.statusBars)
+                .padding(innerPadding),
             contentPadding = PaddingValues(
                 start = BbSpacing.PageHorizontal,
-                top = innerPadding.calculateTopPadding() + BbSpacing.PageTopCompact,
+                top = BbSpacing.PageTopCompact,
                 end = BbSpacing.PageHorizontal,
-                bottom = innerPadding.calculateBottomPadding() + BbSpacing.PageBottom
+                bottom = BbSpacing.PageBottom
             ),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.SectionGapCompact)
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
         ) {
             item {
-                MessageInboxHeader()
-            }
-
-            item {
-                MessageInboxSummary()
-            }
-
-            item {
-
-            }
-
-            item {
-                MessageInboxFilterChips()
-            }
-
-            item {
-                BbSectionHeader(
-                    title = "Gelen kutusu",
-                    subtitle = "Okunmamış ve okunmuş mesajlarınızı konuşma bazlı görüntüleyin"
+                MessageTopBackButton(
+                    onBackClick = onBackClick
                 )
+            }
+
+            item {
+                MessageHeroCard()
+            }
+
+            item {
+                MessageStatsRow()
+            }
+
+            item {
+                MessageFilterChips()
+            }
+
+            item {
+                MessageSectionTitle()
             }
 
             items(
                 items = messages,
-                key = { message ->
-                    message.messageId
+                key = { item ->
+                    item.id
                 }
             ) { message ->
-                MessageInboxCard(
+                MessageCard(
                     message = message,
                     onClick = {
-                        onMessageClick(message.messageId)
+                        onMessageClick(message.id)
                     }
                 )
-            }
-
-            item {
-                Spacer(modifier = Modifier.height(BbSpacing.Space4))
             }
         }
     }
 }
 
 @Composable
-private fun MessageInboxHeader() {
+private fun MessageTopBackButton(
+    onBackClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            modifier = Modifier
+                .background(
+                    color = BbColors.SurfaceMuted,
+                    shape = BbRadius.PillShape
+                )
+                .clickable {
+                    onBackClick()
+                }
+                .padding(
+                    horizontal = BbSpacing.Space3,
+                    vertical = BbSpacing.Space2
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space1),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
+                    contentDescription = "Geri dön",
+                    tint = BbColors.TextStrong,
+                    modifier = Modifier.size(BbIcon.SizeMd)
+                )
+
+                Text(
+                    text = "Geri Dön",
+                    style = BbTypography.labelMedium,
+                    color = BbColors.TextStrong
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun MessageHeroCard() {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
@@ -124,62 +159,74 @@ private fun MessageInboxHeader() {
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
         ) {
-            MessageIconTitleRow(
-                icon = Icons.Outlined.Mail,
-                title = "Mesaj Merkezi"
-            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Mail,
+                    contentDescription = null,
+                    tint = BbColors.Primary,
+                    modifier = Modifier.size(BbIcon.SizeLg)
+                )
+
+                Text(
+                    text = "Mesaj Merkezi",
+                    style = BbTypography.titleSmall,
+                    color = BbColors.Primary
+                )
+            }
 
             Text(
                 text = "Gelen kutusu",
                 style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
+                color = BbColors.TextStrong
             )
 
             Text(
                 text = "Toptan ve perakende ticaret görüşmelerinizden gelen mesajları buradan takip edin.",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                style = BbTypography.bodyMedium,
+                color = BbColors.TextMuted
             )
         }
     }
 }
 
 @Composable
-private fun MessageInboxSummary() {
+private fun MessageStatsRow() {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(BbSpacing.CardGapCompact)
+        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
     ) {
-        MessageSummaryCard(
-            title = "Gelen",
+        MessageStatCard(
+            modifier = Modifier.weight(1f),
+            iconType = MessageStatIconType.Inbox,
             value = "12",
-            icon = Icons.Outlined.Inbox,
-            modifier = Modifier.weight(1f)
+            label = "Gelen"
         )
 
-        MessageSummaryCard(
-            title = "Okunmamış",
+        MessageStatCard(
+            modifier = Modifier.weight(1f),
+            iconType = MessageStatIconType.Unread,
             value = "3",
-            icon = Icons.Outlined.Mail,
-            modifier = Modifier.weight(1f)
+            label = "Okunmamış"
         )
 
-        MessageSummaryCard(
-            title = "Okundu",
+        MessageStatCard(
+            modifier = Modifier.weight(1f),
+            iconType = MessageStatIconType.Read,
             value = "9",
-            icon = Icons.Outlined.MarkEmailRead,
-            modifier = Modifier.weight(1f)
+            label = "Okundu"
         )
     }
 }
 
 @Composable
-private fun MessageSummaryCard(
-    title: String,
+private fun MessageStatCard(
+    modifier: Modifier,
+    iconType: MessageStatIconType,
     value: String,
-    icon: ImageVector,
-    modifier: Modifier = Modifier
+    label: String
 ) {
     BbCard(
         modifier = modifier,
@@ -188,59 +235,105 @@ private fun MessageSummaryCard(
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
         ) {
             Icon(
-                imageVector = icon,
+                imageVector = when (iconType) {
+                    MessageStatIconType.Inbox -> Icons.Outlined.Mail
+                    MessageStatIconType.Unread -> Icons.Outlined.MarkEmailUnread
+                    MessageStatIconType.Read -> Icons.Outlined.MarkEmailRead
+                },
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary
+                tint = BbColors.Primary,
+                modifier = Modifier.size(BbIcon.SizeLg)
             )
 
             Text(
                 text = value,
                 style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
+                color = BbColors.TextStrong
             )
 
             Text(
-                text = title,
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                text = label,
+                style = BbTypography.labelMedium,
+                color = BbColors.TextMuted
             )
         }
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun MessageInboxFilterChips() {
+private fun MessageFilterChips() {
     FlowRow(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(BbSpacing.ChipGap),
-        verticalArrangement = Arrangement.spacedBy(BbSpacing.ChipGap)
+        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2),
+        verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
     ) {
-        getMessageFilterNames().forEach { filterName ->
-            BbChip(
-                text = filterName,
-                selected = false,
-                onClick = {}
-            )
-        }
+        MessageFilterChip("Tümü")
+        MessageFilterChip("Okunmamış")
+        MessageFilterChip("Okundu")
+        MessageFilterChip("Toptan")
+        MessageFilterChip("Perakende")
+        MessageFilterChip("RFQ")
+        MessageFilterChip("Firma")
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun MessageInboxCard(
-    message: MessageInboxItem,
+private fun MessageFilterChip(
+    text: String
+) {
+    Box(
+        modifier = Modifier
+            .background(
+                color = BbColors.SurfaceMuted,
+                shape = BbRadius.PillShape
+            )
+            .padding(
+                horizontal = BbSpacing.Space4,
+                vertical = BbSpacing.Space2
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = text,
+            style = BbTypography.labelMedium,
+            color = BbColors.TextSubtle
+        )
+    }
+}
+
+@Composable
+private fun MessageSectionTitle() {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+    ) {
+        Text(
+            text = "Gelen kutusu",
+            style = MaterialTheme.typography.titleLarge,
+            color = BbColors.TextStrong
+        )
+
+        Text(
+            text = "Okunmamış ve okunmuş mesajlarınızı konuşma bazlı görüntüleyin",
+            style = BbTypography.bodySmall,
+            color = BbColors.TextMuted
+        )
+    }
+}
+
+@Composable
+private fun MessageCard(
+    message: MessageInboxUiModel,
     onClick: () -> Unit
 ) {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium,
+        padding = BbCardPadding.Large,
         onClick = onClick
     ) {
         Column(
@@ -249,201 +342,200 @@ private fun MessageInboxCard(
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.Top,
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
+                verticalAlignment = Alignment.Top
             ) {
-                Icon(
-                    imageVector = message.icon,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary
-                )
+                Box(
+                    modifier = Modifier
+                        .size(BbIcon.BoxMd)
+                        .background(
+                            color = if (message.isCompany) {
+                                BbColors.Yellow.Yellow100
+                            } else {
+                                BbColors.SurfaceMuted
+                            },
+                            shape = BbRadius.PillShape
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = if (message.isCompany) {
+                            Icons.Outlined.Business
+                        } else {
+                            Icons.Outlined.Person
+                        },
+                        contentDescription = null,
+                        tint = BbColors.Primary,
+                        modifier = Modifier.size(BbIcon.SizeMd)
+                    )
+                }
 
                 Column(
                     modifier = Modifier.weight(1f),
                     verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
                 ) {
                     Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(BbSpacing.ChipGap)
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
                             text = message.senderName,
                             style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = BbColors.TextStrong,
+                            modifier = Modifier.weight(1f)
                         )
 
-                        BbChip(
-                            text = if (message.isRead) {
-                                "Okundu"
-                            } else {
-                                "Yeni"
-                            },
-                            selected = !message.isRead,
-                            onClick = {}
+                        MessageStatusBadge(
+                            text = if (message.isUnread) "Yeni" else "Okundu",
+                            isUnread = message.isUnread
                         )
                     }
 
                     Text(
                         text = message.subject,
-                        style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurface
+                        style = BbTypography.titleSmall,
+                        color = BbColors.TextStrong
                     )
 
                     Text(
                         text = message.preview,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        style = BbTypography.bodySmall,
+                        color = BbColors.TextMuted
                     )
 
                     Text(
-                        text = message.sentAt,
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        text = message.dateText,
+                        style = BbTypography.labelMedium,
+                        color = BbColors.TextSubtle
                     )
                 }
 
                 Icon(
-                    imageVector = Icons.Outlined.ChevronRight,
+                    imageVector = Icons.Outlined.KeyboardArrowRight,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    tint = BbColors.TextMuted,
+                    modifier = Modifier.size(BbIcon.SizeLg)
                 )
             }
 
             FlowRow(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.ChipGap),
-                verticalArrangement = Arrangement.spacedBy(BbSpacing.ChipGap)
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2),
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
             ) {
-                BbChip(
-                    text = message.messageTypeName,
-                    selected = false,
-                    onClick = {}
-                )
-
-                BbChip(
-                    text = message.commerceModeName,
-                    selected = false,
-                    onClick = {}
-                )
-
-                BbChip(
-                    text = "${message.replyCount} yanıt",
-                    selected = false,
-                    onClick = {}
-                )
+                MessageSmallTag(message.boxLabel)
+                MessageSmallTag(message.commerceMode)
+                MessageSmallTag(message.replyCountText)
             }
         }
     }
 }
 
 @Composable
-private fun MessageIconTitleRow(
-    icon: ImageVector,
-    title: String
+private fun MessageStatusBadge(
+    text: String,
+    isUnread: Boolean
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(BbSpacing.IconTextGap)
+    Box(
+        modifier = Modifier
+            .background(
+                color = if (isUnread) BbColors.Primary else BbColors.SurfaceMuted,
+                shape = BbRadius.PillShape
+            )
+            .padding(
+                horizontal = BbSpacing.Space3,
+                vertical = BbSpacing.Space1
+            ),
+        contentAlignment = Alignment.Center
     ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.primary
-        )
-
         Text(
-            text = title,
-            style = MaterialTheme.typography.labelLarge,
-            color = MaterialTheme.colorScheme.primary,
-            fontWeight = FontWeight.SemiBold
+            text = text,
+            style = BbTypography.labelMedium,
+            color = if (isUnread) BbColors.TextStrong else BbColors.TextSubtle
         )
     }
 }
 
-data class MessageInboxItem(
-    val messageId: Int,
+@Composable
+private fun MessageSmallTag(
+    text: String
+) {
+    Box(
+        modifier = Modifier
+            .background(
+                color = BbColors.SurfaceMuted,
+                shape = BbRadius.PillShape
+            )
+            .padding(
+                horizontal = BbSpacing.Space3,
+                vertical = BbSpacing.Space1
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = text,
+            style = BbTypography.labelSmall,
+            color = BbColors.TextMuted
+        )
+    }
+}
+
+private enum class MessageStatIconType {
+    Inbox,
+    Unread,
+    Read
+}
+
+private data class MessageInboxUiModel(
+    val id: Int,
     val senderName: String,
     val subject: String,
     val preview: String,
-    val sentAt: String,
-    val messageTypeName: String,
-    val commerceModeName: String,
-    val replyCount: Int,
-    val isRead: Boolean,
-    val icon: ImageVector
+    val dateText: String,
+    val boxLabel: String,
+    val commerceMode: String,
+    val replyCountText: String,
+    val isUnread: Boolean,
+    val isCompany: Boolean
 )
 
-private fun getMessageFilterNames(): List<String> {
+private fun getDemoMessages(): List<MessageInboxUiModel> {
     return listOf(
-        "Tümü",
-        "Okunmamış",
-        "Okundu",
-        "Toptan",
-        "Perakende",
-        "RFQ",
-        "Firma"
-    )
-}
-
-private fun getMessageInboxItems(): List<MessageInboxItem> {
-    return listOf(
-        MessageInboxItem(
-            messageId = 1,
+        MessageInboxUiModel(
+            id = 1,
             senderName = "Murat Erkan",
             subject = "450W paneller için fiyat teklifi",
             preview = "Selamlar, Draugr Network üzerindeki 450W panellerden 200 adetlik bir proje için fiyat teklifi rica ediyorum.",
-            sentAt = "10.05.2026 13:37",
-            messageTypeName = "Gelen Kutusu",
-            commerceModeName = "Toptan",
-            replyCount = 2,
-            isRead = true,
-            icon = Icons.Outlined.Person
+            dateText = "10.05.2026 13:37",
+            boxLabel = "Gelen Kutusu",
+            commerceMode = "Toptan",
+            replyCountText = "2 yanıt",
+            isUnread = false,
+            isCompany = false
         ),
-        MessageInboxItem(
-            messageId = 2,
+        MessageInboxUiModel(
+            id = 2,
             senderName = "Anadolu Ambalaj Sanayi",
-            subject = "Numune talebiniz hakkında",
-            preview = "Talep ettiğiniz numune için teslimat ve kargo bilgilerini paylaşabilir misiniz?",
-            sentAt = "Bugün 11:20",
-            messageTypeName = "Numune",
-            commerceModeName = "Toptan",
-            replyCount = 1,
-            isRead = false,
-            icon = Icons.Outlined.Business
+            subject = "Numune talebi hakkında",
+            preview = "Ambalaj ürünleri için gönderdiğiniz RFQ talebine istinaden numune ve fiyat bilgilerini paylaşmak isteriz.",
+            dateText = "11.05.2026 09:20",
+            boxLabel = "Gelen Kutusu",
+            commerceMode = "RFQ",
+            replyCountText = "1 yanıt",
+            isUnread = true,
+            isCompany = true
         ),
-        MessageInboxItem(
-            messageId = 3,
-            senderName = "Marmara Tedarik Merkezi",
-            subject = "Son fiyat talebi yanıtı",
-            preview = "Belirttiğiniz miktara göre fiyat teklifimizi güncelledik.",
-            sentAt = "Dün 18:45",
-            messageTypeName = "Son Fiyat",
-            commerceModeName = "Toptan",
-            replyCount = 4,
-            isRead = false,
-            icon = Icons.Outlined.RequestQuote
-        ),
-        MessageInboxItem(
-            messageId = 4,
-            senderName = "Nexa Store",
-            subject = "Sipariş bilgilendirmesi",
-            preview = "Perakende siparişinizle ilgili satıcı mesajı bulunmaktadır.",
-            sentAt = "2 gün önce",
-            messageTypeName = "Sipariş",
-            commerceModeName = "Perakende",
-            replyCount = 1,
-            isRead = true,
-            icon = Icons.Outlined.Storefront
+        MessageInboxUiModel(
+            id = 3,
+            senderName = "Moda Nova",
+            subject = "Sipariş mesajı",
+            preview = "Perakende siparişinizle ilgili kargo ve teslimat bilgileri güncellendi.",
+            dateText = "12.05.2026 16:48",
+            boxLabel = "Gelen Kutusu",
+            commerceMode = "Perakende",
+            replyCountText = "3 yanıt",
+            isUnread = true,
+            isCompany = true
         )
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun MessageInboxScreenPreview() {
-    BbTheme {
-        MessageInboxScreen()
-    }
 }

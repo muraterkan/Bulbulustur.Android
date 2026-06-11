@@ -7,8 +7,13 @@ object WholesaleRoutes {
     const val ProductList = "wholesale/product-list"
     const val ProductDetail = "wholesale/product-detail"
     const val Search = "wholesale/search"
+
+    const val Menu = "wholesale/menu"
+
+    const val QuotationRequests = "wholesale/rfq/list"
+    const val RfqCreate = "wholesale/rfq/create"
+
     const val LastPriceRequest = "wholesale/last-price-request"
     const val SampleRequest = "wholesale/sample-request"
     const val CustomizationRequest = "wholesale/customization-request"
-    const val Menu = "wholesale/menu"
 }

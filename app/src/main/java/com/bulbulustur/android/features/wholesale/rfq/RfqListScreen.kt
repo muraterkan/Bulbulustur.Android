@@ -1,10 +1,12 @@
-package com.bulbulustur.android.features.account
+package com.bulbulustur.android.features.wholesale.rfq
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -17,11 +19,14 @@ import androidx.compose.material.icons.outlined.RequestQuote
 import androidx.compose.material.icons.outlined.Tag
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.bulbulustur.android.features.account.components.AccountPageScaffold
+import com.bulbulustur.android.features.wholesale.components.WholesaleBottomNavigation
+import com.bulbulustur.android.features.wholesale.components.WholesaleBottomNavigationItem
 import com.bulbulustur.android.ui.components.BbButton
 import com.bulbulustur.android.ui.components.BbButtonSize
 import com.bulbulustur.android.ui.components.BbButtonVariant
@@ -35,42 +40,146 @@ import com.bulbulustur.android.ui.theme.BbSpacing
 import com.bulbulustur.android.ui.theme.BbTypography
 
 @Composable
-fun QuotationRequestListScreen(
+fun RfqListScreen(
     onBackClick: () -> Unit = {},
     onDiscoverWholesaleClick: () -> Unit = {},
     onOffersClick: (Int) -> Unit = {},
     onDetailClick: (Int) -> Unit = {},
-    onDeleteClick: (Int) -> Unit = {}
+    onDeleteClick: (Int) -> Unit = {},
+    onCreateRfqClick: () -> Unit = {},
+    onHomeClick: () -> Unit = {},
+    onMenuClick: () -> Unit = {},
+    onModeSwitchClick: () -> Unit = {},
+    onBasketClick: () -> Unit = {},
+    onAccountClick: () -> Unit = {}
 ) {
     val rfqRequests = getDemoRfqRequests()
 
-    AccountPageScaffold(
-        title = "Fiyat Teklifi İstekleri",
-        kicker = "RFQ Yönetimi",
-        description = "Oluşturduğunuz fiyat teklifi isteklerini görüntüleyin, detaylarını inceleyin veya gelen tekliflere ulaşın.",
-        backButtonText = "Hesabıma Dön",
-        onBackClick = onBackClick
-    ) {
+    Scaffold(
+        containerColor = BbColors.SurfaceMuted,
+        bottomBar = {
+            WholesaleBottomNavigation(
+                selectedItem = WholesaleBottomNavigationItem.Basket,
+                onItemClick = { selectedItem ->
+                    when (selectedItem) {
+                        WholesaleBottomNavigationItem.Home -> onHomeClick()
+                        WholesaleBottomNavigationItem.Menu -> onMenuClick()
+                        WholesaleBottomNavigationItem.ModeSwitch -> onModeSwitchClick()
+                        WholesaleBottomNavigationItem.Basket -> onBasketClick()
+                        WholesaleBottomNavigationItem.Account -> onAccountClick()
+                    }
+                }
+            )
+        }
+    ) { innerPadding ->
         LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(BbColors.SurfaceMuted)
+                .padding(innerPadding),
+            contentPadding = PaddingValues(
+                start = BbSpacing.PageHorizontal,
+                top = BbSpacing.PageTopCompact,
+                end = BbSpacing.PageHorizontal,
+                bottom = BbSpacing.PageBottom
+            ),
             verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
         ) {
+            item {
+                RfqPageHeader(
+                    onBackClick = onBackClick,
+                    onCreateRfqClick = onCreateRfqClick
+                )
+            }
+
             if (rfqRequests.isEmpty()) {
                 item {
                     RfqEmptyState(
                         onDiscoverWholesaleClick = onDiscoverWholesaleClick
                     )
                 }
+            } else {
+                items(
+                    items = rfqRequests,
+                    key = { item ->
+                        item.buyerRequestId
+                    }
+                ) { item ->
+                    RfqRequestCard(
+                        item = item,
+                        onOffersClick = onOffersClick,
+                        onDetailClick = onDetailClick,
+                        onDeleteClick = onDeleteClick
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun RfqPageHeader(
+    onBackClick: () -> Unit,
+    onCreateRfqClick: () -> Unit
+) {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                RfqIconBox()
+
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+                ) {
+                    Text(
+                        text = "RFQ Yönetimi",
+                        style = BbTypography.labelSmall,
+                        color = BbColors.Yellow.Yellow800
+                    )
+
+                    Text(
+                        text = "Fiyat Teklifi İstekleri",
+                        style = MaterialTheme.typography.titleLarge,
+                        color = BbColors.TextStrong
+                    )
+
+                    Text(
+                        text = "Oluşturduğunuz fiyat teklifi isteklerini görüntüleyin, detaylarını inceleyin veya gelen tekliflere ulaşın.",
+                        style = BbTypography.bodySmall,
+                        color = BbColors.TextMuted
+                    )
+                }
             }
 
-            items(
-                items = rfqRequests,
-                key = { item -> item.buyerRequestId }
-            ) { item ->
-                RfqRequestCard(
-                    item = item,
-                    onOffersClick = onOffersClick,
-                    onDetailClick = onDetailClick,
-                    onDeleteClick = onDeleteClick
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+            ) {
+                BbButton(
+                    text = "Toptana Dön",
+                    onClick = onBackClick,
+                    modifier = Modifier.weight(1f),
+                    variant = BbButtonVariant.Light,
+                    size = BbButtonSize.Small
+                )
+
+                BbButton(
+                    text = "RFQ Oluştur",
+                    onClick = onCreateRfqClick,
+                    modifier = Modifier.weight(1f),
+                    variant = BbButtonVariant.Primary,
+                    size = BbButtonSize.Small
                 )
             }
         }

@@ -105,7 +105,7 @@ fun WholesaleMenuScreen(
                     when (selectedItem) {
                         WholesaleBottomNavigationItem.Home -> onHomeClick()
                         WholesaleBottomNavigationItem.Menu -> Unit
-                        WholesaleBottomNavigationItem.Messages -> Unit
+                        WholesaleBottomNavigationItem.ModeSwitch -> Unit
                         WholesaleBottomNavigationItem.Basket -> onBasketClick()
                         WholesaleBottomNavigationItem.Account -> onAccountClick()
                     }

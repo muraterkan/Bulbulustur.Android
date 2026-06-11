@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.MailOutline
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Icon
@@ -28,8 +30,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.vector.ImageVector
 import com.bulbulustur.android.ui.theme.BbColors
+import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
 import com.bulbulustur.android.ui.theme.BbTypography
@@ -50,12 +53,13 @@ fun RetailSearchHeader(
     onSearchClick: (() -> Unit)? = null,
     onClearClick: (() -> Unit)? = null,
     leadingAction: RetailSearchHeaderLeadingAction = RetailSearchHeaderLeadingAction.Menu,
-    onBackClick: (() -> Unit)? = null
+    onBackClick: (() -> Unit)? = null,
+    onMessageClick: () -> Unit = {}
 ) {
     Surface(
         modifier = modifier.fillMaxWidth(),
         color = BbColors.Surface,
-        shadowElevation = 3.dp
+        shadowElevation = BbSpacing.Space1
     ) {
         Box(
             modifier = Modifier
@@ -72,37 +76,25 @@ fun RetailSearchHeader(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp),
+                    .height(BbSpacing.TopBarHeight),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
             ) {
-                IconButton(
+                RetailHeaderActionButton(
+                    icon = if (leadingAction == RetailSearchHeaderLeadingAction.Back) {
+                        Icons.AutoMirrored.Outlined.ArrowBack
+                    } else {
+                        Icons.Outlined.Menu
+                    },
+                    contentDescription = if (leadingAction == RetailSearchHeaderLeadingAction.Back) "Geri" else "Menü",
                     onClick = {
                         if (leadingAction == RetailSearchHeaderLeadingAction.Back) {
-                            if (onBackClick != null) {
-                                onBackClick()
-                            } else {
-                                onMenuClick()
-                            }
+                            onBackClick?.invoke() ?: onMenuClick()
                         } else {
                             onMenuClick()
                         }
                     }
-                ) {
-                    Icon(
-                        imageVector = if (leadingAction == RetailSearchHeaderLeadingAction.Back) {
-                            Icons.AutoMirrored.Outlined.ArrowBack
-                        } else {
-                            Icons.Outlined.Menu
-                        },
-                        contentDescription = if (leadingAction == RetailSearchHeaderLeadingAction.Back) {
-                            "Geri"
-                        } else {
-                            "Kategoriler"
-                        },
-                        tint = BbColors.TextStrong
-                    )
-                }
+                )
 
                 RetailSearchInput(
                     searchText = searchText,
@@ -113,16 +105,44 @@ fun RetailSearchHeader(
                     modifier = Modifier.weight(1f)
                 )
 
-                IconButton(
+                RetailHeaderActionButton(
+                    icon = Icons.Outlined.MailOutline,
+                    contentDescription = "Mesajlar",
+                    onClick = onMessageClick
+                )
+
+                RetailHeaderActionButton(
+                    icon = Icons.Outlined.FavoriteBorder,
+                    contentDescription = "Favorilerim",
                     onClick = onFavoriteClick
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.FavoriteBorder,
-                        contentDescription = "Favorilerim",
-                        tint = BbColors.TextStrong
-                    )
-                }
+                )
             }
+        }
+    }
+}
+
+@Composable
+private fun RetailHeaderActionButton(
+    icon: ImageVector,
+    contentDescription: String,
+    onClick: () -> Unit
+) {
+    Surface(
+        modifier = Modifier.size(BbIcon.BoxMd),
+        shape = BbRadius.PillShape,
+        color = BbColors.SurfaceMuted,
+        border = BorderStroke(
+            width = BbSpacing.Divider,
+            color = BbColors.Border
+        )
+    ) {
+        IconButton(onClick = onClick) {
+            Icon(
+                imageVector = icon,
+                contentDescription = contentDescription,
+                tint = BbColors.TextStrong,
+                modifier = Modifier.size(BbIcon.TopBarIcon)
+            )
         }
     }
 }
@@ -137,11 +157,11 @@ private fun RetailSearchInput(
     modifier: Modifier = Modifier
 ) {
     Surface(
-        modifier = modifier.height(48.dp),
+        modifier = modifier.height(BbSpacing.TopBarHeight - BbSpacing.Space4),
         shape = RoundedCornerShape(BbRadius.xl),
         color = BbColors.SurfaceMuted,
         border = BorderStroke(
-            width = 1.dp,
+            width = BbSpacing.Divider,
             color = BbColors.BorderStrong
         )
     ) {
@@ -160,9 +180,7 @@ private fun RetailSearchInput(
             },
             leadingIcon = {
                 IconButton(
-                    onClick = {
-                        onSearchClick?.invoke()
-                    },
+                    onClick = { onSearchClick?.invoke() },
                     enabled = onSearchClick != null
                 ) {
                     Icon(
@@ -175,9 +193,7 @@ private fun RetailSearchInput(
             trailingIcon = {
                 if (searchText.isNotBlank()) {
                     IconButton(
-                        onClick = {
-                            onClearClick?.invoke()
-                        }
+                        onClick = { onClearClick?.invoke() }
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.Close,

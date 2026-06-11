@@ -81,6 +81,9 @@ import com.bulbulustur.android.features.store.StoreDetailScreen
 import com.bulbulustur.android.features.store.StoreListScreen
 import com.bulbulustur.android.features.store.StoreProductListScreen
 import com.bulbulustur.android.features.store.StoreRoutes
+import com.bulbulustur.android.features.company.CompanyHomeScreen
+import com.bulbulustur.android.features.company.CompanyProductsScreen
+import com.bulbulustur.android.features.company.CompanyContactScreen
 import com.bulbulustur.android.features.wholesale.CategoryDetailScreen as WholesaleCategoryDetailScreen
 import com.bulbulustur.android.features.wholesale.CustomizationRequestScreen
 import com.bulbulustur.android.features.wholesale.LastPriceRequestScreen
@@ -842,7 +845,7 @@ class MainActivity : ComponentActivity() {
                                     navController.navigate(CompanyRoutes.CompanyDetail)
                                 },
                                 onCompanyProductsClick = {
-                                    navController.navigate(WholesaleRoutes.ProductList)
+                                    navController.navigate(CompanyRoutes.CompanyProducts)
                                 },
                                 onCompanySimilarProductClick = {
                                     navController.navigate(WholesaleRoutes.ProductDetail)
@@ -899,6 +902,37 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
+
+
+
+
+
+                        composable(CompanyRoutes.CompanyHome) {
+                            CompanyHomeScreen(
+                                onBackClick = { navController.popBackStack() },
+                                onProfileClick = { navController.navigate(CompanyRoutes.CompanyDetail) },
+                                onProductsClick = { navController.navigate(CompanyRoutes.CompanyProducts) },
+                                onContactClick = { navController.navigate(CompanyRoutes.CompanyContact) }
+                            )
+                        }
+
+                        composable(CompanyRoutes.CompanyProducts) {
+                            CompanyProductsScreen(
+                                onBackClick = { navController.popBackStack() },
+                                onCompanyProfileClick = { navController.navigate(CompanyRoutes.CompanyDetail) },
+                                onCompanyContactClick = { navController.navigate(CompanyRoutes.CompanyContact) },
+                                onProductClick = { navController.navigate(WholesaleRoutes.ProductDetail) }
+                            )
+                        }
+
+                        composable(CompanyRoutes.CompanyContact) {
+                            CompanyContactScreen(
+                                onBackClick = { navController.popBackStack() },
+                                onCompanyProfileClick = { navController.navigate(CompanyRoutes.CompanyDetail) },
+                                onCompanyProductsClick = { navController.navigate(CompanyRoutes.CompanyProducts) }
+                            )
+                        }
+
                         composable(CompanyRoutes.CompanyList) {
                             CompanyListScreen(
                                 onCompanyClick = {
@@ -911,9 +945,22 @@ class MainActivity : ComponentActivity() {
                             CompanyDetailScreen(
                                 onBackClick = {
                                     navController.popBackStack()
+                                },
+                                onHomeClick = {
+                                    navController.navigate(CompanyRoutes.CompanyHome)
+                                },
+                                onProductListClick = {
+                                    navController.navigate(CompanyRoutes.CompanyProducts)
+                                },
+                                onMessageClick = {
+                                    navController.navigate(CompanyRoutes.CompanyContact)
+                                },
+                                onContactClick = {
+                                    navController.navigate(CompanyRoutes.CompanyContact)
                                 }
                             )
                         }
+
 
                         composable(AccountRoutes.AccountHome) {
                             AccountScreen(

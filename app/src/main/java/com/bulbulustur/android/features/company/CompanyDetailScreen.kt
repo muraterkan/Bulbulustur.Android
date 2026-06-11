@@ -1,6 +1,9 @@
 package com.bulbulustur.android.features.company
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,6 +16,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
+import com.bulbulustur.android.R
 import androidx.compose.material.icons.outlined.Business
 import androidx.compose.material.icons.outlined.ChevronRight
 import androidx.compose.material.icons.outlined.Description
@@ -24,18 +30,20 @@ import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Mail
 import androidx.compose.material.icons.outlined.PhotoLibrary
-import androidx.compose.material.icons.outlined.RequestQuote
 import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material.icons.outlined.Storefront
 import androidx.compose.material.icons.outlined.Verified
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -49,6 +57,8 @@ import com.bulbulustur.android.ui.components.BbChip
 import com.bulbulustur.android.ui.components.BbInnerPageHeader
 import com.bulbulustur.android.ui.components.BbSectionHeader
 import com.bulbulustur.android.ui.theme.BbColors
+import com.bulbulustur.android.ui.theme.BbIcon
+import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
 import com.bulbulustur.android.ui.theme.BbTheme
 
@@ -56,9 +66,10 @@ import com.bulbulustur.android.ui.theme.BbTheme
 fun CompanyDetailScreen(
     companyId: Int = 1,
     onBackClick: () -> Unit = {},
+    onHomeClick: (Int) -> Unit = {},
     onProductListClick: (Int) -> Unit = {},
     onMessageClick: (Int) -> Unit = {},
-    onQuoteRequestClick: (Int) -> Unit = {},
+    onContactClick: (Int) -> Unit = onMessageClick,
     onGalleryClick: (Int) -> Unit = {},
     onCertificateClick: (Int) -> Unit = {},
     onWebsiteClick: (String) -> Unit = {}
@@ -98,8 +109,16 @@ fun CompanyDetailScreen(
                 CompanyDetailMainActions(
                     company = company,
                     onProductListClick = onProductListClick,
-                    onMessageClick = onMessageClick,
-                    onQuoteRequestClick = onQuoteRequestClick
+                    onContactClick = onContactClick
+                )
+            }
+
+            item {
+                CompanyDetailTabs(
+                    company = company,
+                    onHomeClick = onHomeClick,
+                    onProductListClick = onProductListClick,
+                    onContactClick = onContactClick
                 )
             }
 
@@ -149,7 +168,7 @@ fun CompanyDetailScreen(
             items(
                 items = company.productGroups,
                 key = { productGroup ->
-                    productGroup.productGroupId
+                    "product-group-${productGroup.productGroupId}"
                 }
             ) { productGroup ->
                 CompanyProductGroupCard(
@@ -170,7 +189,7 @@ fun CompanyDetailScreen(
             items(
                 items = company.certificates,
                 key = { certificate ->
-                    certificate.certificateId
+                    "certificate-${certificate.certificateId}"
                 }
             ) { certificate ->
                 CompanyCertificateCard(
@@ -184,8 +203,8 @@ fun CompanyDetailScreen(
             item {
                 CompanyTrustPanel(
                     company = company,
-                    onMessageClick = {
-                        onMessageClick(company.companyId)
+                    onContactClick = {
+                        onContactClick(company.companyId)
                     }
                 )
             }
@@ -201,105 +220,113 @@ fun CompanyDetailScreen(
 private fun CompanyDetailHero(
     company: CompanyDetail
 ) {
-    BbCard(
+    Surface(
         modifier = Modifier.fillMaxWidth(),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Large
+        shape = BbRadius.XlShape,
+        color = BbColors.TextStrong,
+        border = BorderStroke(
+            width = BbSpacing.None,
+            color = BbColors.TextStrong
+        )
     ) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            BbColors.TextStrong,
+                            BbColors.Black
+                        )
+                    )
+                )
+                .padding(BbSpacing.Space5)
         ) {
-            Row(
+            Column(
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
             ) {
-                CompanyLogoBox(
-                    logoText = company.logoText,
-                    icon = Icons.Outlined.Business
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+                ) {
+                    CompanyLogoBox()
+
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(BbSpacing.IconTextGapSmall)
+                        ) {
+                            Text(
+                                text = "Firma Profili",
+                                style = MaterialTheme.typography.labelLarge,
+                                color = BbColors.Primary,
+                                fontWeight = FontWeight.SemiBold
+                            )
+
+                            if (company.isVerified) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Verified,
+                                    contentDescription = null,
+                                    tint = BbColors.Primary
+                                )
+                            }
+                        }
+
+                        Text(
+                            text = company.name,
+                            style = MaterialTheme.typography.headlineSmall,
+                            fontWeight = FontWeight.Bold,
+                            color = BbColors.White
+                        )
+                    }
+                }
+
+                Text(
+                    text = company.shortDescription,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = BbColors.White.copy(alpha = 0.78f)
                 )
 
-                Column(
-                    modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(BbSpacing.IconTextGapSmall)
-                    ) {
-                        Text(
-                            text = "Firma Profili",
-                            style = MaterialTheme.typography.labelLarge,
-                            color = BbColors.Primary,
-                            fontWeight = FontWeight.SemiBold
-                        )
+                CompanyDarkTagRow(
+                    tags = buildList {
+                        add(company.country)
+                        add(company.city)
+                        add(company.businessModel)
 
                         if (company.isVerified) {
-                            Icon(
-                                imageVector = Icons.Outlined.Verified,
-                                contentDescription = null,
-                                tint = BbColors.Primary
-                            )
+                            add("Doğrulanmış")
                         }
                     }
-
-                    Text(
-                        text = company.name,
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = BbColors.TextStrong
-                    )
-                }
+                )
             }
-
-            Text(
-                text = company.shortDescription,
-                style = MaterialTheme.typography.bodyMedium,
-                color = BbColors.TextMuted
-            )
-
-            CompanyTagRow(
-                tags = buildList {
-                    add(company.country)
-                    add(company.city)
-                    add(company.businessModel)
-
-                    if (company.isVerified) {
-                        add("Doğrulanmış")
-                    }
-                }
-            )
         }
     }
 }
 
 @Composable
-private fun CompanyLogoBox(
-    logoText: String,
-    icon: ImageVector
-) {
-    BbCard(
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium
+private fun CompanyLogoBox() {
+    Surface(
+        shape = BbRadius.XlShape,
+        color = BbColors.Surface,
+        border = BorderStroke(
+            width = BbSpacing.None,
+            color = BbColors.Border
+        )
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = BbColors.Primary
-            )
-
-            Text(
-                text = logoText,
-                style = MaterialTheme.typography.labelLarge,
-                fontWeight = FontWeight.Bold,
-                color = BbColors.TextStrong
-            )
-        }
+        Image(
+            painter = painterResource(
+                id = R.drawable.company_logo_nexa
+            ),
+            contentDescription = "Company Logo",
+            modifier = Modifier
+                .padding(BbSpacing.Space2)
+                .height(BbSpacing.Space12)
+        )
     }
 }
 
@@ -307,8 +334,7 @@ private fun CompanyLogoBox(
 private fun CompanyDetailMainActions(
     company: CompanyDetail,
     onProductListClick: (Int) -> Unit,
-    onMessageClick: (Int) -> Unit,
-    onQuoteRequestClick: (Int) -> Unit
+    onContactClick: (Int) -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -330,31 +356,127 @@ private fun CompanyDetailMainActions(
 
             CompanyActionCard(
                 title = "İletişime Geç",
-                description = "Mesaj gönder",
+                description = "Yetkili kişiye ulaş",
                 icon = Icons.Outlined.Mail,
                 modifier = Modifier.weight(1f),
                 onClick = {
-                    onMessageClick(company.companyId)
+                    onContactClick(company.companyId)
                 }
             )
         }
 
         BbButton(
-            text = "Bu Firmadan Teklif İste",
+            text = "İletişime Geç",
             onClick = {
-                onQuoteRequestClick(company.companyId)
+                onContactClick(company.companyId)
             },
             modifier = Modifier.fillMaxWidth(),
             variant = BbButtonVariant.Primary,
             size = BbButtonSize.Medium,
             leadingIcon = {
                 Icon(
-                    imageVector = Icons.Outlined.RequestQuote,
+                    imageVector = Icons.Outlined.Email,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onPrimary
                 )
             }
         )
+    }
+}
+
+@Composable
+private fun CompanyDetailTabs(
+    company: CompanyDetail,
+    onHomeClick: (Int) -> Unit,
+    onProductListClick: (Int) -> Unit,
+    onContactClick: (Int) -> Unit
+) {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
+        FlowRow(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+        ) {
+            CompanyTabChip(
+                text = "Ana Sayfa",
+                icon = Icons.Outlined.Home,
+                selected = false,
+                onClick = {
+                    onHomeClick(company.companyId)
+                }
+            )
+
+            CompanyTabChip(
+                text = "Profil",
+                icon = Icons.Outlined.Business,
+                selected = true,
+                onClick = {}
+            )
+
+            CompanyTabChip(
+                text = "Ürünler",
+                icon = Icons.Outlined.Inventory2,
+                selected = false,
+                onClick = {
+                    onProductListClick(company.companyId)
+                }
+            )
+
+            CompanyTabChip(
+                text = "İletişim",
+                icon = Icons.Outlined.Email,
+                selected = false,
+                onClick = {
+                    onContactClick(company.companyId)
+                }
+            )
+        }
+    }
+}
+
+@Composable
+private fun CompanyTabChip(
+    text: String,
+    icon: ImageVector,
+    selected: Boolean,
+    onClick: () -> Unit
+) {
+    Surface(
+        modifier = Modifier.clip(BbRadius.PillShape),
+        onClick = onClick,
+        shape = BbRadius.PillShape,
+        color = if (selected) BbColors.Blue.Blue50 else BbColors.Surface,
+        border = BorderStroke(
+            width = BbSpacing.None,
+            color = if (selected) BbColors.Blue.Blue200 else BbColors.Border
+        )
+    ) {
+        Row(
+            modifier = Modifier.padding(
+                horizontal = BbSpacing.Space3,
+                vertical = BbSpacing.Space2
+            ),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = if (selected) BbColors.Blue.Blue700 else BbColors.TextStrong,
+                modifier = Modifier.height(BbIcon.SizeSm)
+            )
+
+            Text(
+                text = text,
+                style = MaterialTheme.typography.labelMedium,
+                color = BbColors.TextStrong,
+                fontWeight = FontWeight.Bold
+            )
+        }
     }
 }
 
@@ -679,13 +801,13 @@ private fun CompanyCertificateCard(
 @Composable
 private fun CompanyTrustPanel(
     company: CompanyDetail,
-    onMessageClick: () -> Unit
+    onContactClick: () -> Unit
 ) {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
         padding = BbCardPadding.Large,
-        onClick = onMessageClick
+        onClick = onContactClick
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -717,7 +839,7 @@ private fun CompanyTrustPanel(
                 )
 
                 Text(
-                    text = "Mesaj Gönder",
+                    text = "İletişime Geç",
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.SemiBold,
                     color = BbColors.TextStrong
@@ -770,10 +892,42 @@ private fun CompanyTagRow(
     }
 }
 
+@Composable
+private fun CompanyDarkTagRow(
+    tags: List<String>
+) {
+    FlowRow(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(BbSpacing.ChipGap),
+        verticalArrangement = Arrangement.spacedBy(BbSpacing.ChipGap)
+    ) {
+        tags.forEach { tag ->
+            Surface(
+                shape = BbRadius.PillShape,
+                color = BbColors.White.copy(alpha = 0.12f),
+                border = BorderStroke(
+                    width = BbSpacing.None,
+                    color = BbColors.White.copy(alpha = 0.18f)
+                )
+            ) {
+                Text(
+                    modifier = Modifier.padding(
+                        horizontal = BbSpacing.Space3,
+                        vertical = BbSpacing.Space2
+                    ),
+                    text = tag,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = BbColors.White,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
+        }
+    }
+}
+
 data class CompanyDetail(
     val companyId: Int,
     val name: String,
-    val logoText: String,
     val shortDescription: String,
     val about: String,
     val whyUs: String,
@@ -812,7 +966,6 @@ private fun getCompanyDetail(companyId: Int): CompanyDetail {
     return CompanyDetail(
         companyId = companyId,
         name = "Bulbulustur İnternet Teknolojileri ve Tic. A.Ş.",
-        logoText = "BB",
         shortDescription = "Yazılım, dijital dönüşüm ve ticaret altyapıları alanında çözüm sağlayan firma.",
         about = "Firma; üretim, tedarik, satış ve e-ticaret operasyonlarını dijital altyapılarla güçlendiren çözümler geliştirir. Mobil uygulamada bu alan ileride gerçek firma açıklaması, yetenekler ve ticari profil bilgileriyle beslenecek.",
         whyUs = "Firma profili, ürünleri, belgeleri ve iletişim bilgileri tek ekranda sunularak alıcının daha hızlı karar vermesine yardımcı olur.",

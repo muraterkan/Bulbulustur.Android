@@ -38,7 +38,8 @@ fun BbInnerPageHeader(
     modifier: Modifier = Modifier,
     actionIcon: ImageVector? = null,
     actionContentDescription: String? = null,
-    onActionClick: (() -> Unit)? = null
+    onActionClick: (() -> Unit)? = null,
+    actionContent: (@Composable () -> Unit)? = null
 ) {
     Surface(
         modifier = modifier.fillMaxWidth(),
@@ -80,12 +81,18 @@ fun BbInnerPageHeader(
                     overflow = TextOverflow.Ellipsis
                 )
 
-                if (actionIcon != null && onActionClick != null) {
-                    BbInnerHeaderActionButton(
-                        icon = actionIcon,
-                        contentDescription = actionContentDescription ?: title,
-                        onClick = onActionClick
-                    )
+                when {
+                    actionContent != null -> {
+                        actionContent()
+                    }
+
+                    actionIcon != null && onActionClick != null -> {
+                        BbInnerHeaderActionButton(
+                            icon = actionIcon,
+                            contentDescription = actionContentDescription ?: title,
+                            onClick = onActionClick
+                        )
+                    }
                 }
             }
         }

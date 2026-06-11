@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -44,14 +46,16 @@ import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
 import com.bulbulustur.android.ui.components.BbChip
+import com.bulbulustur.android.ui.components.BbInnerPageHeader
 import com.bulbulustur.android.ui.components.BbSectionHeader
-import com.bulbulustur.android.ui.theme.BbIcon
+import com.bulbulustur.android.ui.theme.BbColors
 import com.bulbulustur.android.ui.theme.BbSpacing
 import com.bulbulustur.android.ui.theme.BbTheme
 
 @Composable
 fun CompanyDetailScreen(
     companyId: Int = 1,
+    onBackClick: () -> Unit = {},
     onProductListClick: (Int) -> Unit = {},
     onMessageClick: (Int) -> Unit = {},
     onQuoteRequestClick: (Int) -> Unit = {},
@@ -64,15 +68,23 @@ fun CompanyDetailScreen(
     }
 
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.background
+        containerColor = BbColors.SurfaceSoft,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Firma Profili",
+                onBackClick = onBackClick
+            )
+        }
     ) { innerPadding ->
         LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
             contentPadding = PaddingValues(
                 start = BbSpacing.PageHorizontal,
-                top = innerPadding.calculateTopPadding() + BbSpacing.PageTopCompact,
+                top = BbSpacing.PageTopCompact,
                 end = BbSpacing.PageHorizontal,
-                bottom = innerPadding.calculateBottomPadding() + BbSpacing.PageBottom
+                bottom = BbSpacing.PageBottom
             ),
             verticalArrangement = Arrangement.spacedBy(BbSpacing.SectionGapCompact)
         ) {
@@ -93,7 +105,7 @@ fun CompanyDetailScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Firma vitrini",
+                    title = "Firma Vitrini",
                     subtitle = "Üretim, tesis, showroom veya kurumsal görseller"
                 )
             }
@@ -109,7 +121,7 @@ fun CompanyDetailScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Detaylı firma profili",
+                    title = "Detaylı Firma Profili",
                     subtitle = "Firma hakkında, iş modeli ve ticari bilgiler"
                 )
             }
@@ -129,7 +141,7 @@ fun CompanyDetailScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Ürün grupları",
+                    title = "Ürün Grupları",
                     subtitle = "Firmanın öne çıkan toptan ürün aileleri"
                 )
             }
@@ -150,7 +162,7 @@ fun CompanyDetailScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Belgeler ve sertifikalar",
+                    title = "Belgeler Ve Sertifikalar",
                     subtitle = "Firma güveni için doğrulama bilgileri"
                 )
             }
@@ -219,7 +231,7 @@ private fun CompanyDetailHero(
                         Text(
                             text = "Firma Profili",
                             style = MaterialTheme.typography.labelLarge,
-                            color = MaterialTheme.colorScheme.primary,
+                            color = BbColors.Primary,
                             fontWeight = FontWeight.SemiBold
                         )
 
@@ -227,7 +239,7 @@ private fun CompanyDetailHero(
                             Icon(
                                 imageVector = Icons.Outlined.Verified,
                                 contentDescription = null,
-                                tint = MaterialTheme.colorScheme.primary
+                                tint = BbColors.Primary
                             )
                         }
                     }
@@ -236,7 +248,7 @@ private fun CompanyDetailHero(
                         text = company.name,
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = BbColors.TextStrong
                     )
                 }
             }
@@ -244,7 +256,7 @@ private fun CompanyDetailHero(
             Text(
                 text = company.shortDescription,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = BbColors.TextMuted
             )
 
             CompanyTagRow(
@@ -278,14 +290,14 @@ private fun CompanyLogoBox(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary
+                tint = BbColors.Primary
             )
 
             Text(
                 text = logoText,
                 style = MaterialTheme.typography.labelLarge,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
+                color = BbColors.TextStrong
             )
         }
     }
@@ -328,7 +340,7 @@ private fun CompanyDetailMainActions(
         }
 
         BbButton(
-            text = "Bu firmadan teklif iste",
+            text = "Bu Firmadan Teklif İste",
             onClick = {
                 onQuoteRequestClick(company.companyId)
             },
@@ -367,20 +379,20 @@ private fun CompanyActionCard(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary
+                tint = BbColors.Primary
             )
 
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onSurface
+                color = BbColors.TextStrong
             )
 
             Text(
                 text = description,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = BbColors.TextMuted
             )
         }
     }
@@ -409,7 +421,7 @@ private fun CompanyGalleryPreview(
             Text(
                 text = "Firma vitrini API sonrası gerçek görsellerle yatay galeri olarak beslenecek.",
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = BbColors.TextMuted
             )
 
             CompanyTagRow(
@@ -436,26 +448,26 @@ private fun CompanyAboutCard(
                 text = "Şirket Hakkında",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
+                color = BbColors.TextStrong
             )
 
             Text(
                 text = company.about,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = BbColors.TextMuted
             )
 
             Text(
                 text = "Neden Biz",
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onSurface
+                color = BbColors.TextStrong
             )
 
             Text(
                 text = company.whyUs,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = BbColors.TextMuted
             )
         }
     }
@@ -541,20 +553,20 @@ private fun CompanyInfoCard(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary
+                tint = BbColors.Primary
             )
 
             Text(
                 text = title,
                 style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = BbColors.TextMuted
             )
 
             Text(
                 text = value,
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onSurface
+                color = BbColors.TextStrong
             )
         }
     }
@@ -579,7 +591,7 @@ private fun CompanyProductGroupCard(
             Icon(
                 imageVector = productGroup.icon,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary
+                tint = BbColors.Primary
             )
 
             Column(
@@ -590,26 +602,26 @@ private fun CompanyProductGroupCard(
                     text = productGroup.name,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = BbColors.TextStrong
                 )
 
                 Text(
                     text = productGroup.description,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = BbColors.TextMuted
                 )
 
                 Text(
                     text = "${productGroup.productCount} ürün",
                     style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = BbColors.TextMuted
                 )
             }
 
             Icon(
                 imageVector = Icons.Outlined.ChevronRight,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                tint = BbColors.TextMuted
             )
         }
     }
@@ -634,7 +646,7 @@ private fun CompanyCertificateCard(
             Icon(
                 imageVector = Icons.Outlined.Description,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary
+                tint = BbColors.Primary
             )
 
             Column(
@@ -645,20 +657,20 @@ private fun CompanyCertificateCard(
                     text = certificate.name,
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = BbColors.TextStrong
                 )
 
                 Text(
                     text = certificate.description,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = BbColors.TextMuted
                 )
             }
 
             Icon(
                 imageVector = Icons.Outlined.ChevronRight,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                tint = BbColors.TextMuted
             )
         }
     }
@@ -687,7 +699,7 @@ private fun CompanyTrustPanel(
             Text(
                 text = "Firma profili, ürünleri ve belgeleri üzerinden firmayı daha yakından değerlendirin.",
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = BbColors.TextMuted
             )
 
             CompanyTagRow(
@@ -701,14 +713,14 @@ private fun CompanyTrustPanel(
                 Icon(
                     imageVector = Icons.Outlined.Email,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary
+                    tint = BbColors.Primary
                 )
 
                 Text(
-                    text = "Mesaj gönder",
+                    text = "Mesaj Gönder",
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = BbColors.TextStrong
                 )
             }
         }
@@ -727,14 +739,14 @@ private fun CompanyIconTitleRow(
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.primary
+            tint = BbColors.Primary
         )
 
         Text(
             text = title,
             style = MaterialTheme.typography.titleSmall,
             fontWeight = FontWeight.SemiBold,
-            color = MaterialTheme.colorScheme.onSurface
+            color = BbColors.TextStrong
         )
     }
 }
@@ -822,8 +834,8 @@ private fun getCompanyDetail(companyId: Int): CompanyDetail {
             "Galeri"
         ),
         trustTags = listOf(
-            "Firma bilgileri",
-            "Ürün portföyü",
+            "Firma Bilgileri",
+            "Ürün Portföyü",
             "Sertifika",
             "Mesaj"
         ),

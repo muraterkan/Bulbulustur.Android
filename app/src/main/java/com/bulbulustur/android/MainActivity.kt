@@ -876,16 +876,29 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(WholesaleRoutes.LastPriceRequest) {
-                            LastPriceRequestScreen()
+                            LastPriceRequestScreen(
+                                onBackClick = {
+                                    navController.popBackStack()
+                                }
+                            )
                         }
 
                         composable(WholesaleRoutes.SampleRequest) {
-                            SampleRequestScreen()
+                            SampleRequestScreen(
+                                onBackClick = {
+                                    navController.popBackStack()
+                                }
+                            )
                         }
 
                         composable(WholesaleRoutes.CustomizationRequest) {
-                            CustomizationRequestScreen()
+                            CustomizationRequestScreen(
+                                onBackClick = {
+                                    navController.popBackStack()
+                                }
+                            )
                         }
+
                         composable(CompanyRoutes.CompanyList) {
                             CompanyListScreen(
                                 onCompanyClick = {
@@ -895,7 +908,11 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(CompanyRoutes.CompanyDetail) {
-                            CompanyDetailScreen()
+                            CompanyDetailScreen(
+                                onBackClick = {
+                                    navController.popBackStack()
+                                }
+                            )
                         }
 
                         composable(AccountRoutes.AccountHome) {

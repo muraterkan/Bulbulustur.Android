@@ -3,8 +3,10 @@ package com.bulbulustur.android.features.wholesale
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,6 +20,7 @@ import androidx.compose.material.icons.outlined.Verified
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -30,9 +33,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbChip
+import com.bulbulustur.android.ui.components.BbInnerPageHeader
 import com.bulbulustur.android.ui.components.BbSectionHeader
 import com.bulbulustur.android.ui.theme.BbColors
-import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
 import com.bulbulustur.android.ui.theme.BbTheme
 
@@ -41,6 +44,7 @@ fun SampleRequestScreen(
     productId: Int = 1,
     productName: String = "Square Silver Starlight Chain Shirt Collar Anti-Blood Brooch",
     companyName: String = "Anadolu Tedarik",
+    onBackClick: () -> Unit = {},
     onSendClick: () -> Unit = {}
 ) {
     val quantity = remember {
@@ -51,67 +55,83 @@ fun SampleRequestScreen(
         mutableStateOf("")
     }
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(BbSpacing.md),
-        verticalArrangement = Arrangement.spacedBy(BbSpacing.md)
-    ) {
-        item {
-            SampleRequestHeader(
-                productName = productName
+    Scaffold(
+        containerColor = BbColors.SurfaceSoft,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Numune Talebi",
+                onBackClick = onBackClick
             )
         }
+    ) { innerPadding ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
+            contentPadding = PaddingValues(
+                start = BbSpacing.PageHorizontal,
+                top = BbSpacing.PageTopCompact,
+                end = BbSpacing.PageHorizontal,
+                bottom = BbSpacing.PageBottom
+            ),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
+        ) {
+            item {
+                SampleRequestHeader(
+                    productName = productName
+                )
+            }
 
-        item {
-            SampleProductSummaryCard(
-                productName = productName,
-                companyName = companyName
-            )
-        }
+            item {
+                SampleProductSummaryCard(
+                    productName = productName,
+                    companyName = companyName
+                )
+            }
 
-        item {
-            BbSectionHeader(
-                title = "Numune detayları",
-                subtitle = "Kaç adet numune istediğinizi ve özel notlarınızı yazın"
-            )
-        }
+            item {
+                BbSectionHeader(
+                    title = "Numune Detayları",
+                    subtitle = "Kaç adet numune istediğinizi ve özel notlarınızı yazın"
+                )
+            }
 
-        item {
-            SampleRequestTextField(
-                value = quantity.value,
-                onValueChange = {
-                    quantity.value = it
-                },
-                label = "Miktar",
-                placeholder = "1",
-                icon = Icons.Outlined.Inventory2
-            )
-        }
+            item {
+                SampleRequestTextField(
+                    value = quantity.value,
+                    onValueChange = {
+                        quantity.value = it
+                    },
+                    label = "Miktar",
+                    placeholder = "1",
+                    icon = Icons.Outlined.Inventory2
+                )
+            }
 
-        item {
-            SampleRequestLongTextField(
-                value = detail.value,
-                onValueChange = {
-                    detail.value = it
-                },
-                label = "Diğer detaylar",
-                placeholder = "Bilmemiz gereken başka bir şey var mı? Tüm detayları buraya yazın."
-            )
-        }
+            item {
+                SampleRequestLongTextField(
+                    value = detail.value,
+                    onValueChange = {
+                        detail.value = it
+                    },
+                    label = "Diğer Detaylar",
+                    placeholder = "Bilmemiz gereken başka bir şey var mı? Tüm detayları buraya yazın."
+                )
+            }
 
-        item {
-            SampleRequestHintCard()
-        }
+            item {
+                SampleRequestHintCard()
+            }
 
-        item {
-            SampleRequestSendCard(
-                onSendClick = onSendClick
-            )
-        }
+            item {
+                SampleRequestSendCard(
+                    onSendClick = onSendClick
+                )
+            }
 
-        item {
-            Spacer(modifier = Modifier.height(BbSpacing.xl))
+            item {
+                Spacer(modifier = Modifier.height(BbSpacing.Space4))
+            }
         }
     }
 }
@@ -124,12 +144,12 @@ private fun SampleRequestHeader(
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
-            modifier = Modifier.padding(BbSpacing.lg),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.sm)
+            modifier = Modifier.padding(BbSpacing.Space5),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.sm)
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Science,
@@ -146,16 +166,16 @@ private fun SampleRequestHeader(
             }
 
             Text(
-                text = "Numune isteği oluştur",
+                text = "Numune İsteği Oluştur",
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
+                color = BbColors.TextStrong
             )
 
             Text(
                 text = "Toptan alım öncesinde ürünü incelemek için tedarikçiden numune talep edin.",
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = BbColors.TextMuted
             )
 
             BbChip(
@@ -176,8 +196,8 @@ private fun SampleProductSummaryCard(
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
-            modifier = Modifier.padding(BbSpacing.md),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.sm)
+            modifier = Modifier.padding(BbSpacing.Space4),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
         ) {
             Text(
                 text = "Tedarikçi",
@@ -189,14 +209,14 @@ private fun SampleProductSummaryCard(
             Text(
                 text = productName,
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = BbColors.TextStrong,
                 fontWeight = FontWeight.Bold
             )
 
             FlowRow(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.sm),
-                verticalArrangement = Arrangement.spacedBy(BbSpacing.sm)
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2),
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
             ) {
                 BbChip(
                     text = companyName,
@@ -211,7 +231,7 @@ private fun SampleProductSummaryCard(
                 )
 
                 BbChip(
-                    text = "Numune fiyatı: 20 $",
+                    text = "Numune Fiyatı: 20 $",
                     selected = false,
                     onClick = {}
                 )
@@ -228,9 +248,9 @@ private fun SampleRequestHintCard() {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(BbSpacing.md),
+                .padding(BbSpacing.Space4),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(BbSpacing.md)
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
         ) {
             Icon(
                 imageVector = Icons.Outlined.LocalShipping,
@@ -241,7 +261,7 @@ private fun SampleRequestHintCard() {
             Text(
                 text = "Numune talebinizde hedef kullanım amacını, istediğiniz adet bilgisini ve teslimat notlarını belirtmeniz tedarikçi dönüşünü hızlandırır.",
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = BbColors.TextMuted,
                 modifier = Modifier.weight(1f)
             )
         }
@@ -274,14 +294,14 @@ private fun SampleRequestTextField(
         },
         singleLine = true,
         colors = TextFieldDefaults.colors(
-            focusedTextColor = MaterialTheme.colorScheme.onSurface,
-            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
-            focusedContainerColor = MaterialTheme.colorScheme.surface,
-            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+            focusedTextColor = BbColors.TextStrong,
+            unfocusedTextColor = BbColors.TextStrong,
+            focusedContainerColor = BbColors.Surface,
+            unfocusedContainerColor = BbColors.Surface,
             focusedIndicatorColor = BbColors.Primary,
-            unfocusedIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
+            unfocusedIndicatorColor = BbColors.Border,
             focusedLabelColor = BbColors.Primary,
-            unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            unfocusedLabelColor = BbColors.TextMuted,
             cursorColor = BbColors.Primary
         )
     )
@@ -307,14 +327,14 @@ private fun SampleRequestLongTextField(
             Text(text = placeholder)
         },
         colors = TextFieldDefaults.colors(
-            focusedTextColor = MaterialTheme.colorScheme.onSurface,
-            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
-            focusedContainerColor = MaterialTheme.colorScheme.surface,
-            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+            focusedTextColor = BbColors.TextStrong,
+            unfocusedTextColor = BbColors.TextStrong,
+            focusedContainerColor = BbColors.Surface,
+            unfocusedContainerColor = BbColors.Surface,
             focusedIndicatorColor = BbColors.Primary,
-            unfocusedIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
+            unfocusedIndicatorColor = BbColors.Border,
             focusedLabelColor = BbColors.Primary,
-            unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            unfocusedLabelColor = BbColors.TextMuted,
             cursorColor = BbColors.Primary
         )
     )
@@ -331,9 +351,9 @@ private fun SampleRequestSendCard(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(BbSpacing.lg),
+                .padding(BbSpacing.Space5),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(BbSpacing.md)
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
         ) {
             Icon(
                 imageVector = Icons.Outlined.Send,
@@ -343,19 +363,19 @@ private fun SampleRequestSendCard(
 
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BbSpacing.xs)
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
             ) {
                 Text(
                     text = "Gönder",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = BbColors.TextStrong
                 )
 
                 Text(
                     text = "Numune isteği API bağlantısından sonra gerçek endpoint’e gönderilecek.",
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = BbColors.TextMuted
                 )
             }
 

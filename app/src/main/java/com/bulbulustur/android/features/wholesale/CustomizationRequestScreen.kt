@@ -3,18 +3,17 @@ package com.bulbulustur.android.features.wholesale
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Category
 import androidx.compose.material.icons.outlined.ColorLens
-import androidx.compose.material.icons.outlined.Inventory2
 import androidx.compose.material.icons.outlined.LocalOffer
-import androidx.compose.material.icons.outlined.RequestQuote
 import androidx.compose.material.icons.outlined.Send
 import androidx.compose.material.icons.outlined.Straighten
 import androidx.compose.material.icons.outlined.Style
@@ -22,6 +21,7 @@ import androidx.compose.material.icons.outlined.Verified
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -34,9 +34,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbChip
+import com.bulbulustur.android.ui.components.BbInnerPageHeader
 import com.bulbulustur.android.ui.components.BbSectionHeader
 import com.bulbulustur.android.ui.theme.BbColors
-import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
 import com.bulbulustur.android.ui.theme.BbTheme
 
@@ -45,6 +45,7 @@ fun CustomizationRequestScreen(
     productId: Int = 1,
     productName: String = "Square Silver Starlight Chain Shirt Collar Anti-Blood Brooch",
     companyName: String = "Anadolu Tedarik",
+    onBackClick: () -> Unit = {},
     onSendClick: () -> Unit = {}
 ) {
     val detail = remember {
@@ -63,106 +64,122 @@ fun CustomizationRequestScreen(
         mutableStateOf("")
     }
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(BbSpacing.md),
-        verticalArrangement = Arrangement.spacedBy(BbSpacing.md)
-    ) {
-        item {
-            CustomizationRequestHeader(
-                productName = productName
+    Scaffold(
+        containerColor = BbColors.SurfaceSoft,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Özelleştirme Talebi",
+                onBackClick = onBackClick
             )
         }
+    ) { innerPadding ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
+            contentPadding = PaddingValues(
+                start = BbSpacing.PageHorizontal,
+                top = BbSpacing.PageTopCompact,
+                end = BbSpacing.PageHorizontal,
+                bottom = BbSpacing.PageBottom
+            ),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
+        ) {
+            item {
+                CustomizationRequestHeader(
+                    productName = productName
+                )
+            }
 
-        item {
-            CustomizationProductSummaryCard(
-                productName = productName,
-                companyName = companyName
-            )
-        }
+            item {
+                CustomizationProductSummaryCard(
+                    productName = productName,
+                    companyName = companyName
+                )
+            }
 
-        item {
-            BbSectionHeader(
-                title = "Özelleştirme detayları",
-                subtitle = "Tedarikçinin doğru dönüş yapabilmesi için değişiklikleri açık yazın"
-            )
-        }
+            item {
+                BbSectionHeader(
+                    title = "Özelleştirme Detayları",
+                    subtitle = "Tedarikçinin doğru dönüş yapabilmesi için değişiklikleri açık yazın"
+                )
+            }
 
-        item {
-            CustomizationLongTextField(
-                value = detail.value,
-                onValueChange = {
-                    detail.value = it
-                },
-                label = "Diğer detaylar",
-                placeholder = "Talep ettiğiniz ürün özelleştirmesi hakkında daha fazla detay verin."
-            )
-        }
+            item {
+                CustomizationLongTextField(
+                    value = detail.value,
+                    onValueChange = {
+                        detail.value = it
+                    },
+                    label = "Diğer Detaylar",
+                    placeholder = "Talep ettiğiniz ürün özelleştirmesi hakkında daha fazla detay verin."
+                )
+            }
 
-        item {
-            CustomizationSuggestionChips(
-                onSuggestionClick = {
-                    detail.value = it
-                }
-            )
-        }
+            item {
+                CustomizationSuggestionChips(
+                    onSuggestionClick = {
+                        detail.value = it
+                    }
+                )
+            }
 
-        item {
-            BbSectionHeader(
-                title = "Hızlı detay alanları",
-                subtitle = "İsterseniz özelleştirme bilgisini ayrı ayrı da yazabilirsiniz"
-            )
-        }
+            item {
+                BbSectionHeader(
+                    title = "Hızlı Detay Alanları",
+                    subtitle = "İsterseniz özelleştirme bilgisini ayrı ayrı da yazabilirsiniz"
+                )
+            }
 
-        item {
-            CustomizationTextField(
-                value = colorMaterial.value,
-                onValueChange = {
-                    colorMaterial.value = it
-                },
-                label = "Renk / Malzeme",
-                placeholder = "Örn. siyah, metal, mat yüzey, titanyum",
-                icon = Icons.Outlined.ColorLens
-            )
-        }
+            item {
+                CustomizationTextField(
+                    value = colorMaterial.value,
+                    onValueChange = {
+                        colorMaterial.value = it
+                    },
+                    label = "Renk / Malzeme",
+                    placeholder = "Örn. siyah, metal, mat yüzey, titanyum",
+                    icon = Icons.Outlined.ColorLens
+                )
+            }
 
-        item {
-            CustomizationTextField(
-                value = sizeTechnical.value,
-                onValueChange = {
-                    sizeTechnical.value = it
-                },
-                label = "Ölçü / Teknik Detay",
-                placeholder = "Örn. 30x20 cm, kalınlık, bağlantı detayı",
-                icon = Icons.Outlined.Straighten
-            )
-        }
+            item {
+                CustomizationTextField(
+                    value = sizeTechnical.value,
+                    onValueChange = {
+                        sizeTechnical.value = it
+                    },
+                    label = "Ölçü / Teknik Detay",
+                    placeholder = "Örn. 30x20 cm, kalınlık, bağlantı detayı",
+                    icon = Icons.Outlined.Straighten
+                )
+            }
 
-        item {
-            CustomizationTextField(
-                value = packageLogo.value,
-                onValueChange = {
-                    packageLogo.value = it
-                },
-                label = "Ambalaj / Logo",
-                placeholder = "Örn. logolu ambalaj, özel kutu, etiket baskısı",
-                icon = Icons.Outlined.Style
-            )
-        }
+            item {
+                CustomizationTextField(
+                    value = packageLogo.value,
+                    onValueChange = {
+                        packageLogo.value = it
+                    },
+                    label = "Ambalaj / Logo",
+                    placeholder = "Örn. logolu ambalaj, özel kutu, etiket baskısı",
+                    icon = Icons.Outlined.Style
+                )
+            }
 
-        item {
-            CustomizationHintCard()
-        }
+            item {
+                CustomizationHintCard()
+            }
 
-        item {
-            CustomizationSendCard(
-                onSendClick = onSendClick
-            )
-        }
+            item {
+                CustomizationSendCard(
+                    onSendClick = onSendClick
+                )
+            }
 
-        item {
-            Spacer(modifier = Modifier.height(BbSpacing.xl))
+            item {
+                Spacer(modifier = Modifier.height(BbSpacing.Space4))
+            }
         }
     }
 }
@@ -175,12 +192,12 @@ private fun CustomizationRequestHeader(
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
-            modifier = Modifier.padding(BbSpacing.lg),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.sm)
+            modifier = Modifier.padding(BbSpacing.Space5),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.sm)
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Style,
@@ -197,16 +214,16 @@ private fun CustomizationRequestHeader(
             }
 
             Text(
-                text = "Ürün özelleştirme isteği oluştur",
+                text = "Ürün Özelleştirme İsteği Oluştur",
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
+                color = BbColors.TextStrong
             )
 
             Text(
                 text = "Ürün üzerinde ölçü, renk, malzeme, ambalaj, logo veya üretim detayları için tedarikçiye özel talep gönderin.",
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = BbColors.TextMuted
             )
 
             BbChip(
@@ -227,8 +244,8 @@ private fun CustomizationProductSummaryCard(
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
-            modifier = Modifier.padding(BbSpacing.md),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.sm)
+            modifier = Modifier.padding(BbSpacing.Space4),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
         ) {
             Text(
                 text = "Tedarikçi",
@@ -240,14 +257,14 @@ private fun CustomizationProductSummaryCard(
             Text(
                 text = productName,
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = BbColors.TextStrong,
                 fontWeight = FontWeight.Bold
             )
 
             FlowRow(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.sm),
-                verticalArrangement = Arrangement.spacedBy(BbSpacing.sm)
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2),
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
             ) {
                 BbChip(
                     text = companyName,
@@ -262,7 +279,7 @@ private fun CustomizationProductSummaryCard(
                 )
 
                 BbChip(
-                    text = "Özel üretim desteklenir",
+                    text = "Özel Üretim Desteklenir",
                     selected = false,
                     onClick = {}
                 )
@@ -297,14 +314,14 @@ private fun CustomizationTextField(
         },
         singleLine = true,
         colors = TextFieldDefaults.colors(
-            focusedTextColor = MaterialTheme.colorScheme.onSurface,
-            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
-            focusedContainerColor = MaterialTheme.colorScheme.surface,
-            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+            focusedTextColor = BbColors.TextStrong,
+            unfocusedTextColor = BbColors.TextStrong,
+            focusedContainerColor = BbColors.Surface,
+            unfocusedContainerColor = BbColors.Surface,
             focusedIndicatorColor = BbColors.Primary,
-            unfocusedIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
+            unfocusedIndicatorColor = BbColors.Border,
             focusedLabelColor = BbColors.Primary,
-            unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            unfocusedLabelColor = BbColors.TextMuted,
             cursorColor = BbColors.Primary
         )
     )
@@ -330,14 +347,14 @@ private fun CustomizationLongTextField(
             Text(text = placeholder)
         },
         colors = TextFieldDefaults.colors(
-            focusedTextColor = MaterialTheme.colorScheme.onSurface,
-            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
-            focusedContainerColor = MaterialTheme.colorScheme.surface,
-            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+            focusedTextColor = BbColors.TextStrong,
+            unfocusedTextColor = BbColors.TextStrong,
+            focusedContainerColor = BbColors.Surface,
+            unfocusedContainerColor = BbColors.Surface,
             focusedIndicatorColor = BbColors.Primary,
-            unfocusedIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
+            unfocusedIndicatorColor = BbColors.Border,
             focusedLabelColor = BbColors.Primary,
-            unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            unfocusedLabelColor = BbColors.TextMuted,
             cursorColor = BbColors.Primary
         )
     )
@@ -349,8 +366,8 @@ private fun CustomizationSuggestionChips(
 ) {
     FlowRow(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(BbSpacing.sm),
-        verticalArrangement = Arrangement.spacedBy(BbSpacing.sm)
+        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2),
+        verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
     ) {
         customizationSuggestionTexts().forEach { suggestion ->
             BbChip(
@@ -372,9 +389,9 @@ private fun CustomizationHintCard() {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(BbSpacing.md),
+                .padding(BbSpacing.Space4),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(BbSpacing.md)
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
         ) {
             Icon(
                 imageVector = Icons.Outlined.LocalOffer,
@@ -385,7 +402,7 @@ private fun CustomizationHintCard() {
             Text(
                 text = "Özelleştirme talebinde ölçü, renk, malzeme, kullanım amacı ve minimum sipariş miktarını belirtmek tedarikçi dönüşünü hızlandırır.",
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = BbColors.TextMuted,
                 modifier = Modifier.weight(1f)
             )
         }
@@ -403,9 +420,9 @@ private fun CustomizationSendCard(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(BbSpacing.lg),
+                .padding(BbSpacing.Space5),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(BbSpacing.md)
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
         ) {
             Icon(
                 imageVector = Icons.Outlined.Send,
@@ -415,19 +432,19 @@ private fun CustomizationSendCard(
 
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BbSpacing.xs)
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
             ) {
                 Text(
                     text = "Gönder",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = BbColors.TextStrong
                 )
 
                 Text(
                     text = "Özelleştirme isteği API bağlantısından sonra gerçek endpoint’e gönderilecek.",
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = BbColors.TextMuted
                 )
             }
 

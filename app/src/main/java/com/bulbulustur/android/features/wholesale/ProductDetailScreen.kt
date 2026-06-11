@@ -9,6 +9,7 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -20,33 +21,27 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Business
 import androidx.compose.material.icons.outlined.Category
-import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Description
-import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Inventory2
-import androidx.compose.material.icons.outlined.KeyboardArrowLeft
 import androidx.compose.material.icons.outlined.LocalShipping
-import androidx.compose.material.icons.outlined.MoreHoriz
 import androidx.compose.material.icons.outlined.Paid
 import androidx.compose.material.icons.outlined.RequestQuote
-import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.outlined.Tune
 import androidx.compose.material.icons.outlined.Verified
-import androidx.compose.material.icons.outlined.WorkspacePremium
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -64,14 +59,16 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bulbulustur.android.R
+import com.bulbulustur.android.features.wholesale.components.WholesaleSearchHeader
+import com.bulbulustur.android.features.wholesale.components.WholesaleSearchHeaderLeadingAction
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
@@ -82,20 +79,22 @@ import com.bulbulustur.android.ui.theme.BbSpacing
 import com.bulbulustur.android.ui.theme.BbTheme
 
 @Composable
-fun ProductDetailScreen(
+fun WholesaleProductDetailScreen(
     productId: Int = 1,
     onBackClick: () -> Unit = {},
     onSearchClick: (String) -> Unit = {},
     onFavoriteClick: () -> Unit = {},
+    onMessageClick: () -> Unit = {},
     onMoreClick: () -> Unit = {},
     onLastPriceRequestClick: () -> Unit = {},
     onSampleRequestClick: () -> Unit = {},
     onCustomizationRequestClick: () -> Unit = {},
     onCompanyClick: (WholesaleProductDetailCompany) -> Unit = {},
+    onCompanyProductsClick: () -> Unit = {},
     onCompanySimilarProductClick: (WholesaleMiniProduct) -> Unit = {},
     onCompanyBestSellerProductClick: (WholesaleMiniProduct) -> Unit = {},
-    onCompanySimilarProductsClick: () -> Unit = {},
-    onCompanyBestSellerProductsClick: () -> Unit = {},
+    onCompanySimilarProductsClick: () -> Unit = onCompanyProductsClick,
+    onCompanyBestSellerProductsClick: () -> Unit = onCompanyProductsClick,
     onRelatedCategoryClick: (WholesaleRelatedCategoryChip) -> Unit = {}
 ) {
     val product = remember(productId) {
@@ -115,21 +114,23 @@ fun ProductDetailScreen(
     Scaffold(
         containerColor = BbColors.SurfaceMuted,
         topBar = {
-            WholesaleProductDetailSearchHeader(
+            WholesaleSearchHeader(
                 searchText = searchText,
                 onSearchTextChange = {
                     searchText = it
                 },
+                onMenuClick = {},
+                onFavoriteClick = onFavoriteClick,
+                onMessageClick = onMessageClick,
                 placeholder = product.searchPlaceholder,
-                onBackClick = onBackClick,
                 onSearchClick = {
                     onSearchClick(searchText)
                 },
                 onClearClick = {
                     searchText = ""
                 },
-                onFavoriteClick = onFavoriteClick,
-                onMoreClick = onMoreClick
+                leadingAction = WholesaleSearchHeaderLeadingAction.Back,
+                onBackClick = onBackClick
             )
         },
         bottomBar = {
@@ -186,9 +187,10 @@ fun ProductDetailScreen(
 
             WholesaleCompanyDeepCard(
                 company = product.company,
-                onCompanyClick = {
+                onCompanyProfileClick = {
                     onCompanyClick(product.company)
-                }
+                },
+                onCompanyProductsClick = onCompanyProductsClick
             )
 
             WholesaleProductDescriptionCard(product = product)
@@ -217,138 +219,49 @@ fun ProductDetailScreen(
             )
 
             Spacer(
-                modifier = Modifier.height(BbSpacing.Space20)
+                modifier = Modifier.height(BbSpacing.Space6)
             )
         }
     }
 }
 
 @Composable
-private fun WholesaleProductDetailSearchHeader(
-    searchText: String,
-    onSearchTextChange: (String) -> Unit,
-    placeholder: String,
-    onBackClick: () -> Unit,
-    onSearchClick: () -> Unit,
-    onClearClick: () -> Unit,
-    onFavoriteClick: () -> Unit,
-    onMoreClick: () -> Unit
+fun ProductDetailScreen(
+    productId: Int = 1,
+    onBackClick: () -> Unit = {},
+    onSearchClick: (String) -> Unit = {},
+    onFavoriteClick: () -> Unit = {},
+    onMessageClick: () -> Unit = {},
+    onMoreClick: () -> Unit = {},
+    onLastPriceRequestClick: () -> Unit = {},
+    onSampleRequestClick: () -> Unit = {},
+    onCustomizationRequestClick: () -> Unit = {},
+    onCompanyClick: (WholesaleProductDetailCompany) -> Unit = {},
+    onCompanyProductsClick: () -> Unit = {},
+    onCompanySimilarProductClick: (WholesaleMiniProduct) -> Unit = {},
+    onCompanyBestSellerProductClick: (WholesaleMiniProduct) -> Unit = {},
+    onCompanySimilarProductsClick: () -> Unit = onCompanyProductsClick,
+    onCompanyBestSellerProductsClick: () -> Unit = onCompanyProductsClick,
+    onRelatedCategoryClick: (WholesaleRelatedCategoryChip) -> Unit = {}
 ) {
-    Surface(
-        modifier = Modifier.fillMaxWidth(),
-        color = BbColors.Surface,
-        shadowElevation = 4.dp
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(BbSpacing.TopBarHeight)
-                .padding(
-                    start = BbSpacing.Space2,
-                    end = BbSpacing.Space2
-                ),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
-        ) {
-            IconButton(onClick = onBackClick) {
-                Icon(
-                    imageVector = Icons.Outlined.KeyboardArrowLeft,
-                    contentDescription = "Geri",
-                    tint = BbColors.TextStrong,
-                    modifier = Modifier.size(BbIcon.TopBarIcon)
-                )
-            }
-
-            Surface(
-                modifier = Modifier
-                    .weight(1f)
-                    .height(46.dp),
-                shape = BbRadius.PillShape,
-                color = BbColors.SurfaceSoft,
-                border = BorderStroke(
-                    width = 1.dp,
-                    color = BbColors.Border
-                )
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(
-                            start = BbSpacing.Space3,
-                            end = BbSpacing.Space1
-                        ),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Search,
-                        contentDescription = "Ara",
-                        tint = BbColors.TextMuted,
-                        modifier = Modifier
-                            .size(BbIcon.SizeMd)
-                            .clickable {
-                                onSearchClick()
-                            }
-                    )
-
-                    Spacer(modifier = Modifier.width(BbSpacing.Space2))
-
-                    Box(
-                        modifier = Modifier.weight(1f),
-                        contentAlignment = Alignment.CenterStart
-                    ) {
-                        if (searchText.isBlank()) {
-                            Text(
-                                text = placeholder,
-                                style = MaterialTheme.typography.bodySmall,
-                                color = BbColors.TextMuted,
-                                maxLines = 1
-                            )
-                        }
-
-                        BasicTextField(
-                            value = searchText,
-                            onValueChange = onSearchTextChange,
-                            singleLine = true,
-                            textStyle = MaterialTheme.typography.bodyMedium.copy(
-                                color = BbColors.TextStrong
-                            ),
-                            cursorBrush = SolidColor(BbColors.Primary),
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
-
-                    if (searchText.isNotBlank()) {
-                        IconButton(onClick = onClearClick) {
-                            Icon(
-                                imageVector = Icons.Outlined.Close,
-                                contentDescription = "Temizle",
-                                tint = BbColors.TextMuted,
-                                modifier = Modifier.size(BbIcon.SizeSm)
-                            )
-                        }
-                    }
-                }
-            }
-
-            IconButton(onClick = onFavoriteClick) {
-                Icon(
-                    imageVector = Icons.Outlined.FavoriteBorder,
-                    contentDescription = "Favoriler",
-                    tint = BbColors.TextStrong,
-                    modifier = Modifier.size(BbIcon.TopBarIcon)
-                )
-            }
-
-            IconButton(onClick = onMoreClick) {
-                Icon(
-                    imageVector = Icons.Outlined.MoreHoriz,
-                    contentDescription = "Diğer",
-                    tint = BbColors.TextStrong,
-                    modifier = Modifier.size(BbIcon.TopBarIcon)
-                )
-            }
-        }
-    }
+    WholesaleProductDetailScreen(
+        productId = productId,
+        onBackClick = onBackClick,
+        onSearchClick = onSearchClick,
+        onFavoriteClick = onFavoriteClick,
+        onMessageClick = onMessageClick,
+        onMoreClick = onMoreClick,
+        onLastPriceRequestClick = onLastPriceRequestClick,
+        onSampleRequestClick = onSampleRequestClick,
+        onCustomizationRequestClick = onCustomizationRequestClick,
+        onCompanyClick = onCompanyClick,
+        onCompanyProductsClick = onCompanyProductsClick,
+        onCompanySimilarProductClick = onCompanySimilarProductClick,
+        onCompanyBestSellerProductClick = onCompanyBestSellerProductClick,
+        onCompanySimilarProductsClick = onCompanySimilarProductsClick,
+        onCompanyBestSellerProductsClick = onCompanyBestSellerProductsClick,
+        onRelatedCategoryClick = onRelatedCategoryClick
+    )
 }
 
 @Composable
@@ -921,7 +834,8 @@ private fun WholesaleSecureTradeCard() {
 @Composable
 private fun WholesaleCompanyDeepCard(
     company: WholesaleProductDetailCompany,
-    onCompanyClick: () -> Unit
+    onCompanyProfileClick: () -> Unit,
+    onCompanyProductsClick: () -> Unit
 ) {
     Surface(
         modifier = Modifier
@@ -937,6 +851,12 @@ private fun WholesaleCompanyDeepCard(
             verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
         ) {
             Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(BbRadius.XlShape)
+                    .clickable {
+                        onCompanyProfileClick()
+                    },
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
             ) {
@@ -951,33 +871,30 @@ private fun WholesaleCompanyDeepCard(
                         style = MaterialTheme.typography.titleMedium,
                         color = BbColors.TextStrong,
                         fontWeight = FontWeight.Bold,
-                        maxLines = 1
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
 
                     Text(
                         text = company.description,
                         style = MaterialTheme.typography.bodySmall,
                         color = BbColors.TextSubtle,
-                        maxLines = 2
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
 
                 Icon(
                     imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
-                    contentDescription = null,
+                    contentDescription = "Firma Profilini Görüntüle",
                     tint = BbColors.TextMuted,
-                    modifier = Modifier
-                        .size(BbIcon.SizeMd)
-                        .clickable {
-                            onCompanyClick()
-                        }
+                    modifier = Modifier.size(BbIcon.SizeMd)
                 )
             }
 
             BbCard(
                 variant = BbCardVariant.Default,
-                padding = BbCardPadding.Medium,
-                onClick = onCompanyClick
+                padding = BbCardPadding.Medium
             ) {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
@@ -1014,13 +931,13 @@ private fun WholesaleCompanyDeepCard(
                     ) {
                         WholesaleOutlineActionButton(
                             text = "Daha Fazla Ürün Göster",
-                            onClick = onCompanyClick,
+                            onClick = onCompanyProductsClick,
                             modifier = Modifier.weight(1f)
                         )
 
                         WholesaleOutlineActionButton(
                             text = "Firma Profilini Görüntüle",
-                            onClick = onCompanyClick,
+                            onClick = onCompanyProfileClick,
                             modifier = Modifier.weight(1f)
                         )
                     }
@@ -1136,6 +1053,8 @@ private fun WholesaleHorizontalProductSection(
     onHeaderClick: () -> Unit,
     onProductClick: (WholesaleMiniProduct) -> Unit
 ) {
+    val visibleProducts = products.take(3)
+
     BbCard(
         modifier = Modifier.padding(
             start = BbSpacing.PageHorizontal,
@@ -1151,6 +1070,7 @@ private fun WholesaleHorizontalProductSection(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .clip(BbRadius.LgShape)
                     .clickable {
                         onHeaderClick()
                     },
@@ -1161,30 +1081,30 @@ private fun WholesaleHorizontalProductSection(
                     text = title,
                     style = MaterialTheme.typography.titleMedium,
                     color = BbColors.TextStrong,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
 
                 Icon(
                     imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
-                    contentDescription = null,
+                    contentDescription = "Tümünü Gör",
                     tint = BbColors.TextMuted,
                     modifier = Modifier.size(BbIcon.SizeMd)
                 )
             }
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .horizontalScroll(rememberScrollState()),
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
-            ) {
-                products.forEach { item ->
-                    WholesaleMiniProductCard(
-                        product = item,
-                        onClick = {
-                            onProductClick(item)
-                        }
-                    )
+            visibleProducts.forEachIndexed { index, item ->
+                WholesaleMiniProductCard(
+                    product = item,
+                    onClick = {
+                        onProductClick(item)
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                if (index != visibleProducts.lastIndex) {
+                    Spacer(modifier = Modifier.height(BbSpacing.Space2))
                 }
             }
         }
@@ -1194,72 +1114,109 @@ private fun WholesaleHorizontalProductSection(
 @Composable
 private fun WholesaleMiniProductCard(
     product: WholesaleMiniProduct,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = Modifier
-            .width(142.dp)
+    Surface(
+        modifier = modifier
             .clip(BbRadius.XlShape)
             .clickable {
                 onClick()
             },
-        verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+        shape = BbRadius.XlShape,
+        color = BbColors.Surface,
+        border = BorderStroke(
+            width = 1.dp,
+            color = BbColors.Border
+        )
     ) {
-        Surface(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .aspectRatio(1f),
-            shape = BbRadius.LgShape,
-            color = product.backgroundColor,
-            border = BorderStroke(
-                width = 1.dp,
-                color = BbColors.Border
-            )
+                .padding(BbSpacing.Space3),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
         ) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
+            Surface(
+                modifier = Modifier
+                    .width(104.dp)
+                    .height(104.dp),
+                shape = BbRadius.LgShape,
+                color = product.backgroundColor,
+                border = BorderStroke(
+                    width = 1.dp,
+                    color = BbColors.Border
+                )
             ) {
-                if (product.drawableResId != null) {
-                    Image(
-                        painter = painterResource(id = product.drawableResId),
-                        contentDescription = product.name,
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
-                } else {
-                    Icon(
-                        imageVector = Icons.Outlined.Inventory2,
-                        contentDescription = null,
-                        tint = product.foregroundColor,
-                        modifier = Modifier.size(BbIcon.BoxLg)
-                    )
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (product.drawableResId != null) {
+                        Image(
+                            painter = painterResource(id = product.drawableResId),
+                            contentDescription = product.name,
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
+                    } else {
+                        Icon(
+                            imageVector = Icons.Outlined.Inventory2,
+                            contentDescription = null,
+                            tint = product.foregroundColor,
+                            modifier = Modifier.size(BbIcon.BoxLg)
+                        )
+                    }
                 }
             }
+
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+            ) {
+                Text(
+                    text = product.name,
+                    style = MaterialTheme.typography.titleSmall,
+                    color = BbColors.TextStrong,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+                Text(
+                    text = product.priceLabel,
+                    style = MaterialTheme.typography.titleSmall,
+                    color = BbColors.TextStrong,
+                    fontWeight = FontWeight.ExtraBold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+                Text(
+                    text = product.metaLabel,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = BbColors.TextMuted,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+                Text(
+                    text = product.badgeLabel,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = BbColors.Red.Red600,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+
+            Icon(
+                imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
+                contentDescription = "Ürüne Git",
+                tint = BbColors.TextMuted,
+                modifier = Modifier.size(BbIcon.SizeMd)
+            )
         }
-
-        Text(
-            text = product.priceLabel,
-            style = MaterialTheme.typography.titleSmall,
-            color = BbColors.TextStrong,
-            fontWeight = FontWeight.ExtraBold,
-            maxLines = 2
-        )
-
-        Text(
-            text = product.metaLabel,
-            style = MaterialTheme.typography.bodySmall,
-            color = BbColors.TextMuted,
-            maxLines = 1
-        )
-
-        Text(
-            text = product.badgeLabel,
-            style = MaterialTheme.typography.labelSmall,
-            color = BbColors.Red.Red600,
-            fontWeight = FontWeight.Bold,
-            maxLines = 1
-        )
     }
 }
 
@@ -1287,13 +1244,17 @@ private fun WholesaleRelatedCategoryChipsSection(
                 fontWeight = FontWeight.Bold
             )
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .horizontalScroll(rememberScrollState()),
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+            LazyRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2),
+                contentPadding = PaddingValues(end = BbSpacing.Space4)
             ) {
-                categories.forEach { category ->
+                items(
+                    items = categories,
+                    key = { category ->
+                        category.id
+                    }
+                ) { category ->
                     Surface(
                         modifier = Modifier
                             .clip(BbRadius.PillShape)
@@ -1326,7 +1287,9 @@ private fun WholesaleRelatedCategoryChipsSection(
                                 text = category.name,
                                 style = MaterialTheme.typography.labelMedium,
                                 color = BbColors.TextStrong,
-                                fontWeight = FontWeight.SemiBold
+                                fontWeight = FontWeight.SemiBold,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
                             )
                         }
                     }
@@ -1775,7 +1738,9 @@ private fun WholesaleOutlineActionButton(
         )
     ) {
         Box(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = BbSpacing.Space2),
             contentAlignment = Alignment.Center
         ) {
             Text(
@@ -1783,7 +1748,8 @@ private fun WholesaleOutlineActionButton(
                 style = MaterialTheme.typography.labelMedium,
                 color = BbColors.TextStrong,
                 fontWeight = FontWeight.Bold,
-                maxLines = 1
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }
@@ -1837,16 +1803,6 @@ private fun WholesaleProductDetailBottomBar(
             horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
         ) {
             WholesaleBottomActionButton(
-                text = "Teklif İste",
-                onClick = onLastPriceRequestClick,
-                modifier = Modifier.weight(1.2f),
-                containerColor = BbColors.Primary,
-                contentColor = BbColors.TextStrong,
-                borderColor = BbColors.Primary,
-                leadingIcon = Icons.Outlined.RequestQuote
-            )
-
-            WholesaleBottomActionButton(
                 text = "Numune",
                 onClick = onSampleRequestClick,
                 modifier = Modifier.weight(1f),
@@ -1859,11 +1815,21 @@ private fun WholesaleProductDetailBottomBar(
             WholesaleBottomActionButton(
                 text = "Özelleştir",
                 onClick = onCustomizationRequestClick,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1.05f),
                 containerColor = BbColors.SurfaceMuted,
                 contentColor = BbColors.TextStrong,
                 borderColor = BbColors.Border,
                 leadingIcon = Icons.Outlined.Tune
+            )
+
+            WholesaleBottomActionButton(
+                text = "Teklif Al",
+                onClick = onLastPriceRequestClick,
+                modifier = Modifier.weight(1.05f),
+                containerColor = BbColors.Primary,
+                contentColor = BbColors.TextStrong,
+                borderColor = BbColors.Primary,
+                leadingIcon = Icons.Outlined.RequestQuote
             )
         }
     }
@@ -1917,7 +1883,8 @@ private fun WholesaleBottomActionButton(
                 style = MaterialTheme.typography.labelMedium,
                 color = contentColor,
                 fontWeight = FontWeight.Bold,
-                maxLines = 1
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }
@@ -2147,8 +2114,8 @@ private fun getWholesaleProductDetail(
 
 @Preview(showBackground = true)
 @Composable
-private fun ProductDetailScreenPreview() {
+private fun WholesaleProductDetailScreenPreview() {
     BbTheme {
-        ProductDetailScreen()
+        WholesaleProductDetailScreen()
     }
 }

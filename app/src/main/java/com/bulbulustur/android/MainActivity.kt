@@ -23,6 +23,9 @@ import com.bulbulustur.android.features.account.AccountSecurityScreen
 import com.bulbulustur.android.features.account.AddressFormScreen
 import com.bulbulustur.android.features.account.AddressListScreen
 import com.bulbulustur.android.features.account.CommunicationPreferenceScreen
+import com.bulbulustur.android.features.company.CompanyRoutes
+import com.bulbulustur.android.features.company.CompanyDetailScreen
+import com.bulbulustur.android.features.company.CompanyListScreen
 import com.bulbulustur.android.features.account.CouponListScreen
 import com.bulbulustur.android.features.account.RequestListScreen
 import com.bulbulustur.android.features.account.ReviewListScreen
@@ -677,6 +680,7 @@ class MainActivity : ComponentActivity() {
                                     navController.navigate(WholesaleRoutes.ProductDetail)
                                 },
                                 onCompanyListClick = {
+                                    navController.navigate(CompanyRoutes.CompanyList)
                                 },
                                 onRfqListClick = {
                                     navigateToWholesaleOffers()
@@ -734,7 +738,7 @@ class MainActivity : ComponentActivity() {
                                     navigateToWholesaleCategories()
                                 },
                                 onCompanyListClick = {
-                                    navigateToWholesaleCategories()
+                                    navController.navigate(CompanyRoutes.CompanyList)
                                 },
                                 onRfqClick = {
                                     navigateToWholesaleRfqCreate()
@@ -795,7 +799,7 @@ class MainActivity : ComponentActivity() {
                                     }
                                 },
                                 onCompanyListClick = {
-                                    navigateToWholesaleCategories()
+                                    navController.navigate(CompanyRoutes.CompanyList)
                                 },
                                 onRfqClick = {
                                     navigateToWholesaleRfqCreate()
@@ -831,6 +835,27 @@ class MainActivity : ComponentActivity() {
                                 onFavoriteClick = {
                                     navigateToFavorites()
                                 },
+                                onMessageClick = {
+                                    navigateToInbox()
+                                },
+                                onCompanyClick = {
+                                    navController.navigate(CompanyRoutes.CompanyDetail)
+                                },
+                                onCompanyProductsClick = {
+                                    navController.navigate(WholesaleRoutes.ProductList)
+                                },
+                                onCompanySimilarProductClick = {
+                                    navController.navigate(WholesaleRoutes.ProductDetail)
+                                },
+                                onCompanyBestSellerProductClick = {
+                                    navController.navigate(WholesaleRoutes.ProductDetail)
+                                },
+                                onCompanySimilarProductsClick = {
+                                    navController.navigate(WholesaleRoutes.ProductList)
+                                },
+                                onCompanyBestSellerProductsClick = {
+                                    navController.navigate(WholesaleRoutes.ProductList)
+                                },
                                 onLastPriceRequestClick = {
                                     navController.navigate(WholesaleRoutes.LastPriceRequest)
                                 },
@@ -860,6 +885,17 @@ class MainActivity : ComponentActivity() {
 
                         composable(WholesaleRoutes.CustomizationRequest) {
                             CustomizationRequestScreen()
+                        }
+                        composable(CompanyRoutes.CompanyList) {
+                            CompanyListScreen(
+                                onCompanyClick = {
+                                    navController.navigate(CompanyRoutes.CompanyDetail)
+                                }
+                            )
+                        }
+
+                        composable(CompanyRoutes.CompanyDetail) {
+                            CompanyDetailScreen()
                         }
 
                         composable(AccountRoutes.AccountHome) {

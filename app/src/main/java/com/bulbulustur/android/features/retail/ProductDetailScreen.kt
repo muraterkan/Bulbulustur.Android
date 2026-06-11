@@ -9,6 +9,7 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -24,11 +25,13 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.CircleNotifications
+import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Inventory2
 import androidx.compose.material.icons.outlined.LocalShipping
 import androidx.compose.material.icons.outlined.NotificationsActive
@@ -41,11 +44,16 @@ import androidx.compose.material.icons.outlined.Straighten
 import androidx.compose.material.icons.outlined.Verified
 import androidx.compose.material.icons.outlined.VerifiedUser
 import androidx.compose.material.icons.outlined.WarningAmber
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
@@ -67,6 +75,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -82,6 +91,7 @@ import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
 import com.bulbulustur.android.ui.theme.BbTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductDetailScreen(
     productId: Int = 1,
@@ -125,6 +135,14 @@ fun ProductDetailScreen(
     var quantity by remember {
         mutableIntStateOf(1)
     }
+
+    var activeSheet by remember {
+        mutableStateOf<RetailProductDetailSheet?>(null)
+    }
+
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
 
     val selectedColorVariant = product.colorVariants.first { colorVariant ->
         colorVariant.id == selectedColorId
@@ -238,7 +256,9 @@ fun ProductDetailScreen(
                         selectedSizeId = sizeOption.id
                     }
                 },
-                onSizeGuideClick = onSizeGuideClick,
+                onSizeGuideClick = {
+                    activeSheet = RetailProductDetailSheet.SizeGuide
+                },
                 onDecreaseQuantityClick = {
                     if (quantity > 1) {
                         quantity -= 1
@@ -262,9 +282,15 @@ fun ProductDetailScreen(
             }
 
             RetailProductTrustLinksCard(
-                onLowerPriceClick = onLowerPriceClick,
-                onReportAbuseClick = onReportAbuseClick,
-                onReturnPolicyClick = onReturnPolicyClick
+                onLowerPriceClick = {
+                    activeSheet = RetailProductDetailSheet.LowerPrice
+                },
+                onReportAbuseClick = {
+                    activeSheet = RetailProductDetailSheet.ReportAbuse
+                },
+                onReturnPolicyClick = {
+                    activeSheet = RetailProductDetailSheet.ReturnPolicy
+                }
             )
 
             RetailSellerProductsCarousel(
@@ -306,6 +332,30 @@ fun ProductDetailScreen(
 
             Spacer(
                 modifier = Modifier.height(BbSpacing.Space16)
+            )
+        }
+    }
+
+    val currentSheet = activeSheet
+
+    if (currentSheet != null) {
+        ModalBottomSheet(
+            onDismissRequest = {
+                activeSheet = null
+            },
+            sheetState = sheetState,
+            containerColor = BbColors.Surface
+        ) {
+            RetailProductDetailSheetContent(
+                sheet = currentSheet,
+                product = product,
+                onCloseClick = {
+                    activeSheet = null
+                },
+                onStoreClick = {
+                    activeSheet = null
+                    onStoreClick(product.store)
+                }
             )
         }
     }
@@ -607,7 +657,7 @@ private fun RetailProductDetailVariantCard(
                         )
 
                         Text(
-                            text = "Beden rehberi",
+                            text = "Beden Rehberi",
                             style = MaterialTheme.typography.labelMedium,
                             color = BbColors.Success,
                             fontWeight = FontWeight.Bold
@@ -969,13 +1019,13 @@ private fun RetailProductPriceCard(
                     text = if (product.isInStock) {
                         product.stockText
                     } else {
-                        "Stokta yok"
+                        "Stokta Yok"
                     },
                     icon = Icons.Outlined.Inventory2
                 )
 
                 RetailProductBenefitPill(
-                    text = "Güvenli alışveriş",
+                    text = "Güvenli Alışveriş",
                     icon = Icons.Outlined.Verified
                 )
             }
@@ -1066,7 +1116,7 @@ private fun RetailProductStockAlertCard(
                         verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
                     ) {
                         Text(
-                            text = "Stokta yok",
+                            text = "Stokta Yok",
                             style = MaterialTheme.typography.titleSmall,
                             color = BbColors.TextStrong,
                             fontWeight = FontWeight.Bold
@@ -1080,7 +1130,7 @@ private fun RetailProductStockAlertCard(
                     }
 
                     Text(
-                        text = "Stok alarmı",
+                        text = "Stok Alarmı",
                         style = MaterialTheme.typography.labelMedium,
                         color = BbColors.TextStrong,
                         fontWeight = FontWeight.Bold
@@ -1146,7 +1196,7 @@ private fun RetailProductTrustLinksCard(
             modifier = Modifier.fillMaxWidth()
         ) {
             RetailProductTrustLinkRow(
-                title = "Daha Düşük Fiyat mı Gördünüz?",
+                title = "Daha Düşük Fiyat Mı Gördünüz?",
                 icon = Icons.Outlined.WarningAmber,
                 onClick = onLowerPriceClick
             )
@@ -1162,7 +1212,7 @@ private fun RetailProductTrustLinksCard(
             RetailDashedDivider()
 
             RetailProductTrustLinkRow(
-                title = "İptal ve İade Koşulları",
+                title = "İptal Ve İade Koşulları",
                 icon = Icons.Outlined.VerifiedUser,
                 onClick = onReturnPolicyClick
             )
@@ -1262,8 +1312,8 @@ private fun RetailSellerProductsCarousel(
         verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
     ) {
         RetailSectionTitle(
-            title = "Satıcının diğer ürünleri",
-            actionText = "Mağazaya git",
+            title = "Satıcının Diğer Ürünleri",
+            actionText = "Mağazaya Git",
             onActionClick = onStoreClick
         )
 
@@ -1392,14 +1442,14 @@ private fun RetailSellerMoreProductsCard(
             )
 
             Text(
-                text = "Diğer ürünler",
+                text = "Diğer Ürünler",
                 style = MaterialTheme.typography.titleSmall,
                 color = BbColors.TextStrong,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
-                text = "Mağazaya git",
+                text = "Mağazaya Git",
                 style = MaterialTheme.typography.bodySmall,
                 color = BbColors.TextSubtle
             )
@@ -1421,8 +1471,8 @@ private fun RetailReviewCarousel(
         verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
     ) {
         RetailSectionTitle(
-            title = "Ürün değerlendirmeleri",
-            actionText = "Tüm yorumlar",
+            title = "Ürün Değerlendirmeleri",
+            actionText = "Tüm Yorumlar",
             onActionClick = onReviewClick
         )
 
@@ -1465,7 +1515,7 @@ private fun RetailReviewCarousel(
 
                     Text(
                         modifier = Modifier.weight(1f),
-                        text = "$reviewCount yorum",
+                        text = "$reviewCount Yorum",
                         style = MaterialTheme.typography.bodySmall,
                         color = BbColors.TextMuted
                     )
@@ -1639,7 +1689,7 @@ private fun RetailProductDetailStoreCard(
                 }
 
                 Text(
-                    text = "${store.ratingText} puan · ${store.productCount} ürün",
+                    text = "${store.ratingText} Puan · ${store.productCount} Ürün",
                     style = MaterialTheme.typography.bodySmall,
                     color = BbColors.TextMuted
                 )
@@ -1670,14 +1720,14 @@ private fun RetailProductDetailQuickActions(
         verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
     ) {
         RetailProductDetailActionRow(
-            title = "Diğer satıcılar",
-            subtitle = "${product.otherSellerCount} satıcı daha bu ürünü sunuyor",
+            title = "Diğer Satıcılar",
+            subtitle = "${product.otherSellerCount} Satıcı daha bu ürünü sunuyor",
             onClick = onOtherSellerClick
         )
 
         RetailProductDetailActionRow(
             title = "Soru & Cevap",
-            subtitle = "${product.questionCount} ürün sorusu",
+            subtitle = "${product.questionCount} Ürün sorusu",
             onClick = onQuestionClick
         )
     }
@@ -1743,7 +1793,7 @@ private fun RetailProductDescriptionSection(
             verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
         ) {
             Text(
-                text = "Ürün açıklaması",
+                text = "Ürün Açıklaması",
                 style = MaterialTheme.typography.titleMedium,
                 color = BbColors.TextStrong,
                 fontWeight = FontWeight.Bold
@@ -1770,7 +1820,7 @@ private fun RetailRelatedCategoryChipsSection(
         verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
     ) {
         RetailSectionTitle(
-            title = "İlgili kategoriler",
+            title = "İlgili Kategoriler",
             actionText = "",
             onActionClick = {}
         )
@@ -2014,6 +2064,786 @@ private fun RetailProductBottomActionButton(
     }
 }
 
+private enum class RetailProductDetailSheet {
+    SizeGuide,
+    LowerPrice,
+    ReportAbuse,
+    ReturnPolicy
+}
+
+@Composable
+private fun RetailProductDetailSheetContent(
+    sheet: RetailProductDetailSheet,
+    product: RetailProductDetail,
+    onCloseClick: () -> Unit,
+    onStoreClick: () -> Unit
+) {
+    when (sheet) {
+        RetailProductDetailSheet.SizeGuide -> {
+            RetailSizeGuideSheet(
+                onCloseClick = onCloseClick
+            )
+        }
+
+        RetailProductDetailSheet.LowerPrice -> {
+            RetailLowerPriceSheet(
+                product = product,
+                onCloseClick = onCloseClick
+            )
+        }
+
+        RetailProductDetailSheet.ReportAbuse -> {
+            RetailReportAbuseSheet(
+                product = product,
+                onCloseClick = onCloseClick
+            )
+        }
+
+        RetailProductDetailSheet.ReturnPolicy -> {
+            RetailReturnPolicySheet(
+                onCloseClick = onCloseClick,
+                onStoreClick = onStoreClick
+            )
+        }
+    }
+}
+
+@Composable
+private fun RetailSheetContainer(
+    title: String,
+    subtitle: String,
+    icon: ImageVector,
+    onCloseClick: () -> Unit,
+    content: @Composable ColumnScope.() -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .navigationBarsPadding()
+            .verticalScroll(rememberScrollState())
+            .padding(
+                start = BbSpacing.PageHorizontal,
+                end = BbSpacing.PageHorizontal,
+                bottom = BbSpacing.Space8
+            ),
+        verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+        ) {
+            Surface(
+                modifier = Modifier.size(BbIcon.BoxMd),
+                shape = BbRadius.LgShape,
+                color = BbColors.PrimarySoft
+            ) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = null,
+                        tint = BbColors.TextStrong,
+                        modifier = Modifier.size(BbIcon.SizeMd)
+                    )
+                }
+            }
+
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+            ) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleLarge,
+                    color = BbColors.TextStrong,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Text(
+                    text = subtitle,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = BbColors.TextMuted
+                )
+            }
+
+            Surface(
+                modifier = Modifier
+                    .size(BbIcon.BoxMd)
+                    .clip(CircleShape)
+                    .clickable {
+                        onCloseClick()
+                    },
+                shape = CircleShape,
+                color = BbColors.SurfaceMuted,
+                border = BorderStroke(
+                    width = 1.dp,
+                    color = BbColors.Border
+                )
+            ) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Close,
+                        contentDescription = "Kapat",
+                        tint = BbColors.TextStrong,
+                        modifier = Modifier.size(BbIcon.SizeMd)
+                    )
+                }
+            }
+        }
+
+        content()
+    }
+}
+
+@Composable
+private fun RetailSizeGuideSheet(
+    onCloseClick: () -> Unit
+) {
+    RetailSheetContainer(
+        title = "Ölçü Rehberi",
+        subtitle = "Doğru beden seçimi için kısa rehber",
+        icon = Icons.Outlined.Straighten,
+        onCloseClick = onCloseClick
+    ) {
+        RetailSheetInfoBox(
+            title = "Pratik Öneri",
+            description = "Ölçüm yaparken ürünü kullanacağınız koşulları dikkate alın. Ayakkabı için çorap kalınlığı, kıyafet için kullanım rahatlığı önemlidir."
+        )
+
+        RetailSizeGuideTable()
+
+        RetailSheetMutedBox(
+            text = "Ölçü tabloları genel bilgilendirme amaçlıdır. Marka, model ve üretim kalıbına göre küçük farklılıklar olabilir."
+        )
+
+        RetailSheetPrimaryButton(
+            text = "Detaylı Ölçü Rehberini Aç",
+            onClick = onCloseClick
+        )
+    }
+}
+
+@Composable
+private fun RetailReturnPolicySheet(
+    onCloseClick: () -> Unit,
+    onStoreClick: () -> Unit
+) {
+    RetailSheetContainer(
+        title = "İptal Ve İade Koşulları",
+        subtitle = "Cayma hakkı, iade ve sipariş iptali",
+        icon = Icons.Outlined.VerifiedUser,
+        onCloseClick = onCloseClick
+    ) {
+        Text(
+            text = "İptal Ve İade Süreci",
+            style = MaterialTheme.typography.titleSmall,
+            color = BbColors.TextStrong,
+            fontWeight = FontWeight.Bold
+        )
+
+        Text(
+            text = "Sipariş iptali ve iade süreçleri ürün, satıcı, teslimat durumu ve ilgili mevzuat kapsamında değerlendirilir. İade talebinizi sipariş detayınız üzerinden başlatabilirsiniz.",
+            style = MaterialTheme.typography.bodyMedium,
+            color = BbColors.TextMuted
+        )
+
+        RetailSheetCheckRow(
+            text = "Satıcı tarafından henüz onaylanmamış siparişler iptal edilebilir."
+        )
+
+        RetailSheetCheckRow(
+            text = "İade koşulları ürün türüne, kullanım durumuna ve satıcı politikalarına göre değişebilir."
+        )
+
+        RetailSheetCheckRow(
+            text = "Cayma hakkı ve iade süreci yürürlükteki tüketici mevzuatı kapsamında değerlendirilir."
+        )
+
+        RetailSheetMutedBox(
+            text = "Ürünü iade etmeden önce kullanılmamış ve mümkünse orijinal ambalajında olmasına dikkat edin."
+        )
+
+        RetailSheetPrimaryButton(
+            text = "Mağazaya Git",
+            onClick = onStoreClick
+        )
+    }
+}
+
+@Composable
+private fun RetailLowerPriceSheet(
+    product: RetailProductDetail,
+    onCloseClick: () -> Unit
+) {
+    var competitorName by remember {
+        mutableStateOf("")
+    }
+
+    var competitorLink by remember {
+        mutableStateOf("")
+    }
+
+    var competitorPrice by remember {
+        mutableStateOf("")
+    }
+
+    RetailSheetContainer(
+        title = "Daha Düşük Fiyat Mı Gördünüz?",
+        subtitle = "Fiyat geri bildirimi",
+        icon = Icons.Outlined.WarningAmber,
+        onCloseClick = onCloseClick
+    ) {
+        RetailSheetProductPill(
+            text = product.name
+        )
+
+        Text(
+            text = "Fiyat Bilgilerini Gönder",
+            style = MaterialTheme.typography.titleMedium,
+            color = BbColors.TextStrong,
+            fontWeight = FontWeight.Bold
+        )
+
+        Text(
+            text = "Aynı ürünü başka bir platformda daha uygun fiyata gördüyseniz bize bildirin. Bilgiler kontrol edilerek değerlendirilecektir.",
+            style = MaterialTheme.typography.bodyMedium,
+            color = BbColors.TextMuted
+        )
+
+        RetailSheetTextField(
+            value = competitorName,
+            onValueChange = {
+                competitorName = it
+            },
+            label = "Rakip Firma Adı",
+            placeholder = "Örn: Amazon, Trendyol, Hepsiburada"
+        )
+
+        RetailSheetTextField(
+            value = competitorLink,
+            onValueChange = {
+                competitorLink = it
+            },
+            label = "Rakip Linki",
+            placeholder = "https://..."
+        )
+
+        RetailSheetTextField(
+            value = competitorPrice,
+            onValueChange = {
+                competitorPrice = it
+            },
+            label = "Rakip Fiyatı",
+            placeholder = "0,00",
+            keyboardType = KeyboardType.Decimal
+        )
+
+        RetailSheetMutedBox(
+            text = "Lütfen yalnızca herkesin erişebileceği ürün linklerini paylaşın. Sepet, kişisel hesap veya ödeme ekranı bağlantıları göndermeyin."
+        )
+
+        RetailSheetPrimaryButton(
+            text = "Fiyatı Bildir",
+            onClick = onCloseClick
+        )
+    }
+}
+
+@Composable
+private fun RetailReportAbuseSheet(
+    product: RetailProductDetail,
+    onCloseClick: () -> Unit
+) {
+    val reasons = listOf(
+        "Yanıltıcı Bilgi",
+        "Uygunsuz Görsel",
+        "Sahte Ürün",
+        "Yasaklı İçerik"
+    )
+
+    var selectedReason by remember {
+        mutableStateOf(reasons.first())
+    }
+
+    var detailText by remember {
+        mutableStateOf("")
+    }
+
+    RetailSheetContainer(
+        title = "Kötüye Kullanımı Bildir",
+        subtitle = "Güvenlik ve kalite bildirimi",
+        icon = Icons.Outlined.Report,
+        onCloseClick = onCloseClick
+    ) {
+        RetailSheetProductPill(
+            text = product.name
+        )
+
+        Text(
+            text = "Şikayet Nedeni",
+            style = MaterialTheme.typography.labelLarge,
+            color = BbColors.TextStrong,
+            fontWeight = FontWeight.Bold
+        )
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+        ) {
+            reasons.forEach { reason ->
+                RetailReasonChip(
+                    text = reason,
+                    selected = selectedReason == reason,
+                    onClick = {
+                        selectedReason = reason
+                    }
+                )
+            }
+        }
+
+        RetailSheetTextField(
+            value = detailText,
+            onValueChange = {
+                detailText = it
+            },
+            label = "Detay",
+            placeholder = "Bildirmek istediğiniz durumu kısaca yazın.",
+            minLines = 4
+        )
+
+        RetailSheetMutedBox(
+            text = "Kişisel bilgi, ödeme bilgisi veya üçüncü kişilere ait özel bilgi paylaşmayın."
+        )
+
+        RetailSheetPrimaryButton(
+            text = "Gönder",
+            onClick = onCloseClick
+        )
+    }
+}
+
+
+@Composable
+private fun RetailReasonChip(
+    text: String,
+    selected: Boolean,
+    onClick: () -> Unit
+) {
+    Surface(
+        modifier = Modifier
+            .clip(BbRadius.PillShape)
+            .clickable {
+                onClick()
+            },
+        shape = BbRadius.PillShape,
+        color = if (selected) {
+            BbColors.Primary
+        } else {
+            BbColors.SurfaceMuted
+        },
+        border = BorderStroke(
+            width = 1.dp,
+            color = if (selected) {
+                BbColors.Primary
+            } else {
+                BbColors.Border
+            }
+        )
+    ) {
+        Text(
+            text = text,
+            modifier = Modifier.padding(
+                horizontal = BbSpacing.Space3,
+                vertical = BbSpacing.Space2
+            ),
+            style = MaterialTheme.typography.labelMedium,
+            color = BbColors.TextStrong,
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
+
+@Composable
+private fun RetailSheetTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    placeholder: String,
+    keyboardType: KeyboardType = KeyboardType.Text,
+    minLines: Int = 1
+) {
+    OutlinedTextField(
+        modifier = Modifier.fillMaxWidth(),
+        value = value,
+        onValueChange = onValueChange,
+        label = {
+            Text(text = label)
+        },
+        placeholder = {
+            Text(text = placeholder)
+        },
+        minLines = minLines,
+        singleLine = minLines == 1,
+        shape = BbRadius.Input,
+        keyboardOptions = KeyboardOptions(
+            keyboardType = keyboardType
+        ),
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = BbColors.Primary,
+            unfocusedBorderColor = BbColors.Border,
+            focusedLabelColor = BbColors.TextStrong,
+            unfocusedLabelColor = BbColors.TextMuted,
+            focusedTextColor = BbColors.TextStrong,
+            unfocusedTextColor = BbColors.TextStrong,
+            focusedContainerColor = BbColors.Surface,
+            unfocusedContainerColor = BbColors.Surface,
+            cursorColor = BbColors.Primary
+        )
+    )
+}
+
+@Composable
+private fun RetailReasonOption(
+    text: String,
+    selected: Boolean,
+    onClick: () -> Unit
+) {
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(BbRadius.LgShape)
+            .clickable {
+                onClick()
+            },
+        shape = BbRadius.LgShape,
+        color = if (selected) {
+            BbColors.PrimarySoft
+        } else {
+            BbColors.SurfaceMuted
+        },
+        border = BorderStroke(
+            width = 1.dp,
+            color = if (selected) {
+                BbColors.Primary
+            } else {
+                BbColors.Border
+            }
+        )
+    ) {
+        Row(
+            modifier = Modifier.padding(BbSpacing.Space3),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+        ) {
+            Surface(
+                modifier = Modifier.size(18.dp),
+                shape = CircleShape,
+                color = if (selected) {
+                    BbColors.Primary
+                } else {
+                    BbColors.Surface
+                },
+                border = BorderStroke(
+                    width = 1.dp,
+                    color = if (selected) {
+                        BbColors.Primary
+                    } else {
+                        BbColors.BorderStrong
+                    }
+                )
+            ) {}
+
+            Text(
+                text = text,
+                style = MaterialTheme.typography.labelLarge,
+                color = BbColors.TextStrong,
+                fontWeight = FontWeight.SemiBold
+            )
+        }
+    }
+}
+
+@Composable
+private fun RetailSizeGuideTable() {
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        shape = BbRadius.LgShape,
+        color = BbColors.Surface,
+        border = BorderStroke(
+            width = 1.dp,
+            color = BbColors.Border
+        )
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            RetailSizeGuideTableRow(
+                first = "Beden",
+                second = "Önerilen Ölçü",
+                third = "Not",
+                strong = true,
+                backgroundColor = BbColors.SurfaceMuted
+            )
+
+            RetailSizeGuideTableRow(
+                first = "Standart",
+                second = "Ürün Açıklamasını Kontrol Edin",
+                third = "Marka Ve Modele Göre Değişebilir"
+            )
+
+            RetailSizeGuideTableRow(
+                first = "Dar Kalıp",
+                second = "Bir Beden Büyük Tercih Edilebilir",
+                third = "Satıcı Notlarını Kontrol Edin"
+            )
+
+            RetailSizeGuideTableRow(
+                first = "Geniş Kalıp",
+                second = "Normal Beden Tercih Edilebilir",
+                third = "Müşteri Sorularını İnceleyin"
+            )
+        }
+    }
+}
+
+@Composable
+private fun RetailSizeGuideTableRow(
+    first: String,
+    second: String,
+    third: String,
+    strong: Boolean = false,
+    backgroundColor: Color = BbColors.Surface
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(backgroundColor)
+            .padding(
+                horizontal = BbSpacing.Space3,
+                vertical = BbSpacing.Space3
+            ),
+        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+    ) {
+        RetailTableCell(
+            text = first,
+            modifier = Modifier.weight(0.75f),
+            strong = strong
+        )
+
+        RetailTableCell(
+            text = second,
+            modifier = Modifier.weight(1.35f),
+            strong = strong
+        )
+
+        RetailTableCell(
+            text = third,
+            modifier = Modifier.weight(1.4f),
+            strong = strong
+        )
+    }
+}
+
+@Composable
+private fun RetailTableCell(
+    text: String,
+    modifier: Modifier,
+    strong: Boolean
+) {
+    Text(
+        modifier = modifier,
+        text = text,
+        style = MaterialTheme.typography.labelSmall,
+        color = BbColors.TextStrong,
+        fontWeight = if (strong) {
+            FontWeight.Bold
+        } else {
+            FontWeight.SemiBold
+        }
+    )
+}
+
+@Composable
+private fun RetailSheetInfoBox(
+    title: String,
+    description: String
+) {
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        shape = BbRadius.LgShape,
+        color = BbColors.PrimarySoft,
+        border = BorderStroke(
+            width = 1.dp,
+            color = BbColors.Primary.copy(alpha = 0.45f)
+        )
+    ) {
+        Row(
+            modifier = Modifier.padding(BbSpacing.Space3),
+            verticalAlignment = Alignment.Top,
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+        ) {
+            Surface(
+                modifier = Modifier.size(BbIcon.BoxMd),
+                shape = BbRadius.LgShape,
+                color = BbColors.Surface
+            ) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Straighten,
+                        contentDescription = null,
+                        tint = BbColors.TextStrong,
+                        modifier = Modifier.size(BbIcon.SizeMd)
+                    )
+                }
+            }
+
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+            ) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleSmall,
+                    color = BbColors.TextStrong,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Text(
+                    text = description,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = BbColors.TextMuted
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun RetailSheetCheckRow(
+    text: String
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.Top,
+        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+    ) {
+        Icon(
+            imageVector = Icons.Outlined.Verified,
+            contentDescription = null,
+            tint = BbColors.Green.Green500,
+            modifier = Modifier.size(BbIcon.SizeSm)
+        )
+
+        Text(
+            modifier = Modifier.weight(1f),
+            text = text,
+            style = MaterialTheme.typography.bodyMedium,
+            color = BbColors.TextStrong,
+            fontWeight = FontWeight.SemiBold
+        )
+    }
+}
+
+@Composable
+private fun RetailSheetMutedBox(
+    text: String
+) {
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        shape = BbRadius.LgShape,
+        color = BbColors.SurfaceMuted,
+        border = BorderStroke(
+            width = 1.dp,
+            color = BbColors.Border
+        )
+    ) {
+        Text(
+            modifier = Modifier.padding(BbSpacing.Space3),
+            text = text,
+            style = MaterialTheme.typography.bodySmall,
+            color = BbColors.TextMuted
+        )
+    }
+}
+
+@Composable
+private fun RetailSheetProductPill(
+    text: String
+) {
+    Surface(
+        shape = BbRadius.PillShape,
+        color = BbColors.SurfaceMuted,
+        border = BorderStroke(
+            width = 1.dp,
+            color = BbColors.Border
+        )
+    ) {
+        Row(
+            modifier = Modifier.padding(
+                horizontal = BbSpacing.Space3,
+                vertical = BbSpacing.Space2
+            ),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Inventory2,
+                contentDescription = null,
+                tint = BbColors.Primary,
+                modifier = Modifier.size(BbIcon.SizeSm)
+            )
+
+            Text(
+                text = text,
+                style = MaterialTheme.typography.labelMedium,
+                color = BbColors.TextStrong,
+                fontWeight = FontWeight.Bold
+            )
+        }
+    }
+}
+
+@Composable
+private fun RetailSheetPrimaryButton(
+    text: String,
+    onClick: () -> Unit
+) {
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(48.dp)
+            .clip(BbRadius.XxlShape)
+            .clickable {
+                onClick()
+            },
+        shape = BbRadius.XxlShape,
+        color = BbColors.Primary
+    ) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = text,
+                style = MaterialTheme.typography.labelLarge,
+                color = BbColors.TextStrong,
+                fontWeight = FontWeight.Bold
+            )
+        }
+    }
+}
+
 @Immutable
 data class RetailProductDetailSelection(
     val productId: Int,
@@ -2122,7 +2952,7 @@ private fun getRetailProductDetail(
     val sellerProducts = (1..12).map { index ->
         RetailSellerProductItem(
             id = index,
-            name = "Ortobella günlük sneaker modeli $index",
+            name = "Ortobella Günlük Sneaker Modeli $index",
             priceText = "₺${799 + index * 20},90",
             imageLabel = "P$index",
             drawableResId = if (index <= 4) {
@@ -2135,7 +2965,7 @@ private fun getRetailProductDetail(
 
     return RetailProductDetail(
         id = productId,
-        name = "Kadın klasik sneaker ayakkabı",
+        name = "Kadın Klasik Sneaker Ayakkabı",
         brandName = "Ortobella",
         searchPlaceholder = "Ürün, kategori veya marka ara",
         shortDescription = "Günlük kullanım için rahat tabanlı, sade ve modern sneaker modeli.",
@@ -2143,11 +2973,11 @@ private fun getRetailProductDetail(
         categoryName = "Ayakkabı",
         priceText = "₺899,90",
         oldPriceText = "₺1.099,90",
-        discountText = "%20 indirim",
+        discountText = "%20 İndirim",
         badgeText = "%20",
         ratingText = "★ 4.8",
-        cargoText = "Hızlı kargo",
-        stockText = "Stokta var",
+        cargoText = "Hızlı Kargo",
+        stockText = "Stokta Var",
         isInStock = true,
         reviewCount = 126,
         questionCount = 18,
@@ -2302,11 +3132,11 @@ private fun getRetailProductDetail(
         ),
         relatedCategories = listOf(
             RetailRelatedCategoryChip(1, "Sneaker"),
-            RetailRelatedCategoryChip(2, "Kadın ayakkabı"),
-            RetailRelatedCategoryChip(3, "Günlük ayakkabı"),
-            RetailRelatedCategoryChip(4, "Spor ayakkabı"),
-            RetailRelatedCategoryChip(5, "Rahat taban"),
-            RetailRelatedCategoryChip(6, "Yeni sezon")
+            RetailRelatedCategoryChip(2, "Kadın Ayakkabı"),
+            RetailRelatedCategoryChip(3, "Günlük Ayakkabı"),
+            RetailRelatedCategoryChip(4, "Spor Ayakkabı"),
+            RetailRelatedCategoryChip(5, "Rahat Taban"),
+            RetailRelatedCategoryChip(6, "Yeni Sezon")
         ),
         store = RetailProductDetailStore(
             id = 1,

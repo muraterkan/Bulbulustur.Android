@@ -1053,8 +1053,6 @@ private fun WholesaleHorizontalProductSection(
     onHeaderClick: () -> Unit,
     onProductClick: (WholesaleMiniProduct) -> Unit
 ) {
-    val visibleProducts = products.take(3)
-
     BbCard(
         modifier = Modifier.padding(
             start = BbSpacing.PageHorizontal,
@@ -1094,17 +1092,27 @@ private fun WholesaleHorizontalProductSection(
                 )
             }
 
-            visibleProducts.forEachIndexed { index, item ->
-                WholesaleMiniProductCard(
-                    product = item,
-                    onClick = {
-                        onProductClick(item)
-                    },
-                    modifier = Modifier.fillMaxWidth()
+            LazyRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
+                contentPadding = PaddingValues(
+                    start = BbSpacing.None,
+                    end = BbSpacing.Space4
                 )
-
-                if (index != visibleProducts.lastIndex) {
-                    Spacer(modifier = Modifier.height(BbSpacing.Space2))
+            ) {
+                items(
+                    items = products,
+                    key = { product ->
+                        product.id
+                    }
+                ) { item ->
+                    WholesaleMiniProductCard(
+                        product = item,
+                        onClick = {
+                            onProductClick(item)
+                        },
+                        modifier = Modifier.width(212.dp)
+                    )
                 }
             }
         }
@@ -1130,17 +1138,16 @@ private fun WholesaleMiniProductCard(
             color = BbColors.Border
         )
     ) {
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(BbSpacing.Space3),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+                .padding(BbSpacing.Space2),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
         ) {
             Surface(
                 modifier = Modifier
-                    .width(104.dp)
-                    .height(104.dp),
+                    .fillMaxWidth()
+                    .height(132.dp),
                 shape = BbRadius.LgShape,
                 color = product.backgroundColor,
                 border = BorderStroke(
@@ -1170,51 +1177,39 @@ private fun WholesaleMiniProductCard(
                 }
             }
 
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
-            ) {
-                Text(
-                    text = product.name,
-                    style = MaterialTheme.typography.titleSmall,
-                    color = BbColors.TextStrong,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-                )
+            Text(
+                text = product.name,
+                style = MaterialTheme.typography.labelLarge,
+                color = BbColors.TextStrong,
+                fontWeight = FontWeight.Bold,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
 
-                Text(
-                    text = product.priceLabel,
-                    style = MaterialTheme.typography.titleSmall,
-                    color = BbColors.TextStrong,
-                    fontWeight = FontWeight.ExtraBold,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
+            Text(
+                text = product.priceLabel,
+                style = MaterialTheme.typography.titleSmall,
+                color = BbColors.TextStrong,
+                fontWeight = FontWeight.ExtraBold,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
 
-                Text(
-                    text = product.metaLabel,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = BbColors.TextMuted,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
+            Text(
+                text = product.metaLabel,
+                style = MaterialTheme.typography.bodySmall,
+                color = BbColors.TextMuted,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
 
-                Text(
-                    text = product.badgeLabel,
-                    style = MaterialTheme.typography.labelMedium,
-                    color = BbColors.Red.Red600,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
-
-            Icon(
-                imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
-                contentDescription = "Ürüne Git",
-                tint = BbColors.TextMuted,
-                modifier = Modifier.size(BbIcon.SizeMd)
+            Text(
+                text = product.badgeLabel,
+                style = MaterialTheme.typography.labelMedium,
+                color = BbColors.Red.Red600,
+                fontWeight = FontWeight.Bold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }

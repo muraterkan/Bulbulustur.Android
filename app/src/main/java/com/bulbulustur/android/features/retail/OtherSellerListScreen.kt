@@ -1,5 +1,6 @@
 package com.bulbulustur.android.features.retail
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -9,21 +10,19 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Tune
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,6 +36,18 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.ui.components.BbButton
+import com.bulbulustur.android.ui.components.BbButtonSize
+import com.bulbulustur.android.ui.components.BbButtonVariant
+import com.bulbulustur.android.ui.components.BbCard
+import com.bulbulustur.android.ui.components.BbCardPadding
+import com.bulbulustur.android.ui.components.BbCardVariant
+import com.bulbulustur.android.ui.components.BbInnerPageHeader
+import com.bulbulustur.android.ui.theme.BbColors
+import com.bulbulustur.android.ui.theme.BbIcon
+import com.bulbulustur.android.ui.theme.BbRadius
+import com.bulbulustur.android.ui.theme.BbSpacing
+import com.bulbulustur.android.ui.theme.BbTheme
 
 @Composable
 fun OtherSellerListScreen(
@@ -63,26 +74,34 @@ fun OtherSellerListScreen(
         }
     }
 
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
+    Scaffold(
+        containerColor = BbColors.SurfaceMuted,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Diğer Satıcılar",
+                onBackClick = onBackClick,
+                /*actionIcon = Icons.Outlined.Tune,
+                actionContentDescription = "Filtreler",
+                onActionClick = {
+                    selectedFilter = "Tümü"
+                }*/
+            )
+        }
+    ) { innerPadding ->
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(BbColors.SurfaceMuted)
+                .padding(innerPadding)
+                .navigationBarsPadding(),
             contentPadding = PaddingValues(
-                start = 16.dp,
-                top = 14.dp,
-                end = 16.dp,
-                bottom = 28.dp
+                start = BbSpacing.PageHorizontal,
+                top = BbSpacing.SectionGapCompact,
+                end = BbSpacing.PageHorizontal,
+                bottom = BbSpacing.PageBottom
             ),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
         ) {
-            item {
-                OtherSellerTopBar(
-                    onBackClick = onBackClick
-                )
-            }
-
             item {
                 OtherSellerProductSummary(
                     product = screenData.product
@@ -101,12 +120,15 @@ fun OtherSellerListScreen(
 
             item {
                 OtherSellerSectionTitle(
-                    title = "Diğer satıcılar",
+                    title = "Satıcı seçenekleri",
                     description = "Aynı ürünü satan mağazaları fiyat, kargo ve puana göre karşılaştır."
                 )
             }
 
-            items(filteredSellers) { seller ->
+            items(
+                items = filteredSellers,
+                key = { seller -> seller.id }
+            ) { seller ->
                 OtherSellerCard(
                     seller = seller,
                     onSellerClick = {
@@ -122,113 +144,62 @@ fun OtherSellerListScreen(
 }
 
 @Composable
-private fun OtherSellerTopBar(
-    onBackClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Box(
-            modifier = Modifier
-                .size(38.dp)
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.surfaceVariant)
-                .clickable {
-                    onBackClick()
-                },
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = "‹",
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-
-        Spacer(modifier = Modifier.width(12.dp))
-
-        Column(
-            modifier = Modifier.weight(1f)
-        ) {
-            Text(
-                text = "Diğer satıcılar",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-
-            Text(
-                text = "Aynı ürün için mağaza seçenekleri.",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-    }
-}
-
-@Composable
 private fun OtherSellerProductSummary(
     product: RetailOtherSellerProductSummary
 ) {
-    Card(
+    Surface(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(26.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
-        ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 0.dp
+        shape = BbRadius.XxlShape,
+        color = BbColors.PrimarySoft,
+        border = BorderStroke(
+            width = 1.dp,
+            color = BbColors.Primary.copy(alpha = 0.35f)
         )
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .padding(BbSpacing.CardPadding),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
         ) {
             Box(
                 modifier = Modifier
                     .size(72.dp)
-                    .clip(RoundedCornerShape(20.dp))
-                    .background(MaterialTheme.colorScheme.primary),
+                    .clip(BbRadius.XlShape)
+                    .background(BbColors.Primary),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = product.imageText,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onPrimary
+                    color = BbColors.TextStrong
                 )
             }
 
-            Spacer(modifier = Modifier.width(14.dp))
-
             Column(
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
             ) {
                 Text(
                     text = product.name,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                    color = BbColors.TextStrong
                 )
-
-                Spacer(modifier = Modifier.height(5.dp))
 
                 Text(
                     text = product.variantText,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                    color = BbColors.TextSubtle
                 )
-
-                Spacer(modifier = Modifier.height(9.dp))
 
                 Text(
                     text = "${product.sellerCount} satıcı listeleniyor",
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                    color = BbColors.TextStrong
                 )
             }
         }
@@ -243,19 +214,18 @@ private fun OtherSellerFilterSection(
     onFilterChange: (String) -> Unit
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
     ) {
         OtherSellerSectionTitle(
             title = "Hızlı filtre",
             description = "Satıcıları alışveriş önceliğine göre daralt."
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
-
         FlowRow(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
         ) {
             filters.forEach { filter ->
                 FilterChip(
@@ -278,20 +248,14 @@ private fun OtherSellerCard(
     onSellerClick: () -> Unit,
     onAddToBasketClick: () -> Unit
 ) {
-    Card(
+    BbCard(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 1.dp
-        )
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(14.dp)
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
         ) {
             Row(
                 modifier = Modifier
@@ -299,111 +263,90 @@ private fun OtherSellerCard(
                     .clickable {
                         onSellerClick()
                     },
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
             ) {
                 Box(
                     modifier = Modifier
                         .size(52.dp)
-                        .clip(RoundedCornerShape(18.dp))
-                        .background(MaterialTheme.colorScheme.secondaryContainer),
+                        .clip(BbRadius.LgShape)
+                        .background(BbColors.SurfaceMuted),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = seller.logoText,
                         style = MaterialTheme.typography.labelLarge,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                        color = BbColors.TextStrong
                     )
                 }
 
-                Spacer(modifier = Modifier.width(12.dp))
-
                 Column(
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
                 ) {
                     Row(
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
                     ) {
                         Text(
                             text = seller.storeName,
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = BbColors.TextStrong
                         )
 
                         if (seller.isVerified) {
-                            Spacer(modifier = Modifier.width(8.dp))
-
                             OtherSellerVerifiedBadge()
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(4.dp))
-
                     Text(
                         text = "${seller.ratingText} puan · ${seller.cargoText}",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = BbColors.TextMuted
                     )
                 }
 
                 Text(
                     text = "›",
                     style = MaterialTheme.typography.headlineSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = BbColors.TextMuted
                 )
             }
 
-            Spacer(modifier = Modifier.height(14.dp))
-
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.Bottom
+                verticalAlignment = Alignment.Bottom,
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
             ) {
                 Column(
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
                 ) {
                     Text(
                         text = seller.priceText,
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.primary
+                        color = BbColors.Primary
                     )
-
-                    Spacer(modifier = Modifier.height(3.dp))
 
                     Text(
                         text = seller.stockText,
                         style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = BbColors.TextMuted
                     )
                 }
 
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(999.dp))
-                        .background(MaterialTheme.colorScheme.primary)
-                        .clickable {
-                            onAddToBasketClick()
-                        }
-                        .padding(
-                            horizontal = 16.dp,
-                            vertical = 10.dp
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "Sepete ekle",
-                        style = MaterialTheme.typography.labelMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
-                }
+                BbButton(
+                    text = "Sepete ekle",
+                    onClick = onAddToBasketClick,
+                    variant = BbButtonVariant.Primary,
+                    size = BbButtonSize.Small
+                )
             }
 
             if (seller.badgeText.isNotBlank()) {
-                Spacer(modifier = Modifier.height(10.dp))
-
                 OtherSellerInfoBadge(
                     text = seller.badgeText
                 )
@@ -414,20 +357,23 @@ private fun OtherSellerCard(
 
 @Composable
 private fun OtherSellerVerifiedBadge() {
-    Box(
-        modifier = Modifier
-            .clip(RoundedCornerShape(999.dp))
-            .background(MaterialTheme.colorScheme.primaryContainer)
-            .padding(
-                horizontal = 8.dp,
-                vertical = 3.dp
-            )
+    Surface(
+        shape = BbRadius.PillShape,
+        color = BbColors.PrimarySoft,
+        border = BorderStroke(
+            width = 1.dp,
+            color = BbColors.Primary.copy(alpha = 0.35f)
+        )
     ) {
         Text(
             text = "Doğrulanmış",
+            modifier = Modifier.padding(
+                horizontal = BbSpacing.Space2,
+                vertical = BbSpacing.Space1
+            ),
             style = MaterialTheme.typography.labelSmall,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onPrimaryContainer
+            color = BbColors.TextStrong
         )
     }
 }
@@ -436,19 +382,22 @@ private fun OtherSellerVerifiedBadge() {
 private fun OtherSellerInfoBadge(
     text: String
 ) {
-    Box(
-        modifier = Modifier
-            .clip(RoundedCornerShape(999.dp))
-            .background(MaterialTheme.colorScheme.surfaceVariant)
-            .padding(
-                horizontal = 10.dp,
-                vertical = 5.dp
-            )
+    Surface(
+        shape = BbRadius.PillShape,
+        color = BbColors.SurfaceMuted,
+        border = BorderStroke(
+            width = 1.dp,
+            color = BbColors.Border
+        )
     ) {
         Text(
             text = text,
+            modifier = Modifier.padding(
+                horizontal = BbSpacing.Space3,
+                vertical = BbSpacing.Space1
+            ),
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = BbColors.TextMuted
         )
     }
 }
@@ -459,21 +408,20 @@ private fun OtherSellerSectionTitle(
     description: String
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
     ) {
         Text(
             text = title,
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onBackground
+            color = BbColors.TextStrong
         )
-
-        Spacer(modifier = Modifier.height(3.dp))
 
         Text(
             text = description,
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = BbColors.TextMuted
         )
     }
 }
@@ -505,7 +453,9 @@ data class RetailOtherSellerItem(
     val filterTags: List<String>
 )
 
-private fun getRetailOtherSellerScreenData(productId: Int): RetailOtherSellerScreenData {
+private fun getRetailOtherSellerScreenData(
+    productId: Int
+): RetailOtherSellerScreenData {
     return RetailOtherSellerScreenData(
         product = RetailOtherSellerProductSummary(
             id = productId,
@@ -589,7 +539,7 @@ private fun getRetailOtherSellerScreenData(productId: Int): RetailOtherSellerScr
 @Preview(showBackground = true)
 @Composable
 private fun OtherSellerListScreenPreview() {
-    MaterialTheme {
+    BbTheme {
         OtherSellerListScreen()
     }
 }

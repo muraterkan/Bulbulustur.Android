@@ -1,37 +1,33 @@
 package com.bulbulustur.android.features.logon
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.KeyOff
+import androidx.compose.material.icons.outlined.MarkEmailUnread
+import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material.icons.outlined.Schedule
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import com.bulbulustur.android.ui.components.BbButton
 import com.bulbulustur.android.ui.components.BbButtonSize
 import com.bulbulustur.android.ui.components.BbButtonVariant
-import com.bulbulustur.android.ui.components.BbCard
-import com.bulbulustur.android.ui.components.BbCardPadding
-import com.bulbulustur.android.ui.components.BbCardVariant
+import com.bulbulustur.android.ui.theme.BbColors
+import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
 import com.bulbulustur.android.ui.theme.BbTheme
@@ -44,255 +40,115 @@ fun ExpiredScreen(
     onGoToLogonClick: () -> Unit = {},
     onLanguageClick: () -> Unit = {}
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .statusBarsPadding()
-            .imePadding()
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = BbSpacing.PageHorizontalWide),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Spacer(modifier = Modifier.size(BbSpacing.PageTop))
-
-            ExpiredTopBar(
-                onLanguageClick = onLanguageClick
-            )
-
-            Spacer(modifier = Modifier.size(BbSpacing.Space10))
-
-            BbCard(
-                modifier = Modifier.fillMaxWidth(),
-                variant = BbCardVariant.Elevated,
-                padding = BbCardPadding.Large
-            ) {
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    ExpiredIcon(
-                        expiredType = expiredType
-                    )
-
-                    Spacer(modifier = Modifier.size(BbSpacing.Space5))
-
-                    ExpiredBadge(
-                        text = expiredType.badgeText
-                    )
-
-                    Spacer(modifier = Modifier.size(BbSpacing.Space5))
-
-                    Text(
-                        text = expiredType.title,
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-
-                    Spacer(modifier = Modifier.size(BbSpacing.Space2))
-
-                    Text(
-                        text = expiredType.description,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-
-                    Spacer(modifier = Modifier.size(BbSpacing.Space6))
-
-                    Surface(
-                        modifier = Modifier.fillMaxWidth(),
-                        color = MaterialTheme.colorScheme.surfaceVariant,
-                        shape = BbRadius.Card
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(BbSpacing.CardPadding),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(
-                                text = "İşlem yapılan adres",
-                                style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-
-                            Spacer(modifier = Modifier.size(BbSpacing.Space1))
-
-                            Text(
-                                text = email,
-                                style = MaterialTheme.typography.titleSmall,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.size(BbSpacing.Space6))
-
-                    ExpiredReasonList(
-                        expiredType = expiredType
-                    )
-
-                    Spacer(modifier = Modifier.size(BbSpacing.Space6))
-
-                    BbButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = expiredType.primaryButtonText,
-                        onClick = onSendAgainClick,
-                        variant = BbButtonVariant.Primary,
-                        size = BbButtonSize.Large
-                    )
-
-                    Spacer(modifier = Modifier.size(BbSpacing.Space3))
-
-                    BbButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = "Giriş Ekranına Dön",
-                        onClick = onGoToLogonClick,
-                        variant = BbButtonVariant.Outline,
-                        size = BbButtonSize.Large
-                    )
-
-                    Spacer(modifier = Modifier.size(BbSpacing.Space5))
-
-                    Surface(
-                        modifier = Modifier.fillMaxWidth(),
-                        color = MaterialTheme.colorScheme.primaryContainer,
-                        shape = BbRadius.Card
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(BbSpacing.CardPaddingCompact),
-                            verticalAlignment = Alignment.Top,
-                            horizontalArrangement = Arrangement.spacedBy(BbSpacing.IconTextGap)
-                        ) {
-                            Text(
-                                text = "🛡️",
-                                style = MaterialTheme.typography.titleSmall
-                            )
-
-                            Column {
-                                Text(
-                                    text = "Güvenlik nedeniyle",
-                                    style = MaterialTheme.typography.labelLarge,
-                                    fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.onPrimaryContainer
-                                )
-
-                                Spacer(modifier = Modifier.size(BbSpacing.Space1))
-
-                                Text(
-                                    text = "Süresi dolan bağlantılar tekrar kullanılamaz. Yeni bağlantı oluşturmanız gerekir.",
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onPrimaryContainer
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-
-            Spacer(modifier = Modifier.size(BbSpacing.Space12))
-
-            Text(
-                text = "© 2026 Bulbulustur - Tüm hakları saklıdır",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-
-            Spacer(modifier = Modifier.size(BbSpacing.PageBottomCompact))
+    LogonPublicScaffold(
+        onLanguageSelected = {
+            onLanguageClick()
         }
-    }
-}
-
-@Composable
-private fun ExpiredTopBar(
-    onLanguageClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = buildAnnotatedString {
-                append("bulbulustur")
-
-                withStyle(
-                    style = SpanStyle(
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                ) {
-                    append(".")
-                }
-            },
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Black,
-            color = MaterialTheme.colorScheme.onBackground
+        ExpiredStatusIcon(
+            expiredType = expiredType
         )
 
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.height(BbSpacing.Space5))
 
-        OutlinedButton(
-            onClick = onLanguageClick,
-            shape = BbRadius.Button
-        ) {
-            Text(
-                text = "🌐",
-                style = MaterialTheme.typography.labelLarge
-            )
+        LogonPublicPageTitle(
+            eyebrow = expiredType.badgeText,
+            title = expiredType.title,
+            description = expiredType.description
+        )
 
-            Spacer(modifier = Modifier.size(BbSpacing.IconTextGap))
+        Spacer(modifier = Modifier.height(BbSpacing.Space6))
 
-            Text(
-                text = "Türkçe",
-                style = MaterialTheme.typography.labelLarge,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-        }
+        ExpiredEmailBox(
+            email = email
+        )
+
+        Spacer(modifier = Modifier.height(BbSpacing.Space6))
+
+        ExpiredReasonList(
+            expiredType = expiredType
+        )
+
+        Spacer(modifier = Modifier.height(BbSpacing.Space7))
+
+        BbButton(
+            modifier = Modifier.fillMaxWidth(),
+            text = expiredType.primaryButtonText,
+            onClick = onSendAgainClick,
+            variant = BbButtonVariant.Primary,
+            size = BbButtonSize.Large
+        )
+
+        Spacer(modifier = Modifier.height(BbSpacing.Space3))
+
+        BbButton(
+            modifier = Modifier.fillMaxWidth(),
+            text = "Giriş Ekranına Dön",
+            onClick = onGoToLogonClick,
+            variant = BbButtonVariant.Outline,
+            size = BbButtonSize.Large
+        )
+
+        Spacer(modifier = Modifier.height(BbSpacing.Space6))
+
+        ExpiredSecurityInfoBox()
     }
 }
 
 @Composable
-private fun ExpiredIcon(
+private fun ExpiredStatusIcon(
     expiredType: ExpiredType
 ) {
     Surface(
-        color = MaterialTheme.colorScheme.errorContainer,
+        color = BbColors.Red.Red50,
         shape = BbRadius.PillShape
     ) {
         Box(
             modifier = Modifier.size(BbSpacing.Space20),
             contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = expiredType.iconText,
-                style = MaterialTheme.typography.displaySmall
+            Icon(
+                imageVector = when (expiredType) {
+                    ExpiredType.EmailVerification -> Icons.Outlined.MarkEmailUnread
+                    ExpiredType.PasswordReset -> Icons.Outlined.KeyOff
+                    ExpiredType.RegisterSession -> Icons.Outlined.Schedule
+                },
+                contentDescription = null,
+                tint = BbColors.Red.Red600,
+                modifier = Modifier.size(BbIcon.Size3Xl)
             )
         }
     }
 }
 
 @Composable
-private fun ExpiredBadge(
-    text: String
+private fun ExpiredEmailBox(
+    email: String
 ) {
     Surface(
-        color = MaterialTheme.colorScheme.errorContainer,
-        shape = BbRadius.Badge
+        modifier = Modifier.fillMaxWidth(),
+        color = BbColors.SurfaceMuted,
+        shape = BbRadius.Card
     ) {
-        Text(
-            modifier = Modifier.padding(
-                horizontal = BbSpacing.BadgePaddingHorizontal,
-                vertical = BbSpacing.BadgePaddingVertical
-            ),
-            text = text,
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onErrorContainer,
-            fontWeight = FontWeight.SemiBold
-        )
+        Column(
+            modifier = Modifier.padding(BbSpacing.CardPadding),
+            horizontalAlignment = Alignment.Start
+        ) {
+            Text(
+                text = "İşlem yapılan adres",
+                style = MaterialTheme.typography.labelMedium,
+                color = BbColors.TextMuted
+            )
+
+            Spacer(modifier = Modifier.height(BbSpacing.Space1))
+
+            Text(
+                text = email,
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.Bold,
+                color = BbColors.TextStrong
+            )
+        }
     }
 }
 
@@ -326,7 +182,7 @@ private fun ExpiredReasonItem(
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        color = MaterialTheme.colorScheme.surfaceVariant,
+        color = BbColors.SurfaceMuted,
         shape = BbRadius.Card
     ) {
         Row(
@@ -335,7 +191,7 @@ private fun ExpiredReasonItem(
             horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
         ) {
             Surface(
-                color = MaterialTheme.colorScheme.errorContainer,
+                color = BbColors.Red.Red50,
                 shape = BbRadius.PillShape
             ) {
                 Box(
@@ -346,7 +202,7 @@ private fun ExpiredReasonItem(
                         text = number,
                         style = MaterialTheme.typography.labelLarge,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onErrorContainer
+                        color = BbColors.Red.Red700
                     )
                 }
             }
@@ -358,15 +214,66 @@ private fun ExpiredReasonItem(
                     text = title,
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = BbColors.TextStrong
                 )
 
-                Spacer(modifier = Modifier.size(BbSpacing.Space1))
+                Spacer(modifier = Modifier.height(BbSpacing.Space1))
 
                 Text(
                     text = description,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = BbColors.TextSubtle
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun ExpiredSecurityInfoBox() {
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        color = BbColors.PrimarySoft,
+        shape = BbRadius.Card
+    ) {
+        Row(
+            modifier = Modifier.padding(BbSpacing.CardPaddingCompact),
+            verticalAlignment = Alignment.Top,
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+        ) {
+            Surface(
+                color = BbColors.White,
+                shape = BbRadius.PillShape
+            ) {
+                Box(
+                    modifier = Modifier.size(BbSpacing.Space8),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Refresh,
+                        contentDescription = null,
+                        tint = BbColors.TextStrong,
+                        modifier = Modifier.size(BbIcon.SizeMd)
+                    )
+                }
+            }
+
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    text = "Güvenlik nedeniyle",
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = BbColors.TextStrong
+                )
+
+                Spacer(modifier = Modifier.height(BbSpacing.Space1))
+
+                Text(
+                    text = "Süresi dolan bağlantılar tekrar kullanılamaz. Yeni bağlantı oluşturmanız gerekir.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = BbColors.TextSubtle
                 )
             }
         }
@@ -375,7 +282,6 @@ private fun ExpiredReasonItem(
 
 enum class ExpiredType(
     val badgeText: String,
-    val iconText: String,
     val title: String,
     val description: String,
     val primaryButtonText: String,
@@ -384,7 +290,6 @@ enum class ExpiredType(
 ) {
     EmailVerification(
         badgeText = "Doğrulama Süresi Doldu",
-        iconText = "⏳",
         title = "E-posta Bağlantısı Geçersiz",
         description = "E-posta doğrulama bağlantınızın süresi dolmuş olabilir.",
         primaryButtonText = "Doğrulama E-postasını Yeniden Gönder",
@@ -394,7 +299,6 @@ enum class ExpiredType(
 
     PasswordReset(
         badgeText = "Şifre Bağlantısı Geçersiz",
-        iconText = "🔑",
         title = "Şifre Yenileme Süresi Doldu",
         description = "Şifre yenileme bağlantınız artık kullanılamıyor.",
         primaryButtonText = "Yeni Şifre Bağlantısı Gönder",
@@ -404,7 +308,6 @@ enum class ExpiredType(
 
     RegisterSession(
         badgeText = "Kayıt Oturumu Kapandı",
-        iconText = "🚪",
         title = "Kayıt Bağlantısı Geçersiz",
         description = "Kayıt işleminiz yarıda kalmış veya bağlantı süresi dolmuş olabilir.",
         primaryButtonText = "Kayıt İşlemini Yeniden Başlat",

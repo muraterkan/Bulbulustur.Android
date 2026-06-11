@@ -1,5 +1,9 @@
 package com.bulbulustur.android
 
+import com.bulbulustur.android.features.logon.LogonRoutes
+import com.bulbulustur.android.features.logon.logonGraph
+
+
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -237,13 +241,43 @@ class MainActivity : ComponentActivity() {
                         startDestination = SplashRoutes.Landing
                     ) {
                         composable(SplashRoutes.Landing) {
+
+
+
+
+
+
+
+
+
                             LandingSplashScreen(
+                                autoFinishEnabled = false,
+                                showDebugLogonLinks = true,
                                 onSplashFinished = {
                                     navController.navigate(SplashRoutes.ModeSelection) {
                                         popUpTo(SplashRoutes.Landing) {
                                             inclusive = true
                                         }
 
+                                        launchSingleTop = true
+                                    }
+                                },
+                                onLogonClick = {
+                                    navController.navigate(LogonRoutes.Logon) {
+                                        launchSingleTop = true
+                                    }
+                                },
+                                onRegisterClick = {
+                                    navController.navigate(LogonRoutes.FirstDoor) {
+                                        launchSingleTop = true
+                                    }
+                                },
+                                onForgotPasswordClick = {
+                                    navController.navigate(LogonRoutes.Logon) {
+                                        launchSingleTop = true
+                                    }
+
+                                    navController.navigate(LogonRoutes.ForgotPassword) {
                                         launchSingleTop = true
                                     }
                                 }
@@ -260,7 +294,9 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         }
-
+                        logonGraph(
+                            navController = navController
+                        )
                         composable(MessageRoutes.Inbox) {
                             MessageInboxScreen(
                                 onBackClick = {
@@ -1484,6 +1520,10 @@ class MainActivity : ComponentActivity() {
                             },
                             onWholesaleClick = {
                                 navigateToWholesaleHome()
+                            },
+                            onRfqClick = {
+                                closeBuyerModeSheet()
+                                navigateToWholesaleRfqCreate()
                             }
                         )
                     }

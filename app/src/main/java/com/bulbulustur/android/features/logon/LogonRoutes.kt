@@ -20,7 +20,7 @@ fun NavGraphBuilder.logonGraph(
     composable(
         route = LogonRoutes.Logon
     ) {
-        LogonScreen(
+        LoginScreen(
             onLogonClick = { email, password ->
                 /*
                  * API bağlandığında:

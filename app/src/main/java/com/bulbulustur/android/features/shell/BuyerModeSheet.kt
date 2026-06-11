@@ -12,9 +12,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.icons.outlined.Description
+import androidx.compose.material.icons.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.ShoppingBasket
 import androidx.compose.material.icons.outlined.Storefront
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -38,7 +41,8 @@ fun BuyerModeSheet(
     currentMode: BuyerMode,
     onDismissRequest: () -> Unit,
     onRetailClick: () -> Unit,
-    onWholesaleClick: () -> Unit
+    onWholesaleClick: () -> Unit,
+    onRfqClick: (() -> Unit)? = null
 ) {
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
@@ -106,6 +110,26 @@ fun BuyerModeSheet(
                     )
                 },
                 onClick = onWholesaleClick
+            )
+
+            HorizontalDivider(
+                color = BbColors.Border
+            )
+
+            Text(
+                text = "Hızlı toptan aksiyon",
+                style = MaterialTheme.typography.titleSmall,
+                color = BbColors.TextStrong
+            )
+
+            BuyerRfqShortcutCard(
+                onClick = {
+                    if (onRfqClick != null) {
+                        onRfqClick()
+                    } else {
+                        onWholesaleClick()
+                    }
+                }
             )
         }
     }
@@ -178,6 +202,65 @@ private fun BuyerModeOptionCard(
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun BuyerRfqShortcutCard(
+    onClick: () -> Unit
+) {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium,
+        onClick = onClick
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.CardGap),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(BbIcon.BoxLg)
+                    .background(
+                        color = BbColors.Navy.Navy900,
+                        shape = BbRadius.PillShape
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Description,
+                    contentDescription = null,
+                    tint = BbColors.Primary,
+                    modifier = Modifier.size(BbIcon.SizeLg)
+                )
+            }
+
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+            ) {
+                Text(
+                    text = "RFQ Talebi Gönder",
+                    style = MaterialTheme.typography.titleSmall,
+                    color = BbColors.TextStrong
+                )
+
+                Text(
+                    text = "Toptan alım için tedarikçilerden son fiyat iste",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = BbColors.TextMuted
+                )
+            }
+
+            Icon(
+                imageVector = Icons.Outlined.KeyboardArrowRight,
+                contentDescription = null,
+                tint = BbColors.TextMuted,
+                modifier = Modifier.size(BbIcon.SizeLg)
+            )
         }
     }
 }

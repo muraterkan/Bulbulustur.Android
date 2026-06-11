@@ -8,13 +8,17 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -23,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.bulbulustur.android.R
@@ -33,7 +38,12 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun LandingSplashScreen(
-    onSplashFinished: () -> Unit
+    onSplashFinished: () -> Unit,
+    onLogonClick: () -> Unit = {},
+    onRegisterClick: () -> Unit = {},
+    onForgotPasswordClick: () -> Unit = {},
+    showDebugLogonLinks: Boolean = false,
+    autoFinishEnabled: Boolean = true
 ) {
     val logoAlpha = remember {
         Animatable(0f)
@@ -51,7 +61,7 @@ fun LandingSplashScreen(
         Animatable(28f)
     }
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(autoFinishEnabled) {
         launch {
             logoAlpha.animateTo(
                 targetValue = 1f,
@@ -94,9 +104,10 @@ fun LandingSplashScreen(
             )
         }
 
-        delay(1700)
-
-        onSplashFinished()
+        if (autoFinishEnabled) {
+            delay(1700)
+            onSplashFinished()
+        }
     }
 
     Box(
@@ -105,8 +116,7 @@ fun LandingSplashScreen(
             .background(BbColors.Primary)
     ) {
         Column(
-            modifier = Modifier
-                .align(Alignment.Center),
+            modifier = Modifier.align(Alignment.Center),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -132,6 +142,87 @@ fun LandingSplashScreen(
                 style = MaterialTheme.typography.titleMedium,
                 textAlign = TextAlign.Center
             )
+        }
+
+        if (showDebugLogonLinks) {
+            LandingSplashDebugLinks(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+                    .padding(
+                        start = BbSpacing.PageHorizontal,
+                        end = BbSpacing.PageHorizontal,
+                        bottom = BbSpacing.Space10
+                    ),
+                onContinueClick = onSplashFinished,
+                onLogonClick = onLogonClick,
+                onRegisterClick = onRegisterClick,
+                onForgotPasswordClick = onForgotPasswordClick
+            )
+        }
+    }
+}
+
+@Composable
+private fun LandingSplashDebugLinks(
+    modifier: Modifier = Modifier,
+    onContinueClick: () -> Unit,
+    onLogonClick: () -> Unit,
+    onRegisterClick: () -> Unit,
+    onForgotPasswordClick: () -> Unit
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+    ) {
+        TextButton(
+            onClick = onContinueClick
+        ) {
+            Text(
+                text = "Alışverişe Devam Et",
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.Bold,
+                color = BbColors.Gray.Gray900
+            )
+        }
+
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            TextButton(
+                onClick = onLogonClick
+            ) {
+                Text(
+                    text = "Giriş Yap",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = BbColors.Gray.Gray900
+                )
+            }
+
+            TextButton(
+                onClick = onRegisterClick
+            ) {
+                Text(
+                    text = "Kayıt Ol",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = BbColors.Gray.Gray900
+                )
+            }
+
+            TextButton(
+                onClick = onForgotPasswordClick
+            ) {
+                Text(
+                    text = "Şifremi Unuttum",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = BbColors.Gray.Gray900
+                )
+            }
         }
     }
 }

@@ -2223,7 +2223,7 @@ private fun RetailSizeGuideSheet(
         )
 
         RetailSheetPrimaryButton(
-            text = "Detaylı Ölçü Rehberini Aç",
+            text = "Anladım",
             onClick = onCloseClick
         )
     }

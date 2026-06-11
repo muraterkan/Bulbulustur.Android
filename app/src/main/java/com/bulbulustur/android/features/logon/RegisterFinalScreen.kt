@@ -1,37 +1,32 @@
 package com.bulbulustur.android.features.logon
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material.icons.outlined.MarkEmailUnread
+import androidx.compose.material.icons.outlined.PendingActions
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import com.bulbulustur.android.ui.components.BbButton
 import com.bulbulustur.android.ui.components.BbButtonSize
 import com.bulbulustur.android.ui.components.BbButtonVariant
-import com.bulbulustur.android.ui.components.BbCard
-import com.bulbulustur.android.ui.components.BbCardPadding
-import com.bulbulustur.android.ui.components.BbCardVariant
+import com.bulbulustur.android.ui.theme.BbColors
+import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
 import com.bulbulustur.android.ui.theme.BbTheme
@@ -44,262 +39,125 @@ fun RegisterFinalScreen(
     onResendVerificationClick: () -> Unit = {},
     onLanguageClick: () -> Unit = {}
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .statusBarsPadding()
-            .imePadding()
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = BbSpacing.PageHorizontalWide),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Spacer(modifier = Modifier.size(BbSpacing.PageTop))
-
-            RegisterFinalTopBar(
-                onLanguageClick = onLanguageClick
-            )
-
-            Spacer(modifier = Modifier.size(BbSpacing.Space10))
-
-            BbCard(
-                modifier = Modifier.fillMaxWidth(),
-                variant = BbCardVariant.Elevated,
-                padding = BbCardPadding.Large
-            ) {
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    RegisterFinalIcon(
-                        finalState = finalState
-                    )
-
-                    Spacer(modifier = Modifier.size(BbSpacing.Space5))
-
-                    RegisterFinalBadge(
-                        text = finalState.badgeText
-                    )
-
-                    Spacer(modifier = Modifier.size(BbSpacing.Space5))
-
-                    Text(
-                        text = finalState.title,
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-
-                    Spacer(modifier = Modifier.size(BbSpacing.Space2))
-
-                    Text(
-                        text = finalState.description,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-
-                    Spacer(modifier = Modifier.size(BbSpacing.Space6))
-
-                    Surface(
-                        modifier = Modifier.fillMaxWidth(),
-                        color = MaterialTheme.colorScheme.surfaceVariant,
-                        shape = BbRadius.Card
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(BbSpacing.CardPadding),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(
-                                text = "Doğrulama adresi",
-                                style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-
-                            Spacer(modifier = Modifier.size(BbSpacing.Space1))
-
-                            Text(
-                                text = email,
-                                style = MaterialTheme.typography.titleSmall,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.size(BbSpacing.Space6))
-
-                    RegisterFinalStepList(
-                        finalState = finalState
-                    )
-
-                    Spacer(modifier = Modifier.size(BbSpacing.Space6))
-
-                    BbButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = "Giriş Ekranına Dön",
-                        onClick = onGoToLogonClick,
-                        variant = BbButtonVariant.Primary,
-                        size = BbButtonSize.Large
-                    )
-
-                    if (finalState == RegisterFinalState.WaitingEmailVerification) {
-                        Spacer(modifier = Modifier.size(BbSpacing.Space3))
-
-                        BbButton(
-                            modifier = Modifier.fillMaxWidth(),
-                            text = "Doğrulama E-postasını Tekrar Gönder",
-                            onClick = onResendVerificationClick,
-                            variant = BbButtonVariant.Outline,
-                            size = BbButtonSize.Large
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.size(BbSpacing.Space5))
-
-                    Surface(
-                        modifier = Modifier.fillMaxWidth(),
-                        color = MaterialTheme.colorScheme.primaryContainer,
-                        shape = BbRadius.Card
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(BbSpacing.CardPaddingCompact),
-                            verticalAlignment = Alignment.Top,
-                            horizontalArrangement = Arrangement.spacedBy(BbSpacing.IconTextGap)
-                        ) {
-                            Text(
-                                text = "💡",
-                                style = MaterialTheme.typography.titleSmall
-                            )
-
-                            Column {
-                                Text(
-                                    text = "Küçük not",
-                                    style = MaterialTheme.typography.labelLarge,
-                                    fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.onPrimaryContainer
-                                )
-
-                                Spacer(modifier = Modifier.size(BbSpacing.Space1))
-
-                                Text(
-                                    text = "E-postayı görmüyorsanız spam veya gereksiz klasörünü kontrol edin.",
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onPrimaryContainer
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-
-            Spacer(modifier = Modifier.size(BbSpacing.Space12))
-
-            Text(
-                text = "© 2026 Bulbulustur - Tüm hakları saklıdır",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-
-            Spacer(modifier = Modifier.size(BbSpacing.PageBottomCompact))
+    LogonPublicScaffold(
+        onLanguageSelected = {
+            onLanguageClick()
         }
-    }
-}
-
-@Composable
-private fun RegisterFinalTopBar(
-    onLanguageClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = buildAnnotatedString {
-                append("bulbulustur")
-
-                withStyle(
-                    style = SpanStyle(
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                ) {
-                    append(".")
-                }
-            },
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Black,
-            color = MaterialTheme.colorScheme.onBackground
+        RegisterFinalStatusIcon(
+            finalState = finalState
         )
 
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.height(BbSpacing.Space5))
 
-        OutlinedButton(
-            onClick = onLanguageClick,
-            shape = BbRadius.Button
-        ) {
-            Text(
-                text = "🌐",
-                style = MaterialTheme.typography.labelLarge
-            )
+        LogonPublicPageTitle(
+            eyebrow = finalState.badgeText,
+            title = finalState.title,
+            description = finalState.description
+        )
 
-            Spacer(modifier = Modifier.size(BbSpacing.IconTextGap))
+        Spacer(modifier = Modifier.height(BbSpacing.Space6))
 
-            Text(
-                text = "Türkçe",
-                style = MaterialTheme.typography.labelLarge,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onBackground
+        RegisterFinalEmailBox(
+            email = email
+        )
+
+        Spacer(modifier = Modifier.height(BbSpacing.Space6))
+
+        RegisterFinalStepList(
+            finalState = finalState
+        )
+
+        Spacer(modifier = Modifier.height(BbSpacing.Space7))
+
+        BbButton(
+            modifier = Modifier.fillMaxWidth(),
+            text = "Giriş Ekranına Dön",
+            onClick = onGoToLogonClick,
+            variant = BbButtonVariant.Primary,
+            size = BbButtonSize.Large
+        )
+
+        if (finalState == RegisterFinalState.WaitingEmailVerification) {
+            Spacer(modifier = Modifier.height(BbSpacing.Space3))
+
+            BbButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = "Doğrulama E-postasını Tekrar Gönder",
+                onClick = onResendVerificationClick,
+                variant = BbButtonVariant.Outline,
+                size = BbButtonSize.Large
             )
         }
+
+        Spacer(modifier = Modifier.height(BbSpacing.Space6))
+
+        RegisterFinalInfoBox()
     }
 }
 
 @Composable
-private fun RegisterFinalIcon(
+private fun RegisterFinalStatusIcon(
     finalState: RegisterFinalState
 ) {
     Surface(
         color = when (finalState) {
-            RegisterFinalState.Completed -> MaterialTheme.colorScheme.primaryContainer
-            RegisterFinalState.WaitingEmailVerification -> MaterialTheme.colorScheme.surfaceVariant
-            RegisterFinalState.WaitingApproval -> MaterialTheme.colorScheme.secondaryContainer
+            RegisterFinalState.Completed -> BbColors.Green.Green50
+            RegisterFinalState.WaitingEmailVerification -> BbColors.SurfaceMuted
+            RegisterFinalState.WaitingApproval -> BbColors.PrimarySoft
         },
         shape = BbRadius.PillShape
     ) {
         Box(
-            modifier = Modifier
-                .size(BbSpacing.Space20),
+            modifier = Modifier.size(BbSpacing.Space20),
             contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = finalState.iconText,
-                style = MaterialTheme.typography.displaySmall
+            Icon(
+                imageVector = when (finalState) {
+                    RegisterFinalState.Completed -> Icons.Outlined.CheckCircle
+                    RegisterFinalState.WaitingEmailVerification -> Icons.Outlined.MarkEmailUnread
+                    RegisterFinalState.WaitingApproval -> Icons.Outlined.PendingActions
+                },
+                contentDescription = null,
+                tint = when (finalState) {
+                    RegisterFinalState.Completed -> BbColors.Green.Green700
+                    RegisterFinalState.WaitingEmailVerification -> BbColors.TextStrong
+                    RegisterFinalState.WaitingApproval -> BbColors.TextStrong
+                },
+                modifier = Modifier.size(BbIcon.Size3Xl)
             )
         }
     }
 }
 
 @Composable
-private fun RegisterFinalBadge(
-    text: String
+private fun RegisterFinalEmailBox(
+    email: String
 ) {
     Surface(
-        color = MaterialTheme.colorScheme.primaryContainer,
-        shape = BbRadius.Badge
+        modifier = Modifier.fillMaxWidth(),
+        color = BbColors.SurfaceMuted,
+        shape = BbRadius.Card
     ) {
-        Text(
-            modifier = Modifier.padding(
-                horizontal = BbSpacing.BadgePaddingHorizontal,
-                vertical = BbSpacing.BadgePaddingVertical
-            ),
-            text = text,
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
-            fontWeight = FontWeight.SemiBold
-        )
+        Column(
+            modifier = Modifier.padding(BbSpacing.CardPadding),
+            horizontalAlignment = Alignment.Start
+        ) {
+            Text(
+                text = "Doğrulama adresi",
+                style = MaterialTheme.typography.labelMedium,
+                color = BbColors.TextMuted
+            )
+
+            Spacer(modifier = Modifier.height(BbSpacing.Space1))
+
+            Text(
+                text = email,
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.Bold,
+                color = BbColors.TextStrong
+            )
+        }
     }
 }
 
@@ -345,18 +203,18 @@ private fun RegisterFinalStepItem(
     val numberBackground = if (isCompleted) {
         MaterialTheme.colorScheme.primary
     } else {
-        MaterialTheme.colorScheme.surfaceVariant
+        BbColors.Surface
     }
 
     val numberColor = if (isCompleted) {
         MaterialTheme.colorScheme.onPrimary
     } else {
-        MaterialTheme.colorScheme.onSurfaceVariant
+        BbColors.TextMuted
     }
 
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        color = MaterialTheme.colorScheme.surfaceVariant,
+        color = BbColors.SurfaceMuted,
         shape = BbRadius.Card
     ) {
         Row(
@@ -388,44 +246,68 @@ private fun RegisterFinalStepItem(
                     text = title,
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = BbColors.TextStrong
                 )
 
-                Spacer(modifier = Modifier.size(BbSpacing.Space1))
+                Spacer(modifier = Modifier.height(BbSpacing.Space1))
 
                 Text(
                     text = description,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = BbColors.TextSubtle
                 )
             }
         }
     }
 }
 
+@Composable
+private fun RegisterFinalInfoBox() {
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        color = BbColors.PrimarySoft,
+        shape = BbRadius.Card
+    ) {
+        Column(
+            modifier = Modifier.padding(BbSpacing.CardPaddingCompact)
+        ) {
+            Text(
+                text = "Küçük not",
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.Bold,
+                color = BbColors.TextStrong
+            )
+
+            Spacer(modifier = Modifier.height(BbSpacing.Space1))
+
+            Text(
+                text = "E-postayı görmüyorsanız spam veya gereksiz klasörünü kontrol edin.",
+                style = MaterialTheme.typography.bodySmall,
+                color = BbColors.TextSubtle
+            )
+        }
+    }
+}
+
 enum class RegisterFinalState(
     val badgeText: String,
-    val iconText: String,
     val title: String,
     val description: String
 ) {
     Completed(
         badgeText = "Üyelik Tamamlandı",
-        iconText = "✅",
         title = "Hesabınız Hazır",
         description = "Bulbulustur hesabınız başarıyla oluşturuldu. Artık giriş yapabilirsiniz."
     ),
 
     WaitingEmailVerification(
         badgeText = "Doğrulama Bekleniyor",
-        iconText = "✉️",
         title = "E-postanızı Kontrol Edin",
         description = "Hesabınızı aktifleştirmek için e-posta adresinize gönderilen doğrulama bağlantısını kullanın."
     ),
 
     WaitingApproval(
         badgeText = "Kontrol Bekleniyor",
-        iconText = "🏢",
         title = "Kurumsal Hesap İnceleniyor",
         description = "Firma hesabınız kontrol sürecine alındı. Onaylandığında giriş yapabilirsiniz."
     )

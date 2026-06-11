@@ -3,7 +3,6 @@ package com.bulbulustur.android.features.store
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,8 +23,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.icons.outlined.Inventory2
-import androidx.compose.material.icons.outlined.LocalShipping
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.outlined.Storefront
@@ -44,6 +41,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -64,6 +62,7 @@ fun StoreDetailScreen(
     onProductClick: (RetailStoreProductItem) -> Unit = {},
     onCategoryClick: (String) -> Unit = {},
     onFollowClick: (RetailStoreDetail) -> Unit = {},
+    onStoreListClick: () -> Unit = {},
     onAddToBasketClick: (RetailStoreProductItem) -> Unit = {},
     onFavoriteClick: (RetailStoreProductItem) -> Unit = {}
 ) {
@@ -136,6 +135,12 @@ fun StoreDetailScreen(
             item {
                 StoreTrustInfoCard(
                     store = store
+                )
+            }
+
+            item {
+                StoreOtherStoresCard(
+                    onStoreListClick = onStoreListClick
                 )
             }
 
@@ -462,6 +467,71 @@ private fun StoreTrustInfoCard(
     }
 }
 
+@Composable
+private fun StoreOtherStoresCard(
+    onStoreListClick: () -> Unit
+) {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium,
+        onClick = onStoreListClick
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+        ) {
+            Surface(
+                modifier = Modifier.size(BbIcon.BoxMd),
+                shape = BbRadius.LgShape,
+                color = BbColors.PrimarySoft,
+                border = BorderStroke(
+                    width = 1.dp,
+                    color = BbColors.Primary.copy(alpha = 0.35f)
+                )
+            ) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Storefront,
+                        contentDescription = null,
+                        tint = BbColors.TextStrong,
+                        modifier = Modifier.size(BbIcon.SizeMd)
+                    )
+                }
+            }
+
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+            ) {
+                Text(
+                    text = "Diğer Mağazalar",
+                    style = MaterialTheme.typography.titleSmall,
+                    color = BbColors.TextStrong,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Text(
+                    text = "Bulbulustur’daki diğer perakende mağazalarını keşfedin.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = BbColors.TextMuted
+                )
+            }
+
+            Icon(
+                imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
+                contentDescription = null,
+                tint = BbColors.TextMuted,
+                modifier = Modifier.size(BbIcon.SizeMd)
+            )
+        }
+    }
+}
+
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun StoreCategoryFilterSection(
@@ -676,7 +746,7 @@ private fun StoreProductBadge(
 @Composable
 private fun StoreSmallActionButton(
     text: String,
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    icon: ImageVector,
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {

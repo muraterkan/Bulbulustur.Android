@@ -586,7 +586,9 @@ class MainActivity : ComponentActivity() {
                                     navController.popBackStack()
                                 },
                                 onStoreClick = {
-                                    navController.navigate(StoreRoutes.StoreDetail)
+                                    navController.navigate(StoreRoutes.StoreDetail) {
+                                        launchSingleTop = true
+                                    }
                                 }
                             )
                         }
@@ -597,7 +599,14 @@ class MainActivity : ComponentActivity() {
                                     navController.popBackStack()
                                 },
                                 onProductClick = {
-                                    navController.navigate(RetailRoutes.ProductDetail)
+                                    navController.navigate(RetailRoutes.ProductDetail) {
+                                        launchSingleTop = true
+                                    }
+                                },
+                                onStoreListClick = {
+                                    navController.navigate(StoreRoutes.StoreList) {
+                                        launchSingleTop = true
+                                    }
                                 }
                             )
                         }
@@ -608,7 +617,9 @@ class MainActivity : ComponentActivity() {
                                     navController.popBackStack()
                                 },
                                 onProductClick = {
-                                    navController.navigate(RetailRoutes.ProductDetail)
+                                    navController.navigate(RetailRoutes.ProductDetail) {
+                                        launchSingleTop = true
+                                    }
                                 }
                             )
                         }

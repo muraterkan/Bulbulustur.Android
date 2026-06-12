@@ -44,5 +44,7 @@ object AccountRoutes {
     const val Reviews = "account/reviews"
     const val Coupons = "account/coupons"
     const val Requests = "account/requests"
+    const val RequestDetail = "account/requests/detail"
     const val Subscriptions = "account/subscriptions"
+
 }

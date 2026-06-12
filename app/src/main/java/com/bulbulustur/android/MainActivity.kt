@@ -30,6 +30,7 @@ import com.bulbulustur.android.features.company.CompanyDetailScreen
 import com.bulbulustur.android.features.company.CompanyListScreen
 import com.bulbulustur.android.features.account.CouponListScreen
 import com.bulbulustur.android.features.account.RequestListScreen
+import com.bulbulustur.android.features.account.RequestDetailScreen
 import com.bulbulustur.android.features.account.ReviewListScreen
 import com.bulbulustur.android.features.account.bank.BankAccountCreateScreen
 import com.bulbulustur.android.features.account.bank.BankAccountEditScreen
@@ -1346,6 +1347,26 @@ class MainActivity : ComponentActivity() {
                             RequestListScreen(
                                 onBackClick = {
                                     navController.popBackStack()
+                                },
+                                onRequestDetailClick = {
+                                    navController.navigate(AccountRoutes.RequestDetail)
+                                },
+                                onOrderListClick = {
+                                    navController.navigate(AccountRoutes.Orders)
+                                }
+                            )
+                        }
+
+                        composable(AccountRoutes.RequestDetail) {
+                            RequestDetailScreen(
+                                onBackClick = {
+                                    navController.popBackStack()
+                                },
+                                onOrderClick = {
+                                    navController.navigate(AccountRoutes.OrderDetail)
+                                },
+                                onStoreClick = {
+                                    navController.navigate(StoreRoutes.StoreDetail)
                                 }
                             )
                         }

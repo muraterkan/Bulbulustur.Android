@@ -47,5 +47,5 @@ object AccountRoutes {
     const val Requests = "account/requests"
     const val RequestDetail = "account/requests/detail"
     const val Subscriptions = "account/subscriptions"
-
+    const val SubscriptionDetail = "account/subscriptions/detail"
 }

@@ -20,6 +20,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.bulbulustur.android.features.account.AccountRoutes
+import com.bulbulustur.android.features.account.subscription.SubscriptionListScreen
+import com.bulbulustur.android.features.account.subscription.SubscriptionDetailScreen
 import com.bulbulustur.android.features.account.AccountScreen
 import com.bulbulustur.android.features.account.AccountSecurityScreen
 import com.bulbulustur.android.features.account.AddressFormScreen
@@ -1391,7 +1393,18 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(AccountRoutes.Subscriptions) {
-                            CommunicationPreferenceScreen(
+                            SubscriptionListScreen(
+                                onBackClick = {
+                                    navController.popBackStack()
+                                },
+                                onSubscriptionDetailClick = {
+                                    navController.navigate(AccountRoutes.SubscriptionDetail)
+                                }
+                            )
+                        }
+
+                        composable(AccountRoutes.SubscriptionDetail) {
+                            SubscriptionDetailScreen(
                                 onBackClick = {
                                     navController.popBackStack()
                                 }

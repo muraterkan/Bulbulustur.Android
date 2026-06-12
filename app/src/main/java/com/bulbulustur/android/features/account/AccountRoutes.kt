@@ -38,6 +38,7 @@ object AccountRoutes {
 
     const val Orders = "account/orders"
     const val OrderDetail = "account/orders/detail"
+    const val OrderContract = "account/orders/contract"
 
     const val Favorites = "account/favorites"
     const val Reviews = "account/reviews"

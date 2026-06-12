@@ -64,8 +64,9 @@ import com.bulbulustur.android.features.basket.BasketRoutes
 import com.bulbulustur.android.features.basket.BasketScreen
 import com.bulbulustur.android.features.message.MessageInboxScreen
 import com.bulbulustur.android.features.message.MessageRoutes
-import com.bulbulustur.android.features.order.OrderDetailScreen
 import com.bulbulustur.android.features.order.OrderListScreen
+import com.bulbulustur.android.features.order.OrderDetailScreen
+import com.bulbulustur.android.features.order.OrderContractScreen
 import com.bulbulustur.android.features.retail.CampaignDetailScreen
 import com.bulbulustur.android.features.retail.CampaignListScreen
 import com.bulbulustur.android.features.retail.OtherSellerListScreen
@@ -1284,13 +1285,37 @@ class MainActivity : ComponentActivity() {
                         composable(AccountRoutes.Orders) {
                             OrderListScreen(
                                 onBackClick = {
-                                    navigateBackToAccount()
+                                    navController.popBackStack()
+                                },
+                                onOrderDetailClick = {
+                                    navController.navigate(AccountRoutes.OrderDetail)
                                 }
                             )
                         }
 
                         composable(AccountRoutes.OrderDetail) {
-                            OrderDetailScreen()
+                            OrderDetailScreen(
+                                onBackClick = {
+                                    navController.popBackStack()
+                                },
+                                onContractClick = {
+                                    navController.navigate(AccountRoutes.OrderContract)
+                                },
+                                onStoreClick = {
+                                    navController.navigate(StoreRoutes.StoreDetail)
+                                },
+                                onSupportClick = {
+                                    // V1 için şimdilik boş bırakılabilir ya da support route'una bağlanır
+                                },
+                            )
+                        }
+
+                        composable(AccountRoutes.OrderContract) {
+                            OrderContractScreen(
+                                onBackClick = {
+                                    navController.popBackStack()
+                                }
+                            )
                         }
 
                         composable(AccountRoutes.Favorites) {

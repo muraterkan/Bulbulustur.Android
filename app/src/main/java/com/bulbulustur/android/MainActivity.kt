@@ -1409,10 +1409,6 @@ class MainActivity : ComponentActivity() {
                                 onLegalPoliciesClick = {
                                     navController.navigate(SettingsRoutes.LegalPolicies)
                                 },
-                                onShareThisAppClick = {
-                                },
-                                onSwitchAccountClick = {
-                                },
                                 onSignOutClick = {
                                 }
                             )

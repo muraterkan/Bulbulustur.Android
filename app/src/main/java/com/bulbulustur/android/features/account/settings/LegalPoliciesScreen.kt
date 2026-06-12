@@ -149,7 +149,7 @@ private fun LegalNoticeCard() {
             ) {
                 Text(
                     text = "Bulbulustur Yasal Merkezi",
-                    style = BbTypography.titleSmall,
+                    style = BbTypography.titleMedium,
                     color = BbColors.TextStrong,
                     fontWeight = FontWeight.Bold
                 )

@@ -182,7 +182,7 @@ private fun LegalPolicyDetailMetaCard(
         ) {
             LegalPolicyMetaRow(
                 icon = Icons.Outlined.CalendarMonth,
-                title = "Güncelleme tarihi",
+                title = "Güncelleme Tarihi",
                 value = policy.updatedAt
             )
 
@@ -190,7 +190,7 @@ private fun LegalPolicyDetailMetaCard(
 
             LegalPolicyMetaRow(
                 icon = Icons.Outlined.Segment,
-                title = "Bölüm sayısı",
+                title = "Bölüm Sayısı",
                 value = "${policy.sections.size} bölüm"
             )
         }
@@ -454,7 +454,7 @@ private fun getLegalPolicyDetail(
             title = "Çerez Politikası",
             category = "Politikalar",
             summary = "Çerez ve benzeri teknolojilerin kullanım detayları.",
-            updatedAt = "01/30/2025 11:58:27",
+            updatedAt = "01/30/2025",
             webUrl = "https://www.bulbulustur.com/support/condition/2/politikalar",
             sections = baseSections
         )
@@ -464,7 +464,7 @@ private fun getLegalPolicyDetail(
             title = "KVKK Aydınlatma Metni",
             category = "Politikalar",
             summary = "Kişisel verilerinizle ilgili yasal bilgilendirme.",
-            updatedAt = "01/30/2025 11:58:27",
+            updatedAt = "01/30/2025",
             webUrl = "https://www.bulbulustur.com/support/condition/2/politikalar",
             sections = baseSections
         )
@@ -474,7 +474,7 @@ private fun getLegalPolicyDetail(
             title = "Kullanım Koşulları",
             category = "Koşullar",
             summary = "Bulbulustur hizmetlerini kullanırken geçerli temel koşullar.",
-            updatedAt = "01/30/2025 11:58:27",
+            updatedAt = "01/30/2025",
             webUrl = "https://www.bulbulustur.com/support/condition/1/kosullar",
             sections = baseSections
         )
@@ -484,7 +484,7 @@ private fun getLegalPolicyDetail(
             title = "Yasal Metin",
             category = "Yasal Merkez",
             summary = "Bulbulustur yasal merkezi içinde yer alan bilgilendirme metni.",
-            updatedAt = "01/30/2025 11:58:27",
+            updatedAt = "01/30/2025",
             webUrl = "https://www.bulbulustur.com/support/condition/2/politikalar",
             sections = baseSections
         )

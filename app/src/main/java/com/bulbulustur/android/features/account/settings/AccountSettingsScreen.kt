@@ -1,5 +1,6 @@
 package com.bulbulustur.android.features.account.settings
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -10,13 +11,12 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.ChevronRight
 import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.Info
@@ -28,20 +28,24 @@ import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Payments
 import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material.icons.outlined.Security
-import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.SupportAgent
-import androidx.compose.material.icons.outlined.SwitchAccount
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
+import com.bulbulustur.android.ui.components.BbInnerPageHeader
 import com.bulbulustur.android.ui.theme.BbColors
 import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbRadius
@@ -61,159 +65,140 @@ fun AccountSettingsScreen(
     onCurrencyClick: () -> Unit = {},
     onAboutThisAppClick: () -> Unit = {},
     onLegalPoliciesClick: () -> Unit = {},
-    onShareThisAppClick: () -> Unit = {},
-    onSwitchAccountClick: () -> Unit = {},
     onSignOutClick: () -> Unit = {}
 ) {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(BbColors.SurfaceMuted)
-            .statusBarsPadding()
-            .navigationBarsPadding(),
-        contentPadding = PaddingValues(
-            horizontal = BbSpacing.PageHorizontal,
-            vertical = BbSpacing.PageTopCompact
-        ),
-        verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
-    ) {
-        item {
-            SettingsHeader(
+    Scaffold(
+        containerColor = BbColors.SurfaceMuted,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Ayarlar",
                 onBackClick = onBackClick
             )
         }
-
-        item {
-            SettingsProtectionBlock(
-                onAccountSecurityClick = onAccountSecurityClick,
-                onPrivacyClick = onPrivacyClick,
-                onPermissionsClick = onPermissionsClick,
-                onHelpCenterClick = onHelpCenterClick
-            )
-        }
-
-        item {
-            SettingsMenuGroup {
-                SettingsMenuRow(
-                    title = "Dil",
-                    value = "Türkçe",
-                    icon = Icons.Outlined.Language,
-                    onClick = onLanguageClick
-                )
-
-                SettingsMenuRow(
-                    title = "Görünüm",
-                    value = "Açık tema",
-                    icon = Icons.Outlined.Palette,
-                    onClick = onAppearanceClick
-                )
-
-                SettingsMenuRow(
-                    title = "Ülke ve Bölge",
-                    value = "Türkiye",
-                    icon = Icons.Outlined.Public,
-                    onClick = onRegionClick
-                )
-
-                SettingsMenuRow(
-                    title = "Para Birimi",
-                    value = "TRY",
-                    icon = Icons.Outlined.Payments,
-                    onClick = onCurrencyClick
-                )
-
-                SettingsMenuRow(
-                    title = "Bildirim ve İzinler",
-                    value = null,
-                    icon = Icons.Outlined.Notifications,
-                    onClick = onPermissionsClick
-                )
-            }
-        }
-
-        item {
-            SettingsMenuGroup {
-                SettingsMenuRow(
-                    title = "Uygulama Hakkında",
-                    value = null,
-                    icon = Icons.Outlined.Info,
-                    onClick = onAboutThisAppClick
-                )
-
-                SettingsMenuRow(
-                    title = "Yasal Metinler ve Politikalar",
-                    value = null,
-                    icon = Icons.Outlined.Description,
-                    onClick = onLegalPoliciesClick
-                )
-
-                SettingsMenuRow(
-                    title = "Uygulamayı Paylaş",
-                    value = null,
-                    icon = Icons.Outlined.Share,
-                    onClick = onShareThisAppClick
-                )
-            }
-        }
-
-        item {
-            SettingsMenuGroup {
-                SettingsMenuRow(
-                    title = "Hesap Değiştir",
-                    value = null,
-                    icon = Icons.Outlined.SwitchAccount,
-                    onClick = onSwitchAccountClick
-                )
-
-                SettingsMenuRow(
-                    title = "Çıkış Yap",
-                    value = null,
-                    icon = Icons.Outlined.Logout,
-                    danger = true,
-                    onClick = onSignOutClick
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun SettingsHeader(
-    onBackClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Box(
+    ) { innerPadding ->
+        LazyColumn(
             modifier = Modifier
-                .size(BbIcon.BoxMd)
-                .background(
-                    color = BbColors.Surface,
-                    shape = BbRadius.LgShape
-                )
-                .clickable {
-                    onBackClick()
-                },
-            contentAlignment = Alignment.Center
+                .fillMaxSize()
+                .background(BbColors.SurfaceMuted)
+                .padding(innerPadding)
+                .navigationBarsPadding(),
+            contentPadding = PaddingValues(
+                start = BbSpacing.PageHorizontal,
+                top = BbSpacing.PageTopCompact,
+                end = BbSpacing.PageHorizontal,
+                bottom = BbSpacing.PageBottom
+            ),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
         ) {
-            Icon(
-                imageVector = Icons.Outlined.ArrowBack,
-                contentDescription = null,
-                tint = BbColors.TextStrong,
-                modifier = Modifier.size(BbIcon.Ui)
-            )
-        }
+            item {
+                SettingsProtectionBlock(
+                    onAccountSecurityClick = onAccountSecurityClick,
+                    onPrivacyClick = onPrivacyClick,
+                    onPermissionsClick = onPermissionsClick,
+                    onHelpCenterClick = onHelpCenterClick
+                )
+            }
 
-        Text(
-            text = "Ayarlar",
-            style = BbTypography.titleLarge,
-            color = BbColors.TextStrong,
-            modifier = Modifier
-                .weight(1f)
-                .padding(end = BbIcon.BoxMd),
-            textAlign = TextAlign.Center
-        )
+            item {
+                SettingsSectionTitle(
+                    title = "Tercihler",
+                    subtitle = "Dil, görünüm ve bölgesel tercihlerini yönet."
+                )
+            }
+
+            item {
+                SettingsMenuGroup {
+                    SettingsMenuRow(
+                        title = "Dil",
+                        value = "Türkçe",
+                        icon = Icons.Outlined.Language,
+                        onClick = onLanguageClick
+                    )
+
+                    SettingsDashedDivider()
+
+                    SettingsMenuRow(
+                        title = "Görünüm",
+                        value = "Açık tema",
+                        icon = Icons.Outlined.Palette,
+                        onClick = onAppearanceClick
+                    )
+
+                    SettingsDashedDivider()
+
+                    SettingsMenuRow(
+                        title = "Ülke ve Bölge",
+                        value = "Türkiye",
+                        icon = Icons.Outlined.Public,
+                        onClick = onRegionClick
+                    )
+
+                    SettingsDashedDivider()
+
+                    SettingsMenuRow(
+                        title = "Para Birimi",
+                        value = "TRY",
+                        icon = Icons.Outlined.Payments,
+                        onClick = onCurrencyClick
+                    )
+
+                    SettingsDashedDivider()
+
+                    SettingsMenuRow(
+                        title = "Bildirim ve İzinler",
+                        value = null,
+                        icon = Icons.Outlined.Notifications,
+                        onClick = onPermissionsClick
+                    )
+                }
+            }
+
+            item {
+                SettingsSectionTitle(
+                    title = "Platform",
+                    subtitle = "Uygulama bilgileri ve yasal metinler."
+                )
+            }
+
+            item {
+                SettingsMenuGroup {
+                    SettingsMenuRow(
+                        title = "Uygulama Hakkında",
+                        value = null,
+                        icon = Icons.Outlined.Info,
+                        onClick = onAboutThisAppClick
+                    )
+
+                    SettingsDashedDivider()
+
+                    SettingsMenuRow(
+                        title = "Yasal Metinler ve Politikalar",
+                        value = null,
+                        icon = Icons.Outlined.Description,
+                        onClick = onLegalPoliciesClick
+                    )
+                }
+            }
+
+            item {
+                SettingsSectionTitle(
+                    title = "Oturum",
+                    subtitle = "Hesabından güvenli şekilde çıkış yap."
+                )
+            }
+
+            item {
+                SettingsMenuGroup {
+                    SettingsMenuRow(
+                        title = "Çıkış Yap",
+                        value = null,
+                        icon = Icons.Outlined.Logout,
+                        danger = true,
+                        onClick = onSignOutClick
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -231,9 +216,10 @@ private fun SettingsProtectionBlock(
             verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
         ) {
             Text(
-                text = "Hesabın güvende",
+                text = "Hesabın Güvende",
                 style = BbTypography.headlineSmall,
-                color = BbColors.Green.Green700
+                color = BbColors.TextStrong,
+                fontWeight = FontWeight.Bold
             )
 
             Text(
@@ -247,6 +233,7 @@ private fun SettingsProtectionBlock(
             verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
         ) {
             Row(
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
             ) {
                 SettingsQuickCard(
@@ -265,6 +252,7 @@ private fun SettingsProtectionBlock(
             }
 
             Row(
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
             ) {
                 SettingsQuickCard(
@@ -293,21 +281,24 @@ private fun SettingsQuickCard(
     onClick: () -> Unit
 ) {
     BbCard(
-        modifier = modifier.clickable {
-            onClick()
-        },
+        modifier = modifier
+            .height(124.dp)
+            .clickable {
+                onClick()
+            },
         variant = BbCardVariant.Outlined,
         padding = BbCardPadding.Medium
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Box(
                 modifier = Modifier
-                    .size(BbIcon.BoxMd)
+                    .size(BbIcon.BoxLg)
                     .background(
-                        color = BbColors.Green.Green50,
+                        color = BbColors.Success.copy(alpha = 0.10f),
                         shape = BbRadius.LgShape
                     ),
                 contentAlignment = Alignment.Center
@@ -315,7 +306,7 @@ private fun SettingsQuickCard(
                 Icon(
                     imageVector = icon,
                     contentDescription = null,
-                    tint = BbColors.Green.Green700,
+                    tint = BbColors.Success,
                     modifier = Modifier.size(BbIcon.Ui)
                 )
             }
@@ -324,16 +315,34 @@ private fun SettingsQuickCard(
                 text = title,
                 style = BbTypography.titleSmall,
                 color = BbColors.TextStrong,
-                modifier = Modifier.weight(1f)
-            )
-
-            Icon(
-                imageVector = Icons.Outlined.ChevronRight,
-                contentDescription = null,
-                tint = BbColors.TextMuted,
-                modifier = Modifier.size(BbIcon.Ui)
+                fontWeight = FontWeight.SemiBold,
+                textAlign = TextAlign.Center,
+                maxLines = 2
             )
         }
+    }
+}
+
+@Composable
+private fun SettingsSectionTitle(
+    title: String,
+    subtitle: String
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+    ) {
+        Text(
+            text = title,
+            style = BbTypography.titleMedium,
+            color = BbColors.TextStrong,
+            fontWeight = FontWeight.Bold
+        )
+
+        Text(
+            text = subtitle,
+            style = BbTypography.bodySmall,
+            color = BbColors.TextMuted
+        )
     }
 }
 
@@ -374,16 +383,30 @@ private fun SettingsMenuRow(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
     ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            tint = if (danger) {
-                BbColors.Red.Red600
-            } else {
-                BbColors.Yellow.Yellow800
-            },
-            modifier = Modifier.size(BbIcon.Ui)
-        )
+        Box(
+            modifier = Modifier
+                .size(BbIcon.BoxMd)
+                .background(
+                    color = if (danger) {
+                        BbColors.Red.Red50
+                    } else {
+                        BbColors.SurfaceMuted
+                    },
+                    shape = BbRadius.LgShape
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = if (danger) {
+                    BbColors.Red.Red600
+                } else {
+                    BbColors.TextStrong
+                },
+                modifier = Modifier.size(BbIcon.Ui)
+            )
+        }
 
         Text(
             text = title,
@@ -393,6 +416,7 @@ private fun SettingsMenuRow(
             } else {
                 BbColors.TextStrong
             },
+            fontWeight = FontWeight.SemiBold,
             modifier = Modifier.weight(1f)
         )
 
@@ -409,6 +433,30 @@ private fun SettingsMenuRow(
             contentDescription = null,
             tint = BbColors.TextMuted,
             modifier = Modifier.size(BbIcon.Ui)
+        )
+    }
+}
+
+@Composable
+private fun SettingsDashedDivider() {
+    Canvas(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                start = BbSpacing.Space16,
+                end = BbSpacing.Space4
+            )
+            .height(1.dp)
+    ) {
+        drawLine(
+            color = BbColors.Border,
+            start = Offset(0f, 0f),
+            end = Offset(size.width, 0f),
+            strokeWidth = 1.dp.toPx(),
+            pathEffect = PathEffect.dashPathEffect(
+                intervals = floatArrayOf(10f, 8f),
+                phase = 0f
+            )
         )
     }
 }

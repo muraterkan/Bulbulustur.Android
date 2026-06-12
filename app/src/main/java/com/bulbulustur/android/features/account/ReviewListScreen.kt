@@ -1,12 +1,19 @@
 package com.bulbulustur.android.features.account
 
+import androidx.compose.foundation.Image
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -15,29 +22,35 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Comment
+import androidx.compose.material.icons.outlined.DeleteOutline
 import androidx.compose.material.icons.outlined.Domain
-import androidx.compose.material.icons.outlined.Storefront
+import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material.icons.outlined.Storefront
+import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.bulbulustur.android.features.account.components.AccountPageScaffold
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import com.bulbulustur.android.ui.components.BbButton
 import com.bulbulustur.android.ui.components.BbButtonSize
 import com.bulbulustur.android.ui.components.BbButtonVariant
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
+import com.bulbulustur.android.ui.components.BbInnerPageHeader
 import com.bulbulustur.android.ui.theme.BbColors
+import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
-import com.bulbulustur.android.ui.theme.BbTypography
 
 @Composable
 fun ReviewListScreen(
@@ -46,38 +59,50 @@ fun ReviewListScreen(
     onEditReviewClick: (Int) -> Unit = {},
     onDeleteReviewClick: (Int) -> Unit = {}
 ) {
-    val selectedTabState = remember {
+    var selectedTab by remember {
         mutableStateOf(AccountReviewTab.Product)
     }
 
-    val reviews = getDemoReviews(
-        selectedTab = selectedTabState.value
-    )
+    val reviews = getDemoReviews(selectedTab)
 
-    AccountPageScaffold(
-        title = "Değerlendirmelerim",
-        kicker = "Alışveriş Deneyimi",
-        description = "Daha önce yaptığınız ürün, mağaza ve firma değerlendirmelerini inceleyin.",
-        backButtonText = "Hesabıma Dön",
-        onBackClick = onBackClick
-    ) {
+    Scaffold(
+        containerColor = BbColors.SurfaceMuted,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Değerlendirmelerim",
+                onBackClick = onBackClick
+            )
+        }
+    ) { innerPadding ->
         LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(BbColors.SurfaceMuted)
+                .padding(innerPadding),
+            contentPadding = PaddingValues(
+                start = BbSpacing.PageHorizontal,
+                top = BbSpacing.PageTopCompact,
+                end = BbSpacing.PageHorizontal,
+                bottom = BbSpacing.PageBottom
+            ),
             verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
         ) {
             item {
+                ReviewIntroCard()
+            }
+
+            item {
                 ReviewTabContainer(
-                    selectedTab = selectedTabState.value,
+                    selectedTab = selectedTab,
                     onTabSelected = { tab ->
-                        selectedTabState.value = tab
+                        selectedTab = tab
                     }
                 )
             }
 
             if (reviews.isEmpty()) {
                 item {
-                    ReviewEmptyState(
-                        selectedTab = selectedTabState.value
-                    )
+                    ReviewEmptyState(selectedTab = selectedTab)
                 }
             }
 
@@ -92,6 +117,31 @@ fun ReviewListScreen(
                     onDeleteReviewClick = onDeleteReviewClick
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun ReviewIntroCard() {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+        ) {
+            Text(
+                text = "Alışveriş deneyimi",
+                style = MaterialTheme.typography.labelSmall,
+                color = BbColors.Yellow.Yellow800
+            )
+
+            Text(
+                text = "Ürün, mağaza ve firma değerlendirmelerinizi burada görüntüleyebilir, gerektiğinde düzenleyebilir veya silebilirsiniz.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 }
@@ -149,28 +199,10 @@ private fun ReviewTabItem(
     icon: ImageVector,
     onClick: (AccountReviewTab) -> Unit
 ) {
-    val backgroundColor = if (selected) {
-        BbColors.Surface
-    } else {
-        BbColors.SurfaceMuted
-    }
-
-    val titleColor = if (selected) {
-        BbColors.TextStrong
-    } else {
-        BbColors.TextMuted
-    }
-
-    val iconColor = if (selected) {
-        BbColors.Yellow.Yellow800
-    } else {
-        BbColors.TextMuted
-    }
-
     Box(
         modifier = modifier
             .background(
-                color = backgroundColor,
+                color = if (selected) BbColors.Surface else MaterialTheme.colorScheme.surfaceVariant,
                 shape = BbRadius.LgShape
             )
             .clickable {
@@ -189,19 +221,19 @@ private fun ReviewTabItem(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = iconColor,
-                modifier = Modifier.size(BbSpacing.Space5)
+                tint = if (selected) BbColors.Yellow.Yellow800 else MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.size(BbIcon.Action)
             )
 
             Text(
                 text = tab.title,
-                style = BbTypography.labelSmall,
-                color = titleColor
+                style = MaterialTheme.typography.labelSmall,
+                color = if (selected) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Text(
                 text = count.toString(),
-                style = BbTypography.labelSmall,
+                style = MaterialTheme.typography.labelSmall,
                 color = BbColors.Yellow.Yellow800
             )
         }
@@ -223,76 +255,90 @@ private fun ReviewCard(
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            ReviewMediaArea(
-                review = review
-            )
+            ReviewMediaArea(review = review)
 
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(BbSpacing.CardPadding),
-                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
             ) {
-                ReviewTypeBadge(
-                    text = review.badgeText
-                )
+                ReviewTypeBadge(text = review.badgeText)
 
                 Text(
                     text = review.title,
-                    style = BbTypography.titleSmall,
-                    color = BbColors.TextStrong
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
-                ReviewRatingRow(
-                    rating = review.rating
-                )
+                ReviewRatingRow(rating = review.rating)
 
                 Text(
                     text = review.comment,
-                    style = BbTypography.bodySmall,
-                    color = BbColors.TextMuted
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
-                ReviewDateBox(
-                    dateText = review.dateText
-                )
+                ReviewDateBox(dateText = review.dateText)
 
-                if (review.type == AccountReviewTab.Product) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
-                    ) {
-                        BbButton(
-                            text = "Ürünü Gör",
-                            onClick = {
-                                onProductClick(review.targetId)
-                            },
-                            modifier = Modifier.weight(1f),
-                            variant = BbButtonVariant.Light,
-                            size = BbButtonSize.Small
-                        )
-
-                        BbButton(
-                            text = "Düzenle",
-                            onClick = {
-                                onEditReviewClick(review.reviewId)
-                            },
-                            modifier = Modifier.weight(1f),
-                            variant = BbButtonVariant.Primary,
-                            size = BbButtonSize.Small
-                        )
-                    }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+                ) {
+                    BbButton(
+                        text = review.primaryActionText,
+                        onClick = {
+                            onProductClick(review.targetId)
+                        },
+                        modifier = Modifier.weight(1f),
+                        variant = BbButtonVariant.Light,
+                        size = BbButtonSize.Small,
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Outlined.Visibility,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.size(BbIcon.ButtonIcon)
+                            )
+                        }
+                    )
 
                     BbButton(
-                        text = "Yorumu Sil",
+                        text = "Düzenle",
                         onClick = {
-                            onDeleteReviewClick(review.reviewId)
+                            onEditReviewClick(review.reviewId)
                         },
-                        modifier = Modifier.fillMaxWidth(),
-                        variant = BbButtonVariant.Danger,
-                        size = BbButtonSize.Small
+                        modifier = Modifier.weight(1f),
+                        variant = BbButtonVariant.Primary,
+                        size = BbButtonSize.Small,
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Outlined.Edit,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onPrimary,
+                                modifier = Modifier.size(BbIcon.ButtonIcon)
+                            )
+                        }
                     )
                 }
+
+                BbButton(
+                    text = "Değerlendirmeyi Sil",
+                    onClick = {
+                        onDeleteReviewClick(review.reviewId)
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    variant = BbButtonVariant.Danger,
+                    size = BbButtonSize.Small,
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Outlined.DeleteOutline,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onError,
+                            modifier = Modifier.size(BbIcon.ButtonIcon)
+                        )
+                    }
+                )
             }
         }
     }
@@ -306,25 +352,33 @@ private fun ReviewMediaArea(
         modifier = Modifier
             .fillMaxWidth()
             .aspectRatio(2.65f)
-            .background(
-                color = BbColors.SurfaceMuted
-            ),
+            .background(MaterialTheme.colorScheme.surfaceVariant),
         contentAlignment = Alignment.Center
     ) {
-        Box(
-            modifier = Modifier
-                .size(BbSpacing.Space20)
-                .background(
-                    color = review.mediaBackgroundColor,
-                    shape = BbRadius.MdShape
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = review.mediaText,
-                style = BbTypography.titleMedium,
-                color = review.mediaTextColor
+        if (review.imageResId != null) {
+            Image(
+                painter = painterResource(id = review.imageResId),
+                contentDescription = review.title,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
             )
+        } else {
+            Box(
+                modifier = Modifier
+                    .size(BbSpacing.Space20)
+                    .background(
+                        color = review.mediaBackgroundColor,
+                        shape = BbRadius.LgShape
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Image,
+                    contentDescription = null,
+                    tint = review.mediaTextColor,
+                    modifier = Modifier.size(BbIcon.Feature)
+                )
+            }
         }
     }
 }
@@ -346,7 +400,7 @@ private fun ReviewTypeBadge(
     ) {
         Text(
             text = text,
-            style = BbTypography.labelSmall,
+            style = MaterialTheme.typography.labelSmall,
             color = BbColors.Yellow.Yellow800
         )
     }
@@ -364,19 +418,15 @@ private fun ReviewRatingRow(
             Icon(
                 imageVector = Icons.Outlined.Star,
                 contentDescription = null,
-                tint = if (index < rating) {
-                    BbColors.Yellow.Yellow800
-                } else {
-                    BbColors.BorderStrong
-                },
-                modifier = Modifier.size(BbSpacing.Space4)
+                tint = if (index < rating) BbColors.Yellow.Yellow800 else BbColors.BorderStrong,
+                modifier = Modifier.size(BbIcon.Inline)
             )
         }
 
         Text(
             text = "$rating / 5",
-            style = BbTypography.labelSmall,
-            color = BbColors.TextMuted
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -388,7 +438,7 @@ private fun ReviewDateBox(
     Box(
         modifier = Modifier
             .background(
-                color = BbColors.SurfaceMuted,
+                color = MaterialTheme.colorScheme.surfaceVariant,
                 shape = BbRadius.Badge
             )
             .padding(
@@ -404,13 +454,13 @@ private fun ReviewDateBox(
                 imageVector = Icons.Outlined.CalendarMonth,
                 contentDescription = null,
                 tint = BbColors.Yellow.Yellow800,
-                modifier = Modifier.size(BbSpacing.Space4)
+                modifier = Modifier.size(BbIcon.Inline)
             )
 
             Text(
                 text = dateText,
-                style = BbTypography.labelSmall,
-                color = BbColors.TextMuted
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -443,20 +493,20 @@ private fun ReviewEmptyState(
                     imageVector = selectedTab.icon,
                     contentDescription = null,
                     tint = BbColors.Yellow.Yellow800,
-                    modifier = Modifier.size(BbSpacing.Space7)
+                    modifier = Modifier.size(BbIcon.Feature)
                 )
             }
 
             Text(
-                text = "Kayıt bulunamadı!",
-                style = BbTypography.titleMedium,
-                color = BbColors.TextStrong
+                text = "Kayıt bulunamadı",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
                 text = "Henüz ${selectedTab.emptyText} bulunmuyor. Değerlendirme yaptığınızda burada listelenecek.",
-                style = BbTypography.bodySmall,
-                color = BbColors.TextMuted
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -478,27 +528,14 @@ private fun getDemoProductReviews(): List<ReviewUiModel> {
             reviewId = 1,
             targetId = 101,
             type = AccountReviewTab.Product,
-            title = "Ürün #1",
+            title = "Ortobella Comfort Genç Garson Bot 8028",
             badgeText = "ÜRÜN DEĞERLENDİRMESİ",
             comment = "Makineyi 7 gündür kullanıyorum. Bu süre içinde hem deneyim kazandım hem de internetten okuduğum birçok bilgiyle karşılaştırdım. Ürünü almayı düşünenler için detaylı bir deneyim paylaşmak istedim.",
             rating = 5,
             dateText = "22 Eylül 2025 00:31 tarihinde eklendi",
-            mediaText = "BOT",
             mediaBackgroundColor = BbColors.Beige.Beige200,
-            mediaTextColor = BbColors.Beige.Beige900
-        ),
-        ReviewUiModel(
-            reviewId = 2,
-            targetId = 102,
-            type = AccountReviewTab.Product,
-            title = "Ürün #1",
-            badgeText = "ÜRÜN DEĞERLENDİRMESİ",
-            comment = "Ürün genel olarak beklentimi karşıladı. Teslimat hızlıydı, paketleme iyiydi. Bir süre daha kullandıktan sonra yorumumu güncelleyebilirim.",
-            rating = 4,
-            dateText = "22 Eylül 2025 00:31 tarihinde eklendi",
-            mediaText = "BOT",
-            mediaBackgroundColor = BbColors.Beige.Beige200,
-            mediaTextColor = BbColors.Beige.Beige900
+            mediaTextColor = BbColors.Beige.Beige900,
+            imageResId = null
         )
     )
 }
@@ -514,9 +551,9 @@ private fun getDemoStoreReviews(): List<ReviewUiModel> {
             comment = "Mağaza iletişimi hızlıydı. Sipariş süreci ve kargo bilgilendirmesi anlaşılır şekilde ilerledi.",
             rating = 5,
             dateText = "12 Ekim 2025 14:20 tarihinde eklendi",
-            mediaText = "O",
             mediaBackgroundColor = BbColors.Green.Green700,
-            mediaTextColor = BbColors.White
+            mediaTextColor = BbColors.White,
+            imageResId = null
         )
     )
 }
@@ -532,9 +569,9 @@ private fun getDemoCompanyReviews(): List<ReviewUiModel> {
             comment = "Firma bilgileri netti, ürün açıklamaları yeterliydi. Toptan iletişim tarafında hızlı dönüş aldım.",
             rating = 5,
             dateText = "10 Ekim 2025 09:12 tarihinde eklendi",
-            mediaText = "C",
             mediaBackgroundColor = BbColors.Green.Green700,
-            mediaTextColor = BbColors.White
+            mediaTextColor = BbColors.White,
+            imageResId = null
         )
     )
 }
@@ -561,6 +598,13 @@ private enum class AccountReviewTab(
     )
 }
 
+private val ReviewUiModel.primaryActionText: String
+    get() = when (type) {
+        AccountReviewTab.Product -> "Ürünü Gör"
+        AccountReviewTab.Store -> "Mağazayı Gör"
+        AccountReviewTab.Company -> "Firmayı Gör"
+    }
+
 private data class ReviewUiModel(
     val reviewId: Int,
     val targetId: Int,
@@ -570,7 +614,7 @@ private data class ReviewUiModel(
     val comment: String,
     val rating: Int,
     val dateText: String,
-    val mediaText: String,
     val mediaBackgroundColor: Color,
-    val mediaTextColor: Color
+    val mediaTextColor: Color,
+    val imageResId: Int?
 )

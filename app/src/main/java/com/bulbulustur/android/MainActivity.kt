@@ -32,6 +32,7 @@ import com.bulbulustur.android.features.account.CouponListScreen
 import com.bulbulustur.android.features.account.RequestListScreen
 import com.bulbulustur.android.features.account.RequestDetailScreen
 import com.bulbulustur.android.features.account.ReviewListScreen
+import com.bulbulustur.android.features.account.review.ReviewEditScreen
 import com.bulbulustur.android.features.account.bank.BankAccountCreateScreen
 import com.bulbulustur.android.features.account.bank.BankAccountEditScreen
 import com.bulbulustur.android.features.account.bank.BankAccountListScreen
@@ -1329,7 +1330,25 @@ class MainActivity : ComponentActivity() {
 
                         composable(AccountRoutes.Reviews) {
                             ReviewListScreen(
+                                onBackClick = { navController.popBackStack() },
+                                onProductClick = { navController.navigate(RetailRoutes.ProductDetail) },
+                                onEditReviewClick = { navController.navigate(AccountRoutes.ReviewEdit) },
+                                onDeleteReviewClick = {
+                                    // V1: silme dialogu sonra eklenir
+
+                                }
+                            )
+                        }
+
+                        composable(AccountRoutes.ReviewEdit) {
+                            ReviewEditScreen(
                                 onBackClick = {
+                                    navController.popBackStack()
+                                },
+                                onSaveClick = {
+                                    navController.popBackStack()
+                                },
+                                onDeleteClick = {
                                     navController.popBackStack()
                                 }
                             )

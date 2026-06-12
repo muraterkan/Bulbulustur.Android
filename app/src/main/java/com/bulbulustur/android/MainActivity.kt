@@ -966,11 +966,13 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
-
                         composable(AccountRoutes.AccountHome) {
                             AccountScreen(
                                 onSecurityClick = {
                                     navController.navigate(AccountRoutes.Security)
+                                },
+                                onProfileClick = {
+                                    navController.navigate(AccountRoutes.ProfileInfo)
                                 },
                                 onAddressClick = {
                                     navController.navigate(AccountRoutes.AddressList)

@@ -1,20 +1,18 @@
 package com.bulbulustur.android.features.account.company
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Badge
@@ -28,6 +26,7 @@ import androidx.compose.material.icons.outlined.Storefront
 import androidx.compose.material.icons.outlined.Verified
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -37,12 +36,10 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import com.bulbulustur.android.ui.components.BbButton
-import com.bulbulustur.android.ui.components.BbButtonSize
-import com.bulbulustur.android.ui.components.BbButtonVariant
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
+import com.bulbulustur.android.ui.components.BbInnerPageHeader
 import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
@@ -63,95 +60,103 @@ fun CompanyInfoScreen(
         )
     )
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(pageBackground)
-            .statusBarsPadding()
-            .navigationBarsPadding(),
-        contentPadding = PaddingValues(
-            horizontal = BbSpacing.PageHorizontal,
-            vertical = BbSpacing.PageTopCompact
-        ),
-        verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
-    ) {
-        item {
-            CompanyHeroCard(
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Firma Bilgilerim",
                 onBackClick = onBackClick,
-                onEditClick = onEditClick
+                actionIcon = Icons.Outlined.Edit,
+                actionContentDescription = "Firma Bilgilerini Düzenle",
+                onActionClick = onEditClick
             )
         }
-
-        item {
-            CompanyStatsGrid()
-        }
-
-        item {
-            CompanyInfoSection(
-                title = "Şirket Kimliği",
-                description = "Ünvan, şirket tipi ve kurumsal profil bilgileri.",
-                icon = Icons.Outlined.Badge
-            ) {
-                CompanyInfoRow("Şirket Ünvanı", "Türkiye Global Ticaret Limited Şirketi")
-                CompanyDashedDivider()
-                CompanyInfoRow("Şirket Tipi", "Limited Şirket")
-                CompanyDashedDivider()
-                CompanyInfoRow("Abonelik Planı", "B2B e-marketplace / Free")
-                CompanyDashedDivider()
-                CompanyInfoRow("Kuruluş Yılı", "2025")
+    ) { innerPadding ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(pageBackground)
+                .padding(innerPadding),
+            contentPadding = PaddingValues(
+                start = BbSpacing.PageHorizontal,
+                top = BbSpacing.PageTopCompact,
+                end = BbSpacing.PageHorizontal,
+                bottom = BbSpacing.PageBottom
+            ),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
+        ) {
+            item {
+                CompanyHeroCard()
             }
-        }
 
-        item {
-            CompanyInfoSection(
-                title = "Adres Bilgileri",
-                description = "Şirketin kayıtlı lokasyon bilgileri.",
-                icon = Icons.Outlined.LocationOn
-            ) {
-                CompanyInfoRow("Adres", "Fulya Mah., Aytekin Kotil Cad., No: 11/1")
-                CompanyDashedDivider()
-                CompanyInfoRow("Ülke", "Türkiye")
-                CompanyDashedDivider()
-                CompanyInfoRow("Şehir", "İstanbul")
-                CompanyDashedDivider()
-                CompanyInfoRow("İlçe", "Şişli")
-                CompanyDashedDivider()
-                CompanyInfoRow("Posta Kodu", "34394")
+            item {
+                CompanyStatsGrid()
             }
-        }
 
-        item {
-            CompanyInfoSection(
-                title = "Vergi ve Resmi Bilgiler",
-                description = "Fatura ve resmi kayıt süreçlerinde kullanılan bilgiler.",
-                icon = Icons.Outlined.ReceiptLong
-            ) {
-                CompanyInfoRow("Vergi Dairesi", "Şişli Vergi Dairesi")
-                CompanyDashedDivider()
-                CompanyInfoRow("Vergi Numarası", "789456123")
-                CompanyDashedDivider()
-                CompanyInfoRow("MERSİS", "0188129921700001")
-                CompanyDashedDivider()
-                CompanyInfoRow("KEP", "tglobal@bulbulustur.com")
-                CompanyDashedDivider()
-                CompanyInfoRow("Web Sitesi", "www.turkiyeglobal.com")
+            item {
+                CompanyInfoSection(
+                    title = "Şirket Kimliği",
+                    description = "Ünvan, şirket tipi ve kurumsal profil bilgileri.",
+                    icon = Icons.Outlined.Badge
+                ) {
+                    CompanyInfoRow("Şirket Ünvanı", "Türkiye Global Ticaret Limited Şirketi")
+                    CompanyDashedDivider()
+                    CompanyInfoRow("Şirket Tipi", "Limited Şirket")
+                    CompanyDashedDivider()
+                    CompanyInfoRow("Abonelik Planı", "B2B e-marketplace / Free")
+                    CompanyDashedDivider()
+                    CompanyInfoRow("Kuruluş Yılı", "2025")
+                }
             }
-        }
 
-        item {
-            CompanyActionSection(
-                onB2BIndexClick = onB2BIndexClick,
-                onB2CStoreClick = onB2CStoreClick
-            )
+            item {
+                CompanyInfoSection(
+                    title = "Adres Bilgileri",
+                    description = "Şirketin kayıtlı lokasyon bilgileri.",
+                    icon = Icons.Outlined.LocationOn
+                ) {
+                    CompanyInfoRow("Adres", "Fulya Mah., Aytekin Kotil Cad., No: 11/1")
+                    CompanyDashedDivider()
+                    CompanyInfoRow("Ülke", "Türkiye")
+                    CompanyDashedDivider()
+                    CompanyInfoRow("Şehir", "İstanbul")
+                    CompanyDashedDivider()
+                    CompanyInfoRow("İlçe", "Şişli")
+                    CompanyDashedDivider()
+                    CompanyInfoRow("Posta Kodu", "34394")
+                }
+            }
+
+            item {
+                CompanyInfoSection(
+                    title = "Vergi Ve Resmi Bilgiler",
+                    description = "Fatura ve resmi kayıt süreçlerinde kullanılan bilgiler.",
+                    icon = Icons.Outlined.ReceiptLong
+                ) {
+                    CompanyInfoRow("Vergi Dairesi", "Şişli Vergi Dairesi")
+                    CompanyDashedDivider()
+                    CompanyInfoRow("Vergi Numarası", "789456123")
+                    CompanyDashedDivider()
+                    CompanyInfoRow("MERSİS", "0188129921700001")
+                    CompanyDashedDivider()
+                    CompanyInfoRow("KEP", "tglobal@bulbulustur.com")
+                    CompanyDashedDivider()
+                    CompanyInfoRow("Web Sitesi", "www.turkiyeglobal.com")
+                }
+            }
+
+            item {
+                CompanyActionSection(
+                    onB2BIndexClick = onB2BIndexClick,
+                    onB2CStoreClick = onB2CStoreClick
+                )
+            }
         }
     }
 }
 
 @Composable
-private fun CompanyHeroCard(
-    onBackClick: () -> Unit,
-    onEditClick: () -> Unit
-) {
+private fun CompanyHeroCard() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -222,34 +227,6 @@ private fun CompanyHeroCard(
                 CompanyHeroBadge(
                     text = "B2B Aktif",
                     icon = Icons.Outlined.Storefront
-                )
-            }
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
-            ) {
-                BbButton(
-                    text = "Hesabıma Dön",
-                    onClick = onBackClick,
-                    modifier = Modifier.weight(1f),
-                    variant = BbButtonVariant.Light,
-                    size = BbButtonSize.Small
-                )
-
-                BbButton(
-                    text = "Düzenle",
-                    onClick = onEditClick,
-                    modifier = Modifier.weight(1f),
-                    variant = BbButtonVariant.Primary,
-                    size = BbButtonSize.Small,
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Outlined.Edit,
-                            contentDescription = null,
-                            modifier = Modifier.size(BbIcon.SizeSm)
-                        )
-                    }
                 )
             }
         }

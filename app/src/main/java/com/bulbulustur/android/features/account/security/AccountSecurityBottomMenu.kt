@@ -8,6 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
@@ -35,8 +36,8 @@ fun AccountSecurityBottomMenu(
         padding = BbCardPadding.Large
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
         ) {
             Text(
                 text = "Hesap Güvenliği",
@@ -65,7 +66,7 @@ fun AccountSecurityBottomMenu(
             )
 
             AccountSecurityBottomMenuRow(
-                title = "E-posta Değiştir",
+                title = "E-Posta Değiştir",
                 description = "Hesabına bağlı e-posta adresini güncelle.",
                 selected = selectedItem == AccountSecurityMenuItem.ChangeEmail,
                 onClick = onChangeEmailClick
@@ -94,12 +95,16 @@ private fun AccountSecurityBottomMenuRow(
             .clickable {
                 onClick()
             },
-        variant = if (selected) BbCardVariant.Elevated else BbCardVariant.Outlined,
+        variant = if (selected) {
+            BbCardVariant.Elevated
+        } else {
+            BbCardVariant.Outlined
+        },
         padding = BbCardPadding.Medium
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
         ) {
             Text(
                 text = title,
@@ -108,13 +113,17 @@ private fun AccountSecurityBottomMenuRow(
                     MaterialTheme.colorScheme.primary
                 } else {
                     MaterialTheme.colorScheme.onSurface
-                }
+                },
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
 
             Text(
                 text = description,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }

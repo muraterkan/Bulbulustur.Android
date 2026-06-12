@@ -11,10 +11,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ChevronRight
@@ -24,12 +22,12 @@ import androidx.compose.material.icons.outlined.Key
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.PhoneIphone
 import androidx.compose.material.icons.outlined.Security
-import androidx.compose.material.icons.outlined.Shield
 import androidx.compose.material.icons.outlined.VerifiedUser
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProgressIndicatorDefaults
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -39,12 +37,10 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import com.bulbulustur.android.ui.components.BbButton
-import com.bulbulustur.android.ui.components.BbButtonSize
-import com.bulbulustur.android.ui.components.BbButtonVariant
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
+import com.bulbulustur.android.ui.components.BbInnerPageHeader
 import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
@@ -68,154 +64,114 @@ fun AccountSecurityScreen(
         )
     )
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(pageBackground)
-            .statusBarsPadding()
-            .navigationBarsPadding(),
-        contentPadding = PaddingValues(
-            horizontal = BbSpacing.PageHorizontal,
-            vertical = BbSpacing.PageTopCompact
-        ),
-        verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
-    ) {
-        item {
-            AccountSecurityHeroCard(
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Hesap Ve Güvenlik",
                 onBackClick = onBackClick
             )
         }
-
-        item {
-            AccountSecurityStrengthCard()
-        }
-
-        item {
-            AccountSecuritySection(
-                title = "Profil",
-                description = "Hesabınızda görünen temel bilgileri yönetin.",
-                icon = Icons.Outlined.Person
-            ) {
-                AccountSecurityRow(
-                    title = "Profil Bilgileri",
-                    value = "Ad soyad, hesap ID ve temel profil bilgileri",
-                    icon = Icons.Outlined.Person,
-                    onClick = onProfileInfoClick
-                )
+    ) { innerPadding ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(pageBackground)
+                .padding(innerPadding),
+            contentPadding = PaddingValues(
+                start = BbSpacing.PageHorizontal,
+                top = BbSpacing.PageTopCompact,
+                end = BbSpacing.PageHorizontal,
+                bottom = BbSpacing.PageBottom
+            ),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
+        ) {
+            item {
+                AccountSecurityIntroCard()
             }
-        }
 
-        item {
-            AccountSecuritySection(
-                title = "Giriş ve Güvenlik",
-                description = "E-posta, şifre ve giriş güvenliği ayarları.",
-                icon = Icons.Outlined.Security
-            ) {
-                AccountSecurityRow(
-                    title = "E-posta",
-                    value = "muraterkan500@gmail.com",
-                    icon = Icons.Outlined.Email,
-                    onClick = onEmailChangeClick
-                )
-
-                AccountSecurityDashedDivider()
-
-                AccountSecurityRow(
-                    title = "Şifre",
-                    value = "Hesabınıza giriş yapmak için kullanılır",
-                    icon = Icons.Outlined.Key,
-                    onClick = onPasswordChangeClick
-                )
-
-                AccountSecurityDashedDivider()
-
-                AccountSecurityRow(
-                    title = "Telefonlarım",
-                    value = "SMS doğrulama ve güvenlik işlemleri",
-                    icon = Icons.Outlined.PhoneIphone,
-                    onClick = onPhonesClick
-                )
+            item {
+                AccountSecurityStrengthCard()
             }
-        }
 
-        item {
-            AccountSecuritySection(
-                title = "Oturum Geçmişi",
-                description = "Hesabınıza yapılan erişimleri kontrol edin.",
-                icon = Icons.Outlined.History
-            ) {
-                AccountSecurityRow(
-                    title = "Giriş Etkinlikleri",
-                    value = "Oturum hareketleri ve erişim geçmişi",
-                    icon = Icons.Outlined.History,
-                    onClick = onLoginActivitiesClick
-                )
+            item {
+                AccountSecuritySection(
+                    title = "Profil",
+                    description = "Hesabınızda görünen temel bilgileri yönetin.",
+                    icon = Icons.Outlined.Person
+                ) {
+                    AccountSecurityRow(
+                        title = "Profil Bilgileri",
+                        value = "Ad soyad, hesap ID ve temel profil bilgileri",
+                        icon = Icons.Outlined.Person,
+                        onClick = onProfileInfoClick
+                    )
+                }
+            }
+
+            item {
+                AccountSecuritySection(
+                    title = "Giriş Ve Güvenlik",
+                    description = "E-posta, şifre ve giriş güvenliği ayarları.",
+                    icon = Icons.Outlined.Security
+                ) {
+                    AccountSecurityRow(
+                        title = "E-Posta",
+                        value = "muraterkan500@gmail.com",
+                        icon = Icons.Outlined.Email,
+                        onClick = onEmailChangeClick
+                    )
+
+                    AccountSecurityDashedDivider()
+
+                    AccountSecurityRow(
+                        title = "Şifre",
+                        value = "Hesabınıza giriş yapmak için kullanılır",
+                        icon = Icons.Outlined.Key,
+                        onClick = onPasswordChangeClick
+                    )
+
+                    AccountSecurityDashedDivider()
+
+                    AccountSecurityRow(
+                        title = "Telefonlarım",
+                        value = "SMS doğrulama ve güvenlik işlemleri",
+                        icon = Icons.Outlined.PhoneIphone,
+                        onClick = onPhonesClick
+                    )
+                }
+            }
+
+            item {
+                AccountSecuritySection(
+                    title = "Oturum Geçmişi",
+                    description = "Hesabınıza yapılan erişimleri kontrol edin.",
+                    icon = Icons.Outlined.History
+                ) {
+                    AccountSecurityRow(
+                        title = "Giriş Etkinlikleri",
+                        value = "Oturum hareketleri ve erişim geçmişi",
+                        icon = Icons.Outlined.History,
+                        onClick = onLoginActivitiesClick
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-private fun AccountSecurityHeroCard(
-    onBackClick: () -> Unit
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(
-                color = MaterialTheme.colorScheme.inverseSurface,
-                shape = BbRadius.XlShape
-            )
-            .padding(BbSpacing.CardPadding)
+private fun AccountSecurityIntroCard() {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
     ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
-        ) {
-            BbButton(
-                text = "Hesabıma Dön",
-                onClick = onBackClick,
-                variant = BbButtonVariant.Light,
-                size = BbButtonSize.Small
-            )
-
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(BbIcon.BoxXl)
-                        .background(
-                            color = MaterialTheme.colorScheme.primary,
-                            shape = BbRadius.XlShape
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Shield,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onPrimary,
-                        modifier = Modifier.size(BbIcon.Section)
-                    )
-                }
-
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
-                ) {
-                    Text(
-                        text = "Hesap ve Güvenlik",
-                        style = BbTypography.titleLarge,
-                        color = MaterialTheme.colorScheme.inverseOnSurface
-                    )
-
-                    Text(
-                        text = "Profil, giriş ve doğrulama bilgilerinizi güvenle yönetin.",
-                        style = BbTypography.bodySmall,
-                        color = MaterialTheme.colorScheme.inverseOnSurface.copy(alpha = 0.72f)
-                    )
-                }
-            }
-        }
+        Text(
+            text = "Profil, giriş ve doğrulama bilgilerinizi güvenle yönetin.",
+            style = BbTypography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }
 
@@ -255,7 +211,7 @@ private fun AccountSecurityStrengthCard() {
                     verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
                 ) {
                     Text(
-                        text = "Hesap güvenliği",
+                        text = "Hesap Güvenliği",
                         style = BbTypography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurface
                     )

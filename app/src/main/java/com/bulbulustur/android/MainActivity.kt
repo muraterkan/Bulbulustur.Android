@@ -57,6 +57,7 @@ import com.bulbulustur.android.features.account.settings.AppearanceSettingsScree
 import com.bulbulustur.android.features.account.settings.CurrencySettingsScreen
 import com.bulbulustur.android.features.account.settings.LanguageSettingsScreen
 import com.bulbulustur.android.features.account.settings.LegalPoliciesScreen
+import com.bulbulustur.android.features.account.settings.LegalPolicyDetailScreen
 import com.bulbulustur.android.features.account.settings.RegionSettingsScreen
 import com.bulbulustur.android.features.account.settings.SettingsRoutes
 import com.bulbulustur.android.features.basket.BasketRoutes
@@ -1461,6 +1462,9 @@ class MainActivity : ComponentActivity() {
                             LegalPoliciesScreen(
                                 onBackClick = {
                                     navController.popBackStack()
+                                },
+                                onPolicyClick = { item ->
+                                    navController.navigate(SettingsRoutes.legalPolicyDetail(item.key))
                                 }
                             )
                         }
@@ -1472,6 +1476,27 @@ class MainActivity : ComponentActivity() {
                                 },
                                 onLegalPoliciesClick = {
                                     navController.navigate(SettingsRoutes.LegalPolicies)
+                                }
+                            )
+                        }
+
+                        composable(
+                            route = SettingsRoutes.LegalPolicyDetail,
+                            arguments = listOf(
+                                navArgument("policyKey") {
+                                    type = NavType.StringType
+                                }
+                            )
+                        ) { backStackEntry ->
+                            val policyKey = backStackEntry.arguments?.getString("policyKey").orEmpty()
+
+                            LegalPolicyDetailScreen(
+                                policyKey = policyKey,
+                                onBackClick = {
+                                    navController.popBackStack()
+                                },
+                                onOpenWebClick = {
+                                    // V1: burada browser intent / webview sonra bağlanacak
                                 }
                             )
                         }

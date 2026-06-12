@@ -2,28 +2,28 @@ package com.bulbulustur.android.features.account.bank
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.KeyboardCapitalization
-import androidx.compose.ui.text.input.KeyboardType
-import com.bulbulustur.android.features.account.components.AccountPageScaffold
 import com.bulbulustur.android.ui.components.BbButton
 import com.bulbulustur.android.ui.components.BbButtonSize
 import com.bulbulustur.android.ui.components.BbButtonVariant
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
+import com.bulbulustur.android.ui.components.BbInnerPageHeader
+import com.bulbulustur.android.ui.components.form.BbTextInput
 import com.bulbulustur.android.ui.theme.BbColors
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
@@ -35,7 +35,7 @@ fun BankAccountEditScreen(
     onBackClick: () -> Unit = {},
     onSaveClick: (String) -> Unit = {}
 ) {
-    val ibanState = remember {
+    val ibanState = remember(initialIban) {
         mutableStateOf(initialIban)
     }
 
@@ -53,79 +53,106 @@ fun BankAccountEditScreen(
         "Kaydet"
     }
 
-    AccountPageScaffold(
-        title = title,
-        kicker = "Banka Hesabı",
-        description = "Kayıtlı banka hesabınıza ait IBAN bilgisini düzenleyebilirsiniz. Girdiğiniz IBAN vadeli hesaba ait olmamalıdır.",
-        backButtonText = "Banka Hesaplarıma Dön",
-        onBackClick = onBackClick
-    ) {
-        BbCard(
-            modifier = Modifier.fillMaxWidth(),
-            variant = BbCardVariant.Outlined,
-            padding = BbCardPadding.Medium
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            BbInnerPageHeader(
+                title = title,
+                onBackClick = onBackClick
+            )
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(innerPadding)
+                .verticalScroll(rememberScrollState())
+                .padding(
+                    PaddingValues(
+                        start = BbSpacing.PageHorizontal,
+                        top = BbSpacing.PageTopCompact,
+                        end = BbSpacing.PageHorizontal,
+                        bottom = BbSpacing.PageBottom
+                    )
+                ),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.SectionGap)
         ) {
-            Column(
+            BankAccountEditIntroCard(
+                isEditMode = isEditMode
+            )
+
+            BbCard(
                 modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
+                variant = BbCardVariant.Outlined,
+                padding = BbCardPadding.Medium
             ) {
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
                 ) {
-                    Text(
-                        text = "IBAN Bilgisi",
-                        style = MaterialTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.onSurface
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+                    ) {
+                        Text(
+                            text = "IBAN Bilgisi",
+                            style = MaterialTheme.typography.titleSmall,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+
+                        Text(
+                            text = "IBAN bilgisini boşluk bırakmadan ya da boşluklu olarak girebilirsiniz.",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+
+                    BbTextInput(
+                        value = ibanState.value,
+                        onValueChange = { value ->
+                            ibanState.value = value.uppercase()
+                        },
+                        label = "IBAN",
+                        placeholder = "TR00 0000 0000 0000 0000 0000 00"
                     )
 
-                    Text(
-                        text = "IBAN bilgisini boşluk bırakmadan ya da boşluklu olarak girebilirsiniz.",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    BankAccountWarningBox()
+
+                    BbButton(
+                        text = saveButtonText,
+                        onClick = {
+                            onSaveClick(ibanState.value)
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        variant = BbButtonVariant.Primary,
+                        size = BbButtonSize.Medium
                     )
                 }
-
-                OutlinedTextField(
-                    value = ibanState.value,
-                    onValueChange = { value ->
-                        ibanState.value = value
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    label = {
-                        Text(text = "IBAN")
-                    },
-                    placeholder = {
-                        Text(text = "TR00 0000 0000 0000 0000 0000 00")
-                    },
-                    singleLine = true,
-                    shape = BbRadius.Input,
-                    keyboardOptions = KeyboardOptions(
-                        capitalization = KeyboardCapitalization.Characters,
-                        keyboardType = KeyboardType.Text
-                    ),
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = MaterialTheme.colorScheme.surface,
-                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-                        focusedIndicatorColor = MaterialTheme.colorScheme.primary,
-                        unfocusedIndicatorColor = MaterialTheme.colorScheme.outline,
-                        focusedLabelColor = MaterialTheme.colorScheme.primary,
-                        unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                )
-
-                BankAccountWarningBox()
-
-                BbButton(
-                    text = saveButtonText,
-                    onClick = {
-                        onSaveClick(ibanState.value)
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    variant = BbButtonVariant.Primary,
-                    size = BbButtonSize.Medium
-                )
             }
         }
+    }
+}
+
+@Composable
+private fun BankAccountEditIntroCard(
+    isEditMode: Boolean
+) {
+    val description = if (isEditMode) {
+        "Kayıtlı banka hesabınıza ait IBAN bilgisini düzenleyebilirsiniz. Girdiğiniz IBAN vadeli hesaba ait olmamalıdır."
+    } else {
+        "Para aktarımı ve ödeme sürecinde kullanılacak banka hesabını güvenli şekilde kaydedebilirsiniz. Girdiğiniz IBAN vadeli hesaba ait olmamalıdır."
+    }
+
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
+        Text(
+            text = description,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }
 

@@ -1,5 +1,6 @@
 package com.bulbulustur.android.features.support
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
@@ -26,10 +28,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -39,6 +37,7 @@ import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
 import com.bulbulustur.android.ui.components.BbChip
+import com.bulbulustur.android.ui.components.BbInnerPageHeader
 import com.bulbulustur.android.ui.components.BbSectionHeader
 import com.bulbulustur.android.ui.theme.BbSpacing
 import com.bulbulustur.android.ui.theme.BbTheme
@@ -48,17 +47,22 @@ fun SupportHomeScreen(
     onSearchClick: (String) -> Unit = {},
     onSupportCategoryClick: (Int) -> Unit = {},
     onSupportArticleClick: (Int) -> Unit = {},
-    onVideoGuideClick: (Int) -> Unit = {}
+    onVideoGuideClick: (Int) -> Unit = {},
+    onBackClick: () -> Unit = {}
 ) {
-    var searchText by remember {
-        mutableStateOf("")
-    }
-
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.background
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Yardım Merkezi",
+                onBackClick = onBackClick
+            )
+        }
     ) { innerPadding ->
         LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background),
             contentPadding = PaddingValues(
                 start = BbSpacing.PageHorizontal,
                 top = innerPadding.calculateTopPadding() + BbSpacing.PageTopCompact,
@@ -68,11 +72,7 @@ fun SupportHomeScreen(
             verticalArrangement = Arrangement.spacedBy(BbSpacing.SectionGapCompact)
         ) {
             item {
-                SupportHomeHeader()
-            }
-
-            item {
-
+                SupportIntroCard()
             }
 
             item {
@@ -83,7 +83,7 @@ fun SupportHomeScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Doğru alandan başlayın",
+                    title = "Doğru Alandan Başlayın",
                     subtitle = "Kullandığınız alana göre yardım kategorisini seçin"
                 )
             }
@@ -104,7 +104,7 @@ fun SupportHomeScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Video rehberler",
+                    title = "Video Rehberler",
                     subtitle = "Sık kullanılan işlemleri hızlıca öğrenin"
                 )
             }
@@ -125,7 +125,7 @@ fun SupportHomeScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Popüler yardım başlıkları",
+                    title = "Popüler Yardım Başlıkları",
                     subtitle = "En çok aranan destek konuları"
                 )
             }
@@ -152,31 +152,24 @@ fun SupportHomeScreen(
 }
 
 @Composable
-private fun SupportHomeHeader() {
+private fun SupportIntroCard() {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Large
+        padding = BbCardPadding.Medium
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
         ) {
             SupportIconTitleRow(
                 icon = Icons.Outlined.HelpCenter,
-                title = "Yardım ve Destek Merkezi"
-            )
-
-            Text(
-                text = "Size nasıl yardımcı olabiliriz?",
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
+                title = "Yardım Ve Destek"
             )
 
             Text(
                 text = "Sorular, işlem rehberleri, ürün bilgileri ve destek başlıklarını tek yerden bulun.",
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
@@ -278,7 +271,7 @@ private fun SupportVideoGuideCard(
         ) {
             SupportIconTitleRow(
                 icon = Icons.Outlined.PlayCircle,
-                title = "Video rehber"
+                title = "Video Rehber"
             )
 
             Text(
@@ -423,7 +416,7 @@ private fun getSupportQuickSearchTerms(): List<String> {
         "Sipariş",
         "Ödeme",
         "Entegrasyon",
-        "Hesap yönetimi",
+        "Hesap Yönetimi",
         "Tedarik",
         "Draugr"
     )
@@ -466,21 +459,21 @@ private fun getSupportVideoGuideItems(): List<SupportVideoGuideItem> {
     return listOf(
         SupportVideoGuideItem(
             videoGuideId = 1,
-            title = "Bulbulustur panele giriş",
+            title = "Bulbulustur Panele Giriş",
             description = "Paneli açma, temel ekranları tanıma ve ilk işlem adımları.",
             durationLabel = "3 dk",
             categoryName = "Başlangıç"
         ),
         SupportVideoGuideItem(
             videoGuideId = 2,
-            title = "Hesap bilgilerini güncelleme",
+            title = "Hesap Bilgilerini Güncelleme",
             description = "Firma, kullanıcı ve iletişim bilgilerinizi nasıl güncellersiniz.",
             durationLabel = "4 dk",
             categoryName = "Hesap"
         ),
         SupportVideoGuideItem(
             videoGuideId = 3,
-            title = "Yeni ürün ekleme",
+            title = "Yeni Ürün Ekleme",
             description = "Ürün oluşturma, görsel ekleme ve temel ürün bilgileri.",
             durationLabel = "5 dk",
             categoryName = "Ürün"
@@ -492,30 +485,30 @@ private fun getSupportPopularArticleItems(): List<SupportArticleItem> {
     return listOf(
         SupportArticleItem(
             articleId = 1,
-            title = "KVKK aydınlatma metni",
+            title = "KVKK Aydınlatma Metni",
             description = "Kişisel verilerle ilgili bilgilendirme metinleri.",
-            categoryName = "Yardım merkezi",
+            categoryName = "Yardım Merkezi",
             icon = Icons.Outlined.Description
         ),
         SupportArticleItem(
             articleId = 2,
-            title = "Ürün statüleri nelerdir?",
+            title = "Ürün Statüleri Nelerdir?",
             description = "Ürünlerin yayın, onay ve görünürlük durumları.",
-            categoryName = "Ürün merkezi",
+            categoryName = "Ürün Merkezi",
             icon = Icons.Outlined.Article
         ),
         SupportArticleItem(
             articleId = 3,
-            title = "Fiyat ve teslimat şartlarının görünmesi",
+            title = "Fiyat Ve Teslimat Şartlarının Görünmesi",
             description = "Toptan teklif ve teslimat bilgilerinin yönetimi.",
-            categoryName = "Ticaret merkezi",
+            categoryName = "Ticaret Merkezi",
             icon = Icons.Outlined.Business
         ),
         SupportArticleItem(
             articleId = 4,
-            title = "Şifre yönetimi",
+            title = "Şifre Yönetimi",
             description = "Hesap güvenliği ve şifre değiştirme adımları.",
-            categoryName = "Hesap merkezi",
+            categoryName = "Hesap Merkezi",
             icon = Icons.Outlined.Security
         )
     )

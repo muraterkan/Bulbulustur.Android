@@ -8,15 +8,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.DeleteSweep
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -39,7 +39,7 @@ import com.bulbulustur.android.ui.components.BbButtonVariant
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
-import com.bulbulustur.android.ui.components.BbSectionHeader
+import com.bulbulustur.android.ui.components.BbInnerPageHeader
 import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
@@ -60,11 +60,11 @@ fun ProductHistoryScreen(
     val filters = remember {
         listOf(
             "Tümü",
-            "B2C geçmişi",
+            "B2C Geçmişi",
             "Ayakkabı",
             "Giyim",
             "Bugün",
-            "Bu hafta"
+            "Bu Hafta"
         )
     }
 
@@ -86,21 +86,33 @@ fun ProductHistoryScreen(
     }
 
     Scaffold(
-        bottomBar = {
-        },
-        containerColor = MaterialTheme.colorScheme.background
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Ürün Geçmişi",
+                onBackClick = onBackClick,
+                actionIcon = if (historyItems.isNotEmpty()) {
+                    Icons.Outlined.DeleteSweep
+                } else {
+                    null
+                },
+                actionContentDescription = "Geçmişi Temizle",
+                onActionClick = {
+                    historyItems.clear()
+                }
+            )
+        }
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
                 .background(MaterialTheme.colorScheme.background)
+                .padding(innerPadding)
         ) {
             ProductHistoryHeaderArea(
                 itemCount = historyItems.size,
                 filters = filters,
                 selectedFilter = selectedFilter,
-                onBackClick = onBackClick,
                 onGoProductsClick = onGoProductsClick,
                 onClearHistoryClick = {
                     historyItems.clear()
@@ -159,7 +171,6 @@ private fun ProductHistoryHeaderArea(
     itemCount: Int,
     filters: List<String>,
     selectedFilter: String,
-    onBackClick: () -> Unit,
     onGoProductsClick: () -> Unit,
     onClearHistoryClick: () -> Unit,
     onFilterClick: (String) -> Unit
@@ -174,11 +185,7 @@ private fun ProductHistoryHeaderArea(
             ),
         verticalArrangement = Arrangement.spacedBy(BbSpacing.SectionGapCompact)
     ) {
-        ProductHistoryTopBar(
-            onBackClick = onBackClick
-        )
-
-        ProductHistoryHeroCard(
+        ProductHistoryIntroCard(
             itemCount = itemCount,
             onGoProductsClick = onGoProductsClick,
             onClearHistoryClick = onClearHistoryClick
@@ -189,62 +196,11 @@ private fun ProductHistoryHeaderArea(
             selectedFilter = selectedFilter,
             onFilterClick = onFilterClick
         )
-
-        BbSectionHeader(
-            title = "Geçmiş ürünleriniz",
-            subtitle = "Daha önce incelediğiniz ürünlere hızlıca geri dönün."
-        )
     }
 }
 
 @Composable
-private fun ProductHistoryTopBar(
-    onBackClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Box(
-            modifier = Modifier
-                .size(BbIcon.BoxMd)
-                .clip(BbRadius.PillShape)
-                .background(MaterialTheme.colorScheme.surfaceVariant)
-                .clickable {
-                    onBackClick()
-                },
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = "‹",
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-
-        Spacer(modifier = Modifier.width(BbSpacing.Space3))
-
-        Column(
-            modifier = Modifier.weight(1f)
-        ) {
-            Text(
-                text = "Arama geçmişiniz",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-
-            Text(
-                text = "İncelediğiniz ürünlere kaldığınız yerden dönün.",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-    }
-}
-
-@Composable
-private fun ProductHistoryHeroCard(
+private fun ProductHistoryIntroCard(
     itemCount: Int,
     onGoProductsClick: () -> Unit,
     onClearHistoryClick: () -> Unit
@@ -256,22 +212,18 @@ private fun ProductHistoryHeroCard(
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
         ) {
-            ProductHistoryStatusPill(
-                text = "Geçmiş"
-            )
-
             Text(
-                text = "Daha önce baktığınız ürünler burada",
-                style = MaterialTheme.typography.headlineSmall,
+                text = "Daha Önce Baktığınız Ürünler Burada",
+                style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
                 text = "Ürünleri tekrar inceleyebilir, favorilerinize ekleyebilir veya ürün detayına geri dönebilirsiniz.",
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
@@ -280,7 +232,7 @@ private fun ProductHistoryHeroCard(
                 horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
             ) {
                 BbButton(
-                    text = "Ürünleri incele",
+                    text = "Ürünleri İncele",
                     onClick = onGoProductsClick,
                     modifier = Modifier.weight(1f),
                     variant = BbButtonVariant.Primary,
@@ -351,7 +303,7 @@ private fun ProductHistoryResultHeader(
         ) {
             Text(
                 text = if (selectedFilter == "Tümü") {
-                    "Son görüntülenenler"
+                    "Son Görüntülenenler"
                 } else {
                     selectedFilter
                 },
@@ -416,7 +368,7 @@ private fun ProductHistoryCard(
             )
 
             BbButton(
-                text = "Ürüne git",
+                text = "Ürüne Git",
                 onClick = onProductClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Primary,
@@ -515,11 +467,11 @@ private fun ProductHistoryEmptyState(
                 }
 
                 ProductHistoryStatusPill(
-                    text = "Geçmiş bulunamadı"
+                    text = "Geçmiş Bulunamadı"
                 )
 
                 Text(
-                    text = "Listelenecek ürün bulunmuyor",
+                    text = "Listelenecek Ürün Bulunmuyor",
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
@@ -532,7 +484,7 @@ private fun ProductHistoryEmptyState(
                 )
 
                 BbButton(
-                    text = "Ürünleri incele",
+                    text = "Ürünleri İncele",
                     onClick = onGoProductsClick,
                     variant = BbButtonVariant.Primary,
                     size = BbButtonSize.Medium
@@ -607,10 +559,10 @@ private fun getProductHistoryItems(): List<ProductHistoryItem> {
             productName = "Ortobella Confort Kadın Hakiki Deri Ayakkabı",
             description = "Daha önce görüntülediğin ürün. Ürünü tekrar inceleyebilirsin.",
             categoryName = "Ayakkabı",
-            viewedDateText = "Daha önce baktın",
+            viewedDateText = "Daha Önce Baktın",
             historyTypeText = "Geçmiş",
             imageText = "P1",
-            filterTags = listOf("B2C geçmişi", "Ayakkabı", "Bugün")
+            filterTags = listOf("B2C Geçmişi", "Ayakkabı", "Bugün")
         ),
         ProductHistoryItem(
             id = 2,
@@ -618,32 +570,32 @@ private fun getProductHistoryItems(): List<ProductHistoryItem> {
             productName = "Ortobella Comfort Hakiki Deri Topuk Dikeni Terlik M13",
             description = "Daha önce görüntülediğin ürün. Ürünü tekrar inceleyebilirsin.",
             categoryName = "Ayakkabı",
-            viewedDateText = "Dün baktın",
+            viewedDateText = "Dün Baktın",
             historyTypeText = "Geçmiş",
             imageText = "P2",
-            filterTags = listOf("B2C geçmişi", "Ayakkabı", "Bu hafta")
+            filterTags = listOf("B2C Geçmişi", "Ayakkabı", "Bu Hafta")
         ),
         ProductHistoryItem(
             id = 3,
             productId = 3,
-            productName = "Oversize pamuklu basic tişört",
+            productName = "Oversize Pamuklu Basic Tişört",
             description = "Daha önce görüntülediğin ürün. Ürünü tekrar inceleyebilirsin.",
             categoryName = "Giyim",
-            viewedDateText = "3 gün önce baktın",
+            viewedDateText = "3 Gün Önce Baktın",
             historyTypeText = "Geçmiş",
             imageText = "P3",
-            filterTags = listOf("B2C geçmişi", "Giyim", "Bu hafta")
+            filterTags = listOf("B2C Geçmişi", "Giyim", "Bu Hafta")
         ),
         ProductHistoryItem(
             id = 4,
             productId = 4,
-            productName = "Günlük kullanım omuz çantası",
+            productName = "Günlük Kullanım Omuz Çantası",
             description = "Daha önce görüntülediğin ürün. Ürünü tekrar inceleyebilirsin.",
             categoryName = "Çanta",
-            viewedDateText = "Bu hafta baktın",
+            viewedDateText = "Bu Hafta Baktın",
             historyTypeText = "Geçmiş",
             imageText = "P4",
-            filterTags = listOf("B2C geçmişi", "Bu hafta")
+            filterTags = listOf("B2C Geçmişi", "Bu Hafta")
         )
     )
 }

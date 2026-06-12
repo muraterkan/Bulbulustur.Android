@@ -4,26 +4,31 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.bulbulustur.android.features.account.components.AccountPageScaffold
 import com.bulbulustur.android.ui.components.BbButton
 import com.bulbulustur.android.ui.components.BbButtonSize
 import com.bulbulustur.android.ui.components.BbButtonVariant
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
+import com.bulbulustur.android.ui.components.BbInnerPageHeader
 import com.bulbulustur.android.ui.theme.BbColors
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
@@ -37,22 +42,29 @@ fun PhoneListScreen(
 ) {
     val phones = getDemoPhones()
 
-    AccountPageScaffold(
-        title = "Telefonlarım",
-        kicker = "Hesap Doğrulama",
-        description = "Hesabınıza bağlı cep telefonu numaralarını görüntüleyebilir, doğrulama durumlarını takip edebilir ve yeni telefon ekleyebilirsiniz.",
-        backButtonText = "Hesabıma Dön",
-        onBackClick = onBackClick,
-        actionContent = {
-            BbButton(
-                text = "Telefon Ekle",
-                onClick = onCreatePhoneClick,
-                variant = BbButtonVariant.Primary,
-                size = BbButtonSize.Small
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Telefonlarım",
+                onBackClick = onBackClick,
+                actionIcon = Icons.Outlined.Add,
+                actionContentDescription = "Telefon Ekle",
+                onActionClick = onCreatePhoneClick
             )
         }
-    ) {
+    ) { innerPadding ->
         LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(innerPadding),
+            contentPadding = PaddingValues(
+                start = BbSpacing.PageHorizontal,
+                top = BbSpacing.PageTopCompact,
+                end = BbSpacing.PageHorizontal,
+                bottom = BbSpacing.PageBottom
+            ),
             verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
         ) {
             if (phones.isEmpty()) {
@@ -172,7 +184,7 @@ private fun PhoneEmptyState(
             )
 
             Text(
-                text = "Telefon numarası bulunmuyor",
+                text = "Telefon Numarası Bulunmuyor",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )

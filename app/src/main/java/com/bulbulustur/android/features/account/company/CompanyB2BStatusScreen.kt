@@ -11,17 +11,14 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Business
 import androidx.compose.material.icons.outlined.ChevronRight
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.Language
-import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.OpenInNew
 import androidx.compose.material.icons.outlined.RequestQuote
 import androidx.compose.material.icons.outlined.Storefront
@@ -29,6 +26,7 @@ import androidx.compose.material.icons.outlined.Verified
 import androidx.compose.material.icons.outlined.WorkspacePremium
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -38,12 +36,10 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import com.bulbulustur.android.ui.components.BbButton
-import com.bulbulustur.android.ui.components.BbButtonSize
-import com.bulbulustur.android.ui.components.BbButtonVariant
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
+import com.bulbulustur.android.ui.components.BbInnerPageHeader
 import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
@@ -62,140 +58,130 @@ fun CompanyB2BStatusScreen(
         )
     )
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(pageBackground)
-            .statusBarsPadding()
-            .navigationBarsPadding(),
-        contentPadding = PaddingValues(
-            horizontal = BbSpacing.PageHorizontal,
-            vertical = BbSpacing.PageTopCompact
-        ),
-        verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
-    ) {
-        item {
-            CompanyB2BStatusHeroCard(
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            BbInnerPageHeader(
+                title = "B2B Index Durumu",
                 onBackClick = onBackClick
             )
         }
+    ) { innerPadding ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(pageBackground)
+                .padding(innerPadding),
+            contentPadding = PaddingValues(
+                start = BbSpacing.PageHorizontal,
+                top = BbSpacing.PageTopCompact,
+                end = BbSpacing.PageHorizontal,
+                bottom = BbSpacing.PageBottom
+            ),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
+        ) {
+            item {
+                CompanyB2BStatusIntroCard()
+            }
 
-        item {
-            CompanyB2BActiveSummaryCard()
-        }
+            item {
+                CompanyB2BActiveSummaryCard()
+            }
 
-        item {
-            CompanyB2BStatusStatsGrid()
-        }
+            item {
+                CompanyB2BStatusStatsGrid()
+            }
 
-        item {
-            CompanyB2BStatusSection(
-                title = "B2B Listeleme Bilgileri",
-                description = "Bu bilgiler şirketinizin Bulbulustur toptan satış tarafındaki görünürlüğünü gösterir.",
-                icon = Icons.Outlined.WorkspacePremium
-            ) {
-                CompanyB2BStatusInfoRow(
-                    title = "Şirket Adı",
-                    value = "Bulbulustur İnternet Teknolojileri ve Tic. A.Ş.",
-                    icon = Icons.Outlined.Business
-                )
+            item {
+                CompanyB2BStatusSection(
+                    title = "B2B Listeleme Bilgileri",
+                    description = "Bu bilgiler şirketinizin Bulbulustur toptan satış tarafındaki görünürlüğünü gösterir.",
+                    icon = Icons.Outlined.WorkspacePremium
+                ) {
+                    CompanyB2BStatusInfoRow(
+                        title = "Şirket Adı",
+                        value = "Bulbulustur İnternet Teknolojileri ve Tic. A.Ş.",
+                        icon = Icons.Outlined.Business
+                    )
 
-                CompanyStatusDashedDivider()
+                    CompanyStatusDashedDivider()
 
-                CompanyB2BStatusInfoRow(
-                    title = "Listeleme Durumu",
-                    value = "B2B Index Aktif",
-                    icon = Icons.Outlined.Verified
-                )
+                    CompanyB2BStatusInfoRow(
+                        title = "Listeleme Durumu",
+                        value = "B2B Index Aktif",
+                        icon = Icons.Outlined.Verified
+                    )
 
-                CompanyStatusDashedDivider()
+                    CompanyStatusDashedDivider()
 
-                CompanyB2BStatusInfoRow(
-                    title = "Abonelik Tipi",
-                    value = "B2B e-marketplace / Free",
-                    icon = Icons.Outlined.Storefront
-                )
+                    CompanyB2BStatusInfoRow(
+                        title = "Abonelik Tipi",
+                        value = "B2B e-marketplace / Free",
+                        icon = Icons.Outlined.Storefront
+                    )
 
-                CompanyStatusDashedDivider()
+                    CompanyStatusDashedDivider()
 
-                CompanyB2BStatusInfoRow(
-                    title = "Firma Kimliği",
-                    value = "FGA0IBO7EGAZ5nB",
-                    icon = Icons.Outlined.Language
+                    CompanyB2BStatusInfoRow(
+                        title = "Firma Kimliği",
+                        value = "FGA0IBO7EGAZ5nB",
+                        icon = Icons.Outlined.Language
+                    )
+                }
+            }
+
+            item {
+                CompanyB2BManagementPanelCard(
+                    onClick = onB2BManagementPanelClick
                 )
             }
-        }
-
-        item {
-            CompanyB2BManagementPanelCard(
-                onClick = onB2BManagementPanelClick
-            )
         }
     }
 }
 
 @Composable
-private fun CompanyB2BStatusHeroCard(
-    onBackClick: () -> Unit
-) {
+private fun CompanyB2BStatusIntroCard() {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
         padding = BbCardPadding.Medium
     ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            BbButton(
-                text = "Şirket Bilgilerime Dön",
-                onClick = onBackClick,
-                variant = BbButtonVariant.Light,
-                size = BbButtonSize.Small
-            )
-
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
-                verticalAlignment = Alignment.CenterVertically
+            Box(
+                modifier = Modifier
+                    .size(BbIcon.BoxXl)
+                    .background(
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        shape = BbRadius.XlShape
+                    ),
+                contentAlignment = Alignment.Center
             ) {
-                Box(
-                    modifier = Modifier
-                        .size(BbIcon.BoxXl)
-                        .background(
-                            color = MaterialTheme.colorScheme.primaryContainer,
-                            shape = BbRadius.XlShape
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Verified,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                        modifier = Modifier.size(BbIcon.Section)
-                    )
-                }
+                Icon(
+                    imageVector = Icons.Outlined.Verified,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                    modifier = Modifier.size(BbIcon.Section)
+                )
+            }
 
-                Column(
-                    modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
-                ) {
-                    Text(
-                        text = "B2B Index Aktif",
-                        style = BbTypography.labelLarge,
-                        color = MaterialTheme.colorScheme.primary
-                    )
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+            ) {
+                Text(
+                    text = "Şirketiniz Toptan Ticaret Görünürlüğünde",
+                    style = BbTypography.titleLarge,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
 
-                    Text(
-                        text = "Şirketiniz toptan ticaret görünürlüğünde",
-                        style = BbTypography.titleLarge,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-
-                    Text(
-                        text = "Bulbulustur B2B Index üzerinde şirketiniz aktif olarak listeleniyor. Yönetim panelinden profilinizi, ürünlerinizi ve toptan satış operasyonlarınızı yönetebilirsiniz.",
-                        style = BbTypography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
+                Text(
+                    text = "Bulbulustur B2B Index üzerinde şirketiniz aktif olarak listeleniyor. Yönetim panelinden profilinizi, ürünlerinizi ve toptan satış operasyonlarınızı yönetebilirsiniz.",
+                    style = BbTypography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
         }
     }

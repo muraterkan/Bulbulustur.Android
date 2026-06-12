@@ -4,7 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -18,19 +20,21 @@ import androidx.compose.material.icons.outlined.ReceiptLong
 import androidx.compose.material.icons.outlined.Storefront
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.bulbulustur.android.features.account.components.AccountPageScaffold
 import com.bulbulustur.android.ui.components.BbButton
 import com.bulbulustur.android.ui.components.BbButtonSize
 import com.bulbulustur.android.ui.components.BbButtonVariant
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
+import com.bulbulustur.android.ui.components.BbInnerPageHeader
 import com.bulbulustur.android.ui.theme.BbColors
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
@@ -44,14 +48,26 @@ fun RequestListScreen(
 ) {
     val requests = getDemoRequests()
 
-    AccountPageScaffold(
-        title = "Taleplerim",
-        kicker = "Talep Yönetimi",
-        description = "Oluşturduğunuz iade ve sipariş taleplerini görüntüleyin, detaylarına ulaşın veya iade kargo kodu alın.",
-        backButtonText = "Hesabıma Dön",
-        onBackClick = onBackClick
-    ) {
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Taleplerim",
+                onBackClick = onBackClick
+            )
+        }
+    ) { innerPadding ->
         LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(innerPadding),
+            contentPadding = PaddingValues(
+                start = BbSpacing.PageHorizontal,
+                top = BbSpacing.PageTopCompact,
+                end = BbSpacing.PageHorizontal,
+                bottom = BbSpacing.PageBottom
+            ),
             verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
         ) {
             if (requests.isEmpty()) {
@@ -106,7 +122,7 @@ private fun RequestCard(
                 ) {
                     RequestInfoBox(
                         modifier = Modifier.weight(1f),
-                        title = "SATICI",
+                        title = "Satıcı",
                         value = request.sellerName,
                         icon = Icons.Outlined.Storefront,
                         iconColor = BbColors.Blue.Blue600
@@ -114,7 +130,7 @@ private fun RequestCard(
 
                     RequestInfoBox(
                         modifier = Modifier.weight(1f),
-                        title = "TALEP NEDENİ",
+                        title = "Talep Nedeni",
                         value = request.reason,
                         icon = Icons.Outlined.ReceiptLong,
                         iconColor = BbColors.Orange.Orange600
@@ -123,7 +139,7 @@ private fun RequestCard(
 
                 RequestInfoBox(
                     modifier = Modifier.fillMaxWidth(),
-                    title = "ÜRÜN",
+                    title = "Ürün",
                     value = request.productName,
                     icon = Icons.Outlined.Inventory2,
                     iconColor = BbColors.Yellow.Yellow800,
@@ -181,7 +197,7 @@ private fun RequestCardHeader(
             verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
         ) {
             Text(
-                text = "TALEP NO",
+                text = "Talep No",
                 style = BbTypography.labelSmall,
                 color = BbColors.TextMuted
             )
@@ -288,7 +304,7 @@ private fun RequestDescriptionBox(
             verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
         ) {
             Text(
-                text = "AÇIKLAMA",
+                text = "Açıklama",
                 style = BbTypography.labelSmall,
                 color = BbColors.TextMuted
             )
@@ -330,7 +346,7 @@ private fun RequestPhotoBox(
                 )
 
                 Text(
-                    text = "İADE EDİLEN ÜRÜNÜN FOTOĞRAFLARI",
+                    text = "İade Edilen Ürünün Fotoğrafları",
                     style = BbTypography.labelSmall,
                     color = BbColors.TextMuted
                 )
@@ -460,7 +476,7 @@ private fun RequestEmptyState(
             )
 
             Text(
-                text = "Kayıt bulunamadı!",
+                text = "Kayıt Bulunamadı",
                 style = BbTypography.titleMedium,
                 color = BbColors.TextStrong
             )
@@ -488,7 +504,7 @@ private fun getDemoRequests(): List<RequestUiModel> {
             requestNumber = "#1",
             createdDate = "10 Mayıs 2026",
             sellerName = "Base & Quality Store",
-            reason = "Ürün defolu/hasarlı geldi",
+            reason = "Ürün Defolu/Hasarlı Geldi",
             productName = "Ortobella Comfort Genç Garson Bot 8028",
             description = "Ürünün sağ tarafında dikiş hatası mevcut, değişim veya iade talep ediyorum.",
             photoCount = 1,
@@ -499,7 +515,7 @@ private fun getDemoRequests(): List<RequestUiModel> {
             requestNumber = "#2",
             createdDate = "14 Mayıs 2026",
             sellerName = "Ortobella Comfort",
-            reason = "Yanlış ürün gönderildi",
+            reason = "Yanlış Ürün Gönderildi",
             productName = "Ortobella Comfort Hakiki Deri Terlik M13",
             description = "Sipariş ettiğim varyanttan farklı bir ürün teslim edildi. Değişim sürecini başlatmak istiyorum.",
             photoCount = 2,
@@ -512,7 +528,7 @@ private enum class RequestStatus(
     val title: String
 ) {
     DamagedProduct(
-        title = "Ürün defolu/hasarlı geldi"
+        title = "Ürün Defolu/Hasarlı Geldi"
     ),
     WaitingReview(
         title = "İncelemede"

@@ -4,24 +4,29 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.bulbulustur.android.features.account.components.AccountPageScaffold
 import com.bulbulustur.android.ui.components.BbButton
 import com.bulbulustur.android.ui.components.BbButtonSize
 import com.bulbulustur.android.ui.components.BbButtonVariant
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
+import com.bulbulustur.android.ui.components.BbInnerPageHeader
 import com.bulbulustur.android.ui.theme.BbColors
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
@@ -34,22 +39,29 @@ fun RequestListScreen(
 ) {
     val requests = getDemoRequests()
 
-    AccountPageScaffold(
-        title = "Taleplerim",
-        kicker = "Hesap Talepleri",
-        description = "Destek, işlem ve hesap süreçleriyle ilgili oluşturduğunuz talepleri buradan takip edebilirsiniz.",
-        backButtonText = "Hesabıma Dön",
-        onBackClick = onBackClick,
-        actionContent = {
-            BbButton(
-                text = "Talep Aç",
-                onClick = onCreateRequestClick,
-                variant = BbButtonVariant.Primary,
-                size = BbButtonSize.Small
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Taleplerim",
+                onBackClick = onBackClick,
+                actionIcon = Icons.Outlined.Add,
+                actionContentDescription = "Talep Aç",
+                onActionClick = onCreateRequestClick
             )
         }
-    ) {
+    ) { innerPadding ->
         LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(innerPadding),
+            contentPadding = PaddingValues(
+                start = BbSpacing.PageHorizontal,
+                top = BbSpacing.PageTopCompact,
+                end = BbSpacing.PageHorizontal,
+                bottom = BbSpacing.PageBottom
+            ),
             verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
         ) {
             if (requests.isEmpty()) {
@@ -161,7 +173,7 @@ private fun RequestEmptyState(
             RequestEmptyIconBox()
 
             Text(
-                text = "Henüz talebiniz yok",
+                text = "Henüz Talebiniz Yok",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -264,7 +276,7 @@ private fun getDemoRequests(): List<RequestUiModel> {
         RequestUiModel(
             requestId = 1,
             requestNumber = "REQ-2026-0001",
-            title = "Sipariş teslimat sorusu",
+            title = "Sipariş Teslimat Sorusu",
             description = "Teslimat süreciyle ilgili bilgi talebi oluşturuldu.",
             statusText = "Açık",
             statusType = RequestStatusType.Open,
@@ -274,7 +286,7 @@ private fun getDemoRequests(): List<RequestUiModel> {
         RequestUiModel(
             requestId = 2,
             requestNumber = "REQ-2026-0002",
-            title = "Fatura talebi",
+            title = "Fatura Talebi",
             description = "Sipariş faturasının yeniden gönderilmesi talep edildi.",
             statusText = "Kapandı",
             statusType = RequestStatusType.Closed,

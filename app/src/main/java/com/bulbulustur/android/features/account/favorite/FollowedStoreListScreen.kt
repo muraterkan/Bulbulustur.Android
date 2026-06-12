@@ -4,9 +4,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -14,17 +16,20 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.bulbulustur.android.features.account.components.AccountPageScaffold
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextOverflow
 import com.bulbulustur.android.ui.components.BbButton
 import com.bulbulustur.android.ui.components.BbButtonSize
 import com.bulbulustur.android.ui.components.BbButtonVariant
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
+import com.bulbulustur.android.ui.components.BbInnerPageHeader
 import com.bulbulustur.android.ui.theme.BbColors
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
@@ -37,14 +42,26 @@ fun FollowedStoreListScreen(
 ) {
     val followedStores = getDemoFollowedStores()
 
-    AccountPageScaffold(
-        title = "Takip Edilen Mağazalar",
-        kicker = "Mağaza Takibi",
-        description = "Takip ettiğiniz mağazaları inceleyebilir, mağaza profillerine doğrudan geçebilirsiniz.",
-        backButtonText = "Hesabıma Dön",
-        onBackClick = onBackClick
-    ) {
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Takip Edilen Mağazalar",
+                onBackClick = onBackClick
+            )
+        }
+    ) { innerPadding ->
         LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(innerPadding),
+            contentPadding = PaddingValues(
+                start = BbSpacing.PageHorizontal,
+                top = BbSpacing.PageTopCompact,
+                end = BbSpacing.PageHorizontal,
+                bottom = BbSpacing.PageBottom
+            ),
             verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
         ) {
             if (followedStores.isEmpty()) {
@@ -96,19 +113,23 @@ private fun FollowedStoreCard(
                 Text(
                     text = store.storeName,
                     style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
 
                 Text(
                     text = store.description,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
                 )
 
                 Spacer(modifier = Modifier.height(BbSpacing.Space1))
 
                 BbButton(
-                    text = "Mağaza profilini görüntüle →",
+                    text = "Mağaza Profilini Görüntüle",
                     onClick = {
                         onStoreClick(store.storeId)
                     },
@@ -118,7 +139,7 @@ private fun FollowedStoreCard(
                 )
 
                 BbButton(
-                    text = "× Takipten çıkar",
+                    text = "Takipten Çıkar",
                     onClick = {
                         onUnfollowStoreClick(store.followedStoreId)
                     },
@@ -156,7 +177,9 @@ private fun StoreLogoArea(
             Text(
                 text = store.logoText,
                 style = MaterialTheme.typography.headlineSmall,
-                color = store.logoTextColor
+                color = store.logoTextColor,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }
@@ -176,7 +199,7 @@ private fun FollowStatusBadge() {
             )
     ) {
         Text(
-            text = "TAKİP EDİYOR",
+            text = "Takip Ediyor",
             style = MaterialTheme.typography.labelSmall,
             color = BbColors.Yellow.Yellow800
         )
@@ -198,7 +221,7 @@ private fun FollowedStoreEmptyState() {
             StoreEmptyIconBox()
 
             Text(
-                text = "Kayıt bulunamadı!",
+                text = "Kayıt Bulunamadı",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -270,6 +293,6 @@ private data class FollowedStoreUiModel(
     val storeName: String,
     val description: String,
     val logoText: String,
-    val logoBackgroundColor: androidx.compose.ui.graphics.Color,
-    val logoTextColor: androidx.compose.ui.graphics.Color
+    val logoBackgroundColor: Color,
+    val logoTextColor: Color
 )

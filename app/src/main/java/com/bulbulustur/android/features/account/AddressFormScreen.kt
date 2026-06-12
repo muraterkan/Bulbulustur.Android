@@ -1,17 +1,23 @@
 package com.bulbulustur.android.features.account
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -21,13 +27,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
-import com.bulbulustur.android.features.account.components.AccountPageScaffold
 import com.bulbulustur.android.ui.components.BbButton
 import com.bulbulustur.android.ui.components.BbButtonSize
 import com.bulbulustur.android.ui.components.BbButtonVariant
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
+import com.bulbulustur.android.ui.components.BbInnerPageHeader
 import com.bulbulustur.android.ui.theme.BbColors
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
@@ -106,17 +112,39 @@ fun AddressFormScreen(
 
     val canSubmit = validationState.value.canSubmit && !isLoading
 
-    AccountPageScaffold(
-        title = if (isEditMode) "Adresinizi Düzenleyin" else "Yeni Adres Ekle",
-        kicker = "Adres Bilgileri",
-        description = "Siparişlerinizde kullanmak üzere teslimat adresi oluşturun. Teslimatın doğru ilerlemesi için adres bilgilerini eksiksiz girin.",
-        backButtonText = "Adreslerime Dön",
-        onBackClick = onBackClick
-    ) {
+    val pageTitle = if (isEditMode) {
+        "Adresi Düzenle"
+    } else {
+        "Yeni Adres Ekle"
+    }
+
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            BbInnerPageHeader(
+                title = pageTitle,
+                onBackClick = onBackClick
+            )
+        }
+    ) { innerPadding ->
         Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(innerPadding)
+                .verticalScroll(rememberScrollState())
+                .padding(
+                    PaddingValues(
+                        start = BbSpacing.PageHorizontal,
+                        top = BbSpacing.PageTopCompact,
+                        end = BbSpacing.PageHorizontal,
+                        bottom = BbSpacing.PageBottom
+                    )
+                ),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.SectionGap)
         ) {
+            AddressFormIntroCard()
+
             AddressFormSectionCard(
                 title = "Alıcı Bilgileri",
                 description = "Teslimat alıcısı için ad, soyad ve iletişim bilgilerini girin."
@@ -210,7 +238,7 @@ fun AddressFormScreen(
                     onValueChange = { value ->
                         addressTitleState.value = value
                     },
-                    label = "Bu adrese bir başlık verin",
+                    label = "Bu Adrese Bir Başlık Verin",
                     placeholder = "Ev Adresim"
                 )
 
@@ -252,6 +280,21 @@ fun AddressFormScreen(
                 isLoading = isLoading
             )
         }
+    }
+}
+
+@Composable
+private fun AddressFormIntroCard() {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
+        Text(
+            text = "Siparişlerinizde kullanmak üzere teslimat adresi oluşturun. Teslimatın doğru ilerlemesi için adres bilgilerini eksiksiz girin.",
+            style = BbTypography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }
 
@@ -454,7 +497,7 @@ private fun DefaultAddressBox(
                 verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
             ) {
                 Text(
-                    text = "Varsayılan adresim olarak kaydet",
+                    text = "Varsayılan Adresim Olarak Kaydet",
                     style = BbTypography.labelLarge,
                     color = BbColors.TextStrong
                 )
@@ -486,9 +529,9 @@ private fun AddressFormInfoBox(
     }
 
     val title = if (validation.canSubmit) {
-        "Adres bilgileri uygun görünüyor."
+        "Adres Bilgileri Uygun Görünüyor"
     } else {
-        "Zorunlu adres bilgilerini tamamlayın."
+        "Zorunlu Adres Bilgilerini Tamamlayın"
     }
 
     Box(

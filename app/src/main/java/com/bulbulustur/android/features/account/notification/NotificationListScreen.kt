@@ -8,11 +8,10 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.LocalShipping
 import androidx.compose.material.icons.outlined.Notifications
@@ -21,18 +20,18 @@ import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material.icons.outlined.ShoppingBag
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.bulbulustur.android.ui.components.BbButton
-import com.bulbulustur.android.ui.components.BbButtonSize
-import com.bulbulustur.android.ui.components.BbButtonVariant
+import androidx.compose.ui.text.style.TextOverflow
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
+import com.bulbulustur.android.ui.components.BbInnerPageHeader
 import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
@@ -50,121 +49,80 @@ fun NotificationListScreen(
         )
     )
 
-    val notifications = listOf(
-        NotificationItem(
-            title = "Siparişiniz hazırlanıyor",
-            description = "BB-2026-0001 numaralı siparişiniz satıcı tarafından hazırlanıyor.",
-            timeText = "Bugün",
-            icon = Icons.Outlined.ShoppingBag,
-            isUnread = true
-        ),
-        NotificationItem(
-            title = "Yeni RFQ cevabı geldi",
-            description = "Toptan fiyat teklifi talebiniz için yeni bir satıcı cevabı var.",
-            timeText = "Dün",
-            icon = Icons.Outlined.RequestQuote,
-            isUnread = true
-        ),
-        NotificationItem(
-            title = "Kargo durumu güncellendi",
-            description = "Siparişiniz kargo hazırlık aşamasına geçti.",
-            timeText = "2 gün önce",
-            icon = Icons.Outlined.LocalShipping,
-            isUnread = false
-        ),
-        NotificationItem(
-            title = "Güvenlik önerisi",
-            description = "Telefon doğrulamasını tamamlayarak hesabınızı daha güvenli hale getirebilirsiniz.",
-            timeText = "Bu hafta",
-            icon = Icons.Outlined.Security,
-            isUnread = false
-        )
-    )
+    val notifications = getDemoNotifications()
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(pageBackground)
-            .statusBarsPadding()
-            .navigationBarsPadding(),
-        contentPadding = PaddingValues(
-            horizontal = BbSpacing.PageHorizontal,
-            vertical = BbSpacing.PageTopCompact
-        ),
-        verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
-    ) {
-        item {
-            NotificationHeaderCard(
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Bildirimler",
                 onBackClick = onBackClick
             )
         }
+    ) { innerPadding ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(pageBackground)
+                .padding(innerPadding),
+            contentPadding = PaddingValues(
+                start = BbSpacing.PageHorizontal,
+                top = BbSpacing.PageTopCompact,
+                end = BbSpacing.PageHorizontal,
+                bottom = BbSpacing.PageBottom
+            ),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
+        ) {
+            item {
+                NotificationIntroCard()
+            }
 
-        items(
-            count = notifications.size
-        ) { index ->
-            NotificationCard(
-                item = notifications[index]
-            )
+            items(
+                items = notifications,
+                key = { item -> "${item.title}-${item.timeText}" }
+            ) { item ->
+                NotificationCard(
+                    item = item
+                )
+            }
         }
     }
 }
 
 @Composable
-private fun NotificationHeaderCard(
-    onBackClick: () -> Unit
-) {
+private fun NotificationIntroCard() {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
         padding = BbCardPadding.Medium
     ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            BbButton(
-                text = "Hesabıma Dön",
-                onClick = onBackClick,
-                variant = BbButtonVariant.Light,
-                size = BbButtonSize.Small
-            )
-
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
-                verticalAlignment = Alignment.CenterVertically
+            Box(
+                modifier = Modifier
+                    .size(BbIcon.BoxLg)
+                    .background(
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        shape = BbRadius.XlShape
+                    ),
+                contentAlignment = Alignment.Center
             ) {
-                Box(
-                    modifier = Modifier
-                        .size(BbIcon.BoxXl)
-                        .background(
-                            color = MaterialTheme.colorScheme.primaryContainer,
-                            shape = BbRadius.XlShape
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Notifications,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                        modifier = Modifier.size(BbIcon.Section)
-                    )
-                }
-
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
-                ) {
-                    Text(
-                        text = "Bildirimler",
-                        style = BbTypography.titleLarge,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-
-                    Text(
-                        text = "Sipariş, teklif, kargo ve hesap bildirimlerini buradan takip edin.",
-                        style = BbTypography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
+                Icon(
+                    imageVector = Icons.Outlined.Notifications,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                    modifier = Modifier.size(BbIcon.Section)
+                )
             }
+
+            Text(
+                text = "Sipariş, teklif, kargo ve hesap bildirimlerini buradan takip edebilirsin.",
+                modifier = Modifier.weight(1f),
+                style = BbTypography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 }
@@ -214,13 +172,17 @@ private fun NotificationCard(
                 Text(
                     text = item.title,
                     style = BbTypography.titleSmall,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
                 )
 
                 Text(
                     text = item.description,
                     style = BbTypography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis
                 )
 
                 Text(
@@ -231,6 +193,39 @@ private fun NotificationCard(
             }
         }
     }
+}
+
+private fun getDemoNotifications(): List<NotificationItem> {
+    return listOf(
+        NotificationItem(
+            title = "Siparişiniz Hazırlanıyor",
+            description = "BB-2026-0001 numaralı siparişiniz satıcı tarafından hazırlanıyor.",
+            timeText = "Bugün",
+            icon = Icons.Outlined.ShoppingBag,
+            isUnread = true
+        ),
+        NotificationItem(
+            title = "Yeni RFQ Cevabı Geldi",
+            description = "Toptan fiyat teklifi talebiniz için yeni bir satıcı cevabı var.",
+            timeText = "Dün",
+            icon = Icons.Outlined.RequestQuote,
+            isUnread = true
+        ),
+        NotificationItem(
+            title = "Kargo Durumu Güncellendi",
+            description = "Siparişiniz kargo hazırlık aşamasına geçti.",
+            timeText = "2 gün önce",
+            icon = Icons.Outlined.LocalShipping,
+            isUnread = false
+        ),
+        NotificationItem(
+            title = "Güvenlik Önerisi",
+            description = "Telefon doğrulamasını tamamlayarak hesabınızı daha güvenli hale getirebilirsiniz.",
+            timeText = "Bu hafta",
+            icon = Icons.Outlined.Security,
+            isUnread = false
+        )
+    )
 }
 
 private data class NotificationItem(

@@ -1,10 +1,12 @@
 package com.bulbulustur.android.features.bank
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,12 +17,12 @@ import androidx.compose.material.icons.outlined.AccountBalance
 import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.CreditCard
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Payments
 import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material.icons.outlined.Verified
 import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -29,118 +31,112 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.bulbulustur.android.ui.components.BbCard
-import com.bulbulustur.android.ui.components.BbChip
+import com.bulbulustur.android.ui.components.BbCardPadding
+import com.bulbulustur.android.ui.components.BbCardVariant
+import com.bulbulustur.android.ui.components.BbInnerPageHeader
 import com.bulbulustur.android.ui.components.BbSectionHeader
 import com.bulbulustur.android.ui.theme.BbColors
-import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
 import com.bulbulustur.android.ui.theme.BbTheme
 
 @Composable
 fun BankAccountListScreen(
+    onBackClick: () -> Unit = {},
     onCopyIbanClick: (String) -> Unit = {}
 ) {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(BbSpacing.md),
-        verticalArrangement = Arrangement.spacedBy(BbSpacing.md)
-    ) {
-        item {
-            BankAccountHeader()
-        }
-
-        item {
-            BankAccountWarningCard()
-        }
-
-        item {
-            BbSectionHeader(
-                title = "Bulbulustur banka hesapları",
-                subtitle = "Lütfen ödeme yapmadan önce açıklama alanına sipariş numaranızı yazmayı unutmayın"
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Banka Hesapları",
+                onBackClick = onBackClick
             )
         }
+    ) { innerPadding ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(innerPadding),
+            contentPadding = PaddingValues(
+                start = BbSpacing.PageHorizontal,
+                top = BbSpacing.PageTopCompact,
+                end = BbSpacing.PageHorizontal,
+                bottom = BbSpacing.PageBottom
+            ),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
+        ) {
+            item {
+                BankAccountIntroCard()
+            }
 
-        items(bankAccountItems()) { bankAccount ->
-            BankAccountCard(
-                bankAccount = bankAccount,
-                onCopyIbanClick = {
-                    onCopyIbanClick(bankAccount.iban)
-                }
-            )
-        }
+            item {
+                BankAccountWarningCard()
+            }
 
-        item {
-            BankAccountInfoCard()
-        }
+            item {
+                BbSectionHeader(
+                    title = "Bulbulustur Banka Hesapları",
+                    subtitle = "Ödeme yapmadan önce açıklama alanına sipariş numaranızı yazmayı unutmayın."
+                )
+            }
 
-        item {
-            Spacer(modifier = Modifier.height(BbSpacing.xl))
+            items(
+                items = bankAccountItems(),
+                key = { bankAccount -> bankAccount.bankAccountId }
+            ) { bankAccount ->
+                BankAccountCard(
+                    bankAccount = bankAccount,
+                    onCopyIbanClick = {
+                        onCopyIbanClick(bankAccount.iban)
+                    }
+                )
+            }
+
+            item {
+                BankAccountInfoCard()
+            }
+
+            item {
+                Spacer(modifier = Modifier.height(BbSpacing.Space8))
+            }
         }
     }
 }
 
 @Composable
-private fun BankAccountHeader() {
+private fun BankAccountIntroCard() {
     BbCard(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
     ) {
-        Column(
-            modifier = Modifier.padding(BbSpacing.lg),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.sm)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.Top,
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.sm)
+            Icon(
+                imageVector = Icons.Outlined.Security,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary
+            )
+
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
             ) {
-                Icon(
-                    imageVector = Icons.Outlined.Security,
-                    contentDescription = null,
-                    tint = BbColors.Primary
+                Text(
+                    text = "Ödemenizi Güvenle Tamamlayın",
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = "Havale / EFT bilgileri",
-                    style = MaterialTheme.typography.labelLarge,
-                    color = BbColors.Primary,
-                    fontWeight = FontWeight.SemiBold
-                )
-            }
-
-            Text(
-                text = "Ödemenizi güvenle tamamlayın",
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-
-            Text(
-                text = "Havale veya EFT ile ödeme yapmak için aşağıdaki Bulbulustur banka hesaplarını kullanabilirsiniz.",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-
-            FlowRow(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.sm),
-                verticalArrangement = Arrangement.spacedBy(BbSpacing.sm)
-            ) {
-                BbChip(
-                    text = "Güvenli ödeme",
-                    selected = false,
-                    onClick = {}
-                )
-
-                BbChip(
-                    text = "Sipariş açıklaması",
-                    selected = false,
-                    onClick = {}
-                )
-
-                BbChip(
-                    text = "IBAN kopyala",
-                    selected = false,
-                    onClick = {}
+                    text = "Havale veya EFT ile ödeme yapmak için aşağıdaki Bulbulustur banka hesaplarını kullanabilirsiniz.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -150,27 +146,27 @@ private fun BankAccountHeader() {
 @Composable
 private fun BankAccountWarningCard() {
     BbCard(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(BbSpacing.md),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(BbSpacing.md)
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.Top,
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
         ) {
             Icon(
                 imageVector = Icons.Outlined.Warning,
                 contentDescription = null,
-                tint = BbColors.Primary
+                tint = MaterialTheme.colorScheme.primary
             )
 
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BbSpacing.xs)
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
             ) {
                 Text(
-                    text = "Açıklama alanına sipariş numaranızı yazın",
+                    text = "Açıklama Alanına Sipariş Numaranızı Yazın",
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
@@ -192,30 +188,32 @@ private fun BankAccountCard(
     onCopyIbanClick: () -> Unit
 ) {
     BbCard(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
     ) {
         Column(
-            modifier = Modifier.padding(BbSpacing.md),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.sm)
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.Top,
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.md)
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
             ) {
                 Icon(
                     imageVector = bankAccount.icon,
                     contentDescription = null,
-                    tint = BbColors.Primary
+                    tint = MaterialTheme.colorScheme.primary
                 )
 
                 Column(
                     modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(BbSpacing.xs)
+                    verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
                 ) {
                     Text(
                         text = bankAccount.bankName,
-                        style = MaterialTheme.typography.titleMedium,
+                        style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -230,12 +228,12 @@ private fun BankAccountCard(
                 Icon(
                     imageVector = Icons.Outlined.Verified,
                     contentDescription = null,
-                    tint = BbColors.Primary
+                    tint = MaterialTheme.colorScheme.primary
                 )
             }
 
             BankAccountInfoBox(
-                title = "Hesap sahibi",
+                title = "Hesap Sahibi",
                 value = bankAccount.accountOwner,
                 icon = Icons.Outlined.AccountBalance
             )
@@ -248,25 +246,25 @@ private fun BankAccountCard(
 
             BbCard(
                 modifier = Modifier.fillMaxWidth(),
+                variant = BbCardVariant.Outlined,
+                padding = BbCardPadding.Medium,
                 onClick = onCopyIbanClick
             ) {
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(BbSpacing.md),
+                    modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.ContentCopy,
                         contentDescription = null,
-                        tint = BbColors.Primary
+                        tint = MaterialTheme.colorScheme.primary
                     )
 
-                    Spacer(modifier = Modifier.padding(BbSpacing.xs))
+                    Spacer(modifier = Modifier.padding(BbSpacing.Space1))
 
                     Text(
-                        text = "IBAN kopyala",
+                        text = "IBAN Kopyala",
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface
@@ -277,7 +275,7 @@ private fun BankAccountCard(
             Text(
                 text = "Ödeme açıklamasına sipariş numaranızı yazmanız önerilir.",
                 style = MaterialTheme.typography.labelMedium,
-                color = BbColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -290,29 +288,29 @@ private fun BankAccountInfoBox(
     icon: ImageVector
 ) {
     BbCard(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(BbSpacing.sm),
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(BbSpacing.sm)
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = BbColors.Primary
+                tint = MaterialTheme.colorScheme.primary
             )
 
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BbSpacing.xs)
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
             ) {
                 Text(
                     text = title,
                     style = MaterialTheme.typography.labelSmall,
-                    color = BbColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
                 Text(
@@ -329,28 +327,28 @@ private fun BankAccountInfoBox(
 @Composable
 private fun BankAccountInfoCard() {
     BbCard(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(BbSpacing.lg),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(BbSpacing.md)
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.Top,
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
         ) {
             Icon(
                 imageVector = Icons.Outlined.Info,
                 contentDescription = null,
-                tint = BbColors.Primary
+                tint = MaterialTheme.colorScheme.primary
             )
 
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BbSpacing.xs)
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
             ) {
                 Text(
-                    text = "Ödeme kontrolü",
-                    style = MaterialTheme.typography.titleMedium,
+                    text = "Ödeme Kontrolü",
+                    style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
                 )

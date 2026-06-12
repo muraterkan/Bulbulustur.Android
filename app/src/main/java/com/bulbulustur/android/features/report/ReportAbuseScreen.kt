@@ -9,16 +9,12 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
@@ -38,7 +34,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.bulbulustur.android.ui.components.BbButton
+import com.bulbulustur.android.ui.components.BbButtonSize
+import com.bulbulustur.android.ui.components.BbButtonVariant
 import com.bulbulustur.android.ui.components.BbCard
+import com.bulbulustur.android.ui.components.BbCardPadding
+import com.bulbulustur.android.ui.components.BbCardVariant
+import com.bulbulustur.android.ui.components.BbInnerPageHeader
 import com.bulbulustur.android.ui.components.BbSectionHeader
 import com.bulbulustur.android.ui.theme.BbColors
 import com.bulbulustur.android.ui.theme.BbRadius
@@ -73,6 +75,13 @@ fun ReportAbuseScreen(
     )
 
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Kötüye Kullanım Bildir",
+                onBackClick = onBackClick
+            )
+        },
         bottomBar = {
             ReportAbuseBottomBar(
                 canSubmit = selectedReason.id > 0,
@@ -89,18 +98,16 @@ fun ReportAbuseScreen(
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
                 .padding(
-                    start = BbSpacing.md,
-                    top = BbSpacing.md,
-                    end = BbSpacing.md,
-                    bottom = BbSpacing.xl
+                    PaddingValues(
+                        start = BbSpacing.PageHorizontal,
+                        top = BbSpacing.PageTopCompact,
+                        end = BbSpacing.PageHorizontal,
+                        bottom = BbSpacing.PageBottom
+                    )
                 ),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.md)
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
         ) {
-            ReportAbuseTopBar(
-                onBackClick = onBackClick
-            )
-
-            ReportAbuseHeroCard(
+            ReportAbuseIntroCard(
                 targetTitle = targetTitle,
                 targetType = targetType
             )
@@ -133,78 +140,30 @@ fun ReportAbuseScreen(
 }
 
 @Composable
-private fun ReportAbuseTopBar(
-    onBackClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Box(
-            modifier = Modifier
-                .size(BbSpacing.xl)
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.surface)
-                .clickable {
-                    onBackClick()
-                },
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = "‹",
-                style = MaterialTheme.typography.headlineSmall,
-                color = BbColors.TextStrong
-            )
-        }
-
-        Spacer(modifier = Modifier.width(BbSpacing.md))
-
-        Column(
-            modifier = Modifier.weight(1f)
-        ) {
-            Text(
-                text = "Kötüye kullanım bildir",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                color = BbColors.TextStrong
-            )
-
-            Text(
-                text = "Güvenlik ve kalite bildirimi",
-                style = MaterialTheme.typography.bodySmall,
-                color = BbColors.TextStrong.copy(alpha = 0.62f)
-            )
-        }
-    }
-}
-
-@Composable
-private fun ReportAbuseHeroCard(
+private fun ReportAbuseIntroCard(
     targetTitle: String,
     targetType: ReportTargetType
 ) {
-    BbCard {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.sm)
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
         ) {
-            ReportStatusPill(
-                text = "Güvenlik ve kalite bildirimi"
-            )
-
             Text(
-                text = "Kötüye kullanım bildir",
-                style = MaterialTheme.typography.headlineSmall,
+                text = "Güvenlik Ve Kalite Bildirimi",
+                style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
-                color = BbColors.TextStrong
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
-                text = "Listelenen ${targetType.displayName.lowercase()} isminin, açıklamasının veya içeriğinin Bulbulustur kurallarını ihlal ettiğini düşünüyorsan bize bildirebilirsin.",
-                style = MaterialTheme.typography.bodyMedium,
-                color = BbColors.TextStrong.copy(alpha = 0.68f)
+                text = "Listelenen ${targetType.displayName.lowercase()} isminin, açıklamasının veya içeriğinin Bulbulustur kurallarını ihlal ettiğini düşünüyorsanız bize bildirebilirsiniz.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-
-            Spacer(modifier = Modifier.height(BbSpacing.xs))
 
             ReportTargetMiniPill(
                 text = targetTitle
@@ -218,41 +177,48 @@ private fun ReportTargetCard(
     targetTitle: String,
     targetType: ReportTargetType
 ) {
-    BbCard {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
         Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
                 modifier = Modifier
-                    .size(BbSpacing.xxl)
-                    .clip(RoundedCornerShape(BbRadius.md))
-                    .background(BbColors.Success),
+                    .size(BbSpacing.Space12)
+                    .background(
+                        color = BbColors.Green.Green500,
+                        shape = BbRadius.LgShape
+                    ),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = targetType.shortCode,
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.surface
+                    color = BbColors.White
                 )
             }
 
-            Spacer(modifier = Modifier.width(BbSpacing.md))
-
             Column(
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
             ) {
                 Text(
                     text = targetType.displayName,
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
-                    color = BbColors.TextStrong
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
                     text = targetTitle,
                     style = MaterialTheme.typography.bodySmall,
-                    color = BbColors.TextStrong.copy(alpha = 0.68f),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 2
                 )
             }
@@ -262,25 +228,29 @@ private fun ReportTargetCard(
 
 @Composable
 private fun ReportSafetyInfoCard() {
-    BbCard {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.sm)
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
         ) {
             Text(
-                text = "Bildiriminiz incelenir",
-                style = MaterialTheme.typography.titleMedium,
+                text = "Bildiriminiz İncelenir",
+                style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
-                color = BbColors.TextStrong
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
-                text = "Ürün bilgisi, görsel, açıklama veya satıcıyla ilgili uygunsuz bir durum fark ettiysen kısa bilgilerle bildirebilirsin.",
-                style = MaterialTheme.typography.bodyMedium,
-                color = BbColors.TextStrong.copy(alpha = 0.68f)
+                text = "Ürün bilgisi, görsel, açıklama veya satıcıyla ilgili uygunsuz bir durum fark ettiyseniz kısa bilgilerle bildirebilirsiniz.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Column(
-                verticalArrangement = Arrangement.spacedBy(BbSpacing.xs)
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
             ) {
                 ReportSafetyBullet(
                     text = "Yanıltıcı ürün bilgisi"
@@ -303,21 +273,21 @@ private fun ReportSafetyBullet(
     text: String
 ) {
     Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2),
         verticalAlignment = Alignment.Top
     ) {
         Text(
             text = "✓",
             style = MaterialTheme.typography.bodySmall,
             fontWeight = FontWeight.Bold,
-            color = BbColors.Success
+            color = BbColors.Green.Green700
         )
-
-        Spacer(modifier = Modifier.width(BbSpacing.sm))
 
         Text(
             text = text,
             style = MaterialTheme.typography.bodySmall,
-            color = BbColors.TextStrong.copy(alpha = 0.68f)
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -330,17 +300,17 @@ private fun ReportReasonSection(
     onReasonClick: (ReportReasonItem) -> Unit
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(BbSpacing.sm)
+        verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
     ) {
         BbSectionHeader(
-            title = "Şikayet nedenini seç",
+            title = "Şikayet Nedenini Seç",
             subtitle = "Bildirimini daha hızlı değerlendirebilmemiz için uygun nedeni seç."
         )
 
         FlowRow(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(BbSpacing.sm),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.sm)
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.ChipGap),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.ChipGap)
         ) {
             reasons.forEach { reason ->
                 FilterChip(
@@ -349,7 +319,9 @@ private fun ReportReasonSection(
                         onReasonClick(reason)
                     },
                     label = {
-                        Text(text = reason.title)
+                        Text(
+                            text = reason.title
+                        )
                     }
                 )
             }
@@ -362,13 +334,17 @@ private fun ReportDetailSection(
     detail: String,
     onDetailChange: (String) -> Unit
 ) {
-    BbCard {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.sm)
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
         ) {
             BbSectionHeader(
-                title = "Bildirim detayları",
-                subtitle = "Kısa bir açıklama yazman incelemeyi kolaylaştırır."
+                title = "Bildirim Detayları",
+                subtitle = "Kısa bir açıklama yazmanız incelemeyi kolaylaştırır."
             )
 
             TextField(
@@ -377,14 +353,17 @@ private fun ReportDetailSection(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(BbSpacing.Space16 + BbSpacing.Space16)
-                    .clip(RoundedCornerShape(BbRadius.lg)),
+                    .clip(BbRadius.LgShape),
                 placeholder = {
                     Text(
-                        text = "Bilmemiz gereken başka bir şey var mı? Detayları buraya yaz."
+                        text = "Bilmemiz gereken başka bir şey var mı? Detayları buraya yazın."
                     )
                 },
-                shape = RoundedCornerShape(BbRadius.lg),
+                shape = BbRadius.LgShape,
                 colors = TextFieldDefaults.colors(
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent
@@ -396,31 +375,38 @@ private fun ReportDetailSection(
 
 @Composable
 private fun ReportPrivacyNoticeCard() {
-    BbCard {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
         Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2),
             verticalAlignment = Alignment.Top
         ) {
             Box(
                 modifier = Modifier
-                    .size(BbSpacing.lg)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.surfaceVariant),
+                    .size(BbSpacing.Space6)
+                    .background(
+                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        shape = BbRadius.PillShape
+                    ),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = "i",
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold,
-                    color = BbColors.Success
+                    color = BbColors.Green.Green700
                 )
             }
 
-            Spacer(modifier = Modifier.width(BbSpacing.sm))
-
             Text(
-                text = "Kişisel bilgi, ödeme bilgisi veya üçüncü kişilere ait özel bilgiler paylaşma. Bildirimin kalite ve güvenlik kontrolleri kapsamında değerlendirilebilir.",
+                text = "Kişisel bilgi, ödeme bilgisi veya üçüncü kişilere ait özel bilgiler paylaşmayın. Bildirimin kalite ve güvenlik kontrolleri kapsamında değerlendirilebilir.",
                 style = MaterialTheme.typography.bodySmall,
-                color = BbColors.TextStrong.copy(alpha = 0.68f)
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.weight(1f)
             )
         }
     }
@@ -431,67 +417,25 @@ private fun ReportAbuseBottomBar(
     canSubmit: Boolean,
     onSubmitClick: () -> Unit
 ) {
-    val buttonContainerColor = if (canSubmit) {
-        BbColors.Success
-    } else {
-        MaterialTheme.colorScheme.surfaceVariant
-    }
-
-    val buttonContentColor = if (canSubmit) {
-        MaterialTheme.colorScheme.surface
-    } else {
-        BbColors.TextStrong.copy(alpha = 0.46f)
-    }
-
     Surface(
         color = MaterialTheme.colorScheme.surface,
-        tonalElevation = BbSpacing.xs,
-        shadowElevation = BbSpacing.sm
+        tonalElevation = BbSpacing.Space1,
+        shadowElevation = BbSpacing.Space2
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(BbSpacing.md)
-                .clip(RoundedCornerShape(BbRadius.pill))
-                .background(buttonContainerColor)
-                .clickable(enabled = canSubmit) {
-                    onSubmitClick()
-                }
-                .padding(
-                    horizontal = BbSpacing.lg,
-                    vertical = BbSpacing.md
-                ),
-            contentAlignment = Alignment.Center
+                .padding(BbSpacing.PageHorizontal)
         ) {
-            Text(
+            BbButton(
                 text = "Gönder",
-                style = MaterialTheme.typography.labelLarge,
-                fontWeight = FontWeight.Bold,
-                color = buttonContentColor
+                onClick = onSubmitClick,
+                modifier = Modifier.fillMaxWidth(),
+                variant = BbButtonVariant.Success,
+                size = BbButtonSize.Medium,
+                enabled = canSubmit
             )
         }
-    }
-}
-
-@Composable
-private fun ReportStatusPill(
-    text: String
-) {
-    Box(
-        modifier = Modifier
-            .clip(RoundedCornerShape(BbRadius.pill))
-            .background(MaterialTheme.colorScheme.surfaceVariant)
-            .padding(
-                horizontal = BbSpacing.sm,
-                vertical = BbSpacing.xs
-            )
-    ) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.labelSmall,
-            fontWeight = FontWeight.Bold,
-            color = BbColors.Success
-        )
     }
 }
 
@@ -501,18 +445,20 @@ private fun ReportTargetMiniPill(
 ) {
     Box(
         modifier = Modifier
-            .clip(RoundedCornerShape(BbRadius.pill))
-            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .background(
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                shape = BbRadius.PillShape
+            )
             .padding(
-                horizontal = BbSpacing.sm,
-                vertical = BbSpacing.xs
+                horizontal = BbSpacing.BadgePaddingHorizontal,
+                vertical = BbSpacing.BadgePaddingVertical
             )
     ) {
         Text(
             text = text,
             style = MaterialTheme.typography.labelSmall,
             fontWeight = FontWeight.Bold,
-            color = BbColors.TextStrong
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -560,23 +506,23 @@ private fun getReportReasonItems(): List<ReportReasonItem> {
     return listOf(
         ReportReasonItem(
             id = 1,
-            title = "Yanıltıcı ürün bilgisi"
+            title = "Yanıltıcı Ürün Bilgisi"
         ),
         ReportReasonItem(
             id = 2,
-            title = "Uygunsuz görsel veya açıklama"
+            title = "Uygunsuz Görsel Veya Açıklama"
         ),
         ReportReasonItem(
             id = 3,
-            title = "Sahte ürün şüphesi"
+            title = "Sahte Ürün Şüphesi"
         ),
         ReportReasonItem(
             id = 4,
-            title = "Yasaklı ürün"
+            title = "Yasaklı Ürün"
         ),
         ReportReasonItem(
             id = 5,
-            title = "Kötüye kullanım"
+            title = "Kötüye Kullanım"
         ),
         ReportReasonItem(
             id = 6,

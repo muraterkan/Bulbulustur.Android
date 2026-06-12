@@ -4,22 +4,27 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.bulbulustur.android.features.account.components.AccountPageScaffold
+import androidx.compose.ui.text.style.TextOverflow
 import com.bulbulustur.android.ui.components.BbButton
 import com.bulbulustur.android.ui.components.BbButtonSize
 import com.bulbulustur.android.ui.components.BbButtonVariant
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
+import com.bulbulustur.android.ui.components.BbInnerPageHeader
 import com.bulbulustur.android.ui.theme.BbColors
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
@@ -33,54 +38,77 @@ fun AccountSecurityScreen(
     onDeactivateAccountClick: () -> Unit = {},
     onPhoneListClick: () -> Unit = {}
 ) {
-    AccountPageScaffold(
-        title = "Güvenlik",
-        kicker = "Hesap Koruması",
-        description = "E-posta, şifre, telefon doğrulama ve giriş hareketlerinizi buradan yönetebilirsiniz.",
-        backButtonText = "Hesabıma Dön",
-        onBackClick = onBackClick
-    ) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Güvenlik",
+                onBackClick = onBackClick
+            )
+        }
+    ) { innerPadding ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(innerPadding),
+            contentPadding = PaddingValues(
+                start = BbSpacing.PageHorizontal,
+                top = BbSpacing.PageTopCompact,
+                end = BbSpacing.PageHorizontal,
+                bottom = BbSpacing.PageBottom
+            ),
             verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
         ) {
-            SecuritySummaryCard()
+            item {
+                SecuritySummaryCard()
+            }
 
-            SecurityActionCard(
-                title = "E-posta Değiştir",
-                description = "Hesabınızın bağlı olduğu e-posta adresini güncelleyin.",
-                shortCode = "@",
-                actionText = "Değiştir",
-                onClick = onChangeEmailClick
-            )
+            item {
+                SecurityActionCard(
+                    title = "E-Posta Değiştir",
+                    description = "Hesabınızın bağlı olduğu e-posta adresini güncelleyin.",
+                    shortCode = "@",
+                    actionText = "Değiştir",
+                    onClick = onChangeEmailClick
+                )
+            }
 
-            SecurityActionCard(
-                title = "Şifre Değiştir",
-                description = "Hesap şifrenizi güvenli şekilde yenileyin.",
-                shortCode = "••",
-                actionText = "Güncelle",
-                onClick = onChangePasswordClick
-            )
+            item {
+                SecurityActionCard(
+                    title = "Şifre Değiştir",
+                    description = "Hesap şifrenizi güvenli şekilde yenileyin.",
+                    shortCode = "••",
+                    actionText = "Güncelle",
+                    onClick = onChangePasswordClick
+                )
+            }
 
-            SecurityActionCard(
-                title = "Telefonlarım",
-                description = "Hesabınıza bağlı telefonları ve doğrulama durumlarını yönetin.",
-                shortCode = "☎",
-                actionText = "Yönet",
-                onClick = onPhoneListClick
-            )
+            item {
+                SecurityActionCard(
+                    title = "Telefonlarım",
+                    description = "Hesabınıza bağlı telefonları ve doğrulama durumlarını yönetin.",
+                    shortCode = "☎",
+                    actionText = "Yönet",
+                    onClick = onPhoneListClick
+                )
+            }
 
-            SecurityActionCard(
-                title = "Giriş Hareketleri",
-                description = "Hesabınıza yapılan son girişleri ve cihaz hareketlerini inceleyin.",
-                shortCode = "IP",
-                actionText = "İncele",
-                onClick = onLoginActivitiesClick
-            )
+            item {
+                SecurityActionCard(
+                    title = "Giriş Hareketleri",
+                    description = "Hesabınıza yapılan son girişleri ve cihaz hareketlerini inceleyin.",
+                    shortCode = "IP",
+                    actionText = "İncele",
+                    onClick = onLoginActivitiesClick
+                )
+            }
 
-            SecurityDangerCard(
-                onDeactivateAccountClick = onDeactivateAccountClick
-            )
+            item {
+                SecurityDangerCard(
+                    onDeactivateAccountClick = onDeactivateAccountClick
+                )
+            }
         }
     }
 }
@@ -118,7 +146,7 @@ private fun SecuritySummaryCard() {
                     .padding(BbSpacing.CardPaddingCompact)
             ) {
                 Text(
-                    text = "Hesabınız aktif durumda",
+                    text = "Hesabınız Aktif Durumda",
                     style = MaterialTheme.typography.labelLarge,
                     color = BbColors.Green.Green700
                 )
@@ -157,13 +185,17 @@ private fun SecurityActionCard(
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
 
                 Text(
                     text = description,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
 

@@ -1,10 +1,12 @@
 package com.bulbulustur.android.features.about
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -24,6 +26,7 @@ import androidx.compose.material.icons.outlined.Storefront
 import androidx.compose.material.icons.outlined.Verified
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -32,198 +35,171 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.bulbulustur.android.ui.components.BbCard
-import com.bulbulustur.android.ui.components.BbChip
+import com.bulbulustur.android.ui.components.BbCardPadding
+import com.bulbulustur.android.ui.components.BbCardVariant
+import com.bulbulustur.android.ui.components.BbInnerPageHeader
 import com.bulbulustur.android.ui.components.BbSectionHeader
 import com.bulbulustur.android.ui.theme.BbColors
-import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
 import com.bulbulustur.android.ui.theme.BbTheme
 
 @Composable
 fun AboutScreen(
+    onBackClick: () -> Unit = {},
     onInvestorClick: () -> Unit = {},
     onCareerClick: () -> Unit = {},
     onContactClick: () -> Unit = {},
     onRoadmapClick: () -> Unit = {}
 ) {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(BbSpacing.md),
-        verticalArrangement = Arrangement.spacedBy(BbSpacing.md)
-    ) {
-        item {
-            AboutHeader()
-        }
-
-        item {
-            AboutEcosystemCard()
-        }
-
-        item {
-            BbSectionHeader(
-                title = "Bulbulustur hakkında",
-                subtitle = "Platformun hikayesi, amacı ve ticaret yaklaşımı"
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Hakkımızda",
+                onBackClick = onBackClick
             )
         }
+    ) { innerPadding ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(innerPadding),
+            contentPadding = PaddingValues(
+                start = BbSpacing.PageHorizontal,
+                top = BbSpacing.PageTopCompact,
+                end = BbSpacing.PageHorizontal,
+                bottom = BbSpacing.PageBottom
+            ),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
+        ) {
+            item {
+                AboutIntroCard()
+            }
 
-        items(aboutStoryItems()) { item ->
-            AboutStoryCard(
-                item = item
-            )
-        }
+            item {
+                AboutEcosystemCard()
+            }
 
-        item {
-            BbSectionHeader(
-                title = "Ne yapıyoruz?",
-                subtitle = "Toptan, perakende ve dijital ticaret altyapısını aynı omurgada topluyoruz"
-            )
-        }
+            item {
+                BbSectionHeader(
+                    title = "Bulbulustur Hakkında",
+                    subtitle = "Platformun hikayesi, amacı ve ticaret yaklaşımı"
+                )
+            }
 
-        item {
-            AboutCapabilityGrid()
-        }
+            items(
+                items = aboutStoryItems(),
+                key = { item -> item.title }
+            ) { item ->
+                AboutStoryCard(
+                    item = item
+                )
+            }
 
-        item {
-            BbSectionHeader(
-                title = "Platform yönleri",
-                subtitle = "Alıcı, satıcı, tedarikçi ve geliştirici akışları"
-            )
-        }
+            item {
+                BbSectionHeader(
+                    title = "Ne Yapıyoruz?",
+                    subtitle = "Toptan, perakende ve dijital ticaret altyapısını aynı omurgada topluyoruz"
+                )
+            }
 
-        items(aboutPlatformItems()) { item ->
-            AboutPlatformCard(
-                item = item
-            )
-        }
+            item {
+                AboutCapabilityGrid()
+            }
 
-        item {
-            BbSectionHeader(
-                title = "Devam edin",
-                subtitle = "Kurumsal sayfalara hızlı geçiş"
-            )
-        }
+            item {
+                BbSectionHeader(
+                    title = "Platform Yönleri",
+                    subtitle = "Alıcı, satıcı, tedarikçi ve geliştirici akışları"
+                )
+            }
 
-        item {
-            AboutActionArea(
-                onInvestorClick = onInvestorClick,
-                onCareerClick = onCareerClick,
-                onContactClick = onContactClick,
-                onRoadmapClick = onRoadmapClick
-            )
-        }
+            items(
+                items = aboutPlatformItems(),
+                key = { item -> item.title }
+            ) { item ->
+                AboutPlatformCard(
+                    item = item
+                )
+            }
 
-        item {
-            Spacer(modifier = Modifier.height(BbSpacing.xl))
+            item {
+                BbSectionHeader(
+                    title = "Devam Edin",
+                    subtitle = "Kurumsal sayfalara hızlı geçiş"
+                )
+            }
+
+            item {
+                AboutActionArea(
+                    onInvestorClick = onInvestorClick,
+                    onCareerClick = onCareerClick,
+                    onContactClick = onContactClick,
+                    onRoadmapClick = onRoadmapClick
+                )
+            }
+
+            item {
+                Spacer(modifier = Modifier.height(BbSpacing.Space8))
+            }
         }
     }
 }
 
 @Composable
-private fun AboutHeader() {
+private fun AboutIntroCard() {
     BbCard(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
     ) {
-        Column(
-            modifier = Modifier.padding(BbSpacing.lg),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.sm)
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.sm)
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Business,
-                    contentDescription = null,
-                    tint = BbColors.Primary
-                )
-
-                Text(
-                    text = "Hakkımızda",
-                    style = MaterialTheme.typography.labelLarge,
-                    color = BbColors.Primary,
-                    fontWeight = FontWeight.SemiBold
-                )
-            }
-
-            Text(
-                text = "Biz kimiz?",
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-
-            Text(
-                text = "Bulbulustur; toptan tedarik, perakende satış ve dijital ticaret altyapısını aynı çatı altında birleştiren teknoloji odaklı bir ticaret ekosistemidir.",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-
-            FlowRow(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.sm),
-                verticalArrangement = Arrangement.spacedBy(BbSpacing.sm)
-            ) {
-                BbChip(
-                    text = "Toptan",
-                    selected = false,
-                    onClick = {}
-                )
-
-                BbChip(
-                    text = "Perakende",
-                    selected = false,
-                    onClick = {}
-                )
-
-                BbChip(
-                    text = "Dijital altyapı",
-                    selected = false,
-                    onClick = {}
-                )
-            }
-        }
+        Text(
+            text = "Bulbulustur; toptan tedarik, perakende satış ve dijital ticaret altyapısını aynı çatı altında birleştiren teknoloji odaklı bir ticaret ekosistemidir.",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }
 
 @Composable
 private fun AboutEcosystemCard() {
     BbCard(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
     ) {
         Column(
-            modifier = Modifier.padding(BbSpacing.lg),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.md)
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
         ) {
             Text(
-                text = "Bulbulustur ekosistemi",
-                style = MaterialTheme.typography.labelLarge,
-                color = BbColors.Primary,
-                fontWeight = FontWeight.SemiBold
-            )
-
-            Text(
-                text = "Toptan tedarik, perakende satış ve dijital ticaret altyapısı tek çatı altında.",
-                style = MaterialTheme.typography.titleLarge,
+                text = "Bulbulustur Ekosistemi",
+                style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
 
+            Text(
+                text = "Toptan tedarik, perakende satış ve dijital ticaret altyapısı tek çatı altında.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+
             Column(
-                verticalArrangement = Arrangement.spacedBy(BbSpacing.sm)
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
             ) {
                 AboutTrustRow(
-                    title = "Güvenli ticaret",
+                    title = "Güvenli Ticaret",
                     icon = Icons.Outlined.Verified
                 )
 
                 AboutTrustRow(
-                    title = "Tedarikçi ve mağaza ağı",
+                    title = "Tedarikçi Ve Mağaza Ağı",
                     icon = Icons.Outlined.Storefront
                 )
 
                 AboutTrustRow(
-                    title = "Dijital ticaret altyapısı",
+                    title = "Dijital Ticaret Altyapısı",
                     icon = Icons.Outlined.Hub
                 )
             }
@@ -239,12 +215,12 @@ private fun AboutTrustRow(
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(BbSpacing.sm)
+        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
     ) {
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = BbColors.Primary
+            tint = MaterialTheme.colorScheme.primary
         )
 
         Text(
@@ -261,35 +237,35 @@ private fun AboutStoryCard(
     item: AboutStoryItem
 ) {
     BbCard(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(BbSpacing.md),
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.Top,
-            horizontalArrangement = Arrangement.spacedBy(BbSpacing.md)
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
         ) {
             Icon(
                 imageVector = item.icon,
                 contentDescription = null,
-                tint = BbColors.Primary
+                tint = MaterialTheme.colorScheme.primary
             )
 
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BbSpacing.xs)
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
             ) {
                 Text(
                     text = item.title,
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
                     text = item.description,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
@@ -300,11 +276,11 @@ private fun AboutStoryCard(
 @Composable
 private fun AboutCapabilityGrid() {
     Column(
-        verticalArrangement = Arrangement.spacedBy(BbSpacing.sm)
+        verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(BbSpacing.sm)
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
         ) {
             AboutCapabilityCard(
                 title = "Toptan",
@@ -323,7 +299,7 @@ private fun AboutCapabilityGrid() {
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(BbSpacing.sm)
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
         ) {
             AboutCapabilityCard(
                 title = "Draugr",
@@ -350,16 +326,17 @@ private fun AboutCapabilityCard(
     modifier: Modifier = Modifier
 ) {
     BbCard(
-        modifier = modifier
+        modifier = modifier,
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
     ) {
         Column(
-            modifier = Modifier.padding(BbSpacing.md),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.xs)
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = BbColors.Primary
+                tint = MaterialTheme.colorScheme.primary
             )
 
             Text(
@@ -383,28 +360,28 @@ private fun AboutPlatformCard(
     item: AboutPlatformItem
 ) {
     BbCard(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(BbSpacing.md),
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(BbSpacing.md)
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
         ) {
             Icon(
                 imageVector = item.icon,
                 contentDescription = null,
-                tint = BbColors.Primary
+                tint = MaterialTheme.colorScheme.primary
             )
 
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BbSpacing.xs)
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
             ) {
                 Text(
                     text = item.title,
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -427,10 +404,10 @@ private fun AboutActionArea(
     onRoadmapClick: () -> Unit
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(BbSpacing.sm)
+        verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
     ) {
         AboutActionCard(
-            title = "Yatırımcı ilişkileri",
+            title = "Yatırımcı İlişkileri",
             description = "Kurumsal bilgi ve yatırımcı iletişim alanına geç.",
             icon = Icons.Outlined.Business,
             onClick = onInvestorClick
@@ -444,7 +421,7 @@ private fun AboutActionArea(
         )
 
         AboutActionCard(
-            title = "Yol haritası",
+            title = "Yol Haritası",
             description = "Platformun gelişim adımlarını incele.",
             icon = Icons.Outlined.RocketLaunch,
             onClick = onRoadmapClick
@@ -468,28 +445,28 @@ private fun AboutActionCard(
 ) {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium,
         onClick = onClick
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(BbSpacing.md),
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(BbSpacing.md)
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = BbColors.Primary
+                tint = MaterialTheme.colorScheme.primary
             )
 
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BbSpacing.xs)
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
             ) {
                 Text(
                     text = title,
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -525,17 +502,17 @@ private data class AboutPlatformItem(
 private fun aboutStoryItems(): List<AboutStoryItem> {
     return listOf(
         AboutStoryItem(
-            title = "Bizim hikayemiz",
+            title = "Bizim Hikayemiz",
             description = "Bulbulustur, üretici, tedarikçi, mağaza ve alıcıları aynı dijital omurgada buluşturmak için geliştirilen bir ticaret altyapısıdır.",
             icon = Icons.Outlined.HistoryEdu
         ),
         AboutStoryItem(
-            title = "Neler yapıyoruz?",
+            title = "Neler Yapıyoruz?",
             description = "Toptan tedarik, perakende satış, RFQ, mağaza, marka, ödeme, kargo ve dijital site altyapılarını tek ekosistemde birleştiriyoruz.",
             icon = Icons.Outlined.Lightbulb
         ),
         AboutStoryItem(
-            title = "Neye inanıyoruz?",
+            title = "Neye İnanıyoruz?",
             description = "Ticaretin daha görünür, izlenebilir, erişilebilir ve dijital altyapılarla daha güçlü hale gelmesi gerektiğine inanıyoruz.",
             icon = Icons.Outlined.AutoAwesome
         ),
@@ -555,7 +532,7 @@ private fun aboutPlatformItems(): List<AboutPlatformItem> {
             icon = Icons.Outlined.Storefront
         ),
         AboutPlatformItem(
-            title = "Tedarikçiler ve şirketler",
+            title = "Tedarikçiler Ve Şirketler",
             description = "Firma profili, ürün vitrinleri, belgeler ve RFQ akışlarıyla görünürlük kazanır.",
             icon = Icons.Outlined.Business
         ),

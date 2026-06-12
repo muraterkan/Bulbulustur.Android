@@ -9,19 +9,18 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CheckCircle
-import androidx.compose.material.icons.outlined.ChevronLeft
 import androidx.compose.material.icons.outlined.QuestionAnswer
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material.icons.outlined.Storefront
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,12 +30,10 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import com.bulbulustur.android.ui.components.BbButton
-import com.bulbulustur.android.ui.components.BbButtonSize
-import com.bulbulustur.android.ui.components.BbButtonVariant
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
+import com.bulbulustur.android.ui.components.BbInnerPageHeader
 import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
@@ -68,70 +65,61 @@ fun QuestionAnswerScreen(
             storeName = "Bulbulustur Store",
             question = "Toptan alımda farklı renkleri karıştırabilir miyim?",
             answer = null,
-            statusText = "Cevap bekliyor",
+            statusText = "Cevap Bekliyor",
             statusIcon = Icons.Outlined.Schedule
         )
     )
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(pageBackground)
-            .statusBarsPadding()
-            .navigationBarsPadding(),
-        contentPadding = PaddingValues(
-            horizontal = BbSpacing.PageHorizontal,
-            vertical = BbSpacing.PageTopCompact
-        ),
-        verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
-    ) {
-        item {
-            QuestionAnswerHeader(
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Soru Ve Cevaplarım",
                 onBackClick = onBackClick
             )
         }
+    ) { innerPadding ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(pageBackground)
+                .padding(innerPadding),
+            contentPadding = PaddingValues(
+                start = BbSpacing.PageHorizontal,
+                top = BbSpacing.PageTopCompact,
+                end = BbSpacing.PageHorizontal,
+                bottom = BbSpacing.PageBottom
+            ),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
+        ) {
+            item {
+                QuestionAnswerIntroCard()
+            }
 
-        items(
-            count = questions.size
-        ) { index ->
-            QuestionAnswerCard(
-                item = questions[index]
-            )
+            items(
+                items = questions,
+                key = { question -> "${question.productName}-${question.question}" }
+            ) { question ->
+                QuestionAnswerCard(
+                    item = question
+                )
+            }
         }
     }
 }
 
 @Composable
-private fun QuestionAnswerHeader(
-    onBackClick: () -> Unit
-) {
+private fun QuestionAnswerIntroCard() {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
         padding = BbCardPadding.Medium
     ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
+            verticalAlignment = Alignment.Top
         ) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                BbButton(
-                    text = "Geri",
-                    onClick = onBackClick,
-                    variant = BbButtonVariant.Light,
-                    size = BbButtonSize.Small,
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Outlined.ChevronLeft,
-                            contentDescription = null,
-                            modifier = Modifier.size(BbIcon.SizeSm)
-                        )
-                    }
-                )
-            }
-
             Box(
                 modifier = Modifier
                     .size(BbIcon.BoxLg)
@@ -150,11 +138,12 @@ private fun QuestionAnswerHeader(
             }
 
             Column(
+                modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
             ) {
                 Text(
-                    text = "Soru ve Cevaplarım",
-                    style = BbTypography.titleLarge,
+                    text = "Ürün Soruları Ve Satıcı Cevapları",
+                    style = BbTypography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 

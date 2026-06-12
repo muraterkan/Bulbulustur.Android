@@ -2,7 +2,6 @@ package com.bulbulustur.android.features.account.company
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,15 +10,12 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CheckCircle
-import androidx.compose.material.icons.outlined.ChevronRight
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Public
@@ -31,6 +27,7 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -49,6 +46,7 @@ import com.bulbulustur.android.ui.components.BbButtonVariant
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
+import com.bulbulustur.android.ui.components.BbInnerPageHeader
 import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
@@ -71,153 +69,144 @@ fun CompanyB2BIndexScreen(
         )
     )
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(pageBackground)
-            .statusBarsPadding()
-            .navigationBarsPadding(),
-        contentPadding = PaddingValues(
-            horizontal = BbSpacing.PageHorizontal,
-            vertical = BbSpacing.PageTopCompact
-        ),
-        verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
-    ) {
-        item {
-            CompanyB2BIndexHeroCard(
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            BbInnerPageHeader(
+                title = "B2B Index",
                 onBackClick = onBackClick
             )
         }
+    ) { innerPadding ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(pageBackground)
+                .padding(innerPadding),
+            contentPadding = PaddingValues(
+                start = BbSpacing.PageHorizontal,
+                top = BbSpacing.PageTopCompact,
+                end = BbSpacing.PageHorizontal,
+                bottom = BbSpacing.PageBottom
+            ),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
+        ) {
+            item {
+                CompanyB2BIndexIntroCard()
+            }
 
-        item {
-            CompanyB2BIndexSummaryCard()
-        }
+            item {
+                CompanyB2BIndexSummaryCard()
+            }
 
-        item {
-            CompanyB2BIndexStatsGrid()
-        }
+            item {
+                CompanyB2BIndexStatsGrid()
+            }
 
-        item {
-            CompanyB2BIndexSection(
-                title = "B2B Index ne sağlar?",
-                description = "Firmanızın toptan ticaret akışlarında daha görünür olmasına yardımcı olur.",
-                icon = Icons.Outlined.WorkspacePremium
-            ) {
-                CompanyB2BIndexBenefitRow(
-                    title = "Global Görünürlük",
-                    description = "Şirket profiliniz uluslararası alıcılar için daha keşfedilebilir hale gelir.",
-                    icon = Icons.Outlined.Public
-                )
+            item {
+                CompanyB2BIndexSection(
+                    title = "B2B Index Ne Sağlar?",
+                    description = "Firmanızın toptan ticaret akışlarında daha görünür olmasına yardımcı olur.",
+                    icon = Icons.Outlined.WorkspacePremium
+                ) {
+                    CompanyB2BIndexBenefitRow(
+                        title = "Global Görünürlük",
+                        description = "Şirket profiliniz uluslararası alıcılar için daha keşfedilebilir hale gelir.",
+                        icon = Icons.Outlined.Public
+                    )
 
-                CompanyDashedDivider()
+                    CompanyDashedDivider()
 
-                CompanyB2BIndexBenefitRow(
-                    title = "RFQ Fırsatları",
-                    description = "Potansiyel alıcılardan gelen fiyat teklifi süreçlerine daha yakın olursunuz.",
-                    icon = Icons.Outlined.RequestQuote
-                )
+                    CompanyB2BIndexBenefitRow(
+                        title = "RFQ Fırsatları",
+                        description = "Potansiyel alıcılardan gelen fiyat teklifi süreçlerine daha yakın olursunuz.",
+                        icon = Icons.Outlined.RequestQuote
+                    )
 
-                CompanyDashedDivider()
+                    CompanyDashedDivider()
 
-                CompanyB2BIndexBenefitRow(
-                    title = "Kurumsal Vitrin",
-                    description = "Şirket bilgileriniz daha düzenli ve güven veren bir B2B profilinde sunulur.",
-                    icon = Icons.Outlined.Storefront
+                    CompanyB2BIndexBenefitRow(
+                        title = "Kurumsal Vitrin",
+                        description = "Şirket bilgileriniz daha düzenli ve güven veren bir B2B profilinde sunulur.",
+                        icon = Icons.Outlined.Storefront
+                    )
+                }
+            }
+
+            item {
+                CompanyB2BIndexAgreementCard(
+                    isAccepted = agreementAcceptedState.value,
+                    onAcceptedChange = { isAccepted ->
+                        agreementAcceptedState.value = isAccepted
+                    }
                 )
             }
-        }
 
-        item {
-            CompanyB2BIndexAgreementCard(
-                isAccepted = agreementAcceptedState.value,
-                onAcceptedChange = { isAccepted ->
-                    agreementAcceptedState.value = isAccepted
-                }
-            )
-        }
-
-        item {
-            BbButton(
-                text = "Şirketimi B2B Index’e Dahil Et",
-                onClick = {
-                    if (agreementAcceptedState.value) {
-                        onActivateClick()
-                    }
-                },
-                modifier = Modifier.fillMaxWidth(),
-                variant = if (agreementAcceptedState.value) {
-                    BbButtonVariant.Primary
-                } else {
-                    BbButtonVariant.Light
-                },
-                size = BbButtonSize.Large
-            )
+            item {
+                BbButton(
+                    text = "Şirketimi B2B Index’e Dahil Et",
+                    onClick = {
+                        if (agreementAcceptedState.value) {
+                            onActivateClick()
+                        }
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    variant = if (agreementAcceptedState.value) {
+                        BbButtonVariant.Primary
+                    } else {
+                        BbButtonVariant.Light
+                    },
+                    size = BbButtonSize.Large,
+                    enabled = agreementAcceptedState.value
+                )
+            }
         }
     }
 }
 
 @Composable
-private fun CompanyB2BIndexHeroCard(
-    onBackClick: () -> Unit
-) {
+private fun CompanyB2BIndexIntroCard() {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
         padding = BbCardPadding.Medium
     ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            BbButton(
-                text = "Şirket Bilgilerime Dön",
-                onClick = onBackClick,
-                variant = BbButtonVariant.Light,
-                size = BbButtonSize.Small
-            )
-
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
-                verticalAlignment = Alignment.CenterVertically
+            Box(
+                modifier = Modifier
+                    .size(BbIcon.BoxXl)
+                    .background(
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        shape = BbRadius.XlShape
+                    ),
+                contentAlignment = Alignment.Center
             ) {
-                Box(
-                    modifier = Modifier
-                        .size(BbIcon.BoxXl)
-                        .background(
-                            color = MaterialTheme.colorScheme.primaryContainer,
-                            shape = BbRadius.XlShape
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Language,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                        modifier = Modifier.size(BbIcon.Section)
-                    )
-                }
+                Icon(
+                    imageVector = Icons.Outlined.Language,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                    modifier = Modifier.size(BbIcon.Section)
+                )
+            }
 
-                Column(
-                    modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
-                ) {
-                    Text(
-                        text = "B2B Index",
-                        style = BbTypography.labelLarge,
-                        color = MaterialTheme.colorScheme.primary
-                    )
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+            ) {
+                Text(
+                    text = "Şirketinizi Global Alıcılara Açın",
+                    style = BbTypography.titleLarge,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
 
-                    Text(
-                        text = "Şirketinizi global alıcılara açın",
-                        style = BbTypography.titleLarge,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-
-                    Text(
-                        text = "Toptan alıcıların firmanızı keşfetmesi, teklif süreçlerinize ulaşması ve kurumsal profilinizi görmesi için şirketinizi B2B Index’e dahil edin.",
-                        style = BbTypography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
+                Text(
+                    text = "Toptan alıcıların firmanızı keşfetmesi, teklif süreçlerinize ulaşması ve kurumsal profilinizi görmesi için şirketinizi B2B Index’e dahil edin.",
+                    style = BbTypography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
         }
     }

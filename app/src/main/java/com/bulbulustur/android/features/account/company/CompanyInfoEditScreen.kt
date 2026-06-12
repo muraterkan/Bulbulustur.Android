@@ -4,11 +4,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -16,13 +21,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
-import com.bulbulustur.android.features.account.components.AccountPageScaffold
 import com.bulbulustur.android.ui.components.BbButton
 import com.bulbulustur.android.ui.components.BbButtonSize
 import com.bulbulustur.android.ui.components.BbButtonVariant
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
+import com.bulbulustur.android.ui.components.BbInnerPageHeader
 import com.bulbulustur.android.ui.theme.BbColors
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
@@ -68,17 +73,33 @@ fun CompanyInfoEditScreen(
         mutableStateOf("")
     }
 
-    AccountPageScaffold(
-        title = "Firma Bilgilerim",
-        kicker = "Kurumsal Hesap",
-        description = "Toptan işlem, teklif ve kurumsal fatura süreçlerinde kullanılabilecek firma bilgilerinizi buradan düzenleyebilirsiniz.",
-        backButtonText = "Hesabıma Dön",
-        onBackClick = onBackClick
-    ) {
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Firma Bilgilerini Düzenle",
+                onBackClick = onBackClick
+            )
+        }
+    ) { innerPadding ->
         Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(innerPadding)
+                .verticalScroll(rememberScrollState())
+                .padding(
+                    PaddingValues(
+                        start = BbSpacing.PageHorizontal,
+                        top = BbSpacing.PageTopCompact,
+                        end = BbSpacing.PageHorizontal,
+                        bottom = BbSpacing.PageBottom
+                    )
+                ),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.SectionGap)
         ) {
+            CompanyInfoEditIntroCard()
+
             BbCard(
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbCardVariant.Outlined,
@@ -143,7 +164,7 @@ fun CompanyInfoEditScreen(
                     verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
                 ) {
                     CompanySectionHeader(
-                        title = "İletişim ve Adres",
+                        title = "İletişim Ve Adres",
                         description = "Firma iletişim bilgileriniz ve resmi adresiniz."
                     )
 
@@ -162,7 +183,7 @@ fun CompanyInfoEditScreen(
                         onValueChange = { value ->
                             emailState.value = value
                         },
-                        label = "E-posta",
+                        label = "E-Posta",
                         placeholder = "firma@ornek.com",
                         keyboardType = KeyboardType.Email
                     )
@@ -213,6 +234,21 @@ fun CompanyInfoEditScreen(
                 size = BbButtonSize.Medium
             )
         }
+    }
+}
+
+@Composable
+private fun CompanyInfoEditIntroCard() {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
+        Text(
+            text = "Toptan işlem, teklif ve kurumsal fatura süreçlerinde kullanılabilecek firma bilgilerinizi buradan düzenleyebilirsiniz.",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }
 

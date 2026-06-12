@@ -4,7 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -18,17 +20,19 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.bulbulustur.android.features.account.components.AccountPageScaffold
 import com.bulbulustur.android.ui.components.BbButton
 import com.bulbulustur.android.ui.components.BbButtonSize
 import com.bulbulustur.android.ui.components.BbButtonVariant
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
+import com.bulbulustur.android.ui.components.BbInnerPageHeader
 import com.bulbulustur.android.ui.theme.BbColors
 import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbRadius
@@ -44,34 +48,31 @@ fun AddressListScreen(
 ) {
     val addresses = getDemoAddresses()
 
-    AccountPageScaffold(
-        title = "Adreslerim",
-        kicker = "Adres Yönetimi",
-        description = "Kayıtlı adreslerinizi görüntüleyin, düzenleyin veya yeni adres ekleyin.",
-        backButtonText = "Hesabıma Dön",
-        onBackClick = onBackClick
-    ) {
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Adreslerim",
+                onBackClick = onBackClick,
+                actionIcon = Icons.Outlined.AddLocationAlt,
+                actionContentDescription = "Yeni Adres Ekle",
+                onActionClick = onCreateAddressClick
+            )
+        }
+    ) { innerPadding ->
         LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(innerPadding),
+            contentPadding = PaddingValues(
+                start = BbSpacing.PageHorizontal,
+                top = BbSpacing.PageTopCompact,
+                end = BbSpacing.PageHorizontal,
+                bottom = BbSpacing.PageBottom
+            ),
             verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
         ) {
-            item {
-                BbButton(
-                    text = "Yeni Adres Ekle",
-                    onClick = onCreateAddressClick,
-                    modifier = Modifier.fillMaxWidth(),
-                    variant = BbButtonVariant.Primary,
-                    size = BbButtonSize.Medium,
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Outlined.AddLocationAlt,
-                            contentDescription = null,
-                            tint = BbColors.TextStrong,
-                            modifier = Modifier.size(BbIcon.ButtonIcon)
-                        )
-                    }
-                )
-            }
-
             if (addresses.isEmpty()) {
                 item {
                     AddressEmptyState(
@@ -271,7 +272,7 @@ private fun AddressDefaultBadge() {
             )
     ) {
         Text(
-            text = "Varsayılan adres",
+            text = "Varsayılan Adres",
             style = BbTypography.labelSmall,
             color = BbColors.Green.Green700
         )
@@ -295,7 +296,7 @@ private fun AddressEmptyState(
             AddressIconBox()
 
             Text(
-                text = "Kayıt bulunamadı!",
+                text = "Kayıt Bulunamadı",
                 style = BbTypography.titleMedium,
                 color = BbColors.TextStrong
             )

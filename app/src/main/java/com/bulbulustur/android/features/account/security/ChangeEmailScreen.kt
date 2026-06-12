@@ -4,11 +4,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -17,13 +22,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
-import com.bulbulustur.android.features.account.components.AccountPageScaffold
 import com.bulbulustur.android.ui.components.BbButton
 import com.bulbulustur.android.ui.components.BbButtonSize
 import com.bulbulustur.android.ui.components.BbButtonVariant
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
+import com.bulbulustur.android.ui.components.BbInnerPageHeader
 import com.bulbulustur.android.ui.theme.BbColors
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
@@ -55,17 +60,33 @@ fun ChangeEmailScreen(
 
     val canSubmit = emailValidationState.value.canSubmit && !isLoading
 
-    AccountPageScaffold(
-        title = "E-posta Değiştir",
-        kicker = "Hesap Güvenliği",
-        description = "Hesabınıza bağlı e-posta adresini güncelleyin. Yeni e-posta için doğrulama süreci gerekebilir.",
-        backButtonText = "Güvenliğe Dön",
-        onBackClick = onBackClick
-    ) {
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            BbInnerPageHeader(
+                title = "E-Posta Değiştir",
+                onBackClick = onBackClick
+            )
+        }
+    ) { innerPadding ->
         Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(innerPadding)
+                .verticalScroll(rememberScrollState())
+                .padding(
+                    PaddingValues(
+                        start = BbSpacing.PageHorizontal,
+                        top = BbSpacing.PageTopCompact,
+                        end = BbSpacing.PageHorizontal,
+                        bottom = BbSpacing.PageBottom
+                    )
+                ),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.SectionGap)
         ) {
+            ChangeEmailIntroCard()
+
             BbCard(
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbCardVariant.Outlined,
@@ -86,7 +107,7 @@ fun ChangeEmailScreen(
                         },
                         modifier = Modifier.fillMaxWidth(),
                         label = {
-                            Text(text = "Yeni E-posta")
+                            Text(text = "Yeni E-Posta")
                         },
                         placeholder = {
                             Text(text = "ornek@bulbulustur.com")
@@ -96,7 +117,8 @@ fun ChangeEmailScreen(
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Email
                         ),
-                        isError = newEmailState.value.isNotBlank() && !emailValidationState.value.isValidEmailFormat,
+                        isError = newEmailState.value.isNotBlank() &&
+                                !emailValidationState.value.isValidEmailFormat,
                         supportingText = {
                             EmailSupportingText(
                                 validation = emailValidationState.value,
@@ -131,14 +153,14 @@ fun ChangeEmailScreen(
                         message.isNotBlank()
                     }?.let { message ->
                         EmailMessageBox(
-                            title = "E-posta Güncellendi",
+                            title = "E-Posta Güncellendi",
                             message = message,
                             type = EmailMessageType.Success
                         )
                     }
 
                     BbButton(
-                        text = "E-postayı Güncelle",
+                        text = "E-Postayı Güncelle",
                         onClick = {
                             onSaveClick(newEmailState.value)
                         },
@@ -151,6 +173,21 @@ fun ChangeEmailScreen(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun ChangeEmailIntroCard() {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
+        Text(
+            text = "Hesabınıza bağlı e-posta adresini güncelleyin. Yeni e-posta için doğrulama süreci gerekebilir.",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }
 
@@ -171,7 +208,7 @@ private fun CurrentEmailBox(
             verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
         ) {
             Text(
-                text = "Mevcut E-posta",
+                text = "Mevcut E-Posta",
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

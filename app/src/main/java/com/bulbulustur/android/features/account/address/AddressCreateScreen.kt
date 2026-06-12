@@ -1,13 +1,16 @@
 package com.bulbulustur.android.features.account.address
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -18,7 +21,7 @@ import com.bulbulustur.android.ui.components.BbButtonVariant
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
-import com.bulbulustur.android.ui.components.BbChip
+import com.bulbulustur.android.ui.components.BbInnerPageHeader
 import com.bulbulustur.android.ui.components.form.BbFormSection
 import com.bulbulustur.android.ui.components.form.BbSelectInput
 import com.bulbulustur.android.ui.components.form.BbSelectOption
@@ -64,105 +67,111 @@ fun AddressCreateScreen(
         mutableStateOf(AddressCreateFormState())
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(
-                horizontal = BbSpacing.PageHorizontal,
-                vertical = BbSpacing.PageTop
-            ),
-        verticalArrangement = Arrangement.spacedBy(BbSpacing.SectionGap)
-    ) {
-        BbButton(
-            text = "Adreslerime Dön",
-            onClick = onBackClick,
-            variant = BbButtonVariant.Outline
-        )
-
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
-        ) {
-            BbChip(
-                text = "Adres Bilgileri"
-            )
-
-            Text(
-                text = "Yeni Adres Ekle",
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-
-            Text(
-                text = "Siparişlerinde kullanmak üzere yeni bir teslimat adresi oluştur. Teslimatın doğru ilerlemesi için adres bilgilerini eksiksiz gir.",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Yeni Adres Ekle",
+                onBackClick = onBackClick
             )
         }
-
-        BbFormSection(
-            title = "Teslimat adresi"
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(innerPadding)
+                .verticalScroll(rememberScrollState())
+                .padding(
+                    PaddingValues(
+                        start = BbSpacing.PageHorizontal,
+                        top = BbSpacing.PageTopCompact,
+                        end = BbSpacing.PageHorizontal,
+                        bottom = BbSpacing.PageBottom
+                    )
+                ),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.SectionGap)
         ) {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
+            AddressCreateIntroCard()
+
+            BbFormSection(
+                title = "Teslimat Adresi"
             ) {
-                Text(
-                    text = "Alıcı bilgileri, adres detayı ve konum bilgisini bu formdan yönetebilirsin.",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-
-                AddressCreateReceiverFields(
-                    formState = formState.value,
-                    onStateChange = { changedFormState ->
-                        formState.value = changedFormState
-                    }
-                )
-
-                AddressCreateLocationFields(
-                    formState = formState.value,
-                    onStateChange = { changedFormState ->
-                        formState.value = changedFormState
-                    }
-                )
-
-                AddressCreateDetailFields(
-                    formState = formState.value,
-                    onStateChange = { changedFormState ->
-                        formState.value = changedFormState
-                    }
-                )
-
-                AddressCreateInfoCard()
-
-                if (formState.value.validationMessage != null) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
+                ) {
                     Text(
-                        text = formState.value.validationMessage.orEmpty(),
+                        text = "Alıcı bilgileri, adres detayı ve konum bilgisini bu formdan yönetebilirsin.",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.error
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+
+                    AddressCreateReceiverFields(
+                        formState = formState.value,
+                        onStateChange = { changedFormState ->
+                            formState.value = changedFormState
+                        }
+                    )
+
+                    AddressCreateLocationFields(
+                        formState = formState.value,
+                        onStateChange = { changedFormState ->
+                            formState.value = changedFormState
+                        }
+                    )
+
+                    AddressCreateDetailFields(
+                        formState = formState.value,
+                        onStateChange = { changedFormState ->
+                            formState.value = changedFormState
+                        }
+                    )
+
+                    AddressCreateInfoCard()
+
+                    if (formState.value.validationMessage != null) {
+                        Text(
+                            text = formState.value.validationMessage.orEmpty(),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
+
+                    BbButton(
+                        text = "Kaydet",
+                        onClick = {
+                            if (formState.value.canSubmit) {
+                                onAddressCreateClick(formState.value)
+                            } else {
+                                formState.value = formState.value.copy(
+                                    validationMessage = getAddressCreateValidationMessage(formState.value)
+                                )
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        variant = BbButtonVariant.Primary,
+                        enabled = formState.value.canSubmit,
+                        isLoading = isSubmitting
                     )
                 }
-
-                BbButton(
-                    text = "Kaydet",
-                    onClick = {
-                        if (formState.value.canSubmit) {
-                            onAddressCreateClick(formState.value)
-                        } else {
-                            formState.value = formState.value.copy(
-                                validationMessage = getAddressCreateValidationMessage(formState.value)
-                            )
-                        }
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    variant = BbButtonVariant.Primary,
-                    enabled = formState.value.canSubmit,
-                    isLoading = isSubmitting
-                )
             }
         }
+    }
+}
+
+@Composable
+private fun AddressCreateIntroCard() {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
+        Text(
+            text = "Siparişlerinde kullanmak üzere yeni bir teslimat adresi oluştur. Teslimatın doğru ilerlemesi için adres bilgilerini eksiksiz gir.",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }
 
@@ -359,7 +368,7 @@ private fun AddressCreateDetailFields(
                     )
                 )
             },
-            label = "Bu adrese bir başlık verin",
+            label = "Adres Başlığı",
             placeholder = "Ev adresim, iş adresim gibi"
         )
 
@@ -372,7 +381,7 @@ private fun AddressCreateDetailFields(
                     )
                 )
             },
-            title = "Varsayılan adresim olarak kaydet",
+            title = "Varsayılan Adresim Olarak Kaydet",
             description = "Siparişlerinde bu adres ilk seçenek olarak kullanılabilir."
         )
     }

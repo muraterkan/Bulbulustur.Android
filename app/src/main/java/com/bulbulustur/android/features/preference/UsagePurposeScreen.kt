@@ -9,10 +9,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Business
@@ -23,18 +21,17 @@ import androidx.compose.material.icons.outlined.Storefront
 import androidx.compose.material.icons.outlined.Tune
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.bulbulustur.android.ui.components.BbButton
-import com.bulbulustur.android.ui.components.BbButtonSize
-import com.bulbulustur.android.ui.components.BbButtonVariant
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
+import com.bulbulustur.android.ui.components.BbInnerPageHeader
 import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
@@ -55,73 +52,76 @@ fun UsagePurposeScreen(
         )
     )
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(pageBackground)
-            .statusBarsPadding()
-            .navigationBarsPadding(),
-        contentPadding = PaddingValues(
-            horizontal = BbSpacing.PageHorizontal,
-            vertical = BbSpacing.PageTopCompact
-        ),
-        verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
-    ) {
-        item {
-            UsagePurposeHeader()
-        }
-
-        item {
-            UsagePurposeOptionCard(
-                title = "Perakende alışveriş yapıyorum",
-                description = "Ürün keşfi, sepet, sipariş ve favoriler benim için önemli.",
-                icon = Icons.Outlined.ShoppingBag,
-                isSelected = false,
-                onClick = onRetailClick
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Kullanım Amacı",
+                onBackClick = onBackClick
             )
         }
+    ) { innerPadding ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(pageBackground)
+                .padding(innerPadding),
+            contentPadding = PaddingValues(
+                start = BbSpacing.PageHorizontal,
+                top = BbSpacing.PageTopCompact,
+                end = BbSpacing.PageHorizontal,
+                bottom = BbSpacing.PageBottom
+            ),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
+        ) {
+            item {
+                UsagePurposeIntroCard()
+            }
 
-        item {
-            UsagePurposeOptionCard(
-                title = "Toptan alım yapıyorum",
-                description = "Tedarikçi, RFQ, teklif ve şirket profilleriyle ilerlemek istiyorum.",
-                icon = Icons.Outlined.Business,
-                isSelected = true,
-                onClick = onWholesaleClick
-            )
-        }
+            item {
+                UsagePurposeOptionCard(
+                    title = "Perakende Alışveriş Yapıyorum",
+                    description = "Ürün keşfi, sepet, sipariş ve favoriler benim için önemli.",
+                    icon = Icons.Outlined.ShoppingBag,
+                    isSelected = false,
+                    onClick = onRetailClick
+                )
+            }
 
-        item {
-            UsagePurposeOptionCard(
-                title = "Her ikisini de kullanıyorum",
-                description = "Hem perakende alışveriş hem de toptan ticaret akışlarını görmek istiyorum.",
-                icon = Icons.Outlined.Storefront,
-                isSelected = false,
-                onClick = onBothClick
-            )
-        }
+            item {
+                UsagePurposeOptionCard(
+                    title = "Toptan Alım Yapıyorum",
+                    description = "Tedarikçi, RFQ, teklif ve şirket profilleriyle ilerlemek istiyorum.",
+                    icon = Icons.Outlined.Business,
+                    isSelected = true,
+                    onClick = onWholesaleClick
+                )
+            }
 
-        item {
-            BbButton(
-                text = "Hesabıma Dön",
-                onClick = onBackClick,
-                modifier = Modifier.fillMaxWidth(),
-                variant = BbButtonVariant.Dark,
-                size = BbButtonSize.Medium
-            )
+            item {
+                UsagePurposeOptionCard(
+                    title = "Her İkisini De Kullanıyorum",
+                    description = "Hem perakende alışveriş hem de toptan ticaret akışlarını görmek istiyorum.",
+                    icon = Icons.Outlined.Storefront,
+                    isSelected = false,
+                    onClick = onBothClick
+                )
+            }
         }
     }
 }
 
 @Composable
-private fun UsagePurposeHeader() {
+private fun UsagePurposeIntroCard() {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
         padding = BbCardPadding.Medium
     ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
+            verticalAlignment = Alignment.Top
         ) {
             Box(
                 modifier = Modifier
@@ -140,17 +140,22 @@ private fun UsagePurposeHeader() {
                 )
             }
 
-            Text(
-                text = "Bulbulustur’u en çok hangi amaçla kullanıyorsunuz?",
-                style = BbTypography.titleLarge,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+            ) {
+                Text(
+                    text = "Bulbulustur’u En Çok Hangi Amaçla Kullanıyorsunuz?",
+                    style = BbTypography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
 
-            Text(
-                text = "Bu seçimle ana sayfa, öneriler ve hızlı işlem kartları zamanla sana daha uygun hale gelir.",
-                style = BbTypography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+                Text(
+                    text = "Bu seçimle ana sayfa, öneriler ve hızlı işlem kartları zamanla size daha uygun hale gelir.",
+                    style = BbTypography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
         }
     }
 }

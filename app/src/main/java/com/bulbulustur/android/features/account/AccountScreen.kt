@@ -30,7 +30,6 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.LocalOffer
 import androidx.compose.material.icons.outlined.MailOutline
 import androidx.compose.material.icons.outlined.Notifications
-import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.ProductionQuantityLimits
 import androidx.compose.material.icons.outlined.QuestionAnswer
 import androidx.compose.material.icons.outlined.RequestQuote
@@ -60,7 +59,6 @@ import com.bulbulustur.android.features.retail.components.RetailBottomNavigation
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
-import com.bulbulustur.android.ui.theme.BbColors
 import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
@@ -134,7 +132,7 @@ fun AccountScreen(
             item {
                 AccountHeaderCard(
                     userName = "Murat Erkan",
-                    subtitle = "Bulbulustur hesabın hazır",
+                    subtitle = "Bulbulustur Hesabın Hazır",
                     initials = "ME",
                     onProfileClick = onSecurityClick,
                     onNotificationClick = onNotificationClick,
@@ -180,7 +178,7 @@ fun AccountScreen(
                     title = "Kişisel"
                 ) {
                     AccountMenuRow(
-                        title = "Hesap ve Güvenlik",
+                        title = "Hesap Ve Güvenlik",
                         description = "Profil, şifre ve güvenlik ayarlarını yönet",
                         icon = Icons.Outlined.Security,
                         onClick = onSecurityClick
@@ -251,7 +249,7 @@ fun AccountScreen(
                     AccountDashedDivider()
 
                     AccountMenuRow(
-                        title = "Soru ve Cevaplarım",
+                        title = "Soru Ve Cevaplarım",
                         description = "Ürün sorularını ve satıcı cevaplarını takip et",
                         icon = Icons.Outlined.QuestionAnswer,
                         onClick = onQuestionsClick
@@ -590,28 +588,28 @@ private fun AccountMiniActionScroller(
         horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
     ) {
         AccountMiniActionCard(
-            title = "RFQ oluştur",
+            title = "RFQ Oluştur",
             description = "Toptan teklif al",
             icon = Icons.Outlined.RequestQuote,
             onClick = onQuotationRequestsClick
         )
 
         AccountMiniActionCard(
-            title = "Şirketini tamamla",
+            title = "Şirketini Tamamla",
             description = "Ticari profilini güçlendir",
             icon = Icons.Outlined.Business,
             onClick = onCompanyInfoClick
         )
 
         AccountMiniActionCard(
-            title = "Siparişlerini izle",
+            title = "Siparişlerini İzle",
             description = "Kargo ve ödeme durumu",
             icon = Icons.Outlined.ShoppingBag,
             onClick = onOrdersClick
         )
 
         AccountMiniActionCard(
-            title = "Banka bilgileri",
+            title = "Banka Bilgileri",
             description = "IBAN ve hesap yönetimi",
             icon = Icons.Outlined.Wallet,
             onClick = onBankAccountsClick
@@ -713,7 +711,7 @@ private fun AccountUsagePurposeCard(
                 verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
             ) {
                 Text(
-                    text = "Bulbulustur’u en çok hangi amaçla kullanıyorsunuz?",
+                    text = "Bulbulustur’u En Çok Hangi Amaçla Kullanıyorsunuz?",
                     style = BbTypography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -762,7 +760,7 @@ private fun AccountCommerceHeroCard(
                 )
 
                 Text(
-                    text = "Ticaret merkezini buradan yönet",
+                    text = "Ticaret Merkezini Buradan Yönet",
                     style = BbTypography.titleMedium,
                     color = MaterialTheme.colorScheme.inverseOnSurface
                 )
@@ -977,7 +975,7 @@ private fun AccountSupportCard(
                 verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
             ) {
                 Text(
-                    text = "Yardıma mı ihtiyacın var?",
+                    text = "Yardıma Mı İhtiyacın Var?",
                     style = BbTypography.titleSmall,
                     color = MaterialTheme.colorScheme.onPrimaryContainer
                 )

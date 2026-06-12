@@ -4,14 +4,19 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -21,13 +26,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
-import com.bulbulustur.android.features.account.components.AccountPageScaffold
 import com.bulbulustur.android.ui.components.BbButton
 import com.bulbulustur.android.ui.components.BbButtonSize
 import com.bulbulustur.android.ui.components.BbButtonVariant
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
+import com.bulbulustur.android.ui.components.BbInnerPageHeader
 import com.bulbulustur.android.ui.theme.BbColors
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
@@ -65,16 +70,30 @@ fun DeactivateAccountScreen(
 
     val canSubmit = validationState.value.canSubmit && !isLoading
 
-    AccountPageScaffold(
-        title = "Hesabı Devre Dışı Bırak",
-        kicker = "Kritik İşlem",
-        description = "Hesabınızı devre dışı bırakmadan önce açık sipariş, ödeme, talep ve iletişim süreçlerinizi kontrol etmeniz önerilir.",
-        backButtonText = "Güvenliğe Dön",
-        onBackClick = onBackClick
-    ) {
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Hesabı Devre Dışı Bırak",
+                onBackClick = onBackClick
+            )
+        }
+    ) { innerPadding ->
         Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(innerPadding)
+                .verticalScroll(rememberScrollState())
+                .padding(
+                    PaddingValues(
+                        start = BbSpacing.PageHorizontal,
+                        top = BbSpacing.PageTopCompact,
+                        end = BbSpacing.PageHorizontal,
+                        bottom = BbSpacing.PageBottom
+                    )
+                ),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.SectionGap)
         ) {
             DeactivateWarningCard()
 
@@ -187,13 +206,13 @@ private fun DeactivateWarningCard() {
             verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
         ) {
             Text(
-                text = "Bu işlem dikkat gerektirir",
+                text = "Bu İşlem Dikkat Gerektirir",
                 style = MaterialTheme.typography.titleSmall,
                 color = BbColors.Red.Red700
             )
 
             Text(
-                text = "Hesabınızı devre dışı bıraktığınızda bazı işlemleriniz kısıtlanabilir. Açık sipariş veya destek süreçleriniz varsa önce bunları tamamlamanız önerilir.",
+                text = "Hesabınızı devre dışı bırakmadan önce açık sipariş, ödeme, talep ve iletişim süreçlerinizi kontrol etmeniz önerilir.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

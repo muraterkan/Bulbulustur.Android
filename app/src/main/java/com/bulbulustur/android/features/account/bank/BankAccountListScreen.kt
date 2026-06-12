@@ -4,7 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -12,27 +14,30 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountBalance
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.bulbulustur.android.features.account.components.AccountPageScaffold
+import androidx.compose.ui.text.style.TextOverflow
 import com.bulbulustur.android.ui.components.BbButton
 import com.bulbulustur.android.ui.components.BbButtonSize
 import com.bulbulustur.android.ui.components.BbButtonVariant
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
+import com.bulbulustur.android.ui.components.BbInnerPageHeader
 import com.bulbulustur.android.ui.theme.BbColors
 import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
-import com.bulbulustur.android.ui.theme.BbTypography
 
 @Composable
 fun BankAccountListScreen(
@@ -44,26 +49,31 @@ fun BankAccountListScreen(
 ) {
     val bankAccounts = getDemoBankAccounts()
 
-    AccountPageScaffold(
-        title = "Banka Hesaplarım",
-        kicker = "IBAN Yönetimi",
-        description = "Geri ödeme süreçlerinde kullanılacak banka hesaplarınızı ekleyin, düzenleyin veya kaldırın.",
-        backButtonText = "Hesabıma Dön",
-        onBackClick = onBackClick
-    ) {
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Banka Hesaplarım",
+                onBackClick = onBackClick,
+                actionIcon = Icons.Outlined.Add,
+                actionContentDescription = "Banka Hesabı Ekle",
+                onActionClick = onCreateBankAccountClick
+            )
+        }
+    ) { innerPadding ->
         LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(innerPadding),
+            contentPadding = PaddingValues(
+                start = BbSpacing.PageHorizontal,
+                top = BbSpacing.PageTopCompact,
+                end = BbSpacing.PageHorizontal,
+                bottom = BbSpacing.PageBottom
+            ),
             verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
         ) {
-            item {
-                BbButton(
-                    text = "Banka Hesabı Ekle",
-                    onClick = onCreateBankAccountClick,
-                    modifier = Modifier.fillMaxWidth(),
-                    variant = BbButtonVariant.Primary,
-                    size = BbButtonSize.Medium
-                )
-            }
-
             item {
                 BankAccountWarningBox()
             }
@@ -106,7 +116,7 @@ private fun BankAccountCard(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(BbColors.Surface)
+                .background(MaterialTheme.colorScheme.surface)
         ) {
             BankAccountCardHeader(
                 item = item
@@ -138,7 +148,7 @@ private fun BankAccountCard(
                             Icon(
                                 imageVector = Icons.Outlined.ContentCopy,
                                 contentDescription = null,
-                                tint = BbColors.TextStrong,
+                                tint = MaterialTheme.colorScheme.onSurface,
                                 modifier = Modifier.size(BbIcon.ButtonIcon)
                             )
                         }
@@ -156,7 +166,7 @@ private fun BankAccountCard(
                             Icon(
                                 imageVector = Icons.Outlined.Edit,
                                 contentDescription = null,
-                                tint = BbColors.TextStrong,
+                                tint = MaterialTheme.colorScheme.onPrimary,
                                 modifier = Modifier.size(BbIcon.ButtonIcon)
                             )
                         }
@@ -174,7 +184,7 @@ private fun BankAccountCard(
                             Icon(
                                 imageVector = Icons.Outlined.Delete,
                                 contentDescription = null,
-                                tint = BbColors.White,
+                                tint = MaterialTheme.colorScheme.onError,
                                 modifier = Modifier.size(BbIcon.ButtonIcon)
                             )
                         }
@@ -205,20 +215,24 @@ private fun BankAccountCardHeader(
         ) {
             Text(
                 text = "Banka Hesabı",
-                style = BbTypography.labelSmall,
-                color = BbColors.TextMuted
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Text(
                 text = item.bankName,
-                style = BbTypography.titleSmall,
-                color = BbColors.TextStrong
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurface,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
 
             Text(
                 text = item.accountOwner,
-                style = BbTypography.bodySmall,
-                color = BbColors.TextMuted
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }
@@ -232,7 +246,7 @@ private fun BankAccountIbanBox(
         modifier = Modifier
             .fillMaxWidth()
             .background(
-                color = BbColors.SurfaceMuted,
+                color = MaterialTheme.colorScheme.surfaceVariant,
                 shape = BbRadius.LgShape
             )
             .padding(BbSpacing.CardPaddingCompact)
@@ -242,14 +256,16 @@ private fun BankAccountIbanBox(
         ) {
             Text(
                 text = "IBAN",
-                style = BbTypography.labelSmall,
-                color = BbColors.TextMuted
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Text(
                 text = iban,
-                style = BbTypography.bodyMedium,
-                color = BbColors.TextStrong
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }
@@ -282,15 +298,15 @@ private fun BankAccountWarningBox() {
                 verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
             ) {
                 Text(
-                    text = "Geri ödeme için doğru IBAN bilgisi kullanılır.",
-                    style = BbTypography.labelLarge,
+                    text = "Geri Ödeme İçin Doğru IBAN Bilgisi Kullanılır.",
+                    style = MaterialTheme.typography.labelLarge,
                     color = BbColors.Orange.Orange700
                 )
 
                 Text(
                     text = "Sipariş iptali veya ürün iadesi nedeniyle yapılacak geri ödemelerde kayıtlı banka hesaplarınızdan uygun olan IBAN kullanılabilir.",
-                    style = BbTypography.bodySmall,
-                    color = BbColors.TextMuted
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -314,15 +330,15 @@ private fun BankAccountEmptyState(
             BankAccountIconBox()
 
             Text(
-                text = "Kayıt bulunamadı!",
-                style = BbTypography.titleMedium,
-                color = BbColors.TextStrong
+                text = "Kayıt Bulunamadı",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
                 text = "Henüz kayıtlı banka hesabınız bulunmuyor. Geri ödeme süreçleri için IBAN ekleyebilirsiniz.",
-                style = BbTypography.bodySmall,
-                color = BbColors.TextMuted
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             BbButton(

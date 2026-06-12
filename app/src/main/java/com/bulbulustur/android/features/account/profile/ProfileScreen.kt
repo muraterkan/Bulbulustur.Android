@@ -11,10 +11,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Badge
@@ -34,6 +32,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProgressIndicatorDefaults
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -43,12 +42,10 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import com.bulbulustur.android.ui.components.BbButton
-import com.bulbulustur.android.ui.components.BbButtonSize
-import com.bulbulustur.android.ui.components.BbButtonVariant
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
+import com.bulbulustur.android.ui.components.BbInnerPageHeader
 import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
@@ -72,159 +69,167 @@ fun ProfileScreen(
         )
     )
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(pageBackground)
-            .statusBarsPadding()
-            .navigationBarsPadding(),
-        contentPadding = PaddingValues(
-            horizontal = BbSpacing.PageHorizontal,
-            vertical = BbSpacing.PageTopCompact
-        ),
-        verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
-    ) {
-        item {
-            ProfileHeroCard(
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Profil Bilgileri",
                 onBackClick = onBackClick,
-                onEditClick = onEditClick
+                actionIcon = Icons.Outlined.Edit,
+                actionContentDescription = "Profili Düzenle",
+                onActionClick = onEditClick
             )
         }
-
-        item {
-            ProfileCompletionCard()
-        }
-
-        item {
-            ProfileInfoSection(
-                title = "Temel Bilgiler",
-                description = "Hesabınızın görünen temel bilgileri.",
-                icon = Icons.Outlined.PermIdentity
-            ) {
-                ProfileInfoRow(
-                    title = "Hesap ID",
-                    value = "ME-10000",
-                    icon = Icons.Outlined.Badge,
-                    onClick = onEditClick
-                )
-
-                ProfileDashedDivider()
-
-                ProfileInfoRow(
-                    title = "Ad Soyad",
-                    value = "Murat Erkan",
-                    icon = Icons.Outlined.PermIdentity,
-                    onClick = onEditClick
-                )
-
-                ProfileDashedDivider()
-
-                ProfileInfoRow(
-                    title = "Cinsiyet",
-                    value = "Erkek",
-                    icon = Icons.Outlined.Man,
-                    onClick = onEditClick
-                )
-
-                ProfileDashedDivider()
-
-                ProfileInfoRow(
-                    title = "Ülke / Şehir",
-                    value = "Türkiye / Ankara",
-                    icon = Icons.Outlined.LocationOn,
-                    onClick = onEditClick
-                )
+    ) { innerPadding ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(pageBackground)
+                .padding(innerPadding),
+            contentPadding = PaddingValues(
+                start = BbSpacing.PageHorizontal,
+                top = BbSpacing.PageTopCompact,
+                end = BbSpacing.PageHorizontal,
+                bottom = BbSpacing.PageBottom
+            ),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
+        ) {
+            item {
+                ProfileHeroCard()
             }
-        }
 
-        item {
-            ProfileInfoSection(
-                title = "Doğrulama",
-                description = "Güvenlik ve hesap doğrulama bilgileri.",
-                icon = Icons.Outlined.Security
-            ) {
-                ProfileInfoRow(
-                    title = "E-posta",
-                    value = "muraterkan500@gmail.com",
-                    icon = Icons.Outlined.Email,
-                    onClick = onEmailClick
-                )
-
-                ProfileDashedDivider()
-
-                ProfileInfoRow(
-                    title = "Telefonlarım",
-                    value = "1 telefon kayıtlı · doğrulama bekliyor",
-                    icon = Icons.Outlined.PhoneIphone,
-                    onClick = onPhonesClick
-                )
-
-                ProfileDashedDivider()
-
-                ProfileInfoRow(
-                    title = "E-posta Doğrulama",
-                    value = "Doğrulanmış",
-                    icon = Icons.Outlined.Verified,
-                    onClick = onEmailClick
-                )
+            item {
+                ProfileCompletionCard()
             }
-        }
 
-        item {
-            ProfileInfoSection(
-                title = "Bulbulustur Kullanımı",
-                description = "Uygulama deneyimini şekillendiren bilgiler.",
-                icon = Icons.Outlined.Tune
-            ) {
-                ProfileInfoRow(
-                    title = "Kullanım Amacı",
-                    value = "Toptan ve perakende alışveriş",
-                    icon = Icons.Outlined.Tune,
-                    onClick = onUsagePurposeClick
-                )
+            item {
+                ProfileInfoSection(
+                    title = "Temel Bilgiler",
+                    description = "Hesabınızın görünen temel bilgileri.",
+                    icon = Icons.Outlined.PermIdentity
+                ) {
+                    ProfileInfoRow(
+                        title = "Hesap ID",
+                        value = "ME-10000",
+                        icon = Icons.Outlined.Badge,
+                        onClick = onEditClick
+                    )
 
-                ProfileDashedDivider()
+                    ProfileDashedDivider()
 
-                ProfileInfoRow(
-                    title = "Hesap Modu",
-                    value = "Toptan / Perakende",
-                    icon = Icons.Outlined.Storefront,
-                    onClick = onUsagePurposeClick
-                )
+                    ProfileInfoRow(
+                        title = "Ad Soyad",
+                        value = "Murat Erkan",
+                        icon = Icons.Outlined.PermIdentity,
+                        onClick = onEditClick
+                    )
+
+                    ProfileDashedDivider()
+
+                    ProfileInfoRow(
+                        title = "Cinsiyet",
+                        value = "Erkek",
+                        icon = Icons.Outlined.Man,
+                        onClick = onEditClick
+                    )
+
+                    ProfileDashedDivider()
+
+                    ProfileInfoRow(
+                        title = "Ülke / Şehir",
+                        value = "Türkiye / Ankara",
+                        icon = Icons.Outlined.LocationOn,
+                        onClick = onEditClick
+                    )
+                }
             }
-        }
 
-        item {
-            ProfileInfoSection(
-                title = "Kurumsal Bağlantı",
-                description = "Şirket ve B2B görünürlük bağlantılarınız.",
-                icon = Icons.Outlined.Business
-            ) {
-                ProfileInfoRow(
-                    title = "Şirket Bilgileri",
-                    value = "Türkiye Global Ticaret Limited Şirketi",
-                    icon = Icons.Outlined.Business,
-                    onClick = onCompanyInfoClick
-                )
+            item {
+                ProfileInfoSection(
+                    title = "Doğrulama",
+                    description = "Güvenlik ve hesap doğrulama bilgileri.",
+                    icon = Icons.Outlined.Security
+                ) {
+                    ProfileInfoRow(
+                        title = "E-Posta",
+                        value = "muraterkan500@gmail.com",
+                        icon = Icons.Outlined.Email,
+                        onClick = onEmailClick
+                    )
 
-                ProfileDashedDivider()
+                    ProfileDashedDivider()
 
-                ProfileInfoRow(
-                    title = "B2B Index",
-                    value = "Aktif",
-                    icon = Icons.Outlined.Verified,
-                    onClick = onB2BStatusClick
-                )
+                    ProfileInfoRow(
+                        title = "Telefonlarım",
+                        value = "1 telefon kayıtlı · doğrulama bekliyor",
+                        icon = Icons.Outlined.PhoneIphone,
+                        onClick = onPhonesClick
+                    )
+
+                    ProfileDashedDivider()
+
+                    ProfileInfoRow(
+                        title = "E-Posta Doğrulama",
+                        value = "Doğrulanmış",
+                        icon = Icons.Outlined.Verified,
+                        onClick = onEmailClick
+                    )
+                }
+            }
+
+            item {
+                ProfileInfoSection(
+                    title = "Bulbulustur Kullanımı",
+                    description = "Uygulama deneyimini şekillendiren bilgiler.",
+                    icon = Icons.Outlined.Tune
+                ) {
+                    ProfileInfoRow(
+                        title = "Kullanım Amacı",
+                        value = "Toptan ve perakende alışveriş",
+                        icon = Icons.Outlined.Tune,
+                        onClick = onUsagePurposeClick
+                    )
+
+                    ProfileDashedDivider()
+
+                    ProfileInfoRow(
+                        title = "Hesap Modu",
+                        value = "Toptan / Perakende",
+                        icon = Icons.Outlined.Storefront,
+                        onClick = onUsagePurposeClick
+                    )
+                }
+            }
+
+            item {
+                ProfileInfoSection(
+                    title = "Kurumsal Bağlantı",
+                    description = "Şirket ve B2B görünürlük bağlantılarınız.",
+                    icon = Icons.Outlined.Business
+                ) {
+                    ProfileInfoRow(
+                        title = "Şirket Bilgileri",
+                        value = "Türkiye Global Ticaret Limited Şirketi",
+                        icon = Icons.Outlined.Business,
+                        onClick = onCompanyInfoClick
+                    )
+
+                    ProfileDashedDivider()
+
+                    ProfileInfoRow(
+                        title = "B2B Index",
+                        value = "Aktif",
+                        icon = Icons.Outlined.Verified,
+                        onClick = onB2BStatusClick
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-private fun ProfileHeroCard(
-    onBackClick: () -> Unit,
-    onEditClick: () -> Unit
-) {
+private fun ProfileHeroCard() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -234,75 +239,49 @@ private fun ProfileHeroCard(
             )
             .padding(BbSpacing.CardPadding)
     ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            BbButton(
-                text = "Hesabıma Dön",
-                onClick = onBackClick,
-                variant = BbButtonVariant.Light,
-                size = BbButtonSize.Small
-            )
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
-                verticalAlignment = Alignment.CenterVertically
+            Box(
+                modifier = Modifier
+                    .size(BbIcon.Box2Xl)
+                    .background(
+                        color = MaterialTheme.colorScheme.primary,
+                        shape = BbRadius.XlShape
+                    ),
+                contentAlignment = Alignment.Center
             ) {
-                Box(
-                    modifier = Modifier
-                        .size(BbIcon.Box2Xl)
-                        .background(
-                            color = MaterialTheme.colorScheme.primary,
-                            shape = BbRadius.XlShape
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "ME",
-                        style = BbTypography.titleLarge,
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
-                }
-
-                Column(
-                    modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
-                ) {
-                    Text(
-                        text = "Profil Bilgileri",
-                        style = BbTypography.labelSmall,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-
-                    Text(
-                        text = "Murat Erkan",
-                        style = BbTypography.titleLarge,
-                        color = MaterialTheme.colorScheme.inverseOnSurface
-                    )
-
-                    Text(
-                        text = "ME-10000 · muraterkan500@gmail.com",
-                        style = BbTypography.bodySmall,
-                        color = MaterialTheme.colorScheme.inverseOnSurface.copy(alpha = 0.72f)
-                    )
-                }
+                Text(
+                    text = "ME",
+                    style = BbTypography.titleLarge,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
             }
 
-            BbButton(
-                text = "Profili Düzenle",
-                onClick = onEditClick,
-                modifier = Modifier.fillMaxWidth(),
-                variant = BbButtonVariant.Primary,
-                size = BbButtonSize.Medium,
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Outlined.Edit,
-                        contentDescription = null,
-                        modifier = Modifier.size(BbIcon.SizeSm)
-                    )
-                }
-            )
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+            ) {
+                Text(
+                    text = "Profil Bilgileri",
+                    style = BbTypography.labelSmall,
+                    color = MaterialTheme.colorScheme.primary
+                )
+
+                Text(
+                    text = "Murat Erkan",
+                    style = BbTypography.titleLarge,
+                    color = MaterialTheme.colorScheme.inverseOnSurface
+                )
+
+                Text(
+                    text = "ME-10000 · muraterkan500@gmail.com",
+                    style = BbTypography.bodySmall,
+                    color = MaterialTheme.colorScheme.inverseOnSurface.copy(alpha = 0.72f)
+                )
+            }
         }
     }
 }
@@ -344,7 +323,7 @@ private fun ProfileCompletionCard() {
                     verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
                 ) {
                     Text(
-                        text = "Profil tamamlanma durumu",
+                        text = "Profil Tamamlanma Durumu",
                         style = BbTypography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurface
                     )

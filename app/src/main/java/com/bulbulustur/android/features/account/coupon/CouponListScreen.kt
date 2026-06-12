@@ -4,7 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -18,21 +20,25 @@ import androidx.compose.material.icons.outlined.LocalOffer
 import androidx.compose.material.icons.outlined.ReceiptLong
 import androidx.compose.material.icons.outlined.Redeem
 import androidx.compose.material.icons.outlined.Timelapse
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.bulbulustur.android.features.account.components.AccountPageScaffold
+import androidx.compose.ui.text.style.TextOverflow
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
+import com.bulbulustur.android.ui.components.BbInnerPageHeader
 import com.bulbulustur.android.ui.theme.BbColors
+import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
-import com.bulbulustur.android.ui.theme.BbTypography
 
 @Composable
 fun CouponListScreen(
@@ -40,14 +46,26 @@ fun CouponListScreen(
 ) {
     val coupons = getDemoCoupons()
 
-    AccountPageScaffold(
-        title = "Kuponlarım",
-        kicker = "Kupon Yönetimi",
-        description = "Hesabınıza tanımlanan kuponları, kullanım durumlarını, geçerlilik tarihlerini ve sipariş bağlantılarını buradan takip edin.",
-        backButtonText = "Hesabıma Dön",
-        onBackClick = onBackClick
-    ) {
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Kuponlarım",
+                onBackClick = onBackClick
+            )
+        }
+    ) { innerPadding ->
         LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(innerPadding),
+            contentPadding = PaddingValues(
+                start = BbSpacing.PageHorizontal,
+                top = BbSpacing.PageTopCompact,
+                end = BbSpacing.PageHorizontal,
+                bottom = BbSpacing.PageBottom
+            ),
             verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
         ) {
             if (coupons.isEmpty()) {
@@ -80,13 +98,15 @@ private fun CouponCard(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(BbColors.Surface)
+                .background(MaterialTheme.colorScheme.surface)
         ) {
             CouponCardHeader(
                 coupon = coupon
             )
 
-            CouponDivider()
+            HorizontalDivider(
+                color = MaterialTheme.colorScheme.outlineVariant
+            )
 
             Column(
                 modifier = Modifier
@@ -95,14 +115,14 @@ private fun CouponCard(
                 verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
             ) {
                 CouponInfoBox(
-                    title = "GEÇERLİLİK TARİHİ",
+                    title = "Geçerlilik tarihi",
                     value = coupon.expireDate,
                     icon = Icons.Outlined.CalendarMonth,
                     iconColor = BbColors.Yellow.Yellow800
                 )
 
                 CouponInfoBox(
-                    title = "KULLANIM TARİHİ / SİPARİŞ NO",
+                    title = "Kullanım tarihi / sipariş no",
                     value = coupon.usageText,
                     icon = Icons.Outlined.ReceiptLong,
                     iconColor = BbColors.Blue.Blue600
@@ -136,23 +156,29 @@ private fun CouponCardHeader(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
         ) {
-            CouponLabel(
-                text = "KUPON"
+            Text(
+                text = "Kupon kodu",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Text(
                 text = coupon.code,
-                style = BbTypography.titleMedium,
-                color = BbColors.TextStrong
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
 
-            CouponLabel(
-                text = "MİKTAR"
+            Text(
+                text = "Miktar",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Text(
                 text = coupon.amountText,
-                style = BbTypography.titleSmall,
+                style = MaterialTheme.typography.titleSmall,
                 color = BbColors.Yellow.Yellow800
             )
         }
@@ -174,7 +200,7 @@ private fun CouponInfoBox(
         modifier = Modifier
             .fillMaxWidth()
             .background(
-                color = BbColors.SurfaceMuted,
+                color = MaterialTheme.colorScheme.surfaceVariant,
                 shape = BbRadius.LgShape
             )
             .padding(BbSpacing.CardPaddingCompact),
@@ -185,7 +211,7 @@ private fun CouponInfoBox(
             imageVector = icon,
             contentDescription = null,
             tint = iconColor,
-            modifier = Modifier.size(BbSpacing.Space5)
+            modifier = Modifier.size(BbIcon.SizeMd)
         )
 
         Column(
@@ -194,14 +220,16 @@ private fun CouponInfoBox(
         ) {
             Text(
                 text = title,
-                style = BbTypography.labelSmall,
-                color = BbColors.TextMuted
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Text(
                 text = value,
-                style = BbTypography.bodyMedium,
-                color = BbColors.TextStrong
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }
@@ -248,27 +276,16 @@ private fun CouponStatusBadge(
                 imageVector = icon,
                 contentDescription = null,
                 tint = textColor,
-                modifier = Modifier.size(BbSpacing.Space4)
+                modifier = Modifier.size(BbIcon.SizeSm)
             )
 
             Text(
                 text = status.title,
-                style = BbTypography.labelSmall,
+                style = MaterialTheme.typography.labelSmall,
                 color = textColor
             )
         }
     }
-}
-
-@Composable
-private fun CouponLabel(
-    text: String
-) {
-    Text(
-        text = text,
-        style = BbTypography.labelSmall,
-        color = BbColors.TextMuted
-    )
 }
 
 @Composable
@@ -277,7 +294,7 @@ private fun CouponIconBox(
 ) {
     Box(
         modifier = Modifier
-            .size(BbSpacing.Space12)
+            .size(BbIcon.BoxLg)
             .background(
                 color = BbColors.Yellow.Yellow100,
                 shape = BbRadius.LgShape
@@ -288,7 +305,7 @@ private fun CouponIconBox(
             imageVector = icon,
             contentDescription = null,
             tint = BbColors.Yellow.Yellow800,
-            modifier = Modifier.size(BbSpacing.Space6)
+            modifier = Modifier.size(BbIcon.SizeLg)
         )
     }
 }
@@ -299,9 +316,9 @@ private fun CouponSmallIconBox(
 ) {
     Box(
         modifier = Modifier
-            .size(BbSpacing.Space9)
+            .size(BbIcon.BoxMd)
             .background(
-                color = BbColors.Surface,
+                color = MaterialTheme.colorScheme.surface,
                 shape = BbRadius.LgShape
             ),
         contentAlignment = Alignment.Center
@@ -310,19 +327,9 @@ private fun CouponSmallIconBox(
             imageVector = icon,
             contentDescription = null,
             tint = BbColors.Yellow.Yellow800,
-            modifier = Modifier.size(BbSpacing.Space5)
+            modifier = Modifier.size(BbIcon.SizeMd)
         )
     }
-}
-
-@Composable
-private fun CouponDivider() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(BbColors.Border)
-            .padding(top = BbSpacing.None)
-    )
 }
 
 @Composable
@@ -342,15 +349,15 @@ private fun CouponEmptyState() {
             )
 
             Text(
-                text = "Kayıt bulunamadı!",
-                style = BbTypography.titleMedium,
-                color = BbColors.TextStrong
+                text = "Kupon bulunamadı",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
-                text = "Hesabınıza tanımlı kupon bulunmuyor. Kuponlarınız oluştuğunda burada listelenecek.",
-                style = BbTypography.bodySmall,
-                color = BbColors.TextMuted
+                text = "Hesabınıza tanımlı kupon oluştuğunda burada listelenecek.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }

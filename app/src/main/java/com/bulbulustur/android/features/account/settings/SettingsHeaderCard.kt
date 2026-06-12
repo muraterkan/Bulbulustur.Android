@@ -1,13 +1,19 @@
 package com.bulbulustur.android.features.account.settings
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.bulbulustur.android.ui.components.*
-import com.bulbulustur.android.ui.theme.*
+import com.bulbulustur.android.ui.components.BbCard
+import com.bulbulustur.android.ui.components.BbCardPadding
+import com.bulbulustur.android.ui.components.BbCardVariant
+import com.bulbulustur.android.ui.theme.BbSpacing
+import com.bulbulustur.android.ui.theme.BbTypography
 
+@Suppress("UNUSED_PARAMETER")
 @Composable
 fun SettingsHeaderCard(
     backText: String,
@@ -22,36 +28,13 @@ fun SettingsHeaderCard(
         padding = BbCardPadding.Medium
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
         ) {
-            BbButton(
-                text = backText,
-                onClick = onBackClick,
-                variant = BbButtonVariant.Light,
-                size = BbButtonSize.Small
+            Text(
+                text = description,
+                style = BbTypography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-
-            Column(
-                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
-            ) {
-                Text(
-                    text = kicker,
-                    style = BbTypography.labelSmall,
-                    color = MaterialTheme.colorScheme.primary
-                )
-
-                Text(
-                    text = title,
-                    style = BbTypography.titleLarge,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-
-                Text(
-                    text = description,
-                    style = BbTypography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
         }
     }
 }

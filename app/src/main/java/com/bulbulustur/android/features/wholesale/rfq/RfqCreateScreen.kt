@@ -1,20 +1,25 @@
 package com.bulbulustur.android.features.wholesale.rfq
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Category
 import androidx.compose.material.icons.outlined.CurrencyLira
 import androidx.compose.material.icons.outlined.Inventory2
+import androidx.compose.material.icons.outlined.Lightbulb
 import androidx.compose.material.icons.outlined.LocalShipping
 import androidx.compose.material.icons.outlined.Payments
 import androidx.compose.material.icons.outlined.RequestQuote
@@ -33,19 +38,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import com.bulbulustur.android.features.wholesale.components.WholesaleBottomNavigation
 import com.bulbulustur.android.features.wholesale.components.WholesaleBottomNavigationItem
 import com.bulbulustur.android.ui.components.BbButton
 import com.bulbulustur.android.ui.components.BbButtonSize
 import com.bulbulustur.android.ui.components.BbButtonVariant
 import com.bulbulustur.android.ui.components.BbCard
+import com.bulbulustur.android.ui.components.BbCardPadding
+import com.bulbulustur.android.ui.components.BbCardVariant
 import com.bulbulustur.android.ui.components.BbChip
-import com.bulbulustur.android.ui.components.BbSectionHeader
+import com.bulbulustur.android.ui.components.BbInnerPageHeader
 import com.bulbulustur.android.ui.theme.BbColors
+import com.bulbulustur.android.ui.theme.BbIcon
+import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
-import com.bulbulustur.android.ui.theme.BbTheme
 
 @Composable
 fun RfqCreateScreen(
@@ -54,8 +60,6 @@ fun RfqCreateScreen(
     initialProductName: String = "",
     onBackClick: () -> Unit = {},
     onSendClick: () -> Unit = {},
-
-    // Bottom navigation
     onHomeClick: () -> Unit = {},
     onMenuClick: () -> Unit = {},
     onModeSwitchClick: () -> Unit = {},
@@ -107,7 +111,13 @@ fun RfqCreateScreen(
     }
 
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+        containerColor = BbColors.SurfaceMuted,
+        topBar = {
+            BbInnerPageHeader(
+                title = "RFQ Oluştur",
+                onBackClick = onBackClick
+            )
+        },
         bottomBar = {
             WholesaleBottomNavigation(
                 selectedItem = WholesaleBottomNavigationItem.Basket,
@@ -126,6 +136,7 @@ fun RfqCreateScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
+                .background(BbColors.SurfaceMuted)
                 .padding(innerPadding),
             contentPadding = PaddingValues(
                 start = BbSpacing.PageHorizontal,
@@ -136,120 +147,106 @@ fun RfqCreateScreen(
             verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
         ) {
             item {
-                RfqCreateHeader(
+                RfqCreateIntroCard(
                     productId = productId,
-                    companyId = companyId,
-                    onBackClick = onBackClick
+                    companyId = companyId
                 )
             }
 
             item {
-                RfqCreateHintPanel()
-            }
-
-            item {
-                BbSectionHeader(
-                    title = "Talep bilgileri",
-                    subtitle = "Tedarikçilere neye ihtiyacınız olduğunu net anlatın"
-                )
-            }
-
-            item {
-                RfqTextField(
-                    value = productName.value,
-                    onValueChange = {
-                        productName.value = it
-                    },
-                    label = "Ürün adı",
-                    placeholder = "Örn. Endüstriyel vana",
-                    icon = Icons.Outlined.Inventory2
-                )
-            }
-
-            item {
-                RfqTextField(
-                    value = categoryName.value,
-                    onValueChange = {
-                        categoryName.value = it
-                    },
-                    label = "Kategori",
-                    placeholder = "Örn. Kök / Endüstriyel ürünler",
-                    icon = Icons.Outlined.Category
-                )
-            }
-
-            item {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+                RfqFormSection(
+                    title = "Temel Bilgiler",
+                    subtitle = "Tedarikçilerin talebi hızlı anlayabilmesi için ürün ve kategori bilgisini net yazın."
                 ) {
                     RfqTextField(
-                        value = quantity.value,
+                        value = productName.value,
                         onValueChange = {
-                            quantity.value = it
+                            productName.value = it
                         },
-                        label = "Satın alma miktarı",
-                        placeholder = "0",
-                        icon = Icons.Outlined.Straighten,
-                        modifier = Modifier.weight(1f)
+                        label = "Ürün adı",
+                        placeholder = "Örn. Endüstriyel vana",
+                        icon = Icons.Outlined.Inventory2
                     )
 
                     RfqTextField(
-                        value = unitName.value,
+                        value = categoryName.value,
                         onValueChange = {
-                            unitName.value = it
+                            categoryName.value = it
                         },
-                        label = "Birim",
-                        placeholder = "Varil",
-                        icon = Icons.Outlined.Inventory2,
-                        modifier = Modifier.weight(1f)
+                        label = "Kategori",
+                        placeholder = "Örn. Ambalaj ve Paketleme",
+                        icon = Icons.Outlined.Category
                     )
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+                    ) {
+                        RfqTextField(
+                            value = quantity.value,
+                            onValueChange = {
+                                quantity.value = it
+                            },
+                            label = "Miktar",
+                            placeholder = "0",
+                            icon = Icons.Outlined.Straighten,
+                            modifier = Modifier.weight(1f)
+                        )
+
+                        RfqTextField(
+                            value = unitName.value,
+                            onValueChange = {
+                                unitName.value = it
+                            },
+                            label = "Birim",
+                            placeholder = "Adet",
+                            icon = Icons.Outlined.Inventory2,
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
                 }
             }
 
             item {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+                RfqFormSection(
+                    title = "Ticari Bilgiler",
+                    subtitle = "Hedef fiyat, ödeme ve teslimat şartları teklif kalitesini artırır."
                 ) {
-                    RfqTextField(
-                        value = unitPrice.value,
-                        onValueChange = {
-                            unitPrice.value = it
-                        },
-                        label = "Birim fiyat",
-                        placeholder = "0",
-                        icon = Icons.Outlined.Payments,
-                        modifier = Modifier.weight(1f)
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+                    ) {
+                        RfqTextField(
+                            value = unitPrice.value,
+                            onValueChange = {
+                                unitPrice.value = it
+                            },
+                            label = "Birim fiyat",
+                            placeholder = "0",
+                            icon = Icons.Outlined.Payments,
+                            modifier = Modifier.weight(1f)
+                        )
 
-                    RfqTextField(
-                        value = currencyName.value,
-                        onValueChange = {
-                            currencyName.value = it
-                        },
-                        label = "Para birimi",
-                        placeholder = "TL / USD / EUR",
-                        icon = Icons.Outlined.CurrencyLira,
-                        modifier = Modifier.weight(1f)
-                    )
-                }
-            }
+                        RfqTextField(
+                            value = currencyName.value,
+                            onValueChange = {
+                                currencyName.value = it
+                            },
+                            label = "Para birimi",
+                            placeholder = "TL",
+                            icon = Icons.Outlined.CurrencyLira,
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
 
-            item {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
-                ) {
                     RfqTextField(
                         value = materialName.value,
                         onValueChange = {
                             materialName.value = it
                         },
                         label = "Malzeme",
-                        placeholder = "Titanyum",
-                        icon = Icons.Outlined.Verified,
-                        modifier = Modifier.weight(1f)
+                        placeholder = "Örn. Kraft / Metal / Plastik",
+                        icon = Icons.Outlined.Verified
                     )
 
                     RfqTextField(
@@ -258,198 +255,150 @@ fun RfqCreateScreen(
                             paymentTerm.value = it
                         },
                         label = "Ödeme şartı",
-                        placeholder = "Peşin / vadeli",
-                        icon = Icons.Outlined.Payments,
-                        modifier = Modifier.weight(1f)
+                        placeholder = "Peşin / Vadeli / Görüşülebilir",
+                        icon = Icons.Outlined.Payments
+                    )
+
+                    RfqTextField(
+                        value = tradeTerm.value,
+                        onValueChange = {
+                            tradeTerm.value = it
+                        },
+                        label = "Ticaret şartı",
+                        placeholder = "FOB / CIF / EXW",
+                        icon = Icons.Outlined.RequestQuote
+                    )
+
+                    RfqTextField(
+                        value = shippingTarget.value,
+                        onValueChange = {
+                            shippingTarget.value = it
+                        },
+                        label = "Nakliye hedefi",
+                        placeholder = "Türkiye / İstanbul / Ambarlı Port",
+                        icon = Icons.Outlined.LocalShipping
                     )
                 }
             }
 
             item {
-                RfqTextField(
-                    value = tradeTerm.value,
-                    onValueChange = {
-                        tradeTerm.value = it
-                    },
-                    label = "Ticaret şartları",
-                    placeholder = "Örn. FOB, CIF, EXW veya özel şartlar",
-                    icon = Icons.Outlined.RequestQuote
-                )
+                RfqFormSection(
+                    title = "Talep Açıklaması",
+                    subtitle = "Renk, ölçü, malzeme, ambalaj, sertifika veya özel üretim beklentilerini yazın."
+                ) {
+                    RfqLongTextField(
+                        value = description.value,
+                        onValueChange = {
+                            description.value = it
+                        },
+                        label = "Ürün açıklaması",
+                        placeholder = "Aradığınız ürünü ve beklentilerinizi detaylandırın."
+                    )
+                }
             }
 
             item {
-                RfqTextField(
-                    value = shippingTarget.value,
-                    onValueChange = {
-                        shippingTarget.value = it
-                    },
-                    label = "Nakliye hedefi",
-                    placeholder = "Örn. Türkiye / İstanbul / Ambarlı Port",
-                    icon = Icons.Outlined.LocalShipping
-                )
-            }
-
-            item {
-                RfqLongTextField(
-                    value = description.value,
-                    onValueChange = {
-                        description.value = it
-                    },
-                    label = "Ürün açıklaması",
-                    placeholder = "Aradığınız ürünü açıklayın. Renk, malzeme, boyut, ambalaj, paketleme ve sertifika gerekliliklerini yazın."
-                )
-            }
-
-            item {
-                RfqSuggestionChips(
-                    onSuggestionClick = {
-                        description.value = it
+                RfqSuggestionCard(
+                    onSuggestionClick = { suggestion ->
+                        description.value = suggestion
                     }
                 )
             }
 
             item {
-                RfqSendCard(
+                RfqSubmitCard(
                     onSendClick = onSendClick
                 )
             }
-
-            item {
-                Spacer(
-                    modifier = Modifier.height(BbSpacing.Space8)
-                )
-            }
         }
     }
 }
 
 @Composable
-private fun RfqCreateHeader(
+private fun RfqCreateIntroCard(
     productId: Int?,
-    companyId: Int?,
-    onBackClick: () -> Unit
+    companyId: Int?
 ) {
     BbCard(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
     ) {
-        Column(
-            modifier = Modifier.padding(BbSpacing.CardPadding),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
+            verticalAlignment = Alignment.Top
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+            RfqCreateIconBox(
+                icon = Icons.Outlined.RequestQuote
+            )
+
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
             ) {
-                Icon(
-                    imageVector = Icons.Outlined.RequestQuote,
-                    contentDescription = null,
-                    tint = BbColors.Primary
+                Text(
+                    text = "B2B RFQ",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = BbColors.Yellow.Yellow800
                 )
 
                 Text(
-                    text = "B2B RFQ",
-                    style = MaterialTheme.typography.labelLarge,
-                    color = BbColors.Primary,
-                    fontWeight = FontWeight.SemiBold
+                    text = "Doğru talebi yaz, daha kaliteli teklif al.",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+
+                Text(
+                    text = buildString {
+                        append("Ürün, miktar, ticari şart ve teslimat hedefini netleştirerek tedarikçilerden daha sağlıklı dönüş alın.")
+                        if (productId != null) {
+                            append(" Bu talep ürün üzerinden başlatıldı.")
+                        }
+                        if (companyId != null) {
+                            append(" Bu talep firma üzerinden başlatıldı.")
+                        }
+                    },
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-
-            Text(
-                text = "RFQ talebi gönder",
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-
-            Text(
-                text = "Tedarikçilere neye ihtiyacınız olduğunu söyleyin. Ürün, miktar, ticaret şartı ve teslimat hedefini ne kadar net yazarsanız teklif süreci o kadar sağlıklı ilerler.",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-
-            FlowRow(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2),
-                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
-            ) {
-                BbChip(
-                    text = "Net talep",
-                    selected = false,
-                    onClick = {}
-                )
-
-                BbChip(
-                    text = "Doğru tedarikçi",
-                    selected = false,
-                    onClick = {}
-                )
-
-                BbChip(
-                    text = "Ticari şartlar",
-                    selected = false,
-                    onClick = {}
-                )
-
-                if (productId != null) {
-                    BbChip(
-                        text = "Üründen geldi",
-                        selected = false,
-                        onClick = {}
-                    )
-                }
-
-                if (companyId != null) {
-                    BbChip(
-                        text = "Firmadan geldi",
-                        selected = false,
-                        onClick = {}
-                    )
-                }
-            }
-
-            BbButton(
-                text = "Toptana Dön",
-                onClick = onBackClick,
-                modifier = Modifier.fillMaxWidth(),
-                variant = BbButtonVariant.Light,
-                size = BbButtonSize.Small
-            )
         }
     }
 }
 
 @Composable
-private fun RfqCreateHintPanel() {
+private fun RfqFormSection(
+    title: String,
+    subtitle: String,
+    content: @Composable ColumnScope.() -> Unit
+) {
     BbCard(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
     ) {
         Column(
-            modifier = Modifier.padding(BbSpacing.CardPaddingCompact),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+            Column(
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
             ) {
-                Icon(
-                    imageVector = Icons.Outlined.Verified,
-                    contentDescription = null,
-                    tint = BbColors.Primary
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = "Satın alma akışı",
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface
+                    text = subtitle,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
-            Text(
-                text = "Sevkiyat, ödeme, hedef teslimat ve ticari şartları baştan yazmak teklifleri karşılaştırmayı kolaylaştırır.",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+            content()
         }
     }
 }
@@ -480,6 +429,7 @@ private fun RfqTextField(
             )
         },
         singleLine = true,
+        shape = BbRadius.Input,
         colors = TextFieldDefaults.colors(
             focusedTextColor = MaterialTheme.colorScheme.onSurface,
             unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
@@ -487,7 +437,7 @@ private fun RfqTextField(
             unfocusedContainerColor = MaterialTheme.colorScheme.surface,
             focusedIndicatorColor = BbColors.Primary,
             unfocusedIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
-            focusedLabelColor = BbColors.Primary,
+            focusedLabelColor = BbColors.Yellow.Yellow800,
             unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
             cursorColor = BbColors.Primary
         )
@@ -504,7 +454,7 @@ private fun RfqLongTextField(
     OutlinedTextField(
         modifier = Modifier
             .fillMaxWidth()
-            .height(BbSpacing.Space16 * 3),
+            .height(BbSpacing.Space20),
         value = value,
         onValueChange = onValueChange,
         label = {
@@ -513,6 +463,7 @@ private fun RfqLongTextField(
         placeholder = {
             Text(text = placeholder)
         },
+        shape = BbRadius.Input,
         colors = TextFieldDefaults.colors(
             focusedTextColor = MaterialTheme.colorScheme.onSurface,
             unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
@@ -520,84 +471,127 @@ private fun RfqLongTextField(
             unfocusedContainerColor = MaterialTheme.colorScheme.surface,
             focusedIndicatorColor = BbColors.Primary,
             unfocusedIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
-            focusedLabelColor = BbColors.Primary,
+            focusedLabelColor = BbColors.Yellow.Yellow800,
             unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
             cursorColor = BbColors.Primary
         )
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun RfqSuggestionChips(
+private fun RfqSuggestionCard(
     onSuggestionClick: (String) -> Unit
 ) {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
     ) {
-        Text(
-            text = "Hazır talep notları",
-            style = MaterialTheme.typography.titleSmall,
-            fontWeight = FontWeight.SemiBold,
-            color = MaterialTheme.colorScheme.onSurface
-        )
-
-        FlowRow(
+        Column(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
         ) {
-            rfqSuggestionTexts().forEach { suggestion ->
-                BbChip(
-                    text = suggestion.title,
-                    selected = false,
-                    onClick = {
-                        onSuggestionClick(suggestion.description)
-                    }
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Lightbulb,
+                    contentDescription = null,
+                    tint = BbColors.Yellow.Yellow800,
+                    modifier = Modifier.size(BbIcon.Ui)
                 )
+
+                Text(
+                    text = "Hazır talep notları",
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+
+            FlowRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2),
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+            ) {
+                rfqSuggestionTexts().forEach { suggestion ->
+                    BbChip(
+                        text = suggestion.title,
+                        selected = false,
+                        onClick = {
+                            onSuggestionClick(suggestion.description)
+                        }
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-private fun RfqSendCard(
+private fun RfqSubmitCard(
     onSendClick: () -> Unit
 ) {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
-        onClick = onSendClick
+        variant = BbCardVariant.Default,
+        padding = BbCardPadding.Medium
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(BbSpacing.CardPadding),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
         ) {
-            Icon(
-                imageVector = Icons.Outlined.Send,
-                contentDescription = null,
-                tint = BbColors.Primary
+            Text(
+                text = "Talebi göndermeye hazır mısınız?",
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurface
             )
 
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
-            ) {
-                Text(
-                    text = "Gönder",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
+            Text(
+                text = "API bağlantısından sonra bu form gerçek RFQ endpoint’ine gönderilecek.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
 
-                Text(
-                    text = "RFQ talebi API bağlantısından sonra gerçek endpoint’e gönderilecek.",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
+            BbButton(
+                text = "RFQ Gönder",
+                onClick = onSendClick,
+                modifier = Modifier.fillMaxWidth(),
+                variant = BbButtonVariant.Primary,
+                size = BbButtonSize.Large,
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Outlined.Send,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimary,
+                        modifier = Modifier.size(BbIcon.ButtonIcon)
+                    )
+                }
+            )
         }
+    }
+}
+
+@Composable
+private fun RfqCreateIconBox(
+    icon: ImageVector
+) {
+    Box(
+        modifier = Modifier
+            .size(BbIcon.BoxMd)
+            .background(
+                color = BbColors.Yellow.Yellow100,
+                shape = BbRadius.LgShape
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = BbColors.Yellow.Yellow800,
+            modifier = Modifier.size(BbIcon.Action)
+        )
     }
 }
 
@@ -625,12 +619,4 @@ private fun rfqSuggestionTexts(): List<RfqSuggestionText> {
             description = "Teslimat süresi, ödeme şartı, nakliye hedefi ve ticari koşulların teklifte belirtilmesini istiyorum."
         )
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun RfqCreateScreenPreview() {
-    BbTheme {
-        RfqCreateScreen()
-    }
 }

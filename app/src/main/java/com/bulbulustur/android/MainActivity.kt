@@ -1,5 +1,16 @@
 package com.bulbulustur.android
 
+import com.bulbulustur.android.features.order.OrderRoutes
+import com.bulbulustur.android.features.account.AccountRoutes
+import com.bulbulustur.android.features.company.CompanyRoutes
+import com.bulbulustur.android.features.account.bank.BankAccountRoutes
+import com.bulbulustur.android.features.account.settings.SettingsRoutes
+import com.bulbulustur.android.features.basket.BasketRoutes
+import com.bulbulustur.android.features.message.MessageRoutes
+import com.bulbulustur.android.features.retail.RetailRoutes
+import com.bulbulustur.android.features.splash.SplashRoutes
+import com.bulbulustur.android.features.store.StoreRoutes
+
 import com.bulbulustur.android.features.logon.logonGraph
 
 import android.os.Bundle
@@ -20,7 +31,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 
-import com.bulbulustur.android.features.order.OrderRoutes
 import com.bulbulustur.android.features.order.OrderListScreen
 import com.bulbulustur.android.features.order.OrderDetailScreen
 import com.bulbulustur.android.features.order.OrderContractScreen
@@ -29,7 +39,6 @@ import com.bulbulustur.android.features.order.OrderReturnRequestScreen
 import com.bulbulustur.android.features.order.OrderReviewCreateScreen
 import com.bulbulustur.android.features.order.OrderShipmentTrackingScreen
 import com.bulbulustur.android.features.account.wallet.WalletBalanceScreen
-import com.bulbulustur.android.features.account.AccountRoutes
 import com.bulbulustur.android.features.account.subscription.SubscriptionListScreen
 import com.bulbulustur.android.features.account.subscription.SubscriptionDetailScreen
 import com.bulbulustur.android.features.account.AccountScreen
@@ -37,7 +46,6 @@ import com.bulbulustur.android.features.account.AccountSecurityScreen
 import com.bulbulustur.android.features.account.AddressFormScreen
 import com.bulbulustur.android.features.account.AddressListScreen
 import com.bulbulustur.android.features.account.CommunicationPreferenceScreen
-import com.bulbulustur.android.features.company.CompanyRoutes
 import com.bulbulustur.android.features.company.CompanyDetailScreen
 import com.bulbulustur.android.features.company.CompanyListScreen
 import com.bulbulustur.android.features.account.CouponListScreen
@@ -48,7 +56,6 @@ import com.bulbulustur.android.features.account.review.ReviewEditScreen
 import com.bulbulustur.android.features.account.bank.BankAccountCreateScreen
 import com.bulbulustur.android.features.account.bank.BankAccountEditScreen
 import com.bulbulustur.android.features.account.bank.BankAccountListScreen
-import com.bulbulustur.android.features.account.bank.BankAccountRoutes
 import com.bulbulustur.android.features.account.company.CompanyB2BIndexScreen
 import com.bulbulustur.android.features.account.company.CompanyB2BStatusScreen
 import com.bulbulustur.android.features.account.company.CompanyInfoEditScreen
@@ -73,12 +80,8 @@ import com.bulbulustur.android.features.account.settings.LanguageSettingsScreen
 import com.bulbulustur.android.features.account.settings.LegalPoliciesScreen
 import com.bulbulustur.android.features.account.settings.LegalPolicyDetailScreen
 import com.bulbulustur.android.features.account.settings.RegionSettingsScreen
-import com.bulbulustur.android.features.account.settings.SettingsRoutes
-import com.bulbulustur.android.features.basket.BasketRoutes
 import com.bulbulustur.android.features.basket.BasketScreen
 import com.bulbulustur.android.features.message.MessageInboxScreen
-import com.bulbulustur.android.features.message.MessageRoutes
-
 import com.bulbulustur.android.features.retail.CampaignDetailScreen
 import com.bulbulustur.android.features.retail.CampaignListScreen
 import com.bulbulustur.android.features.retail.OtherSellerListScreen
@@ -88,14 +91,11 @@ import com.bulbulustur.android.features.retail.ProductQuestionScreen
 import com.bulbulustur.android.features.retail.ProductReviewScreen
 import com.bulbulustur.android.features.retail.RetailCategoryHomeScreen
 import com.bulbulustur.android.features.retail.RetailHomeScreen
-import com.bulbulustur.android.features.retail.RetailRoutes
 import com.bulbulustur.android.features.retail.menu.RetailMenuScreen
 import com.bulbulustur.android.features.splash.ModeSelectionScreen
-import com.bulbulustur.android.features.splash.SplashRoutes
 import com.bulbulustur.android.features.store.StoreDetailScreen
 import com.bulbulustur.android.features.store.StoreListScreen
 import com.bulbulustur.android.features.store.StoreProductListScreen
-import com.bulbulustur.android.features.store.StoreRoutes
 import com.bulbulustur.android.features.company.CompanyHomeScreen
 import com.bulbulustur.android.features.company.CompanyProductsScreen
 import com.bulbulustur.android.features.company.CompanyContactScreen
@@ -110,6 +110,9 @@ import com.bulbulustur.android.features.wholesale.WholesaleCategoryHomeScreen
 import com.bulbulustur.android.features.wholesale.WholesaleHomeScreen
 import com.bulbulustur.android.features.wholesale.WholesaleRoutes
 import com.bulbulustur.android.features.wholesale.menu.WholesaleMenuScreen
+import com.bulbulustur.android.features.wholesale.rfq.RfqRoutes
+import com.bulbulustur.android.features.wholesale.rfq.RfqDetailScreen
+import com.bulbulustur.android.features.wholesale.rfq.RfqOfferDetailScreen
 import com.bulbulustur.android.features.wholesale.rfq.RfqCreateScreen
 import com.bulbulustur.android.features.wholesale.rfq.RfqListScreen
 import com.bulbulustur.android.ui.shell.BuyerMode
@@ -641,6 +644,23 @@ class MainActivity : ComponentActivity() {
                                         launchSingleTop = true
                                     }
                                 },
+                                onDiscoverWholesaleClick = {
+                                    navController.navigate(WholesaleRoutes.Home) {
+                                        launchSingleTop = true
+                                    }
+                                },
+                                onOffersClick = { buyerRequestId ->
+                                    navController.navigate(RfqRoutes.detail(buyerRequestId))
+                                },
+                                onDetailClick = { buyerRequestId ->
+                                    navController.navigate(RfqRoutes.detail(buyerRequestId))
+                                },
+                                onDeleteClick = {
+                                    // V1: silme dialogu sonra eklenecek
+                                },
+                                onCreateRfqClick = {
+                                    navController.navigate(RfqRoutes.Create)
+                                },
                                 onHomeClick = {
                                     navController.navigate(WholesaleRoutes.Home) {
                                         launchSingleTop = true
@@ -653,13 +673,12 @@ class MainActivity : ComponentActivity() {
                                     openBuyerModeSheet()
                                 },
                                 onBasketClick = {
-                                    navigateToWholesaleOffers()
+                                    navController.navigate(WholesaleRoutes.QuotationRequests) {
+                                        launchSingleTop = true
+                                    }
                                 },
                                 onAccountClick = {
                                     navigateToAccount()
-                                },
-                                onCreateRfqClick = {
-                                    navigateToWholesaleRfqCreate()
                                 }
                             )
                         }
@@ -668,6 +687,101 @@ class MainActivity : ComponentActivity() {
                             RfqCreateScreen(
                                 onBackClick = {
                                     navController.popBackStack()
+                                }
+                            )
+                        }
+
+                        composable(RfqRoutes.Create) {
+                            RfqCreateScreen(
+                                onBackClick = {
+                                    navController.popBackStack()
+                                },
+                                onSendClick = {
+                                    navController.popBackStack()
+                                },
+                                onHomeClick = {
+                                    navController.navigate(WholesaleRoutes.Home) {
+                                        launchSingleTop = true
+                                    }
+                                },
+                                onMenuClick = {
+                                    navigateToWholesaleCategories()
+                                },
+                                onModeSwitchClick = {
+                                    openBuyerModeSheet()
+                                },
+                                onBasketClick = {
+                                    navController.navigate(WholesaleRoutes.QuotationRequests) {
+                                        launchSingleTop = true
+                                    }
+                                },
+                                onAccountClick = {
+                                    navigateToAccount()
+                                }
+                            )
+                        }
+
+                        composable(
+                            route = RfqRoutes.Detail,
+                            arguments = listOf(
+                                navArgument(RfqRoutes.ArgBuyerRequestId) {
+                                    type = NavType.IntType
+                                }
+                            )
+                        ) { backStackEntry ->
+                            val buyerRequestId = backStackEntry.arguments
+                                ?.getInt(RfqRoutes.ArgBuyerRequestId)
+                                ?: 0
+
+                            RfqDetailScreen(
+                                buyerRequestId = buyerRequestId,
+                                onBackClick = {
+                                    navController.popBackStack()
+                                },
+                                onOfferClick = { sendedOfferId ->
+                                    navController.navigate(
+                                        RfqRoutes.offerDetail(
+                                            buyerRequestId = buyerRequestId,
+                                            sendedOfferId = sendedOfferId
+                                        )
+                                    )
+                                },
+                                onCreateRfqClick = {
+                                    navController.navigate(RfqRoutes.Create)
+                                }
+                            )
+                        }
+
+                        composable(
+                            route = RfqRoutes.OfferDetail,
+                            arguments = listOf(
+                                navArgument(RfqRoutes.ArgBuyerRequestId) {
+                                    type = NavType.IntType
+                                },
+                                navArgument(RfqRoutes.ArgSendedOfferId) {
+                                    type = NavType.IntType
+                                }
+                            )
+                        ) { backStackEntry ->
+                            val buyerRequestId = backStackEntry.arguments
+                                ?.getInt(RfqRoutes.ArgBuyerRequestId)
+                                ?: 0
+
+                            val sendedOfferId = backStackEntry.arguments
+                                ?.getInt(RfqRoutes.ArgSendedOfferId)
+                                ?: 0
+
+                            RfqOfferDetailScreen(
+                                buyerRequestId = buyerRequestId,
+                                sendedOfferId = sendedOfferId,
+                                onBackClick = {
+                                    navController.popBackStack()
+                                },
+                                onSellerClick = {
+                                    navController.navigate(CompanyRoutes.CompanyDetail)
+                                },
+                                onMessageClick = {
+                                    navigateToInbox()
                                 }
                             )
                         }

@@ -35,6 +35,7 @@ import com.bulbulustur.android.ui.theme.BbColors
 import com.bulbulustur.android.ui.theme.BbSpacing
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import com.bulbulustur.android.ui.theme.BbLayout
 
 @Composable
 fun LandingSplashScreen(
@@ -124,7 +125,7 @@ fun LandingSplashScreen(
                 painter = painterResource(id = R.drawable.logo_black),
                 contentDescription = "Bulbulustur",
                 modifier = Modifier
-                    .width(230.dp)
+                    .width(BbLayout.LogoWidthLarge)
                     .alpha(logoAlpha.value)
                     .scale(logoScale.value)
             )

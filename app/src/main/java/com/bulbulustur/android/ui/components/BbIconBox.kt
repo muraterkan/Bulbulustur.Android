@@ -15,10 +15,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.ui.theme.BbAlpha
 import com.bulbulustur.android.ui.theme.BbColors
 import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbRadius
+import com.bulbulustur.android.ui.theme.BbSpacing
 
 enum class BbIconBoxVariant {
     Default,
@@ -73,7 +74,7 @@ fun BbIconBox(
                 if (bordered) {
                     Modifier.border(
                         border = BorderStroke(
-                            width = 1.dp,
+                            width = BbSpacing.BorderThin,
                             color = borderColor
                         ),
                         shape = boxShape
@@ -180,7 +181,7 @@ private fun getBbIconBoxBorderColor(
 ): Color {
     return when (variant) {
         BbIconBoxVariant.Default -> MaterialTheme.colorScheme.outlineVariant
-        BbIconBoxVariant.Primary -> MaterialTheme.colorScheme.primary.copy(alpha = 0.24f)
+        BbIconBoxVariant.Primary -> MaterialTheme.colorScheme.primary.copy(alpha = BbAlpha.OverlayHeavy)
         BbIconBoxVariant.Accent -> BbColors.Purple.Purple200
         BbIconBoxVariant.B2B -> BbColors.Blue.Blue200
         BbIconBoxVariant.B2C -> BbColors.Orange.Orange200

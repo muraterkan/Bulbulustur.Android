@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.bulbulustur.android.ui.theme.BbColors
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
+import com.bulbulustur.android.ui.theme.BbAlpha
 
 enum class BbChipVariant {
     Default,
@@ -82,8 +83,8 @@ fun BbChip(
                 selectedTrailingIconColor = getBbChipContentColor(variant, selected = true),
                 containerColor = getBbChipContainerColor(variant, selected = false),
                 labelColor = getBbChipContentColor(variant, selected = false),
-                disabledContainerColor = getBbChipContainerColor(variant, selected = false).copy(alpha = 0.45f),
-                disabledLabelColor = getBbChipContentColor(variant, selected = false).copy(alpha = 0.55f)
+                disabledContainerColor = getBbChipContainerColor(variant, selected = false).copy(alpha = BbAlpha.DisabledContainer),
+                disabledLabelColor = getBbChipContentColor(variant, selected = false).copy(alpha = BbAlpha.DisabledLabel)
             ),
             border = getBbChipBorder(variant, selected = true)
         )
@@ -106,8 +107,8 @@ fun BbChip(
             labelColor = getBbChipContentColor(variant, selected = false),
             leadingIconContentColor = getBbChipContentColor(variant, selected = false),
             trailingIconContentColor = getBbChipContentColor(variant, selected = false),
-            disabledContainerColor = getBbChipContainerColor(variant, selected = false).copy(alpha = 0.45f),
-            disabledLabelColor = getBbChipContentColor(variant, selected = false).copy(alpha = 0.55f)
+            disabledContainerColor = getBbChipContainerColor(variant, selected = false).copy(alpha = BbAlpha.DisabledContainer),
+            disabledLabelColor = getBbChipContentColor(variant, selected = false).copy(alpha = BbAlpha.DisabledLabel)
         ),
         border = getBbChipBorder(variant, selected = false)
     )
@@ -136,8 +137,8 @@ fun BbSuggestionChip(
             containerColor = getBbChipContainerColor(variant, selected = false),
             labelColor = getBbChipContentColor(variant, selected = false),
             iconContentColor = getBbChipContentColor(variant, selected = false),
-            disabledContainerColor = getBbChipContainerColor(variant, selected = false).copy(alpha = 0.45f),
-            disabledLabelColor = getBbChipContentColor(variant, selected = false).copy(alpha = 0.55f)
+            disabledContainerColor = getBbChipContainerColor(variant, selected = false).copy(alpha = BbAlpha.DisabledContainer),
+            disabledLabelColor = getBbChipContentColor(variant, selected = false).copy(alpha = BbAlpha.DisabledLabel)
         ),
         border = getBbChipBorder(variant, selected = false)
     )

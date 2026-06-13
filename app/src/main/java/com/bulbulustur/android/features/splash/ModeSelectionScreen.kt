@@ -51,7 +51,7 @@ import com.bulbulustur.android.ui.theme.BbColors
 import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
-
+import com.bulbulustur.android.ui.theme.BbLayout
 @Composable
 fun ModeSelectionScreen(
     onRetailClick: () -> Unit,
@@ -124,7 +124,7 @@ private fun ModeSelectionHeader() {
             painter = painterResource(id = R.drawable.logo_black),
             contentDescription = "Bulbulustur",
             modifier = Modifier
-                .width(178.dp)
+                .width(BbLayout.LogoWidthMedium)
                 .height(42.dp),
             contentScale = ContentScale.Fit
         )

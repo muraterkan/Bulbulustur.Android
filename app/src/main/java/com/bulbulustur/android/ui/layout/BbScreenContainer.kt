@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.ui.theme.BbLayout
 import com.bulbulustur.android.ui.theme.BbSpacing
 
 enum class BbScreenContainerWidth {
@@ -58,9 +58,9 @@ private fun getBbScreenContainerMaxWidth(
     width: BbScreenContainerWidth
 ): Dp? {
     return when (width) {
-        BbScreenContainerWidth.Compact -> 520.dp
-        BbScreenContainerWidth.Default -> 720.dp
-        BbScreenContainerWidth.Wide -> 960.dp
+        BbScreenContainerWidth.Compact -> BbLayout.ScreenContainerWidthCompact
+        BbScreenContainerWidth.Default -> BbLayout.ScreenContainerWidthDefault
+        BbScreenContainerWidth.Wide -> BbLayout.ScreenContainerWidthWide
         BbScreenContainerWidth.Full -> null
     }
 }

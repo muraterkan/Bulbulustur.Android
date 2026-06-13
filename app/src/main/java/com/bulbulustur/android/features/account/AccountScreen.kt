@@ -72,6 +72,8 @@ import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
 import com.bulbulustur.android.ui.theme.BbTypography
+import com.bulbulustur.android.ui.theme.BbLayout
+import com.bulbulustur.android.ui.theme.BbAlpha
 
 @Composable
 fun AccountScreen(
@@ -454,12 +456,12 @@ private fun AccountAvatar(
 ) {
     Box(
         modifier = Modifier
-            .size(106.dp)
+            .size(BbLayout.AccountAvatarSize)
             .background(
                 color = BbColors.Primary,
                 shape = CircleShape
             )
-            .padding(4.dp)
+            .padding(BbSpacing.Space1)
             .clickable {
                 onClick()
             },
@@ -540,7 +542,7 @@ private fun AccountTopIconButton(
 ) {
     Box(
         modifier = Modifier
-            .size(44.dp)
+            .size(BbSpacing.Space11)
             .clickable {
                 onClick()
             },
@@ -637,8 +639,8 @@ private fun AccountProfileStat(
 private fun AccountVerticalDivider() {
     Box(
         modifier = Modifier
-            .width(1.dp)
-            .height(36.dp)
+            .width(BbSpacing.BorderThin)
+            .height(BbSpacing.Space9)
             .background(BbColors.Border)
     )
 }
@@ -688,12 +690,12 @@ private fun AccountPrimaryActionCard(
 
     val borderColor = when (accent) {
         AccountActionAccent.Red -> BbColors.Red.Red600.copy(alpha = 0.16f)
-        AccountActionAccent.Green -> BbColors.Success.copy(alpha = 0.24f)
+        AccountActionAccent.Green -> BbColors.Success.copy(alpha = BbAlpha.OverlayHeavy)
     }
 
     val iconContainer = when (accent) {
         AccountActionAccent.Red -> BbColors.Red.Red600.copy(alpha = 0.10f)
-        AccountActionAccent.Green -> BbColors.Success.copy(alpha = 0.12f)
+        AccountActionAccent.Green -> BbColors.Success.copy(alpha = BbAlpha.Overlay)
     }
 
     val iconTint = when (accent) {
@@ -703,7 +705,7 @@ private fun AccountPrimaryActionCard(
 
     Surface(
         modifier = modifier
-            .height(132.dp)
+            .height(BbLayout.ProductCardWidthSmall)
             .clickable {
                 onClick()
             },
@@ -829,7 +831,7 @@ private fun AccountUsagePurposeDarkCard(
                 Text(
                     text = "Toptan, perakende veya her ikisi için deneyimini kişiselleştirelim.",
                     style = BbTypography.bodySmall,
-                    color = BbColors.Surface.copy(alpha = 0.72f)
+                    color = BbColors.Surface.copy(alpha = BbAlpha.Muted)
                 )
             }
 
@@ -1001,7 +1003,7 @@ private fun AccountDashedDivider() {
                 start = BbSpacing.Space16,
                 end = BbSpacing.Space4
             )
-            .height(1.dp)
+            .height(BbSpacing.BorderThin)
     ) {
         drawLine(
             color = BbColors.Border,

@@ -1,6 +1,7 @@
 package com.bulbulustur.android.features.wholesale.components
 
 import androidx.compose.foundation.BorderStroke
+import com.bulbulustur.android.ui.theme.BbLayout
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -76,7 +77,7 @@ fun WholesaleSearchHeader(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(BbSpacing.TopBarHeight),
+                    .height(BbLayout.TopBarHeight),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
             ) {
@@ -163,7 +164,7 @@ private fun WholesaleSearchInput(
     modifier: Modifier = Modifier
 ) {
     Surface(
-        modifier = modifier.height(BbSpacing.TopBarHeight - BbSpacing.Space4),
+        modifier = modifier.height(BbLayout.TopBarHeight - BbSpacing.Space4),
         shape = RoundedCornerShape(BbRadius.xl),
         color = BbColors.SurfaceMuted,
         border = BorderStroke(
@@ -217,12 +218,12 @@ private fun WholesaleSearchInput(
                 focusedTextColor = BbColors.TextStrong,
                 unfocusedTextColor = BbColors.TextStrong,
                 disabledTextColor = BbColors.TextMuted,
-                focusedContainerColor = Color.Transparent,
-                unfocusedContainerColor = Color.Transparent,
-                disabledContainerColor = Color.Transparent,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent,
+                focusedContainerColor = BbColors.Transparent,
+                unfocusedContainerColor = BbColors.Transparent,
+                disabledContainerColor = BbColors.Transparent,
+                focusedIndicatorColor = BbColors.Transparent,
+                unfocusedIndicatorColor = BbColors.Transparent,
+                disabledIndicatorColor = BbColors.Transparent,
                 cursorColor = BbColors.Primary
             )
         )

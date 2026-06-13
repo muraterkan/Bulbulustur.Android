@@ -165,7 +165,7 @@ private fun OtherSellerProductSummary(
         ) {
             Box(
                 modifier = Modifier
-                    .size(72.dp)
+                    .size(BbSpacing.Space18)
                     .clip(BbRadius.XlShape)
                     .background(BbColors.Primary),
                 contentAlignment = Alignment.Center
@@ -268,7 +268,7 @@ private fun OtherSellerCard(
             ) {
                 Box(
                     modifier = Modifier
-                        .size(52.dp)
+                        .size(BbSpacing.Space13)
                         .clip(BbRadius.LgShape)
                         .background(BbColors.SurfaceMuted),
                     contentAlignment = Alignment.Center

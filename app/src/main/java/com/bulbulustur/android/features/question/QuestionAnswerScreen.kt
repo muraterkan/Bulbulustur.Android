@@ -38,6 +38,7 @@ import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
 import com.bulbulustur.android.ui.theme.BbTypography
+import com.bulbulustur.android.ui.theme.BbAlpha
 
 @Composable
 fun QuestionAnswerScreen(
@@ -45,7 +46,7 @@ fun QuestionAnswerScreen(
 ) {
     val pageBackground = Brush.verticalGradient(
         colors = listOf(
-            MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.55f),
+            MaterialTheme.colorScheme.primaryContainer.copy(alpha = BbAlpha.DisabledLabel),
             MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.80f),
             MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.95f)
         )
@@ -308,7 +309,7 @@ private fun AccountQuestionDivider() {
     Canvas(
         modifier = Modifier
             .fillMaxWidth()
-            .size(height = 1.dp, width = 1.dp)
+            .size(height = 1.dp, width = BbSpacing.BorderThin)
     ) {
         drawLine(
             color = dividerColor,

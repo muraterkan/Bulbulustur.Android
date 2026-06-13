@@ -36,6 +36,7 @@ import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
 import com.bulbulustur.android.ui.theme.BbTypography
+import com.bulbulustur.android.ui.theme.BbAlpha
 
 @Composable
 fun NotificationListScreen(
@@ -43,7 +44,7 @@ fun NotificationListScreen(
 ) {
     val pageBackground = Brush.verticalGradient(
         colors = listOf(
-            MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.55f),
+            MaterialTheme.colorScheme.primaryContainer.copy(alpha = BbAlpha.DisabledLabel),
             MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.80f),
             MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.95f)
         )

@@ -36,10 +36,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import com.bulbulustur.android.ui.theme.BbColors
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.ui.theme.BbSpacing
+
 
 @Composable
 fun CheckoutPaymentScreen(
@@ -97,7 +99,7 @@ fun CheckoutPaymentScreen(
                     end = 16.dp,
                     bottom = 16.dp
                 ),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
             ) {
                 item {
                     CheckoutPaymentTopBar(
@@ -257,7 +259,7 @@ private fun CheckoutProgressCard(
         ) {
             Box(
                 modifier = Modifier
-                    .size(52.dp)
+                    .size(BbSpacing.Space13)
                     .clip(CircleShape)
                     .background(MaterialTheme.colorScheme.primary),
                 contentAlignment = Alignment.Center
@@ -309,7 +311,7 @@ private fun CheckoutPaymentSummaryCard(
         )
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(BbSpacing.Space4)
         ) {
             CheckoutPaymentSummaryRow(
                 title = "Ürün toplamı",
@@ -335,7 +337,7 @@ private fun CheckoutPaymentSummaryCard(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(1.dp)
+                    .height(BbSpacing.BorderThin)
                     .background(MaterialTheme.colorScheme.surfaceVariant)
             )
 
@@ -506,7 +508,7 @@ private fun CheckoutNewCardForm(
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
         ) {
             CheckoutPaymentSectionTitle(
                 title = "Kart bilgileri",
@@ -592,9 +594,9 @@ private fun CheckoutPaymentTextField(
         singleLine = true,
         shape = RoundedCornerShape(18.dp),
         colors = TextFieldDefaults.colors(
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-            disabledIndicatorColor = Color.Transparent
+            focusedIndicatorColor = BbColors.Transparent,
+            unfocusedIndicatorColor = BbColors.Transparent,
+            disabledIndicatorColor = BbColors.Transparent
         )
     )
 }
@@ -617,7 +619,7 @@ private fun CheckoutSecurePaymentInfoCard() {
         ) {
             Box(
                 modifier = Modifier
-                    .size(44.dp)
+                    .size(BbSpacing.Space11)
                     .clip(CircleShape)
                     .background(MaterialTheme.colorScheme.secondaryContainer),
                 contentAlignment = Alignment.Center

@@ -321,8 +321,8 @@ private fun RetailCategoryHomeGatewayCard(
         ) {
             Box(
                 modifier = Modifier
-                    .width(44.dp)
-                    .height(44.dp)
+                    .width(BbSpacing.Space11)
+                    .height(BbSpacing.Space11)
                     .background(
                         color = item.backgroundColor,
                         shape = BbRadius.LgShape

@@ -14,9 +14,12 @@ import com.bulbulustur.android.ui.theme.BbSpacing
 fun BbProductGrid(
     modifier: Modifier = Modifier,
     columns: Int = 2,
-    contentPadding: PaddingValues = PaddingValues(BbSpacing.md),
-    horizontalSpacing: Dp = BbSpacing.sm,
-    verticalSpacing: Dp = BbSpacing.md,
+    contentPadding: PaddingValues = PaddingValues(
+        horizontal = BbSpacing.PageHorizontal,
+        vertical = BbSpacing.SectionContentGap
+    ),
+    horizontalSpacing: Dp = BbSpacing.ProductCardGap,
+    verticalSpacing: Dp = BbSpacing.CardGap,
     content: LazyGridScope.() -> Unit
 ) {
     LazyVerticalGrid(

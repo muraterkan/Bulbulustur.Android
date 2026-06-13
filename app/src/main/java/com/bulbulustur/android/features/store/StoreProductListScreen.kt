@@ -36,10 +36,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import com.bulbulustur.android.ui.theme.BbColors
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.ui.theme.BbSpacing
 
 @Composable
 fun StoreProductListScreen(
@@ -93,7 +94,7 @@ fun StoreProductListScreen(
                 end = 16.dp,
                 bottom = 28.dp
             ),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
         ) {
             item {
                 StoreProductListTopBar(
@@ -311,15 +312,15 @@ private fun StoreProductSearchBox(
         singleLine = true,
         shape = RoundedCornerShape(18.dp),
         colors = TextFieldDefaults.colors(
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-            disabledIndicatorColor = Color.Transparent
+            focusedIndicatorColor = BbColors.Transparent,
+            unfocusedIndicatorColor = BbColors.Transparent,
+            disabledIndicatorColor = BbColors.Transparent
         ),
         trailingIcon = {
             Text(
                 text = "Ara",
                 modifier = Modifier
-                    .padding(end = 12.dp)
+                    .padding(end = BbSpacing.Space3)
                     .clickable {
                         onSearchSubmit()
                     },
@@ -350,7 +351,7 @@ private fun StoreProductCategoryFilterSection(
         FlowRow(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
         ) {
             categories.forEach { category ->
                 FilterChip(
@@ -387,7 +388,7 @@ private fun StoreProductSortFilterSection(
         FlowRow(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
         ) {
             sortOptions.forEach { sortOption ->
                 FilterChip(

@@ -21,7 +21,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.AssistChip
+import com.bulbulustur.android.ui.theme.BbColors
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilterChip
@@ -42,6 +42,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.ui.theme.BbSpacing
+import com.bulbulustur.android.ui.theme.BbLayout
 
 @Composable
 fun CategoryDetailScreen(
@@ -72,7 +74,7 @@ fun CategoryDetailScreen(
                 end = 16.dp,
                 bottom = 28.dp
             ),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
         ) {
             item {
                 CategoryDetailTopBar(
@@ -234,7 +236,7 @@ private fun CategoryDetailHero(
             Spacer(modifier = Modifier.height(16.dp))
 
             Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
             ) {
                 CategoryStatPill(
                     title = "${category.productCount}",
@@ -304,15 +306,15 @@ private fun CategoryDetailSearchBox(
         singleLine = true,
         shape = RoundedCornerShape(18.dp),
         colors = TextFieldDefaults.colors(
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-            disabledIndicatorColor = Color.Transparent
+            focusedIndicatorColor = BbColors.Transparent,
+            unfocusedIndicatorColor = BbColors.Transparent,
+            disabledIndicatorColor = BbColors.Transparent
         ),
         trailingIcon = {
             Text(
                 text = "Ara",
                 modifier = Modifier
-                    .padding(end = 12.dp)
+                    .padding(end = BbSpacing.Space3)
                     .clickable {
                         onSearchClick()
                     },
@@ -447,7 +449,7 @@ private fun CategoryCampaignCard(
 ) {
     Card(
         modifier = Modifier
-            .width(230.dp)
+            .width(BbLayout.LogoWidthLarge)
             .clickable {
                 onClick()
             },
@@ -460,7 +462,7 @@ private fun CategoryCampaignCard(
         )
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(BbSpacing.Space4)
         ) {
             Text(
                 text = campaign.badge,
@@ -507,7 +509,7 @@ private fun CategoryQuickFilterSection(
         FlowRow(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
         ) {
             filters.forEachIndexed { index, filter ->
                 FilterChip(

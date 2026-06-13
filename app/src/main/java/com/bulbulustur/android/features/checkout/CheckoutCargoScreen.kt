@@ -36,6 +36,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.ui.theme.BbSpacing
 
 @Composable
 fun CheckoutCargoScreen(
@@ -94,7 +95,7 @@ fun CheckoutCargoScreen(
                     end = 16.dp,
                     bottom = 16.dp
                 ),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
             ) {
                 item {
                     CheckoutCargoTopBar(
@@ -218,7 +219,7 @@ private fun CheckoutProgressCard(
         ) {
             Box(
                 modifier = Modifier
-                    .size(52.dp)
+                    .size(BbSpacing.Space13)
                     .clip(CircleShape)
                     .background(MaterialTheme.colorScheme.primary),
                 contentAlignment = Alignment.Center
@@ -270,7 +271,7 @@ private fun CheckoutCargoAddressCard(
         )
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(BbSpacing.Space4)
         ) {
             Text(
                 text = "Teslimat adresi",
@@ -318,7 +319,7 @@ private fun CheckoutStoreCargoGroupCard(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(BbSpacing.Space4)
         ) {
             CheckoutStoreCargoHeader(
                 cargoGroup = cargoGroup
@@ -350,7 +351,7 @@ private fun CheckoutStoreCargoHeader(
     ) {
         Box(
             modifier = Modifier
-                .size(48.dp)
+                .size(BbSpacing.Space12)
                 .clip(RoundedCornerShape(16.dp))
                 .background(MaterialTheme.colorScheme.secondaryContainer),
             contentAlignment = Alignment.Center
@@ -475,7 +476,7 @@ private fun CheckoutCargoInfoCard() {
         )
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(BbSpacing.Space4)
         ) {
             Text(
                 text = "Kargo bilgilendirmesi",

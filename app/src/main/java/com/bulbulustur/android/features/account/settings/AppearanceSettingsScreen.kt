@@ -37,6 +37,7 @@ import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
 import com.bulbulustur.android.ui.theme.BbTypography
+import com.bulbulustur.android.ui.theme.BbAlpha
 
 @Composable
 fun AppearanceSettingsScreen(
@@ -69,7 +70,7 @@ fun AppearanceSettingsScreen(
 
     val pageBackground = Brush.verticalGradient(
         colors = listOf(
-            MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.45f),
+            MaterialTheme.colorScheme.primaryContainer.copy(alpha = BbAlpha.DisabledContainer),
             MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.85f),
             MaterialTheme.colorScheme.surfaceVariant
         )

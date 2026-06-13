@@ -23,11 +23,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
-import com.bulbulustur.android.ui.theme.BbColors
 import com.bulbulustur.android.ui.theme.BbIcon
+import com.bulbulustur.android.ui.theme.BbLayout
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
 
@@ -43,13 +41,14 @@ fun BbInnerPageHeader(
 ) {
     Surface(
         modifier = modifier.fillMaxWidth(),
-        color = BbColors.Surface,
-        shadowElevation = BbSpacing.Space1
+        color = MaterialTheme.colorScheme.surface,
+        contentColor = MaterialTheme.colorScheme.onSurface,
+        shadowElevation = BbSpacing.ElevationSm
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(BbColors.Surface)
+                .background(MaterialTheme.colorScheme.surface)
                 .windowInsetsPadding(WindowInsets.statusBars)
                 .padding(
                     start = BbSpacing.Space2,
@@ -61,9 +60,9 @@ fun BbInnerPageHeader(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(BbSpacing.TopBarHeight),
+                    .height(BbLayout.TopBarHeight),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.IconTextGap)
             ) {
                 BbInnerHeaderActionButton(
                     icon = Icons.AutoMirrored.Outlined.ArrowBack,
@@ -75,8 +74,7 @@ fun BbInnerPageHeader(
                     text = title,
                     modifier = Modifier.weight(1f),
                     style = MaterialTheme.typography.titleLarge,
-                    color = BbColors.TextStrong,
-                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -106,19 +104,19 @@ private fun BbInnerHeaderActionButton(
     onClick: () -> Unit
 ) {
     Surface(
-        modifier = Modifier.size(BbIcon.BoxMd),
+        modifier = Modifier.size(BbLayout.ToolbarActionSize),
         shape = BbRadius.PillShape,
-        color = BbColors.SurfaceMuted,
+        color = MaterialTheme.colorScheme.surfaceVariant,
+        contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
         border = BorderStroke(
-            width = 1.dp,
-            color = BbColors.Border
+            width = BbSpacing.BorderThin,
+            color = MaterialTheme.colorScheme.outlineVariant
         )
     ) {
         IconButton(onClick = onClick) {
             Icon(
                 imageVector = icon,
                 contentDescription = contentDescription,
-                tint = BbColors.TextStrong,
                 modifier = Modifier.size(BbIcon.TopBarIcon)
             )
         }

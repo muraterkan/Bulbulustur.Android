@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import com.bulbulustur.android.ui.theme.BbSpacing
+import com.bulbulustur.android.ui.theme.BbAlpha
 
 @Composable
 fun AccountScreenContainer(
@@ -27,7 +28,7 @@ fun AccountScreenContainer(
 ) {
     val backgroundBrush = Brush.verticalGradient(
         colors = listOf(
-            MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.55f),
+            MaterialTheme.colorScheme.primaryContainer.copy(alpha = BbAlpha.DisabledLabel),
             MaterialTheme.colorScheme.background,
             MaterialTheme.colorScheme.background
         )

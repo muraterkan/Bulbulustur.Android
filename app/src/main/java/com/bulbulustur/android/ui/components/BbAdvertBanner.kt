@@ -1,19 +1,29 @@
 package com.bulbulustur.android.ui.components
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Campaign
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
-import com.bulbulustur.android.ui.theme.*
+import com.bulbulustur.android.ui.theme.BbIcon
+import com.bulbulustur.android.ui.theme.BbLayout
+import com.bulbulustur.android.ui.theme.BbRadius
+import com.bulbulustur.android.ui.theme.BbSpacing
 
 @Composable
 fun BbAdvertBanner(
@@ -25,41 +35,39 @@ fun BbAdvertBanner(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .height(120.dp)
+            .height(BbLayout.CampaignHeroHeight)
             .clickable(enabled = onClick != null) {
                 onClick?.invoke()
             },
-        shape = RoundedCornerShape(BbRadius.lg),
-        color = BbColors.Primary
+        shape = BbRadius.Card,
+        color = MaterialTheme.colorScheme.primary,
+        contentColor = MaterialTheme.colorScheme.onPrimary
     ) {
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(BbSpacing.lg),
+                .padding(BbSpacing.CardPaddingLoose),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
                 imageVector = Icons.Outlined.Campaign,
                 contentDescription = null,
-                tint = BbColors.White,
-                modifier = Modifier.size(48.dp)
+                modifier = Modifier.size(BbIcon.Size4Xl)
             )
 
-            Spacer(modifier = Modifier.width(BbSpacing.md))
+            Spacer(modifier = Modifier.width(BbSpacing.IconTextGapLarge))
 
             Column {
                 Text(
                     text = title,
-                    style = BbTypography.titleLarge,
-                    color = BbColors.White
+                    style = MaterialTheme.typography.titleLarge
                 )
 
-                Spacer(modifier = Modifier.height(BbSpacing.xs))
+                Spacer(modifier = Modifier.height(BbSpacing.IconTextGapSmall))
 
                 Text(
                     text = description,
-                    style = BbTypography.bodyMedium,
-                    color = BbColors.White,
+                    style = MaterialTheme.typography.bodyMedium,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )

@@ -160,7 +160,7 @@ private fun ProductReviewProductSummary(
         ) {
             Box(
                 modifier = Modifier
-                    .size(72.dp)
+                    .size(BbSpacing.Space18)
                     .clip(BbRadius.XlShape)
                     .background(BbColors.Primary),
                 contentAlignment = Alignment.Center

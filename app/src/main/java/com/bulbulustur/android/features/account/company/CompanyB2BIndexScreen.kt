@@ -51,6 +51,8 @@ import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
 import com.bulbulustur.android.ui.theme.BbTypography
+import com.bulbulustur.android.ui.theme.BbAlpha
+
 
 @Composable
 fun CompanyB2BIndexScreen(
@@ -63,7 +65,7 @@ fun CompanyB2BIndexScreen(
 
     val pageBackground = Brush.verticalGradient(
         colors = listOf(
-            MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.55f),
+            MaterialTheme.colorScheme.primaryContainer.copy(alpha = BbAlpha.DisabledLabel),
             MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.80f),
             MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.95f)
         )
@@ -257,7 +259,7 @@ private fun CompanyB2BIndexSummaryCard() {
                 Text(
                     text = "Limited Şirket · İstanbul / Türkiye",
                     style = BbTypography.bodySmall,
-                    color = MaterialTheme.colorScheme.inverseOnSurface.copy(alpha = 0.72f)
+                    color = MaterialTheme.colorScheme.inverseOnSurface.copy(alpha = BbAlpha.Muted)
                 )
 
                 Row(
@@ -287,7 +289,7 @@ private fun CompanyB2BIndexStatusPill(
     Row(
         modifier = Modifier
             .background(
-                color = MaterialTheme.colorScheme.inverseOnSurface.copy(alpha = 0.12f),
+                color = MaterialTheme.colorScheme.inverseOnSurface.copy(alpha = BbAlpha.Overlay),
                 shape = BbRadius.Badge
             )
             .padding(
@@ -582,7 +584,7 @@ private fun CompanyDashedDivider() {
                 start = BbSpacing.Space4,
                 end = BbSpacing.Space4
             )
-            .size(height = 1.dp, width = 1.dp)
+            .size(height = 1.dp, width = BbSpacing.BorderThin)
     ) {
         drawLine(
             color = dividerColor,

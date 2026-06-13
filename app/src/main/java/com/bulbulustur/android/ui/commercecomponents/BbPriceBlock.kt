@@ -3,20 +3,19 @@ package com.bulbulustur.android.ui.commercecomponents
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.height
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.unit.dp
 import com.bulbulustur.android.ui.theme.BbColors
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
-import com.bulbulustur.android.ui.theme.BbTypography
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.Locale
@@ -38,36 +37,38 @@ fun BbPriceBlock(
             ) {
                 Text(
                     text = bbFormatPrice(oldPrice, currencySymbol),
-                    style = BbTypography.bodySmall.copy(
+                    style = MaterialTheme.typography.bodySmall.copy(
                         textDecoration = TextDecoration.LineThrough
                     ),
-                    color = BbColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
                 if (discountPercent != null && discountPercent > 0) {
-                    Spacer(modifier = Modifier.width(BbSpacing.xs))
+                    Spacer(modifier = Modifier.width(BbSpacing.IconTextGapSmall))
 
                     Surface(
-                        shape = RoundedCornerShape(BbRadius.sm),
-                        color = BbColors.Success
+                        shape = BbRadius.Badge,
+                        color = BbColors.Success,
+                        contentColor = BbColors.White
                     ) {
                         Text(
                             text = "%$discountPercent",
-                            style = BbTypography.labelSmall,
-                            color = BbColors.White,
-                            modifier = Modifier
-                                .height(20.dp)
+                            style = MaterialTheme.typography.labelSmall,
+                            modifier = Modifier.padding(
+                                horizontal = BbSpacing.BadgePaddingHorizontal,
+                                vertical = BbSpacing.BadgePaddingVertical
+                            )
                         )
                     }
                 }
             }
 
-            Spacer(modifier = Modifier.height(BbSpacing.xs))
+            Spacer(modifier = Modifier.height(BbSpacing.IconTextGapSmall))
         }
 
         Text(
             text = bbFormatPrice(price, currencySymbol),
-            style = BbTypography.titleMedium,
+            style = MaterialTheme.typography.titleMedium,
             color = BbColors.Success
         )
     }

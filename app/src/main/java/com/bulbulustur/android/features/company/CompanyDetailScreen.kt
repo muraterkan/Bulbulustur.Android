@@ -61,6 +61,7 @@ import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
 import com.bulbulustur.android.ui.theme.BbTheme
+import com.bulbulustur.android.ui.theme.BbAlpha
 
 @Composable
 fun CompanyDetailScreen(
@@ -904,10 +905,10 @@ private fun CompanyDarkTagRow(
         tags.forEach { tag ->
             Surface(
                 shape = BbRadius.PillShape,
-                color = BbColors.White.copy(alpha = 0.12f),
+                color = BbColors.White.copy(alpha = BbAlpha.Overlay),
                 border = BorderStroke(
                     width = BbSpacing.None,
-                    color = BbColors.White.copy(alpha = 0.18f)
+                    color = BbColors.White.copy(alpha = BbAlpha.OverlayStrong)
                 )
             ) {
                 Text(

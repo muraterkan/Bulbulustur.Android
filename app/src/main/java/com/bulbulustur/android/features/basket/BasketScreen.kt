@@ -62,6 +62,7 @@ import com.bulbulustur.android.ui.theme.BbColors
 import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
+import com.bulbulustur.android.ui.theme.BbAlpha
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -775,7 +776,7 @@ private fun BasketCheckoutBar(
                 Text(
                     text = "Toplam",
                     style = MaterialTheme.typography.labelSmall,
-                    color = BbColors.White.copy(alpha = 0.72f)
+                    color = BbColors.White.copy(alpha = BbAlpha.Muted)
                 )
 
                 Text(

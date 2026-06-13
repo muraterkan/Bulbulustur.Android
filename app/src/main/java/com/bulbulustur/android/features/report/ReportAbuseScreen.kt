@@ -364,9 +364,9 @@ private fun ReportDetailSection(
                     focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
                     unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
                     disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    disabledIndicatorColor = Color.Transparent
+                    focusedIndicatorColor = BbColors.Transparent,
+                    unfocusedIndicatorColor = BbColors.Transparent,
+                    disabledIndicatorColor = BbColors.Transparent
                 )
             )
         }

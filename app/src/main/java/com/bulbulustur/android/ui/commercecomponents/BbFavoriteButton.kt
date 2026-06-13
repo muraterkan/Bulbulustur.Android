@@ -1,20 +1,21 @@
 package com.bulbulustur.android.ui.commercecomponents
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.bulbulustur.android.ui.theme.BbColors
+import com.bulbulustur.android.ui.theme.BbIcon
+import com.bulbulustur.android.ui.theme.BbLayout
+import com.bulbulustur.android.ui.theme.BbRadius
+import com.bulbulustur.android.ui.theme.BbSpacing
 
 @Composable
 fun BbFavoriteButton(
@@ -26,14 +27,15 @@ fun BbFavoriteButton(
 ) {
     if (showSurface) {
         Surface(
-            modifier = modifier.size(42.dp),
-            shape = CircleShape,
+            modifier = modifier.size(BbLayout.CardActionSize),
+            shape = BbRadius.PillShape,
             color = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.onSurface,
             border = BorderStroke(
-                width = 1.dp,
+                width = BbSpacing.BorderThin,
                 color = MaterialTheme.colorScheme.outlineVariant
             ),
-            shadowElevation = 2.dp
+            shadowElevation = BbSpacing.ElevationXs
         ) {
             BbFavoriteIconButtonContent(
                 isFavorite = isFavorite,
@@ -77,8 +79,9 @@ private fun BbFavoriteIconButtonContent(
             tint = if (isFavorite) {
                 BbColors.Danger
             } else {
-                BbColors.TextStrong
-            }
+                MaterialTheme.colorScheme.onSurface
+            },
+            modifier = Modifier.size(BbIcon.Action)
         )
     }
 }

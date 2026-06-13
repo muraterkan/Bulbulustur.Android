@@ -16,7 +16,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Business
 import androidx.compose.material.icons.outlined.ContactMail
 import androidx.compose.material.icons.outlined.Inventory2
-import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material.icons.outlined.Verified
 import androidx.compose.material3.Icon
@@ -46,6 +45,7 @@ import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
 import com.bulbulustur.android.ui.theme.BbTheme
+import com.bulbulustur.android.ui.theme.BbAlpha
 
 @Composable
 fun CompanyHomeScreen(
@@ -351,7 +351,7 @@ private fun CompanyHomeInfoLine(
                 tint = BbColors.Primary,
                 modifier = Modifier
                     .size(BbIcon.SizeMd)
-                    .weight(0.12f)
+                    .weight(BbAlpha.Overlay)
             )
 
             Text(

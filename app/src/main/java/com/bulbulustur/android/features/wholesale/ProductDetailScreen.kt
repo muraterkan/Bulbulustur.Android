@@ -77,6 +77,7 @@ import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
 import com.bulbulustur.android.ui.theme.BbTheme
+import com.bulbulustur.android.ui.theme.BbLayout
 
 @Composable
 fun WholesaleProductDetailScreen(
@@ -330,7 +331,7 @@ private fun WholesaleProductDetailImageSlide(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(max = 390.dp)
+            .heightIn(max = BbLayout.ProductDetailImageMaxHeight)
             .aspectRatio(0.92f)
             .background(image.backgroundColor),
         contentAlignment = Alignment.Center
@@ -1021,7 +1022,7 @@ private fun WholesaleProductPropertyRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(min = 48.dp)
+            .heightIn(min = BbSpacing.Space12)
             .padding(
                 horizontal = BbSpacing.Space3,
                 vertical = BbSpacing.Space2
@@ -1680,7 +1681,7 @@ private fun WholesaleInlineAction(
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .height(44.dp)
+            .height(BbSpacing.Space11)
             .clip(BbRadius.PillShape)
             .clickable {
                 onClick()
@@ -1720,7 +1721,7 @@ private fun WholesaleOutlineActionButton(
 ) {
     Surface(
         modifier = modifier
-            .height(44.dp)
+            .height(BbSpacing.Space11)
             .clip(BbRadius.PillShape)
             .clickable {
                 onClick()
@@ -1757,7 +1758,7 @@ private fun WholesaleDashedDivider() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(1.dp)
+            .height(BbSpacing.BorderThin)
             .padding(horizontal = BbSpacing.Space3)
             .drawBehind {
                 drawLine(
@@ -1842,7 +1843,7 @@ private fun WholesaleBottomActionButton(
 ) {
     Surface(
         modifier = modifier
-            .height(48.dp)
+            .height(BbSpacing.Space12)
             .clip(BbRadius.PillShape)
             .clickable {
                 onClick()

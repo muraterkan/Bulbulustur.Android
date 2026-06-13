@@ -367,7 +367,7 @@ private fun LegalDetailDashedDivider() {
     Canvas(
         modifier = Modifier
             .fillMaxWidth()
-            .height(1.dp)
+            .height(BbSpacing.BorderThin)
     ) {
         drawLine(
             color = BbColors.Border,

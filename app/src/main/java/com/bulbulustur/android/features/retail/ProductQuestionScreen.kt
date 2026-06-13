@@ -173,7 +173,7 @@ private fun ProductQuestionProductSummary(
         ) {
             Box(
                 modifier = Modifier
-                    .size(72.dp)
+                    .size(BbSpacing.Space18)
                     .clip(BbRadius.XlShape)
                     .background(BbColors.Primary),
                 contentAlignment = Alignment.Center
@@ -232,7 +232,7 @@ private fun ProductQuestionAskCard(
         ) {
             Box(
                 modifier = Modifier
-                    .size(48.dp)
+                    .size(BbSpacing.Space12)
                     .clip(BbRadius.LgShape)
                     .background(BbColors.PrimarySoft),
                 contentAlignment = Alignment.Center

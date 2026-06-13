@@ -37,6 +37,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.ui.theme.BbSpacing
 
 @Composable
 fun SellerLandingScreen(
@@ -70,7 +71,7 @@ fun SellerLandingScreen(
                 end = 16.dp,
                 bottom = 28.dp
             ),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
         ) {
             item {
                 SellerLandingTopBar(
@@ -210,7 +211,7 @@ private fun SellerLandingHero(
             Spacer(modifier = Modifier.height(16.dp))
 
             Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
             ) {
                 SellerLandingHeroPill(
                     title = summary.storeCountText,
@@ -361,7 +362,7 @@ private fun SellerLandingTabSection(
     FlowRow(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
     ) {
         tabs.forEach { tab ->
             FilterChip(
@@ -404,7 +405,7 @@ private fun SellerLandingInfoCard(
         ) {
             Box(
                 modifier = Modifier
-                    .size(48.dp)
+                    .size(BbSpacing.Space12)
                     .clip(RoundedCornerShape(16.dp))
                     .background(MaterialTheme.colorScheme.secondaryContainer),
                 contentAlignment = Alignment.Center

@@ -249,7 +249,7 @@ private fun FavoriteTabItem(
                 .fillMaxWidth()
                 .height(BbSpacing.Space1)
                 .background(
-                    color = if (isSelected) BbColors.TextStrong else Color.Transparent,
+                    color = if (isSelected) BbColors.TextStrong else BbColors.Transparent,
                     shape = BbRadius.PillShape
                 )
         )

@@ -190,7 +190,7 @@ private fun StoreFollowButton(
 ) {
     Surface(
         modifier = Modifier
-            .height(40.dp)
+            .height(BbSpacing.Space10)
             .clip(BbRadius.PillShape)
             .clickable {
                 onClick()

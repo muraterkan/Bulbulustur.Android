@@ -229,7 +229,7 @@ private fun StoreListHeaderActionButton(
 ) {
     Surface(
         modifier = Modifier
-            .height(40.dp)
+            .height(BbSpacing.Space10)
             .clip(BbRadius.PillShape)
             .clickable {
                 onClick()
@@ -864,7 +864,7 @@ private fun StoreListPrimaryButton(
 ) {
     Surface(
         modifier = modifier
-            .height(44.dp)
+            .height(BbSpacing.Space11)
             .clip(BbRadius.PillShape)
             .clickable {
                 onClick()
@@ -911,7 +911,7 @@ private fun StoreListSecondaryButton(
 ) {
     Surface(
         modifier = modifier
-            .height(44.dp)
+            .height(BbSpacing.Space11)
             .clip(BbRadius.PillShape)
             .clickable {
                 onClick()

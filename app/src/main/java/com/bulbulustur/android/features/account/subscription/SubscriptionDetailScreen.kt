@@ -38,6 +38,7 @@ import com.bulbulustur.android.ui.theme.BbColors
 import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
+import com.bulbulustur.android.ui.theme.BbAlpha
 
 @Composable
 fun SubscriptionDetailScreen(
@@ -149,7 +150,7 @@ private fun SubscriptionHeroCard(
                 modifier = Modifier
                     .size(BbIcon.BoxMd)
                     .background(
-                        color = BbColors.White.copy(alpha = 0.12f),
+                        color = BbColors.White.copy(alpha = BbAlpha.Overlay),
                         shape = BbRadius.LgShape
                     ),
                 contentAlignment = Alignment.Center

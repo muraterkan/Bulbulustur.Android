@@ -90,6 +90,8 @@ import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
 import com.bulbulustur.android.ui.theme.BbTheme
+import com.bulbulustur.android.ui.theme.BbLayout
+import com.bulbulustur.android.ui.theme.BbAlpha
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -376,7 +378,7 @@ private fun RetailProductDetailGallery(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(max = 390.dp)
+                .heightIn(max = BbLayout.ProductDetailImageMaxHeight)
                 .background(BbColors.White),
             contentAlignment = Alignment.Center
         ) {
@@ -424,7 +426,7 @@ private fun RetailProductDetailImageSlide(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(max = 390.dp)
+            .heightIn(max = BbLayout.ProductDetailImageMaxHeight)
             .aspectRatio(0.92f)
             .background(image.backgroundColor),
         contentAlignment = Alignment.Center
@@ -739,7 +741,7 @@ private fun RetailProductColorChoice(
 
     Surface(
         modifier = Modifier
-            .width(92.dp)
+            .width(BbLayout.FixedWidth92)
             .clip(BbRadius.XlShape)
             .clickable {
                 onClick()
@@ -1043,7 +1045,7 @@ private fun RetailProductBenefitPill(
         color = BbColors.Success.copy(alpha = 0.10f),
         border = BorderStroke(
             width = 1.dp,
-            color = BbColors.Success.copy(alpha = 0.24f)
+            color = BbColors.Success.copy(alpha = BbAlpha.OverlayHeavy)
         )
     ) {
         Row(
@@ -1141,7 +1143,7 @@ private fun RetailProductStockAlertCard(
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(48.dp)
+                    .height(BbSpacing.Space12)
                     .clip(BbRadius.XxlShape)
                     .clickable {
                         onStockAlarmClick()
@@ -1229,7 +1231,7 @@ private fun RetailProductTrustLinkRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(52.dp)
+            .height(BbSpacing.Space13)
             .clickable {
                 onClick()
             }
@@ -1282,7 +1284,7 @@ private fun RetailDashedDivider() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(1.dp)
+            .height(BbSpacing.BorderThin)
             .padding(horizontal = BbSpacing.Space3)
             .drawBehind {
                 drawLine(
@@ -1347,7 +1349,7 @@ private fun RetailSellerProductMiniCard(
 ) {
     Surface(
         modifier = Modifier
-            .width(132.dp)
+            .width(BbLayout.ProductCardWidthSmall)
             .clip(BbRadius.XlShape)
             .clickable {
                 onClick()
@@ -1366,7 +1368,7 @@ private fun RetailSellerProductMiniCard(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(96.dp)
+                    .height(BbSpacing.Space24)
                     .clip(BbRadius.LgShape)
                     .background(BbColors.SurfaceMuted),
                 contentAlignment = Alignment.Center
@@ -1412,8 +1414,8 @@ private fun RetailSellerMoreProductsCard(
 ) {
     Surface(
         modifier = Modifier
-            .width(132.dp)
-            .height(188.dp)
+            .width(BbLayout.ProductCardWidthSmall)
+            .height(BbLayout.ProductCardMediaHeightLarge)
             .clip(BbRadius.XlShape)
             .clickable {
                 onClick()
@@ -2021,7 +2023,7 @@ private fun RetailProductBottomActionButton(
 ) {
     Surface(
         modifier = modifier
-            .height(44.dp)
+            .height(BbSpacing.Space11)
             .clip(BbRadius.XxlShape)
             .clickable {
                 onClick()
@@ -2682,7 +2684,7 @@ private fun RetailSheetInfoBox(
         color = BbColors.PrimarySoft,
         border = BorderStroke(
             width = 1.dp,
-            color = BbColors.Primary.copy(alpha = 0.45f)
+            color = BbColors.Primary.copy(alpha = BbAlpha.DisabledContainer)
         )
     ) {
         Row(
@@ -2822,7 +2824,7 @@ private fun RetailSheetPrimaryButton(
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .height(48.dp)
+            .height(BbSpacing.Space12)
             .clip(BbRadius.XxlShape)
             .clickable {
                 onClick()

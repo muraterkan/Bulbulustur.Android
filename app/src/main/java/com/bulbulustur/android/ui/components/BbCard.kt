@@ -1,19 +1,17 @@
 package com.bulbulustur.android.ui.components
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
-import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import com.bulbulustur.android.ui.theme.BbColors
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
 
@@ -39,7 +37,6 @@ fun BbCard(
     onClick: (() -> Unit)? = null,
     content: @Composable () -> Unit
 ) {
-    val cardShape = RoundedCornerShape(BbRadius.lg)
     val cardModifier = if (onClick != null) {
         modifier.clickable(enabled = enabled) {
             onClick()
@@ -52,7 +49,7 @@ fun BbCard(
         BbCardVariant.Default -> {
             Card(
                 modifier = cardModifier,
-                shape = cardShape,
+                shape = BbRadius.Card,
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.surface
                 )
@@ -67,12 +64,12 @@ fun BbCard(
         BbCardVariant.Elevated -> {
             ElevatedCard(
                 modifier = cardModifier,
-                shape = cardShape,
+                shape = BbRadius.Card,
                 colors = CardDefaults.elevatedCardColors(
                     containerColor = MaterialTheme.colorScheme.surface
                 ),
                 elevation = CardDefaults.elevatedCardElevation(
-                    defaultElevation = 4.dp
+                    defaultElevation = BbSpacing.ElevationSm
                 )
             ) {
                 BbCardContent(
@@ -85,12 +82,12 @@ fun BbCard(
         BbCardVariant.Outlined -> {
             OutlinedCard(
                 modifier = cardModifier,
-                shape = cardShape,
+                shape = BbRadius.Card,
                 colors = CardDefaults.outlinedCardColors(
                     containerColor = MaterialTheme.colorScheme.surface
                 ),
                 border = BorderStroke(
-                    width = 1.dp,
+                    width = BbSpacing.BorderThin,
                     color = MaterialTheme.colorScheme.outlineVariant
                 )
             ) {
@@ -108,7 +105,7 @@ private fun BbCardContent(
     padding: BbCardPadding,
     content: @Composable () -> Unit
 ) {
-    androidx.compose.foundation.layout.Box(
+    Box(
         modifier = Modifier.padding(bbCardPaddingValues(padding))
     ) {
         content()
@@ -119,9 +116,9 @@ private fun bbCardPaddingValues(
     padding: BbCardPadding
 ): PaddingValues {
     return when (padding) {
-        BbCardPadding.None -> PaddingValues(0.dp)
-        BbCardPadding.Small -> PaddingValues(BbSpacing.sm)
-        BbCardPadding.Medium -> PaddingValues(BbSpacing.md)
-        BbCardPadding.Large -> PaddingValues(BbSpacing.lg)
+        BbCardPadding.None -> PaddingValues(BbSpacing.None)
+        BbCardPadding.Small -> PaddingValues(BbSpacing.CardPaddingCompact)
+        BbCardPadding.Medium -> PaddingValues(BbSpacing.CardPadding)
+        BbCardPadding.Large -> PaddingValues(BbSpacing.CardPaddingLoose)
     }
 }

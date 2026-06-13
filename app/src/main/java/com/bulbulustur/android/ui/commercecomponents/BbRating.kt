@@ -3,20 +3,21 @@ package com.bulbulustur.android.ui.commercecomponents
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.StarBorder
 import androidx.compose.material.icons.outlined.StarHalf
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.bulbulustur.android.ui.theme.BbColors
+import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbSpacing
-import com.bulbulustur.android.ui.theme.BbTypography
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.Locale
@@ -47,24 +48,24 @@ fun BbRating(
                 size = size
             )
 
-            Spacer(modifier = Modifier.width(BbSpacing.xs))
+            Spacer(modifier = Modifier.width(BbSpacing.IconTextGapSmall))
         }
 
         if (showRatingText) {
             Text(
                 text = bbFormatRating(rating),
-                style = BbTypography.labelSmall,
-                color = BbColors.TextStrong
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
 
         if (reviewCount != null) {
-            Spacer(modifier = Modifier.width(4.dp))
+            Spacer(modifier = Modifier.width(BbSpacing.IconTextGapSmall))
 
             Text(
                 text = "($reviewCount)",
-                style = BbTypography.labelSmall,
-                color = BbColors.TextMuted
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -78,8 +79,8 @@ private fun BbRatingStars(
     val fullStars = floor(rating).toInt().coerceIn(0, 5)
     val hasHalfStar = rating - fullStars >= 0.5
     val starSize = when (size) {
-        BbRatingSize.Small -> 16.dp
-        BbRatingSize.Medium -> 20.dp
+        BbRatingSize.Small -> BbIcon.SizeXs
+        BbRatingSize.Medium -> BbIcon.SizeMd
     }
 
     Row(
@@ -96,8 +97,7 @@ private fun BbRatingStars(
                 imageVector = icon,
                 contentDescription = null,
                 tint = BbColors.Warning,
-                modifier = Modifier
-                    .width(starSize)
+                modifier = Modifier.size(starSize)
             )
         }
     }

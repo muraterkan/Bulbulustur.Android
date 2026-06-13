@@ -36,6 +36,7 @@ import com.bulbulustur.android.ui.theme.BbColors
 import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
+import com.bulbulustur.android.ui.theme.BbAlpha
 
 @Composable
 fun WalletBalanceScreen(
@@ -317,7 +318,7 @@ private fun WalletIconBox(
         modifier = Modifier
             .size(BbIcon.BoxMd)
             .background(
-                color = if (soft) BbColors.White.copy(alpha = 0.12f) else BbColors.Yellow.Yellow100,
+                color = if (soft) BbColors.White.copy(alpha = BbAlpha.Overlay) else BbColors.Yellow.Yellow100,
                 shape = BbRadius.LgShape
             ),
         contentAlignment = Alignment.Center

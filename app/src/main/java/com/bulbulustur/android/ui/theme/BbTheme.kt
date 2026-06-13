@@ -198,14 +198,12 @@ private fun getBbColorScheme(
     if (useDynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         return when (themeMode) {
             BbThemeMode.Light -> dynamicLightColorScheme(context)
-            BbThemeMode.Navy,
             BbThemeMode.Dark -> dynamicDarkColorScheme(context)
         }
     }
 
     return when (themeMode) {
         BbThemeMode.Light -> BbLightColorScheme
-        BbThemeMode.Navy -> BbNavyColorScheme
         BbThemeMode.Dark -> BbDarkColorScheme
     }
 }

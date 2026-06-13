@@ -52,6 +52,17 @@ object BbLayout {
     val QuantityControlWidth: Dp = BbSpacing.Space14
 
     /*
+ * Chip / badge dimensions
+ */
+
+    val ChipHeightSmall: Dp = BbSpacing.Space7
+    val ChipHeightMedium: Dp = BbSpacing.Space9
+
+    val BadgeDotSize: Dp = BbSpacing.Space2
+    val BadgeSmallSize: Dp = BbSpacing.Space5
+    val BadgeMediumSize: Dp = BbSpacing.Space6
+
+    /*
      * Logo dimensions
      */
 
@@ -177,6 +188,22 @@ object BbLayout {
      * Use these only while consolidating existing screens.
      * If a value becomes page-specific noise, remove it after refactor.
      */
+
+    /*
+     * Brand scroller dimensions
+     */
+
+    val BrandScrollerItemWidth: Dp = 76.dp
+    val BrandScrollerItemHeight: Dp = 98.dp
+    val BrandScrollerLogoSize: Dp = StoreProductImageSize
+
+    /*
+     * Screen container widths
+     */
+
+    val ScreenContainerWidthCompact: Dp = 520.dp
+    val ScreenContainerWidthDefault: Dp = 720.dp
+    val ScreenContainerWidthWide: Dp = 960.dp
 
     val FixedWidth92: Dp = 92.dp
     val FixedWidth142: Dp = 142.dp

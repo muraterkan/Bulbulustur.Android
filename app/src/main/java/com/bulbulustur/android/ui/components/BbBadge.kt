@@ -3,6 +3,7 @@ package com.bulbulustur.android.ui.components
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.defaultMinSize
@@ -13,11 +14,13 @@ import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.ui.theme.BbAlpha
 import com.bulbulustur.android.ui.theme.BbColors
+import com.bulbulustur.android.ui.theme.BbLayout
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
 
@@ -51,32 +54,27 @@ fun BbBadge(
 ) {
     val containerColor = getBbBadgeContainerColor(variant)
     val contentColor = getBbBadgeContentColor(variant)
+    val badgeShape = if (size == BbBadgeSize.Dot) {
+        CircleShape
+    } else {
+        BbRadius.Badge
+    }
 
     val badgeModifier = modifier
         .defaultMinSize(
             minWidth = getBbBadgeMinWidth(size),
             minHeight = getBbBadgeMinHeight(size)
         )
-        .clip(
-            if (size == BbBadgeSize.Dot) {
-                CircleShape
-            } else {
-                BbRadius.Badge
-            }
-        )
+        .clip(badgeShape)
         .background(containerColor)
         .then(
             if (bordered) {
                 Modifier.border(
                     border = BorderStroke(
-                        width = 1.dp,
+                        width = BbSpacing.BorderThin,
                         color = getBbBadgeBorderColor(variant)
                     ),
-                    shape = if (size == BbBadgeSize.Dot) {
-                        CircleShape
-                    } else {
-                        BbRadius.Badge
-                    }
+                    shape = badgeShape
                 )
             } else {
                 Modifier
@@ -84,9 +82,9 @@ fun BbBadge(
         )
         .padding(getBbBadgePadding(size))
 
-    androidx.compose.foundation.layout.Box(
+    Box(
         modifier = badgeModifier,
-        contentAlignment = androidx.compose.ui.Alignment.Center
+        contentAlignment = Alignment.Center
     ) {
         if (size != BbBadgeSize.Dot && !text.isNullOrBlank()) {
             Text(
@@ -175,50 +173,50 @@ private fun getBbBadgeBorderColor(
     variant: BbBadgeVariant
 ): Color {
     return when (variant) {
-        BbBadgeVariant.Primary -> MaterialTheme.colorScheme.primary.copy(alpha = 0.35f)
-        BbBadgeVariant.Secondary -> MaterialTheme.colorScheme.secondary.copy(alpha = 0.35f)
+        BbBadgeVariant.Primary -> MaterialTheme.colorScheme.primary.copy(alpha = BbAlpha.Faint)
+        BbBadgeVariant.Secondary -> MaterialTheme.colorScheme.secondary.copy(alpha = BbAlpha.Faint)
         BbBadgeVariant.B2B -> BbColors.Blue.Blue200
         BbBadgeVariant.B2C -> BbColors.Orange.Orange200
         BbBadgeVariant.Success -> BbColors.Green.Green200
         BbBadgeVariant.Warning -> BbColors.Orange.Orange200
-        BbBadgeVariant.Danger -> MaterialTheme.colorScheme.error.copy(alpha = 0.35f)
+        BbBadgeVariant.Danger -> MaterialTheme.colorScheme.error.copy(alpha = BbAlpha.Faint)
         BbBadgeVariant.Info -> BbColors.Turquoise.Turquoise200
         BbBadgeVariant.Dark -> BbColors.Navy.Navy700
         BbBadgeVariant.Light -> MaterialTheme.colorScheme.outlineVariant
-        BbBadgeVariant.Soft -> MaterialTheme.colorScheme.primary.copy(alpha = 0.25f)
+        BbBadgeVariant.Soft -> MaterialTheme.colorScheme.primary.copy(alpha = BbAlpha.OverlayHeavy)
     }
 }
 
 private fun getBbBadgeMinWidth(
     size: BbBadgeSize
 ) = when (size) {
-    BbBadgeSize.Dot -> 8.dp
-    BbBadgeSize.Small -> 20.dp
-    BbBadgeSize.Medium -> 24.dp
+    BbBadgeSize.Dot -> BbLayout.BadgeDotSize
+    BbBadgeSize.Small -> BbLayout.BadgeSmallSize
+    BbBadgeSize.Medium -> BbLayout.BadgeMediumSize
 }
 
 private fun getBbBadgeMinHeight(
     size: BbBadgeSize
 ) = when (size) {
-    BbBadgeSize.Dot -> 8.dp
-    BbBadgeSize.Small -> 20.dp
-    BbBadgeSize.Medium -> 24.dp
+    BbBadgeSize.Dot -> BbLayout.BadgeDotSize
+    BbBadgeSize.Small -> BbLayout.BadgeSmallSize
+    BbBadgeSize.Medium -> BbLayout.BadgeMediumSize
 }
 
 private fun getBbBadgePadding(
     size: BbBadgeSize
 ): PaddingValues {
     return when (size) {
-        BbBadgeSize.Dot -> PaddingValues(0.dp)
+        BbBadgeSize.Dot -> PaddingValues(BbSpacing.None)
 
         BbBadgeSize.Small -> PaddingValues(
             horizontal = BbSpacing.BadgePaddingHorizontal,
-            vertical = 2.dp
+            vertical = BbSpacing.BadgePaddingVertical
         )
 
         BbBadgeSize.Medium -> PaddingValues(
-            horizontal = BbSpacing.Space2,
-            vertical = BbSpacing.Space1
+            horizontal = BbSpacing.BadgePaddingHorizontal,
+            vertical = BbSpacing.BadgePaddingVertical
         )
     }
 }

@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -18,9 +17,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalLayoutDirection
+import com.bulbulustur.android.ui.theme.BbAlpha
 import com.bulbulustur.android.ui.theme.BbColors
 import com.bulbulustur.android.ui.theme.BbSpacing
 
@@ -52,6 +50,7 @@ fun BbPageScaffold(
     content: @Composable (PaddingValues) -> Unit
 ) {
     val backgroundBrush = getBbPageBackgroundBrush(surface)
+    val layoutDirection = LocalLayoutDirection.current
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -61,7 +60,7 @@ fun BbPageScaffold(
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
         },
-        containerColor = Color.Transparent,
+        containerColor = BbColors.Transparent,
         contentWindowInsets = WindowInsets.safeDrawing
     ) { innerPadding ->
         Box(
@@ -69,9 +68,9 @@ fun BbPageScaffold(
                 .fillMaxSize()
                 .background(backgroundBrush)
                 .padding(
-                    start = innerPadding.calculateStartPadding(LayoutDirection.Ltr),
+                    start = innerPadding.calculateStartPadding(layoutDirection),
                     top = innerPadding.calculateTopPadding(),
-                    end = innerPadding.calculateEndPadding(LayoutDirection.Ltr),
+                    end = innerPadding.calculateEndPadding(layoutDirection),
                     bottom = innerPadding.calculateBottomPadding()
                 )
                 .padding(
@@ -104,8 +103,8 @@ private fun getBbPageBackgroundBrush(
 
         BbPageSurface.White -> Brush.verticalGradient(
             colors = listOf(
-                BbColors.White,
-                BbColors.White
+                colorScheme.surface,
+                colorScheme.surface
             )
         )
 
@@ -125,14 +124,14 @@ private fun getBbPageBackgroundBrush(
 
         BbPageSurface.Accent -> Brush.verticalGradient(
             colors = listOf(
-                colorScheme.primaryContainer.copy(alpha = 0.45f),
+                colorScheme.primaryContainer.copy(alpha = BbAlpha.DisabledContainer),
                 colorScheme.background
             )
         )
 
         BbPageSurface.Technical -> Brush.verticalGradient(
             colors = listOf(
-                BbColors.Turquoise.Turquoise50.copy(alpha = 0.65f),
+                BbColors.Turquoise.Turquoise50.copy(alpha = BbAlpha.DisabledContent),
                 colorScheme.background
             )
         )
@@ -145,7 +144,7 @@ private fun getBbPageTopPadding(
     BbPageSpacing.Default -> BbSpacing.PageTop
     BbPageSpacing.Compact -> BbSpacing.PageTopCompact
     BbPageSpacing.Loose -> BbSpacing.PageTopSpaced
-    BbPageSpacing.Flush -> 0.dp
+    BbPageSpacing.Flush -> BbSpacing.None
 }
 
 private fun getBbPageBottomPadding(
@@ -154,5 +153,5 @@ private fun getBbPageBottomPadding(
     BbPageSpacing.Default -> BbSpacing.PageBottom
     BbPageSpacing.Compact -> BbSpacing.PageBottomCompact
     BbPageSpacing.Loose -> BbSpacing.PageBottomLoose
-    BbPageSpacing.Flush -> 0.dp
+    BbPageSpacing.Flush -> BbSpacing.None
 }

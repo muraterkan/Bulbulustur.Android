@@ -31,6 +31,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.ui.theme.BbSpacing
 
 @Composable
 fun OrderSuccessScreen(
@@ -60,7 +61,7 @@ fun OrderSuccessScreen(
                     end = 16.dp,
                     bottom = 18.dp
                 ),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
             ) {
                 item {
                     OrderSuccessHero(
@@ -130,7 +131,7 @@ private fun OrderSuccessHero(
         ) {
             Box(
                 modifier = Modifier
-                    .size(72.dp)
+                    .size(BbSpacing.Space18)
                     .clip(CircleShape)
                     .background(MaterialTheme.colorScheme.primary),
                 contentAlignment = Alignment.Center
@@ -244,14 +245,14 @@ private fun OrderSuccessShipmentCard(
         )
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(BbSpacing.Space4)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Box(
                     modifier = Modifier
-                        .size(48.dp)
+                        .size(BbSpacing.Space12)
                         .clip(RoundedCornerShape(16.dp))
                         .background(MaterialTheme.colorScheme.secondaryContainer),
                     contentAlignment = Alignment.Center
@@ -321,7 +322,7 @@ private fun OrderSuccessProductLine(
     ) {
         Box(
             modifier = Modifier
-                .size(44.dp)
+                .size(BbSpacing.Space11)
                 .clip(RoundedCornerShape(14.dp))
                 .background(MaterialTheme.colorScheme.surfaceVariant),
             contentAlignment = Alignment.Center
@@ -401,7 +402,7 @@ private fun OrderSuccessTotalCard(
         )
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(BbSpacing.Space4)
         ) {
             OrderSuccessTotalRow(
                 title = "Ürün toplamı",
@@ -427,7 +428,7 @@ private fun OrderSuccessTotalCard(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(1.dp)
+                    .height(BbSpacing.BorderThin)
                     .background(MaterialTheme.colorScheme.surfaceVariant)
             )
 
@@ -502,7 +503,7 @@ private fun OrderSuccessInfoCard() {
         )
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(BbSpacing.Space4)
         ) {
             Text(
                 text = "Sırada ne var?",

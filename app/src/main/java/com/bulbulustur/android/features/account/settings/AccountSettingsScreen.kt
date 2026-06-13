@@ -446,7 +446,7 @@ private fun SettingsDashedDivider() {
                 start = BbSpacing.Space16,
                 end = BbSpacing.Space4
             )
-            .height(1.dp)
+            .height(BbSpacing.BorderThin)
     ) {
         drawLine(
             color = BbColors.Border,

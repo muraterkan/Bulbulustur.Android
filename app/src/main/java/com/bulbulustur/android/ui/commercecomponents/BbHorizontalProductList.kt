@@ -12,8 +12,10 @@ import com.bulbulustur.android.ui.theme.BbSpacing
 @Composable
 fun BbHorizontalProductList(
     modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(horizontal = BbSpacing.md),
-    itemSpacing: Dp = BbSpacing.sm,
+    contentPadding: PaddingValues = PaddingValues(
+        horizontal = BbSpacing.PageHorizontal
+    ),
+    itemSpacing: Dp = BbSpacing.ProductCardGap,
     content: LazyListScope.() -> Unit
 ) {
     LazyRow(

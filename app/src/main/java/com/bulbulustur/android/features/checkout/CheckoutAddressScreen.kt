@@ -35,6 +35,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.ui.theme.BbSpacing
 
 @Composable
 fun CheckoutAddressScreen(
@@ -74,7 +75,7 @@ fun CheckoutAddressScreen(
                     end = 16.dp,
                     bottom = 16.dp
                 ),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
             ) {
                 item {
                     CheckoutAddressTopBar(
@@ -207,7 +208,7 @@ private fun CheckoutProgressCard(
         ) {
             Box(
                 modifier = Modifier
-                    .size(52.dp)
+                    .size(BbSpacing.Space13)
                     .clip(CircleShape)
                     .background(MaterialTheme.colorScheme.primary),
                 contentAlignment = Alignment.Center
@@ -519,7 +520,7 @@ private fun CheckoutInvoiceInfoCard() {
         )
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(BbSpacing.Space4)
         ) {
             Text(
                 text = "Fatura adresi",

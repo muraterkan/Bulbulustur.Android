@@ -68,6 +68,8 @@ import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
 import com.bulbulustur.android.ui.theme.BbTypography
+import com.bulbulustur.android.ui.theme.BbLayout
+import com.bulbulustur.android.ui.theme.BbAlpha
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -275,7 +277,7 @@ private fun AboutLogoShowcase(
 ) {
     Box(
         modifier = Modifier
-            .size(122.dp)
+            .size(BbLayout.AboutAppLogoOuterSize)
             .clickable {
                 onLogoClick()
             },
@@ -578,7 +580,7 @@ private fun AboutRateAppSheet(
             color = BbColors.PrimarySoft,
             border = BorderStroke(
                 width = 1.dp,
-                color = BbColors.Primary.copy(alpha = 0.72f)
+                color = BbColors.Primary.copy(alpha = BbAlpha.Muted)
             )
         ) {
             Column(
@@ -794,7 +796,7 @@ private fun AboutSheetButton(
 ) {
     Surface(
         modifier = modifier
-            .height(48.dp)
+            .height(BbSpacing.Space12)
             .clip(BbRadius.XxlShape)
             .clickable {
                 onClick()
@@ -829,7 +831,7 @@ private fun AboutDashedDivider() {
                 start = BbSpacing.Space16,
                 end = BbSpacing.Space4
             )
-            .height(1.dp)
+            .height(BbSpacing.BorderThin)
     ) {
         drawLine(
             color = BbColors.Border,

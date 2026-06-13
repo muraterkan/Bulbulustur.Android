@@ -43,6 +43,7 @@ import com.bulbulustur.android.ui.theme.BbColors
 import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
+import com.bulbulustur.android.ui.theme.BbAlpha
 
 @Composable
 fun RfqListScreen(
@@ -334,7 +335,7 @@ private fun RfqStatusBadge(
     Box(
         modifier = Modifier
             .background(
-                color = color.copy(alpha = 0.12f),
+                color = color.copy(alpha = BbAlpha.Overlay),
                 shape = BbRadius.Badge
             )
             .padding(

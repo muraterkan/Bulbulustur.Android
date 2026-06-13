@@ -362,7 +362,7 @@ private fun WholesaleMenuCategoryCard(
         ) {
             Box(
                 modifier = Modifier
-                    .size(44.dp)
+                    .size(BbSpacing.Space11)
                     .clip(CircleShape)
                     .background(BbColors.Navy.Navy50),
                 contentAlignment = Alignment.Center

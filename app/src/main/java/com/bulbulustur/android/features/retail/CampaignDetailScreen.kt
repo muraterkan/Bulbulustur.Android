@@ -38,6 +38,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.ui.theme.BbSpacing
+import com.bulbulustur.android.ui.theme.BbLayout
 
 @Composable
 fun CampaignDetailScreen(
@@ -77,7 +79,7 @@ fun CampaignDetailScreen(
                 end = 16.dp,
                 bottom = 28.dp
             ),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
         ) {
             item {
                 CampaignDetailTopBar(
@@ -263,7 +265,7 @@ private fun CampaignDetailHero(
             Spacer(modifier = Modifier.height(16.dp))
 
             Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
             ) {
                 CampaignDetailHeroPill(
                     title = campaign.discountText,
@@ -418,7 +420,7 @@ private fun CampaignCategoryCard(
 ) {
     Card(
         modifier = Modifier
-            .width(150.dp)
+            .width(BbLayout.FixedWidth150)
             .clickable {
                 onClick()
             },
@@ -573,7 +575,7 @@ private fun CampaignConditionSection(
         )
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(BbSpacing.Space4)
         ) {
             CampaignDetailSectionTitle(
                 title = "Kampanya koşulları",
@@ -628,7 +630,7 @@ private fun CampaignProductFilterSection(
         FlowRow(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
         ) {
             filters.forEach { filter ->
                 FilterChip(

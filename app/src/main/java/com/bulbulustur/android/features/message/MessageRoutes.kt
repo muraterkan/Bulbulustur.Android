@@ -1,12 +1,12 @@
 package com.bulbulustur.android.features.message
 
 object MessageRoutes {
-
     const val Inbox = "message/inbox"
 
-    const val Detail = "message/detail/{conversationId}"
+    const val Detail = "message/detail/{messageId}"
+    const val ArgMessageId = "messageId"
 
-    fun detail(conversationId: Long): String {
-        return "message/detail/$conversationId"
+    fun detail(messageId: Int): String {
+        return "message/detail/$messageId"
     }
 }

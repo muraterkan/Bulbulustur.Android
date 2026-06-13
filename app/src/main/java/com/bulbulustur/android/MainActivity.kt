@@ -82,6 +82,7 @@ import com.bulbulustur.android.features.account.settings.LegalPolicyDetailScreen
 import com.bulbulustur.android.features.account.settings.RegionSettingsScreen
 import com.bulbulustur.android.features.basket.BasketScreen
 import com.bulbulustur.android.features.message.MessageInboxScreen
+import com.bulbulustur.android.features.message.MessageDetailScreen
 import com.bulbulustur.android.features.retail.CampaignDetailScreen
 import com.bulbulustur.android.features.retail.CampaignListScreen
 import com.bulbulustur.android.features.retail.OtherSellerListScreen
@@ -290,7 +291,31 @@ class MainActivity : ComponentActivity() {
                                         }
                                     }
                                 },
-                                onMessageClick = {
+                                onMessageClick = { messageId ->
+                                    navController.navigate(MessageRoutes.detail(messageId))
+                                }
+                            )
+                        }
+
+                        composable(
+                            route = MessageRoutes.Detail,
+                            arguments = listOf(
+                                navArgument(MessageRoutes.ArgMessageId) {
+                                    type = NavType.IntType
+                                }
+                            )
+                        ) { backStackEntry ->
+                            val messageId = backStackEntry.arguments
+                                ?.getInt(MessageRoutes.ArgMessageId)
+                                ?: 1
+
+                            MessageDetailScreen(
+                                messageId = messageId,
+                                onBackClick = {
+                                    navController.popBackStack()
+                                },
+                                onSendClick = {
+                                    // V1 dummy
                                 }
                             )
                         }

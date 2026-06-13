@@ -1,21 +1,22 @@
 package com.bulbulustur.android.features.message
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Business
-import androidx.compose.material.icons.outlined.MoreHoriz
-import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.Reply
 import androidx.compose.material.icons.outlined.Send
 import androidx.compose.material.icons.outlined.Verified
@@ -30,20 +31,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import com.bulbulustur.android.ui.components.BbButton
 import com.bulbulustur.android.ui.components.BbButtonSize
 import com.bulbulustur.android.ui.components.BbButtonVariant
 import com.bulbulustur.android.ui.components.BbCard
 import com.bulbulustur.android.ui.components.BbCardPadding
 import com.bulbulustur.android.ui.components.BbCardVariant
-import com.bulbulustur.android.ui.components.BbChip
-import com.bulbulustur.android.ui.components.BbSectionHeader
+import com.bulbulustur.android.ui.components.BbInnerPageHeader
 import com.bulbulustur.android.ui.components.form.BbTextarea
+import com.bulbulustur.android.ui.theme.BbColors
+import com.bulbulustur.android.ui.theme.BbIcon
+import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
-import com.bulbulustur.android.ui.theme.BbTheme
 
 @Composable
 fun MessageDetailScreen(
@@ -60,54 +59,51 @@ fun MessageDetailScreen(
     }
 
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.background
+        containerColor = BbColors.SurfaceMuted,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Mesaj Detayı",
+                onBackClick = onBackClick
+            )
+        }
     ) { innerPadding ->
         LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(BbColors.SurfaceMuted)
+                .padding(innerPadding),
             contentPadding = PaddingValues(
                 start = BbSpacing.PageHorizontal,
-                top = innerPadding.calculateTopPadding() + BbSpacing.PageTopCompact,
+                top = BbSpacing.PageTopCompact,
                 end = BbSpacing.PageHorizontal,
-                bottom = innerPadding.calculateBottomPadding() + BbSpacing.PageBottom
+                bottom = BbSpacing.PageBottom
             ),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.SectionGapCompact)
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
         ) {
             item {
-                MessageDetailHeader(
-                    conversation = conversation,
-                    onBackClick = onBackClick
-                )
+                MessageSubjectCard(conversation = conversation)
             }
 
             item {
-                MessageConversationInfoCard(
-                    conversation = conversation
-                )
+                MessageCompanyCard(conversation = conversation)
             }
 
             item {
-                BbSectionHeader(
-                    title = "Konuşma",
-                    subtitle = "Toptan ticaret görüşmesini görüntüleyin ve yanıt gönderin"
-                )
+                MessageConversationHeader()
             }
 
             items(
                 items = conversation.messages,
-                key = { message ->
-                    message.conversationItemId
-                }
+                key = { message -> message.conversationItemId }
             ) { message ->
-                MessageBubbleCard(
-                    message = message
-                )
+                MessageBubbleCard(message = message)
             }
 
             item {
                 MessageReplyEditor(
                     value = replyText,
-                    onValueChange = {
-                        replyText = it
+                    onValueChange = { value ->
+                        replyText = value
                     },
                     onSendClick = {
                         onSendClick(replyText)
@@ -115,46 +111,32 @@ fun MessageDetailScreen(
                     }
                 )
             }
-
-            item {
-                Spacer(modifier = Modifier.height(BbSpacing.Space4))
-            }
         }
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun MessageDetailHeader(
-    conversation: MessageConversation,
-    onBackClick: () -> Unit
+private fun MessageSubjectCard(
+    conversation: MessageConversation
 ) {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Large
+        padding = BbCardPadding.Medium
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
+                verticalAlignment = Alignment.Top
             ) {
-                BbButton(
-                    text = "",
-                    onClick = onBackClick,
-                    variant = BbButtonVariant.Outline,
-                    size = BbButtonSize.Small,
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Outlined.ArrowBack,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                    }
+                MessageIconBox(
+                    icon = Icons.Outlined.Description,
+                    backgroundColor = BbColors.Yellow.Yellow100,
+                    iconColor = BbColors.Yellow.Yellow800
                 )
 
                 Column(
@@ -162,62 +144,38 @@ private fun MessageDetailHeader(
                     verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
                 ) {
                     Text(
-                        text = "Mesaj",
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.primary,
-                        fontWeight = FontWeight.SemiBold
+                        text = "Konuşma",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = BbColors.Yellow.Yellow800
                     )
 
                     Text(
                         text = conversation.subject,
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
+
+                    Text(
+                        text = "Ticaret görüşmenizi görüntüleyin ve karşı tarafa yanıt gönderin.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
-
-                Icon(
-                    imageVector = Icons.Outlined.MoreHoriz,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
-                )
             }
 
-            Text(
-                text = "Toptan ticaret görüşmenizi görüntüleyin ve karşı tarafa yanıt gönderin.",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+            MessageTagRow(
+                tags = listOf(
+                    conversation.commerceModeName,
+                    conversation.messageTypeName,
+                    conversation.statusName
+                )
             )
-
-            FlowRow(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.ChipGap),
-                verticalArrangement = Arrangement.spacedBy(BbSpacing.ChipGap)
-            ) {
-                BbChip(
-                    text = conversation.commerceModeName,
-                    selected = false,
-                    onClick = {}
-                )
-
-                BbChip(
-                    text = conversation.messageTypeName,
-                    selected = false,
-                    onClick = {}
-                )
-
-                BbChip(
-                    text = conversation.statusName,
-                    selected = false,
-                    onClick = {}
-                )
-            }
         }
     }
 }
 
 @Composable
-private fun MessageConversationInfoCard(
+private fun MessageCompanyCard(
     conversation: MessageConversation
 ) {
     BbCard(
@@ -227,35 +185,37 @@ private fun MessageConversationInfoCard(
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
+            verticalAlignment = Alignment.Top
         ) {
-            Icon(
-                imageVector = Icons.Outlined.Business,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary
+            MessageIconBox(
+                icon = Icons.Outlined.Business,
+                backgroundColor = BbColors.Blue.Blue50,
+                iconColor = BbColors.Blue.Blue600
             )
 
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
             ) {
                 Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(BbSpacing.IconTextGapSmall)
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
                         text = conversation.companyName,
                         style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.weight(1f)
                     )
 
                     if (conversation.isVerifiedCompany) {
                         Icon(
                             imageVector = Icons.Outlined.Verified,
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary
+                            tint = BbColors.Green.Green600,
+                            modifier = Modifier.size(BbIcon.Action)
                         )
                     }
                 }
@@ -268,11 +228,31 @@ private fun MessageConversationInfoCard(
 
                 Text(
                     text = "Son mesaj: ${conversation.lastMessageDate}",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    style = MaterialTheme.typography.labelSmall,
+                    color = BbColors.TextMuted
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun MessageConversationHeader() {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+    ) {
+        Text(
+            text = "Konuşma",
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+
+        Text(
+            text = "Mesaj geçmişi ve ekler",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }
 
@@ -281,61 +261,36 @@ private fun MessageConversationInfoCard(
 private fun MessageBubbleCard(
     message: MessageConversationItem
 ) {
-    val horizontalAlignment = if (message.isMine) {
-        Alignment.End
-    } else {
-        Alignment.Start
-    }
-
-    val cardVariant = if (message.isMine) {
-        BbCardVariant.Outlined
-    } else {
-        BbCardVariant.Outlined
-    }
-
     Column(
         modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = horizontalAlignment,
+        horizontalAlignment = if (message.isMine) Alignment.End else Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(BbSpacing.IconTextGapSmall)
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            if (!message.isMine) {
-                Icon(
-                    imageVector = Icons.Outlined.Person,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-
             Text(
                 text = message.senderName,
                 style = MaterialTheme.typography.labelMedium,
-                fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
                 text = message.sentAt,
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = BbColors.TextMuted
             )
-
-            if (message.isMine) {
-                Icon(
-                    imageVector = Icons.Outlined.Person,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
         }
 
-        BbCard(
-            modifier = Modifier.fillMaxWidth(),
-            variant = cardVariant,
-            padding = BbCardPadding.Medium
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    color = if (message.isMine) BbColors.Yellow.Yellow50 else BbColors.Surface,
+                    shape = BbRadius.LgShape
+                )
+                .padding(BbSpacing.CardPadding)
         ) {
             Column(
                 modifier = Modifier.fillMaxWidth(),
@@ -349,16 +304,11 @@ private fun MessageBubbleCard(
 
                 if (message.attachments.isNotEmpty()) {
                     FlowRow(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(BbSpacing.ChipGap),
-                        verticalArrangement = Arrangement.spacedBy(BbSpacing.ChipGap)
+                        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2),
+                        verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
                     ) {
                         message.attachments.forEach { attachment ->
-                            BbChip(
-                                text = attachment,
-                                selected = false,
-                                onClick = {}
-                            )
+                            MessageAttachmentTag(text = attachment)
                         }
                     }
                 }
@@ -383,19 +333,19 @@ private fun MessageReplyEditor(
             verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
         ) {
             Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(BbSpacing.IconTextGap)
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Reply,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary
+                    tint = BbColors.Yellow.Yellow800,
+                    modifier = Modifier.size(BbIcon.Ui)
                 )
 
                 Text(
                     text = "Yanıt yaz",
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
                 )
             }
@@ -420,11 +370,99 @@ private fun MessageReplyEditor(
                     Icon(
                         imageVector = Icons.Outlined.Send,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onPrimary
+                        tint = MaterialTheme.colorScheme.onPrimary,
+                        modifier = Modifier.size(BbIcon.ButtonIcon)
                     )
                 }
             )
         }
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun MessageTagRow(
+    tags: List<String>
+) {
+    FlowRow(
+        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2),
+        verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+    ) {
+        tags.forEach { tag ->
+            MessageSmallTag(text = tag)
+        }
+    }
+}
+
+@Composable
+private fun MessageSmallTag(
+    text: String
+) {
+    Box(
+        modifier = Modifier
+            .background(
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                shape = BbRadius.Badge
+            )
+            .padding(
+                horizontal = BbSpacing.BadgePaddingHorizontal,
+                vertical = BbSpacing.BadgePaddingVertical
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+
+@Composable
+private fun MessageAttachmentTag(
+    text: String
+) {
+    Box(
+        modifier = Modifier
+            .background(
+                color = BbColors.Blue.Blue50,
+                shape = BbRadius.Badge
+            )
+            .padding(
+                horizontal = BbSpacing.BadgePaddingHorizontal,
+                vertical = BbSpacing.BadgePaddingVertical
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.labelSmall,
+            color = BbColors.Blue.Blue700
+        )
+    }
+}
+
+@Composable
+private fun MessageIconBox(
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    backgroundColor: androidx.compose.ui.graphics.Color,
+    iconColor: androidx.compose.ui.graphics.Color
+) {
+    Box(
+        modifier = Modifier
+            .size(BbIcon.BoxMd)
+            .background(
+                color = backgroundColor,
+                shape = BbRadius.LgShape
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = iconColor,
+            modifier = Modifier.size(BbIcon.Action)
+        )
     }
 }
 
@@ -450,12 +488,14 @@ data class MessageConversationItem(
     val attachments: List<String>
 )
 
-private fun getMessageConversation(messageId: Int): MessageConversation {
+private fun getMessageConversation(
+    messageId: Int
+): MessageConversation {
     return MessageConversation(
         messageId = messageId,
         subject = "450W paneller için fiyat teklifi",
-        companyName = "Drauger Network Firması",
-        companyDescription = "Toptan ürün, teknik doküman ve proje bazlı teklif görüşmesi.",
+        companyName = "Anadolu Ambalaj Sanayi",
+        companyDescription = "Toptan ürün, numune ve RFQ görüşmeleri için doğrulanmış firma.",
         commerceModeName = "Toptan",
         messageTypeName = "Gelen Kutusu",
         statusName = "Okundu",
@@ -464,8 +504,8 @@ private fun getMessageConversation(messageId: Int): MessageConversation {
         messages = listOf(
             MessageConversationItem(
                 conversationItemId = 1,
-                senderName = "Murat Erkan",
-                body = "Selamlar, Drauger Network üzerindeki 450W panellerden 200 adetlik bir proje için fiyat teklifi rica ediyorum. Teslimat süresi nedir?",
+                senderName = "Anadolu Ambalaj Sanayi",
+                body = "RFQ talebinize istinaden numune ve fiyat bilgilerini paylaşmak isteriz. Miktar ve teslimat hedefinizi netleştirirseniz daha doğru fiyat sunabiliriz.",
                 sentAt = "10.05.2026 12:47",
                 isMine = false,
                 attachments = emptyList()
@@ -473,22 +513,11 @@ private fun getMessageConversation(messageId: Int): MessageConversation {
             MessageConversationItem(
                 conversationItemId = 2,
                 senderName = "Bulbulustur",
-                body = "Belgeleri Drauger panelindeki Teknik Dokümanlar kısmına ekledim. Siparişi onaylamanız durumunda kargo çıkışını yarın sabah sağlarız.",
+                body = "Merhaba, 10.000 adet için İstanbul teslim fiyat ve termin süresini paylaşabilir misiniz?",
                 sentAt = "10.05.2026 13:37",
                 isMine = true,
-                attachments = listOf(
-                    "Teknik Doküman",
-                    "Proforma"
-                )
+                attachments = listOf("RFQ Özeti", "Teknik Not")
             )
         )
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun MessageDetailScreenPreview() {
-    BbTheme {
-        MessageDetailScreen()
-    }
 }

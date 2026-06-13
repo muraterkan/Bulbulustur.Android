@@ -11,41 +11,65 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.ChevronRight
+import androidx.compose.material.icons.outlined.ConfirmationNumber
+import androidx.compose.material.icons.outlined.DeleteOutline
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.LocalShipping
+import androidx.compose.material.icons.outlined.Remove
+import androidx.compose.material.icons.outlined.Security
+import androidx.compose.material.icons.outlined.ShoppingBasket
+import androidx.compose.material.icons.outlined.Storefront
+import androidx.compose.material.icons.outlined.Wallet
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.bulbulustur.android.features.retail.components.RetailBottomNavigation
 import com.bulbulustur.android.features.retail.components.RetailBottomNavigationItem
+import com.bulbulustur.android.ui.components.BbButton
+import com.bulbulustur.android.ui.components.BbButtonSize
+import com.bulbulustur.android.ui.components.BbButtonVariant
 import com.bulbulustur.android.ui.components.BbCard
-import com.bulbulustur.android.ui.components.BbSectionHeader
+import com.bulbulustur.android.ui.components.BbCardPadding
+import com.bulbulustur.android.ui.components.BbCardVariant
+import com.bulbulustur.android.ui.components.BbInnerPageHeader
 import com.bulbulustur.android.ui.theme.BbColors
+import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BasketScreen(
     onBackClick: () -> Unit = {},
     onCheckoutClick: (List<BasketLineItem>) -> Unit = {},
     onProductClick: (BasketLineItem) -> Unit = {},
     onStoreClick: (BasketStoreGroup) -> Unit = {},
-
-    // Bottom navigation
     onHomeClick: () -> Unit = {},
     onMenuClick: () -> Unit = {},
     onModeSwitchClick: () -> Unit = {},
@@ -57,34 +81,61 @@ fun BasketScreen(
         }
     }
 
-    val storeGroups = basketLines.groupBy {
-        it.storeId
-    }.map { basketGroup ->
-        BasketStoreGroup(
-            storeId = basketGroup.key,
-            storeName = basketGroup.value.first().storeName,
-            storeLogoText = basketGroup.value.first().storeLogoText,
-            cargoText = basketGroup.value.first().cargoText,
-            lines = basketGroup.value
+    var showCouponSheet by remember { mutableStateOf(false) }
+    var showFavoriteSheet by remember { mutableStateOf(false) }
+    var couponApplied by remember { mutableStateOf(false) }
+
+    val storeGroups = basketLines
+        .groupBy { it.storeId }
+        .map { basketGroup ->
+            BasketStoreGroup(
+                storeId = basketGroup.key,
+                storeName = basketGroup.value.first().storeName,
+                storeLogoText = basketGroup.value.first().storeLogoText,
+                cargoText = basketGroup.value.first().cargoText,
+                lines = basketGroup.value
+            )
+        }
+
+    val productTotal = basketLines.sumOf { it.priceValue * it.quantity }
+    val cargoTotal = storeGroups.sumOf { it.lines.first().cargoPriceValue }
+    val lineDiscountTotal = basketLines.sumOf { it.discountValue * it.quantity }
+    val couponDiscount = if (couponApplied) 75.0 else 0.0
+    val discountTotal = lineDiscountTotal + couponDiscount
+    val payableTotal = productTotal + cargoTotal - discountTotal
+
+    if (showCouponSheet) {
+        BasketCouponSheet(
+            couponApplied = couponApplied,
+            onApplyCouponClick = {
+                couponApplied = true
+                showCouponSheet = false
+            },
+            onDismiss = {
+                showCouponSheet = false
+            }
         )
     }
 
-    val productTotal = basketLines.sumOf {
-        it.priceValue * it.quantity
+    if (showFavoriteSheet) {
+        BasketFavoriteSheet(
+            onAddFavoriteClick = {
+                showFavoriteSheet = false
+            },
+            onDismiss = {
+                showFavoriteSheet = false
+            }
+        )
     }
-
-    val cargoTotal = storeGroups.sumOf {
-        it.lines.first().cargoPriceValue
-    }
-
-    val discountTotal = basketLines.sumOf {
-        it.discountValue * it.quantity
-    }
-
-    val payableTotal = productTotal + cargoTotal - discountTotal
 
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+        containerColor = BbColors.SurfaceMuted,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Sepetim",
+                onBackClick = onBackClick
+            )
+        },
         bottomBar = {
             Column(
                 modifier = Modifier.fillMaxWidth()
@@ -116,7 +167,7 @@ fun BasketScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .background(BbColors.SurfaceMuted)
                 .padding(innerPadding),
             contentPadding = PaddingValues(
                 start = BbSpacing.PageHorizontal,
@@ -127,12 +178,6 @@ fun BasketScreen(
             verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
         ) {
             item {
-                BasketTopBar(
-                    onBackClick = onBackClick
-                )
-            }
-
-            item {
                 BasketHeaderCard(
                     lineCount = basketLines.size,
                     storeCount = storeGroups.size
@@ -140,15 +185,29 @@ fun BasketScreen(
             }
 
             if (basketLines.isEmpty()) {
-                item {
-                    BasketEmptyCard()
-                }
+                item { BasketEmptyCard() }
+                item { BasketBuyerProtectionCard() }
             } else {
+                item {
+                    BasketCouponCard(
+                        couponApplied = couponApplied,
+                        onClick = {
+                            showCouponSheet = true
+                        }
+                    )
+                }
+
+                item {
+                    BasketFavoriteShortcutCard(
+                        onClick = {
+                            showFavoriteSheet = true
+                        }
+                    )
+                }
+
                 items(
                     items = storeGroups,
-                    key = { storeGroup ->
-                        storeGroup.storeId
-                    }
+                    key = { storeGroup -> storeGroup.storeId }
                 ) { storeGroup ->
                     BasketStoreGroupCard(
                         storeGroup = storeGroup,
@@ -157,9 +216,7 @@ fun BasketScreen(
                         },
                         onProductClick = onProductClick,
                         onIncreaseQuantityClick = { line ->
-                            val index = basketLines.indexOfFirst {
-                                it.id == line.id
-                            }
+                            val index = basketLines.indexOfFirst { it.id == line.id }
 
                             if (index >= 0) {
                                 basketLines[index] = basketLines[index].copy(
@@ -168,9 +225,7 @@ fun BasketScreen(
                             }
                         },
                         onDecreaseQuantityClick = { line ->
-                            val index = basketLines.indexOfFirst {
-                                it.id == line.id
-                            }
+                            val index = basketLines.indexOfFirst { it.id == line.id }
 
                             if (index >= 0 && basketLines[index].quantity > 1) {
                                 basketLines[index] = basketLines[index].copy(
@@ -179,9 +234,7 @@ fun BasketScreen(
                             }
                         },
                         onRemoveClick = { line ->
-                            basketLines.removeAll {
-                                it.id == line.id
-                            }
+                            basketLines.removeAll { it.id == line.id }
                         }
                     )
                 }
@@ -194,55 +247,9 @@ fun BasketScreen(
                         payableTotalText = formatPrice(payableTotal)
                     )
                 }
+
+                item { BasketBuyerProtectionCard() }
             }
-        }
-    }
-}
-
-@Composable
-private fun BasketTopBar(
-    onBackClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Box(
-            modifier = Modifier
-                .size(BbIconSizeTopBar())
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.surface)
-                .clickable {
-                    onBackClick()
-                },
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = "‹",
-                style = MaterialTheme.typography.headlineSmall,
-                color = BbColors.TextStrong
-            )
-        }
-
-        Spacer(
-            modifier = Modifier.width(BbSpacing.Space3)
-        )
-
-        Column(
-            modifier = Modifier.weight(1f)
-        ) {
-            Text(
-                text = "Sepetim",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                color = BbColors.TextStrong
-            )
-
-            Text(
-                text = "Ürünleri kontrol et ve checkout adımına geç",
-                style = MaterialTheme.typography.bodySmall,
-                color = BbColors.TextMuted
-            )
         }
     }
 }
@@ -252,43 +259,41 @@ private fun BasketHeaderCard(
     lineCount: Int,
     storeCount: Int
 ) {
-    BbCard {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
         Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
-                modifier = Modifier
-                    .size(BbSpacing.Space12)
-                    .clip(RoundedCornerShape(BbRadius.md))
-                    .background(BbColors.Success),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "S",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.surface
-                )
-            }
-
-            Spacer(
-                modifier = Modifier.width(BbSpacing.Space3)
+            BasketIconBox(
+                icon = Icons.Outlined.ShoppingBasket,
+                backgroundColor = BbColors.Yellow.Yellow100,
+                iconColor = BbColors.Yellow.Yellow800
             )
 
             Column(
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
             ) {
                 Text(
-                    text = "$lineCount ürün sepette",
+                    text = if (lineCount > 0) "$lineCount ürün sepette" else "Sepetin boş",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = BbColors.TextStrong
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = "$storeCount mağazadan gönderim yapılacak",
+                    text = if (lineCount > 0) {
+                        "$storeCount mağazadan gönderim yapılacak"
+                    } else {
+                        "Ürün keşfine dönüp sepetini doldurabilirsin."
+                    },
                     style = MaterialTheme.typography.bodySmall,
-                    color = BbColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -296,37 +301,103 @@ private fun BasketHeaderCard(
 }
 
 @Composable
-private fun BasketEmptyCard() {
-    BbCard {
-        Column(
+private fun BasketCouponCard(
+    couponApplied: Boolean,
+    onClick: () -> Unit
+) {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium,
+        onClick = onClick
+    ) {
+        Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
-                modifier = Modifier
-                    .size(BbSpacing.Space16)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.surfaceVariant),
-                contentAlignment = Alignment.Center
+            BasketIconBox(
+                icon = Icons.Outlined.ConfirmationNumber,
+                backgroundColor = BbColors.Yellow.Yellow100,
+                iconColor = BbColors.Yellow.Yellow800
+            )
+
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
             ) {
                 Text(
-                    text = "🧺",
-                    style = MaterialTheme.typography.headlineMedium
+                    text = "Kupon ve İndirimler",
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Text(
+                    text = if (couponApplied) {
+                        "WELCOME75 kuponu uygulandı."
+                    } else {
+                        "İndirim kodu ekle veya kullanılabilir kuponlarını görüntüle."
+                    },
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
-            Text(
-                text = "Sepetin boş",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                color = BbColors.TextStrong
+            Icon(
+                imageVector = Icons.Outlined.ChevronRight,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.size(BbIcon.Action)
+            )
+        }
+    }
+}
+
+@Composable
+private fun BasketFavoriteShortcutCard(
+    onClick: () -> Unit
+) {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium,
+        onClick = onClick
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            BasketIconBox(
+                icon = Icons.Outlined.FavoriteBorder,
+                backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+                iconColor = MaterialTheme.colorScheme.onSurface
             )
 
-            Text(
-                text = "Ürün keşfine dönüp sepetini doldurabilirsin.",
-                style = MaterialTheme.typography.bodySmall,
-                color = BbColors.TextMuted
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+            ) {
+                Text(
+                    text = "Favorilerinden Sepete Ekle",
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Text(
+                    text = "Daha önce beğendiğin ürünleri hızlıca sepete aktar.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            Icon(
+                imageVector = Icons.Outlined.ChevronRight,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.size(BbIcon.Action)
             )
         }
     }
@@ -341,8 +412,13 @@ private fun BasketStoreGroupCard(
     onDecreaseQuantityClick: (BasketLineItem) -> Unit,
     onRemoveClick: (BasketLineItem) -> Unit
 ) {
-    BbCard {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
         Column(
+            modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
         ) {
             BasketStoreHeader(
@@ -350,7 +426,7 @@ private fun BasketStoreGroupCard(
                 onStoreClick = onStoreClick
             )
 
-            storeGroup.lines.forEach { line ->
+            storeGroup.lines.forEachIndexed { index, line ->
                 BasketLineCard(
                     line = line,
                     onProductClick = {
@@ -366,6 +442,10 @@ private fun BasketStoreGroupCard(
                         onRemoveClick(line)
                     }
                 )
+
+                if (index != storeGroup.lines.lastIndex) {
+                    HorizontalDivider(color = BbColors.Border)
+                }
             }
         }
     }
@@ -379,51 +459,74 @@ private fun BasketStoreHeader(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable {
-                onStoreClick()
-            },
+            .clickable { onStoreClick() },
+        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
             modifier = Modifier
-                .size(BbSpacing.Space8)
-                .clip(RoundedCornerShape(BbRadius.md))
-                .background(MaterialTheme.colorScheme.surfaceVariant),
+                .size(BbIcon.BoxMd)
+                .background(
+                    color = MaterialTheme.colorScheme.surfaceVariant,
+                    shape = BbRadius.LgShape
+                ),
             contentAlignment = Alignment.Center
         ) {
             Text(
                 text = storeGroup.storeLogoText,
-                style = MaterialTheme.typography.labelMedium,
+                style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.Bold,
-                color = BbColors.TextStrong
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
-
-        Spacer(
-            modifier = Modifier.width(BbSpacing.Space2)
-        )
 
         Column(
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
         ) {
-            Text(
-                text = storeGroup.storeName,
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Bold,
-                color = BbColors.TextStrong
-            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space1),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Storefront,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(BbIcon.Inline)
+                )
 
-            Text(
-                text = storeGroup.cargoText,
-                style = MaterialTheme.typography.bodySmall,
-                color = BbColors.TextMuted
-            )
+                Text(
+                    text = storeGroup.storeName,
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space1),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.LocalShipping,
+                    contentDescription = null,
+                    tint = BbColors.Yellow.Yellow800,
+                    modifier = Modifier.size(BbIcon.Inline)
+                )
+
+                Text(
+                    text = storeGroup.cargoText,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
         }
 
-        Text(
-            text = "›",
-            style = MaterialTheme.typography.headlineSmall,
-            color = BbColors.TextMuted
+        Icon(
+            imageVector = Icons.Outlined.ChevronRight,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.size(BbIcon.Action)
         )
     }
 }
@@ -439,32 +542,31 @@ private fun BasketLineCard(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(BbRadius.lg))
-            .background(MaterialTheme.colorScheme.surfaceVariant)
-            .clickable {
-                onProductClick()
-            }
-            .padding(BbSpacing.Space2),
+            .background(
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                shape = BbRadius.LgShape
+            )
+            .clickable { onProductClick() }
+            .padding(BbSpacing.CardPaddingCompact),
+        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
             modifier = Modifier
                 .size(BbSpacing.Space16)
-                .clip(RoundedCornerShape(BbRadius.md))
-                .background(MaterialTheme.colorScheme.surface),
+                .background(
+                    color = BbColors.Surface,
+                    shape = BbRadius.LgShape
+                ),
             contentAlignment = Alignment.Center
         ) {
             Text(
                 text = line.imageText,
                 style = MaterialTheme.typography.labelLarge,
                 fontWeight = FontWeight.Bold,
-                color = BbColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
-
-        Spacer(
-            modifier = Modifier.width(BbSpacing.Space2)
-        )
 
         Column(
             modifier = Modifier.weight(1f),
@@ -474,14 +576,14 @@ private fun BasketLineCard(
                 text = line.productName,
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.SemiBold,
-                color = BbColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 maxLines = 2
             )
 
             Text(
                 text = line.variantText,
                 style = MaterialTheme.typography.bodySmall,
-                color = BbColors.TextMuted,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 1
             )
 
@@ -489,43 +591,52 @@ private fun BasketLineCard(
                 text = line.priceText,
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
-                color = BbColors.Success
+                color = BbColors.Yellow.Yellow800
             )
 
             Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 BasketQuantityButton(
-                    text = "-",
+                    icon = Icons.Outlined.Remove,
                     onClick = onDecreaseQuantityClick
                 )
 
                 Text(
                     text = line.quantity.toString(),
-                    modifier = Modifier.padding(horizontal = BbSpacing.Space2),
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
-                    color = BbColors.TextStrong
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 BasketQuantityButton(
-                    text = "+",
+                    icon = Icons.Outlined.Add,
                     onClick = onIncreaseQuantityClick
                 )
 
-                Spacer(
-                    modifier = Modifier.weight(1f)
-                )
+                Spacer(modifier = Modifier.weight(1f))
 
-                Text(
-                    text = "Sil",
-                    modifier = Modifier.clickable {
-                        onRemoveClick()
-                    },
-                    style = MaterialTheme.typography.labelMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = BbColors.TextMuted
-                )
+                Row(
+                    modifier = Modifier.clickable { onRemoveClick() },
+                    horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space1),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.DeleteOutline,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.size(BbIcon.Inline)
+                    )
+
+                    Text(
+                        text = "Sil",
+                        style = MaterialTheme.typography.labelSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
         }
     }
@@ -533,24 +644,24 @@ private fun BasketLineCard(
 
 @Composable
 private fun BasketQuantityButton(
-    text: String,
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
     onClick: () -> Unit
 ) {
     Box(
         modifier = Modifier
-            .size(BbSpacing.Space6)
-            .clip(CircleShape)
-            .background(MaterialTheme.colorScheme.surface)
-            .clickable {
-                onClick()
-            },
+            .size(BbIcon.BoxSm)
+            .background(
+                color = BbColors.Surface,
+                shape = CircleShape
+            )
+            .clickable { onClick() },
         contentAlignment = Alignment.Center
     ) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.labelLarge,
-            fontWeight = FontWeight.Bold,
-            color = BbColors.TextStrong
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier.size(BbIcon.Inline)
         )
     }
 }
@@ -562,39 +673,30 @@ private fun BasketSummaryCard(
     discountTotalText: String,
     payableTotalText: String
 ) {
-    BbCard {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
         ) {
-            BbSectionHeader(
-                title = "Sepet özeti",
-                subtitle = "Ödeme öncesi toplamlar"
+            Text(
+                text = "Sepet Özeti",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface
             )
+
+            BasketSummaryRow("Ürün Toplamı", productTotalText)
+            BasketSummaryRow("Kargo", cargoTotalText)
+            BasketSummaryRow("İndirim", discountTotalText)
+
+            HorizontalDivider(color = BbColors.Border)
 
             BasketSummaryRow(
-                title = "Ürün toplamı",
-                value = productTotalText
-            )
-
-            BasketSummaryRow(
-                title = "Kargo",
-                value = cargoTotalText
-            )
-
-            BasketSummaryRow(
-                title = "İndirim",
-                value = discountTotalText
-            )
-
-            Spacer(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(BbSpacing.Divider)
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
-            )
-
-            BasketSummaryRow(
-                title = "Ödenecek tutar",
+                title = "Ödenecek Tutar",
                 value = payableTotalText,
                 isStrong = true
             )
@@ -610,6 +712,7 @@ private fun BasketSummaryRow(
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
@@ -620,12 +723,12 @@ private fun BasketSummaryRow(
             } else {
                 MaterialTheme.typography.bodySmall
             },
-            fontWeight = if (isStrong) {
-                FontWeight.Bold
+            fontWeight = if (isStrong) FontWeight.Bold else FontWeight.Normal,
+            color = if (isStrong) {
+                MaterialTheme.colorScheme.onSurface
             } else {
-                FontWeight.Normal
-            },
-            color = BbColors.TextStrong
+                MaterialTheme.colorScheme.onSurfaceVariant
+            }
         )
 
         Text(
@@ -637,9 +740,9 @@ private fun BasketSummaryRow(
             },
             fontWeight = FontWeight.Bold,
             color = if (isStrong) {
-                BbColors.Success
+                BbColors.Yellow.Yellow800
             } else {
-                BbColors.TextStrong
+                MaterialTheme.colorScheme.onSurface
             }
         )
     }
@@ -651,7 +754,7 @@ private fun BasketCheckoutBar(
     onCheckoutClick: () -> Unit
 ) {
     Surface(
-        color = MaterialTheme.colorScheme.surface,
+        color = BbColors.TextStrong,
         tonalElevation = BbSpacing.Space1,
         shadowElevation = BbSpacing.Space2
     ) {
@@ -662,46 +765,393 @@ private fun BasketCheckoutBar(
                     horizontal = BbSpacing.PageHorizontal,
                     vertical = BbSpacing.Space3
                 ),
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
             ) {
                 Text(
                     text = "Toplam",
                     style = MaterialTheme.typography.labelSmall,
-                    color = BbColors.TextMuted
+                    color = BbColors.White.copy(alpha = 0.72f)
                 )
 
                 Text(
                     text = payableTotalText,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = BbColors.Success
+                    color = BbColors.Primary
                 )
             }
 
             Box(
                 modifier = Modifier
-                    .clip(RoundedCornerShape(BbRadius.pill))
-                    .background(BbColors.Success)
-                    .clickable {
-                        onCheckoutClick()
-                    }
+                    .background(
+                        color = BbColors.Primary,
+                        shape = BbRadius.PillShape
+                    )
+                    .clickable { onCheckoutClick() }
                     .padding(
-                        horizontal = BbSpacing.Space6,
+                        horizontal = BbSpacing.Space5,
                         vertical = BbSpacing.Space3
                     ),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "Checkout’a geç",
+                    text = "Siparişi Tamamla",
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.surface
+                    color = BbColors.TextStrong
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun BasketEmptyCard() {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Large
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+        ) {
+            BasketIconBox(
+                icon = Icons.Outlined.ShoppingBasket,
+                backgroundColor = BbColors.Yellow.Yellow100,
+                iconColor = BbColors.Yellow.Yellow800
+            )
+
+            Text(
+                text = "Sepetin boş",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
+            Text(
+                text = "Ürün keşfine dönüp sepetini doldurabilirsin.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+@Composable
+private fun BasketBuyerProtectionCard() {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
+        ) {
+            Text(
+                text = "Alıcı Koruması",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+            ) {
+                BasketProtectionItem(
+                    modifier = Modifier.weight(1f),
+                    icon = Icons.Outlined.Security,
+                    title = "Güvenli ödeme"
+                )
+
+                BasketProtectionItem(
+                    modifier = Modifier.weight(1f),
+                    icon = Icons.Outlined.LocalShipping,
+                    title = "Lojistik destek"
+                )
+
+                BasketProtectionItem(
+                    modifier = Modifier.weight(1f),
+                    icon = Icons.Outlined.Wallet,
+                    title = "Kolay iade"
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun BasketProtectionItem(
+    modifier: Modifier,
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    title: String
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+    ) {
+        BasketIconBox(
+            icon = icon,
+            backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+            iconColor = MaterialTheme.colorScheme.onSurface
+        )
+
+        Text(
+            text = title,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+
+@Composable
+private fun BasketIconBox(
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    backgroundColor: androidx.compose.ui.graphics.Color,
+    iconColor: androidx.compose.ui.graphics.Color
+) {
+    Box(
+        modifier = Modifier
+            .size(BbIcon.BoxMd)
+            .background(
+                color = backgroundColor,
+                shape = BbRadius.LgShape
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = iconColor,
+            modifier = Modifier.size(BbIcon.Action)
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun BasketCouponSheet(
+    couponApplied: Boolean,
+    onApplyCouponClick: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    var couponCode by remember {
+        mutableStateOf(if (couponApplied) "WELCOME75" else "")
+    }
+
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        containerColor = BbColors.Surface
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .navigationBarsPadding()
+                .padding(
+                    start = BbSpacing.PageHorizontal,
+                    end = BbSpacing.PageHorizontal,
+                    bottom = BbSpacing.PageBottom
+                ),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
+        ) {
+            Text(
+                text = "Kupon ve İndirimler",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
+            OutlinedTextField(
+                value = couponCode,
+                onValueChange = { couponCode = it },
+                modifier = Modifier.fillMaxWidth(),
+                label = {
+                    Text(text = "İndirim kodu")
+                },
+                singleLine = true,
+                shape = BbRadius.Input
+            )
+
+            BbButton(
+                text = if (couponApplied) "Kupon Uygulandı" else "Kuponu Uygula",
+                onClick = onApplyCouponClick,
+                modifier = Modifier.fillMaxWidth(),
+                variant = BbButtonVariant.Primary,
+                size = BbButtonSize.Medium
+            )
+
+            BasketCouponOption(
+                title = "WELCOME75",
+                description = "Sepette 75 TL indirim",
+                onClick = onApplyCouponClick
+            )
+
+            BasketCouponOption(
+                title = "KARGO50",
+                description = "Seçili mağazalarda kargo indirimi",
+                onClick = onApplyCouponClick
+            )
+        }
+    }
+}
+
+@Composable
+private fun BasketCouponOption(
+    title: String,
+    description: String,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                shape = BbRadius.LgShape
+            )
+            .clickable { onClick() }
+            .padding(BbSpacing.CardPaddingCompact),
+        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        BasketIconBox(
+            icon = Icons.Outlined.ConfirmationNumber,
+            backgroundColor = BbColors.Yellow.Yellow100,
+            iconColor = BbColors.Yellow.Yellow800
+        )
+
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+        ) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurface,
+                fontWeight = FontWeight.Bold
+            )
+
+            Text(
+                text = description,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun BasketFavoriteSheet(
+    onAddFavoriteClick: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    val favorites = getFavoriteSuggestions()
+
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        containerColor = BbColors.Surface
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .navigationBarsPadding()
+                .padding(
+                    start = BbSpacing.PageHorizontal,
+                    end = BbSpacing.PageHorizontal,
+                    bottom = BbSpacing.PageBottom
+                ),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
+        ) {
+            Text(
+                text = "Favorilerinden Sepete Ekle",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
+                contentPadding = PaddingValues(end = BbSpacing.PageHorizontal)
+            ) {
+                items(
+                    items = favorites,
+                    key = { favorite -> favorite.name }
+                ) { favorite ->
+                    BasketFavoriteSuggestionCard(
+                        modifier = Modifier.fillParentMaxWidth(0.42f),
+                        favorite = favorite,
+                        onAddFavoriteClick = onAddFavoriteClick
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun BasketFavoriteSuggestionCard(
+    modifier: Modifier = Modifier,
+    favorite: BasketFavoriteSuggestion,
+    onAddFavoriteClick: () -> Unit
+) {
+    Column(
+        modifier = modifier
+            .background(
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                shape = BbRadius.LgShape
+            )
+            .padding(BbSpacing.CardPaddingCompact),
+        verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(BbSpacing.Space20)
+                .background(
+                    color = BbColors.Surface,
+                    shape = BbRadius.LgShape
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = favorite.imageText,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+
+        Text(
+            text = favorite.name,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurface,
+            fontWeight = FontWeight.Bold,
+            maxLines = 2
+        )
+
+        Text(
+            text = favorite.priceText,
+            style = MaterialTheme.typography.labelSmall,
+            color = BbColors.Yellow.Yellow800,
+            fontWeight = FontWeight.Bold
+        )
+
+        BbButton(
+            text = "Sepete Ekle",
+            onClick = onAddFavoriteClick,
+            modifier = Modifier.fillMaxWidth(),
+            variant = BbButtonVariant.Primary,
+            size = BbButtonSize.Small
+        )
     }
 }
 
@@ -729,6 +1179,37 @@ data class BasketLineItem(
     val cargoPriceValue: Double,
     val imageText: String
 )
+
+private data class BasketFavoriteSuggestion(
+    val name: String,
+    val priceText: String,
+    val imageText: String
+)
+
+private fun getFavoriteSuggestions(): List<BasketFavoriteSuggestion> {
+    return listOf(
+        BasketFavoriteSuggestion(
+            name = "Ortobella deri terlik",
+            priceText = "₺849,90",
+            imageText = "F1"
+        ),
+        BasketFavoriteSuggestion(
+            name = "Pamuklu basic tişört",
+            priceText = "₺349,90",
+            imageText = "F2"
+        ),
+        BasketFavoriteSuggestion(
+            name = "Kışlık bot koleksiyonu",
+            priceText = "₺1.249,00",
+            imageText = "F3"
+        ),
+        BasketFavoriteSuggestion(
+            name = "Rahat taban günlük ayakkabı",
+            priceText = "₺749,90",
+            imageText = "F4"
+        )
+    )
+}
 
 private fun getBasketLineItems(): List<BasketLineItem> {
     return listOf(
@@ -786,9 +1267,6 @@ private fun getBasketLineItems(): List<BasketLineItem> {
 private fun formatPrice(value: Double): String {
     return "₺${String.format("%.2f", value).replace(".", ",")}"
 }
-
-@Composable
-private fun BbIconSizeTopBar() = BbSpacing.Space8
 
 @Preview(showBackground = true)
 @Composable

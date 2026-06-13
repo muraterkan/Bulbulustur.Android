@@ -19,6 +19,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+
+import com.bulbulustur.android.features.order.OrderRoutes
+import com.bulbulustur.android.features.order.OrderListScreen
+import com.bulbulustur.android.features.order.OrderDetailScreen
+import com.bulbulustur.android.features.order.OrderContractScreen
+import com.bulbulustur.android.features.order.OrderCancelRequestScreen
+import com.bulbulustur.android.features.order.OrderReturnRequestScreen
+import com.bulbulustur.android.features.order.OrderReviewCreateScreen
+import com.bulbulustur.android.features.order.OrderShipmentTrackingScreen
+import com.bulbulustur.android.features.account.wallet.WalletBalanceScreen
 import com.bulbulustur.android.features.account.AccountRoutes
 import com.bulbulustur.android.features.account.subscription.SubscriptionListScreen
 import com.bulbulustur.android.features.account.subscription.SubscriptionDetailScreen
@@ -68,9 +78,7 @@ import com.bulbulustur.android.features.basket.BasketRoutes
 import com.bulbulustur.android.features.basket.BasketScreen
 import com.bulbulustur.android.features.message.MessageInboxScreen
 import com.bulbulustur.android.features.message.MessageRoutes
-import com.bulbulustur.android.features.order.OrderListScreen
-import com.bulbulustur.android.features.order.OrderDetailScreen
-import com.bulbulustur.android.features.order.OrderContractScreen
+
 import com.bulbulustur.android.features.retail.CampaignDetailScreen
 import com.bulbulustur.android.features.retail.CampaignListScreen
 import com.bulbulustur.android.features.retail.OtherSellerListScreen
@@ -82,7 +90,6 @@ import com.bulbulustur.android.features.retail.RetailCategoryHomeScreen
 import com.bulbulustur.android.features.retail.RetailHomeScreen
 import com.bulbulustur.android.features.retail.RetailRoutes
 import com.bulbulustur.android.features.retail.menu.RetailMenuScreen
-import com.bulbulustur.android.features.splash.LandingSplashScreen
 import com.bulbulustur.android.features.splash.ModeSelectionScreen
 import com.bulbulustur.android.features.splash.SplashRoutes
 import com.bulbulustur.android.features.store.StoreDetailScreen
@@ -242,21 +249,8 @@ class MainActivity : ComponentActivity() {
 
                     NavHost(
                         navController = navController,
-                        startDestination = SplashRoutes.Landing
+                        startDestination = SplashRoutes.ModeSelection
                     ) {
-                        composable(SplashRoutes.Landing) {
-                            LandingSplashScreen(
-                                onSplashFinished = {
-                                    navController.navigate(SplashRoutes.ModeSelection) {
-                                        popUpTo(SplashRoutes.Landing) {
-                                            inclusive = true
-                                        }
-
-                                        launchSingleTop = true
-                                    }
-                                }
-                            )
-                        }
 
                         composable(SplashRoutes.ModeSelection) {
                             ModeSelectionScreen(
@@ -971,6 +965,186 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
+
+                        composable(OrderRoutes.List) {
+                            OrderListScreen(
+                                onBackClick = {
+                                    navController.popBackStack()
+                                },
+                                onOrderDetailClick = { orderId ->
+                                    navController.navigate(OrderRoutes.detail(orderId))
+                                }
+                            )
+                        }
+
+                        composable(
+                            route = OrderRoutes.Detail,
+                            arguments = listOf(
+                                navArgument(OrderRoutes.ArgOrderId) {
+                                    type = NavType.IntType
+                                }
+                            )
+                        ) { backStackEntry ->
+                            val orderId = backStackEntry.arguments?.getInt(OrderRoutes.ArgOrderId) ?: 0
+
+                            OrderDetailScreen(
+                                orderId = orderId,
+                                onBackClick = {
+                                    navController.popBackStack()
+                                },
+                                onContractClick = {
+                                    navController.navigate(
+                                        OrderRoutes.contract(
+                                            orderKey = "ORD-F4QO-AFPR-J5EX",
+                                            storeKey = "STORE-ORTOBELLA"
+                                        )
+                                    )
+                                },
+                                onStoreClick = {
+                                    navController.navigate(StoreRoutes.StoreDetail)
+                                },
+                                onSupportClick = {
+                                    // V1: support bottom sheet OrderDetail içinde açılıyor.
+                                },
+                                onCancelRequestClick = { orderStoreLineId, orderKey ->
+                                    navController.navigate(
+                                        OrderRoutes.cancelRequest(
+                                            orderStoreLineId = orderStoreLineId,
+                                            orderKey = orderKey
+                                        )
+                                    )
+                                },
+                                onReturnRequestClick = { orderStoreLineId, orderKey ->
+                                    navController.navigate(
+                                        OrderRoutes.returnRequest(
+                                            orderStoreLineId = orderStoreLineId,
+                                            orderKey = orderKey
+                                        )
+                                    )
+                                },
+                                onReviewCreateClick = { orderStoreLineId, productId, memberKey ->
+                                    navController.navigate(
+                                        OrderRoutes.reviewCreate(
+                                            orderStoreLineId = orderStoreLineId,
+                                            productId = productId,
+                                            memberKey = memberKey
+                                        )
+                                    )
+                                },
+                                onShipmentTrackingClick = { orderStoreLineId ->
+                                    navController.navigate(
+                                        OrderRoutes.shipmentTracking(
+                                            orderStoreLineId = orderStoreLineId
+                                        )
+                                    )
+                                }
+                            )
+
+
+                        }
+
+                        composable(
+                            route = OrderRoutes.Contract,
+                            arguments = listOf(
+                                navArgument(OrderRoutes.ArgOrderKey) {
+                                    type = NavType.StringType
+                                },
+                                navArgument(OrderRoutes.ArgStoreKey) {
+                                    type = NavType.StringType
+                                }
+                            )
+                        ) { backStackEntry ->
+                            val orderKey = backStackEntry.arguments?.getString(OrderRoutes.ArgOrderKey).orEmpty()
+
+                            OrderContractScreen(
+                                orderCode = orderKey.ifBlank { "ORD-F4QO-AFPR-J5EX" },
+                                onBackClick = {
+                                    navController.popBackStack()
+                                }
+                            )
+                        }
+
+                        composable(
+                            route = OrderRoutes.CancelRequest,
+                            arguments = listOf(
+                                navArgument(OrderRoutes.ArgOrderStoreLineId) {
+                                    type = NavType.LongType
+                                },
+                                navArgument(OrderRoutes.ArgOrderKey) {
+                                    type = NavType.StringType
+                                }
+                            )
+                        ) {
+                            OrderCancelRequestScreen(
+                                onBackClick = {
+                                    navController.popBackStack()
+                                },
+                                onSubmitClick = {
+                                    navController.popBackStack()
+                                }
+                            )
+                        }
+
+                        composable(
+                            route = OrderRoutes.ReturnRequest,
+                            arguments = listOf(
+                                navArgument(OrderRoutes.ArgOrderStoreLineId) {
+                                    type = NavType.LongType
+                                },
+                                navArgument(OrderRoutes.ArgOrderKey) {
+                                    type = NavType.StringType
+                                }
+                            )
+                        ) {
+                            OrderReturnRequestScreen(
+                                onBackClick = {
+                                    navController.popBackStack()
+                                },
+                                onSubmitClick = {
+                                    navController.popBackStack()
+                                }
+                            )
+                        }
+
+                        composable(
+                            route = OrderRoutes.ReviewCreate,
+                            arguments = listOf(
+                                navArgument(OrderRoutes.ArgOrderStoreLineId) {
+                                    type = NavType.LongType
+                                },
+                                navArgument(OrderRoutes.ArgProductId) {
+                                    type = NavType.LongType
+                                },
+                                navArgument(OrderRoutes.ArgMemberKey) {
+                                    type = NavType.StringType
+                                }
+                            )
+                        ) {
+                            OrderReviewCreateScreen(
+                                onBackClick = {
+                                    navController.popBackStack()
+                                },
+                                onSubmitClick = {
+                                    navController.popBackStack()
+                                }
+                            )
+                        }
+
+                        composable(
+                            route = OrderRoutes.ShipmentTracking,
+                            arguments = listOf(
+                                navArgument(OrderRoutes.ArgOrderStoreLineId) {
+                                    type = NavType.LongType
+                                }
+                            )
+                        ) {
+                            OrderShipmentTrackingScreen(
+                                onBackClick = {
+                                    navController.popBackStack()
+                                }
+                            )
+                        }
+
                         composable(AccountRoutes.AccountHome) {
                             AccountScreen(
                                 onSecurityClick = {
@@ -995,7 +1169,7 @@ class MainActivity : ComponentActivity() {
                                     navigateToWholesaleOffers()
                                 },
                                 onOrdersClick = {
-                                    navController.navigate(AccountRoutes.Orders)
+                                    navController.navigate(OrderRoutes.List)
                                 },
                                 onFavoritesClick = {
                                     navigateToFavorites()
@@ -1011,6 +1185,9 @@ class MainActivity : ComponentActivity() {
                                 },
                                 onSubscriptionsClick = {
                                     navController.navigate(AccountRoutes.Subscriptions)
+                                },
+                                onWalletBalanceClick = {
+                                    navController.navigate(AccountRoutes.WalletBalance)
                                 },
                                 onBankAccountsClick = {
                                     navController.navigate(BankAccountRoutes.List)
@@ -1286,42 +1463,6 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
-                        composable(AccountRoutes.Orders) {
-                            OrderListScreen(
-                                onBackClick = {
-                                    navController.popBackStack()
-                                },
-                                onOrderDetailClick = {
-                                    navController.navigate(AccountRoutes.OrderDetail)
-                                }
-                            )
-                        }
-
-                        composable(AccountRoutes.OrderDetail) {
-                            OrderDetailScreen(
-                                onBackClick = {
-                                    navController.popBackStack()
-                                },
-                                onContractClick = {
-                                    navController.navigate(AccountRoutes.OrderContract)
-                                },
-                                onStoreClick = {
-                                    navController.navigate(StoreRoutes.StoreDetail)
-                                },
-                                onSupportClick = {
-                                    // V1 için şimdilik boş bırakılabilir ya da support route'una bağlanır
-                                },
-                            )
-                        }
-
-                        composable(AccountRoutes.OrderContract) {
-                            OrderContractScreen(
-                                onBackClick = {
-                                    navController.popBackStack()
-                                }
-                            )
-                        }
-
                         composable(AccountRoutes.Favorites) {
                             FavoriteListScreen(
                                 onBackClick = {
@@ -1370,10 +1511,10 @@ class MainActivity : ComponentActivity() {
                                     navController.popBackStack()
                                 },
                                 onRequestDetailClick = {
-                                    navController.navigate(AccountRoutes.RequestDetail)
+                                    navController.navigate(OrderRoutes.detail(1))
                                 },
                                 onOrderListClick = {
-                                    navController.navigate(AccountRoutes.Orders)
+                                    navController.navigate(OrderRoutes.List)
                                 }
                             )
                         }
@@ -1411,6 +1552,16 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
+                        composable(AccountRoutes.WalletBalance) {
+                            WalletBalanceScreen(
+                                onBackClick = {
+                                    navController.popBackStack()
+                                },
+                                onBankAccountsClick = {
+                                    navController.navigate(BankAccountRoutes.List)
+                                }
+                            )
+                        }
                         composable(BankAccountRoutes.List) {
                             BankAccountListScreen(
                                 onBackClick = {

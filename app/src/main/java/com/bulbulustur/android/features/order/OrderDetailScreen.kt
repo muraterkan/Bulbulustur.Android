@@ -1,6 +1,7 @@
 package com.bulbulustur.android.features.order
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,18 +17,27 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.CalendarMonth
+import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Description
+import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.LocalShipping
 import androidx.compose.material.icons.outlined.Payments
 import androidx.compose.material.icons.outlined.ReceiptLong
+import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.outlined.Storefront
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -42,13 +52,6 @@ import com.bulbulustur.android.ui.theme.BbColors
 import com.bulbulustur.android.ui.theme.BbIcon
 import com.bulbulustur.android.ui.theme.BbRadius
 import com.bulbulustur.android.ui.theme.BbSpacing
-import androidx.compose.foundation.clickable
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 
 @Composable
 fun OrderDetailScreen(
@@ -56,10 +59,17 @@ fun OrderDetailScreen(
     onBackClick: () -> Unit = {},
     onContractClick: () -> Unit = {},
     onSupportClick: () -> Unit = {},
-    onStoreClick: () -> Unit = {}
+    onStoreClick: () -> Unit = {},
+    onCancelRequestClick: (Long, String) -> Unit = { _, _ -> },
+    onReturnRequestClick: (Long, String) -> Unit = { _, _ -> },
+    onReviewCreateClick: (Long, Long, String) -> Unit = { _, _, _ -> },
+    onShipmentTrackingClick: (Long) -> Unit = {}
 ) {
     val order = getDemoOrderDetail(orderId)
-    var showSupportSheet by remember { mutableStateOf(false) }
+
+    var showSupportSheet by remember {
+        mutableStateOf(false)
+    }
 
     if (showSupportSheet) {
         OrderSupportBottomSheet(
@@ -93,8 +103,23 @@ fun OrderDetailScreen(
                 OrderDetailStatusCard(order = order)
             }
 
-            item {
-                OrderDetailProductsCard(order = order)
+            order.storeGroups.forEach { storeGroup ->
+                item {
+                    OrderDetailStoreGroupCard(
+                        order = order,
+                        storeGroup = storeGroup,
+                        onContractClick = onContractClick,
+                        onStoreClick = onStoreClick,
+                        onSupportClick = {
+                            onSupportClick()
+                            showSupportSheet = true
+                        },
+                        onCancelRequestClick = onCancelRequestClick,
+                        onReturnRequestClick = onReturnRequestClick,
+                        onReviewCreateClick = onReviewCreateClick,
+                        onShipmentTrackingClick = onShipmentTrackingClick
+                    )
+                }
             }
 
             item {
@@ -103,13 +128,6 @@ fun OrderDetailScreen(
 
             item {
                 OrderDetailPaymentCard(order = order)
-            }
-
-            item {
-                OrderDetailStoreCard(
-                    order = order,
-                    onStoreClick = onStoreClick
-                )
             }
 
             item {
@@ -433,42 +451,16 @@ private fun OrderDetailStatusCard(
 }
 
 @Composable
-private fun OrderDetailStepRow(
-    step: OrderDetailStepUiModel
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        OrderDetailIconBox(
-            icon = step.icon,
-            backgroundColor = step.color.copy(alpha = if (step.isCompleted) 0.16f else 0.08f),
-            iconColor = step.color
-        )
-
-        Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
-        ) {
-            Text(
-                text = step.title,
-                style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-
-            Text(
-                text = step.description,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-    }
-}
-
-@Composable
-private fun OrderDetailProductsCard(
-    order: OrderDetailUiModel
+private fun OrderDetailStoreGroupCard(
+    order: OrderDetailUiModel,
+    storeGroup: OrderDetailStoreGroupUiModel,
+    onContractClick: () -> Unit,
+    onStoreClick: () -> Unit,
+    onSupportClick: () -> Unit,
+    onCancelRequestClick: (Long, String) -> Unit,
+    onReturnRequestClick: (Long, String) -> Unit,
+    onReviewCreateClick: (Long, Long, String) -> Unit,
+    onShipmentTrackingClick: (Long) -> Unit
 ) {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
@@ -479,16 +471,89 @@ private fun OrderDetailProductsCard(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
         ) {
-            OrderDetailSectionTitle(
-                title = "Ürünler",
-                subtitle = "Bu siparişte yer alan ürünler"
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                OrderDetailIconBox(
+                    icon = Icons.Outlined.Storefront,
+                    backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+                    iconColor = MaterialTheme.colorScheme.onSurface
+                )
+
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .clickable {
+                            onStoreClick()
+                        },
+                    verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+                ) {
+                    Text(
+                        text = "Satıcı",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+
+                    Text(
+                        text = storeGroup.storeName,
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+
+                Icon(
+                    imageVector = Icons.Outlined.KeyboardArrowRight,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(BbIcon.Action)
+                )
+            }
+
+            BbButton(
+                text = "Satış Sözleşmesi",
+                onClick = onContractClick,
+                modifier = Modifier.fillMaxWidth(),
+                variant = BbButtonVariant.Light,
+                size = BbButtonSize.Small,
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Outlined.Description,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.size(BbIcon.ButtonIcon)
+                    )
+                }
             )
 
-            order.products.forEachIndexed { index, product ->
-                OrderDetailProductRow(product = product)
+            if (storeGroup.hasShipmentTracking) {
+                OrderDetailCargoCard(
+                    storeGroup = storeGroup,
+                    onShipmentTrackingClick = {
+                        onShipmentTrackingClick(storeGroup.firstTrackableOrderStoreLineId)
+                    }
+                )
+            }
 
-                if (index != order.products.lastIndex) {
-                    HorizontalDivider(color = BbColors.Border)
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+            ) {
+                storeGroup.products.forEachIndexed { index, product ->
+                    OrderDetailProductRow(
+                        orderKey = order.orderKey,
+                        product = product,
+                        onSupportClick = onSupportClick,
+                        onCancelRequestClick = onCancelRequestClick,
+                        onReturnRequestClick = onReturnRequestClick,
+                        onReviewCreateClick = onReviewCreateClick,
+                        onShipmentTrackingClick = onShipmentTrackingClick
+                    )
+
+                    if (index != storeGroup.products.lastIndex) {
+                        HorizontalDivider(color = BbColors.Border)
+                    }
                 }
             }
         }
@@ -496,53 +561,268 @@ private fun OrderDetailProductsCard(
 }
 
 @Composable
-private fun OrderDetailProductRow(
-    product: OrderDetailProductUiModel
+private fun OrderDetailCargoCard(
+    storeGroup: OrderDetailStoreGroupUiModel,
+    onShipmentTrackingClick: () -> Unit
 ) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
-        verticalAlignment = Alignment.CenterVertically
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                color = BbColors.Blue.Blue50,
+                shape = BbRadius.LgShape
+            )
+            .padding(BbSpacing.CardPaddingCompact)
     ) {
-        Box(
-            modifier = Modifier
-                .size(BbIcon.BoxLg)
-                .background(
-                    color = MaterialTheme.colorScheme.surfaceVariant,
-                    shape = BbRadius.LgShape
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                imageVector = Icons.Outlined.ReceiptLong,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(BbIcon.Feature)
-            )
-        }
-
         Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
         ) {
-            Text(
-                text = product.name,
-                style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                OrderDetailIconBox(
+                    icon = Icons.Outlined.LocalShipping,
+                    backgroundColor = BbColors.Surface,
+                    iconColor = BbColors.Blue.Blue600
+                )
 
-            Text(
-                text = "${product.quantity} adet · ${product.unitPriceText}",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+                ) {
+                    Text(
+                        text = "Kargo Bilgisi",
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+
+                    Text(
+                        text = "${storeGroup.cargoCompany} · ${storeGroup.cargoTrackingNumber}",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+
+            BbButton(
+                text = "Kargom Nerede?",
+                onClick = onShipmentTrackingClick,
+                modifier = Modifier.fillMaxWidth(),
+                variant = BbButtonVariant.Primary,
+                size = BbButtonSize.Small,
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Outlined.LocalShipping,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimary,
+                        modifier = Modifier.size(BbIcon.ButtonIcon)
+                    )
+                }
             )
         }
+    }
+}
 
-        Text(
-            text = product.totalText,
-            style = MaterialTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.onSurface
+@Composable
+private fun OrderDetailProductRow(
+    orderKey: String,
+    product: OrderDetailProductUiModel,
+    onSupportClick: () -> Unit,
+    onCancelRequestClick: (Long, String) -> Unit,
+    onReturnRequestClick: (Long, String) -> Unit,
+    onReviewCreateClick: (Long, Long, String) -> Unit,
+    onShipmentTrackingClick: (Long) -> Unit
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
+            verticalAlignment = Alignment.Top
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(BbIcon.BoxLg)
+                    .background(
+                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        shape = BbRadius.LgShape
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.ReceiptLong,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(BbIcon.Feature)
+                )
+            }
+
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+            ) {
+                Text(
+                    text = product.name,
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+
+                Text(
+                    text = "${product.quantity} adet · ${product.unitPriceText}",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+
+                OrderDetailLineStatusBadge(
+                    text = product.statusText,
+                    status = product.status
+                )
+            }
+
+            Column(
+                horizontalAlignment = Alignment.End,
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+            ) {
+                Text(
+                    text = "Toplam",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+
+                Text(
+                    text = product.totalText,
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+        }
+
+        OrderDetailProductActions(
+            orderKey = orderKey,
+            product = product,
+            onSupportClick = onSupportClick,
+            onCancelRequestClick = onCancelRequestClick,
+            onReturnRequestClick = onReturnRequestClick,
+            onReviewCreateClick = onReviewCreateClick,
+            onShipmentTrackingClick = onShipmentTrackingClick
         )
+    }
+}
+
+@Composable
+private fun OrderDetailProductActions(
+    orderKey: String,
+    product: OrderDetailProductUiModel,
+    onSupportClick: () -> Unit,
+    onCancelRequestClick: (Long, String) -> Unit,
+    onReturnRequestClick: (Long, String) -> Unit,
+    onReviewCreateClick: (Long, Long, String) -> Unit,
+    onShipmentTrackingClick: (Long) -> Unit
+) {
+    val actions = product.availableActions()
+
+    if (actions.isEmpty()) {
+        return
+    }
+
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+    ) {
+        actions.forEach { action ->
+            when (action) {
+                OrderDetailLineAction.Cancel -> {
+                    BbButton(
+                        text = "İptal Et",
+                        onClick = {
+                            onCancelRequestClick(product.orderStoreLineId, orderKey)
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        variant = BbButtonVariant.Light,
+                        size = BbButtonSize.Small
+                    )
+                }
+
+                OrderDetailLineAction.Return -> {
+                    BbButton(
+                        text = "İade Talebi",
+                        onClick = {
+                            onReturnRequestClick(product.orderStoreLineId, orderKey)
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        variant = BbButtonVariant.Light,
+                        size = BbButtonSize.Small
+                    )
+                }
+
+                OrderDetailLineAction.Support -> {
+                    BbButton(
+                        text = "Talep Oluştur",
+                        onClick = onSupportClick,
+                        modifier = Modifier.fillMaxWidth(),
+                        variant = BbButtonVariant.Light,
+                        size = BbButtonSize.Small,
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Outlined.HelpOutline,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.size(BbIcon.ButtonIcon)
+                            )
+                        }
+                    )
+                }
+
+                OrderDetailLineAction.Review -> {
+                    BbButton(
+                        text = "Değerlendir",
+                        onClick = {
+                            onReviewCreateClick(
+                                product.orderStoreLineId,
+                                product.productId,
+                                product.memberKey
+                            )
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        variant = BbButtonVariant.Primary,
+                        size = BbButtonSize.Small,
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Outlined.Star,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onPrimary,
+                                modifier = Modifier.size(BbIcon.ButtonIcon)
+                            )
+                        }
+                    )
+                }
+
+                OrderDetailLineAction.ShipmentTracking -> {
+                    BbButton(
+                        text = "Kargom Nerede?",
+                        onClick = {
+                            onShipmentTrackingClick(product.orderStoreLineId)
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        variant = BbButtonVariant.Light,
+                        size = BbButtonSize.Small,
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Outlined.LocalShipping,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.size(BbIcon.ButtonIcon)
+                            )
+                        }
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -561,22 +841,16 @@ private fun OrderDetailDeliveryCard(
         ) {
             OrderDetailSectionTitle(
                 title = "Teslimat Bilgileri",
-                subtitle = "Kargo ve teslimat adresi"
+                subtitle = "Siparişe ait teslimat adresi"
             )
-
-            OrderDetailInfoRow(
-                icon = Icons.Outlined.LocalShipping,
-                title = "Kargo Durumu",
-                value = order.shippingStatus
-            )
-
-            HorizontalDivider(color = BbColors.Border)
 
             OrderDetailInfoRow(
                 icon = Icons.Outlined.CalendarMonth,
                 title = "Tahmini Teslimat",
                 value = order.estimatedDelivery
             )
+
+            HorizontalDivider(color = BbColors.Border)
 
             Text(
                 text = order.addressText,
@@ -621,55 +895,6 @@ private fun OrderDetailPaymentCard(
                 title = "Genel Toplam",
                 value = order.totalText,
                 isStrong = true
-            )
-        }
-    }
-}
-
-@Composable
-private fun OrderDetailStoreCard(
-    order: OrderDetailUiModel,
-    onStoreClick: () -> Unit
-) {
-    BbCard(
-        modifier = Modifier.fillMaxWidth(),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium,
-        onClick = onStoreClick
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            OrderDetailIconBox(
-                icon = Icons.Outlined.Storefront,
-                backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
-                iconColor = MaterialTheme.colorScheme.onSurface
-            )
-
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
-            ) {
-                Text(
-                    text = order.storeName,
-                    style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-
-                Text(
-                    text = "Satıcı bilgileri ve mağaza sayfası",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-
-            Icon(
-                imageVector = Icons.Outlined.KeyboardArrowRight,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(BbIcon.Action)
             )
         }
     }
@@ -724,6 +949,40 @@ private fun OrderDetailActionsCard(
                         modifier = Modifier.size(BbIcon.ButtonIcon)
                     )
                 }
+            )
+        }
+    }
+}
+
+@Composable
+private fun OrderDetailStepRow(
+    step: OrderDetailStepUiModel
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        OrderDetailIconBox(
+            icon = step.icon,
+            backgroundColor = step.color.copy(alpha = if (step.isCompleted) 0.16f else 0.08f),
+            iconColor = step.color
+        )
+
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+        ) {
+            Text(
+                text = step.title,
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
+            Text(
+                text = step.description,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -891,6 +1150,38 @@ private fun OrderDetailStatusBadge(
 }
 
 @Composable
+private fun OrderDetailLineStatusBadge(
+    text: String,
+    status: OrderDetailLineStatus
+) {
+    val color = when (status) {
+        OrderDetailLineStatus.Received -> BbColors.Blue.Blue600
+        OrderDetailLineStatus.Preparing -> BbColors.Orange.Orange600
+        OrderDetailLineStatus.Shipped -> BbColors.Blue.Blue600
+        OrderDetailLineStatus.Delivered -> BbColors.Green.Green600
+        OrderDetailLineStatus.Other -> BbColors.TextMuted
+    }
+
+    Box(
+        modifier = Modifier
+            .background(
+                color = color.copy(alpha = 0.12f),
+                shape = BbRadius.Badge
+            )
+            .padding(
+                horizontal = BbSpacing.BadgePaddingHorizontal,
+                vertical = BbSpacing.BadgePaddingVertical
+            )
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.labelSmall,
+            color = color
+        )
+    }
+}
+
+@Composable
 private fun OrderDetailIconBox(
     icon: ImageVector,
     backgroundColor: Color,
@@ -914,35 +1205,105 @@ private fun OrderDetailIconBox(
     }
 }
 
+private fun OrderDetailProductUiModel.availableActions(): List<OrderDetailLineAction> {
+    return when (status) {
+        OrderDetailLineStatus.Received -> {
+            listOf(OrderDetailLineAction.Cancel)
+        }
+
+        OrderDetailLineStatus.Preparing -> {
+            listOf(OrderDetailLineAction.Support)
+        }
+
+        OrderDetailLineStatus.Shipped -> {
+            listOf(
+                OrderDetailLineAction.ShipmentTracking,
+                OrderDetailLineAction.Support
+            )
+        }
+
+        OrderDetailLineStatus.Delivered -> {
+            listOf(
+                OrderDetailLineAction.ShipmentTracking,
+                OrderDetailLineAction.Return,
+                OrderDetailLineAction.Support,
+                OrderDetailLineAction.Review
+            )
+        }
+
+        OrderDetailLineStatus.Other -> {
+            emptyList()
+        }
+    }
+}
+
+private val OrderDetailStoreGroupUiModel.hasShipmentTracking: Boolean
+    get() = products.any {
+        it.status == OrderDetailLineStatus.Shipped || it.status == OrderDetailLineStatus.Delivered
+    }
+
+private val OrderDetailStoreGroupUiModel.firstTrackableOrderStoreLineId: Long
+    get() = products.firstOrNull {
+        it.status == OrderDetailLineStatus.Shipped || it.status == OrderDetailLineStatus.Delivered
+    }?.orderStoreLineId ?: 0L
+
 private fun getDemoOrderDetail(
     orderId: Int
 ): OrderDetailUiModel {
     return OrderDetailUiModel(
         orderId = orderId,
+        orderKey = "ORD-F4QO-AFPR-J5EX",
         orderNumber = "Sipariş #1000000",
         orderDate = "9 Mayıs 2026",
-        statusText = "Hazırlanıyor",
+        statusText = "İşlemde",
         statusColor = BbColors.Orange.Orange600,
-        productCountText = "2 ürün",
-        productTotalText = "1.200,50 ₺",
+        productCountText = "3 ürün",
+        productTotalText = "2.400,75 ₺",
         cargoText = "50,00 ₺",
-        totalText = "1.250,50 ₺",
-        shippingStatus = "Hazırlanıyor",
+        totalText = "2.450,75 ₺",
         estimatedDelivery = "12 Mayıs 2026",
         addressText = "Murat Erkan · İstanbul / Türkiye · Teslimat adresi API bağlandığında gerçek kullanıcı adresinden beslenecek.",
-        storeName = "Ortobella",
-        products = listOf(
-            OrderDetailProductUiModel(
-                name = "Kadın Sneaker Günlük Ayakkabı",
-                quantity = 1,
-                unitPriceText = "850,25 ₺",
-                totalText = "850,25 ₺"
-            ),
-            OrderDetailProductUiModel(
-                name = "Pamuklu Basic Tişört",
-                quantity = 1,
-                unitPriceText = "350,25 ₺",
-                totalText = "350,25 ₺"
+        storeGroups = listOf(
+            OrderDetailStoreGroupUiModel(
+                storeKey = "STORE-ORTOBELLA",
+                storeName = "Ortobella",
+                cargoCompany = "Yurtiçi Kargo",
+                cargoTrackingNumber = "YK-2026-00012345",
+                products = listOf(
+                    OrderDetailProductUiModel(
+                        orderStoreLineId = 10001L,
+                        productId = 501L,
+                        memberKey = "MEMBER-SECURE-501",
+                        name = "Minimal Sırt Çantası",
+                        quantity = 1,
+                        unitPriceText = "850,25 ₺",
+                        totalText = "850,25 ₺",
+                        statusText = "Sipariş Alındı",
+                        status = OrderDetailLineStatus.Received
+                    ),
+                    OrderDetailProductUiModel(
+                        orderStoreLineId = 10002L,
+                        productId = 502L,
+                        memberKey = "MEMBER-SECURE-502",
+                        name = "Kadın Sneaker Günlük Ayakkabı",
+                        quantity = 1,
+                        unitPriceText = "1.200,25 ₺",
+                        totalText = "1.200,25 ₺",
+                        statusText = "Kargoya Verildi",
+                        status = OrderDetailLineStatus.Shipped
+                    ),
+                    OrderDetailProductUiModel(
+                        orderStoreLineId = 10003L,
+                        productId = 503L,
+                        memberKey = "MEMBER-SECURE-503",
+                        name = "Pamuklu Basic Tişört",
+                        quantity = 1,
+                        unitPriceText = "350,25 ₺",
+                        totalText = "350,25 ₺",
+                        statusText = "Teslim Edildi",
+                        status = OrderDetailLineStatus.Delivered
+                    )
+                )
             )
         ),
         steps = listOf(
@@ -961,8 +1322,8 @@ private fun getDemoOrderDetail(
                 isCompleted = true
             ),
             OrderDetailStepUiModel(
-                title = "Hazırlanıyor",
-                description = "Satıcı ürünleri kargoya hazırlıyor.",
+                title = "Sipariş İşlemde",
+                description = "Satıcı ve kargo süreçleri ürün satırlarına göre güncelleniyor.",
                 icon = Icons.Outlined.LocalShipping,
                 color = BbColors.Orange.Orange600,
                 isCompleted = false
@@ -973,6 +1334,7 @@ private fun getDemoOrderDetail(
 
 private data class OrderDetailUiModel(
     val orderId: Int,
+    val orderKey: String,
     val orderNumber: String,
     val orderDate: String,
     val statusText: String,
@@ -981,19 +1343,30 @@ private data class OrderDetailUiModel(
     val productTotalText: String,
     val cargoText: String,
     val totalText: String,
-    val shippingStatus: String,
     val estimatedDelivery: String,
     val addressText: String,
-    val storeName: String,
-    val products: List<OrderDetailProductUiModel>,
+    val storeGroups: List<OrderDetailStoreGroupUiModel>,
     val steps: List<OrderDetailStepUiModel>
 )
 
+private data class OrderDetailStoreGroupUiModel(
+    val storeKey: String,
+    val storeName: String,
+    val cargoCompany: String,
+    val cargoTrackingNumber: String,
+    val products: List<OrderDetailProductUiModel>
+)
+
 private data class OrderDetailProductUiModel(
+    val orderStoreLineId: Long,
+    val productId: Long,
+    val memberKey: String,
     val name: String,
     val quantity: Int,
     val unitPriceText: String,
-    val totalText: String
+    val totalText: String,
+    val statusText: String,
+    val status: OrderDetailLineStatus
 )
 
 private data class OrderDetailStepUiModel(
@@ -1003,3 +1376,19 @@ private data class OrderDetailStepUiModel(
     val color: Color,
     val isCompleted: Boolean
 )
+
+private enum class OrderDetailLineStatus {
+    Received,
+    Preparing,
+    Shipped,
+    Delivered,
+    Other
+}
+
+private enum class OrderDetailLineAction {
+    Cancel,
+    Return,
+    Support,
+    Review,
+    ShipmentTracking
+}

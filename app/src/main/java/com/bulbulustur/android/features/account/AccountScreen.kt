@@ -89,6 +89,7 @@ fun AccountScreen(
     onRequestsClick: () -> Unit = {},
     onSubscriptionsClick: () -> Unit = {},
     onBankAccountsClick: () -> Unit = {},
+    onWalletBalanceClick: () -> Unit = {},
     onSettingsClick: () -> Unit = {},
     onMessagesClick: () -> Unit = {},
     onSupportClick: () -> Unit = {},
@@ -321,7 +322,7 @@ fun AccountScreen(
                         title = "Cüzdan ve Bakiye",
                         description = "Bakiye, ödeme ve finansal hareketlerini incele.",
                         icon = Icons.Outlined.Wallet,
-                        onClick = onBankAccountsClick
+                        onClick = onWalletBalanceClick
                     )
                 }
             }

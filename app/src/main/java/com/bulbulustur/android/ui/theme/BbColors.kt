@@ -1,34 +1,87 @@
+/*
+ * Bulbulustur Android Native Buyer App
+ * Design System / Color Tokens
+ *
+ * This file is the mobile color palette source derived from Bulbulustur Web Main CSS.
+ *
+ * Rules:
+ * - Raw Color(...) values are allowed here because this file defines the palette.
+ * - BbColors is the static palette layer.
+ * - BbTheme maps these palette values into MaterialTheme.colorScheme for Light, Navy and Dark themes.
+ * - Feature screens should prefer MaterialTheme.colorScheme for theme-aware UI colors.
+ * - Use BbColors directly only for fixed brand/status colors or inside design system/theme/component definitions.
+ */
+
 package com.bulbulustur.android.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
 object BbColors {
 
+    /*
+     * Special colors
+     */
+
+    val Transparent = Color.Transparent
+    val Unspecified = Color.Unspecified
+
+    /*
+     * Base colors
+     */
+
     val White = Color(0xFFFFFFFF)
     val Black = Color(0xFF000000)
 
+    /*
+     * Brand aliases
+     * Kept for compatibility with the existing Android codebase.
+     */
+
     val Primary = Color(0xFFFED700)
     val PrimarySoft = Color(0xFFFFF8CC)
+
+    /*
+     * Status aliases
+     * Static status colors. Use directly only when status identity must stay stable across themes.
+     */
 
     val Success = Color(0xFF22C55E)
     val Warning = Color(0xFFF97316)
     val Danger = Color(0xFFEF4444)
     val Info = Color(0xFF2563EB)
 
+    /*
+     * Surface aliases
+     * Prefer MaterialTheme.colorScheme.surface/background in feature screens.
+     */
+
     val Surface = Color(0xFFFFFFFF)
     val SurfaceSoft = Color(0xFFFAFBFC)
     val SurfaceMuted = Color(0xFFF4F6F8)
     val SurfaceElevated = Color(0xFFFFFFFF)
 
+    /*
+     * Text aliases
+     * Prefer MaterialTheme.colorScheme.onSurface/onSurfaceVariant in feature screens.
+     */
+
     val TextStrong = Color(0xFF0F1A33)
     val TextMuted = Color(0xFF6B7894)
     val TextSubtle = Color(0xFF445066)
 
+    /*
+     * Border aliases
+     * Prefer MaterialTheme.colorScheme.outline/outlineVariant in feature screens.
+     */
+
     val Border = Color(0xFFE8EDF3)
     val BorderStrong = Color(0xFFD5DDE8)
 
-    object Yellow {
+    /*
+     * Yellow / Brand scale
+     */
 
+    object Yellow {
         val Yellow50 = Color(0xFFFFFDF0)
         val Yellow100 = Color(0xFFFFF8CC)
         val Yellow200 = Color(0xFFFFF099)
@@ -40,6 +93,10 @@ object BbColors {
         val Yellow800 = Color(0xFF806700)
         val Yellow900 = Color(0xFF4D3E00)
     }
+
+    /*
+     * Navy scale
+     */
 
     object Navy {
         val Navy50 = Color(0xFFEDF4FB)
@@ -54,6 +111,10 @@ object BbColors {
         val Navy900 = Color(0xFF081626)
     }
 
+    /*
+     * Gray scale
+     */
+
     object Gray {
         val Gray50 = Color(0xFFFAFBFC)
         val Gray100 = Color(0xFFF4F6F8)
@@ -66,6 +127,10 @@ object BbColors {
         val Gray800 = Color(0xFF232D44)
         val Gray900 = Color(0xFF0F1A33)
     }
+
+    /*
+     * Coal / Dark scale
+     */
 
     object Coal {
         val Coal50 = Color(0xFF252A35)
@@ -80,6 +145,10 @@ object BbColors {
         val Coal900 = Color(0xFF000000)
     }
 
+    /*
+     * Ink / Navy dark scale
+     */
+
     object Ink {
         val Ink50 = Color(0xFF233446)
         val Ink100 = Color(0xFF1C2B3C)
@@ -92,6 +161,10 @@ object BbColors {
         val Ink800 = Color(0xFF05080C)
         val Ink900 = Color(0xFF030507)
     }
+
+    /*
+     * Blue scale
+     */
 
     object Blue {
         val Blue50 = Color(0xFFEFF6FF)
@@ -106,6 +179,10 @@ object BbColors {
         val Blue900 = Color(0xFF172554)
     }
 
+    /*
+     * Orange scale
+     */
+
     object Orange {
         val Orange50 = Color(0xFFFFF7ED)
         val Orange100 = Color(0xFFFFEDD5)
@@ -118,6 +195,10 @@ object BbColors {
         val Orange800 = Color(0xFF9A3412)
         val Orange900 = Color(0xFF7C2D12)
     }
+
+    /*
+     * Purple scale
+     */
 
     object Purple {
         val Purple50 = Color(0xFFF5F3FF)
@@ -132,6 +213,10 @@ object BbColors {
         val Purple900 = Color(0xFF4C1D95)
     }
 
+    /*
+     * Pink scale
+     */
+
     object Pink {
         val Pink50 = Color(0xFFFDF2F8)
         val Pink100 = Color(0xFFFCE7F3)
@@ -144,6 +229,10 @@ object BbColors {
         val Pink800 = Color(0xFF9D174D)
         val Pink900 = Color(0xFF831843)
     }
+
+    /*
+     * Green scale
+     */
 
     object Green {
         val Green50 = Color(0xFFF0FDF4)
@@ -158,6 +247,10 @@ object BbColors {
         val Green900 = Color(0xFF14532D)
     }
 
+    /*
+     * Turquoise scale
+     */
+
     object Turquoise {
         val Turquoise50 = Color(0xFFECFEFF)
         val Turquoise100 = Color(0xFFCFFAFE)
@@ -171,6 +264,10 @@ object BbColors {
         val Turquoise900 = Color(0xFF164E63)
     }
 
+    /*
+     * Red scale
+     */
+
     object Red {
         val Red50 = Color(0xFFFEF2F2)
         val Red100 = Color(0xFFFEE2E2)
@@ -183,6 +280,10 @@ object BbColors {
         val Red800 = Color(0xFF991B1B)
         val Red900 = Color(0xFF7F1D1D)
     }
+
+    /*
+     * Beige scale
+     */
 
     object Beige {
         val Beige50 = Color(0xFFFBFBFA)

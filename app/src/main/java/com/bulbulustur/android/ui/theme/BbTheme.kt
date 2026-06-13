@@ -1,6 +1,20 @@
+/*
+ * Bulbulustur Android Native Buyer App
+ * Design System / Theme
+ *
+ * This file maps the static Bulbulustur color palette into MaterialTheme.colorScheme.
+ *
+ * Rules:
+ * - BbColors is the static palette layer derived from Bulbulustur Web Main CSS.
+ * - BbTheme maps BbColors into Material3 color schemes for Light, Navy and Dark modes.
+ * - Feature screens should use MaterialTheme.colorScheme instead of direct BbColors for theme-aware colors.
+ * - Direct BbColors usage is valid here because this file defines the theme mapping.
+ */
+
 package com.bulbulustur.android.ui.theme
 
 import android.app.Activity
+import android.content.Context
 import android.os.Build
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
@@ -9,6 +23,7 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
@@ -149,7 +164,6 @@ private val BbDarkColorScheme = darkColorScheme(
     scrim = BbColors.Black
 )
 
-
 @Composable
 fun BbTheme(
     themeMode: BbThemeMode = BbThemeMode.Light,
@@ -176,18 +190,17 @@ fun BbTheme(
     )
 }
 
-@Composable
 private fun getBbColorScheme(
     themeMode: BbThemeMode,
     useDynamicColor: Boolean,
-    context: android.content.Context
+    context: Context
 ): ColorScheme {
     if (useDynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        if (themeMode == BbThemeMode.Light) {
-            return dynamicLightColorScheme(context)
+        return when (themeMode) {
+            BbThemeMode.Light -> dynamicLightColorScheme(context)
+            BbThemeMode.Navy,
+            BbThemeMode.Dark -> dynamicDarkColorScheme(context)
         }
-
-        return dynamicDarkColorScheme(context)
     }
 
     return when (themeMode) {
@@ -208,18 +221,16 @@ private fun ApplyBbSystemBars(
         return
     }
 
-    val activity = view.context as? Activity
-
-    if (activity == null) {
-        return
-    }
-
+    val activity = view.context as? Activity ?: return
     val window = activity.window
-    val insetsController = WindowCompat.getInsetsController(window, view)
 
-    window.statusBarColor = colorScheme.background.toArgb()
-    window.navigationBarColor = colorScheme.background.toArgb()
+    SideEffect {
+        val insetsController = WindowCompat.getInsetsController(window, view)
 
-    insetsController.isAppearanceLightStatusBars = themeMode == BbThemeMode.Light
-    insetsController.isAppearanceLightNavigationBars = themeMode == BbThemeMode.Light
+        window.statusBarColor = colorScheme.background.toArgb()
+        window.navigationBarColor = colorScheme.background.toArgb()
+
+        insetsController.isAppearanceLightStatusBars = themeMode == BbThemeMode.Light
+        insetsController.isAppearanceLightNavigationBars = themeMode == BbThemeMode.Light
+    }
 }

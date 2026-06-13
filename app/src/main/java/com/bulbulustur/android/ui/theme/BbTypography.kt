@@ -1,3 +1,17 @@
+/*
+ * Bulbulustur Android Native Buyer App
+ * Design System / Typography Tokens
+ *
+ * This file is the single source of truth for Material3 typography roles.
+ *
+ * Rules:
+ * - Feature screens must not define raw TextStyle(...), fontSize or fontWeight values.
+ * - Feature screens should use MaterialTheme.typography.* roles.
+ * - Raw sp values, FontWeight and TextStyle are allowed here because this file defines typography tokens.
+ * - Typography tokens are mapped into BbTheme through MaterialTheme.
+ * - Keep this file aligned with the Bulbulustur Web Main CSS visual hierarchy.
+ */
+
 package com.bulbulustur.android.ui.theme
 
 import androidx.compose.material3.Typography
@@ -7,6 +21,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
 val BbTypography = Typography(
+
+    /*
+     * Display
+     * Large marketing / splash / hero typography.
+     */
+
     displayLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.ExtraBold,
@@ -28,6 +48,11 @@ val BbTypography = Typography(
         lineHeight = 34.sp,
         letterSpacing = (-0.8).sp
     ),
+
+    /*
+     * Headline
+     * Page titles, large section heads and important screen headers.
+     */
 
     headlineLarge = TextStyle(
         fontFamily = FontFamily.Default,
@@ -51,6 +76,11 @@ val BbTypography = Typography(
         letterSpacing = (-0.4).sp
     ),
 
+    /*
+     * Title
+     * Card titles, list titles, section titles and compact headers.
+     */
+
     titleLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.SemiBold,
@@ -73,6 +103,11 @@ val BbTypography = Typography(
         letterSpacing = 0.sp
     ),
 
+    /*
+     * Body
+     * Main reading text, descriptions and supporting copy.
+     */
+
     bodyLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
@@ -94,6 +129,11 @@ val BbTypography = Typography(
         lineHeight = 22.sp,
         letterSpacing = 0.sp
     ),
+
+    /*
+     * Label
+     * Buttons, chips, badges, tabs, meta labels and compact UI text.
+     */
 
     labelLarge = TextStyle(
         fontFamily = FontFamily.Default,

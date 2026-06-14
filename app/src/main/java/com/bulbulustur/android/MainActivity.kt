@@ -1,17 +1,13 @@
 package com.bulbulustur.android
 
-import com.bulbulustur.android.features.order.OrderRoutes
-import com.bulbulustur.android.features.account.AccountRoutes
-import com.bulbulustur.android.features.company.CompanyRoutes
-import com.bulbulustur.android.features.account.bank.BankAccountRoutes
-import com.bulbulustur.android.features.account.settings.SettingsRoutes
-import com.bulbulustur.android.features.basket.BasketRoutes
-import com.bulbulustur.android.features.message.MessageRoutes
-import com.bulbulustur.android.features.retail.RetailRoutes
-import com.bulbulustur.android.features.splash.SplashRoutes
-import com.bulbulustur.android.features.store.StoreRoutes
+import com.bulbulustur.android.Features.account.AccountRoutes
+import com.bulbulustur.android.Features.company.CompanyRoutes
+import com.bulbulustur.android.Features.account.bank.BankAccountRoutes
+import com.bulbulustur.android.Features.account.settings.SettingsRoutes
+import com.bulbulustur.android.Features.message.MessageRoutes
+import com.bulbulustur.android.Features.splash.SplashRoutes
 
-import com.bulbulustur.android.features.logon.logonGraph
+import com.bulbulustur.android.Features.logon.logonGraph
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -31,94 +27,92 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 
-import com.bulbulustur.android.features.order.OrderListScreen
-import com.bulbulustur.android.features.order.OrderDetailScreen
-import com.bulbulustur.android.features.order.OrderContractScreen
-import com.bulbulustur.android.features.order.OrderCancelRequestScreen
-import com.bulbulustur.android.features.order.OrderReturnRequestScreen
-import com.bulbulustur.android.features.order.OrderReviewCreateScreen
-import com.bulbulustur.android.features.order.OrderShipmentTrackingScreen
-import com.bulbulustur.android.features.account.wallet.WalletBalanceScreen
-import com.bulbulustur.android.features.account.subscription.SubscriptionListScreen
-import com.bulbulustur.android.features.account.subscription.SubscriptionDetailScreen
-import com.bulbulustur.android.features.account.AccountScreen
-import com.bulbulustur.android.features.account.AccountSecurityScreen
-import com.bulbulustur.android.features.account.AddressFormScreen
-import com.bulbulustur.android.features.account.AddressListScreen
-import com.bulbulustur.android.features.account.CommunicationPreferenceScreen
-import com.bulbulustur.android.features.company.CompanyDetailScreen
-import com.bulbulustur.android.features.company.CompanyListScreen
-import com.bulbulustur.android.features.account.CouponListScreen
-import com.bulbulustur.android.features.account.RequestListScreen
-import com.bulbulustur.android.features.account.RequestDetailScreen
-import com.bulbulustur.android.features.account.ReviewListScreen
-import com.bulbulustur.android.features.account.review.ReviewEditScreen
-import com.bulbulustur.android.features.account.bank.BankAccountCreateScreen
-import com.bulbulustur.android.features.account.bank.BankAccountEditScreen
-import com.bulbulustur.android.features.account.bank.BankAccountListScreen
-import com.bulbulustur.android.features.account.company.CompanyB2BIndexScreen
-import com.bulbulustur.android.features.account.company.CompanyB2BStatusScreen
-import com.bulbulustur.android.features.account.company.CompanyInfoEditScreen
-import com.bulbulustur.android.features.account.company.CompanyInfoScreen
-import com.bulbulustur.android.features.account.favorite.FavoriteListScreen
-import com.bulbulustur.android.features.account.favorite.FollowedStoreListScreen
-import com.bulbulustur.android.features.account.notification.NotificationListScreen
-import com.bulbulustur.android.features.account.phone.PhoneCreateScreen
-import com.bulbulustur.android.features.account.phone.PhoneListScreen
-import com.bulbulustur.android.features.account.phone.PhoneVerifyScreen
-import com.bulbulustur.android.features.account.preference.UsagePurposeScreen
-import com.bulbulustur.android.features.account.profile.ProfileScreen
-import com.bulbulustur.android.features.account.question.QuestionAnswerScreen
-import com.bulbulustur.android.features.account.security.ChangeEmailScreen
-import com.bulbulustur.android.features.account.security.ChangePasswordScreen
-import com.bulbulustur.android.features.account.security.LoginActivitiesScreen
-import com.bulbulustur.android.features.account.settings.AboutThisAppScreen
-import com.bulbulustur.android.features.account.settings.AccountSettingsScreen
-import com.bulbulustur.android.features.account.settings.AppearanceSettingsScreen
-import com.bulbulustur.android.features.account.settings.CurrencySettingsScreen
-import com.bulbulustur.android.features.account.settings.LanguageSettingsScreen
-import com.bulbulustur.android.features.account.settings.LegalPoliciesScreen
-import com.bulbulustur.android.features.account.settings.LegalPolicyDetailScreen
-import com.bulbulustur.android.features.account.settings.RegionSettingsScreen
-import com.bulbulustur.android.features.basket.BasketScreen
-import com.bulbulustur.android.features.message.MessageInboxScreen
-import com.bulbulustur.android.features.message.MessageDetailScreen
-import com.bulbulustur.android.features.retail.CampaignDetailScreen
-import com.bulbulustur.android.features.retail.CampaignListScreen
-import com.bulbulustur.android.features.retail.OtherSellerListScreen
-import com.bulbulustur.android.features.retail.ProductDetailScreen as RetailProductDetailScreen
-import com.bulbulustur.android.features.retail.ProductListScreen as RetailProductListScreen
-import com.bulbulustur.android.features.retail.ProductQuestionScreen
-import com.bulbulustur.android.features.retail.ProductReviewScreen
-import com.bulbulustur.android.features.retail.RetailCategoryHomeScreen
-import com.bulbulustur.android.features.retail.RetailHomeScreen
-import com.bulbulustur.android.features.retail.menu.RetailMenuScreen
-import com.bulbulustur.android.features.splash.ModeSelectionScreen
-import com.bulbulustur.android.features.store.StoreDetailScreen
-import com.bulbulustur.android.features.store.StoreListScreen
-import com.bulbulustur.android.features.store.StoreProductListScreen
-import com.bulbulustur.android.features.company.CompanyHomeScreen
-import com.bulbulustur.android.features.company.CompanyProductsScreen
-import com.bulbulustur.android.features.company.CompanyContactScreen
-import com.bulbulustur.android.features.wholesale.CategoryDetailScreen as WholesaleCategoryDetailScreen
-import com.bulbulustur.android.features.wholesale.CustomizationRequestScreen
-import com.bulbulustur.android.features.wholesale.LastPriceRequestScreen
-import com.bulbulustur.android.features.wholesale.ProductDetailScreen as WholesaleProductDetailScreen
-import com.bulbulustur.android.features.wholesale.ProductListScreen as WholesaleProductListScreen
-import com.bulbulustur.android.features.wholesale.SampleRequestScreen
-import com.bulbulustur.android.features.wholesale.SearchScreen as WholesaleSearchScreen
-import com.bulbulustur.android.features.wholesale.WholesaleCategoryHomeScreen
-import com.bulbulustur.android.features.wholesale.WholesaleHomeScreen
-import com.bulbulustur.android.features.wholesale.WholesaleRoutes
-import com.bulbulustur.android.features.wholesale.menu.WholesaleMenuScreen
-import com.bulbulustur.android.features.wholesale.rfq.RfqRoutes
-import com.bulbulustur.android.features.wholesale.rfq.RfqDetailScreen
-import com.bulbulustur.android.features.wholesale.rfq.RfqOfferDetailScreen
-import com.bulbulustur.android.features.wholesale.rfq.RfqCreateScreen
-import com.bulbulustur.android.features.wholesale.rfq.RfqListScreen
-import com.bulbulustur.android.ui.shell.BuyerMode
-import com.bulbulustur.android.ui.shell.BuyerModeSheet
-import com.bulbulustur.android.ui.theme.BbTheme
+import com.bulbulustur.android.Features.areas.b2c.order.OrderListScreen
+import com.bulbulustur.android.Features.areas.b2c.order.OrderDetailScreen
+import com.bulbulustur.android.Features.areas.b2c.order.OrderContractScreen
+import com.bulbulustur.android.Features.areas.b2c.order.OrderCancelRequestScreen
+import com.bulbulustur.android.Features.areas.b2c.order.OrderReturnRequestScreen
+import com.bulbulustur.android.Features.areas.b2c.order.OrderReviewCreateScreen
+import com.bulbulustur.android.Features.areas.b2c.order.OrderShipmentTrackingScreen
+import com.bulbulustur.android.Features.account.wallet.WalletBalanceScreen
+import com.bulbulustur.android.Features.account.subscription.SubscriptionListScreen
+import com.bulbulustur.android.Features.account.subscription.SubscriptionDetailScreen
+import com.bulbulustur.android.Features.account.AccountScreen
+import com.bulbulustur.android.Features.account.AccountSecurityScreen
+import com.bulbulustur.android.Features.account.AddressFormScreen
+import com.bulbulustur.android.Features.account.AddressListScreen
+import com.bulbulustur.android.Features.account.CommunicationPreferenceScreen
+import com.bulbulustur.android.Features.company.CompanyDetailScreen
+import com.bulbulustur.android.Features.company.CompanyListScreen
+import com.bulbulustur.android.Features.account.CouponListScreen
+import com.bulbulustur.android.Features.account.RequestListScreen
+import com.bulbulustur.android.Features.account.RequestDetailScreen
+import com.bulbulustur.android.Features.account.ReviewListScreen
+import com.bulbulustur.android.Features.account.review.ReviewEditScreen
+import com.bulbulustur.android.Features.account.bank.BankAccountCreateScreen
+import com.bulbulustur.android.Features.account.bank.BankAccountEditScreen
+import com.bulbulustur.android.Features.account.bank.BankAccountListScreen
+import com.bulbulustur.android.Features.account.company.CompanyB2BIndexScreen
+import com.bulbulustur.android.Features.account.company.CompanyB2BStatusScreen
+import com.bulbulustur.android.Features.account.company.CompanyInfoEditScreen
+import com.bulbulustur.android.Features.account.company.CompanyInfoScreen
+import com.bulbulustur.android.Features.account.favorite.FavoriteListScreen
+import com.bulbulustur.android.Features.account.favorite.FollowedStoreListScreen
+import com.bulbulustur.android.Features.account.notification.NotificationListScreen
+import com.bulbulustur.android.Features.account.phone.PhoneCreateScreen
+import com.bulbulustur.android.Features.account.phone.PhoneListScreen
+import com.bulbulustur.android.Features.account.phone.PhoneVerifyScreen
+import com.bulbulustur.android.Features.account.preference.UsagePurposeScreen
+import com.bulbulustur.android.Features.account.profile.ProfileScreen
+import com.bulbulustur.android.Features.account.question.QuestionAnswerScreen
+import com.bulbulustur.android.Features.account.security.ChangeEmailScreen
+import com.bulbulustur.android.Features.account.security.ChangePasswordScreen
+import com.bulbulustur.android.Features.account.security.LoginActivitiesScreen
+import com.bulbulustur.android.Features.account.settings.AboutThisAppScreen
+import com.bulbulustur.android.Features.account.settings.AccountSettingsScreen
+import com.bulbulustur.android.Features.account.settings.AppearanceSettingsScreen
+import com.bulbulustur.android.Features.account.settings.CurrencySettingsScreen
+import com.bulbulustur.android.Features.account.settings.LanguageSettingsScreen
+import com.bulbulustur.android.Features.account.settings.LegalPoliciesScreen
+import com.bulbulustur.android.Features.account.settings.LegalPolicyDetailScreen
+import com.bulbulustur.android.Features.account.settings.RegionSettingsScreen
+import com.bulbulustur.android.Features.areas.b2c.basket.BasketScreen
+import com.bulbulustur.android.Features.message.MessageInboxScreen
+import com.bulbulustur.android.Features.message.MessageDetailScreen
+import com.bulbulustur.android.Features.areas.b2c.CampaignDetailScreen
+import com.bulbulustur.android.Features.areas.b2c.CampaignListScreen
+import com.bulbulustur.android.Features.areas.b2c.OtherSellerListScreen
+import com.bulbulustur.android.Features.areas.b2c.ProductDetailScreen as RetailProductDetailScreen
+import com.bulbulustur.android.Features.areas.b2c.ProductListScreen as RetailProductListScreen
+import com.bulbulustur.android.Features.areas.b2c.ProductQuestionScreen
+import com.bulbulustur.android.Features.areas.b2c.ProductReviewScreen
+import com.bulbulustur.android.Features.areas.b2c.RetailCategoryHomeScreen
+import com.bulbulustur.android.Features.areas.b2c.RetailHomeScreen
+import com.bulbulustur.android.Features.areas.b2c.menu.RetailMenuScreen
+import com.bulbulustur.android.Features.splash.ModeSelectionScreen
+import com.bulbulustur.android.Features.areas.b2c.store.StoreDetailScreen
+import com.bulbulustur.android.Features.areas.b2c.store.StoreListScreen
+import com.bulbulustur.android.Features.areas.b2c.store.StoreProductListScreen
+import com.bulbulustur.android.Features.company.CompanyHomeScreen
+import com.bulbulustur.android.Features.company.CompanyProductsScreen
+import com.bulbulustur.android.Features.company.CompanyContactScreen
+import com.bulbulustur.android.Features.areas.b2b.CategoryDetailScreen as WholesaleCategoryDetailScreen
+import com.bulbulustur.android.Features.areas.b2b.CustomizationRequestScreen
+import com.bulbulustur.android.Features.areas.b2b.LastPriceRequestScreen
+import com.bulbulustur.android.Features.areas.b2b.ProductDetailScreen as WholesaleProductDetailScreen
+import com.bulbulustur.android.Features.areas.b2b.ProductListScreen as WholesaleProductListScreen
+import com.bulbulustur.android.Features.areas.b2b.SampleRequestScreen
+import com.bulbulustur.android.Features.areas.b2b.SearchScreen as WholesaleSearchScreen
+import com.bulbulustur.android.Features.areas.b2b.WholesaleCategoryHomeScreen
+import com.bulbulustur.android.Features.areas.b2b.WholesaleHomeScreen
+import com.bulbulustur.android.Features.areas.b2b.menu.WholesaleMenuScreen
+import com.bulbulustur.android.Features.areas.b2b.rfq.RfqDetailScreen
+import com.bulbulustur.android.Features.areas.b2b.rfq.RfqOfferDetailScreen
+import com.bulbulustur.android.Features.areas.b2b.rfq.RfqCreateScreen
+import com.bulbulustur.android.Features.areas.b2b.rfq.RfqListScreen
+import com.bulbulustur.android.Ui.shell.BuyerMode
+import com.bulbulustur.android.Ui.shell.BuyerModeSheet
+import com.bulbulustur.android.Ui.theme.BbTheme
 
 class MainActivity : ComponentActivity() {
 
@@ -162,7 +156,7 @@ class MainActivity : ComponentActivity() {
                     }
 
                     fun navigateToRetailBasket() {
-                        navController.navigate(BasketRoutes.Basket) {
+                        navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.basket.BasketRoutes.Basket) {
                             launchSingleTop = true
                         }
                     }
@@ -174,25 +168,25 @@ class MainActivity : ComponentActivity() {
                     }
 
                     fun navigateToRetailCategories() {
-                        navController.navigate(RetailRoutes.CategoryHome) {
+                        navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.CategoryHome) {
                             launchSingleTop = true
                         }
                     }
 
                     fun navigateToWholesaleCategories() {
-                        navController.navigate(WholesaleRoutes.CategoryHome) {
+                        navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.CategoryHome) {
                             launchSingleTop = true
                         }
                     }
 
                     fun navigateToWholesaleOffers() {
-                        navController.navigate(WholesaleRoutes.QuotationRequests) {
+                        navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.QuotationRequests) {
                             launchSingleTop = true
                         }
                     }
 
                     fun navigateToWholesaleRfqCreate() {
-                        navController.navigate(WholesaleRoutes.RfqCreate) {
+                        navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.RfqCreate) {
                             launchSingleTop = true
                         }
                     }
@@ -212,7 +206,7 @@ class MainActivity : ComponentActivity() {
                     fun navigateToRetailHome() {
                         closeBuyerModeSheet()
 
-                        navController.navigate(RetailRoutes.Home) {
+                        navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.Home) {
                             launchSingleTop = true
                             restoreState = true
 
@@ -226,13 +220,13 @@ class MainActivity : ComponentActivity() {
                     fun navigateToWholesaleHome() {
                         closeBuyerModeSheet()
 
-                        navController.navigate(WholesaleRoutes.Home) {
+                        navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.Home) {
                             launchSingleTop = true
                         }
                     }
 
                     fun navigateFromModeSelectionToRetail() {
-                        navController.navigate(RetailRoutes.Home) {
+                        navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.Home) {
                             popUpTo(SplashRoutes.ModeSelection) {
                                 inclusive = true
                             }
@@ -242,7 +236,7 @@ class MainActivity : ComponentActivity() {
                     }
 
                     fun navigateFromModeSelectionToWholesale() {
-                        navController.navigate(WholesaleRoutes.Home) {
+                        navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.Home) {
                             popUpTo(SplashRoutes.ModeSelection) {
                                 inclusive = true
                             }
@@ -281,11 +275,11 @@ class MainActivity : ComponentActivity() {
 
                                     if (!didPop) {
                                         if (previousRoute.startsWith("wholesale/")) {
-                                            navController.navigate(WholesaleRoutes.Home) {
+                                            navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.Home) {
                                                 launchSingleTop = true
                                             }
                                         } else {
-                                            navController.navigate(RetailRoutes.Home) {
+                                            navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.Home) {
                                                 launchSingleTop = true
                                             }
                                         }
@@ -320,21 +314,21 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
-                        composable(BasketRoutes.Basket) {
-                            BasketScreen(
+                        composable(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.basket.BasketRoutes.Basket) {
+                            _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.basket.BasketScreen(
                                 onBackClick = {
                                     navController.popBackStack()
                                 },
                                 onCheckoutClick = {
                                 },
                                 onProductClick = {
-                                    navController.navigate(RetailRoutes.ProductDetail)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.ProductDetail)
                                 },
                                 onStoreClick = {
-                                    navController.navigate(StoreRoutes.StoreDetail)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.store.StoreRoutes.StoreDetail)
                                 },
                                 onHomeClick = {
-                                    navController.navigate(RetailRoutes.Home) {
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.Home) {
                                         launchSingleTop = true
                                     }
                                 },
@@ -350,25 +344,25 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
-                        composable(RetailRoutes.Home) {
-                            RetailHomeScreen(
+                        composable(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.Home) {
+                            _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailHomeScreen(
                                 onSearchClick = {
-                                    navController.navigate(RetailRoutes.Search)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.Search)
                                 },
                                 onCategoryClick = {
                                     navigateToRetailCategories()
                                 },
                                 onProductListClick = {
-                                    navController.navigate(RetailRoutes.ProductList)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.ProductList)
                                 },
                                 onProductDetailClick = {
-                                    navController.navigate(RetailRoutes.ProductDetail)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.ProductDetail)
                                 },
                                 onFavoriteClick = {
                                     navigateToFavorites()
                                 },
                                 onStoreClick = {
-                                    navController.navigate(StoreRoutes.StoreList)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.store.StoreRoutes.StoreList)
                                 },
                                 onMessageClick = {
                                     navigateToInbox()
@@ -388,15 +382,15 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
-                        composable(RetailRoutes.Menu) {
-                            RetailMenuScreen(
+                        composable(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.Menu) {
+                            _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.menu.RetailMenuScreen(
                                 onHomeClick = {
-                                    navController.navigate(RetailRoutes.Home) {
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.Home) {
                                         launchSingleTop = true
                                     }
                                 },
                                 onSearchClick = {
-                                    navController.navigate(RetailRoutes.Search)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.Search)
                                 },
                                 onBasketClick = {
                                     navigateToRetailBasket()
@@ -408,21 +402,21 @@ class MainActivity : ComponentActivity() {
                                     navigateToRetailCategories()
                                 },
                                 onCampaignsClick = {
-                                    navController.navigate(RetailRoutes.CampaignList)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.CampaignList)
                                 },
                                 onStoresClick = {
-                                    navController.navigate(StoreRoutes.StoreList)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.store.StoreRoutes.StoreList)
                                 }
                             )
                         }
 
-                        composable(RetailRoutes.CategoryHome) {
-                            RetailCategoryHomeScreen(
+                        composable(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.CategoryHome) {
+                            _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailCategoryHomeScreen(
                                 onBackClick = {
                                     navigateToRetailHome()
                                 },
                                 onSearchClick = {
-                                    navController.navigate(RetailRoutes.Search)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.Search)
                                 },
                                 onMenuClick = {
                                     navigateToRetailHome()
@@ -446,23 +440,23 @@ class MainActivity : ComponentActivity() {
                                     navigateToAccount()
                                 },
                                 onProductListClick = {
-                                    navController.navigate(RetailRoutes.ProductList)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.ProductList)
                                 },
                                 onSubCategoryClick = {
-                                    navController.navigate(RetailRoutes.CategoryHome) {
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.CategoryHome) {
                                         launchSingleTop = true
                                     }
                                 },
                                 onStoreClick = {
-                                    navController.navigate(StoreRoutes.StoreList)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.store.StoreRoutes.StoreList)
                                 }
                             )
                         }
 
-                        composable(RetailRoutes.ProductList) {
+                        composable(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.ProductList) {
                             RetailProductListScreen(
                                 onSearchClick = {
-                                    navController.navigate(RetailRoutes.Search)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.Search)
                                 },
                                 onMenuClick = {
                                     navigateToRetailCategories()
@@ -471,10 +465,10 @@ class MainActivity : ComponentActivity() {
                                     navigateToFavorites()
                                 },
                                 onProductDetailClick = {
-                                    navController.navigate(RetailRoutes.ProductDetail)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.ProductDetail)
                                 },
                                 onHomeClick = {
-                                    navController.navigate(RetailRoutes.Home) {
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.Home) {
                                         launchSingleTop = true
                                     }
                                 },
@@ -493,10 +487,10 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
-                        composable(RetailRoutes.Search) {
+                        composable(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.Search) {
                             RetailProductListScreen(
                                 onSearchClick = {
-                                    navController.navigate(RetailRoutes.Search)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.Search)
                                 },
                                 onMenuClick = {
                                     navigateToRetailCategories()
@@ -505,10 +499,10 @@ class MainActivity : ComponentActivity() {
                                     navigateToFavorites()
                                 },
                                 onProductDetailClick = {
-                                    navController.navigate(RetailRoutes.ProductDetail)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.ProductDetail)
                                 },
                                 onHomeClick = {
-                                    navController.navigate(RetailRoutes.Home) {
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.Home) {
                                         launchSingleTop = true
                                     }
                                 },
@@ -527,13 +521,13 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
-                        composable(RetailRoutes.ProductDetail) {
+                        composable(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.ProductDetail) {
                             RetailProductDetailScreen(
                                 onBackClick = {
                                     navController.popBackStack()
                                 },
                                 onSearchClick = {
-                                    navController.navigate(RetailRoutes.Search)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.Search)
                                 },
                                 onFavoriteClick = {
                                     navigateToFavorites()
@@ -550,144 +544,152 @@ class MainActivity : ComponentActivity() {
                                 onStockAlarmClick = {
                                 },
                                 onStoreClick = {
-                                    navController.navigate(StoreRoutes.StoreDetail)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.store.StoreRoutes.StoreDetail)
                                 },
                                 onOtherSellerClick = {
-                                    navController.navigate(RetailRoutes.OtherSellerList)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.OtherSellerList)
                                 },
                                 onReviewClick = {
-                                    navController.navigate(RetailRoutes.ProductReview)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.ProductReview)
                                 },
                                 onQuestionClick = {
-                                    navController.navigate(RetailRoutes.ProductQuestion)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.ProductQuestion)
                                 },
                                 onSellerProductClick = {
-                                    navController.navigate(RetailRoutes.ProductDetail) {
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.ProductDetail) {
                                         launchSingleTop = true
                                     }
                                 },
                                 onRelatedCategoryClick = {
-                                    navController.navigate(RetailRoutes.ProductList)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.ProductList)
                                 }
                             )
                         }
 
-                        composable(RetailRoutes.ProductReview) {
-                            ProductReviewScreen(
+                        composable(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.ProductReview) {
+                            _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.ProductReviewScreen(
                                 onBackClick = {
                                     navController.popBackStack()
                                 }
                             )
                         }
 
-                        composable(RetailRoutes.ProductQuestion) {
-                            ProductQuestionScreen(
+                        composable(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.ProductQuestion) {
+                            _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.ProductQuestionScreen(
                                 onBackClick = {
                                     navController.popBackStack()
                                 }
                             )
                         }
 
-                        composable(RetailRoutes.OtherSellerList) {
-                            OtherSellerListScreen(
+                        composable(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.OtherSellerList) {
+                            _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.OtherSellerListScreen(
                                 onBackClick = {
                                     navController.popBackStack()
                                 }
                             )
                         }
 
-                        composable(RetailRoutes.CampaignList) {
-                            CampaignListScreen(
+                        composable(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.CampaignList) {
+                            _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.CampaignListScreen(
                                 onBackClick = {
                                     navController.popBackStack()
                                 },
                                 onCampaignClick = {
-                                    navController.navigate(RetailRoutes.CampaignDetail)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.CampaignDetail)
                                 }
                             )
                         }
 
-                        composable(RetailRoutes.CampaignDetail) {
-                            CampaignDetailScreen(
+                        composable(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.CampaignDetail) {
+                            _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.CampaignDetailScreen(
                                 onBackClick = {
                                     navController.popBackStack()
                                 },
                                 onProductClick = {
-                                    navController.navigate(RetailRoutes.ProductDetail)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.ProductDetail)
                                 }
                             )
                         }
 
-                        composable(StoreRoutes.StoreList) {
-                            StoreListScreen(
+                        composable(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.store.StoreRoutes.StoreList) {
+                            _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.store.StoreListScreen(
                                 onBackClick = {
                                     navController.popBackStack()
                                 },
                                 onStoreClick = {
-                                    navController.navigate(StoreRoutes.StoreDetail) {
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.store.StoreRoutes.StoreDetail) {
                                         launchSingleTop = true
                                     }
                                 }
                             )
                         }
 
-                        composable(StoreRoutes.StoreDetail) {
-                            StoreDetailScreen(
+                        composable(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.store.StoreRoutes.StoreDetail) {
+                            _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.store.StoreDetailScreen(
                                 onBackClick = {
                                     navController.popBackStack()
                                 },
                                 onProductClick = {
-                                    navController.navigate(RetailRoutes.ProductDetail) {
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.ProductDetail) {
                                         launchSingleTop = true
                                     }
                                 },
                                 onStoreListClick = {
-                                    navController.navigate(StoreRoutes.StoreList) {
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.store.StoreRoutes.StoreList) {
                                         launchSingleTop = true
                                     }
                                 }
                             )
                         }
 
-                        composable(StoreRoutes.StoreProductList) {
-                            StoreProductListScreen(
+                        composable(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.store.StoreRoutes.StoreProductList) {
+                            _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.store.StoreProductListScreen(
                                 onBackClick = {
                                     navController.popBackStack()
                                 },
                                 onProductClick = {
-                                    navController.navigate(RetailRoutes.ProductDetail) {
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.ProductDetail) {
                                         launchSingleTop = true
                                     }
                                 }
                             )
                         }
 
-                        composable(WholesaleRoutes.QuotationRequests) {
-                            RfqListScreen(
+                        composable(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.QuotationRequests) {
+                            _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.rfq.RfqListScreen(
                                 onBackClick = {
-                                    navController.navigate(WholesaleRoutes.Home) {
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.Home) {
                                         launchSingleTop = true
                                     }
                                 },
                                 onDiscoverWholesaleClick = {
-                                    navController.navigate(WholesaleRoutes.Home) {
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.Home) {
                                         launchSingleTop = true
                                     }
                                 },
                                 onOffersClick = { buyerRequestId ->
-                                    navController.navigate(RfqRoutes.detail(buyerRequestId))
+                                    navController.navigate(
+                                        _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.rfq.RfqRoutes.detail(
+                                            buyerRequestId
+                                        )
+                                    )
                                 },
                                 onDetailClick = { buyerRequestId ->
-                                    navController.navigate(RfqRoutes.detail(buyerRequestId))
+                                    navController.navigate(
+                                        _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.rfq.RfqRoutes.detail(
+                                            buyerRequestId
+                                        )
+                                    )
                                 },
                                 onDeleteClick = {
                                     // V1: silme dialogu sonra eklenecek
                                 },
                                 onCreateRfqClick = {
-                                    navController.navigate(RfqRoutes.Create)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.rfq.RfqRoutes.Create)
                                 },
                                 onHomeClick = {
-                                    navController.navigate(WholesaleRoutes.Home) {
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.Home) {
                                         launchSingleTop = true
                                     }
                                 },
@@ -698,7 +700,7 @@ class MainActivity : ComponentActivity() {
                                     openBuyerModeSheet()
                                 },
                                 onBasketClick = {
-                                    navController.navigate(WholesaleRoutes.QuotationRequests) {
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.QuotationRequests) {
                                         launchSingleTop = true
                                     }
                                 },
@@ -708,16 +710,16 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
-                        composable(WholesaleRoutes.RfqCreate) {
-                            RfqCreateScreen(
+                        composable(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.RfqCreate) {
+                            _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.rfq.RfqCreateScreen(
                                 onBackClick = {
                                     navController.popBackStack()
                                 }
                             )
                         }
 
-                        composable(RfqRoutes.Create) {
-                            RfqCreateScreen(
+                        composable(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.rfq.RfqRoutes.Create) {
+                            _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.rfq.RfqCreateScreen(
                                 onBackClick = {
                                     navController.popBackStack()
                                 },
@@ -725,7 +727,7 @@ class MainActivity : ComponentActivity() {
                                     navController.popBackStack()
                                 },
                                 onHomeClick = {
-                                    navController.navigate(WholesaleRoutes.Home) {
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.Home) {
                                         launchSingleTop = true
                                     }
                                 },
@@ -736,7 +738,7 @@ class MainActivity : ComponentActivity() {
                                     openBuyerModeSheet()
                                 },
                                 onBasketClick = {
-                                    navController.navigate(WholesaleRoutes.QuotationRequests) {
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.QuotationRequests) {
                                         launchSingleTop = true
                                     }
                                 },
@@ -747,56 +749,56 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(
-                            route = RfqRoutes.Detail,
+                            route = _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.rfq.RfqRoutes.Detail,
                             arguments = listOf(
-                                navArgument(RfqRoutes.ArgBuyerRequestId) {
+                                navArgument(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.rfq.RfqRoutes.ArgBuyerRequestId) {
                                     type = NavType.IntType
                                 }
                             )
                         ) { backStackEntry ->
                             val buyerRequestId = backStackEntry.arguments
-                                ?.getInt(RfqRoutes.ArgBuyerRequestId)
+                                ?.getInt(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.rfq.RfqRoutes.ArgBuyerRequestId)
                                 ?: 0
 
-                            RfqDetailScreen(
+                            _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.rfq.RfqDetailScreen(
                                 buyerRequestId = buyerRequestId,
                                 onBackClick = {
                                     navController.popBackStack()
                                 },
                                 onOfferClick = { sendedOfferId ->
                                     navController.navigate(
-                                        RfqRoutes.offerDetail(
+                                        _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.rfq.RfqRoutes.offerDetail(
                                             buyerRequestId = buyerRequestId,
                                             sendedOfferId = sendedOfferId
                                         )
                                     )
                                 },
                                 onCreateRfqClick = {
-                                    navController.navigate(RfqRoutes.Create)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.rfq.RfqRoutes.Create)
                                 }
                             )
                         }
 
                         composable(
-                            route = RfqRoutes.OfferDetail,
+                            route = _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.rfq.RfqRoutes.OfferDetail,
                             arguments = listOf(
-                                navArgument(RfqRoutes.ArgBuyerRequestId) {
+                                navArgument(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.rfq.RfqRoutes.ArgBuyerRequestId) {
                                     type = NavType.IntType
                                 },
-                                navArgument(RfqRoutes.ArgSendedOfferId) {
+                                navArgument(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.rfq.RfqRoutes.ArgSendedOfferId) {
                                     type = NavType.IntType
                                 }
                             )
                         ) { backStackEntry ->
                             val buyerRequestId = backStackEntry.arguments
-                                ?.getInt(RfqRoutes.ArgBuyerRequestId)
+                                ?.getInt(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.rfq.RfqRoutes.ArgBuyerRequestId)
                                 ?: 0
 
                             val sendedOfferId = backStackEntry.arguments
-                                ?.getInt(RfqRoutes.ArgSendedOfferId)
+                                ?.getInt(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.rfq.RfqRoutes.ArgSendedOfferId)
                                 ?: 0
 
-                            RfqOfferDetailScreen(
+                            _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.rfq.RfqOfferDetailScreen(
                                 buyerRequestId = buyerRequestId,
                                 sendedOfferId = sendedOfferId,
                                 onBackClick = {
@@ -811,19 +813,19 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
-                        composable(WholesaleRoutes.Home) {
-                            WholesaleHomeScreen(
+                        composable(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.Home) {
+                            _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleHomeScreen(
                                 onSearchClick = {
-                                    navController.navigate(WholesaleRoutes.Search)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.Search)
                                 },
                                 onCategoryClick = {
                                     navigateToWholesaleCategories()
                                 },
                                 onProductListClick = {
-                                    navController.navigate(WholesaleRoutes.ProductList)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.ProductList)
                                 },
                                 onProductDetailClick = {
-                                    navController.navigate(WholesaleRoutes.ProductDetail)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.ProductDetail)
                                 },
                                 onCompanyListClick = {
                                     navController.navigate(CompanyRoutes.CompanyList)
@@ -838,13 +840,13 @@ class MainActivity : ComponentActivity() {
                                     navigateToFavorites()
                                 },
                                 onLastPriceRequestClick = {
-                                    navController.navigate(WholesaleRoutes.LastPriceRequest)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.LastPriceRequest)
                                 },
                                 onSampleRequestClick = {
-                                    navController.navigate(WholesaleRoutes.SampleRequest)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.SampleRequest)
                                 },
                                 onCustomizationRequestClick = {
-                                    navController.navigate(WholesaleRoutes.CustomizationRequest)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.CustomizationRequest)
                                 },
                                 onMessageClick = {
                                     navigateToInbox()
@@ -864,15 +866,15 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
-                        composable(WholesaleRoutes.Menu) {
-                            WholesaleMenuScreen(
+                        composable(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.Menu) {
+                            _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.menu.WholesaleMenuScreen(
                                 onHomeClick = {
-                                    navController.navigate(WholesaleRoutes.Home) {
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.Home) {
                                         launchSingleTop = true
                                     }
                                 },
                                 onSearchClick = {
-                                    navController.navigate(WholesaleRoutes.Search)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.Search)
                                 },
                                 onBasketClick = {
                                     navigateToWholesaleOffers()
@@ -892,23 +894,23 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
-                        composable(WholesaleRoutes.CategoryHome) {
-                            WholesaleCategoryHomeScreen(
+                        composable(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.CategoryHome) {
+                            _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleCategoryHomeScreen(
                                 onBackClick = {
-                                    navController.navigate(WholesaleRoutes.Home) {
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.Home) {
                                         launchSingleTop = true
-                                        popUpTo(WholesaleRoutes.Home) {
+                                        popUpTo(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.Home) {
                                             inclusive = false
                                         }
                                     }
                                 },
                                 onSearchClick = {
-                                    navController.navigate(WholesaleRoutes.Search)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.Search)
                                 },
                                 onMenuClick = {
-                                    navController.navigate(WholesaleRoutes.Home) {
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.Home) {
                                         launchSingleTop = true
-                                        popUpTo(WholesaleRoutes.Home) {
+                                        popUpTo(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.Home) {
                                             inclusive = false
                                         }
                                     }
@@ -920,9 +922,9 @@ class MainActivity : ComponentActivity() {
                                     navigateToInbox()
                                 },
                                 onHomeClick = {
-                                    navController.navigate(WholesaleRoutes.Home) {
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.Home) {
                                         launchSingleTop = true
-                                        popUpTo(WholesaleRoutes.Home) {
+                                        popUpTo(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.Home) {
                                             inclusive = false
                                         }
                                     }
@@ -937,10 +939,10 @@ class MainActivity : ComponentActivity() {
                                     navigateToAccount()
                                 },
                                 onProductListClick = {
-                                    navController.navigate(WholesaleRoutes.ProductList)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.ProductList)
                                 },
                                 onSubCategoryClick = {
-                                    navController.navigate(WholesaleRoutes.CategoryHome) {
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.CategoryHome) {
                                         launchSingleTop = true
                                     }
                                 },
@@ -951,32 +953,32 @@ class MainActivity : ComponentActivity() {
                                     navigateToWholesaleRfqCreate()
                                 },
                                 onLastPriceRequestClick = {
-                                    navController.navigate(WholesaleRoutes.LastPriceRequest)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.LastPriceRequest)
                                 },
                                 onSampleRequestClick = {
-                                    navController.navigate(WholesaleRoutes.SampleRequest)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.SampleRequest)
                                 },
                                 onCustomizationRequestClick = {
-                                    navController.navigate(WholesaleRoutes.CustomizationRequest)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.CustomizationRequest)
                                 }
                             )
                         }
 
-                        composable(WholesaleRoutes.CategoryDetail) {
+                        composable(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.CategoryDetail) {
                             WholesaleCategoryDetailScreen()
                         }
 
-                        composable(WholesaleRoutes.ProductList) {
+                        composable(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.ProductList) {
                             WholesaleProductListScreen()
                         }
 
-                        composable(WholesaleRoutes.ProductDetail) {
+                        composable(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.ProductDetail) {
                             WholesaleProductDetailScreen(
                                 onBackClick = {
                                     navController.popBackStack()
                                 },
                                 onSearchClick = {
-                                    navController.navigate(WholesaleRoutes.Search)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.Search)
                                 },
                                 onFavoriteClick = {
                                     navigateToFavorites()
@@ -991,54 +993,54 @@ class MainActivity : ComponentActivity() {
                                     navController.navigate(CompanyRoutes.CompanyProducts)
                                 },
                                 onCompanySimilarProductClick = {
-                                    navController.navigate(WholesaleRoutes.ProductDetail)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.ProductDetail)
                                 },
                                 onCompanyBestSellerProductClick = {
-                                    navController.navigate(WholesaleRoutes.ProductDetail)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.ProductDetail)
                                 },
                                 onCompanySimilarProductsClick = {
-                                    navController.navigate(WholesaleRoutes.ProductList)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.ProductList)
                                 },
                                 onCompanyBestSellerProductsClick = {
-                                    navController.navigate(WholesaleRoutes.ProductList)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.ProductList)
                                 },
                                 onLastPriceRequestClick = {
-                                    navController.navigate(WholesaleRoutes.LastPriceRequest)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.LastPriceRequest)
                                 },
                                 onSampleRequestClick = {
-                                    navController.navigate(WholesaleRoutes.SampleRequest)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.SampleRequest)
                                 },
                                 onCustomizationRequestClick = {
-                                    navController.navigate(WholesaleRoutes.CustomizationRequest)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.CustomizationRequest)
                                 },
                                 onRelatedCategoryClick = {
-                                    navController.navigate(WholesaleRoutes.ProductList)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.ProductList)
                                 }
                             )
                         }
 
-                        composable(WholesaleRoutes.Search) {
+                        composable(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.Search) {
                             WholesaleSearchScreen()
                         }
 
-                        composable(WholesaleRoutes.LastPriceRequest) {
-                            LastPriceRequestScreen(
+                        composable(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.LastPriceRequest) {
+                            _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.LastPriceRequestScreen(
                                 onBackClick = {
                                     navController.popBackStack()
                                 }
                             )
                         }
 
-                        composable(WholesaleRoutes.SampleRequest) {
-                            SampleRequestScreen(
+                        composable(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.SampleRequest) {
+                            _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.SampleRequestScreen(
                                 onBackClick = {
                                     navController.popBackStack()
                                 }
                             )
                         }
 
-                        composable(WholesaleRoutes.CustomizationRequest) {
-                            CustomizationRequestScreen(
+                        composable(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.CustomizationRequest) {
+                            _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.CustomizationRequestScreen(
                                 onBackClick = {
                                     navController.popBackStack()
                                 }
@@ -1064,7 +1066,7 @@ class MainActivity : ComponentActivity() {
                                 onBackClick = { navController.popBackStack() },
                                 onCompanyProfileClick = { navController.navigate(CompanyRoutes.CompanyDetail) },
                                 onCompanyContactClick = { navController.navigate(CompanyRoutes.CompanyContact) },
-                                onProductClick = { navController.navigate(WholesaleRoutes.ProductDetail) }
+                                onProductClick = { navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRoutes.ProductDetail) }
                             )
                         }
 
@@ -1105,49 +1107,53 @@ class MainActivity : ComponentActivity() {
                         }
 
 
-                        composable(OrderRoutes.List) {
-                            OrderListScreen(
+                        composable(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.order.OrderRoutes.List) {
+                            _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.order.OrderListScreen(
                                 onBackClick = {
                                     navController.popBackStack()
                                 },
                                 onOrderDetailClick = { orderId ->
-                                    navController.navigate(OrderRoutes.detail(orderId))
+                                    navController.navigate(
+                                        _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.order.OrderRoutes.detail(
+                                            orderId
+                                        )
+                                    )
                                 }
                             )
                         }
 
                         composable(
-                            route = OrderRoutes.Detail,
+                            route = _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.order.OrderRoutes.Detail,
                             arguments = listOf(
-                                navArgument(OrderRoutes.ArgOrderId) {
+                                navArgument(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.order.OrderRoutes.ArgOrderId) {
                                     type = NavType.IntType
                                 }
                             )
                         ) { backStackEntry ->
-                            val orderId = backStackEntry.arguments?.getInt(OrderRoutes.ArgOrderId) ?: 0
+                            val orderId = backStackEntry.arguments?.getInt(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.order.OrderRoutes.ArgOrderId) ?: 0
 
-                            OrderDetailScreen(
+                            _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.order.OrderDetailScreen(
                                 orderId = orderId,
                                 onBackClick = {
                                     navController.popBackStack()
                                 },
                                 onContractClick = {
                                     navController.navigate(
-                                        OrderRoutes.contract(
+                                        _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.order.OrderRoutes.contract(
                                             orderKey = "ORD-F4QO-AFPR-J5EX",
                                             storeKey = "STORE-ORTOBELLA"
                                         )
                                     )
                                 },
                                 onStoreClick = {
-                                    navController.navigate(StoreRoutes.StoreDetail)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.store.StoreRoutes.StoreDetail)
                                 },
                                 onSupportClick = {
                                     // V1: support bottom sheet OrderDetail içinde açılıyor.
                                 },
                                 onCancelRequestClick = { orderStoreLineId, orderKey ->
                                     navController.navigate(
-                                        OrderRoutes.cancelRequest(
+                                        _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.order.OrderRoutes.cancelRequest(
                                             orderStoreLineId = orderStoreLineId,
                                             orderKey = orderKey
                                         )
@@ -1155,7 +1161,7 @@ class MainActivity : ComponentActivity() {
                                 },
                                 onReturnRequestClick = { orderStoreLineId, orderKey ->
                                     navController.navigate(
-                                        OrderRoutes.returnRequest(
+                                        _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.order.OrderRoutes.returnRequest(
                                             orderStoreLineId = orderStoreLineId,
                                             orderKey = orderKey
                                         )
@@ -1163,7 +1169,7 @@ class MainActivity : ComponentActivity() {
                                 },
                                 onReviewCreateClick = { orderStoreLineId, productId, memberKey ->
                                     navController.navigate(
-                                        OrderRoutes.reviewCreate(
+                                        _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.order.OrderRoutes.reviewCreate(
                                             orderStoreLineId = orderStoreLineId,
                                             productId = productId,
                                             memberKey = memberKey
@@ -1172,7 +1178,7 @@ class MainActivity : ComponentActivity() {
                                 },
                                 onShipmentTrackingClick = { orderStoreLineId ->
                                     navController.navigate(
-                                        OrderRoutes.shipmentTracking(
+                                        _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.order.OrderRoutes.shipmentTracking(
                                             orderStoreLineId = orderStoreLineId
                                         )
                                     )
@@ -1183,19 +1189,19 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(
-                            route = OrderRoutes.Contract,
+                            route = _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.order.OrderRoutes.Contract,
                             arguments = listOf(
-                                navArgument(OrderRoutes.ArgOrderKey) {
+                                navArgument(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.order.OrderRoutes.ArgOrderKey) {
                                     type = NavType.StringType
                                 },
-                                navArgument(OrderRoutes.ArgStoreKey) {
+                                navArgument(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.order.OrderRoutes.ArgStoreKey) {
                                     type = NavType.StringType
                                 }
                             )
                         ) { backStackEntry ->
-                            val orderKey = backStackEntry.arguments?.getString(OrderRoutes.ArgOrderKey).orEmpty()
+                            val orderKey = backStackEntry.arguments?.getString(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.order.OrderRoutes.ArgOrderKey).orEmpty()
 
-                            OrderContractScreen(
+                            _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.order.OrderContractScreen(
                                 orderCode = orderKey.ifBlank { "ORD-F4QO-AFPR-J5EX" },
                                 onBackClick = {
                                     navController.popBackStack()
@@ -1204,17 +1210,17 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(
-                            route = OrderRoutes.CancelRequest,
+                            route = _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.order.OrderRoutes.CancelRequest,
                             arguments = listOf(
-                                navArgument(OrderRoutes.ArgOrderStoreLineId) {
+                                navArgument(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.order.OrderRoutes.ArgOrderStoreLineId) {
                                     type = NavType.LongType
                                 },
-                                navArgument(OrderRoutes.ArgOrderKey) {
+                                navArgument(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.order.OrderRoutes.ArgOrderKey) {
                                     type = NavType.StringType
                                 }
                             )
                         ) {
-                            OrderCancelRequestScreen(
+                            _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.order.OrderCancelRequestScreen(
                                 onBackClick = {
                                     navController.popBackStack()
                                 },
@@ -1225,17 +1231,17 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(
-                            route = OrderRoutes.ReturnRequest,
+                            route = _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.order.OrderRoutes.ReturnRequest,
                             arguments = listOf(
-                                navArgument(OrderRoutes.ArgOrderStoreLineId) {
+                                navArgument(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.order.OrderRoutes.ArgOrderStoreLineId) {
                                     type = NavType.LongType
                                 },
-                                navArgument(OrderRoutes.ArgOrderKey) {
+                                navArgument(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.order.OrderRoutes.ArgOrderKey) {
                                     type = NavType.StringType
                                 }
                             )
                         ) {
-                            OrderReturnRequestScreen(
+                            _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.order.OrderReturnRequestScreen(
                                 onBackClick = {
                                     navController.popBackStack()
                                 },
@@ -1246,20 +1252,20 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(
-                            route = OrderRoutes.ReviewCreate,
+                            route = _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.order.OrderRoutes.ReviewCreate,
                             arguments = listOf(
-                                navArgument(OrderRoutes.ArgOrderStoreLineId) {
+                                navArgument(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.order.OrderRoutes.ArgOrderStoreLineId) {
                                     type = NavType.LongType
                                 },
-                                navArgument(OrderRoutes.ArgProductId) {
+                                navArgument(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.order.OrderRoutes.ArgProductId) {
                                     type = NavType.LongType
                                 },
-                                navArgument(OrderRoutes.ArgMemberKey) {
+                                navArgument(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.order.OrderRoutes.ArgMemberKey) {
                                     type = NavType.StringType
                                 }
                             )
                         ) {
-                            OrderReviewCreateScreen(
+                            _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.order.OrderReviewCreateScreen(
                                 onBackClick = {
                                     navController.popBackStack()
                                 },
@@ -1270,14 +1276,14 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(
-                            route = OrderRoutes.ShipmentTracking,
+                            route = _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.order.OrderRoutes.ShipmentTracking,
                             arguments = listOf(
-                                navArgument(OrderRoutes.ArgOrderStoreLineId) {
+                                navArgument(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.order.OrderRoutes.ArgOrderStoreLineId) {
                                     type = NavType.LongType
                                 }
                             )
                         ) {
-                            OrderShipmentTrackingScreen(
+                            _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.order.OrderShipmentTrackingScreen(
                                 onBackClick = {
                                     navController.popBackStack()
                                 }
@@ -1308,7 +1314,7 @@ class MainActivity : ComponentActivity() {
                                     navigateToWholesaleOffers()
                                 },
                                 onOrdersClick = {
-                                    navController.navigate(OrderRoutes.List)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.order.OrderRoutes.List)
                                 },
                                 onFavoritesClick = {
                                     navigateToFavorites()
@@ -1348,7 +1354,7 @@ class MainActivity : ComponentActivity() {
                                     navController.navigate(AccountRoutes.UsagePurpose)
                                 },
                                 onHomeClick = {
-                                    navController.navigate(RetailRoutes.Home) {
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.Home) {
                                         launchSingleTop = true
                                     }
                                 },
@@ -1613,7 +1619,7 @@ class MainActivity : ComponentActivity() {
                         composable(AccountRoutes.Reviews) {
                             ReviewListScreen(
                                 onBackClick = { navController.popBackStack() },
-                                onProductClick = { navController.navigate(RetailRoutes.ProductDetail) },
+                                onProductClick = { navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.RetailRoutes.ProductDetail) },
                                 onEditReviewClick = { navController.navigate(AccountRoutes.ReviewEdit) },
                                 onDeleteReviewClick = {
                                     // V1: silme dialogu sonra eklenir
@@ -1650,10 +1656,10 @@ class MainActivity : ComponentActivity() {
                                     navController.popBackStack()
                                 },
                                 onRequestDetailClick = {
-                                    navController.navigate(OrderRoutes.detail(1))
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.order.OrderRoutes.detail(1))
                                 },
                                 onOrderListClick = {
-                                    navController.navigate(OrderRoutes.List)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.order.OrderRoutes.List)
                                 }
                             )
                         }
@@ -1667,7 +1673,7 @@ class MainActivity : ComponentActivity() {
                                     navController.navigate(AccountRoutes.OrderDetail)
                                 },
                                 onStoreClick = {
-                                    navController.navigate(StoreRoutes.StoreDetail)
+                                    navController.navigate(_root_ide_package_.com.bulbulustur.android.Features.areas.b2c.store.StoreRoutes.StoreDetail)
                                 }
                             )
                         }

@@ -72,7 +72,6 @@ fun BankAccountListScreen(
 
 
 
-
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
@@ -98,6 +97,7 @@ fun BankAccountListScreen(
             ),
             verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
         ) {
+
             item {
                 Text(
                     text = localizationValue,

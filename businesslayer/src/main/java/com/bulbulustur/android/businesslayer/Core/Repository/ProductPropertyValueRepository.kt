@@ -1,27 +1,71 @@
-﻿package com.bulbulustur.android.businesslayer.Core.Repository import com.bulbulustur.android.businesslayer.Core.Util.Result
+package com.bulbulustur.android.businesslayer.Core.Repository
 
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductPropertyValueDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.IProductPropertyValueRepository
+import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.ProductPropertyValueInsertModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.ProductPropertyValueUpdateModel
 import com.bulbulustur.android.businesslayer.Core.Network.ApiClient
+import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
+import com.bulbulustur.android.businesslayer.Core.Util.Result
 
 class ProductPropertyValueRepository(
-    private val apiClient: ApiClient
+    private val apiClient: ApiClient = ApiClient
 ) : IProductPropertyValueRepository {
 
     override suspend fun GetProductPropertyValueListAsync(): Result<List<ProductPropertyValueDTO>> {
-        TODO("Not implemented yet")
+        return apiClient.GetAsync(
+            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            method = "GetProductPropertyValueListAsync"
+        )
     }
 
     override suspend fun GetProductPropertyValueByIdAsync(
-        propertyValueId: Int
+        productPropertyValueId: Int
     ): Result<ProductPropertyValueUpdateModel?> {
-        TODO("Not implemented yet")
+        return apiClient.GetAsync(
+            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            method = "GetProductPropertyValueByIdAsync",
+            query = "productPropertyValueId=$productPropertyValueId"
+        )
     }
 
     override suspend fun GetProductPropertyValueByIdExtendedAsync(
-        propertyValueId: Int
+        productPropertyValueId: Int
     ): Result<ProductPropertyValueDTO?> {
-        TODO("Not implemented yet")
+        return apiClient.GetAsync(
+            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            method = "GetProductPropertyValueByIdExtendedAsync",
+            query = "productPropertyValueId=$productPropertyValueId"
+        )
+    }
+
+    override suspend fun InsertAsync(
+        model: ProductPropertyValueInsertModel
+    ): Result<Unit> {
+        return apiClient.PostAsync(
+            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            method = "InsertAsync",
+            data = model
+        )
+    }
+
+    override suspend fun UpdateAsync(
+        model: ProductPropertyValueUpdateModel
+    ): Result<Unit> {
+        return apiClient.PostAsync(
+            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            method = "UpdateAsync",
+            data = model
+        )
+    }
+
+    override suspend fun DeleteAsync(
+        productPropertyValueId: Int
+    ): Result<Unit> {
+        return apiClient.DeleteAsync(
+            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            method = "DeleteAsync",
+            query = "productPropertyValueId=$productPropertyValueId"
+        )
     }
 }

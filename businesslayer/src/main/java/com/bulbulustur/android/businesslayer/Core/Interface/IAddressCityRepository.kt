@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.businesslayer.Core.Interface
+package com.bulbulustur.android.businesslayer.Core.Interface
 
 import com.bulbulustur.android.businesslayer.Core.DTO.AddressCityDTO
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.AddressCityInsertModel
@@ -10,7 +10,6 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface IAddressCityRepository {
-
 
     @GET("api/AddressCity/GetAddressCityListAsync")
     suspend fun GetAddressCityListAsync():

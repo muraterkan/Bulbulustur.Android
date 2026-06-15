@@ -1,27 +1,71 @@
-﻿package com.bulbulustur.android.businesslayer.Core.Repository import com.bulbulustur.android.businesslayer.Core.Util.Result
+package com.bulbulustur.android.businesslayer.Core.Repository
 
 import com.bulbulustur.android.businesslayer.Core.DTO.SystemDescOrderStoreLineStatusDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.ISystemDescOrderStoreLineStatusRepository
+import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.SystemDescOrderStoreLineStatusInsertModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.SystemDescOrderStoreLineStatusUpdateModel
 import com.bulbulustur.android.businesslayer.Core.Network.ApiClient
+import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
+import com.bulbulustur.android.businesslayer.Core.Util.Result
 
 class SystemDescOrderStoreLineStatusRepository(
-    private val apiClient: ApiClient
+    private val apiClient: ApiClient = ApiClient
 ) : ISystemDescOrderStoreLineStatusRepository {
 
     override suspend fun GetSystemDescOrderStoreLineStatusListAsync(): Result<List<SystemDescOrderStoreLineStatusDTO>> {
-        TODO("Not implemented yet")
+        return apiClient.GetAsync(
+            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            method = "GetSystemDescOrderStoreLineStatusListAsync"
+        )
     }
 
     override suspend fun GetSystemDescOrderStoreLineStatusByIdAsync(
         systemDescOrderStoreLineStatusId: Int
     ): Result<SystemDescOrderStoreLineStatusUpdateModel?> {
-        TODO("Not implemented yet")
+        return apiClient.GetAsync(
+            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            method = "GetSystemDescOrderStoreLineStatusByIdAsync",
+            query = "systemDescOrderStoreLineStatusId=$systemDescOrderStoreLineStatusId"
+        )
     }
 
     override suspend fun GetSystemDescOrderStoreLineStatusByIdExtendedAsync(
         systemDescOrderStoreLineStatusId: Int
     ): Result<SystemDescOrderStoreLineStatusDTO?> {
-        TODO("Not implemented yet")
+        return apiClient.GetAsync(
+            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            method = "GetSystemDescOrderStoreLineStatusByIdExtendedAsync",
+            query = "systemDescOrderStoreLineStatusId=$systemDescOrderStoreLineStatusId"
+        )
+    }
+
+    override suspend fun InsertAsync(
+        model: SystemDescOrderStoreLineStatusInsertModel
+    ): Result<Unit> {
+        return apiClient.PostAsync(
+            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            method = "InsertAsync",
+            data = model
+        )
+    }
+
+    override suspend fun UpdateAsync(
+        model: SystemDescOrderStoreLineStatusUpdateModel
+    ): Result<Unit> {
+        return apiClient.PostAsync(
+            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            method = "UpdateAsync",
+            data = model
+        )
+    }
+
+    override suspend fun DeleteAsync(
+        systemDescOrderStoreLineStatusId: Int
+    ): Result<Unit> {
+        return apiClient.DeleteAsync(
+            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            method = "DeleteAsync",
+            query = "systemDescOrderStoreLineStatusId=$systemDescOrderStoreLineStatusId"
+        )
     }
 }

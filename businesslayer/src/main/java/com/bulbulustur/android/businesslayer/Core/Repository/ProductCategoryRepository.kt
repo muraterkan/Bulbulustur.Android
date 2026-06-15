@@ -1,27 +1,71 @@
-﻿package com.bulbulustur.android.businesslayer.Core.Repository import com.bulbulustur.android.businesslayer.Core.Util.Result
+package com.bulbulustur.android.businesslayer.Core.Repository
 
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.IProductCategoryRepository
+import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.ProductCategoryInsertModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.ProductCategoryUpdateModel
 import com.bulbulustur.android.businesslayer.Core.Network.ApiClient
+import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
+import com.bulbulustur.android.businesslayer.Core.Util.Result
 
 class ProductCategoryRepository(
-    private val apiClient: ApiClient
+    private val apiClient: ApiClient = ApiClient
 ) : IProductCategoryRepository {
 
     override suspend fun GetProductCategoryListAsync(): Result<List<ProductCategoryDTO>> {
-        TODO("Not implemented yet")
+        return apiClient.GetAsync(
+            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            method = "GetProductCategoryListAsync"
+        )
     }
 
     override suspend fun GetProductCategoryByIdAsync(
         productCategoryId: Int
     ): Result<ProductCategoryUpdateModel?> {
-        TODO("Not implemented yet")
+        return apiClient.GetAsync(
+            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            method = "GetProductCategoryByIdAsync",
+            query = "productCategoryId=$productCategoryId"
+        )
     }
 
     override suspend fun GetProductCategoryByIdExtendedAsync(
         productCategoryId: Int
     ): Result<ProductCategoryDTO?> {
-        TODO("Not implemented yet")
+        return apiClient.GetAsync(
+            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            method = "GetProductCategoryByIdExtendedAsync",
+            query = "productCategoryId=$productCategoryId"
+        )
+    }
+
+    override suspend fun InsertAsync(
+        model: ProductCategoryInsertModel
+    ): Result<Unit> {
+        return apiClient.PostAsync(
+            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            method = "InsertAsync",
+            data = model
+        )
+    }
+
+    override suspend fun UpdateAsync(
+        model: ProductCategoryUpdateModel
+    ): Result<Unit> {
+        return apiClient.PostAsync(
+            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            method = "UpdateAsync",
+            data = model
+        )
+    }
+
+    override suspend fun DeleteAsync(
+        productCategoryId: Int
+    ): Result<Unit> {
+        return apiClient.DeleteAsync(
+            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            method = "DeleteAsync",
+            query = "productCategoryId=$productCategoryId"
+        )
     }
 }

@@ -1,0 +1,32 @@
+﻿package com.bulbulustur.android.businesslayer.Core.Model.UpdateModels
+
+data class WholesaleProductUpdateModel(
+    val WholesaleProductId: Int = 0,
+    val InsertedBy: Int = 0,
+    val InsertedDate: String = "",
+    val StatusId: Int = 0,
+    val CompanyId: Int = 0,
+    val ProductCategoryId: Int = 0,
+    val ProductName: String = "",
+    val Description: String = "",
+    val BrandId: Int = 0,
+    val MinimumOrderQuantity: Int = 0,
+    val MinimumOrderUnitId: Int = 0,
+    val MonthlyProduction: Int = 0,
+    val MonthlyProductionUnitId: Int = 0,
+    val ViewCount: Int = 0,
+    val SeoTitle: String = "",
+    val SeoDescription: String = "",
+    val ConfirmationStatusId: Int = 0,
+    val LeadTimeId: Int = 0,
+    val ModelNumber: String = "",
+    val CustomizationId: Int = 0,
+    val DimensionsPerUnit: String = "",
+    val WeightPerUnit: Double = 0.0,
+    val HtsCode: String = "",
+    val OriginId: Int = 0,
+    val DimensionsPerUnitId: Int = 0,
+    val WeightPerUnitId: Int = 0,
+    val SamplePrice: Double = 0.0,
+    val SecureKey: String = ""
+)

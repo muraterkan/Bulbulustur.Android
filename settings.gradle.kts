@@ -24,3 +24,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Bulbulustur.Android"
 include(":app")
+include(":businesslayer")

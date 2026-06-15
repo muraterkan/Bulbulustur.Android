@@ -1,0 +1,8 @@
+﻿package com.bulbulustur.android.businesslayer.Core.DTO
+
+data class FaqSectionDTO(
+    val FaqSectionId: Int = 0,
+    val EmployeeId: Int = 0,
+    val InsertedDate: String = "",
+    val StatusId: Int = 0
+)

@@ -1,0 +1,33 @@
+﻿package com.bulbulustur.android.businesslayer.Core.Model.InsertModels
+
+data class InvoiceLineInsertModel(
+    val InsertedBy: Int = 0,
+    val InsertedDate: String = "",
+    val StatusId: Int = 0,
+    val InvoiceId: Int = 0,
+    val InvoiceDate: String = "",
+    val ProductName: String = "",
+    val Barcode: String = "",
+    val Quantity: String = "",
+    val Unit: String = "",
+    val UnitPrice: Double = 0.0,
+    val TotalPrice: Double? = null,
+    val VatRate: String = "",
+    val VatAmount: Double = 0.0,
+    val Discount: Double? = null,
+    val DiscountRate: Double? = null,
+    val Currency: String = "",
+    val RelatedInvoiceLineId: Int? = null,
+    val IsRefund: Boolean? = null,
+    val ServicePeriod: String = "",
+    val ChartOfAccountId: Int = 0,
+    val AccountingCode: String = "",
+    val CostCenterId: Int? = null,
+    val DiscountReason: String = "",
+    val InvoiceItemTypeId: Int = 0,
+    val StoreId: Int = 0,
+    val CommissionRate: Int = 0,
+    val CommissionAmount: Double = 0.0,
+    val WaybillInfo: String = "",
+    val IsCredit: Boolean = false
+)

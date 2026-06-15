@@ -1,0 +1,31 @@
+﻿package com.bulbulustur.android.businesslayer.Core.Model.UpdateModels
+
+data class CompanyUserUpdateModel(
+    val CompanyUserId: Int = 0,
+    val InsertedBy: Int = 0,
+    val InsertedDate: String = "",
+    val StatusId: Int = 0,
+    val Name: String = "",
+    val Surname: String = "",
+    val Phone: String = "",
+    val Department: String = "",
+    val Position: String = "",
+    val CompanyId: Int = 0,
+    val IdentificationNumber: String = "",
+    val BloodTypeId: Int? = null,
+    val MaritalStatusId: Int? = null,
+    val Birthday: String? = null,
+    val CountryId: Int = 0,
+    val CountryStateId: Int = 0,
+    val CityId: Int = 0,
+    val DistrictId: Int? = null,
+    val PostCode: String = "",
+    val Address: String = "",
+    val Picture: String = "",
+    val ForContact: Boolean = false,
+    val Email: String = "",
+    val CompanyUserKey: String = "",
+    val CountryDepartmentId: Int? = null,
+    val IsAdmin: Boolean = false,
+    val BranchId: Int = 0
+)

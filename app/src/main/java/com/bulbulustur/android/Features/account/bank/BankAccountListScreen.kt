@@ -1,12 +1,5 @@
 package com.bulbulustur.android.Features.account.bank
 
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import com.bulbulustur.android.Core.Repository.LocalizationRepository
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -56,22 +49,6 @@ fun BankAccountListScreen(
 ) {
     val bankAccounts = getDemoBankAccounts()
 
-
-    val localizationRepository = remember { LocalizationRepository() }
-
-    var localizationValue by remember {
-        mutableStateOf("Servisten bekleniyor...")
-    }
-
-    LaunchedEffect(Unit) {
-        localizationValue = localizationRepository.getResourceValue(
-            languageId = 1,
-            key = "10b4490d-396d-4469-8731-d5d2cd311c5c"
-        )
-    }
-
-
-
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
@@ -97,15 +74,6 @@ fun BankAccountListScreen(
             ),
             verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
         ) {
-
-            item {
-                Text(
-                    text = localizationValue,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.primary
-                )
-            }
-
             item {
                 BankAccountWarningBox()
             }

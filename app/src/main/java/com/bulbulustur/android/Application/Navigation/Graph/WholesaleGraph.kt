@@ -1,0 +1,91 @@
+package com.bulbulustur.android.Application.Navigation
+
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
+import com.bulbulustur.android.Features.Areas.b2b.ProductListScreen as WholesaleProductListScreen
+import com.bulbulustur.android.Features.Areas.b2b.CategoryDetailScreen as WholesaleCategoryDetailScreen
+import com.bulbulustur.android.Features.Areas.b2b.WholesaleCategoryHomeScreen
+import com.bulbulustur.android.Features.Areas.b2b.WholesaleHomeScreen
+import com.bulbulustur.android.Features.Areas.b2b.WholesaleProductDetailScreen
+import com.bulbulustur.android.Features.Areas.b2b.rfq.RfqCreateScreen
+import com.bulbulustur.android.Features.Areas.b2b.rfq.RfqListScreen
+
+fun NavGraphBuilder.wholesaleGraph(
+    navigator: BulbulusturNavigator
+) {
+
+    composable(WholesaleRoutes.Home) {
+        WholesaleHomeScreen(
+            onMenuClick = {
+                navigator.navigateToWholesaleCategories()
+            },
+            onMessageClick = {
+                navigator.navigateToInbox()
+            },
+            onAccountClick = {
+                navigator.navigateToAccount()
+            },
+            onModeSwitchClick = {
+                navigator.openModeSheet()
+            },
+            onQuotationRequestsClick = {
+                navigator.navigateToWholesaleOffers()
+            }
+        )
+    }
+
+    composable(WholesaleRoutes.CategoryHome) {
+        WholesaleCategoryHomeScreen(
+            onBackClick = {
+                navigator.back()
+            }
+        )
+    }
+
+    composable(WholesaleRoutes.CategoryDetail) {
+        WholesaleCategoryDetailScreen()
+    }
+
+    composable(WholesaleRoutes.ProductList) {
+        WholesaleProductListScreen(
+            onMessageClick = {
+                navigator.navigateToInbox()
+            },
+            onAccountClick = {
+                navigator.navigateToAccount()
+            },
+            onModeSwitchClick = {
+                navigator.openModeSheet()
+            }
+        )
+    }
+
+    composable(WholesaleRoutes.ProductDetail) {
+        WholesaleProductDetailScreen(
+            onBackClick = {
+                navigator.back()
+            }
+        )
+    }
+
+    composable(RfqRoutes.List) {
+        RfqListScreen(
+            onBackClick = {
+                navigator.back()
+            },
+            onCreateRfqClick = {
+                navigator.navController.navigate(
+                    RfqRoutes.Create
+                )
+            }
+        )
+    }
+
+    composable(RfqRoutes.Create) {
+        RfqCreateScreen(
+            onBackClick = {
+                navigator.back()
+            }
+        )
+    }
+}

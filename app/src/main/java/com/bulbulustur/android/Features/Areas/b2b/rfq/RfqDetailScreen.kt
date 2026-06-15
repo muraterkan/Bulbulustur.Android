@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Features.areas.b2b.rfq
+package com.bulbulustur.android.Features.Areas.b2b.rfq
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

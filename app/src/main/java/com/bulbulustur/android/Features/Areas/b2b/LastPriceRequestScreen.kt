@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Features.areas.b2b
+package com.bulbulustur.android.Features.Areas.b2b
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -92,13 +92,13 @@ fun LastPriceRequestScreen(
             verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
         ) {
             item {
-                _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.LastPriceRequestHeader(
+                _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.LastPriceRequestHeader(
                     productName = productName
                 )
             }
 
             item {
-                _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.LastPriceProductSummaryCard(
+                _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.LastPriceProductSummaryCard(
                     productName = productName,
                     companyName = companyName,
                     currentPriceLabel = currentPriceLabel
@@ -117,7 +117,7 @@ fun LastPriceRequestScreen(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
                 ) {
-                    _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.LastPriceTextField(
+                    _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.LastPriceTextField(
                         value = quantity.value,
                         onValueChange = {
                             quantity.value = it
@@ -128,7 +128,7 @@ fun LastPriceRequestScreen(
                         modifier = Modifier.weight(1f)
                     )
 
-                    _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.LastPriceTextField(
+                    _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.LastPriceTextField(
                         value = targetPrice.value,
                         onValueChange = {
                             targetPrice.value = it
@@ -146,7 +146,7 @@ fun LastPriceRequestScreen(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
                 ) {
-                    _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.LastPriceTextField(
+                    _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.LastPriceTextField(
                         value = paymentTerm.value,
                         onValueChange = {
                             paymentTerm.value = it
@@ -157,7 +157,7 @@ fun LastPriceRequestScreen(
                         modifier = Modifier.weight(1f)
                     )
 
-                    _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.LastPriceTextField(
+                    _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.LastPriceTextField(
                         value = deliveryTarget.value,
                         onValueChange = {
                             deliveryTarget.value = it
@@ -171,7 +171,7 @@ fun LastPriceRequestScreen(
             }
 
             item {
-                _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.LastPriceLongTextField(
+                _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.LastPriceLongTextField(
                     value = detail.value,
                     onValueChange = {
                         detail.value = it
@@ -182,7 +182,7 @@ fun LastPriceRequestScreen(
             }
 
             item {
-                _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.LastPriceSuggestionChips(
+                _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.LastPriceSuggestionChips(
                     onSuggestionClick = {
                         detail.value = it
                     }
@@ -190,11 +190,11 @@ fun LastPriceRequestScreen(
             }
 
             item {
-                _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.LastPriceHintCard()
+                _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.LastPriceHintCard()
             }
 
             item {
-                _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.LastPriceSendCard(
+                _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.LastPriceSendCard(
                     onSendClick = onSendClick
                 )
             }
@@ -393,7 +393,7 @@ private fun LastPriceSuggestionChips(
         horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2),
         verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
     ) {
-        _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.lastPriceSuggestionTexts()
+        _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.lastPriceSuggestionTexts()
             .forEach { suggestion ->
             BbChip(
                 text = suggestion.title,
@@ -487,21 +487,21 @@ private data class LastPriceSuggestionText(
     val description: String
 )
 
-private fun lastPriceSuggestionTexts(): List<com.bulbulustur.android.Features.areas.b2b.LastPriceSuggestionText> {
+private fun lastPriceSuggestionTexts(): List<com.bulbulustur.android.Features.Areas.b2b.LastPriceSuggestionText> {
     return listOf(
-        _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.LastPriceSuggestionText(
+        _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.LastPriceSuggestionText(
             title = "Toplu Alım",
             description = "Belirttiğim miktar için en iyi son fiyatı rica ederim."
         ),
-        _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.LastPriceSuggestionText(
+        _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.LastPriceSuggestionText(
             title = "Ödeme Şartı",
             description = "Peşin ve vadeli ödeme seçeneklerine göre son fiyat bilgisini paylaşabilir misiniz?"
         ),
-        _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.LastPriceSuggestionText(
+        _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.LastPriceSuggestionText(
             title = "Teslimat",
             description = "Teslimat süresi, kargo/lojistik maliyeti ve hedef teslimat bilgisiyle birlikte son fiyat rica ederim."
         ),
-        _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.LastPriceSuggestionText(
+        _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.LastPriceSuggestionText(
             title = "Karşılaştırma",
             description = "Aynı ürün için alternatif kalite veya ambalaj seçenekleri varsa fiyat karşılaştırması almak isterim."
         )
@@ -512,6 +512,6 @@ private fun lastPriceSuggestionTexts(): List<com.bulbulustur.android.Features.ar
 @Composable
 private fun LastPriceRequestScreenPreview() {
     BbTheme {
-        _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.LastPriceRequestScreen()
+        _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.LastPriceRequestScreen()
     }
 }

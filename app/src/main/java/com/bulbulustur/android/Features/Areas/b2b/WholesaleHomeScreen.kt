@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Features.areas.b2b
+package com.bulbulustur.android.Features.Areas.b2b
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -51,9 +51,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.bulbulustur.android.R
-import com.bulbulustur.android.Features.areas.b2b.components.WholesaleBottomNavigation
-import com.bulbulustur.android.Features.areas.b2b.components.WholesaleBottomNavigationItem
-import com.bulbulustur.android.Features.areas.b2b.components.WholesaleSearchHeader
+import com.bulbulustur.android.Features.Areas.b2b.components.WholesaleBottomNavigation
+import com.bulbulustur.android.Features.Areas.b2b.components.WholesaleBottomNavigationItem
+import com.bulbulustur.android.Features.Areas.b2b.components.WholesaleSearchHeader
 import com.bulbulustur.android.Ui.components.BbButton
 import com.bulbulustur.android.Ui.components.BbButtonSize
 import com.bulbulustur.android.Ui.components.BbButtonVariant

@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Features.areas.b2c
+package com.bulbulustur.android.Features.Areas.b2c
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
@@ -80,8 +80,8 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bulbulustur.android.R
-import com.bulbulustur.android.Features.areas.b2c.components.RetailSearchHeader
-import com.bulbulustur.android.Features.areas.b2c.components.RetailSearchHeaderLeadingAction
+import com.bulbulustur.android.Features.Areas.b2c.components.RetailSearchHeader
+import com.bulbulustur.android.Features.Areas.b2c.components.RetailSearchHeaderLeadingAction
 import com.bulbulustur.android.Ui.components.BbCard
 import com.bulbulustur.android.Ui.components.BbCardPadding
 import com.bulbulustur.android.Ui.components.BbCardVariant

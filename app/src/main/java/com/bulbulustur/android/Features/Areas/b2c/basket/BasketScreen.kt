@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Features.areas.b2c.basket
+package com.bulbulustur.android.Features.Areas.b2c.basket
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -51,8 +51,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import com.bulbulustur.android.Features.areas.b2c.components.RetailBottomNavigation
-import com.bulbulustur.android.Features.areas.b2c.components.RetailBottomNavigationItem
+import com.bulbulustur.android.Features.Areas.b2c.components.RetailBottomNavigation
+import com.bulbulustur.android.Features.Areas.b2c.components.RetailBottomNavigationItem
 import com.bulbulustur.android.Ui.components.BbButton
 import com.bulbulustur.android.Ui.components.BbButtonSize
 import com.bulbulustur.android.Ui.components.BbButtonVariant

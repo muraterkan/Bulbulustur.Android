@@ -1,7 +1,10 @@
-package com.bulbulustur.android.Application.Navigation
+package com.bulbulustur.android.Application.Navigation.Graph
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
+import com.bulbulustur.android.Application.Navigation.CompanyRoutes
+import com.bulbulustur.android.Application.Navigation.WholesaleRoutes
 import com.bulbulustur.android.Features.company.CompanyContactScreen
 import com.bulbulustur.android.Features.company.CompanyDetailScreen
 import com.bulbulustur.android.Features.company.CompanyHomeScreen

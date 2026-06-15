@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Features.areas.b2b.rfq
+package com.bulbulustur.android.Features.Areas.b2b.rfq
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -38,8 +38,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.bulbulustur.android.Features.areas.b2b.components.WholesaleBottomNavigation
-import com.bulbulustur.android.Features.areas.b2b.components.WholesaleBottomNavigationItem
+import com.bulbulustur.android.Features.Areas.b2b.components.WholesaleBottomNavigation
+import com.bulbulustur.android.Features.Areas.b2b.components.WholesaleBottomNavigationItem
 import com.bulbulustur.android.Ui.components.BbButton
 import com.bulbulustur.android.Ui.components.BbButtonSize
 import com.bulbulustur.android.Ui.components.BbButtonVariant

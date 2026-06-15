@@ -61,7 +61,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.bulbulustur.android.R
-import com.bulbulustur.android.Features.areas.b2c.components.RetailBottomNavigation
+import com.bulbulustur.android.Features.Areas.b2c.components.RetailBottomNavigation
 import com.bulbulustur.android.Ui.components.BbCard
 import com.bulbulustur.android.Ui.components.BbCardPadding
 import com.bulbulustur.android.Ui.components.BbCardVariant
@@ -129,15 +129,15 @@ fun AccountScreen(
     Scaffold(
         containerColor = BbColors.SurfaceMuted,
         bottomBar = {
-            _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.components.RetailBottomNavigation(
-                selectedItem = _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.components.RetailBottomNavigationItem.Account,
+            _root_ide_package_.com.bulbulustur.android.Features.Areas.b2c.components.RetailBottomNavigation(
+                selectedItem = _root_ide_package_.com.bulbulustur.android.Features.Areas.b2c.components.RetailBottomNavigationItem.Account,
                 onItemClick = { selectedItem ->
                     when (selectedItem) {
-                        _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.components.RetailBottomNavigationItem.Home -> onHomeClick()
-                        _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.components.RetailBottomNavigationItem.Menu -> onMenuClick()
-                        _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.components.RetailBottomNavigationItem.ModeSwitch -> onModeSwitchClick()
-                        _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.components.RetailBottomNavigationItem.Basket -> onBasketClick()
-                        _root_ide_package_.com.bulbulustur.android.Features.areas.b2c.components.RetailBottomNavigationItem.Account -> Unit
+                        _root_ide_package_.com.bulbulustur.android.Features.Areas.b2c.components.RetailBottomNavigationItem.Home -> onHomeClick()
+                        _root_ide_package_.com.bulbulustur.android.Features.Areas.b2c.components.RetailBottomNavigationItem.Menu -> onMenuClick()
+                        _root_ide_package_.com.bulbulustur.android.Features.Areas.b2c.components.RetailBottomNavigationItem.ModeSwitch -> onModeSwitchClick()
+                        _root_ide_package_.com.bulbulustur.android.Features.Areas.b2c.components.RetailBottomNavigationItem.Basket -> onBasketClick()
+                        _root_ide_package_.com.bulbulustur.android.Features.Areas.b2c.components.RetailBottomNavigationItem.Account -> Unit
                     }
                 }
             )

@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Features.areas.b2b
+package com.bulbulustur.android.Features.Areas.b2b
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -86,13 +86,13 @@ fun CustomizationRequestScreen(
             verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
         ) {
             item {
-                _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.CustomizationRequestHeader(
+                _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.CustomizationRequestHeader(
                     productName = productName
                 )
             }
 
             item {
-                _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.CustomizationProductSummaryCard(
+                _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.CustomizationProductSummaryCard(
                     productName = productName,
                     companyName = companyName
                 )
@@ -106,7 +106,7 @@ fun CustomizationRequestScreen(
             }
 
             item {
-                _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.CustomizationLongTextField(
+                _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.CustomizationLongTextField(
                     value = detail.value,
                     onValueChange = {
                         detail.value = it
@@ -117,7 +117,7 @@ fun CustomizationRequestScreen(
             }
 
             item {
-                _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.CustomizationSuggestionChips(
+                _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.CustomizationSuggestionChips(
                     onSuggestionClick = {
                         detail.value = it
                     }
@@ -132,7 +132,7 @@ fun CustomizationRequestScreen(
             }
 
             item {
-                _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.CustomizationTextField(
+                _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.CustomizationTextField(
                     value = colorMaterial.value,
                     onValueChange = {
                         colorMaterial.value = it
@@ -144,7 +144,7 @@ fun CustomizationRequestScreen(
             }
 
             item {
-                _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.CustomizationTextField(
+                _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.CustomizationTextField(
                     value = sizeTechnical.value,
                     onValueChange = {
                         sizeTechnical.value = it
@@ -156,7 +156,7 @@ fun CustomizationRequestScreen(
             }
 
             item {
-                _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.CustomizationTextField(
+                _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.CustomizationTextField(
                     value = packageLogo.value,
                     onValueChange = {
                         packageLogo.value = it
@@ -168,11 +168,11 @@ fun CustomizationRequestScreen(
             }
 
             item {
-                _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.CustomizationHintCard()
+                _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.CustomizationHintCard()
             }
 
             item {
-                _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.CustomizationSendCard(
+                _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.CustomizationSendCard(
                     onSendClick = onSendClick
                 )
             }
@@ -369,7 +369,7 @@ private fun CustomizationSuggestionChips(
         horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2),
         verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
     ) {
-        _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.customizationSuggestionTexts()
+        _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.customizationSuggestionTexts()
             .forEach { suggestion ->
             BbChip(
                 text = suggestion.title,
@@ -463,21 +463,21 @@ private data class CustomizationSuggestionText(
     val description: String
 )
 
-private fun customizationSuggestionTexts(): List<com.bulbulustur.android.Features.areas.b2b.CustomizationSuggestionText> {
+private fun customizationSuggestionTexts(): List<com.bulbulustur.android.Features.Areas.b2b.CustomizationSuggestionText> {
     return listOf(
-        _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.CustomizationSuggestionText(
+        _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.CustomizationSuggestionText(
             title = "Renk / Malzeme",
             description = "Ürün için özel renk, malzeme ve yüzey seçenekleri hakkında teklif almak istiyorum."
         ),
-        _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.CustomizationSuggestionText(
+        _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.CustomizationSuggestionText(
             title = "Ölçü / Teknik Detay",
             description = "Ürün ölçülerinin ve teknik detayların ihtiyacıma göre özelleştirilmesini istiyorum."
         ),
-        _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.CustomizationSuggestionText(
+        _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.CustomizationSuggestionText(
             title = "Ambalaj / Logo",
             description = "Ürün ambalajı, logo baskısı ve etiketleme seçenekleriyle birlikte fiyat almak istiyorum."
         ),
-        _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.CustomizationSuggestionText(
+        _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.CustomizationSuggestionText(
             title = "Özel Üretim",
             description = "Bu ürünün özel üretim koşulları, minimum sipariş miktarı ve teslim süresi hakkında bilgi almak istiyorum."
         )
@@ -488,6 +488,6 @@ private fun customizationSuggestionTexts(): List<com.bulbulustur.android.Feature
 @Composable
 private fun CustomizationRequestScreenPreview() {
     BbTheme {
-        _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.CustomizationRequestScreen()
+        _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.CustomizationRequestScreen()
     }
 }

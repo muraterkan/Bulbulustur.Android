@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Features.areas.b2c
+package com.bulbulustur.android.Features.Areas.b2c
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,9 +31,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.material3.Icon
-import com.bulbulustur.android.Features.areas.b2c.components.RetailBottomNavigation
-import com.bulbulustur.android.Features.areas.b2c.components.RetailBottomNavigationItem
-import com.bulbulustur.android.Features.areas.b2c.components.RetailSearchHeader
+import com.bulbulustur.android.Features.Areas.b2c.components.RetailBottomNavigation
+import com.bulbulustur.android.Features.Areas.b2c.components.RetailBottomNavigationItem
+import com.bulbulustur.android.Features.Areas.b2c.components.RetailSearchHeader
 import com.bulbulustur.android.Ui.commercecomponents.BbProductGrid
 import com.bulbulustur.android.Ui.components.BbCard
 import com.bulbulustur.android.Ui.components.BbChip

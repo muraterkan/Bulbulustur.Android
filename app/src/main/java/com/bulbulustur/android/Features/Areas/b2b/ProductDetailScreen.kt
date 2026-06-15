@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Features.areas.b2b
+package com.bulbulustur.android.Features.Areas.b2b
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
@@ -66,7 +66,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bulbulustur.android.R
-import com.bulbulustur.android.Features.areas.b2b.components.WholesaleSearchHeader
+import com.bulbulustur.android.Features.Areas.b2b.components.WholesaleSearchHeader
 import com.bulbulustur.android.Ui.components.BbCard
 import com.bulbulustur.android.Ui.components.BbCardPadding
 import com.bulbulustur.android.Ui.components.BbCardVariant
@@ -88,16 +88,16 @@ fun WholesaleProductDetailScreen(
     onLastPriceRequestClick: () -> Unit = {},
     onSampleRequestClick: () -> Unit = {},
     onCustomizationRequestClick: () -> Unit = {},
-    onCompanyClick: (com.bulbulustur.android.Features.areas.b2b.WholesaleProductDetailCompany) -> Unit = {},
+    onCompanyClick: (com.bulbulustur.android.Features.Areas.b2b.WholesaleProductDetailCompany) -> Unit = {},
     onCompanyProductsClick: () -> Unit = {},
-    onCompanySimilarProductClick: (com.bulbulustur.android.Features.areas.b2b.WholesaleMiniProduct) -> Unit = {},
-    onCompanyBestSellerProductClick: (com.bulbulustur.android.Features.areas.b2b.WholesaleMiniProduct) -> Unit = {},
+    onCompanySimilarProductClick: (com.bulbulustur.android.Features.Areas.b2b.WholesaleMiniProduct) -> Unit = {},
+    onCompanyBestSellerProductClick: (com.bulbulustur.android.Features.Areas.b2b.WholesaleMiniProduct) -> Unit = {},
     onCompanySimilarProductsClick: () -> Unit = onCompanyProductsClick,
     onCompanyBestSellerProductsClick: () -> Unit = onCompanyProductsClick,
-    onRelatedCategoryClick: (com.bulbulustur.android.Features.areas.b2b.WholesaleRelatedCategoryChip) -> Unit = {}
+    onRelatedCategoryClick: (com.bulbulustur.android.Features.Areas.b2b.WholesaleRelatedCategoryChip) -> Unit = {}
 ) {
     val product = remember(productId) {
-        _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.getWholesaleProductDetail(
+        _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.getWholesaleProductDetail(
             productId
         )
     }
@@ -115,7 +115,7 @@ fun WholesaleProductDetailScreen(
     Scaffold(
         containerColor = BbColors.SurfaceMuted,
         topBar = {
-            _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.components.WholesaleSearchHeader(
+            _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.components.WholesaleSearchHeader(
                 searchText = searchText,
                 onSearchTextChange = {
                     searchText = it
@@ -130,12 +130,12 @@ fun WholesaleProductDetailScreen(
                 onClearClick = {
                     searchText = ""
                 },
-                leadingAction = _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.components.WholesaleSearchHeaderLeadingAction.Back,
+                leadingAction = _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.components.WholesaleSearchHeaderLeadingAction.Back,
                 onBackClick = onBackClick
             )
         },
         bottomBar = {
-            _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleProductDetailBottomBar(
+            _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleProductDetailBottomBar(
                 onLastPriceRequestClick = onLastPriceRequestClick,
                 onSampleRequestClick = onSampleRequestClick,
                 onCustomizationRequestClick = onCustomizationRequestClick
@@ -149,7 +149,7 @@ fun WholesaleProductDetailScreen(
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
         ) {
-            _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleProductDetailGallery(
+            _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleProductDetailGallery(
                 product = product,
                 currentPage = pagerState.currentPage,
                 pagerContent = {
@@ -157,42 +157,42 @@ fun WholesaleProductDetailScreen(
                         state = pagerState,
                         modifier = Modifier.fillMaxWidth()
                     ) { page ->
-                        _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleProductDetailImageSlide(
+                        _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleProductDetailImageSlide(
                             image = product.images[page]
                         )
                     }
                 }
             )
 
-            _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleProductTitleCard(
+            _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleProductTitleCard(
                 product = product
             )
 
-            _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleTradeSummaryCard(
+            _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleTradeSummaryCard(
                 product = product
             )
 
-            _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesalePriceBreakdownCard(
+            _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesalePriceBreakdownCard(
                 priceBreaks = product.priceBreaks,
                 onClick = onLastPriceRequestClick
             )
 
-            _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleFeatureGridCard(
+            _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleFeatureGridCard(
                 features = product.highlightFeatures
             )
 
-            _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleCustomizationOptionsCard(
+            _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleCustomizationOptionsCard(
                 options = product.customizationOptions,
                 onCustomizationRequestClick = onCustomizationRequestClick
             )
 
-            _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleOrderAndDeliveryCard(
+            _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleOrderAndDeliveryCard(
                 product = product
             )
 
-            _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleSecureTradeCard()
+            _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleSecureTradeCard()
 
-            _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleCompanyDeepCard(
+            _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleCompanyDeepCard(
                 company = product.company,
                 onCompanyProfileClick = {
                     onCompanyClick(product.company)
@@ -200,29 +200,29 @@ fun WholesaleProductDetailScreen(
                 onCompanyProductsClick = onCompanyProductsClick
             )
 
-            _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleProductDescriptionCard(
+            _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleProductDescriptionCard(
                 product = product
             )
 
-            _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleProductInformationCard(
+            _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleProductInformationCard(
                 properties = product.properties
             )
 
-            _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleHorizontalProductSection(
+            _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleHorizontalProductSection(
                 title = "Bu Firmadan Benzer Ürünler",
                 products = product.companySimilarProducts,
                 onHeaderClick = onCompanySimilarProductsClick,
                 onProductClick = onCompanySimilarProductClick
             )
 
-            _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleHorizontalProductSection(
+            _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleHorizontalProductSection(
                 title = "Bu Firmanın Çok Satanları",
                 products = product.companyBestSellerProducts,
                 onHeaderClick = onCompanyBestSellerProductsClick,
                 onProductClick = onCompanyBestSellerProductClick
             )
 
-            _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleRelatedCategoryChipsSection(
+            _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleRelatedCategoryChipsSection(
                 categories = product.relatedCategories,
                 onCategoryClick = onRelatedCategoryClick
             )
@@ -245,15 +245,15 @@ fun ProductDetailScreen(
     onLastPriceRequestClick: () -> Unit = {},
     onSampleRequestClick: () -> Unit = {},
     onCustomizationRequestClick: () -> Unit = {},
-    onCompanyClick: (com.bulbulustur.android.Features.areas.b2b.WholesaleProductDetailCompany) -> Unit = {},
+    onCompanyClick: (com.bulbulustur.android.Features.Areas.b2b.WholesaleProductDetailCompany) -> Unit = {},
     onCompanyProductsClick: () -> Unit = {},
-    onCompanySimilarProductClick: (com.bulbulustur.android.Features.areas.b2b.WholesaleMiniProduct) -> Unit = {},
-    onCompanyBestSellerProductClick: (com.bulbulustur.android.Features.areas.b2b.WholesaleMiniProduct) -> Unit = {},
+    onCompanySimilarProductClick: (com.bulbulustur.android.Features.Areas.b2b.WholesaleMiniProduct) -> Unit = {},
+    onCompanyBestSellerProductClick: (com.bulbulustur.android.Features.Areas.b2b.WholesaleMiniProduct) -> Unit = {},
     onCompanySimilarProductsClick: () -> Unit = onCompanyProductsClick,
     onCompanyBestSellerProductsClick: () -> Unit = onCompanyProductsClick,
-    onRelatedCategoryClick: (com.bulbulustur.android.Features.areas.b2b.WholesaleRelatedCategoryChip) -> Unit = {}
+    onRelatedCategoryClick: (com.bulbulustur.android.Features.Areas.b2b.WholesaleRelatedCategoryChip) -> Unit = {}
 ) {
-    _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleProductDetailScreen(
+    _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleProductDetailScreen(
         productId = productId,
         onBackClick = onBackClick,
         onSearchClick = onSearchClick,
@@ -275,7 +275,7 @@ fun ProductDetailScreen(
 
 @Composable
 private fun WholesaleProductDetailGallery(
-    product: com.bulbulustur.android.Features.areas.b2b.WholesaleProductDetail,
+    product: com.bulbulustur.android.Features.Areas.b2b.WholesaleProductDetail,
     currentPage: Int,
     pagerContent: @Composable () -> Unit
 ) {
@@ -319,7 +319,7 @@ private fun WholesaleProductDetailGallery(
             }
         }
 
-        _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleProductDetailImageCounter(
+        _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleProductDetailImageCounter(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(
@@ -334,7 +334,7 @@ private fun WholesaleProductDetailGallery(
 
 @Composable
 private fun WholesaleProductDetailImageSlide(
-    image: com.bulbulustur.android.Features.areas.b2b.WholesaleProductImage
+    image: com.bulbulustur.android.Features.Areas.b2b.WholesaleProductImage
 ) {
     Box(
         modifier = Modifier
@@ -388,7 +388,7 @@ private fun WholesaleProductDetailImageCounter(
 
 @Composable
 private fun WholesaleProductTitleCard(
-    product: com.bulbulustur.android.Features.areas.b2b.WholesaleProductDetail
+    product: com.bulbulustur.android.Features.Areas.b2b.WholesaleProductDetail
 ) {
     BbCard(
         modifier = Modifier.padding(
@@ -406,21 +406,21 @@ private fun WholesaleProductTitleCard(
                 modifier = Modifier.horizontalScroll(rememberScrollState()),
                 horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
             ) {
-                _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleMiniPill(
+                _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleMiniPill(
                     text = "Toptan Ürün",
                     icon = Icons.Outlined.Business,
                     containerColor = BbColors.PrimarySoft,
                     contentColor = BbColors.TextStrong
                 )
 
-                _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleMiniPill(
+                _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleMiniPill(
                     text = "Doğrulanmış Firma",
                     icon = Icons.Outlined.Verified,
                     containerColor = BbColors.Green.Green50,
                     contentColor = BbColors.Green.Green700
                 )
 
-                _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleMiniPill(
+                _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleMiniPill(
                     text = "Özelleştirilebilir",
                     icon = Icons.Outlined.Tune,
                     containerColor = BbColors.Blue.Blue50,
@@ -483,7 +483,7 @@ private fun WholesaleProductTitleCard(
 
 @Composable
 private fun WholesaleTradeSummaryCard(
-    product: com.bulbulustur.android.Features.areas.b2b.WholesaleProductDetail
+    product: com.bulbulustur.android.Features.Areas.b2b.WholesaleProductDetail
 ) {
     Surface(
         modifier = Modifier
@@ -504,7 +504,7 @@ private fun WholesaleTradeSummaryCard(
             modifier = Modifier.padding(BbSpacing.Space4),
             verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
         ) {
-            _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleSectionLabel(
+            _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleSectionLabel(
                 text = "Ticari Teklif Özeti",
                 icon = Icons.Outlined.RequestQuote
             )
@@ -513,12 +513,12 @@ private fun WholesaleTradeSummaryCard(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
             ) {
-                _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleSummaryMetric(
+                _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleSummaryMetric(
                     "Fiyat",
                     product.priceLabel,
                     Modifier.weight(1f)
                 )
-                _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleSummaryMetric(
+                _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleSummaryMetric(
                     "Min. Sipariş",
                     product.minimumOrderLabel,
                     Modifier.weight(1f)
@@ -529,12 +529,12 @@ private fun WholesaleTradeSummaryCard(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
             ) {
-                _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleSummaryMetric(
+                _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleSummaryMetric(
                     "Üretim Süresi",
                     product.deliveryTimeLabel,
                     Modifier.weight(1f)
                 )
-                _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleSummaryMetric(
+                _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleSummaryMetric(
                     "Teslimat",
                     product.deliveryCountryLabel,
                     Modifier.weight(1f)
@@ -546,7 +546,7 @@ private fun WholesaleTradeSummaryCard(
                 horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
             ) {
                 product.tradeBenefits.forEach { benefit ->
-                    _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleBenefitPill(
+                    _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleBenefitPill(
                         text = benefit.text,
                         icon = benefit.icon
                     )
@@ -558,7 +558,7 @@ private fun WholesaleTradeSummaryCard(
 
 @Composable
 private fun WholesalePriceBreakdownCard(
-    priceBreaks: List<com.bulbulustur.android.Features.areas.b2b.WholesalePriceBreak>,
+    priceBreaks: List<com.bulbulustur.android.Features.Areas.b2b.WholesalePriceBreak>,
     onClick: () -> Unit
 ) {
     BbCard(

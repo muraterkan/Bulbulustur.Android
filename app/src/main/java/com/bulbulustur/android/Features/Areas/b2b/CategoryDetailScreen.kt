@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Features.areas.b2b
+package com.bulbulustur.android.Features.Areas.b2b
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -54,7 +54,7 @@ fun CategoryDetailScreen(
     onSearchClick: (String) -> Unit = {}
 ) {
     val category = remember(categoryId) {
-        _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.getWholesaleCategoryDetail(
+        _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.getWholesaleCategoryDetail(
             categoryId
         )
     }
@@ -77,7 +77,7 @@ fun CategoryDetailScreen(
             verticalArrangement = Arrangement.spacedBy(BbSpacing.SectionGapCompact)
         ) {
             item {
-                _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleCategoryDetailHeader(
+                _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleCategoryDetailHeader(
                     category = category
                 )
             }
@@ -87,7 +87,7 @@ fun CategoryDetailScreen(
             }
 
             item {
-                _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleCategoryDetailActions(
+                _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleCategoryDetailActions(
                     categoryId = category.categoryId,
                     onProductListClick = onProductListClick,
                     onCompanyListClick = onCompanyListClick,
@@ -108,7 +108,7 @@ fun CategoryDetailScreen(
                     subCategory.categoryId
                 }
             ) { subCategory ->
-                _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleSubCategoryCard(
+                _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleSubCategoryCard(
                     subCategory = subCategory,
                     onClick = {
                         onSubCategoryClick(subCategory.categoryId)
@@ -124,7 +124,7 @@ fun CategoryDetailScreen(
             }
 
             item {
-                _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesalePopularProductGroups(
+                _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesalePopularProductGroups(
                     productGroups = category.popularProductGroups,
                     onProductListClick = {
                         onProductListClick(category.categoryId)
@@ -140,7 +140,7 @@ fun CategoryDetailScreen(
             }
 
             item {
-                _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleCategoryStats(
+                _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleCategoryStats(
                     category = category
                 )
             }
@@ -155,7 +155,7 @@ fun CategoryDetailScreen(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun WholesaleCategoryDetailHeader(
-    category: com.bulbulustur.android.Features.areas.b2b.WholesaleCategoryDetail
+    category: com.bulbulustur.android.Features.Areas.b2b.WholesaleCategoryDetail
 ) {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
@@ -166,7 +166,7 @@ private fun WholesaleCategoryDetailHeader(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
         ) {
-            _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleCategoryIconTitleRow(
+            _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleCategoryIconTitleRow(
                 icon = category.icon,
                 title = "Toptan Kategori"
             )
@@ -226,7 +226,7 @@ private fun WholesaleCategoryDetailActions(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(BbSpacing.CardGapCompact)
         ) {
-            _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleCategoryActionCard(
+            _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleCategoryActionCard(
                 title = "Ürünleri Gör",
                 description = "Toptan liste",
                 icon = Icons.Outlined.Inventory2,
@@ -236,7 +236,7 @@ private fun WholesaleCategoryDetailActions(
                 }
             )
 
-            _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleCategoryActionCard(
+            _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleCategoryActionCard(
                 title = "Firmalar",
                 description = "Firma vitrinleri",
                 icon = Icons.Outlined.Business,
@@ -308,7 +308,7 @@ private fun WholesaleCategoryActionCard(
 
 @Composable
 private fun WholesaleSubCategoryCard(
-    subCategory: com.bulbulustur.android.Features.areas.b2b.WholesaleSubCategoryItem,
+    subCategory: com.bulbulustur.android.Features.Areas.b2b.WholesaleSubCategoryItem,
     onClick: () -> Unit
 ) {
     BbCard(
@@ -384,25 +384,25 @@ private fun WholesalePopularProductGroups(
 
 @Composable
 private fun WholesaleCategoryStats(
-    category: com.bulbulustur.android.Features.areas.b2b.WholesaleCategoryDetail
+    category: com.bulbulustur.android.Features.Areas.b2b.WholesaleCategoryDetail
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(BbSpacing.CardGapCompact)
     ) {
-        _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleCategoryStatCard(
+        _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleCategoryStatCard(
             title = "Ürün",
             value = category.productCount.toString(),
             modifier = Modifier.weight(1f)
         )
 
-        _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleCategoryStatCard(
+        _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleCategoryStatCard(
             title = "Firma",
             value = category.companyCount.toString(),
             modifier = Modifier.weight(1f)
         )
 
-        _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleCategoryStatCard(
+        _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleCategoryStatCard(
             title = "RFQ",
             value = category.rfqCount.toString(),
             modifier = Modifier.weight(1f)
@@ -474,7 +474,7 @@ data class WholesaleCategoryDetail(
     val companyCount: Int,
     val rfqCount: Int,
     val icon: ImageVector,
-    val subCategories: List<com.bulbulustur.android.Features.areas.b2b.WholesaleSubCategoryItem>,
+    val subCategories: List<com.bulbulustur.android.Features.Areas.b2b.WholesaleSubCategoryItem>,
     val popularProductGroups: List<String>
 )
 
@@ -486,8 +486,8 @@ data class WholesaleSubCategoryItem(
     val icon: ImageVector
 )
 
-private fun getWholesaleCategoryDetail(categoryId: Int): com.bulbulustur.android.Features.areas.b2b.WholesaleCategoryDetail {
-    return _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleCategoryDetail(
+private fun getWholesaleCategoryDetail(categoryId: Int): com.bulbulustur.android.Features.Areas.b2b.WholesaleCategoryDetail {
+    return _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleCategoryDetail(
         categoryId = categoryId,
         name = "Ambalaj ve Paketleme",
         description = "Koli, kutu, poşet, etiket, streç film ve endüstriyel ambalaj ürünleri için toptan kategori merkezi.",
@@ -495,35 +495,35 @@ private fun getWholesaleCategoryDetail(categoryId: Int): com.bulbulustur.android
         companyCount = 42,
         rfqCount = 17,
         icon = Icons.Outlined.Category,
-        subCategories = _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.getWholesaleSubCategories(),
-        popularProductGroups = _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.getWholesalePopularProductGroups()
+        subCategories = _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.getWholesaleSubCategories(),
+        popularProductGroups = _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.getWholesalePopularProductGroups()
     )
 }
 
-private fun getWholesaleSubCategories(): List<com.bulbulustur.android.Features.areas.b2b.WholesaleSubCategoryItem> {
+private fun getWholesaleSubCategories(): List<com.bulbulustur.android.Features.Areas.b2b.WholesaleSubCategoryItem> {
     return listOf(
-        _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleSubCategoryItem(
+        _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleSubCategoryItem(
             categoryId = 101,
             name = "Koli ve Kutu",
             description = "E-ticaret, sanayi ve depolama için koli çeşitleri.",
             productCount = 36,
             icon = Icons.Outlined.Inventory2
         ),
-        _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleSubCategoryItem(
+        _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleSubCategoryItem(
             categoryId = 102,
             name = "Poşet ve Çanta",
             description = "Mağaza, kargo ve üretim süreçleri için poşet çözümleri.",
             productCount = 28,
             icon = Icons.Outlined.Business
         ),
-        _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleSubCategoryItem(
+        _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleSubCategoryItem(
             categoryId = 103,
             name = "Etiket ve Barkod",
             description = "Ürün, depo, sevkiyat ve fiyat etiketi çözümleri.",
             productCount = 21,
             icon = Icons.Outlined.Verified
         ),
-        _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.WholesaleSubCategoryItem(
+        _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.WholesaleSubCategoryItem(
             categoryId = 104,
             name = "Streç ve Koruyucu Ambalaj",
             description = "Paletleme, sarma ve taşıma güvenliği için ürünler.",
@@ -549,6 +549,6 @@ private fun getWholesalePopularProductGroups(): List<String> {
 @Composable
 private fun CategoryDetailScreenPreview() {
     BbTheme {
-        _root_ide_package_.com.bulbulustur.android.Features.areas.b2b.CategoryDetailScreen()
+        _root_ide_package_.com.bulbulustur.android.Features.Areas.b2b.CategoryDetailScreen()
     }
 }

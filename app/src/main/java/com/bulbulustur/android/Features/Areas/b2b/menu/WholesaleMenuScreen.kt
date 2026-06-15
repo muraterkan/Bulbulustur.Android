@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Features.areas.b2b.menu
+package com.bulbulustur.android.Features.Areas.b2b.menu
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -44,9 +44,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.bulbulustur.android.Features.areas.b2b.components.WholesaleBottomNavigationItem
-import com.bulbulustur.android.Features.areas.b2b.components.WholesaleSearchHeader
-import com.bulbulustur.android.Features.areas.b2b.components.WholesaleBottomNavigation
+import com.bulbulustur.android.Features.Areas.b2b.components.WholesaleBottomNavigationItem
+import com.bulbulustur.android.Features.Areas.b2b.components.WholesaleSearchHeader
+import com.bulbulustur.android.Features.Areas.b2b.components.WholesaleBottomNavigation
 import com.bulbulustur.android.Ui.theme.BbColors
 import com.bulbulustur.android.Ui.theme.BbRadius
 import com.bulbulustur.android.Ui.theme.BbSpacing

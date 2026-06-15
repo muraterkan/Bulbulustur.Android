@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Features.areas.b2b.components
+package com.bulbulustur.android.Features.Areas.b2b.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background

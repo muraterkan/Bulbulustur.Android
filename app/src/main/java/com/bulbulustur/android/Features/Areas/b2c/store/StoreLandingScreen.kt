@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Features.areas.b2c.store
+package com.bulbulustur.android.Features.Areas.b2c.store
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

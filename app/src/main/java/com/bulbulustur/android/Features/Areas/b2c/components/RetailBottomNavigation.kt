@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Features.areas.b2c.components
+package com.bulbulustur.android.Features.Areas.b2c.components
 
 import androidx.compose.runtime.Composable
 import com.bulbulustur.android.Ui.shell.BuyerBottomNavigation

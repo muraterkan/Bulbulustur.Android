@@ -1,9 +1,12 @@
-package com.bulbulustur.android.Application.Navigation
+package com.bulbulustur.android.Application.Navigation.Graph
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
+import com.bulbulustur.android.Application.Navigation.OrderRoutes
+import com.bulbulustur.android.Application.Navigation.StoreRoutes
 import com.bulbulustur.android.Features.Areas.b2c.order.OrderCancelRequestScreen
 import com.bulbulustur.android.Features.Areas.b2c.order.OrderContractScreen
 import com.bulbulustur.android.Features.Areas.b2c.order.OrderDetailScreen

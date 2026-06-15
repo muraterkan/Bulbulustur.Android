@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Features.areas.b2c.order
+package com.bulbulustur.android.Features.Areas.b2c.order
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

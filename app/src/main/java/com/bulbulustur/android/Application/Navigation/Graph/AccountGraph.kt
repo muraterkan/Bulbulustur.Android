@@ -1,9 +1,16 @@
-package com.bulbulustur.android.Application.Navigation
+package com.bulbulustur.android.Application.Navigation.Graph
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.bulbulustur.android.Application.Navigation.AccountRoutes
+import com.bulbulustur.android.Application.Navigation.BankAccountRoutes
+import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
+import com.bulbulustur.android.Application.Navigation.OrderRoutes
+import com.bulbulustur.android.Application.Navigation.RetailRoutes
+import com.bulbulustur.android.Application.Navigation.SettingsRoutes
+import com.bulbulustur.android.Application.Navigation.StoreRoutes
 import com.bulbulustur.android.Features.account.AccountScreen
 import com.bulbulustur.android.Features.account.AccountSecurityScreen
 import com.bulbulustur.android.Features.account.AddressFormScreen

@@ -1,0 +1,304 @@
+﻿package com.bulbulustur.android.Views.Account
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
+import com.bulbulustur.android.wwwroot.components.BbButton
+import com.bulbulustur.android.wwwroot.components.BbButtonSize
+import com.bulbulustur.android.wwwroot.components.BbButtonVariant
+import com.bulbulustur.android.wwwroot.components.BbCard
+import com.bulbulustur.android.wwwroot.components.BbCardPadding
+import com.bulbulustur.android.wwwroot.components.BbCardVariant
+import com.bulbulustur.android.wwwroot.components.BbInnerPageHeader
+import com.bulbulustur.android.wwwroot.theme.BbRadius
+import com.bulbulustur.android.wwwroot.theme.BbSpacing
+
+@Composable
+fun ProfileScreen(
+    onBackClick: () -> Unit = {},
+    onSaveClick: (
+        name: String,
+        surname: String,
+        gender: String,
+        profession: String,
+        birthDate: String,
+        country: String,
+        city: String,
+        district: String
+    ) -> Unit = { _, _, _, _, _, _, _, _ -> }
+) {
+    val nameState = remember {
+        mutableStateOf("Murat")
+    }
+
+    val surnameState = remember {
+        mutableStateOf("Erkan")
+    }
+
+    val genderState = remember {
+        mutableStateOf("")
+    }
+
+    val professionState = remember {
+        mutableStateOf("")
+    }
+
+    val birthDateState = remember {
+        mutableStateOf("")
+    }
+
+    val countryState = remember {
+        mutableStateOf("TÃ¼rkiye")
+    }
+
+    val cityState = remember {
+        mutableStateOf("")
+    }
+
+    val districtState = remember {
+        mutableStateOf("")
+    }
+
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            BbInnerPageHeader(
+                title = "KullanÄ±cÄ± Bilgileri",
+                onBackClick = onBackClick
+            )
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(innerPadding)
+                .verticalScroll(rememberScrollState())
+                .padding(
+                    PaddingValues(
+                        start = BbSpacing.PageHorizontal,
+                        top = BbSpacing.PageTopCompact,
+                        end = BbSpacing.PageHorizontal,
+                        bottom = BbSpacing.PageBottom
+                    )
+                ),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.SectionGap)
+        ) {
+            ProfileIntroCard()
+
+            BbCard(
+                modifier = Modifier.fillMaxWidth(),
+                variant = BbCardVariant.Outlined,
+                padding = BbCardPadding.Medium
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
+                ) {
+                    AccountFormSectionHeader(
+                        title = "KiÅŸisel Bilgiler",
+                        description = "Ad, soyad, meslek ve doÄŸum tarihi bilgilerinizi gÃ¼ncelleyin."
+                    )
+
+                    AccountTextField(
+                        value = nameState.value,
+                        onValueChange = { value ->
+                            nameState.value = value
+                        },
+                        label = "Ä°sim",
+                        placeholder = "Ä°sminiz"
+                    )
+
+                    AccountTextField(
+                        value = surnameState.value,
+                        onValueChange = { value ->
+                            surnameState.value = value
+                        },
+                        label = "Soyisim",
+                        placeholder = "Soyisminiz"
+                    )
+
+                    AccountTextField(
+                        value = genderState.value,
+                        onValueChange = { value ->
+                            genderState.value = value
+                        },
+                        label = "Cinsiyet",
+                        placeholder = "SeÃ§iniz"
+                    )
+
+                    AccountTextField(
+                        value = professionState.value,
+                        onValueChange = { value ->
+                            professionState.value = value
+                        },
+                        label = "Meslek",
+                        placeholder = "MesleÄŸiniz"
+                    )
+
+                    AccountTextField(
+                        value = birthDateState.value,
+                        onValueChange = { value ->
+                            birthDateState.value = value
+                        },
+                        label = "DoÄŸum GÃ¼nÃ¼",
+                        placeholder = "gg.aa.yyyy",
+                        keyboardType = KeyboardType.Number
+                    )
+                }
+            }
+
+            BbCard(
+                modifier = Modifier.fillMaxWidth(),
+                variant = BbCardVariant.Outlined,
+                padding = BbCardPadding.Medium
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
+                ) {
+                    AccountFormSectionHeader(
+                        title = "Konum Bilgileri",
+                        description = "Ãœlke, ÅŸehir ve ilÃ§e bilgilerinizi dÃ¼zenleyin."
+                    )
+
+                    AccountTextField(
+                        value = countryState.value,
+                        onValueChange = { value ->
+                            countryState.value = value
+                        },
+                        label = "Ãœlke",
+                        placeholder = "Ãœlke seÃ§iniz"
+                    )
+
+                    AccountTextField(
+                        value = cityState.value,
+                        onValueChange = { value ->
+                            cityState.value = value
+                        },
+                        label = "Åehir",
+                        placeholder = "Åehir seÃ§iniz"
+                    )
+
+                    AccountTextField(
+                        value = districtState.value,
+                        onValueChange = { value ->
+                            districtState.value = value
+                        },
+                        label = "Ä°lÃ§e",
+                        placeholder = "Ä°lÃ§e seÃ§iniz"
+                    )
+                }
+            }
+
+            BbButton(
+                text = "GÃ¼ncelle",
+                onClick = {
+                    onSaveClick(
+                        nameState.value,
+                        surnameState.value,
+                        genderState.value,
+                        professionState.value,
+                        birthDateState.value,
+                        countryState.value,
+                        cityState.value,
+                        districtState.value
+                    )
+                },
+                modifier = Modifier.fillMaxWidth(),
+                variant = BbButtonVariant.Primary,
+                size = BbButtonSize.Medium
+            )
+        }
+    }
+}
+
+@Composable
+private fun ProfileIntroCard() {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
+        Text(
+            text = "HesabÄ±nÄ±za ait kiÅŸisel ve konum bilgilerini buradan gÃ¼ncelleyebilirsiniz.",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+
+@Composable
+private fun AccountFormSectionHeader(
+    title: String,
+    description: String
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+    ) {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+
+        Text(
+            text = description,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+
+@Composable
+private fun AccountTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    placeholder: String,
+    keyboardType: KeyboardType = KeyboardType.Text
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = { newValue ->
+            onValueChange(newValue)
+        },
+        modifier = Modifier.fillMaxWidth(),
+        label = {
+            Text(text = label)
+        },
+        placeholder = {
+            Text(text = placeholder)
+        },
+        singleLine = true,
+        shape = BbRadius.Input,
+        keyboardOptions = KeyboardOptions(
+            keyboardType = keyboardType
+        ),
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = MaterialTheme.colorScheme.surface,
+            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+            unfocusedIndicatorColor = MaterialTheme.colorScheme.outline,
+            focusedLabelColor = MaterialTheme.colorScheme.primary,
+            unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    )
+}

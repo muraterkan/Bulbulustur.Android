@@ -1,9 +1,9 @@
 package com.bulbulustur.android.Areas.b2b.ViewComponents
 
 import androidx.compose.runtime.Composable
-import com.bulbulustur.android.wwwroot.shell.BuyerBottomNavigation
-import com.bulbulustur.android.wwwroot.shell.BuyerBottomNavigationItem
-import com.bulbulustur.android.wwwroot.shell.BuyerMode
+import com.bulbulustur.android.Views.Shared.BuyerBottomNavigation
+import com.bulbulustur.android.Views.Shared.BuyerBottomNavigationItem
+import com.bulbulustur.android.Views.Shared.BuyerMode
 
 enum class WholesaleBottomNavigationItem {
     Home,

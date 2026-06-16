@@ -1,0 +1,600 @@
+﻿package com.bulbulustur.android.Views.Account
+
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.selection.toggleable
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material.icons.outlined.Language
+import androidx.compose.material.icons.outlined.LocationOn
+import androidx.compose.material.icons.outlined.Public
+import androidx.compose.material.icons.outlined.RequestQuote
+import androidx.compose.material.icons.outlined.Storefront
+import androidx.compose.material.icons.outlined.Verified
+import androidx.compose.material.icons.outlined.WorkspacePremium
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.wwwroot.components.BbButton
+import com.bulbulustur.android.wwwroot.components.BbButtonSize
+import com.bulbulustur.android.wwwroot.components.BbButtonVariant
+import com.bulbulustur.android.wwwroot.components.BbCard
+import com.bulbulustur.android.wwwroot.components.BbCardPadding
+import com.bulbulustur.android.wwwroot.components.BbCardVariant
+import com.bulbulustur.android.wwwroot.components.BbInnerPageHeader
+import com.bulbulustur.android.wwwroot.theme.BbIcon
+import com.bulbulustur.android.wwwroot.theme.BbRadius
+import com.bulbulustur.android.wwwroot.theme.BbSpacing
+import com.bulbulustur.android.wwwroot.theme.BbTypography
+import com.bulbulustur.android.wwwroot.theme.BbAlpha
+
+
+@Composable
+fun CompanyB2BIndexScreen(
+    onBackClick: () -> Unit = {},
+    onActivateClick: () -> Unit = {}
+) {
+    val agreementAcceptedState = remember {
+        mutableStateOf(false)
+    }
+
+    val pageBackground = Brush.verticalGradient(
+        colors = listOf(
+            MaterialTheme.colorScheme.primaryContainer.copy(alpha = BbAlpha.DisabledLabel),
+            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.80f),
+            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.95f)
+        )
+    )
+
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            BbInnerPageHeader(
+                title = "B2B Index",
+                onBackClick = onBackClick
+            )
+        }
+    ) { innerPadding ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(pageBackground)
+                .padding(innerPadding),
+            contentPadding = PaddingValues(
+                start = BbSpacing.PageHorizontal,
+                top = BbSpacing.PageTopCompact,
+                end = BbSpacing.PageHorizontal,
+                bottom = BbSpacing.PageBottom
+            ),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.CardGap)
+        ) {
+            item {
+                CompanyB2BIndexIntroCard()
+            }
+
+            item {
+                CompanyB2BIndexSummaryCard()
+            }
+
+            item {
+                CompanyB2BIndexStatsGrid()
+            }
+
+            item {
+                CompanyB2BIndexSection(
+                    title = "B2B Index Ne SaÄŸlar?",
+                    description = "FirmanÄ±zÄ±n toptan ticaret akÄ±ÅŸlarÄ±nda daha gÃ¶rÃ¼nÃ¼r olmasÄ±na yardÄ±mcÄ± olur.",
+                    icon = Icons.Outlined.WorkspacePremium
+                ) {
+                    CompanyB2BIndexBenefitRow(
+                        title = "Global GÃ¶rÃ¼nÃ¼rlÃ¼k",
+                        description = "Åirket profiliniz uluslararasÄ± alÄ±cÄ±lar iÃ§in daha keÅŸfedilebilir hale gelir.",
+                        icon = Icons.Outlined.Public
+                    )
+
+                    CompanyDashedDivider()
+
+                    CompanyB2BIndexBenefitRow(
+                        title = "RFQ FÄ±rsatlarÄ±",
+                        description = "Potansiyel alÄ±cÄ±lardan gelen fiyat teklifi sÃ¼reÃ§lerine daha yakÄ±n olursunuz.",
+                        icon = Icons.Outlined.RequestQuote
+                    )
+
+                    CompanyDashedDivider()
+
+                    CompanyB2BIndexBenefitRow(
+                        title = "Kurumsal Vitrin",
+                        description = "Åirket bilgileriniz daha dÃ¼zenli ve gÃ¼ven veren bir B2B profilinde sunulur.",
+                        icon = Icons.Outlined.Storefront
+                    )
+                }
+            }
+
+            item {
+                CompanyB2BIndexAgreementCard(
+                    isAccepted = agreementAcceptedState.value,
+                    onAcceptedChange = { isAccepted ->
+                        agreementAcceptedState.value = isAccepted
+                    }
+                )
+            }
+
+            item {
+                BbButton(
+                    text = "Åirketimi B2B Indexâ€™e Dahil Et",
+                    onClick = {
+                        if (agreementAcceptedState.value) {
+                            onActivateClick()
+                        }
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    variant = if (agreementAcceptedState.value) {
+                        BbButtonVariant.Primary
+                    } else {
+                        BbButtonVariant.Light
+                    },
+                    size = BbButtonSize.Large,
+                    enabled = agreementAcceptedState.value
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun CompanyB2BIndexIntroCard() {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(BbIcon.BoxXl)
+                    .background(
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        shape = BbRadius.XlShape
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Language,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                    modifier = Modifier.size(BbIcon.Section)
+                )
+            }
+
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+            ) {
+                Text(
+                    text = "Åirketinizi Global AlÄ±cÄ±lara AÃ§Ä±n",
+                    style = BbTypography.titleLarge,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+
+                Text(
+                    text = "Toptan alÄ±cÄ±larÄ±n firmanÄ±zÄ± keÅŸfetmesi, teklif sÃ¼reÃ§lerinize ulaÅŸmasÄ± ve kurumsal profilinizi gÃ¶rmesi iÃ§in ÅŸirketinizi B2B Indexâ€™e dahil edin.",
+                    style = BbTypography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun CompanyB2BIndexSummaryCard() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                color = MaterialTheme.colorScheme.inverseSurface,
+                shape = BbRadius.XlShape
+            )
+            .padding(BbSpacing.CardPadding)
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(BbIcon.BoxXl)
+                    .background(
+                        color = MaterialTheme.colorScheme.primary,
+                        shape = BbRadius.XlShape
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Storefront,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onPrimary,
+                    modifier = Modifier.size(BbIcon.Section)
+                )
+            }
+
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+            ) {
+                Text(
+                    text = "TÃ¼rkiye Global Ticaret Limited Åirketi",
+                    style = BbTypography.titleMedium,
+                    color = MaterialTheme.colorScheme.inverseOnSurface
+                )
+
+                Text(
+                    text = "Limited Åirket Â· Ä°stanbul / TÃ¼rkiye",
+                    style = BbTypography.bodySmall,
+                    color = MaterialTheme.colorScheme.inverseOnSurface.copy(alpha = BbAlpha.Muted)
+                )
+
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    CompanyB2BIndexStatusPill(
+                        text = "B2B Index KapalÄ±",
+                        icon = Icons.Outlined.Verified
+                    )
+
+                    CompanyB2BIndexStatusPill(
+                        text = "Profil Aktif",
+                        icon = Icons.Outlined.CheckCircle
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun CompanyB2BIndexStatusPill(
+    text: String,
+    icon: ImageVector
+) {
+    Row(
+        modifier = Modifier
+            .background(
+                color = MaterialTheme.colorScheme.inverseOnSurface.copy(alpha = BbAlpha.Overlay),
+                shape = BbRadius.Badge
+            )
+            .padding(
+                horizontal = BbSpacing.Space2,
+                vertical = BbSpacing.Space1
+            ),
+        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space1),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(BbIcon.Size2Xs)
+        )
+
+        Text(
+            text = text,
+            style = BbTypography.labelSmall,
+            color = MaterialTheme.colorScheme.inverseOnSurface
+        )
+    }
+}
+
+@Composable
+private fun CompanyB2BIndexStatsGrid() {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+        ) {
+            CompanyB2BIndexStatCard(
+                modifier = Modifier.weight(1f),
+                icon = Icons.Outlined.Storefront,
+                label = "Firma KimliÄŸi",
+                value = "2-FGA0IBO7EGAZ5nB"
+            )
+
+            CompanyB2BIndexStatCard(
+                modifier = Modifier.weight(1f),
+                icon = Icons.Outlined.LocationOn,
+                label = "Lokasyon",
+                value = "Ä°stanbul"
+            )
+        }
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+        ) {
+            CompanyB2BIndexStatCard(
+                modifier = Modifier.weight(1f),
+                icon = Icons.Outlined.Public,
+                label = "GÃ¶rÃ¼nÃ¼rlÃ¼k",
+                value = "KapalÄ±"
+            )
+
+            CompanyB2BIndexStatCard(
+                modifier = Modifier.weight(1f),
+                icon = Icons.Outlined.RequestQuote,
+                label = "RFQ",
+                value = "HazÄ±r"
+            )
+        }
+    }
+}
+
+@Composable
+private fun CompanyB2BIndexStatCard(
+    modifier: Modifier,
+    icon: ImageVector,
+    label: String,
+    value: String
+) {
+    BbCard(
+        modifier = modifier,
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(BbIcon.BoxMd)
+                    .background(
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        shape = BbRadius.PillShape
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                    modifier = Modifier.size(BbIcon.Ui)
+                )
+            }
+
+            Text(
+                text = label,
+                style = BbTypography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+
+            Text(
+                text = value,
+                style = BbTypography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        }
+    }
+}
+
+@Composable
+private fun CompanyB2BIndexSection(
+    title: String,
+    description: String,
+    icon: ImageVector,
+    content: @Composable ColumnScope.() -> Unit
+) {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.None
+    ) {
+        Column(
+            modifier = Modifier.background(MaterialTheme.colorScheme.surface)
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(BbSpacing.CardPadding),
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(BbIcon.BoxMd)
+                        .background(
+                            color = MaterialTheme.colorScheme.primaryContainer,
+                            shape = BbRadius.LgShape
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                        modifier = Modifier.size(BbIcon.Ui)
+                    )
+                }
+
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+                ) {
+                    Text(
+                        text = title,
+                        style = BbTypography.titleSmall,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+
+                    Text(
+                        text = description,
+                        style = BbTypography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+
+            CompanyDashedDivider()
+
+            Column {
+                content()
+            }
+        }
+    }
+}
+
+@Composable
+private fun CompanyB2BIndexBenefitRow(
+    title: String,
+    description: String,
+    icon: ImageVector
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(BbSpacing.CardPadding),
+        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            modifier = Modifier
+                .size(BbIcon.BoxMd)
+                .background(
+                    color = MaterialTheme.colorScheme.surfaceVariant,
+                    shape = BbRadius.PillShape
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.size(BbIcon.Ui)
+            )
+        }
+
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+        ) {
+            Text(
+                text = title,
+                style = BbTypography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
+            Text(
+                text = description,
+                style = BbTypography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+@Composable
+private fun CompanyB2BIndexAgreementCard(
+    isAccepted: Boolean,
+    onAcceptedChange: (Boolean) -> Unit
+) {
+    BbCard(
+        modifier = Modifier
+            .fillMaxWidth()
+            .toggleable(
+                value = isAccepted,
+                role = Role.Checkbox,
+                onValueChange = { checked ->
+                    onAcceptedChange(checked)
+                }
+            ),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2),
+            verticalAlignment = Alignment.Top
+        ) {
+            Checkbox(
+                checked = isAccepted,
+                onCheckedChange = { checked ->
+                    onAcceptedChange(checked)
+                },
+                colors = CheckboxDefaults.colors(
+                    checkedColor = MaterialTheme.colorScheme.primary,
+                    uncheckedColor = MaterialTheme.colorScheme.outline,
+                    checkmarkColor = MaterialTheme.colorScheme.onPrimary
+                )
+            )
+
+            Column(
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+            ) {
+                Text(
+                    text = "Bulbulustur KullanÄ±cÄ± SÃ¶zleÅŸmesiâ€™ni okudum ve kabul ediyorum.",
+                    style = BbTypography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+
+                Text(
+                    text = "B2B Indexâ€™e dahil olduÄŸunuzda ÅŸirket profiliniz ve uygun kurumsal bilgileriniz platform Ã¼zerinde gÃ¶rÃ¼nÃ¼r olabilir.",
+                    style = BbTypography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun CompanyDashedDivider() {
+    val dividerColor = MaterialTheme.colorScheme.outlineVariant
+
+    Canvas(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                start = BbSpacing.Space4,
+                end = BbSpacing.Space4
+            )
+            .size(height = 1.dp, width = BbSpacing.BorderThin)
+    ) {
+        drawLine(
+            color = dividerColor,
+            start = Offset(0f, 0f),
+            end = Offset(size.width, 0f),
+            strokeWidth = 1.dp.toPx(),
+            pathEffect = PathEffect.dashPathEffect(
+                intervals = floatArrayOf(10f, 8f),
+                phase = 0f
+            )
+        )
+    }
+}

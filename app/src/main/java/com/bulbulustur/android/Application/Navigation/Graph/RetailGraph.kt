@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Navigation.Graph
+﻿package com.bulbulustur.android.Application.Navigation.Graph
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -6,14 +6,17 @@ import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
 import com.bulbulustur.android.Application.Navigation.RetailRoutes
 import com.bulbulustur.android.Areas.b2c.Views.Campaign.CampaignDetailScreen
 import com.bulbulustur.android.Areas.b2c.Views.Campaign.CampaignListScreen
-import com.bulbulustur.android.Areas.b2c.ProductListScreen as RetailProductListScreen
+import com.bulbulustur.android.Areas.b2c.Views.Category.RetailCategoryHomeScreen
+import com.bulbulustur.android.Areas.b2c.Views.Category.RetailHomeScreen
+import com.bulbulustur.android.Areas.b2c.Views.Product.ProductDetailScreen
+import com.bulbulustur.android.Areas.b2c.Views.Product.ProductListScreen as RetailProductListScreen
 
 fun NavGraphBuilder.retailGraph(
     navigator: BulbulusturNavigator
 ) {
 
     composable(RetailRoutes.Home) {
-        _root_ide_package_.com.bulbulustur.android.Areas.b2c.RetailHomeScreen(
+        RetailHomeScreen(
             onMenuClick = {
                 navigator.navigateToRetailCategories()
             },
@@ -33,7 +36,7 @@ fun NavGraphBuilder.retailGraph(
     }
 
     composable(RetailRoutes.CategoryHome) {
-        _root_ide_package_.com.bulbulustur.android.Areas.b2c.RetailCategoryHomeScreen(
+        RetailCategoryHomeScreen(
             onBackClick = {
                 navigator.back()
             }
@@ -58,7 +61,7 @@ fun NavGraphBuilder.retailGraph(
     }
 
     composable(RetailRoutes.ProductDetail) {
-        _root_ide_package_.com.bulbulustur.android.Areas.b2c.ProductDetailScreen(
+        ProductDetailScreen(
             onBackClick = {
                 navigator.back()
             }

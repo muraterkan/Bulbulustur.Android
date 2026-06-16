@@ -22,9 +22,9 @@ import com.bulbulustur.android.Application.Navigation.Graph.settingsGraph
 import com.bulbulustur.android.Application.Navigation.Graph.splashGraph
 import com.bulbulustur.android.Application.Navigation.Graph.wholesaleGraph
 import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
-import com.bulbulustur.android.Views.logon.logonGraph
-import com.bulbulustur.android.wwwroot.shell.BuyerMode
-import com.bulbulustur.android.wwwroot.shell.BuyerModeSheet
+import com.bulbulustur.android.Views.Logon.logonGraph
+import com.bulbulustur.android.Views.Shared.BuyerMode
+import com.bulbulustur.android.Views.Shared.BuyerModeSheet
 import com.bulbulustur.android.wwwroot.theme.BbTheme
 
 @Composable

@@ -44,9 +44,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.bulbulustur.android.Areas.b2c.Views.components.RetailBottomNavigation
-import com.bulbulustur.android.Areas.b2c.Views.components.RetailBottomNavigationItem
-import com.bulbulustur.android.Areas.b2c.Views.components.RetailSearchHeader
 import com.bulbulustur.android.wwwroot.theme.BbColors
 import com.bulbulustur.android.wwwroot.theme.BbRadius
 import com.bulbulustur.android.wwwroot.theme.BbSpacing

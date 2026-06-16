@@ -1,0 +1,276 @@
+﻿package com.bulbulustur.android.Views.Account
+
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.wwwroot.components.BbButton
+import com.bulbulustur.android.wwwroot.components.BbButtonSize
+import com.bulbulustur.android.wwwroot.components.BbButtonVariant
+import com.bulbulustur.android.wwwroot.components.BbCard
+import com.bulbulustur.android.wwwroot.components.BbCardPadding
+import com.bulbulustur.android.wwwroot.components.BbCardVariant
+import com.bulbulustur.android.wwwroot.components.BbInnerPageHeader
+import com.bulbulustur.android.wwwroot.theme.BbColors
+import com.bulbulustur.android.wwwroot.theme.BbSpacing
+
+@Composable
+fun CommunicationPreferenceScreen(
+    onBackClick: () -> Unit = {},
+    onSaveClick: (
+        emailAllowed: Boolean,
+        smsAllowed: Boolean,
+        phoneAllowed: Boolean,
+        appNotificationAllowed: Boolean
+    ) -> Unit = { _, _, _, _ -> }
+) {
+    val emailAllowedState = remember {
+        mutableStateOf(true)
+    }
+
+    val smsAllowedState = remember {
+        mutableStateOf(false)
+    }
+
+    val phoneAllowedState = remember {
+        mutableStateOf(false)
+    }
+
+    val appNotificationAllowedState = remember {
+        mutableStateOf(true)
+    }
+
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Bildirim Ve Ä°zinler",
+                onBackClick = onBackClick
+            )
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(innerPadding)
+                .verticalScroll(rememberScrollState())
+                .padding(
+                    PaddingValues(
+                        start = BbSpacing.PageHorizontal,
+                        top = BbSpacing.PageTopCompact,
+                        end = BbSpacing.PageHorizontal,
+                        bottom = BbSpacing.PageBottom
+                    )
+                ),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.SectionGap)
+        ) {
+            CommunicationDescriptionCard()
+
+            CommunicationPreferenceCard(
+                emailAllowed = emailAllowedState.value,
+                smsAllowed = smsAllowedState.value,
+                phoneAllowed = phoneAllowedState.value,
+                appNotificationAllowed = appNotificationAllowedState.value,
+                onEmailAllowedChange = { value ->
+                    emailAllowedState.value = value
+                },
+                onSmsAllowedChange = { value ->
+                    smsAllowedState.value = value
+                },
+                onPhoneAllowedChange = { value ->
+                    phoneAllowedState.value = value
+                },
+                onAppNotificationAllowedChange = { value ->
+                    appNotificationAllowedState.value = value
+                }
+            )
+
+            BbButton(
+                text = "Tercihleri Kaydet",
+                onClick = {
+                    onSaveClick(
+                        emailAllowedState.value,
+                        smsAllowedState.value,
+                        phoneAllowedState.value,
+                        appNotificationAllowedState.value
+                    )
+                },
+                modifier = Modifier.fillMaxWidth(),
+                variant = BbButtonVariant.Primary,
+                size = BbButtonSize.Medium
+            )
+        }
+    }
+}
+
+@Composable
+private fun CommunicationDescriptionCard() {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
+        Text(
+            text = "E-posta, SMS, telefon ve uygulama bildirimleri iÃ§in tercihlerinizi buradan yÃ¶netebilirsiniz. Zorunlu hesap, gÃ¼venlik ve sipariÅŸ bildirimleri yasal sÃ¼reÃ§ler kapsamÄ±nda ayrÄ±ca gÃ¶nderilebilir.",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+
+@Composable
+private fun CommunicationPreferenceCard(
+    emailAllowed: Boolean,
+    smsAllowed: Boolean,
+    phoneAllowed: Boolean,
+    appNotificationAllowed: Boolean,
+    onEmailAllowedChange: (Boolean) -> Unit,
+    onSmsAllowedChange: (Boolean) -> Unit,
+    onPhoneAllowedChange: (Boolean) -> Unit,
+    onAppNotificationAllowedChange: (Boolean) -> Unit
+) {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.None
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.surface)
+        ) {
+            CommunicationPreferenceRow(
+                title = "E-Posta Bildirimleri",
+                description = "SipariÅŸ, kampanya ve hesap bilgilendirmeleri e-posta ile gÃ¶nderilebilir.",
+                checked = emailAllowed,
+                onCheckedChange = onEmailAllowedChange
+            )
+
+            CommunicationDashedDivider()
+
+            CommunicationPreferenceRow(
+                title = "SMS Bildirimleri",
+                description = "KÄ±sa bilgilendirme ve doÄŸrulama mesajlarÄ± SMS ile gÃ¶nderilebilir.",
+                checked = smsAllowed,
+                onCheckedChange = onSmsAllowedChange
+            )
+
+            CommunicationDashedDivider()
+
+            CommunicationPreferenceRow(
+                title = "Telefon AramasÄ±",
+                description = "Gerekli durumlarda hesabÄ±nÄ±zla ilgili telefonla iletiÅŸim kurulabilir.",
+                checked = phoneAllowed,
+                onCheckedChange = onPhoneAllowedChange
+            )
+
+            CommunicationDashedDivider()
+
+            CommunicationPreferenceRow(
+                title = "Uygulama Bildirimleri",
+                description = "Mobil uygulama Ã¼zerinden bildirim almayÄ± yÃ¶netebilirsiniz.",
+                checked = appNotificationAllowed,
+                onCheckedChange = onAppNotificationAllowedChange
+            )
+        }
+    }
+}
+
+@Composable
+private fun CommunicationPreferenceRow(
+    title: String,
+    description: String,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(BbSpacing.CardPadding),
+        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+        ) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
+            Text(
+                text = description,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+
+        Switch(
+            checked = checked,
+            onCheckedChange = { value ->
+                onCheckedChange(value)
+            },
+            colors = SwitchDefaults.colors(
+                checkedThumbColor = BbColors.White,
+                checkedTrackColor = MaterialTheme.colorScheme.primary,
+                checkedBorderColor = MaterialTheme.colorScheme.primary,
+                uncheckedThumbColor = MaterialTheme.colorScheme.surface,
+                uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant,
+                uncheckedBorderColor = MaterialTheme.colorScheme.outline
+            )
+        )
+    }
+}
+
+@Composable
+private fun CommunicationDashedDivider() {
+    val dividerColor = MaterialTheme.colorScheme.outlineVariant
+
+    Canvas(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                start = BbSpacing.CardPadding,
+                end = BbSpacing.CardPadding
+            )
+            .size(
+                width = 1.dp,
+                height = 1.dp
+            )
+    ) {
+        drawLine(
+            color = dividerColor,
+            start = Offset(0f, 0f),
+            end = Offset(size.width, 0f),
+            strokeWidth = 1.dp.toPx(),
+            pathEffect = PathEffect.dashPathEffect(
+                intervals = floatArrayOf(8f, 8f),
+                phase = 0f
+            )
+        )
+    }
+}

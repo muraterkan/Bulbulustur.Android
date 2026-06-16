@@ -1,15 +1,15 @@
-package com.bulbulustur.android.Application.Navigation.Graph
+﻿package com.bulbulustur.android.Application.Navigation.Graph
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
 import com.bulbulustur.android.Application.Navigation.CompanyRoutes
 import com.bulbulustur.android.Application.Navigation.WholesaleRoutes
-import com.bulbulustur.android.Views.company.CompanyContactScreen
-import com.bulbulustur.android.Views.company.CompanyDetailScreen
-import com.bulbulustur.android.Views.company.CompanyHomeScreen
-import com.bulbulustur.android.Views.company.CompanyListScreen
-import com.bulbulustur.android.Views.company.CompanyProductsScreen
+import com.bulbulustur.android.Views.Company.CompanyContactScreen
+import com.bulbulustur.android.Views.Company.CompanyDetailScreen
+import com.bulbulustur.android.Views.Company.CompanyHomeScreen
+import com.bulbulustur.android.Views.Company.CompanyListScreen
+import com.bulbulustur.android.Views.Company.CompanyProductsScreen
 
 fun NavGraphBuilder.companyGraph(
     navigator: BulbulusturNavigator
@@ -65,7 +65,7 @@ fun NavGraphBuilder.companyGraph(
     }
 
     composable(CompanyRoutes.CompanyDetail) {
-        CompanyDetailScreen(
+       CompanyDetailScreen(
             onBackClick = { navigator.back() },
             onHomeClick = {
                 navigator.navController.navigate(CompanyRoutes.CompanyHome)

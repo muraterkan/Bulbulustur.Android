@@ -1,10 +1,10 @@
-package com.bulbulustur.android.Application.Navigation.Graph
+﻿package com.bulbulustur.android.Application.Navigation.Graph
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
 import com.bulbulustur.android.Application.Navigation.SplashRoutes
-import com.bulbulustur.android.Views.splash.ModeSelectionScreen
+import com.bulbulustur.android.Views.Splash.ModeSelectionScreen
 
 fun NavGraphBuilder.splashGraph(
     navigator: BulbulusturNavigator

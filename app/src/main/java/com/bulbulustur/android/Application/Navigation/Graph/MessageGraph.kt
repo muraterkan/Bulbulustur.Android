@@ -8,8 +8,8 @@ import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
 import com.bulbulustur.android.Application.Navigation.MessageRoutes
 import com.bulbulustur.android.Application.Navigation.RetailRoutes
 import com.bulbulustur.android.Application.Navigation.WholesaleRoutes
-import com.bulbulustur.android.Features.message.MessageDetailScreen
-import com.bulbulustur.android.Features.message.MessageInboxScreen
+import com.bulbulustur.android.Views.message.MessageDetailScreen
+import com.bulbulustur.android.Views.message.MessageInboxScreen
 
 fun NavGraphBuilder.messageGraph(
     navigator: BulbulusturNavigator

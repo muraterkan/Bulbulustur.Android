@@ -1,0 +1,716 @@
+package com.bulbulustur.android.Areas.b2c
+
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Category
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.KeyboardArrowRight
+import androidx.compose.material.icons.outlined.LocalOffer
+import androidx.compose.material.icons.outlined.NewReleases
+import androidx.compose.material.icons.outlined.ShoppingBasket
+import androidx.compose.material.icons.outlined.Storefront
+import androidx.compose.material.icons.outlined.Verified
+import androidx.compose.material.icons.outlined.WorkspacePremium
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.Areas.b2c.Views.components.RetailBottomNavigation
+import com.bulbulustur.android.Areas.b2c.Views.components.RetailBottomNavigationItem
+import com.bulbulustur.android.Areas.b2c.Views.components.RetailSearchHeader
+import com.bulbulustur.android.Areas.b2c.Views.components.RetailSearchHeaderLeadingAction
+import com.bulbulustur.android.wwwroot.components.BbButton
+import com.bulbulustur.android.wwwroot.components.BbButtonSize
+import com.bulbulustur.android.wwwroot.components.BbButtonVariant
+import com.bulbulustur.android.wwwroot.components.BbCard
+import com.bulbulustur.android.wwwroot.components.BbCardPadding
+import com.bulbulustur.android.wwwroot.components.BbCardVariant
+import com.bulbulustur.android.wwwroot.components.BbChip
+import com.bulbulustur.android.wwwroot.components.BbSectionHeader
+import com.bulbulustur.android.wwwroot.theme.BbColors
+import com.bulbulustur.android.wwwroot.theme.BbRadius
+import com.bulbulustur.android.wwwroot.theme.BbSpacing
+import com.bulbulustur.android.wwwroot.theme.BbTheme
+
+@Composable
+fun RetailCategoryHomeScreen(
+    onBackClick: () -> Unit = {},
+    onSearchClick: (String) -> Unit = {},
+    onMenuClick: () -> Unit = {},
+    onFavoriteClick: () -> Unit = {},
+    onMessageClick: () -> Unit = {},
+    onHomeClick: () -> Unit = {},
+    onModeSwitchClick: () -> Unit = {},
+    onBasketClick: () -> Unit = {},
+    onAccountClick: () -> Unit = {},
+    onProductListClick: () -> Unit = {},
+    onSubCategoryClick: () -> Unit = {},
+    onStoreClick: () -> Unit = {}
+) {
+    var searchText by remember {
+        mutableStateOf("")
+    }
+
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            RetailSearchHeader(
+                searchText = searchText,
+                onSearchTextChange = {
+                    searchText = it
+                },
+                onMenuClick = onMenuClick,
+                onFavoriteClick = onFavoriteClick,
+                onMessageClick = onMessageClick,
+                placeholder = "Ürün, kategori veya marka ara",
+                onSearchClick = {
+                    onSearchClick(searchText)
+                },
+                onClearClick = {
+                    searchText = ""
+                },
+                leadingAction = RetailSearchHeaderLeadingAction.Back,
+                onBackClick = onBackClick
+            )
+        },
+        bottomBar = {
+            RetailBottomNavigation(
+                selectedItem = RetailBottomNavigationItem.Menu,
+                onItemClick = { selectedItem ->
+                    when (selectedItem) {
+                        RetailBottomNavigationItem.Home -> onHomeClick()
+                        RetailBottomNavigationItem.Menu -> Unit
+                        RetailBottomNavigationItem.ModeSwitch -> onModeSwitchClick()
+                        RetailBottomNavigationItem.Basket -> onBasketClick()
+                        RetailBottomNavigationItem.Account -> onAccountClick()
+                    }
+                }
+            )
+        }
+    ) { innerPadding ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background),
+            contentPadding = PaddingValues(
+                start = BbSpacing.PageHorizontal,
+                top = innerPadding.calculateTopPadding() + BbSpacing.PageTopCompact,
+                end = BbSpacing.PageHorizontal,
+                bottom = innerPadding.calculateBottomPadding() + BbSpacing.PageBottom
+            ),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.SectionGapCompact)
+        ) {
+            item {
+                RetailCategoryHomeHeroCard(
+                    onProductListClick = onProductListClick,
+                    onStoreClick = onStoreClick
+                )
+            }
+
+            item {
+                RetailCategoryHomeGatewayRow(
+                    onProductListClick = onProductListClick,
+                    onStoreClick = onStoreClick,
+                    onFavoriteClick = onFavoriteClick
+                )
+            }
+
+            item {
+                RetailCategoryHomeTrustStrip()
+            }
+
+            item {
+                BbSectionHeader(
+                    title = "Alt Kategoriler",
+                    subtitle = "Bu kategori altındaki alışveriş kırılımlarını incele."
+                )
+            }
+
+            items(
+                items = getRetailCategoryHomeSubCategories(),
+                key = { item ->
+                    item.title
+                }
+            ) { item ->
+                RetailCategoryHomeSubCategoryCard(
+                    item = item,
+                    onClick = onSubCategoryClick
+                )
+            }
+
+            item {
+                BbSectionHeader(
+                    title = "Kategori vitrinleri",
+                    subtitle = "Ürün, mağaza ve kampanya akışlarına hızlı geç."
+                )
+            }
+
+            item {
+                RetailCategoryHomeShowcaseRow(
+                    onProductListClick = onProductListClick,
+                    onStoreClick = onStoreClick,
+                    onFavoriteClick = onFavoriteClick
+                )
+            }
+
+            item {
+                BbSectionHeader(
+                    title = "Popüler aramalar",
+                    subtitle = "Bu kategoride sık kullanılan başlıklar."
+                )
+            }
+
+            item {
+                RetailCategoryHomePopularSearchChipRow(
+                    onProductListClick = onProductListClick
+                )
+            }
+
+            item {
+                Spacer(
+                    modifier = Modifier.height(BbSpacing.Space4)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun RetailCategoryHomeHeroCard(
+    onProductListClick: () -> Unit,
+    onStoreClick: () -> Unit
+) {
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        shape = BbRadius.XlShape,
+        color = BbColors.Yellow.Yellow100
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(BbColors.Yellow.Yellow100)
+                .padding(BbSpacing.Space5),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space4)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Category,
+                    contentDescription = null,
+                    tint = BbColors.TextStrong
+                )
+
+                Text(
+                    text = "Perakende kategori",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = BbColors.TextStrong,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
+
+            Text(
+                text = "Elektronik",
+                style = MaterialTheme.typography.headlineSmall,
+                color = BbColors.TextStrong,
+                fontWeight = FontWeight.Bold
+            )
+
+            Text(
+                text = "Alt kategorileri, ürün vitrinlerini ve mağaza geçişlerini bu alandan keşfet.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = BbColors.TextSubtle
+            )
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+            ) {
+                BbButton(
+                    text = "Ürünleri Gör",
+                    onClick = onProductListClick,
+                    modifier = Modifier.weight(1f),
+                    variant = BbButtonVariant.Dark,
+                    size = BbButtonSize.Medium
+                )
+
+                BbButton(
+                    text = "Mağazalar",
+                    onClick = onStoreClick,
+                    modifier = Modifier.weight(1f),
+                    variant = BbButtonVariant.Light,
+                    size = BbButtonSize.Medium
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun RetailCategoryHomeGatewayRow(
+    onProductListClick: () -> Unit,
+    onStoreClick: () -> Unit,
+    onFavoriteClick: () -> Unit
+) {
+    LazyRow(
+        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+    ) {
+        items(
+            items = getRetailCategoryHomeGateways(),
+            key = { item ->
+                item.title
+            }
+        ) { item ->
+            RetailCategoryHomeGatewayCard(
+                item = item,
+                onClick = {
+                    when (item.target) {
+                        RetailCategoryHomeGatewayTarget.Products -> onProductListClick()
+                        RetailCategoryHomeGatewayTarget.Stores -> onStoreClick()
+                        RetailCategoryHomeGatewayTarget.Favorites -> onFavoriteClick()
+                    }
+                }
+            )
+        }
+    }
+}
+
+@Composable
+private fun RetailCategoryHomeGatewayCard(
+    item: RetailCategoryHomeGatewayItem,
+    onClick: () -> Unit
+) {
+    BbCard(
+        modifier = Modifier.width(168.dp),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium,
+        onClick = onClick
+    ) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+        ) {
+            Box(
+                modifier = Modifier
+                    .width(BbSpacing.Space11)
+                    .height(BbSpacing.Space11)
+                    .background(
+                        color = item.backgroundColor,
+                        shape = BbRadius.LgShape
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = item.icon,
+                    contentDescription = null,
+                    tint = item.iconColor
+                )
+            }
+
+            Text(
+                text = item.title,
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurface,
+                fontWeight = FontWeight.SemiBold
+            )
+
+            Text(
+                text = item.description,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+@Composable
+private fun RetailCategoryHomeTrustStrip() {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+        ) {
+            RetailCategoryHomeTrustItem(
+                icon = Icons.Outlined.Verified,
+                title = "Güvenli",
+                modifier = Modifier.weight(1f)
+            )
+
+            RetailCategoryHomeTrustItem(
+                icon = Icons.Outlined.WorkspacePremium,
+                title = "Seçili",
+                modifier = Modifier.weight(1f)
+            )
+
+            RetailCategoryHomeTrustItem(
+                icon = Icons.Outlined.Storefront,
+                title = "Mağazalar",
+                modifier = Modifier.weight(1f)
+            )
+        }
+    }
+}
+
+@Composable
+private fun RetailCategoryHomeTrustItem(
+    icon: ImageVector,
+    title: String,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = BbColors.Primary
+        )
+
+        Text(
+            text = title,
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onSurface,
+            fontWeight = FontWeight.SemiBold
+        )
+    }
+}
+
+@Composable
+private fun RetailCategoryHomeSubCategoryCard(
+    item: RetailCategoryHomeSubCategoryItem,
+    onClick: () -> Unit
+) {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium,
+        onClick = onClick
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+        ) {
+            Box(
+                modifier = Modifier
+                    .width(42.dp)
+                    .height(42.dp)
+                    .background(
+                        color = item.backgroundColor,
+                        shape = BbRadius.LgShape
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = item.icon,
+                    contentDescription = null,
+                    tint = item.iconColor
+                )
+            }
+
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(BbSpacing.Space1)
+            ) {
+                Text(
+                    text = item.title,
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.SemiBold
+                )
+
+                Text(
+                    text = item.description,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            Icon(
+                imageVector = Icons.Outlined.KeyboardArrowRight,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+@Composable
+private fun RetailCategoryHomeShowcaseRow(
+    onProductListClick: () -> Unit,
+    onStoreClick: () -> Unit,
+    onFavoriteClick: () -> Unit
+) {
+    LazyRow(
+        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+    ) {
+        items(
+            items = getRetailCategoryHomeShowcases(),
+            key = { item ->
+                item.title
+            }
+        ) { item ->
+            RetailCategoryHomeShowcaseCard(
+                item = item,
+                onClick = {
+                    when (item.target) {
+                        RetailCategoryHomeShowcaseTarget.Products -> onProductListClick()
+                        RetailCategoryHomeShowcaseTarget.Stores -> onStoreClick()
+                        RetailCategoryHomeShowcaseTarget.Favorites -> onFavoriteClick()
+                    }
+                }
+            )
+        }
+    }
+}
+
+@Composable
+private fun RetailCategoryHomeShowcaseCard(
+    item: RetailCategoryHomeShowcaseItem,
+    onClick: () -> Unit
+) {
+    Surface(
+        modifier = Modifier.width(236.dp),
+        shape = BbRadius.XlShape,
+        color = item.backgroundColor,
+        border = BorderStroke(
+            width = 1.dp,
+            color = BbColors.Border
+        ),
+        onClick = onClick
+    ) {
+        Column(
+            modifier = Modifier.padding(BbSpacing.Space4),
+            verticalArrangement = Arrangement.spacedBy(BbSpacing.Space3)
+        ) {
+            Icon(
+                imageVector = item.icon,
+                contentDescription = null,
+                tint = item.iconColor
+            )
+
+            Text(
+                text = item.title,
+                style = MaterialTheme.typography.titleMedium,
+                color = BbColors.TextStrong,
+                fontWeight = FontWeight.SemiBold
+            )
+
+            Text(
+                text = item.description,
+                style = MaterialTheme.typography.bodySmall,
+                color = BbColors.TextSubtle
+            )
+        }
+    }
+}
+
+@Composable
+private fun RetailCategoryHomePopularSearchChipRow(
+    onProductListClick: () -> Unit
+) {
+    LazyRow(
+        horizontalArrangement = Arrangement.spacedBy(BbSpacing.Space2)
+    ) {
+        items(
+            items = getRetailCategoryHomePopularSearches(),
+            key = { item ->
+                item
+            }
+        ) { item ->
+            BbChip(
+                text = item,
+                selected = false,
+                onClick = onProductListClick
+            )
+        }
+    }
+}
+
+@Immutable
+private data class RetailCategoryHomeGatewayItem(
+    val title: String,
+    val description: String,
+    val icon: ImageVector,
+    val backgroundColor: Color,
+    val iconColor: Color,
+    val target: RetailCategoryHomeGatewayTarget
+)
+
+private enum class RetailCategoryHomeGatewayTarget {
+    Products,
+    Stores,
+    Favorites
+}
+
+@Immutable
+private data class RetailCategoryHomeSubCategoryItem(
+    val title: String,
+    val description: String,
+    val icon: ImageVector,
+    val backgroundColor: Color,
+    val iconColor: Color
+)
+
+@Immutable
+private data class RetailCategoryHomeShowcaseItem(
+    val title: String,
+    val description: String,
+    val icon: ImageVector,
+    val backgroundColor: Color,
+    val iconColor: Color,
+    val target: RetailCategoryHomeShowcaseTarget
+)
+
+private enum class RetailCategoryHomeShowcaseTarget {
+    Products,
+    Stores,
+    Favorites
+}
+
+private fun getRetailCategoryHomeGateways(): List<RetailCategoryHomeGatewayItem> {
+    return listOf(
+        RetailCategoryHomeGatewayItem(
+            title = "Ürünler",
+            description = "Bu kategorideki ürünler",
+            icon = Icons.Outlined.ShoppingBasket,
+            backgroundColor = BbColors.Blue.Blue50,
+            iconColor = BbColors.Blue.Blue700,
+            target = RetailCategoryHomeGatewayTarget.Products
+        ),
+        RetailCategoryHomeGatewayItem(
+            title = "Mağazalar",
+            description = "Kategori mağazaları",
+            icon = Icons.Outlined.Storefront,
+            backgroundColor = BbColors.Green.Green50,
+            iconColor = BbColors.Green.Green700,
+            target = RetailCategoryHomeGatewayTarget.Stores
+        ),
+        RetailCategoryHomeGatewayItem(
+            title = "Favoriler",
+            description = "Beğenilen ürünler",
+            icon = Icons.Outlined.FavoriteBorder,
+            backgroundColor = BbColors.Pink.Pink50,
+            iconColor = BbColors.Pink.Pink700,
+            target = RetailCategoryHomeGatewayTarget.Favorites
+        )
+    )
+}
+
+private fun getRetailCategoryHomeSubCategories(): List<RetailCategoryHomeSubCategoryItem> {
+    return listOf(
+        RetailCategoryHomeSubCategoryItem(
+            title = "Telefonlar",
+            description = "Akıllı telefon ve aksesuarları",
+            icon = Icons.Outlined.Category,
+            backgroundColor = BbColors.Yellow.Yellow50,
+            iconColor = BbColors.Navy.Navy900
+        ),
+        RetailCategoryHomeSubCategoryItem(
+            title = "Bilgisayar",
+            description = "Notebook, masaüstü ve çevre birimleri",
+            icon = Icons.Outlined.Category,
+            backgroundColor = BbColors.Blue.Blue50,
+            iconColor = BbColors.Blue.Blue700
+        ),
+        RetailCategoryHomeSubCategoryItem(
+            title = "Akıllı Ev",
+            description = "Ev otomasyonu ve güvenlik ürünleri",
+            icon = Icons.Outlined.Category,
+            backgroundColor = BbColors.Green.Green50,
+            iconColor = BbColors.Green.Green700
+        ),
+        RetailCategoryHomeSubCategoryItem(
+            title = "Ses ve Görüntü",
+            description = "Kulaklık, hoparlör ve medya ürünleri",
+            icon = Icons.Outlined.Category,
+            backgroundColor = BbColors.Purple.Purple50,
+            iconColor = BbColors.Purple.Purple700
+        )
+    )
+}
+
+private fun getRetailCategoryHomeShowcases(): List<RetailCategoryHomeShowcaseItem> {
+    return listOf(
+        RetailCategoryHomeShowcaseItem(
+            title = "Yeni gelenler",
+            description = "Bu kategoriye yeni eklenen ürünleri keşfet.",
+            icon = Icons.Outlined.NewReleases,
+            backgroundColor = BbColors.Yellow.Yellow50,
+            iconColor = BbColors.Navy.Navy900,
+            target = RetailCategoryHomeShowcaseTarget.Products
+        ),
+        RetailCategoryHomeShowcaseItem(
+            title = "Kampanyalar",
+            description = "Seçili indirim ve fırsat vitrinlerine bak.",
+            icon = Icons.Outlined.LocalOffer,
+            backgroundColor = BbColors.Green.Green50,
+            iconColor = BbColors.Green.Green700,
+            target = RetailCategoryHomeShowcaseTarget.Products
+        ),
+        RetailCategoryHomeShowcaseItem(
+            title = "Mağaza keşfi",
+            description = "Bu kategoride öne çıkan mağazaları incele.",
+            icon = Icons.Outlined.Storefront,
+            backgroundColor = BbColors.Blue.Blue50,
+            iconColor = BbColors.Blue.Blue700,
+            target = RetailCategoryHomeShowcaseTarget.Stores
+        )
+    )
+}
+
+private fun getRetailCategoryHomePopularSearches(): List<String> {
+    return listOf(
+        "Telefon",
+        "Bluetooth kulaklık",
+        "Notebook",
+        "Akıllı saat",
+        "Tablet",
+        "Şarj adaptörü",
+        "Oyuncu ekipmanı",
+        "Ev elektroniği"
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun RetailCategoryHomeScreenPreview() {
+    BbTheme {
+        RetailCategoryHomeScreen()
+    }
+}

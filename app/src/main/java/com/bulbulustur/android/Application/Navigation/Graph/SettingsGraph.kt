@@ -6,11 +6,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
 import com.bulbulustur.android.Application.Navigation.SettingsRoutes
-import com.bulbulustur.android.Features.account.settings.AppearanceSettingsScreen
-import com.bulbulustur.android.Features.account.settings.LanguageSettingsScreen
-import com.bulbulustur.android.Features.account.settings.LegalPoliciesScreen
-import com.bulbulustur.android.Features.account.settings.AccountSettingsScreen
-import com.bulbulustur.android.Features.account.settings.LegalPolicyDetailScreen
+import com.bulbulustur.android.Views.account.settings.AppearanceSettingsScreen
+import com.bulbulustur.android.Views.account.settings.LanguageSettingsScreen
+import com.bulbulustur.android.Views.account.settings.LegalPoliciesScreen
+import com.bulbulustur.android.Views.account.settings.AccountSettingsScreen
+import com.bulbulustur.android.Views.account.settings.LegalPolicyDetailScreen
 
 fun NavGraphBuilder.settingsGraph(
     navigator: BulbulusturNavigator

@@ -22,10 +22,10 @@ import com.bulbulustur.android.Application.Navigation.Graph.settingsGraph
 import com.bulbulustur.android.Application.Navigation.Graph.splashGraph
 import com.bulbulustur.android.Application.Navigation.Graph.wholesaleGraph
 import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
-import com.bulbulustur.android.Features.logon.logonGraph
-import com.bulbulustur.android.Ui.shell.BuyerMode
-import com.bulbulustur.android.Ui.shell.BuyerModeSheet
-import com.bulbulustur.android.Ui.theme.BbTheme
+import com.bulbulustur.android.Views.logon.logonGraph
+import com.bulbulustur.android.wwwroot.shell.BuyerMode
+import com.bulbulustur.android.wwwroot.shell.BuyerModeSheet
+import com.bulbulustur.android.wwwroot.theme.BbTheme
 
 @Composable
 fun BulbulusturApp() {

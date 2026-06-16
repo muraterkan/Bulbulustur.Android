@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Views.Splash
+package com.bulbulustur.android.Views.Home
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing

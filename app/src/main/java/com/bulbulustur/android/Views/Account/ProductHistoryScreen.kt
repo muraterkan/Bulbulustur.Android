@@ -32,7 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import com.bulbulustur.android.wwwroot.commercecomponents.BbProductGrid
+import com.bulbulustur.android.wwwroot.components.commerce.BbProductGrid
 import com.bulbulustur.android.wwwroot.components.BbButton
 import com.bulbulustur.android.wwwroot.components.BbButtonSize
 import com.bulbulustur.android.wwwroot.components.BbButtonVariant

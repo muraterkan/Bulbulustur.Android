@@ -1,13 +1,13 @@
-﻿package com.bulbulustur.android.Application.Navigation.Graph
+﻿package com.bulbulustur.android.Graph
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
-import com.bulbulustur.android.Application.Navigation.MessageRoutes
-import com.bulbulustur.android.Application.Navigation.RetailRoutes
-import com.bulbulustur.android.Application.Navigation.WholesaleRoutes
+import com.bulbulustur.android.BulbulusturNavigator
+import com.bulbulustur.android.MessageRoutes
+import com.bulbulustur.android.RetailRoutes
+import com.bulbulustur.android.WholesaleRoutes
 import com.bulbulustur.android.Views.Message.MessageDetailScreen
 import com.bulbulustur.android.Views.Message.MessageInboxScreen
 

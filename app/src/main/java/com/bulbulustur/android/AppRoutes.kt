@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Navigation
+package com.bulbulustur.android
 
 object SplashRoutes {
     const val Landing = "splash/landing"

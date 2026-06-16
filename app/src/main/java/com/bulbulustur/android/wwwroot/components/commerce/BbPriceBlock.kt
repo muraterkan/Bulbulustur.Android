@@ -1,4 +1,4 @@
-package com.bulbulustur.android.wwwroot.commercecomponents
+package com.bulbulustur.android.wwwroot.components.commerce
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row

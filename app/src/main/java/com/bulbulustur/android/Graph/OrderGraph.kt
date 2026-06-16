@@ -1,12 +1,12 @@
-﻿package com.bulbulustur.android.Application.Navigation.Graph
+﻿package com.bulbulustur.android.Graph
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
-import com.bulbulustur.android.Application.Navigation.OrderRoutes
-import com.bulbulustur.android.Application.Navigation.StoreRoutes
+import com.bulbulustur.android.BulbulusturNavigator
+import com.bulbulustur.android.OrderRoutes
+import com.bulbulustur.android.StoreRoutes
 import com.bulbulustur.android.Areas.b2c.Views.order.OrderCancelRequestScreen
 import com.bulbulustur.android.Areas.b2c.Views.order.OrderContractScreen
 import com.bulbulustur.android.Areas.b2c.Views.order.OrderDetailScreen
@@ -19,7 +19,7 @@ fun NavGraphBuilder.orderGraph(
     navigator: BulbulusturNavigator
 ) {
     composable(OrderRoutes.List) {
-        _root_ide_package_.com.bulbulustur.android.Areas.b2c.Views.order.OrderListScreen(
+        OrderListScreen(
             onBackClick = { navigator.back() },
             onOrderDetailClick = { orderId ->
                 navigator.navController.navigate(OrderRoutes.detail(orderId))
@@ -37,7 +37,7 @@ fun NavGraphBuilder.orderGraph(
     ) { backStackEntry ->
         val orderId = backStackEntry.arguments?.getInt(OrderRoutes.ArgOrderId) ?: 0
 
-        _root_ide_package_.com.bulbulustur.android.Areas.b2c.Views.order.OrderDetailScreen(
+        OrderDetailScreen(
             orderId = orderId,
             onBackClick = { navigator.back() },
             onContractClick = {
@@ -100,7 +100,7 @@ fun NavGraphBuilder.orderGraph(
             ?.getString(OrderRoutes.ArgOrderKey)
             .orEmpty()
 
-        _root_ide_package_.com.bulbulustur.android.Areas.b2c.Views.order.OrderContractScreen(
+        OrderContractScreen(
             orderCode = orderKey.ifBlank { "ORD-F4QO-AFPR-J5EX" },
             onBackClick = { navigator.back() }
         )
@@ -117,7 +117,7 @@ fun NavGraphBuilder.orderGraph(
             }
         )
     ) {
-        _root_ide_package_.com.bulbulustur.android.Areas.b2c.Views.order.OrderCancelRequestScreen(
+        OrderCancelRequestScreen(
             onBackClick = { navigator.back() },
             onSubmitClick = { navigator.back() }
         )
@@ -134,7 +134,7 @@ fun NavGraphBuilder.orderGraph(
             }
         )
     ) {
-        _root_ide_package_.com.bulbulustur.android.Areas.b2c.Views.order.OrderReturnRequestScreen(
+        OrderReturnRequestScreen(
             onBackClick = { navigator.back() },
             onSubmitClick = { navigator.back() }
         )
@@ -154,7 +154,7 @@ fun NavGraphBuilder.orderGraph(
             }
         )
     ) {
-        _root_ide_package_.com.bulbulustur.android.Areas.b2c.Views.order.OrderReviewCreateScreen(
+        OrderReviewCreateScreen(
             onBackClick = { navigator.back() },
             onSubmitClick = { navigator.back() }
         )
@@ -168,7 +168,7 @@ fun NavGraphBuilder.orderGraph(
             }
         )
     ) {
-        _root_ide_package_.com.bulbulustur.android.Areas.b2c.Views.order.OrderShipmentTrackingScreen(
+        OrderShipmentTrackingScreen(
             onBackClick = { navigator.back() }
         )
     }

@@ -1,4 +1,4 @@
-package com.bulbulustur.android.wwwroot.commercecomponents
+package com.bulbulustur.android.wwwroot.components.commerce
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background

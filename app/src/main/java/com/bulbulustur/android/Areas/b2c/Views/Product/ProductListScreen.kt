@@ -34,7 +34,7 @@ import androidx.compose.material3.Icon
 import com.bulbulustur.android.Areas.b2c.ViewComponents.RetailBottomNavigation
 import com.bulbulustur.android.Areas.b2c.ViewComponents.RetailBottomNavigationItem
 import com.bulbulustur.android.Areas.b2c.ViewComponents.RetailSearchHeader
-import com.bulbulustur.android.wwwroot.commercecomponents.BbProductGrid
+import com.bulbulustur.android.wwwroot.components.commerce.BbProductGrid
 import com.bulbulustur.android.wwwroot.components.BbCard
 import com.bulbulustur.android.wwwroot.components.BbChip
 import com.bulbulustur.android.wwwroot.components.BbSectionHeader

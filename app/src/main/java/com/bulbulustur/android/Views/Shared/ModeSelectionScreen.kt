@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Views.Modeselection
+package com.bulbulustur.android.Views.Shared
 
 import androidx.compose.foundation.background
 import androidx.compose.material3.MaterialTheme

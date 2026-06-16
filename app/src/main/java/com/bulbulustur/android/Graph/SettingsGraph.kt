@@ -1,11 +1,11 @@
-﻿package com.bulbulustur.android.Application.Navigation.Graph
+﻿package com.bulbulustur.android.Graph
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
-import com.bulbulustur.android.Application.Navigation.SettingsRoutes
+import com.bulbulustur.android.BulbulusturNavigator
+import com.bulbulustur.android.SettingsRoutes
 import com.bulbulustur.android.Views.Account.AppearanceSettingsScreen
 import com.bulbulustur.android.Views.Account.LanguageSettingsScreen
 import com.bulbulustur.android.Views.Account.LegalPoliciesScreen

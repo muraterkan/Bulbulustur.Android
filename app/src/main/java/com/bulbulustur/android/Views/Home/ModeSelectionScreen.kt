@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Views.Splash
+package com.bulbulustur.android.Views.Home
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -52,6 +52,7 @@ import com.bulbulustur.android.wwwroot.theme.BbIcon
 import com.bulbulustur.android.wwwroot.theme.BbRadius
 import com.bulbulustur.android.wwwroot.theme.BbSpacing
 import com.bulbulustur.android.wwwroot.theme.BbLayout
+
 @Composable
 fun ModeSelectionScreen(
     onRetailClick: () -> Unit,

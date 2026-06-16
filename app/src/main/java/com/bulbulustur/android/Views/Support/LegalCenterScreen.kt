@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Views.Legal
+package com.bulbulustur.android.Views.Support
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

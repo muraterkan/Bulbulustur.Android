@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application
+package com.bulbulustur.android
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -12,16 +12,14 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.bulbulustur.android.Application.Navigation.SplashRoutes
-import com.bulbulustur.android.Application.Navigation.Graph.accountGraph
-import com.bulbulustur.android.Application.Navigation.Graph.companyGraph
-import com.bulbulustur.android.Application.Navigation.Graph.messageGraph
-import com.bulbulustur.android.Application.Navigation.Graph.orderGraph
-import com.bulbulustur.android.Application.Navigation.Graph.retailGraph
-import com.bulbulustur.android.Application.Navigation.Graph.settingsGraph
-import com.bulbulustur.android.Application.Navigation.Graph.splashGraph
-import com.bulbulustur.android.Application.Navigation.Graph.wholesaleGraph
-import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
+import com.bulbulustur.android.Graph.accountGraph
+import com.bulbulustur.android.Graph.companyGraph
+import com.bulbulustur.android.Graph.messageGraph
+import com.bulbulustur.android.Graph.orderGraph
+import com.bulbulustur.android.Graph.retailGraph
+import com.bulbulustur.android.Graph.settingsGraph
+import com.bulbulustur.android.Graph.splashGraph
+import com.bulbulustur.android.Graph.wholesaleGraph
 import com.bulbulustur.android.Views.Logon.logonGraph
 import com.bulbulustur.android.Views.Shared.BuyerMode
 import com.bulbulustur.android.Views.Shared.BuyerModeSheet

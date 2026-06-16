@@ -33,7 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.bulbulustur.android.Areas.b2b.ViewComponents.WholesaleBottomNavigation
 import com.bulbulustur.android.Areas.b2b.ViewComponents.WholesaleBottomNavigationItem
 import com.bulbulustur.android.Areas.b2b.ViewComponents.WholesaleSearchHeader
-import com.bulbulustur.android.wwwroot.commercecomponents.BbProductGrid
+import com.bulbulustur.android.wwwroot.components.commerce.BbProductGrid
 import com.bulbulustur.android.wwwroot.components.BbCard
 import com.bulbulustur.android.wwwroot.components.BbChip
 import com.bulbulustur.android.wwwroot.components.BbSectionHeader

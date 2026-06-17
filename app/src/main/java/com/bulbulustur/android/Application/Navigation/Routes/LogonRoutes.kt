@@ -1,8 +1,15 @@
-﻿package com.bulbulustur.android.Graph
+﻿package com.bulbulustur.android.Application.Navigation.Routes
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import com.bulbulustur.android.Application.Views.Logon.ExpiredScreen
+import com.bulbulustur.android.Application.Views.Logon.FirstDoorScreen
+import com.bulbulustur.android.Application.Views.Logon.FirstDoorType
+import com.bulbulustur.android.Application.Views.Logon.ForgotPasswordScreen
+import com.bulbulustur.android.Application.Views.Logon.LoginScreen
+import com.bulbulustur.android.Application.Views.Logon.RegisterFinalScreen
+import com.bulbulustur.android.Application.Views.Logon.RegisterStartScreen
 
 object LogonRoutes {
 
@@ -20,7 +27,7 @@ fun NavGraphBuilder.logonGraph(
     composable(
         route = LogonRoutes.Logon
     ) {
-        _root_ide_package_.com.bulbulustur.android.Application.Views.Logon.LoginScreen(
+        LoginScreen(
             onLogonClick = { email, password ->
                 /*
                  * API bağlandığında:
@@ -56,7 +63,7 @@ fun NavGraphBuilder.logonGraph(
     composable(
         route = LogonRoutes.ForgotPassword
     ) {
-        _root_ide_package_.com.bulbulustur.android.Application.Views.Logon.ForgotPasswordScreen(
+        ForgotPasswordScreen(
             onSendResetLinkClick = { email ->
                 /*
                  * API bağlandığında:
@@ -81,18 +88,18 @@ fun NavGraphBuilder.logonGraph(
     composable(
         route = LogonRoutes.FirstDoor
     ) {
-        _root_ide_package_.com.bulbulustur.android.Application.Views.Logon.FirstDoorScreen(
+        FirstDoorScreen(
             onContinueClick = { selectedDoor ->
                 when (selectedDoor) {
-                    _root_ide_package_.com.bulbulustur.android.Application.Views.Logon.FirstDoorType.IndividualBuyer -> {
+                    FirstDoorType.IndividualBuyer -> {
                         navController.navigate(LogonRoutes.RegisterStart)
                     }
 
-                    _root_ide_package_.com.bulbulustur.android.Application.Views.Logon.FirstDoorType.CompanyBuyer -> {
+                    FirstDoorType.CompanyBuyer -> {
                         navController.navigate(LogonRoutes.RegisterStart)
                     }
 
-                    _root_ide_package_.com.bulbulustur.android.Application.Views.Logon.FirstDoorType.ExistingAccount -> {
+                    FirstDoorType.ExistingAccount -> {
                         navController.popBackStack(
                             route = LogonRoutes.Logon,
                             inclusive = false
@@ -117,7 +124,7 @@ fun NavGraphBuilder.logonGraph(
     composable(
         route = LogonRoutes.RegisterStart
     ) {
-        _root_ide_package_.com.bulbulustur.android.Application.Views.Logon.RegisterStartScreen(
+        RegisterStartScreen(
             onContinueClick = { registerStartForm ->
                 /*
                  * API bağlandığında:
@@ -143,7 +150,7 @@ fun NavGraphBuilder.logonGraph(
     composable(
         route = LogonRoutes.RegisterFinal
     ) {
-        _root_ide_package_.com.bulbulustur.android.Application.Views.Logon.RegisterFinalScreen(
+        RegisterFinalScreen(
             onGoToLogonClick = {
                 navController.popBackStack(
                     route = LogonRoutes.Logon,
@@ -167,7 +174,7 @@ fun NavGraphBuilder.logonGraph(
     composable(
         route = LogonRoutes.Expired
     ) {
-        _root_ide_package_.com.bulbulustur.android.Application.Views.Logon.ExpiredScreen(
+        ExpiredScreen(
             onSendAgainClick = {
                 /*
                  * expiredType'a göre:

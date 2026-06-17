@@ -1,9 +1,9 @@
-﻿package com.bulbulustur.android.Graph
+﻿package com.bulbulustur.android.Application.Navigation.Graph
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.bulbulustur.android.BulbulusturNavigator
-import com.bulbulustur.android.RetailRoutes
+import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
+import com.bulbulustur.android.Application.Navigation.Routes.RetailRoutes
 import com.bulbulustur.android.Application.Areas.b2c.Views.Campaign.CampaignDetailScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.Campaign.CampaignListScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.Category.RetailCategoryHomeScreen

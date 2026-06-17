@@ -1,6 +1,12 @@
-﻿package com.bulbulustur.android
+package com.bulbulustur.android.Application.Navigation
 
 import androidx.navigation.NavHostController
+import com.bulbulustur.android.Application.Navigation.Routes.AccountRoutes
+import com.bulbulustur.android.Application.Navigation.Routes.BasketRoutes
+import com.bulbulustur.android.Application.Navigation.Routes.MessageRoutes
+import com.bulbulustur.android.Application.Navigation.Routes.RetailRoutes
+import com.bulbulustur.android.Application.Navigation.Routes.SplashRoutes
+import com.bulbulustur.android.Application.Navigation.Routes.WholesaleRoutes
 
 class BulbulusturNavigator(
     val navController: NavHostController,

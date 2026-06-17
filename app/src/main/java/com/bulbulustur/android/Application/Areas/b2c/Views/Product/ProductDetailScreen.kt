@@ -80,8 +80,8 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bulbulustur.android.R
-import com.bulbulustur.android.Application.Areas.b2c.ViewComponents.RetailSearchHeader
-import com.bulbulustur.android.Application.Areas.b2c.ViewComponents.RetailSearchHeaderLeadingAction
+import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeader
+import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeaderLeadingAction
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant

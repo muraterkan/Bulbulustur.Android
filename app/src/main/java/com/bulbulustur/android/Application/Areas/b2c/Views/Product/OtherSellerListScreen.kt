@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2c
+package com.bulbulustur.android.Application.Areas.b2c.Views.Product
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background

@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Shared.Components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

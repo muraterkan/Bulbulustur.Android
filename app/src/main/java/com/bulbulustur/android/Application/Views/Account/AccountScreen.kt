@@ -61,8 +61,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.bulbulustur.android.R
-import com.bulbulustur.android.Application.Areas.b2c.ViewComponents.RetailBottomNavigation
-import com.bulbulustur.android.Application.Areas.b2c.ViewComponents.RetailBottomNavigationItem
+import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailBottomNavigation
+import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailBottomNavigationItem
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant

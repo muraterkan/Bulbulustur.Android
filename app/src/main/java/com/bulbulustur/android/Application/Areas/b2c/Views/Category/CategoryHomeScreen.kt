@@ -44,10 +44,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.bulbulustur.android.Application.Areas.b2c.ViewComponents.RetailBottomNavigation
-import com.bulbulustur.android.Application.Areas.b2c.ViewComponents.RetailBottomNavigationItem
-import com.bulbulustur.android.Application.Areas.b2c.ViewComponents.RetailSearchHeader
-import com.bulbulustur.android.Application.Areas.b2c.ViewComponents.RetailSearchHeaderLeadingAction
+import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailBottomNavigation
+import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailBottomNavigationItem
+import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeader
+import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeaderLeadingAction
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant

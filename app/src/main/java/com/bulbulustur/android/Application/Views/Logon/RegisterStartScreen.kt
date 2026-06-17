@@ -26,6 +26,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.Application.Views.Shared.LogonPublicFieldLabel
+import com.bulbulustur.android.Application.Views.Shared.LogonPublicPageTitle
+import com.bulbulustur.android.Application.Views.Shared.LogonPublicRegisterLegalFooter
+import com.bulbulustur.android.Application.Views.Shared.LogonPublicScaffold
+import com.bulbulustur.android.Application.Views.Shared.LogonPublicTextField
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant

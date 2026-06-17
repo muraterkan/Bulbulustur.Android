@@ -31,9 +31,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.material3.Icon
-import com.bulbulustur.android.Application.Areas.b2c.ViewComponents.RetailBottomNavigation
-import com.bulbulustur.android.Application.Areas.b2c.ViewComponents.RetailBottomNavigationItem
-import com.bulbulustur.android.Application.Areas.b2c.ViewComponents.RetailSearchHeader
+import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailBottomNavigation
+import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailBottomNavigationItem
+import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeader
 import com.bulbulustur.android.Application.Views.Shared.Components.BbProductGrid
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbChip

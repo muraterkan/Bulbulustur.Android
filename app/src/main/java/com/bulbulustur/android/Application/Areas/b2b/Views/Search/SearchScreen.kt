@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2b.Views
+package com.bulbulustur.android.Application.Areas.b2b.Views.Search
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

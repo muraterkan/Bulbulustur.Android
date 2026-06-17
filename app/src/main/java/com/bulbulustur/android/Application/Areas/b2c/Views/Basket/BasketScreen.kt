@@ -51,8 +51,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import com.bulbulustur.android.Application.Areas.b2c.ViewComponents.RetailBottomNavigation
-import com.bulbulustur.android.Application.Areas.b2c.ViewComponents.RetailBottomNavigationItem
+import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailBottomNavigation
+import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailBottomNavigationItem
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant

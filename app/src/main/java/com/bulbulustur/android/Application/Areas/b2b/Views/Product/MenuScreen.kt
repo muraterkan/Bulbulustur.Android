@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2c.ViewComponents
+package com.bulbulustur.android.Application.Areas.b2b.Views.Product
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -24,10 +24,10 @@ import androidx.compose.foundation.lazy.grid.items
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
-import androidx.compose.material.icons.rounded.Category
-import androidx.compose.material.icons.rounded.LocalOffer
+import androidx.compose.material.icons.rounded.BusinessCenter
+import androidx.compose.material.icons.rounded.Description
+import androidx.compose.material.icons.rounded.Factory
 import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material.icons.rounded.Storefront
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -44,19 +44,22 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleBottomNavigation
+import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleBottomNavigationItem
+import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleSearchHeader
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 
 @Composable
-fun RetailMenuScreen(
+fun WholesaleMenuScreen(
     onHomeClick: () -> Unit,
     onSearchClick: () -> Unit,
     onBasketClick: () -> Unit,
     onAccountClick: () -> Unit,
     onCategoryClick: (Int) -> Unit,
-    onCampaignsClick: () -> Unit = {},
-    onStoresClick: () -> Unit = {},
+    onCompanyListClick: () -> Unit = {},
+    onRfqClick: () -> Unit = {},
     onFavoriteClick: () -> Unit = {}
 ) {
     var searchText by remember {
@@ -70,7 +73,7 @@ fun RetailMenuScreen(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            RetailSearchHeader(
+            WholesaleSearchHeader(
                 searchText = searchText,
                 onSearchTextChange = {
                     searchText = it
@@ -85,25 +88,25 @@ fun RetailMenuScreen(
                 }
             )
 
-            RetailMenuContent(
+            WholesaleMenuContent(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth(),
                 onCategoryClick = onCategoryClick,
-                onCampaignsClick = onCampaignsClick,
-                onStoresClick = onStoresClick,
+                onCompanyListClick = onCompanyListClick,
+                onRfqClick = onRfqClick,
                 onSearchClick = onSearchClick
             )
 
-            RetailBottomNavigation(
-                selectedItem = RetailBottomNavigationItem.Menu,
+            WholesaleBottomNavigation(
+                selectedItem = WholesaleBottomNavigationItem.Menu,
                 onItemClick = { selectedItem ->
                     when (selectedItem) {
-                        RetailBottomNavigationItem.Home -> onHomeClick()
-                        RetailBottomNavigationItem.Menu -> Unit
-                        RetailBottomNavigationItem.ModeSwitch -> Unit
-                        RetailBottomNavigationItem.Basket -> onBasketClick()
-                        RetailBottomNavigationItem.Account -> onAccountClick()
+                        WholesaleBottomNavigationItem.Home -> onHomeClick()
+                        WholesaleBottomNavigationItem.Menu -> Unit
+                        WholesaleBottomNavigationItem.ModeSwitch -> Unit
+                        WholesaleBottomNavigationItem.Basket -> onBasketClick()
+                        WholesaleBottomNavigationItem.Account -> onAccountClick()
                     }
                 }
             )
@@ -112,11 +115,11 @@ fun RetailMenuScreen(
 }
 
 @Composable
-private fun RetailMenuContent(
+private fun WholesaleMenuContent(
     modifier: Modifier,
     onCategoryClick: (Int) -> Unit,
-    onCampaignsClick: () -> Unit,
-    onStoresClick: () -> Unit,
+    onCompanyListClick: () -> Unit,
+    onRfqClick: () -> Unit,
     onSearchClick: () -> Unit
 ) {
     LazyVerticalGrid(
@@ -136,7 +139,7 @@ private fun RetailMenuContent(
                 GridItemSpan(maxLineSpan)
             }
         ) {
-            RetailMenuHero()
+            WholesaleMenuHero()
         }
 
         item(
@@ -144,9 +147,9 @@ private fun RetailMenuContent(
                 GridItemSpan(maxLineSpan)
             }
         ) {
-            RetailMenuQuickActions(
-                onCampaignsClick = onCampaignsClick,
-                onStoresClick = onStoresClick,
+            WholesaleMenuQuickActions(
+                onCompanyListClick = onCompanyListClick,
+                onRfqClick = onRfqClick,
                 onSearchClick = onSearchClick
             )
         }
@@ -156,16 +159,16 @@ private fun RetailMenuContent(
                 GridItemSpan(maxLineSpan)
             }
         ) {
-            RetailMenuSectionTitle()
+            WholesaleMenuSectionTitle()
         }
 
         items(
-            items = retailMenuCategories(),
+            items = wholesaleMenuCategories(),
             key = {
                 it.categoryId
             }
         ) { category ->
-            RetailMenuCategoryCard(
+            WholesaleMenuCategoryCard(
                 category = category,
                 onClick = {
                     onCategoryClick(category.categoryId)
@@ -176,7 +179,7 @@ private fun RetailMenuContent(
 }
 
 @Composable
-private fun RetailMenuHero() {
+private fun WholesaleMenuHero() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -184,8 +187,8 @@ private fun RetailMenuHero() {
             .background(BBColors.White)
             .padding(BBSpacing.Space5)
     ) {
-        RetailMenuBadge(
-            text = "Perakende kategori keşfi"
+        WholesaleMenuBadge(
+            text = "Toptan kategori keşfi"
         )
 
         Spacer(
@@ -193,7 +196,7 @@ private fun RetailMenuHero() {
         )
 
         Text(
-            text = "Alışveriş dünyasına kategori kapısından gir",
+            text = "Sektörleri, tedarikçileri ve toptan ürün gruplarını keşfet",
             style = MaterialTheme.typography.headlineSmall,
             color = BBColors.TextStrong,
             fontWeight = FontWeight.Bold
@@ -204,7 +207,7 @@ private fun RetailMenuHero() {
         )
 
         Text(
-            text = "Ana kategorileri keşfet, kategori ana sayfasında alt kırılımlar, ürün vitrinleri ve kampanyalara ulaş.",
+            text = "Ana kategoriye gir, kategori ana sayfasında alt kırılımlar, tedarikçiler, ürün vitrinleri ve teklif akışlarıyla devam et.",
             style = MaterialTheme.typography.bodySmall,
             color = BBColors.TextMuted
         )
@@ -213,9 +216,9 @@ private fun RetailMenuHero() {
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun RetailMenuQuickActions(
-    onCampaignsClick: () -> Unit,
-    onStoresClick: () -> Unit,
+private fun WholesaleMenuQuickActions(
+    onCompanyListClick: () -> Unit,
+    onRfqClick: () -> Unit,
     onSearchClick: () -> Unit
 ) {
     FlowRow(
@@ -223,33 +226,33 @@ private fun RetailMenuQuickActions(
         horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2),
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
     ) {
-        RetailMenuQuickActionCard(
-            title = "Kampanyalar",
+        WholesaleMenuQuickActionCard(
+            title = "Tedarikçiler",
             icon = {
                 Icon(
-                    imageVector = Icons.Rounded.LocalOffer,
+                    imageVector = Icons.Rounded.Factory,
                     contentDescription = null,
                     tint = BBColors.TextStrong,
                     modifier = Modifier.size(18.dp)
                 )
             },
-            onClick = onCampaignsClick
+            onClick = onCompanyListClick
         )
 
-        RetailMenuQuickActionCard(
-            title = "Mağazalar",
+        WholesaleMenuQuickActionCard(
+            title = "Teklif İste",
             icon = {
                 Icon(
-                    imageVector = Icons.Rounded.Storefront,
+                    imageVector = Icons.Rounded.Description,
                     contentDescription = null,
                     tint = BBColors.TextStrong,
                     modifier = Modifier.size(18.dp)
                 )
             },
-            onClick = onStoresClick
+            onClick = onRfqClick
         )
 
-        RetailMenuQuickActionCard(
+        WholesaleMenuQuickActionCard(
             title = "Ara",
             icon = {
                 Icon(
@@ -265,7 +268,7 @@ private fun RetailMenuQuickActions(
 }
 
 @Composable
-private fun RetailMenuQuickActionCard(
+private fun WholesaleMenuQuickActionCard(
     title: String,
     icon: @Composable () -> Unit,
     onClick: () -> Unit
@@ -304,7 +307,7 @@ private fun RetailMenuQuickActionCard(
 }
 
 @Composable
-private fun RetailMenuSectionTitle() {
+private fun WholesaleMenuSectionTitle() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -330,8 +333,8 @@ private fun RetailMenuSectionTitle() {
 }
 
 @Composable
-private fun RetailMenuCategoryCard(
-    category: RetailMenuCategory,
+private fun WholesaleMenuCategoryCard(
+    category: WholesaleMenuCategory,
     onClick: () -> Unit
 ) {
     Surface(
@@ -360,13 +363,13 @@ private fun RetailMenuCategoryCard(
                 modifier = Modifier
                     .size(BBSpacing.Space11)
                     .clip(BBRadius.IconBoxSoft)
-                    .background(BBColors.PrimarySoft),
+                    .background(BBColors.Navy.Navy50),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    imageVector = Icons.Rounded.Category,
+                    imageVector = Icons.Rounded.BusinessCenter,
                     contentDescription = null,
-                    tint = BBColors.TextStrong,
+                    tint = BBColors.Navy.Navy700,
                     modifier = Modifier.size(22.dp)
                 )
             }
@@ -388,7 +391,7 @@ private fun RetailMenuCategoryCard(
                 )
 
                 Text(
-                    text = "Kategoriye gir",
+                    text = "Sektöre gir",
                     style = MaterialTheme.typography.labelSmall,
                     color = BBColors.TextMuted,
                     textAlign = TextAlign.Center
@@ -406,7 +409,7 @@ private fun RetailMenuCategoryCard(
 }
 
 @Composable
-private fun RetailMenuBadge(
+private fun WholesaleMenuBadge(
     text: String
 ) {
     Surface(
@@ -427,31 +430,30 @@ private fun RetailMenuBadge(
 }
 
 @Immutable
-private data class RetailMenuCategory(
+private data class WholesaleMenuCategory(
     val categoryId: Int,
     val title: String
 )
 
-private fun retailMenuCategories(): List<RetailMenuCategory> {
+private fun wholesaleMenuCategories(): List<WholesaleMenuCategory> {
     return listOf(
-        RetailMenuCategory(1, "Otomobil Parça ve Aksesuarları"),
-        RetailMenuCategory(2, "Tüketici Elektroniği"),
-        RetailMenuCategory(3, "Elektronik Parçalar"),
-        RetailMenuCategory(4, "Moda Aksesuarları ve Ayakkabılar"),
-        RetailMenuCategory(5, "Moda Giyim ve Kumaşlar"),
-        RetailMenuCategory(6, "Yiyecek, Ev ve Evcil Hayvanlar"),
-        RetailMenuCategory(7, "Mobilya ve Ev Dekorasyonu"),
-        RetailMenuCategory(8, "Hediyeler ve Primer"),
-        RetailMenuCategory(9, "Donanım"),
-        RetailMenuCategory(10, "Sağlık ve Kişisel Bakım"),
-        RetailMenuCategory(11, "Ev Aletleri"),
-        RetailMenuCategory(12, "Endüstriyel Malzemeler"),
-        RetailMenuCategory(13, "Makine ve Ekipman"),
-        RetailMenuCategory(14, "Mobil Elektronik"),
-        RetailMenuCategory(15, "Anne, Çocuk ve Oyuncaklar"),
-        RetailMenuCategory(16, "Baskı ve Paketleme"),
-        RetailMenuCategory(17, "Akıllı Yaşam Elektroniği"),
-        RetailMenuCategory(18, "Spor ve Dış Mekan")
+        WholesaleMenuCategory(1, "Otomobil Parça ve Aksesuarları"),
+        WholesaleMenuCategory(2, "Tüketici Elektroniği"),
+        WholesaleMenuCategory(3, "Elektronik Parçalar"),
+        WholesaleMenuCategory(4, "Moda Aksesuarları ve Ayakkabılar"),
+        WholesaleMenuCategory(5, "Moda Giyim ve Kumaşlar"),
+        WholesaleMenuCategory(6, "Yiyecek, Ev ve Evcil Hayvanlar"),
+        WholesaleMenuCategory(7, "Mobilya ve Ev Dekorasyonu"),
+        WholesaleMenuCategory(8, "Hediyeler ve Primer"),
+        WholesaleMenuCategory(9, "Donanım"),
+        WholesaleMenuCategory(10, "Sağlık ve Kişisel Bakım"),
+        WholesaleMenuCategory(11, "Ev Aletleri"),
+        WholesaleMenuCategory(12, "Endüstriyel Malzemeler"),
+        WholesaleMenuCategory(13, "Makine ve Ekipman"),
+        WholesaleMenuCategory(14, "Mobil Elektronik"),
+        WholesaleMenuCategory(15, "Anne, Çocuk ve Oyuncaklar"),
+        WholesaleMenuCategory(16, "Baskı ve Paketleme"),
+        WholesaleMenuCategory(17, "Akıllı Yaşam Elektroniği"),
+        WholesaleMenuCategory(18, "Spor ve Dış Mekan")
     )
 }
-

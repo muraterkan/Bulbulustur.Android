@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2b.ViewComponents
+package com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background

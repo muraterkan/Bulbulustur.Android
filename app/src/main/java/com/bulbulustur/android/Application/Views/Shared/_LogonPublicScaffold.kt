@@ -1,5 +1,6 @@
-package com.bulbulustur.android.Application.Views.Logon
+package com.bulbulustur.android.Application.Views.Shared
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.Image
 import androidx.compose.ui.unit.Dp
@@ -22,12 +23,14 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuDefaults
@@ -168,7 +171,7 @@ private fun LogonPublicHeader(
                     },
                 shape = BBRadius.Button,
                 color = MaterialTheme.colorScheme.surface,
-                border = androidx.compose.foundation.BorderStroke(
+                border = BorderStroke(
                     width = 1.dp,
                     color = BBColors.Border
                 )
@@ -314,7 +317,7 @@ fun LogonPublicTextField(
     placeholder: String = "",
     trailingContent: @Composable (() -> Unit)? = null,
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    keyboardOptions: androidx.compose.foundation.text.KeyboardOptions = androidx.compose.foundation.text.KeyboardOptions.Default
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default
 ) {
     TextField(
         modifier = modifier
@@ -363,7 +366,7 @@ fun LogonDividerWithText(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        androidx.compose.material3.HorizontalDivider(
+        HorizontalDivider(
             modifier = Modifier.weight(1f),
             color = BBColors.Border
         )
@@ -375,7 +378,7 @@ fun LogonDividerWithText(
             color = BBColors.TextMuted
         )
 
-        androidx.compose.material3.HorizontalDivider(
+        HorizontalDivider(
             modifier = Modifier.weight(1f),
             color = BBColors.Border
         )

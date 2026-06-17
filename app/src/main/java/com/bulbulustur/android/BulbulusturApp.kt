@@ -20,7 +20,7 @@ import com.bulbulustur.android.Graph.retailGraph
 import com.bulbulustur.android.Graph.settingsGraph
 import com.bulbulustur.android.Graph.splashGraph
 import com.bulbulustur.android.Graph.wholesaleGraph
-import com.bulbulustur.android.Application.Views.Logon.logonGraph
+import com.bulbulustur.android.Graph.logonGraph
 import com.bulbulustur.android.businesslayer.Core.Enums.EBuyerMode
 import com.bulbulustur.android.Application.Views.Shared.Components.BuyerModeSheet
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme

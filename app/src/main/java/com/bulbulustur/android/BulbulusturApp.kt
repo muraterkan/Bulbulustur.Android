@@ -1,4 +1,4 @@
-package com.bulbulustur.android
+﻿package com.bulbulustur.android
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -20,10 +20,10 @@ import com.bulbulustur.android.Graph.retailGraph
 import com.bulbulustur.android.Graph.settingsGraph
 import com.bulbulustur.android.Graph.splashGraph
 import com.bulbulustur.android.Graph.wholesaleGraph
-import com.bulbulustur.android.Views.Logon.logonGraph
-import com.bulbulustur.android.Views.Shared.BuyerMode
-import com.bulbulustur.android.Views.Shared.BuyerModeSheet
-import com.bulbulustur.android.wwwroot.theme.BbTheme
+import com.bulbulustur.android.Application.Views.Logon.logonGraph
+import com.bulbulustur.android.businesslayer.Core.Enums.EBuyerMode
+import com.bulbulustur.android.Application.Views.Shared.Components.BuyerModeSheet
+import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
 
 @Composable
 fun BulbulusturApp() {
@@ -42,8 +42,8 @@ fun BulbulusturApp() {
             val currentRoute = currentBackStackEntry?.destination?.route
 
             val currentBuyerMode = when {
-                currentRoute?.startsWith("wholesale/") == true -> BuyerMode.Wholesale
-                else -> BuyerMode.Retail
+                currentRoute?.startsWith("wholesale/") == true -> EBuyerMode.Wholesale
+                else -> EBuyerMode.Retail
             }
 
             val appNavigator = remember(navController) {

@@ -7,13 +7,13 @@ import androidx.navigation.navArgument
 import com.bulbulustur.android.BulbulusturNavigator
 import com.bulbulustur.android.OrderRoutes
 import com.bulbulustur.android.StoreRoutes
-import com.bulbulustur.android.Areas.b2c.Views.order.OrderCancelRequestScreen
-import com.bulbulustur.android.Areas.b2c.Views.order.OrderContractScreen
-import com.bulbulustur.android.Areas.b2c.Views.order.OrderDetailScreen
-import com.bulbulustur.android.Areas.b2c.Views.order.OrderListScreen
-import com.bulbulustur.android.Areas.b2c.Views.order.OrderReturnRequestScreen
-import com.bulbulustur.android.Areas.b2c.Views.order.OrderReviewCreateScreen
-import com.bulbulustur.android.Areas.b2c.Views.order.OrderShipmentTrackingScreen
+import com.bulbulustur.android.Application.Areas.b2c.Views.order.OrderCancelRequestScreen
+import com.bulbulustur.android.Application.Areas.b2c.Views.order.OrderContractScreen
+import com.bulbulustur.android.Application.Areas.b2c.Views.order.OrderDetailScreen
+import com.bulbulustur.android.Application.Areas.b2c.Views.order.OrderListScreen
+import com.bulbulustur.android.Application.Areas.b2c.Views.order.OrderReturnRequestScreen
+import com.bulbulustur.android.Application.Areas.b2c.Views.order.OrderReviewCreateScreen
+import com.bulbulustur.android.Application.Areas.b2c.Views.order.OrderShipmentTrackingScreen
 
 fun NavGraphBuilder.orderGraph(
     navigator: BulbulusturNavigator
@@ -173,3 +173,4 @@ fun NavGraphBuilder.orderGraph(
         )
     }
 }
+

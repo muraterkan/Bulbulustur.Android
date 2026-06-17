@@ -6,11 +6,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.bulbulustur.android.BulbulusturNavigator
 import com.bulbulustur.android.SettingsRoutes
-import com.bulbulustur.android.Views.Account.AppearanceSettingsScreen
-import com.bulbulustur.android.Views.Account.LanguageSettingsScreen
-import com.bulbulustur.android.Views.Account.LegalPoliciesScreen
-import com.bulbulustur.android.Views.Account.AccountSettingsScreen
-import com.bulbulustur.android.Views.Account.LegalPolicyDetailScreen
+import com.bulbulustur.android.Application.Views.Account.AppearanceSettingsScreen
+import com.bulbulustur.android.Application.Views.Account.LanguageSettingsScreen
+import com.bulbulustur.android.Application.Views.Account.LegalPoliciesScreen
+import com.bulbulustur.android.Application.Views.Account.AccountSettingsScreen
+import com.bulbulustur.android.Application.Views.Account.LegalPolicyDetailScreen
 
 fun NavGraphBuilder.settingsGraph(
     navigator: BulbulusturNavigator
@@ -91,3 +91,4 @@ fun NavGraphBuilder.settingsGraph(
         )
     }
 }
+

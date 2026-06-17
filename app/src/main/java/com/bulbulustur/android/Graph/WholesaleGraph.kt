@@ -5,13 +5,13 @@ import androidx.navigation.compose.composable
 import com.bulbulustur.android.BulbulusturNavigator
 import com.bulbulustur.android.RfqRoutes
 import com.bulbulustur.android.WholesaleRoutes
-import com.bulbulustur.android.Areas.b2b.Views.Category.WholesaleCategoryHomeScreen
-import com.bulbulustur.android.Areas.b2b.Views.Home.WholesaleHomeScreen
-import com.bulbulustur.android.Areas.b2b.Views.Product.WholesaleProductDetailScreen
-import com.bulbulustur.android.Areas.b2b.Views.Product.ProductListScreen as WholesaleProductListScreen
-import com.bulbulustur.android.Areas.b2b.Views.Category.CategoryDetailScreen as WholesaleCategoryDetailScreen
-import com.bulbulustur.android.Areas.b2b.Views.Rfq.RfqCreateScreen
-import com.bulbulustur.android.Areas.b2b.Views.Rfq.RfqListScreen
+import com.bulbulustur.android.Application.Areas.b2b.Views.Category.WholesaleCategoryHomeScreen
+import com.bulbulustur.android.Application.Areas.b2b.Views.Home.WholesaleHomeScreen
+import com.bulbulustur.android.Application.Areas.b2b.Views.Product.WholesaleProductDetailScreen
+import com.bulbulustur.android.Application.Areas.b2b.Views.Product.ProductListScreen as WholesaleProductListScreen
+import com.bulbulustur.android.Application.Areas.b2b.Views.Category.CategoryDetailScreen as WholesaleCategoryDetailScreen
+import com.bulbulustur.android.Application.Areas.b2b.Views.Rfq.RfqCreateScreen
+import com.bulbulustur.android.Application.Areas.b2b.Views.Rfq.RfqListScreen
 
 fun NavGraphBuilder.wholesaleGraph(
     navigator: BulbulusturNavigator
@@ -92,3 +92,4 @@ fun NavGraphBuilder.wholesaleGraph(
         )
     }
 }
+

@@ -1,0 +1,267 @@
+package com.bulbulustur.android.Application.Views.Shared.Components
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.icons.outlined.Description
+import androidx.compose.material.icons.outlined.KeyboardArrowRight
+import androidx.compose.material.icons.outlined.ShoppingBasket
+import androidx.compose.material.icons.outlined.Storefront
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import com.bulbulustur.android.businesslayer.Core.Enums.EBuyerMode
+import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
+import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
+import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
+import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
+import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
+import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
+import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun BuyerModeSheet(
+    currentMode: EBuyerMode,
+    onDismissRequest: () -> Unit,
+    onRetailClick: () -> Unit,
+    onWholesaleClick: () -> Unit,
+    onRfqClick: (() -> Unit)? = null
+) {
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
+
+    ModalBottomSheet(
+        sheetState = sheetState,
+        onDismissRequest = onDismissRequest,
+        containerColor = BBColors.Surface,
+        shape = RoundedCornerShape(
+            topStart = BBRadius.xxl,
+            topEnd = BBRadius.xxl
+        )
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .navigationBarsPadding()
+                .padding(
+                    start = BBSpacing.PageHorizontal,
+                    end = BBSpacing.PageHorizontal,
+                    bottom = BBSpacing.PageBottom
+                ),
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
+        ) {
+            Text(
+                text = "Alışveriş Alanları",
+                style = MaterialTheme.typography.headlineSmall,
+                color = BBColors.TextStrong
+            )
+
+            Text(
+                text = "Perakende alışveriş ve toptan ticaret arasında geçiş yapabilirsin.",
+                style = MaterialTheme.typography.bodySmall,
+                color = BBColors.TextMuted
+            )
+
+            BuyerModeOptionCard(
+                title = "Perakende Alışveriş",
+                description = "Kampanyalar, ürünler ve sepet",
+                selected = currentMode == EBuyerMode.Retail,
+                iconContainerColor = BBColors.PrimarySoft,
+                icon = {
+                    Icon(
+                        imageVector = Icons.Outlined.ShoppingBasket,
+                        contentDescription = null,
+                        tint = BBColors.TextStrong,
+                        modifier = Modifier.size(BBIcon.SizeLg)
+                    )
+                },
+                onClick = onRetailClick
+            )
+
+            BuyerModeOptionCard(
+                title = "Toptan Ticaret",
+                description = "RFQ, MOQ, tedarikçiler ve teklifler",
+                selected = currentMode == EBuyerMode.Wholesale,
+                iconContainerColor = BBColors.Orange.Orange100,
+                icon = {
+                    Icon(
+                        imageVector = Icons.Outlined.Storefront,
+                        contentDescription = null,
+                        tint = BBColors.Orange.Orange700,
+                        modifier = Modifier.size(BBIcon.SizeLg)
+                    )
+                },
+                onClick = onWholesaleClick
+            )
+
+            HorizontalDivider(
+                color = BBColors.Border
+            )
+
+            Text(
+                text = "Hızlı toptan aksiyon",
+                style = MaterialTheme.typography.titleSmall,
+                color = BBColors.TextStrong
+            )
+
+            BuyerRfqShortcutCard(
+                onClick = {
+                    if (onRfqClick != null) {
+                        onRfqClick()
+                    } else {
+                        onWholesaleClick()
+                    }
+                }
+            )
+        }
+    }
+}
+
+@Composable
+private fun BuyerModeOptionCard(
+    title: String,
+    description: String,
+    selected: Boolean,
+    iconContainerColor: Color,
+    icon: @Composable () -> Unit,
+    onClick: () -> Unit
+) {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium,
+        onClick = onClick
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(BBSpacing.CardGap),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(BBIcon.BoxLg)
+                    .background(
+                        color = iconContainerColor,
+                        shape = BBRadius.PillShape
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                icon()
+            }
+
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+            ) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleSmall,
+                    color = BBColors.TextStrong
+                )
+
+                Text(
+                    text = description,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = BBColors.TextMuted
+                )
+            }
+
+            if (selected) {
+                Box(
+                    modifier = Modifier
+                        .size(BBIcon.BoxSm)
+                        .background(
+                            color = BBColors.Green.Green50,
+                            shape = BBRadius.PillShape
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Check,
+                        contentDescription = null,
+                        tint = BBColors.Green.Green600,
+                        modifier = Modifier.size(BBIcon.SizeSm)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun BuyerRfqShortcutCard(
+    onClick: () -> Unit
+) {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium,
+        onClick = onClick
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(BBSpacing.CardGap),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(BBIcon.BoxLg)
+                    .background(
+                        color = BBColors.Navy.Navy900,
+                        shape = BBRadius.PillShape
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Description,
+                    contentDescription = null,
+                    tint = BBColors.Primary,
+                    modifier = Modifier.size(BBIcon.SizeLg)
+                )
+            }
+
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+            ) {
+                Text(
+                    text = "RFQ Talebi Gönder",
+                    style = MaterialTheme.typography.titleSmall,
+                    color = BBColors.TextStrong
+                )
+
+                Text(
+                    text = "Toptan alım için tedarikçilerden son fiyat iste",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = BBColors.TextMuted
+                )
+            }
+
+            Icon(
+                imageVector = Icons.Outlined.KeyboardArrowRight,
+                contentDescription = null,
+                tint = BBColors.TextMuted,
+                modifier = Modifier.size(BBIcon.SizeLg)
+            )
+        }
+    }
+}

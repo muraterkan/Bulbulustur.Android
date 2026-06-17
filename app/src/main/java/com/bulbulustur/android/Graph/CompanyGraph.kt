@@ -5,11 +5,11 @@ import androidx.navigation.compose.composable
 import com.bulbulustur.android.BulbulusturNavigator
 import com.bulbulustur.android.CompanyRoutes
 import com.bulbulustur.android.WholesaleRoutes
-import com.bulbulustur.android.Views.Company.CompanyContactScreen
-import com.bulbulustur.android.Views.Company.CompanyDetailScreen
-import com.bulbulustur.android.Views.Company.CompanyHomeScreen
-import com.bulbulustur.android.Views.Company.CompanyListScreen
-import com.bulbulustur.android.Views.Company.CompanyProductsScreen
+import com.bulbulustur.android.Application.Views.Company.CompanyDetailScreen
+import com.bulbulustur.android.Application.Views.Company.CompanyHomeScreen
+import com.bulbulustur.android.Application.Views.Company.CompanyListScreen
+import com.bulbulustur.android.Application.Views.Company.CompanyProductsScreen
+import com.bulbulustur.android.Application.Views.Company.CompanyContactScreen
 
 fun NavGraphBuilder.companyGraph(
     navigator: BulbulusturNavigator
@@ -82,3 +82,4 @@ fun NavGraphBuilder.companyGraph(
         )
     }
 }
+

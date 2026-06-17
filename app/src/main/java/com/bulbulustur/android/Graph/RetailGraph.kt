@@ -4,12 +4,12 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.bulbulustur.android.BulbulusturNavigator
 import com.bulbulustur.android.RetailRoutes
-import com.bulbulustur.android.Areas.b2c.Views.Campaign.CampaignDetailScreen
-import com.bulbulustur.android.Areas.b2c.Views.Campaign.CampaignListScreen
-import com.bulbulustur.android.Areas.b2c.Views.Category.RetailCategoryHomeScreen
-import com.bulbulustur.android.Areas.b2c.Views.Category.RetailHomeScreen
-import com.bulbulustur.android.Areas.b2c.Views.Product.ProductDetailScreen
-import com.bulbulustur.android.Areas.b2c.Views.Product.ProductListScreen as RetailProductListScreen
+import com.bulbulustur.android.Application.Areas.b2c.Views.Campaign.CampaignDetailScreen
+import com.bulbulustur.android.Application.Areas.b2c.Views.Campaign.CampaignListScreen
+import com.bulbulustur.android.Application.Areas.b2c.Views.Category.RetailCategoryHomeScreen
+import com.bulbulustur.android.Application.Areas.b2c.Views.Category.RetailHomeScreen
+import com.bulbulustur.android.Application.Areas.b2c.Views.Product.ProductDetailScreen
+import com.bulbulustur.android.Application.Areas.b2c.Views.Product.ProductListScreen as RetailProductListScreen
 
 fun NavGraphBuilder.retailGraph(
     navigator: BulbulusturNavigator
@@ -84,3 +84,4 @@ fun NavGraphBuilder.retailGraph(
         )
     }
 }
+

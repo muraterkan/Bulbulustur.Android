@@ -4,7 +4,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.bulbulustur.android.BulbulusturNavigator
 import com.bulbulustur.android.SplashRoutes
-import com.bulbulustur.android.Views.Home.ModeSelectionScreen
+import com.bulbulustur.android.Application.Views.Home.ModeSelectionScreen
 
 fun NavGraphBuilder.splashGraph(
     navigator: BulbulusturNavigator

@@ -11,37 +11,37 @@ import com.bulbulustur.android.OrderRoutes
 import com.bulbulustur.android.RetailRoutes
 import com.bulbulustur.android.SettingsRoutes
 import com.bulbulustur.android.StoreRoutes
-import com.bulbulustur.android.Views.Account.AccountScreen
-import com.bulbulustur.android.Views.Account.AccountSecurityScreen
-import com.bulbulustur.android.Views.Account.AddressFormScreen
-import com.bulbulustur.android.Views.Account.AddressListScreen
-import com.bulbulustur.android.Views.Account.CouponListScreen
-import com.bulbulustur.android.Views.Account.RequestDetailScreen
-import com.bulbulustur.android.Views.Account.RequestListScreen
-import com.bulbulustur.android.Views.Account.ReviewListScreen
-import com.bulbulustur.android.Views.Account.BankAccountCreateScreen
-import com.bulbulustur.android.Views.Account.BankAccountEditScreen
-import com.bulbulustur.android.Views.Account.BankAccountListScreen
-import com.bulbulustur.android.Views.Account.CompanyB2BIndexScreen
-import com.bulbulustur.android.Views.Account.CompanyB2BStatusScreen
-import com.bulbulustur.android.Views.Account.CompanyInfoEditScreen
-import com.bulbulustur.android.Views.Account.CompanyInfoScreen
-import com.bulbulustur.android.Views.Account.FavoriteListScreen
-import com.bulbulustur.android.Views.Account.FollowedStoreListScreen
-import com.bulbulustur.android.Views.Account.NotificationListScreen
-import com.bulbulustur.android.Views.Account.PhoneCreateScreen
-import com.bulbulustur.android.Views.Account.PhoneListScreen
-import com.bulbulustur.android.Views.Account.PhoneVerifyScreen
-import com.bulbulustur.android.Views.Preference.UsagePurposeScreen
-import com.bulbulustur.android.Views.Account.ProfileScreen
-import com.bulbulustur.android.Views.Question.QuestionAnswerScreen
-import com.bulbulustur.android.Views.Account.ReviewEditScreen
-import com.bulbulustur.android.Views.Account.ChangeEmailScreen
-import com.bulbulustur.android.Views.Account.ChangePasswordScreen
-import com.bulbulustur.android.Views.Account.LoginActivitiesScreen
-import com.bulbulustur.android.Views.Account.SubscriptionDetailScreen
-import com.bulbulustur.android.Views.Account.SubscriptionListScreen
-import com.bulbulustur.android.Views.Account.WalletBalanceScreen
+import com.bulbulustur.android.Application.Views.Account.AccountScreen
+import com.bulbulustur.android.Application.Views.Account.AccountSecurityScreen
+import com.bulbulustur.android.Application.Views.Account.AddressFormScreen
+import com.bulbulustur.android.Application.Views.Account.AddressListScreen
+import com.bulbulustur.android.Application.Views.Account.CouponListScreen
+import com.bulbulustur.android.Application.Views.Account.RequestDetailScreen
+import com.bulbulustur.android.Application.Views.Account.RequestListScreen
+import com.bulbulustur.android.Application.Views.Account.ReviewListScreen
+import com.bulbulustur.android.Application.Views.Account.BankAccountCreateScreen
+import com.bulbulustur.android.Application.Views.Account.BankAccountEditScreen
+import com.bulbulustur.android.Application.Views.Account.BankAccountListScreen
+import com.bulbulustur.android.Application.Views.Account.CompanyB2BIndexScreen
+import com.bulbulustur.android.Application.Views.Account.CompanyB2BStatusScreen
+import com.bulbulustur.android.Application.Views.Account.CompanyInfoEditScreen
+import com.bulbulustur.android.Application.Views.Account.CompanyInfoScreen
+import com.bulbulustur.android.Application.Views.Account.FavoriteListScreen
+import com.bulbulustur.android.Application.Views.Account.FollowedStoreListScreen
+import com.bulbulustur.android.Application.Views.Account.NotificationListScreen
+import com.bulbulustur.android.Application.Views.Account.PhoneCreateScreen
+import com.bulbulustur.android.Application.Views.Account.PhoneListScreen
+import com.bulbulustur.android.Application.Views.Account.PhoneVerifyScreen
+import com.bulbulustur.android.Application.Views.Preference.UsagePurposeScreen
+import com.bulbulustur.android.Application.Views.Account.ProfileScreen
+import com.bulbulustur.android.Application.Views.Question.QuestionAnswerScreen
+import com.bulbulustur.android.Application.Views.Account.ReviewEditScreen
+import com.bulbulustur.android.Application.Views.Account.ChangeEmailScreen
+import com.bulbulustur.android.Application.Views.Account.ChangePasswordScreen
+import com.bulbulustur.android.Application.Views.Account.LoginActivitiesScreen
+import com.bulbulustur.android.Application.Views.Account.SubscriptionDetailScreen
+import com.bulbulustur.android.Application.Views.Account.SubscriptionListScreen
+import com.bulbulustur.android.Application.Views.Account.WalletBalanceScreen
 
 fun NavGraphBuilder.accountGraph(
     navigator: BulbulusturNavigator
@@ -305,3 +305,4 @@ fun NavGraphBuilder.accountGraph(
         )
     }
 }
+

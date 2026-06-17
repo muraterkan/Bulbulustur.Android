@@ -1,4 +1,4 @@
-package com.bulbulustur.android
+﻿package com.bulbulustur.android
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

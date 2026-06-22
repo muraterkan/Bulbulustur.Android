@@ -559,7 +559,7 @@ private fun getCompanyListItems(): List<CompanyListItem> {
     return listOf(
         CompanyListItem(
             companyId = 1,
-            name = "Bulbulustur İnternet Teknolojileri ve Tic. A.�?.",
+            name = "Bulbulustur İnternet Teknolojileri ve Tic. A.Ş.",
             description = "Yazılım, dijital dönüşüm ve ticaret altyapıları alanında çözüm sağlayan firma.",
             country = "Türkiye",
             city = "İstanbul",

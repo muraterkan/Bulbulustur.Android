@@ -75,7 +75,7 @@ fun QuestionAnswerScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Soru Ve Cevaplarım",
+                title = "Soru ve Cevaplarım",
                 onBackClick = onBackClick
             )
         }
@@ -143,7 +143,7 @@ private fun QuestionAnswerIntroCard() {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Ürün Soruları Ve Satıcı Cevapları",
+                    text = "Ürün Soruları ve Satıcı Cevapları",
                     style = BbTypography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )

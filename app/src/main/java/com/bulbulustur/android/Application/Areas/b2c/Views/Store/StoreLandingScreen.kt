@@ -193,7 +193,7 @@ private fun SellerLandingHero(
                 .padding(18.dp)
         ) {
             Text(
-                text = "Ürünlerini Bulbulustur’da vitrine çıkar",
+                text = "Ürünlerini Bulbulustur’da Vitrine çıkar",
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onPrimaryContainer
@@ -588,7 +588,7 @@ private fun getRetailSellerLandingScreenData(): RetailSellerLandingScreenData {
                 id = 3,
                 groupName = "Avantajlar",
                 title = "Güven veren mağaza profili",
-                description = "Mağaza vitrini, puanlama, ürün listeleri ve sipariş akışıyla profesyonel görünüm sağlanır.",
+                description = "Mağaza Vitrini, puanlama, ürün listeleri ve sipariş akışıyla profesyonel görünüm sağlanır.",
                 iconText = "GP"
             ),
             RetailSellerInfoItem(
@@ -601,9 +601,9 @@ private fun getRetailSellerLandingScreenData(): RetailSellerLandingScreenData {
             RetailSellerInfoItem(
                 id = 5,
                 groupName = "Başvuru",
-                title = "�?irket doğrulama",
+                title = "Şirket doğrulama",
                 description = "Satıcı güvenliği için şirket ve yetkili bilgileri doğrulama sürecine alınır.",
-                iconText = "�?D"
+                iconText = "ŞD"
             ),
             RetailSellerInfoItem(
                 id = 6,
@@ -629,7 +629,7 @@ private fun getRetailSellerLandingScreenData(): RetailSellerLandingScreenData {
             RetailSellerInfoItem(
                 id = 9,
                 groupName = "Satış kanalları",
-                title = "Kampanya ve vitrinler",
+                title = "Kampanya ve Vitrinler",
                 description = "Seçili ürünleri ve mağaza fırsatlarını kampanya alanlarında öne çıkarabilirsin.",
                 iconText = "KV"
             )

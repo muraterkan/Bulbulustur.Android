@@ -384,7 +384,7 @@ private fun OrderCancelWarningCard() {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "İptal süreci",
+                    text = "İptal Süreci",
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -430,7 +430,7 @@ private fun OrderCancelActionCard(
             )
 
             BbButton(
-                text = "Sipariş Detayına Dön",
+                text = "Sipariş Detaylarına Dön",
                 onClick = onBackClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Light,

@@ -151,7 +151,7 @@ private fun ReportAbuseIntroCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             Text(
-                text = "Güvenlik Ve Kalite Bildirimi",
+                text = "Güvenlik ve Kalite Bildirimi",
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -301,7 +301,7 @@ private fun ReportReasonSection(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
     ) {
         BbSectionHeader(
-            title = "�?ikayet Nedenini Seç",
+            title = "Şikayet Nedenini Seç",
             subtitle = "Bildirimini daha hızlı değerlendirebilmemiz için uygun nedeni seç."
         )
 
@@ -512,7 +512,7 @@ private fun getReportReasonItems(): List<ReportReasonItem> {
         ),
         ReportReasonItem(
             id = 3,
-            title = "Sahte Ürün �?üphesi"
+            title = "Sahte Ürün Şüphesi"
         ),
         ReportReasonItem(
             id = 4,

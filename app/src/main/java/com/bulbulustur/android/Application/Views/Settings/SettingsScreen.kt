@@ -34,7 +34,7 @@ import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
 
 @Composable
 fun SettingsScreen(
-    currentThemeName: String = "Sistem varsayılanı",
+    currentThemeName: String = "Sistem Varsayılanı",
     currentLanguageName: String = "Türkçe",
     onThemeClick: () -> Unit = {},
     onLanguageClick: () -> Unit = {}
@@ -51,7 +51,7 @@ fun SettingsScreen(
 
         item {
             BbSectionHeader(
-                title = "Uygulama ayarları",
+                title = "Uygulama Ayarları",
                 subtitle = "Bu alan yalnızca uygulamanın görünüm ve dil tercihlerini değiştirir"
             )
         }
@@ -59,7 +59,7 @@ fun SettingsScreen(
         item {
             SettingsOptionCard(
                 title = "Görünüm",
-                description = "Tema tercihini değiştir",
+                description = "Tema Tercihini Değiştir",
                 currentValue = currentThemeName,
                 icon = Icons.Outlined.Palette,
                 onClick = onThemeClick
@@ -69,7 +69,7 @@ fun SettingsScreen(
         item {
             SettingsOptionCard(
                 title = "Dil",
-                description = "Uygulama dilini değiştir",
+                description = "Uygulama Dilini Değiştir",
                 currentValue = currentLanguageName,
                 icon = Icons.Outlined.Language,
                 onClick = onLanguageClick
@@ -114,7 +114,7 @@ private fun SettingsHeader() {
             }
 
             Text(
-                text = "Uygulama ayarları",
+                text = "Uygulama Ayarları",
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface

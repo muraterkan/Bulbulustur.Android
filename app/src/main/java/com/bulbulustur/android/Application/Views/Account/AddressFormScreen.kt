@@ -73,7 +73,7 @@ fun AddressFormScreen(
     }
 
     val districtState = remember {
-        mutableStateOf(if (isEditMode) "�?işli" else "")
+        mutableStateOf(if (isEditMode) "Şişli" else "")
     }
 
     val addressTextState = remember {
@@ -206,8 +206,8 @@ fun AddressFormScreen(
                     onValueChange = { value ->
                         cityState.value = value
                     },
-                    label = "�?ehir",
-                    placeholder = "�?ehir seçiniz"
+                    label = "Şehir",
+                    placeholder = "Şehir seçiniz"
                 )
 
                 BbAddressTextField(

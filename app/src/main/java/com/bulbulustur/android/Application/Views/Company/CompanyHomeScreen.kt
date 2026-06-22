@@ -116,12 +116,12 @@ fun CompanyHomeScreen(
 
             item {
                 CompanyHomeSectionCard(
-                    title = "�?irket Vitrini",
-                    subtitle = "Firmanın öne çıkardığı ürün gruplarını, özel koleksiyonlarını ve ticari vitrinlerini inceleyin.",
+                    title = "Şirket Vitrini",
+                    subtitle = "Firmanın öne çıkardığı ürün gruplarını, özel koleksiyonlarını ve ticari Vitrinlerini inceleyin.",
                     items = listOf(
                         "Öne Çıkan Ürün Koleksiyonları",
                         "Kurumsal Tedarikçi Profili",
-                        "Hızlı İletişim Ve Teklif Süreci"
+                        "Hızlı İletişim ve Teklif Süreci"
                     ),
                     icon = Icons.Outlined.Security,
                     onClick = onProfileClick
@@ -306,7 +306,7 @@ private fun CompanyHomeShowcaseCard() {
 
                 Column {
                     Text(
-                        text = "�?irket Vitrini",
+                        text = "Şirket Vitrini",
                         style = MaterialTheme.typography.titleMedium,
                         color = BBColors.TextStrong,
                         fontWeight = FontWeight.Bold
@@ -322,7 +322,7 @@ private fun CompanyHomeShowcaseCard() {
 
             CompanyHomeInfoLine("Öne Çıkan Ürün Koleksiyonları")
             CompanyHomeInfoLine("Kurumsal Tedarikçi Profili")
-            CompanyHomeInfoLine("Hızlı İletişim Ve Teklif Süreci")
+            CompanyHomeInfoLine("Hızlı İletişim ve Teklif Süreci")
         }
     }
 }

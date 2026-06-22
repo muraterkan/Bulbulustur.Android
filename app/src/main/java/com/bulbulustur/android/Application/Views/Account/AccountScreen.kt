@@ -240,7 +240,7 @@ fun AccountScreen(
                     title = "Ticari Profil"
                 ) {
                     AccountMenuRow(
-                        title = "�?irket Bilgileri",
+                        title = "Şirket Bilgileri",
                         description = "Firma ve ticari hesap bilgilerini yönet.",
                         icon = Icons.Outlined.Business,
                         onClick = onCompanyInfoClick
@@ -312,7 +312,7 @@ fun AccountScreen(
                 ) {
                     AccountMenuRow(
                         title = "Abonelikler",
-                        description = "Paket ve üyelik süreçlerini görüntüle.",
+                        description = "Paket ve Üyelik Süreçlerini görüntüle.",
                         icon = Icons.Outlined.CreditCard,
                         onClick = onSubscriptionsClick
                     )
@@ -664,7 +664,7 @@ private fun AccountPrimaryActions(
 
         AccountPrimaryActionCard(
             modifier = Modifier.weight(1f),
-            title = "�?irketini Kaydet",
+            title = "Şirketini Kaydet",
             description = "Ticari profilini güçlendir.",
             icon = Icons.Outlined.Business,
             accent = AccountActionAccent.Green,

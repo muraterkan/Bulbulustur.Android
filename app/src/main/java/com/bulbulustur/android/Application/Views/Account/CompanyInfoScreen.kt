@@ -96,13 +96,13 @@ fun CompanyInfoScreen(
 
             item {
                 CompanyInfoSection(
-                    title = "�?irket Kimliği",
+                    title = "Şirket Kimliği",
                     description = "Ünvan, şirket tipi ve kurumsal profil bilgileri.",
                     icon = Icons.Outlined.Badge
                 ) {
-                    CompanyInfoRow("�?irket Ünvanı", "Türkiye Global Ticaret Limited �?irketi")
+                    CompanyInfoRow("Şirket Ünvanı", "Türkiye Global Ticaret Limited Şirketi")
                     CompanyDashedDivider()
-                    CompanyInfoRow("�?irket Tipi", "Limited �?irket")
+                    CompanyInfoRow("Şirket Tipi", "Limited Şirket")
                     CompanyDashedDivider()
                     CompanyInfoRow("Abonelik Planı", "B2B e-marketplace / Free")
                     CompanyDashedDivider()
@@ -113,16 +113,16 @@ fun CompanyInfoScreen(
             item {
                 CompanyInfoSection(
                     title = "Adres Bilgileri",
-                    description = "�?irketin kayıtlı lokasyon bilgileri.",
+                    description = "Şirketin kayıtlı lokasyon bilgileri.",
                     icon = Icons.Outlined.LocationOn
                 ) {
                     CompanyInfoRow("Adres", "Fulya Mah., Aytekin Kotil Cad., No: 11/1")
                     CompanyDashedDivider()
                     CompanyInfoRow("Ülke", "Türkiye")
                     CompanyDashedDivider()
-                    CompanyInfoRow("�?ehir", "İstanbul")
+                    CompanyInfoRow("Şehir", "İstanbul")
                     CompanyDashedDivider()
-                    CompanyInfoRow("İlçe", "�?işli")
+                    CompanyInfoRow("İlçe", "Şişli")
                     CompanyDashedDivider()
                     CompanyInfoRow("Posta Kodu", "34394")
                 }
@@ -130,11 +130,11 @@ fun CompanyInfoScreen(
 
             item {
                 CompanyInfoSection(
-                    title = "Vergi Ve Resmi Bilgiler",
+                    title = "Vergi ve Resmi Bilgiler",
                     description = "Fatura ve resmi kayıt süreçlerinde kullanılan bilgiler.",
                     icon = Icons.Outlined.ReceiptLong
                 ) {
-                    CompanyInfoRow("Vergi Dairesi", "�?işli Vergi Dairesi")
+                    CompanyInfoRow("Vergi Dairesi", "Şişli Vergi Dairesi")
                     CompanyDashedDivider()
                     CompanyInfoRow("Vergi Numarası", "789456123")
                     CompanyDashedDivider()
@@ -203,13 +203,13 @@ private fun CompanyHeroCard() {
                     )
 
                     Text(
-                        text = "Türkiye Global Ticaret Limited �?irketi",
+                        text = "Türkiye Global Ticaret Limited Şirketi",
                         style = BbTypography.titleLarge,
                         color = MaterialTheme.colorScheme.inverseOnSurface
                     )
 
                     Text(
-                        text = "Limited �?irket",
+                        text = "Limited Şirket",
                         style = BbTypography.bodySmall,
                         color = MaterialTheme.colorScheme.inverseOnSurface.copy(alpha = BBAlpha.Muted)
                     )
@@ -298,7 +298,7 @@ private fun CompanyStatsGrid() {
             CompanyStatCard(
                 modifier = Modifier.weight(1f),
                 icon = Icons.Outlined.LocationOn,
-                label = "Ülke / �?ehir",
+                label = "Ülke / Şehir",
                 value = "Türkiye / İstanbul"
             )
 
@@ -459,11 +459,11 @@ private fun CompanyActionSection(
 ) {
     CompanyInfoSection(
         title = "Kurumsal İşlemler",
-        description = "�?irket profilini ticaret akışlarına bağla.",
+        description = "Şirket profilini ticaret akışlarına bağla.",
         icon = Icons.Outlined.Business
     ) {
         CompanyActionRow(
-            title = "�?irketimi B2B Index’e Dahil Et",
+            title = "Şirketimi B2B Index’e Dahil Et",
             description = "Tedarikçiler ve toptan alıcılar tarafından keşfedil.",
             icon = Icons.Outlined.Storefront,
             onClick = onB2BIndexClick

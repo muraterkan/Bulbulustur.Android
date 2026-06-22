@@ -321,7 +321,7 @@ private fun StoreListHeroCard(
                 StoreListHeroMiniCard(
                     modifier = Modifier.weight(1f),
                     title = "Güvenilir Satıcılar",
-                    subtitle = "Doğrulanmış mağaza vitrinlerini inceleyin.",
+                    subtitle = "Doğrulanmış mağaza Vitrinlerini inceleyin.",
                     icon = Icons.Outlined.Verified
                 )
 

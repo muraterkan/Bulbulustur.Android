@@ -192,7 +192,7 @@ fun RegisterStartScreen(
         Spacer(modifier = Modifier.height(BBSpacing.Space4))
 
         LogonPublicFieldLabel(
-            text = "�?ifre"
+            text = "Şifre"
         )
 
         Spacer(modifier = Modifier.height(BBSpacing.Space2))
@@ -202,7 +202,7 @@ fun RegisterStartScreen(
             onValueChange = {
                 password = it
             },
-            placeholder = "�?ifreniz",
+            placeholder = "Şifreniz",
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password

@@ -78,7 +78,7 @@ fun StoreProductListScreen(
         when (selectedSort) {
             "En düşük fiyat" -> categoryFilteredProducts.sortedBy { it.priceValue }
             "En yüksek fiyat" -> categoryFilteredProducts.sortedByDescending { it.priceValue }
-            "Yeni gelenler" -> categoryFilteredProducts.filter { it.isNew }
+            "Yeni Gelenler" -> categoryFilteredProducts.filter { it.isNew }
             else -> categoryFilteredProducts
         }
     }
@@ -196,7 +196,7 @@ private fun StoreProductListTopBar(
             )
 
             Text(
-                text = "Mağaza vitrininin tüm ürün akışı.",
+                text = "Mağaza Vitrininin tüm ürün akışı.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -617,7 +617,7 @@ private fun getRetailStoreProductListScreenData(storeId: Int): RetailStoreProduc
             "Öne çıkan",
             "En düşük fiyat",
             "En yüksek fiyat",
-            "Yeni gelenler"
+            "Yeni Gelenler"
         ),
         products = listOf(
             RetailStoreProductListItem(

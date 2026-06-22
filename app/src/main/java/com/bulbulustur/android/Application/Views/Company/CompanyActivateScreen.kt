@@ -63,7 +63,7 @@ fun CompanyActivateScreen(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.SectionGap)
     ) {
         BbButton(
-            text = "�?irket Bilgilerime Dön",
+            text = "Şirket Bilgilerime Dön",
             onClick = onBackClick,
             variant = BbButtonVariant.Outline
         )
@@ -77,13 +77,13 @@ fun CompanyActivateScreen(
             )
 
             Text(
-                text = "�?irketinizi B2B Index’e Dahil Edin",
+                text = "Şirketinizi B2B Index’e Dahil Edin",
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
-                text = "Türkiye’deki üretici, tedarikçi ve toptancı şirketlerin global alıcılara daha görünür olmasını sağlayan B2B vitrin alanına katılın.",
+                text = "Türkiye’deki üretici, tedarikçi ve toptancı şirketlerin global alıcılara daha görünür olmasını sağlayan B2B Vitrin alanına katılın.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -93,7 +93,7 @@ fun CompanyActivateScreen(
 
         CompanyActivateBenefitCard(
             title = "Global Görünürlük",
-            description = "�?irket profiliniz uluslararası alıcılar için daha keşfedilebilir hale gelir."
+            description = "Şirket profiliniz uluslararası alıcılar için daha keşfedilebilir hale gelir."
         )
 
         CompanyActivateBenefitCard(
@@ -103,7 +103,7 @@ fun CompanyActivateScreen(
 
         CompanyActivateBenefitCard(
             title = "Kurumsal Vitrin",
-            description = "�?irket bilgileriniz daha düzenli, güven veren ve B2B profiline uygun şekilde sunulur."
+            description = "Şirket bilgileriniz daha düzenli, güven veren ve B2B profiline uygun şekilde sunulur."
         )
 
         CompanyActivateSummaryCard(
@@ -146,7 +146,7 @@ fun CompanyActivateScreen(
                 }
 
                 BbButton(
-                    text = "�?irketimi B2B Index’e Dahil Et",
+                    text = "Şirketimi B2B Index’e Dahil Et",
                     onClick = {
                         if (formState.value.canSubmit) {
                             onCompanyActivateClick(formState.value)
@@ -184,7 +184,7 @@ private fun CompanyActivateInfoCard() {
             )
 
             Text(
-                text = "�?irketinizin ürün ve hizmetlerini global alıcılarla buluşturmak için tasarlanmış kurumsal görünürlük alanıdır. Başlangıçta ücretsiz olarak kullanabilir, ihtiyaçlarınıza göre açıklama ve planlarınızı daha sonra geliştirebilirsiniz.",
+                text = "Şirketinizin ürün ve hizmetlerini global alıcılarla buluşturmak için tasarlanmış kurumsal görünürlük alanıdır. Başlangıçta ücretsiz olarak kullanabilir, ihtiyaçlarınıza göre açıklama ve planlarınızı daha sonra geliştirebilirsiniz.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -247,12 +247,12 @@ private fun CompanyActivateSummaryCard(
             )
 
             CompanyActivateSummaryRow(
-                label = "�?irket",
+                label = "Şirket",
                 value = companyActivateSummary.companyDisplayName
             )
 
             CompanyActivateSummaryRow(
-                label = "�?irket Kimliği",
+                label = "Şirket Kimliği",
                 value = companyActivateSummary.companyCode
             )
 
@@ -302,6 +302,6 @@ private fun createSampleCompanyActivateSummary(): CompanyActivateSummary {
         companyCode = "FGAOlbO7EGAZ5nB",
         createdDateText = "17.10.2025",
         b2bIndexStatusText = "Kapalı",
-        companyDisplayName = "Türkiye Global Ticaret Limited �?irketi"
+        companyDisplayName = "Türkiye Global Ticaret Limited Şirketi"
     )
 }

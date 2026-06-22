@@ -25,15 +25,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
-import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
+import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBAlpha
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BbTypography
-import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBAlpha
 
 @Composable
 fun CurrencySettingsScreen(
@@ -43,20 +47,54 @@ fun CurrencySettingsScreen(
         mutableStateOf("TRY")
     }
 
-    val currencies = listOf(
-        CurrencyOption("TRY", "Türk Lirası", "g���g���"),
-        CurrencyOption("USD", "Amerikan Doları", "g���g���"),
-        CurrencyOption("EUR", "Euro", "g���g���"),
-        CurrencyOption("GBP", "İngiliz Sterlini", "g���g���"),
-        CurrencyOption("AED", "Emirati Dirhem", "g���g���"),
-        CurrencyOption("SAR", "Suudi Riyali", "g���g���"),
-        CurrencyOption("CNY", "Çin Yuanı", "g���g���")
-    )
+    val currencies = remember {
+        listOf(
+            CurrencyOption(
+                code = "TRY",
+                name = "Türk Lirası",
+                flagFileName = "turkey.svg"
+            ),
+            CurrencyOption(
+                code = "USD",
+                name = "Amerikan Doları",
+                flagFileName = "United States of America.svg"
+            ),
+            CurrencyOption(
+                code = "EUR",
+                name = "Euro",
+                flagFileName = "european-union.svg"
+            ),
+            CurrencyOption(
+                code = "GBP",
+                name = "İngiliz Sterlini",
+                flagFileName = "United Kingdom.svg"
+            ),
+            CurrencyOption(
+                code = "AED",
+                name = "Emirati Dirhem",
+                flagFileName = "United Arab Emirates.svg"
+            ),
+            CurrencyOption(
+                code = "SAR",
+                name = "Suudi Riyali",
+                flagFileName = "saudi-arabia.svg"
+            ),
+            CurrencyOption(
+                code = "CNY",
+                name = "Çin Yuanı",
+                flagFileName = "china.svg"
+            )
+        )
+    }
 
     val pageBackground = Brush.verticalGradient(
         colors = listOf(
-            MaterialTheme.colorScheme.primaryContainer.copy(alpha = BBAlpha.DisabledContainer),
-            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.85f),
+            MaterialTheme.colorScheme.primaryContainer.copy(
+                alpha = BBAlpha.DisabledContainer
+            ),
+            MaterialTheme.colorScheme.surfaceVariant.copy(
+                alpha = 0.85f
+            ),
             MaterialTheme.colorScheme.surfaceVariant
         )
     )
@@ -81,7 +119,9 @@ fun CurrencySettingsScreen(
                 end = BBSpacing.PageHorizontal,
                 bottom = BBSpacing.PageBottom
             ),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.CardGap
+            )
         ) {
             item {
                 CurrencyIntroCard()
@@ -89,7 +129,9 @@ fun CurrencySettingsScreen(
 
             items(
                 items = currencies,
-                key = { currency -> currency.code }
+                key = { currency ->
+                    currency.code
+                }
             ) { currency ->
                 CurrencyRow(
                     item = currency,
@@ -135,27 +177,21 @@ private fun CurrencyRow(
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+            horizontalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space3
+            ),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
-                modifier = Modifier
-                    .size(BBIcon.BoxLg)
-                    .background(
-                        color = MaterialTheme.colorScheme.surfaceVariant,
-                        shape = BBRadius.PillShape
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = item.flag,
-                    style = BbTypography.titleLarge
-                )
-            }
+            CurrencyFlag(
+                flagFileName = item.flagFileName,
+                contentDescription = "${item.name} bayrağı"
+            )
 
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+                verticalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space1
+                )
             ) {
                 Text(
                     text = item.code,
@@ -173,7 +209,7 @@ private fun CurrencyRow(
             if (isSelected) {
                 Icon(
                     imageVector = Icons.Outlined.CheckCircle,
-                    contentDescription = null,
+                    contentDescription = "Seçili para birimi",
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(BBIcon.SizeLg)
                 )
@@ -182,9 +218,37 @@ private fun CurrencyRow(
     }
 }
 
+@Composable
+private fun CurrencyFlag(
+    flagFileName: String,
+    contentDescription: String
+) {
+    val context = LocalContext.current
+
+    Box(
+        modifier = Modifier
+            .size(BBIcon.BoxLg)
+            .background(
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                shape = BBRadius.PillShape
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        AsyncImage(
+            model = ImageRequest.Builder(context)
+                .data(
+                    "file:///android_asset/flags/$flagFileName"
+                )
+                .build(),
+            contentDescription = contentDescription,
+            modifier = Modifier.size(BBIcon.Size2Xl),
+            contentScale = ContentScale.Fit
+        )
+    }
+}
+
 private data class CurrencyOption(
     val code: String,
     val name: String,
-    val flag: String
+    val flagFileName: String
 )
-

@@ -164,7 +164,7 @@ private fun SupportIntroCard() {
         ) {
             SupportIconTitleRow(
                 icon = Icons.Outlined.HelpCenter,
-                title = "Yardım Ve Destek"
+                title = "Yardım ve Destek"
             )
 
             Text(
@@ -499,14 +499,14 @@ private fun getSupportPopularArticleItems(): List<SupportArticleItem> {
         ),
         SupportArticleItem(
             articleId = 3,
-            title = "Fiyat Ve Teslimat �?artlarının Görünmesi",
+            title = "Fiyat ve Teslimat Şartlarının Görünmesi",
             description = "Toptan teklif ve teslimat bilgilerinin yönetimi.",
             categoryName = "Ticaret Merkezi",
             icon = Icons.Outlined.Business
         ),
         SupportArticleItem(
             articleId = 4,
-            title = "�?ifre Yönetimi",
+            title = "Şifre Yönetimi",
             description = "Hesap güvenliği ve şifre değiştirme adımları.",
             categoryName = "Hesap Merkezi",
             icon = Icons.Outlined.Security

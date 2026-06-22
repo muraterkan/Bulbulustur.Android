@@ -120,7 +120,7 @@ fun CampaignListScreen(
             item {
                 CampaignSectionTitle(
                     title = "Aktif kampanyalar",
-                    description = "Perakende alışverişte öne çıkan fırsatları keşfet."
+                    description = "Perakende Alışverişte öne çıkan fırsatları keşfet."
                 )
             }
 
@@ -172,7 +172,7 @@ private fun CampaignListTopBar(
             )
 
             Text(
-                text = "Fırsat, vitrin ve sezon kampanyaları.",
+                text = "Fırsat, Vitrin ve sezon kampanyaları.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -207,7 +207,7 @@ private fun CampaignListHero() {
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "Seçili mağazalar, kategori vitrinleri ve indirimli ürün akışları burada toplanır.",
+                text = "Seçili mağazalar, kategori Vitrinleri ve indirimli ürün akışları burada toplanır.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onPrimaryContainer
             )
@@ -224,7 +224,7 @@ private fun CampaignListHero() {
 
                 CampaignHeroPill(
                     title = "8",
-                    subtitle = "vitrin"
+                    subtitle = "Vitrin"
                 )
 
                 CampaignHeroPill(
@@ -502,7 +502,7 @@ private fun getRetailCampaignListItems(): List<RetailCampaignListItem> {
         RetailCampaignListItem(
             id = 1,
             title = "Sezonun öne çıkanları",
-            description = "Moda kategorisinde yeni sezon ürünleri ve seçili mağaza vitrinleri.",
+            description = "Moda kategorisinde yeni sezon ürünleri ve seçili mağaza Vitrinleri.",
             badgeText = "Yeni sezon",
             iconText = "MO",
             categoryName = "Moda",
@@ -523,7 +523,7 @@ private fun getRetailCampaignListItems(): List<RetailCampaignListItem> {
         ),
         RetailCampaignListItem(
             id = 3,
-            title = "Ev & Yaşam vitrinleri",
+            title = "Ev & Yaşam Vitrinleri",
             description = "Mutfak, dekorasyon ve ev tekstili ürünlerinde öne çıkan mağazalar.",
             badgeText = "Vitrin",
             iconText = "EV",

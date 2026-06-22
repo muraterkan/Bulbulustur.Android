@@ -293,7 +293,7 @@ private fun BasketHeaderCard(
                     text = if (lineCount > 0) {
                         "$storeCount mağazadan gönderim yapılacak"
                     } else {
-                        "Ürün keşfine dönüp sepetini doldurabilirsin."
+                        "Ürün Keşfine dönüp sepetini doldurabilirsin."
                     },
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -839,7 +839,7 @@ private fun BasketEmptyCard() {
             )
 
             Text(
-                text = "Ürün keşfine dönüp sepetini doldurabilirsin.",
+                text = "Ürün Keşfine dönüp sepetini doldurabilirsin.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

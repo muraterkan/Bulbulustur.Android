@@ -69,7 +69,7 @@ fun AccountSecurityScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Hesap Ve Güvenlik",
+                title = "Hesap ve Güvenlik",
                 onBackClick = onBackClick
             )
         }
@@ -112,7 +112,7 @@ fun AccountSecurityScreen(
 
             item {
                 AccountSecuritySection(
-                    title = "Giriş Ve Güvenlik",
+                    title = "Giriş ve Güvenlik",
                     description = "E-posta, şifre ve giriş güvenliği ayarları.",
                     icon = Icons.Outlined.Security
                 ) {
@@ -126,7 +126,7 @@ fun AccountSecurityScreen(
                     AccountSecurityDashedDivider()
 
                     AccountSecurityRow(
-                        title = "�?ifre",
+                        title = "Şifre",
                         value = "Hesabınıza giriş yapmak için kullanılır",
                         icon = Icons.Outlined.Key,
                         onClick = onPasswordChangeClick

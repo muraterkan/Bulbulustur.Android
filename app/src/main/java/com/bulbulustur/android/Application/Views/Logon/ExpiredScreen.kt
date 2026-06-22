@@ -300,11 +300,11 @@ enum class ExpiredType(
     ),
 
     PasswordReset(
-        badgeText = "�?ifre Bağlantısı Geçersiz",
-        title = "�?ifre Yenileme Süresi Doldu",
-        description = "�?ifre yenileme bağlantınız artık kullanılamıyor.",
-        primaryButtonText = "Yeni �?ifre Bağlantısı Gönder",
-        firstReason = "�?ifre yenileme bağlantıları tek kullanımlık ve süre sınırlıdır.",
+        badgeText = "Şifre Bağlantısı Geçersiz",
+        title = "Şifre Yenileme Süresi Doldu",
+        description = "Şifre yenileme bağlantınız artık kullanılamıyor.",
+        primaryButtonText = "Yeni Şifre Bağlantısı Gönder",
+        firstReason = "Şifre yenileme bağlantıları tek kullanımlık ve süre sınırlıdır.",
         secondReason = "Yeni bağlantı göndererek şifre yenileme işlemini tekrar başlatabilirsiniz."
     ),
 

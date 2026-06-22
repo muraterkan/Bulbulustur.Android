@@ -388,7 +388,7 @@ private fun CategoryCampaignSection(
     ) {
         RetailSectionTitle(
             title = "Kategori fırsatları",
-            description = "Bu kategoriye bağlı aktif vitrinler ve kampanyalar."
+            description = "Bu kategoriye bağlı aktif Vitrinler ve kampanyalar."
         )
 
         Spacer(modifier = Modifier.height(BBSpacing.Space3))
@@ -481,7 +481,7 @@ private fun CategoryQuickFilterSection(
 @Composable
 private fun CategoryProductSectionHeader() {
     RetailSectionTitle(
-        title = "Öne çıkan ürünler",
+        title = "Öne Çıkan Ürünler",
         description = "Bu kategoride dikkat çeken ürünlerden kısa bir seçki."
     )
 }
@@ -641,7 +641,7 @@ private fun getRetailCategoryDetail(categoryId: Int): RetailCategoryDetail {
             ),
             RetailCategoryCampaignItem(
                 id = 2,
-                title = "Haftanın vitrinleri",
+                title = "Haftanın Vitrinleri",
                 description = "Popüler mağazalardan hızlı keşif.",
                 badge = "Vitrin"
             ),
@@ -654,7 +654,7 @@ private fun getRetailCategoryDetail(categoryId: Int): RetailCategoryDetail {
         ),
         quickFilters = listOf(
             "Popüler",
-            "Yeni gelenler",
+            "Yeni Gelenler",
             "Çok satanlar",
             "İndirimli",
             "Ücretsiz kargo",

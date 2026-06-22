@@ -806,7 +806,7 @@ private fun getRetailCampaignDetail(campaignId: Int): RetailCampaignDetail {
     return RetailCampaignDetail(
         id = campaignId,
         title = "Sezonun öne çıkanları",
-        description = "Moda kategorisinde yeni sezon ürünleri, seçili mağaza vitrinleri ve avantajlı fiyatlarla hazırlanmış perakende kampanyası.",
+        description = "Moda kategorisinde yeni sezon ürünleri, seçili mağaza Vitrinleri ve avantajlı fiyatlarla hazırlanmış perakende kampanyası.",
         badgeText = "Yeni sezon kampanyası",
         iconText = "MO",
         discountText = "%35'e varan",

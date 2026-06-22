@@ -85,7 +85,7 @@ fun OrderContractScreen(
                 ) {
                     OrderContractInfoBox(
                         modifier = Modifier.weight(1f),
-                        title = "SİPARİ�?",
+                        title = "SİPARİŞ",
                         value = contract.orderCode,
                         icon = Icons.Outlined.Numbers,
                         iconColor = BBColors.Yellow.Yellow800

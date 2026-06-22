@@ -324,7 +324,7 @@ private fun OrderReviewContentCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             OrderReviewSectionTitle(
-                title = "Yorumunuz",
+                title = "Değerlendirmeniz",
                 subtitle = "Ürün deneyiminizi birkaç cümleyle anlatın."
             )
 
@@ -385,7 +385,7 @@ private fun OrderReviewAgreementCard(
                 )
 
                 Text(
-                    text = "Yorumunuzun ürün deneyimine dayalı, doğru ve diğer kullanıcılara yardımcı olacak şekilde yazılması gerekir.",
+                    text = "Değerlendirmenizun ürün deneyimine dayalı, doğru ve diğer kullanıcılara yardımcı olacak şekilde yazılması gerekir.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -427,7 +427,7 @@ private fun OrderReviewActionCard(
             )
 
             BbButton(
-                text = "Sipariş Detayına Dön",
+                text = "Sipariş Detaylarına Dön",
                 onClick = onBackClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Light,

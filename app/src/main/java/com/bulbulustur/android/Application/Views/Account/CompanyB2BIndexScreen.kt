@@ -113,7 +113,7 @@ fun CompanyB2BIndexScreen(
                 ) {
                     CompanyB2BIndexBenefitRow(
                         title = "Global Görünürlük",
-                        description = "�?irket profiliniz uluslararası alıcılar için daha keşfedilebilir hale gelir.",
+                        description = "Şirket profiliniz uluslararası alıcılar için daha keşfedilebilir hale gelir.",
                         icon = Icons.Outlined.Public
                     )
 
@@ -129,7 +129,7 @@ fun CompanyB2BIndexScreen(
 
                     CompanyB2BIndexBenefitRow(
                         title = "Kurumsal Vitrin",
-                        description = "�?irket bilgileriniz daha düzenli ve güven veren bir B2B profilinde sunulur.",
+                        description = "Şirket bilgileriniz daha düzenli ve güven veren bir B2B profilinde sunulur.",
                         icon = Icons.Outlined.Storefront
                     )
                 }
@@ -146,7 +146,7 @@ fun CompanyB2BIndexScreen(
 
             item {
                 BbButton(
-                    text = "�?irketimi B2B Index’e Dahil Et",
+                    text = "Şirketimi B2B Index’e Dahil Et",
                     onClick = {
                         if (agreementAcceptedState.value) {
                             onActivateClick()
@@ -199,7 +199,7 @@ private fun CompanyB2BIndexIntroCard() {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "�?irketinizi Global Alıcılara Açın",
+                    text = "Şirketinizi Global Alıcılara Açın",
                     style = BbTypography.titleLarge,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -251,13 +251,13 @@ private fun CompanyB2BIndexSummaryCard() {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Türkiye Global Ticaret Limited �?irketi",
+                    text = "Türkiye Global Ticaret Limited Şirketi",
                     style = BbTypography.titleMedium,
                     color = MaterialTheme.colorScheme.inverseOnSurface
                 )
 
                 Text(
-                    text = "Limited �?irket · İstanbul / Türkiye",
+                    text = "Limited Şirket · İstanbul / Türkiye",
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.inverseOnSurface.copy(alpha = BBAlpha.Muted)
                 )

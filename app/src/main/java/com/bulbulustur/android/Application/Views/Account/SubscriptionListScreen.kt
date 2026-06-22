@@ -111,7 +111,7 @@ private fun SubscriptionIntroCard() {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Paket ve üyelik süreçleri",
+                    text = "Paket ve Üyelik Süreçleri",
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -186,14 +186,14 @@ private fun SubscriptionCard(
             ) {
                 SubscriptionInfoBox(
                     modifier = Modifier.weight(1f),
-                    title = "BA�?LANGIÇ",
+                    title = "BAŞLANGIÇ",
                     value = subscription.startDate,
                     iconColor = BBColors.Blue.Blue600
                 )
 
                 SubscriptionInfoBox(
                     modifier = Modifier.weight(1f),
-                    title = "BİTİ�?",
+                    title = "BİTİŞ",
                     value = subscription.endDate,
                     iconColor = BBColors.Orange.Orange600
                 )

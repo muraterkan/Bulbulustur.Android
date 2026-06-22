@@ -122,12 +122,12 @@ private fun FavoriteIntroCard(
     selectedTab: FavoriteTab
 ) {
     val title = when (selectedTab) {
-        FavoriteTab.Retail -> "Perakende favorileriniz"
-        FavoriteTab.Wholesale -> "Toptan favorileriniz"
+        FavoriteTab.Retail -> "Perakende Favorileriniz"
+        FavoriteTab.Wholesale -> "Toptan Favorileriniz"
     }
 
     val description = when (selectedTab) {
-        FavoriteTab.Retail -> "Perakende alışveriş için favoriye eklediğiniz ürünleri burada görebilir, daha sonra incelemek veya sepete eklemek için hızlıca geri dönebilirsiniz."
+        FavoriteTab.Retail -> "Perakende Alışveriş için favoriye eklediğiniz ürünleri burada görebilir, daha sonra incelemek veya sepete eklemek için hızlıca geri dönebilirsiniz."
         FavoriteTab.Wholesale -> "Toptan alışveriş için favoriye eklediğiniz ürünleri burada görebilir, teklif ve tedarik süreçlerine hızlıca dönebilirsiniz."
     }
 
@@ -428,8 +428,8 @@ private fun FavoriteEmptyState(
     }
 
     val description = when (tab) {
-        FavoriteTab.Retail -> "Perakende ürünleri favorilerinize ekleyerek daha sonra hızlıca ulaşabilirsiniz."
-        FavoriteTab.Wholesale -> "Toptan ürünleri favorilerinize ekleyerek teklif ve tedarik süreçlerine hızlıca dönebilirsiniz."
+        FavoriteTab.Retail -> "Perakende ürünleri Favorilerinize ekleyerek daha sonra hızlıca ulaşabilirsiniz."
+        FavoriteTab.Wholesale -> "Toptan ürünleri Favorilerinize ekleyerek teklif ve tedarik süreçlerine hızlıca dönebilirsiniz."
     }
 
     BbCard(

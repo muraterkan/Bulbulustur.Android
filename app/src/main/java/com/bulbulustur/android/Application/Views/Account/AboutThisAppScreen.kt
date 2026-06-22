@@ -256,7 +256,7 @@ private fun AboutAppHero(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
         ) {
             Text(
-                text = "Toptan ve perakende ticaret platformu",
+                text = "Toptan ve Perakende Ticaret Platformu",
                 style = BbTypography.bodyMedium,
                 color = BBColors.TextMuted
             )
@@ -492,7 +492,7 @@ private fun AboutClearCacheSheet(
         )
 
         Text(
-            text = "Bu işlem geçici uygulama verilerini temizler. Hesabınız, siparişleriniz, favorileriniz ve kayıtlı bilgileriniz etkilenmez.",
+            text = "Bu işlem geçici uygulama verilerini temizler. Hesabınız, siparişleriniz, Favorileriniz ve kayıtlı bilgileriniz etkilenmez.",
             style = BbTypography.bodyMedium.copy(
                 lineHeight = 20.sp
             ),
@@ -664,7 +664,7 @@ private fun AboutRateAppSheet(
         }
 
         AboutSheetButton(
-            text = "�?imdi Değil",
+            text = "Şimdi Değil",
             modifier = Modifier.fillMaxWidth(),
             containerColor = BBColors.TextStrong,
             contentColor = Color.White,

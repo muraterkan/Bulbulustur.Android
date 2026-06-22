@@ -158,7 +158,7 @@ fun StoreDetailScreen(
             item {
                 StoreDetailSectionTitle(
                     title = "${store.name} Ürünleri",
-                    description = "Mağazanın ürünlerini inceleyin, favorilerinize ekleyin ve alışverişe devam edin."
+                    description = "Mağazanın ürünlerini inceleyin, Favorilerinize ekleyin ve alışverişe devam edin."
                 )
             }
 
@@ -451,14 +451,14 @@ private fun StoreTrustInfoCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Satıcı �?irket Bilgileri",
+                    text = "Satıcı Şirket Bilgileri",
                     style = MaterialTheme.typography.titleSmall,
                     color = BBColors.TextStrong,
                     fontWeight = FontWeight.Bold
                 )
 
                 Text(
-                    text = "${store.name} mağazası, Bulbulustur store kayıtları üzerinden doğrulanmış mağaza vitrini olarak listelenir.",
+                    text = "${store.name} mağazası, Bulbulustur store kayıtları üzerinden doğrulanmış mağaza Vitrini olarak listelenir.",
                     style = MaterialTheme.typography.bodySmall,
                     color = BBColors.TextMuted
                 )
@@ -848,7 +848,7 @@ private fun getRetailStoreDetail(
         name = "Ortobella Store",
         logoText = "OS",
         shortDescription = "Ayakkabı ve günlük moda ürünleri",
-        description = "Ortobella Store, seçili ayakkabı ve günlük kullanım ürünlerini perakende alışveriş akışında sunan doğrulanmış mağaza vitrinidir.",
+        description = "Ortobella Store, seçili ayakkabı ve günlük kullanım ürünlerini perakende alışveriş akışında sunan doğrulanmış mağaza Vitrinidir.",
         productCount = 248,
         ratingText = "4.8",
         cargoText = "Hızlı",

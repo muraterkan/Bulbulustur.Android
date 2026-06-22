@@ -47,8 +47,8 @@ fun ForgotPasswordScreen(
     ) {
         LogonPublicPageTitle(
             eyebrow = "Hesap Kurtarma",
-            title = "�?ifremi Unuttum",
-            description = "E-posta adresinizi yazın. �?ifre yenileme bağlantısını size gönderelim."
+            title = "Şifremi Unuttum",
+            description = "E-posta adresinizi yazın. Şifre yenileme bağlantısını size gönderelim."
         )
 
         Spacer(modifier = Modifier.height(BBSpacing.Space8))
@@ -74,7 +74,7 @@ fun ForgotPasswordScreen(
 
         BbButton(
             modifier = Modifier.fillMaxWidth(),
-            text = "�?ifre Yenileme Bağlantısı Gönder",
+            text = "Şifre Yenileme Bağlantısı Gönder",
             onClick = {
                 onSendResetLinkClick(email)
             },

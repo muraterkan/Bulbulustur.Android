@@ -80,14 +80,14 @@ fun SubscriptionDetailScreen(
                 ) {
                     SubscriptionDetailInfoBox(
                         modifier = Modifier.weight(1f),
-                        title = "BA�?LANGIÇ",
+                        title = "BAŞLANGIÇ",
                         value = subscription.startDate,
                         iconColor = BBColors.Blue.Blue600
                     )
 
                     SubscriptionDetailInfoBox(
                         modifier = Modifier.weight(1f),
-                        title = "BİTİ�?",
+                        title = "BİTİŞ",
                         value = subscription.endDate,
                         iconColor = BBColors.Orange.Orange600
                     )

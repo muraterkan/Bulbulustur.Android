@@ -82,7 +82,7 @@ fun UsagePurposeScreen(
             item {
                 UsagePurposeOptionCard(
                     title = "Perakende Alışveriş Yapıyorum",
-                    description = "Ürün keşfi, sepet, sipariş ve favoriler benim için önemli.",
+                    description = "Ürün Keşfi, sepet, sipariş ve favoriler benim için önemli.",
                     icon = Icons.Outlined.ShoppingBag,
                     isSelected = false,
                     onClick = onRetailClick
@@ -101,7 +101,7 @@ fun UsagePurposeScreen(
 
             item {
                 UsagePurposeOptionCard(
-                    title = "Her İkisini De Kullanıyorum",
+                    title = "Her İkisini de Kullanıyorum",
                     description = "Hem perakende alışveriş hem de toptan ticaret akışlarını görmek istiyorum.",
                     icon = Icons.Outlined.Storefront,
                     isSelected = false,

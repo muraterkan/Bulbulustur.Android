@@ -331,7 +331,7 @@ private fun CompanyContactInfoCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             Text(
-                text = "Adres Ve Kurumsal İletişim",
+                text = "Adres ve Kurumsal İletişim",
                 style = MaterialTheme.typography.titleMedium,
                 color = BBColors.TextStrong,
                 fontWeight = FontWeight.Bold
@@ -529,7 +529,7 @@ private fun getCompanyContact(
         name = "Ortobella Comfort",
         logoText = "OC",
         contactPerson = "Yetkili Kişi",
-        contactTitle = "Toptan Satış Ve Kurumsal İletişim",
+        contactTitle = "Toptan Satış ve Kurumsal İletişim",
         website = "www.ortobella.com",
         address = "Yeni Mah. Çarşamba Cad. No:52 Piazza AVM -1 Kat / Canik / Samsun",
         email = "sales@ortobella.com",

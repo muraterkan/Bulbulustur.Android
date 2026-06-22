@@ -65,7 +65,7 @@ fun CommunicationPreferenceScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Bildirim Ve İzinler",
+                title = "Bildirim ve İzinler",
                 onBackClick = onBackClick
             )
         }

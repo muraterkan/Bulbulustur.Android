@@ -76,7 +76,7 @@ fun BuyerModeSheet(
             )
 
             Text(
-                text = "Perakende alışveriş ve toptan ticaret arasında geçiş yapabilirsin.",
+                text = "Perakende Alışveriş ve toptan ticaret arasında geçiş yapabilirsin.",
                 style = MaterialTheme.typography.bodySmall,
                 color = BBColors.TextMuted
             )

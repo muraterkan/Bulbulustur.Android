@@ -301,8 +301,8 @@ private fun AddressCreateLocationFields(
                     )
                 )
             },
-            label = "�?ehir",
-            placeholder = "�?ehir seçiniz",
+            label = "Şehir",
+            placeholder = "Şehir seçiniz",
             options = addressCityOptions()
         )
 
@@ -426,7 +426,7 @@ private fun getAddressCreateValidationMessage(
     }
 
     if (formState.cityName.isBlank()) {
-        return "�?ehir seçilmelidir."
+        return "Şehir seçilmelidir."
     }
 
     if (formState.districtName.isBlank()) {
@@ -467,7 +467,7 @@ private fun addressCityOptions(): List<BbSelectOption> {
 
 private fun addressDistrictOptions(): List<BbSelectOption> {
     return listOf(
-        BbSelectOption("�?işli", "�?işli"),
+        BbSelectOption("Şişli", "Şişli"),
         BbSelectOption("Kadıköy", "Kadıköy"),
         BbSelectOption("Üsküdar", "Üsküdar"),
         BbSelectOption("Çankaya", "Çankaya"),

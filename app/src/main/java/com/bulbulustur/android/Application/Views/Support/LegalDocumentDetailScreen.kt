@@ -383,7 +383,7 @@ private fun getLegalDocumentDetail(
         4 -> LegalDocumentDetail(
             legalDocumentId = legalDocumentId,
             title = "Mesafeli Satış Sözleşmesi",
-            description = "Perakende alışveriş süreçlerinde geçerli satış ve teslimat hükümleri.",
+            description = "Perakende Alışveriş süreçlerinde geçerli satış ve teslimat hükümleri.",
             categoryName = "Satış",
             updatedDateLabel = "Güncel",
             sectionCount = 4,

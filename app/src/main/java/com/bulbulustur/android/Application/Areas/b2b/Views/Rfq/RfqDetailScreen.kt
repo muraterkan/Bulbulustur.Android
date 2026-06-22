@@ -309,14 +309,14 @@ private fun RfqDetailTradeCard(
             )
 
             RfqInfoRow(
-                title = "Ticaret �?artı",
+                title = "Ticaret Şartı",
                 value = rfq.tradeTermName
             )
 
             HorizontalDivider(color = BBColors.Border)
 
             RfqInfoRow(
-                title = "Ödeme �?artı",
+                title = "Ödeme Şartı",
                 value = rfq.paymentTermName
             )
 

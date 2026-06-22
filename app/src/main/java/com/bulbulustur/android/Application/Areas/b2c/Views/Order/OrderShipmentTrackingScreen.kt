@@ -114,7 +114,7 @@ fun OrderShipmentTrackingScreen(
 
             item {
                 BbButton(
-                    text = "Sipariş Detayına Dön",
+                    text = "Sipariş Detaylarına Dön",
                     onClick = onBackClick,
                     modifier = Modifier.fillMaxWidth(),
                     variant = BbButtonVariant.Light,

@@ -188,7 +188,7 @@ fun WholesaleCategoryHomeScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Popüler ticaret aramaları",
+                    title = "Popüler ticaret Aramaları",
                     subtitle = "Bu sektörde sık kullanılan arama başlıkları"
                 )
             }

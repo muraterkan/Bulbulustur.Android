@@ -193,8 +193,8 @@ fun ProfileScreen(
                         onValueChange = { value ->
                             cityState.value = value
                         },
-                        label = "�?ehir",
-                        placeholder = "�?ehir seçiniz"
+                        label = "Şehir",
+                        placeholder = "Şehir seçiniz"
                     )
 
                     AccountTextField(

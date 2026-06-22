@@ -504,7 +504,7 @@ private fun RfqSuggestionCard(
                 )
 
                 Text(
-                    text = "Hazır talep notları",
+                    text = "Hazır Talep Notları",
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -543,7 +543,7 @@ private fun RfqSubmitCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
         ) {
             Text(
-                text = "Talebi göndermeye hazır mısınız?",
+                text = "Talebi Göndermeye Hazır mısınız?",
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface
             )

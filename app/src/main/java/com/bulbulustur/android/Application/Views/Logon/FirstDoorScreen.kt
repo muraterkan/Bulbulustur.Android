@@ -65,7 +65,7 @@ fun FirstDoorScreen(
             FirstDoorOptionCard(
                 marker = "B",
                 title = "Bireysel Alıcıyım",
-                description = "Perakende alışveriş yapmak ve siparişlerinizi takip etmek için devam edin.",
+                description = "Perakende Alışveriş yapmak ve siparişlerinizi takip etmek için devam edin.",
                 isSelected = selectedDoor == FirstDoorType.IndividualBuyer,
                 onClick = {
                     selectedDoor = FirstDoorType.IndividualBuyer

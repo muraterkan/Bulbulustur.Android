@@ -760,28 +760,28 @@ private fun wholesaleCategoryItems(): List<WholesaleCategoryHomeItem> {
     return listOf(
         WholesaleCategoryHomeItem(
             title = "Elektronik",
-            description = "Cihaz Ve Bileşenler",
+            description = "Cihaz ve Bileşenler",
             icon = Icons.Outlined.Inventory2,
             tint = BBColors.Blue.Blue700,
             backgroundColor = BBColors.Blue.Blue50
         ),
         WholesaleCategoryHomeItem(
             title = "Ambalaj",
-            description = "Kutu, Etiket Ve Paketleme",
+            description = "Kutu, Etiket ve Paketleme",
             icon = Icons.Outlined.Category,
             tint = BBColors.Yellow.Yellow800,
             backgroundColor = BBColors.Yellow.Yellow100
         ),
         WholesaleCategoryHomeItem(
             title = "Tekstil",
-            description = "Kumaş, Giyim Ve Aksesuar",
+            description = "Kumaş, Giyim ve Aksesuar",
             icon = Icons.Outlined.Storefront,
             tint = BBColors.Green.Green700,
             backgroundColor = BBColors.Green.Green50
         ),
         WholesaleCategoryHomeItem(
             title = "Makine",
-            description = "Üretim Ve Sanayi Ekipmanı",
+            description = "Üretim ve Sanayi Ekipmanı",
             icon = Icons.Outlined.Business,
             tint = BBColors.Navy.Navy700,
             backgroundColor = BBColors.Navy.Navy50
@@ -810,7 +810,7 @@ private fun wholesaleShowcaseProducts(): List<WholesaleShowcaseProduct> {
         WholesaleShowcaseProduct(
             id = 1,
             title = "Endüstriyel Ambalaj Kutusu",
-            category = "Ambalaj Ve Paketleme",
+            category = "Ambalaj ve Paketleme",
             price = "₺18,90 / Adet",
             moq = "MOQ 500",
             supplier = "3 Firma",
@@ -820,7 +820,7 @@ private fun wholesaleShowcaseProducts(): List<WholesaleShowcaseProduct> {
         WholesaleShowcaseProduct(
             id = 2,
             title = "Toptan Üretim Kumaşı",
-            category = "Tekstil Ve Giyim",
+            category = "Tekstil ve Giyim",
             price = "₺74,50 / Metre",
             moq = "MOQ 250",
             supplier = "5 Firma",
@@ -830,7 +830,7 @@ private fun wholesaleShowcaseProducts(): List<WholesaleShowcaseProduct> {
         WholesaleShowcaseProduct(
             id = 3,
             title = "Paslanmaz Üretim Parçası",
-            category = "Makine Ve Sanayi",
+            category = "Makine ve Sanayi",
             price = "₺42,00 / Adet",
             moq = "MOQ 100",
             supplier = "4 Firma",
@@ -850,7 +850,7 @@ private fun wholesaleShowcaseProducts(): List<WholesaleShowcaseProduct> {
         WholesaleShowcaseProduct(
             id = 5,
             title = "Özel Baskılı Etiket Rulosu",
-            category = "Etiket Ve Baskı",
+            category = "Etiket ve Baskı",
             price = "₺31,75 / Rulo",
             moq = "MOQ 300",
             supplier = "2 Firma",

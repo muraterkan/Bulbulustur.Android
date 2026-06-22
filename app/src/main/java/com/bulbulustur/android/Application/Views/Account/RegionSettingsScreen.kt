@@ -15,7 +15,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CheckCircle
-import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -26,15 +25,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
-import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
+import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBAlpha
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BbTypography
-import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBAlpha
 
 @Composable
 fun RegionSettingsScreen(
@@ -44,56 +47,58 @@ fun RegionSettingsScreen(
         mutableStateOf("TR")
     }
 
-    val regions = listOf(
-        RegionOption(
-            code = "TR",
-            countryName = "Türkiye",
-            regionName = "Türkiye Pazarı",
-            flag = "g���g���"
-        ),
-        RegionOption(
-            code = "US",
-            countryName = "United States",
-            regionName = "North America",
-            flag = "g���g���"
-        ),
-        RegionOption(
-            code = "DE",
-            countryName = "Deutschland",
-            regionName = "Europe",
-            flag = "g���g���"
-        ),
-        RegionOption(
-            code = "FR",
-            countryName = "France",
-            regionName = "Europe",
-            flag = "g���g���"
-        ),
-        RegionOption(
-            code = "GB",
-            countryName = "United Kingdom",
-            regionName = "Europe",
-            flag = "g���g���"
-        ),
-        RegionOption(
-            code = "AE",
-            countryName = "United Arab Emirates",
-            regionName = "Middle East",
-            flag = "g���g���"
-        ),
-        RegionOption(
-            code = "SA",
-            countryName = "Saudi Arabia",
-            regionName = "Middle East",
-            flag = "g���g���"
-        ),
-        RegionOption(
-            code = "CN",
-            countryName = "China",
-            regionName = "Asia",
-            flag = "g���g���"
+    val regions = remember {
+        listOf(
+            RegionOption(
+                code = "TR",
+                countryName = "Türkiye",
+                regionName = "Türkiye Pazarı",
+                flagFileName = "turkey.svg"
+            ),
+            RegionOption(
+                code = "US",
+                countryName = "United States",
+                regionName = "North America",
+                flagFileName = "United States of America.svg"
+            ),
+            RegionOption(
+                code = "DE",
+                countryName = "Deutschland",
+                regionName = "Europe",
+                flagFileName = "germany.svg"
+            ),
+            RegionOption(
+                code = "FR",
+                countryName = "France",
+                regionName = "Europe",
+                flagFileName = "france.svg"
+            ),
+            RegionOption(
+                code = "GB",
+                countryName = "United Kingdom",
+                regionName = "Europe",
+                flagFileName = "United Kingdom.svg"
+            ),
+            RegionOption(
+                code = "AE",
+                countryName = "United Arab Emirates",
+                regionName = "Middle East",
+                flagFileName = "United Arab Emirates.svg"
+            ),
+            RegionOption(
+                code = "SA",
+                countryName = "Saudi Arabia",
+                regionName = "Middle East",
+                flagFileName = "saudi-arabia.svg"
+            ),
+            RegionOption(
+                code = "CN",
+                countryName = "China",
+                regionName = "Asia",
+                flagFileName = "china.svg"
+            )
         )
-    )
+    }
 
     val selectedRegion = regions.firstOrNull { region ->
         region.code == selectedRegionState.value
@@ -101,7 +106,9 @@ fun RegionSettingsScreen(
 
     val pageBackground = Brush.verticalGradient(
         colors = listOf(
-            MaterialTheme.colorScheme.primaryContainer.copy(alpha = BBAlpha.DisabledContainer),
+            MaterialTheme.colorScheme.primaryContainer.copy(
+                alpha = BBAlpha.DisabledContainer
+            ),
             MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.85f),
             MaterialTheme.colorScheme.surfaceVariant
         )
@@ -111,7 +118,7 @@ fun RegionSettingsScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Ülke Ve Bölge",
+                title = "Ülke ve Bölge",
                 onBackClick = onBackClick
             )
         }
@@ -141,7 +148,9 @@ fun RegionSettingsScreen(
 
             items(
                 items = regions,
-                key = { region -> region.code }
+                key = { region ->
+                    region.code
+                }
             ) { region ->
                 RegionRow(
                     item = region,
@@ -184,22 +193,11 @@ private fun SelectedRegionCard(
             horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
-                modifier = Modifier
-                    .size(BBIcon.BoxLg)
-                    .background(
-                        color = MaterialTheme.colorScheme.primaryContainer,
-                        shape = BBRadius.PillShape
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Public,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                    modifier = Modifier.size(BBIcon.Section)
-                )
-            }
+            RegionFlag(
+                flagFileName = selectedRegion.flagFileName,
+                contentDescription = "${selectedRegion.countryName} bayrağı",
+                highlighted = true
+            )
 
             Column(
                 modifier = Modifier.weight(1f),
@@ -212,7 +210,7 @@ private fun SelectedRegionCard(
                 )
 
                 Text(
-                    text = "${selectedRegion.flag} ${selectedRegion.countryName}",
+                    text = selectedRegion.countryName,
                     style = BbTypography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -247,20 +245,10 @@ private fun RegionRow(
             horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
-                modifier = Modifier
-                    .size(BBIcon.BoxLg)
-                    .background(
-                        color = MaterialTheme.colorScheme.surfaceVariant,
-                        shape = BBRadius.PillShape
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = item.flag,
-                    style = BbTypography.titleLarge
-                )
-            }
+            RegionFlag(
+                flagFileName = item.flagFileName,
+                contentDescription = "${item.countryName} bayrağı"
+            )
 
             Column(
                 modifier = Modifier.weight(1f),
@@ -282,7 +270,7 @@ private fun RegionRow(
             if (isSelected) {
                 Icon(
                     imageVector = Icons.Outlined.CheckCircle,
-                    contentDescription = null,
+                    contentDescription = "Seçili bölge",
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(BBIcon.SizeLg)
                 )
@@ -291,10 +279,43 @@ private fun RegionRow(
     }
 }
 
+@Composable
+private fun RegionFlag(
+    flagFileName: String,
+    contentDescription: String,
+    highlighted: Boolean = false
+) {
+    val context = LocalContext.current
+
+    Box(
+        modifier = Modifier
+            .size(BBIcon.BoxLg)
+            .background(
+                color = if (highlighted) {
+                    MaterialTheme.colorScheme.primaryContainer
+                } else {
+                    MaterialTheme.colorScheme.surfaceVariant
+                },
+                shape = BBRadius.PillShape
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        AsyncImage(
+            model = ImageRequest.Builder(context)
+                .data(
+                    "file:///android_asset/flags/$flagFileName"
+                )
+                .build(),
+            contentDescription = contentDescription,
+            modifier = Modifier.size(BBIcon.Size2Xl),
+            contentScale = ContentScale.Fit
+        )
+    }
+}
+
 private data class RegionOption(
     val code: String,
     val countryName: String,
     val regionName: String,
-    val flag: String
+    val flagFileName: String
 )
-

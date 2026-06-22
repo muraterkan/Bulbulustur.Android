@@ -188,7 +188,7 @@ private fun RetailMenuHero() {
             .padding(BBSpacing.Space5)
     ) {
         RetailMenuBadge(
-            text = "Perakende kategori keşfi"
+            text = "Perakende Kategori Keşfi"
         )
 
         Spacer(
@@ -207,7 +207,7 @@ private fun RetailMenuHero() {
         )
 
         Text(
-            text = "Ana kategorileri keşfet, kategori ana sayfasında alt kırılımlar, ürün vitrinleri ve kampanyalara ulaş.",
+            text = "Ana kategorileri keşfet, kategori ana sayfasında alt kırılımlar, ürün Vitrinleri ve kampanyalara ulaş.",
             style = MaterialTheme.typography.bodySmall,
             color = BBColors.TextMuted
         )

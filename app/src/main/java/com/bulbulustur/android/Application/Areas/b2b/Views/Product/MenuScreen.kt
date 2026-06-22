@@ -188,7 +188,7 @@ private fun WholesaleMenuHero() {
             .padding(BBSpacing.Space5)
     ) {
         WholesaleMenuBadge(
-            text = "Toptan kategori keşfi"
+            text = "Toptan kategori Keşfi"
         )
 
         Spacer(
@@ -207,7 +207,7 @@ private fun WholesaleMenuHero() {
         )
 
         Text(
-            text = "Ana kategoriye gir, kategori ana sayfasında alt kırılımlar, tedarikçiler, ürün vitrinleri ve teklif akışlarıyla devam et.",
+            text = "Ana kategoriye gir, kategori ana sayfasında alt kırılımlar, tedarikçiler, ürün Vitrinleri ve teklif akışlarıyla devam et.",
             style = MaterialTheme.typography.bodySmall,
             color = BBColors.TextMuted
         )

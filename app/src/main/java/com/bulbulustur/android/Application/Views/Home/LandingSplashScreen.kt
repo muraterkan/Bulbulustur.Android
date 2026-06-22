@@ -218,7 +218,7 @@ private fun LandingSplashDebugLinks(
                 onClick = onForgotPasswordClick
             ) {
                 Text(
-                    text = "�?ifremi Unuttum",
+                    text = "Şifremi Unuttum",
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.SemiBold,
                     color = BBColors.Gray.Gray900

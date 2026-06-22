@@ -344,7 +344,7 @@ private fun MessageReplyEditor(
                 )
 
                 Text(
-                    text = "Yanıt yaz",
+                    text = "Yanıtla",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )

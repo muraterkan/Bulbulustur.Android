@@ -194,7 +194,7 @@ private fun AboutEcosystemCard() {
                 )
 
                 AboutTrustRow(
-                    title = "Tedarikçi Ve Mağaza Ağı",
+                    title = "Tedarikçi ve Mağaza Ağı",
                     icon = Icons.Outlined.Storefront
                 )
 
@@ -284,7 +284,7 @@ private fun AboutCapabilityGrid() {
         ) {
             AboutCapabilityCard(
                 title = "Toptan",
-                description = "Tedarikçi, RFQ ve toptan ürün keşfi.",
+                description = "Tedarikçi, RFQ ve toptan ürün Keşfi.",
                 icon = Icons.Outlined.Business,
                 modifier = Modifier.weight(1f)
             )
@@ -532,8 +532,8 @@ private fun aboutPlatformItems(): List<AboutPlatformItem> {
             icon = Icons.Outlined.Storefront
         ),
         AboutPlatformItem(
-            title = "Tedarikçiler Ve �?irketler",
-            description = "Firma profili, ürün vitrinleri, belgeler ve RFQ akışlarıyla görünürlük kazanır.",
+            title = "Tedarikçiler ve Şirketler",
+            description = "Firma profili, ürün Vitrinleri, belgeler ve RFQ akışlarıyla görünürlük kazanır.",
             icon = Icons.Outlined.Business
         ),
         AboutPlatformItem(

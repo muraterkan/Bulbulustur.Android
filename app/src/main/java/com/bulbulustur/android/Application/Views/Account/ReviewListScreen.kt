@@ -132,7 +132,7 @@ private fun ReviewIntroCard() {
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
         ) {
             Text(
-                text = "Alışveriş deneyimi",
+                text = "Alışveriş Deneyimi",
                 style = MaterialTheme.typography.labelSmall,
                 color = BBColors.Yellow.Yellow800
             )
@@ -529,7 +529,7 @@ private fun getDemoProductReviews(): List<ReviewUiModel> {
             targetId = 101,
             type = AccountReviewTab.Product,
             title = "Ortobella Comfort Genç Garson Bot 8028",
-            badgeText = "ÜRÜN DE�?ERLENDİRMESİ",
+            badgeText = "ÜRÜN DEĞERLENDİRMESİ",
             comment = "Makineyi 7 gündür kullanıyorum. Bu süre içinde hem deneyim kazandım hem de internetten okuduğum birçok bilgiyle karşılaştırdım. Ürünü almayı düşünenler için detaylı bir deneyim paylaşmak istedim.",
             rating = 5,
             dateText = "22 Eylül 2025 00:31 tarihinde eklendi",
@@ -547,7 +547,7 @@ private fun getDemoStoreReviews(): List<ReviewUiModel> {
             targetId = 501,
             type = AccountReviewTab.Store,
             title = "Ortobella Comfort",
-            badgeText = "MA�?AZA DE�?ERLENDİRMESİ",
+            badgeText = "MAĞAZA DEĞERLENDİRMESİ",
             comment = "Mağaza iletişimi hızlıydı. Sipariş süreci ve kargo bilgilendirmesi anlaşılır şekilde ilerledi.",
             rating = 5,
             dateText = "12 Ekim 2025 14:20 tarihinde eklendi",
@@ -565,7 +565,7 @@ private fun getDemoCompanyReviews(): List<ReviewUiModel> {
             targetId = 701,
             type = AccountReviewTab.Company,
             title = "Citrix Tedarik",
-            badgeText = "FİRMA DE�?ERLENDİRMESİ",
+            badgeText = "FİRMA DEĞERLENDİRMESİ",
             comment = "Firma bilgileri netti, ürün açıklamaları yeterliydi. Toptan iletişim tarafında hızlı dönüş aldım.",
             rating = 5,
             dateText = "10 Ekim 2025 09:12 tarihinde eklendi",

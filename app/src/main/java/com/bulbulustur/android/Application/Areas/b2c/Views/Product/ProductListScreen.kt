@@ -75,7 +75,7 @@ fun ProductListScreen(
             "Öne çıkan",
             "En düşük fiyat",
             "En yüksek fiyat",
-            "Yeni gelenler"
+            "Yeni Gelenler"
         )
     }
 
@@ -124,7 +124,7 @@ fun ProductListScreen(
                 product.priceValue
             }
 
-            "Yeni gelenler" -> categoryFilteredProducts.filter { product ->
+            "Yeni Gelenler" -> categoryFilteredProducts.filter { product ->
                 product.isNew
             }
 

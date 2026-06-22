@@ -6,11 +6,15 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
 import com.bulbulustur.android.Application.Navigation.Routes.SettingsRoutes
+import com.bulbulustur.android.Application.Views.Account.AboutThisAppScreen
+import com.bulbulustur.android.Application.Views.Account.AccountSettingsScreen
 import com.bulbulustur.android.Application.Views.Account.AppearanceSettingsScreen
+import com.bulbulustur.android.Application.Views.Account.CommunicationPreferenceScreen
+import com.bulbulustur.android.Application.Views.Account.CurrencySettingsScreen
 import com.bulbulustur.android.Application.Views.Account.LanguageSettingsScreen
 import com.bulbulustur.android.Application.Views.Account.LegalPoliciesScreen
-import com.bulbulustur.android.Application.Views.Account.AccountSettingsScreen
 import com.bulbulustur.android.Application.Views.Account.LegalPolicyDetailScreen
+import com.bulbulustur.android.Application.Views.Account.RegionSettingsScreen
 
 fun NavGraphBuilder.settingsGraph(
     navigator: BulbulusturNavigator
@@ -31,9 +35,29 @@ fun NavGraphBuilder.settingsGraph(
                     SettingsRoutes.Appearance
                 )
             },
+            onRegionClick = {
+                navigator.navController.navigate(
+                    SettingsRoutes.Region
+                )
+            },
+            onCurrencyClick = {
+                navigator.navController.navigate(
+                    SettingsRoutes.Currency
+                )
+            },
+            onCommunicationPreferenceClick = {
+                navigator.navController.navigate(
+                    SettingsRoutes.Communication
+                )
+            },
             onLegalPoliciesClick = {
                 navigator.navController.navigate(
                     SettingsRoutes.LegalPolicies
+                )
+            },
+            onAboutThisAppClick = {
+                navigator.navController.navigate(
+                    SettingsRoutes.AboutThisApp
                 )
             }
         )
@@ -55,6 +79,38 @@ fun NavGraphBuilder.settingsGraph(
         )
     }
 
+    composable(SettingsRoutes.Region) {
+        RegionSettingsScreen(
+            onBackClick = {
+                navigator.back()
+            }
+        )
+    }
+
+    composable(SettingsRoutes.Currency) {
+        CurrencySettingsScreen(
+            onBackClick = {
+                navigator.back()
+            }
+        )
+    }
+
+    composable(SettingsRoutes.Communication) {
+        CommunicationPreferenceScreen(
+            onBackClick = {
+                navigator.back()
+            }
+        )
+    }
+
+    composable(SettingsRoutes.AboutThisApp) {
+        AboutThisAppScreen(
+            onBackClick = {
+                navigator.back()
+            }
+        )
+    }
+
     composable(SettingsRoutes.LegalPolicies) {
         LegalPoliciesScreen(
             onBackClick = {
@@ -62,7 +118,9 @@ fun NavGraphBuilder.settingsGraph(
             },
             onPolicyClick = { item ->
                 navigator.navController.navigate(
-                    SettingsRoutes.legalPolicyDetail(item.key)
+                    SettingsRoutes.legalPolicyDetail(
+                        policyKey = item.key
+                    )
                 )
             }
         )
@@ -91,4 +149,3 @@ fun NavGraphBuilder.settingsGraph(
         )
     }
 }
-

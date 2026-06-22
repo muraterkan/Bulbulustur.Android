@@ -1198,7 +1198,7 @@ private fun RetailProductTrustLinksCard(
             modifier = Modifier.fillMaxWidth()
         ) {
             RetailProductTrustLinkRow(
-                title = "Daha Düşük Fiyat Mı Gördünüz?",
+                title = "Daha Düşük Fiyat mı Gördünüz?",
                 icon = Icons.Outlined.WarningAmber,
                 onClick = onLowerPriceClick
             )
@@ -1214,7 +1214,7 @@ private fun RetailProductTrustLinksCard(
             RetailDashedDivider()
 
             RetailProductTrustLinkRow(
-                title = "İptal Ve İade Koşulları",
+                title = "İptal ve İade Koşulları",
                 icon = Icons.Outlined.VerifiedUser,
                 onClick = onReturnPolicyClick
             )
@@ -2237,13 +2237,13 @@ private fun RetailReturnPolicySheet(
     onStoreClick: () -> Unit
 ) {
     RetailSheetContainer(
-        title = "İptal Ve İade Koşulları",
+        title = "İptal ve İade Koşulları",
         subtitle = "Cayma hakkı, iade ve sipariş iptali",
         icon = Icons.Outlined.VerifiedUser,
         onCloseClick = onCloseClick
     ) {
         Text(
-            text = "İptal Ve İade Süreci",
+            text = "İptal ve İade Süreci",
             style = MaterialTheme.typography.titleSmall,
             color = BBColors.TextStrong,
             fontWeight = FontWeight.Bold
@@ -2296,7 +2296,7 @@ private fun RetailLowerPriceSheet(
     }
 
     RetailSheetContainer(
-        title = "Daha Düşük Fiyat Mı Gördünüz?",
+        title = "Daha Düşük Fiyat mı Gördünüz?",
         subtitle = "Fiyat geri bildirimi",
         icon = Icons.Outlined.WarningAmber,
         onCloseClick = onCloseClick
@@ -2388,7 +2388,7 @@ private fun RetailReportAbuseSheet(
         )
 
         Text(
-            text = "�?ikayet Nedeni",
+            text = "Şikayet Nedeni",
             style = MaterialTheme.typography.labelLarge,
             color = BBColors.TextStrong,
             fontWeight = FontWeight.Bold
@@ -2598,7 +2598,7 @@ private fun RetailSizeGuideTable() {
             RetailSizeGuideTableRow(
                 first = "Standart",
                 second = "Ürün Açıklamasını Kontrol Edin",
-                third = "Marka Ve Modele Göre Değişebilir"
+                third = "Marka ve Modele Göre Değişebilir"
             )
 
             RetailSizeGuideTableRow(

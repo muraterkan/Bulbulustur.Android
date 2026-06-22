@@ -169,7 +169,7 @@ fun RetailCategoryHomeScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Kategori vitrinleri",
+                    title = "Kategori Vitrinleri",
                     subtitle = "Ürün, mağaza ve kampanya akışlarına hızlı geç."
                 )
             }
@@ -184,7 +184,7 @@ fun RetailCategoryHomeScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Popüler aramalar",
+                    title = "Popüler Aramalar",
                     subtitle = "Bu kategoride sık kullanılan başlıklar."
                 )
             }
@@ -232,7 +232,7 @@ private fun RetailCategoryHomeHeroCard(
                 )
 
                 Text(
-                    text = "Perakende kategori",
+                    text = "Perakende Kategori",
                     style = MaterialTheme.typography.labelLarge,
                     color = BBColors.TextStrong,
                     fontWeight = FontWeight.SemiBold
@@ -247,7 +247,7 @@ private fun RetailCategoryHomeHeroCard(
             )
 
             Text(
-                text = "Alt kategorileri, ürün vitrinlerini ve mağaza geçişlerini bu alandan keşfet.",
+                text = "Alt kategorileri, ürün Vitrinlerini ve mağaza geçişlerini bu alandan keşfet.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = BBColors.TextSubtle
             )
@@ -668,7 +668,7 @@ private fun getRetailCategoryHomeSubCategories(): List<RetailCategoryHomeSubCate
 private fun getRetailCategoryHomeShowcases(): List<RetailCategoryHomeShowcaseItem> {
     return listOf(
         RetailCategoryHomeShowcaseItem(
-            title = "Yeni gelenler",
+            title = "Yeni Gelenler",
             description = "Bu kategoriye yeni eklenen ürünleri keşfet.",
             icon = Icons.Outlined.NewReleases,
             backgroundColor = BBColors.Yellow.Yellow50,
@@ -677,14 +677,14 @@ private fun getRetailCategoryHomeShowcases(): List<RetailCategoryHomeShowcaseIte
         ),
         RetailCategoryHomeShowcaseItem(
             title = "Kampanyalar",
-            description = "Seçili indirim ve fırsat vitrinlerine bak.",
+            description = "Seçili indirim ve fırsat Vitrinlerine bak.",
             icon = Icons.Outlined.LocalOffer,
             backgroundColor = BBColors.Green.Green50,
             iconColor = BBColors.Green.Green700,
             target = RetailCategoryHomeShowcaseTarget.Products
         ),
         RetailCategoryHomeShowcaseItem(
-            title = "Mağaza keşfi",
+            title = "Mağaza Keşfi",
             description = "Bu kategoride öne çıkan mağazaları incele.",
             icon = Icons.Outlined.Storefront,
             backgroundColor = BBColors.Blue.Blue50,
@@ -701,7 +701,7 @@ private fun getRetailCategoryHomePopularSearches(): List<String> {
         "Notebook",
         "Akıllı saat",
         "Tablet",
-        "�?arj adaptörü",
+        "Şarj adaptörü",
         "Oyuncu ekipmanı",
         "Ev elektroniği"
     )

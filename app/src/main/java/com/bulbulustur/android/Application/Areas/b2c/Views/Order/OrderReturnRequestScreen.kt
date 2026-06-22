@@ -430,7 +430,7 @@ private fun OrderReturnActionCard(
             )
 
             BbButton(
-                text = "Sipariş Detayına Dön",
+                text = "Sipariş Detaylarına Dön",
                 onClick = onBackClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Light,

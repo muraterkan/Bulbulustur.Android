@@ -81,7 +81,7 @@ fun OrderDetailScreen(
     }
 
     OrderDetailPageScaffold(
-        title = "Sipariş Detayı",
+        title = "Sipariş Detayları",
         subtitle = order.orderNumber,
         onBackClick = onBackClick
     ) {

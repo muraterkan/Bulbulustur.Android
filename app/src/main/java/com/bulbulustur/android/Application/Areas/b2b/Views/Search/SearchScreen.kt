@@ -91,7 +91,7 @@ fun SearchScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Popüler aramalar",
+                    title = "Popüler Aramalar",
                     subtitle = "Toptan pazaryerinde sık kullanılan arama girişleri"
                 )
             }
@@ -152,7 +152,7 @@ fun SearchScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Öne çıkan ürünler",
+                    title = "Öne Çıkan Ürünler",
                     subtitle = "API sonrası gerçek arama sonuçları burada listelenecek"
                 )
             }
@@ -240,7 +240,7 @@ private fun WholesaleSearchModeCards(
 
             WholesaleSearchModeCard(
                 title = "Firmalarda ara",
-                description = "Firma vitrini",
+                description = "Firma Vitrini",
                 icon = Icons.Outlined.Business,
                 modifier = Modifier.weight(1f),
                 onClick = {

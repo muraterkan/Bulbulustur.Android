@@ -226,7 +226,7 @@ private fun ReviewEditCommentCard(
                 shape = BBRadius.Input,
                 textStyle = MaterialTheme.typography.bodySmall,
                 label = {
-                    Text(text = "Yorumunuz")
+                    Text(text = "Değerlendirmeniz")
                 }
             )
         }

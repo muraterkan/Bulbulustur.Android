@@ -46,7 +46,7 @@ fun AccountSecurityBottomMenu(
             )
 
             Text(
-                text = "�?ifre, e-posta, giriş hareketleri ve hesap durumu işlemlerini buradan yönetebilirsin.",
+                text = "Şifre, e-posta, giriş hareketleri ve hesap durumu işlemlerini buradan yönetebilirsin.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -59,7 +59,7 @@ fun AccountSecurityBottomMenu(
             )
 
             AccountSecurityBottomMenuRow(
-                title = "�?ifre Değiştir",
+                title = "Şifre Değiştir",
                 description = "Hesabın için yeni ve güçlü bir şifre belirle.",
                 selected = selectedItem == AccountSecurityMenuItem.ChangePassword,
                 onClick = onChangePasswordClick

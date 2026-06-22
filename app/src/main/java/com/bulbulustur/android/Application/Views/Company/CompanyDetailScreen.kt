@@ -182,7 +182,7 @@ fun CompanyDetailScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Belgeler Ve Sertifikalar",
+                    title = "Belgeler ve Sertifikalar",
                     subtitle = "Firma güveni için doğrulama bilgileri"
                 )
             }
@@ -542,7 +542,7 @@ private fun CompanyGalleryPreview(
             )
 
             Text(
-                text = "Firma vitrini API sonrası gerçek görsellerle yatay galeri olarak beslenecek.",
+                text = "Firma Vitrini API sonrası gerçek görsellerle yatay galeri olarak beslenecek.",
                 style = MaterialTheme.typography.bodySmall,
                 color = BBColors.TextMuted
             )
@@ -568,7 +568,7 @@ private fun CompanyAboutCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             Text(
-                text = "�?irket Hakkında",
+                text = "Şirket Hakkında",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = BBColors.TextStrong
@@ -966,7 +966,7 @@ data class CompanyCertificate(
 private fun getCompanyDetail(companyId: Int): CompanyDetail {
     return CompanyDetail(
         companyId = companyId,
-        name = "Bulbulustur İnternet Teknolojileri ve Tic. A.�?.",
+        name = "Bulbulustur İnternet Teknolojileri ve Tic. A.Ş.",
         shortDescription = "Yazılım, dijital dönüşüm ve ticaret altyapıları alanında çözüm sağlayan firma.",
         about = "Firma; üretim, tedarik, satış ve e-ticaret operasyonlarını dijital altyapılarla güçlendiren çözümler geliştirir. Mobil uygulamada bu alan ileride gerçek firma açıklaması, yetenekler ve ticari profil bilgileriyle beslenecek.",
         whyUs = "Firma profili, ürünleri, belgeleri ve iletişim bilgileri tek ekranda sunularak alıcının daha hızlı karar vermesine yardımcı olur.",
@@ -1003,7 +1003,7 @@ private fun getCompanyProductGroups(): List<CompanyProductGroup> {
         CompanyProductGroup(
             productGroupId = 1,
             name = "Philips Antifreeze",
-            description = "Endüstriyel ürün grubu için dummy ürün vitrini.",
+            description = "Endüstriyel ürün grubu için dummy ürün Vitrini.",
             productCount = 4,
             icon = Icons.Outlined.Inventory2
         ),

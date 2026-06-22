@@ -187,7 +187,7 @@ fun SearchScreen(
                     item {
                         SearchSectionTitle(
                             title = "Mağaza sonuçları",
-                            description = "Ürün satan mağaza ve vitrinler."
+                            description = "Ürün satan mağaza ve Vitrinler."
                         )
                     }
 
@@ -321,7 +321,7 @@ private fun RecentSearchSection(
         modifier = Modifier.fillMaxWidth()
     ) {
         SearchSectionTitle(
-            title = "Son aramalar",
+            title = "Son Aramalar",
             description = "Tek dokunuşla tekrar ara."
         )
 
@@ -357,8 +357,8 @@ private fun PopularSearchSection(
         modifier = Modifier.fillMaxWidth()
     ) {
         SearchSectionTitle(
-            title = "Popüler aramalar",
-            description = "�?u an en çok bakılan aramalar."
+            title = "Popüler Aramalar",
+            description = "Şu an en çok bakılan Aramalar."
         )
 
         Spacer(modifier = Modifier.height(8.dp))

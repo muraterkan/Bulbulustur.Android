@@ -93,7 +93,7 @@ fun ChangePasswordScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "�?ifre Değiştir",
+                title = "Şifre Değiştir",
                 onBackClick = onBackClick
             )
         }
@@ -130,7 +130,7 @@ fun ChangePasswordScreen(
                         onValueChange = { value ->
                             oldPasswordState.value = value
                         },
-                        label = "Mevcut �?ifre",
+                        label = "Mevcut Şifre",
                         visible = showOldPasswordState.value,
                         onVisibilityChange = {
                             showOldPasswordState.value = !showOldPasswordState.value
@@ -142,7 +142,7 @@ fun ChangePasswordScreen(
                         onValueChange = { value ->
                             newPasswordState.value = value
                         },
-                        label = "Yeni �?ifre",
+                        label = "Yeni Şifre",
                         visible = showNewPasswordState.value,
                         onVisibilityChange = {
                             showNewPasswordState.value = !showNewPasswordState.value
@@ -154,7 +154,7 @@ fun ChangePasswordScreen(
                         onValueChange = { value ->
                             newPasswordAgainState.value = value
                         },
-                        label = "Yeni �?ifre Tekrar",
+                        label = "Yeni Şifre Tekrar",
                         visible = showNewPasswordAgainState.value,
                         onVisibilityChange = {
                             showNewPasswordAgainState.value = !showNewPasswordAgainState.value
@@ -179,14 +179,14 @@ fun ChangePasswordScreen(
                         message.isNotBlank()
                     }?.let { message ->
                         PasswordMessageBox(
-                            title = "�?ifre Güncellendi",
+                            title = "Şifre Güncellendi",
                             message = message,
                             type = PasswordMessageType.Success
                         )
                     }
 
                     BbButton(
-                        text = "�?ifreyi Güncelle",
+                        text = "Şifreyi Güncelle",
                         onClick = {
                             onSaveClick(
                                 oldPasswordState.value,
@@ -291,7 +291,7 @@ private fun PasswordRuleBox(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
         ) {
             Text(
-                text = "Güçlü �?ifre Kontrolü",
+                text = "Güçlü Şifre Kontrolü",
                 style = MaterialTheme.typography.labelLarge,
                 color = BBColors.Yellow.Yellow800
             )

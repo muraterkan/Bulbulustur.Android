@@ -151,7 +151,7 @@ fun LastPriceRequestScreen(
                         onValueChange = {
                             paymentTerm.value = it
                         },
-                        label = "Ödeme �?artı",
+                        label = "Ödeme Şartı",
                         placeholder = "Peşin / vadeli",
                         icon = Icons.Outlined.Payments,
                         modifier = Modifier.weight(1f)
@@ -494,7 +494,7 @@ private fun lastPriceSuggestionTexts(): List<LastPriceSuggestionText> {
             description = "Belirttiğim miktar için en iyi son fiyatı rica ederim."
         ),
         LastPriceSuggestionText(
-            title = "Ödeme �?artı",
+            title = "Ödeme Şartı",
             description = "Peşin ve vadeli ödeme seçeneklerine göre son fiyat bilgisini paylaşabilir misiniz?"
         ),
         LastPriceSuggestionText(

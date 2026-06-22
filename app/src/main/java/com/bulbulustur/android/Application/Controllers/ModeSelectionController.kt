@@ -30,7 +30,6 @@ class ModeSelectionController(
     private val _state = MutableStateFlow(ModeSelectionControllerState())
     val State: StateFlow<ModeSelectionControllerState> = _state.asStateFlow()
 
-
     fun Index(parameters: Map<String, Any?> = emptyMap()) {
         viewModelScope.launch {
             _state.update {

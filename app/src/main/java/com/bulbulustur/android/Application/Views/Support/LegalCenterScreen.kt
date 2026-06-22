@@ -358,7 +358,7 @@ private fun legalDocumentItems(): List<LegalDocumentItem> {
         LegalDocumentItem(
             legalDocumentId = 4,
             title = "Mesafeli Satış Sözleşmesi",
-            description = "Perakende alışveriş süreçlerinde geçerli satış ve teslimat hükümleri.",
+            description = "Perakende Alışveriş süreçlerinde geçerli satış ve teslimat hükümleri.",
             categoryName = "Satış",
             updatedDateLabel = "Güncel",
             icon = Icons.Outlined.Description
@@ -394,7 +394,7 @@ private fun platformRuleItems(): List<LegalDocumentItem> {
         ),
         LegalDocumentItem(
             legalDocumentId = 8,
-            title = "İptal ve İade �?artları",
+            title = "İptal ve İade Şartları",
             description = "Sipariş iptali, iade süreci ve kullanıcı haklarına ilişkin bilgiler.",
             categoryName = "Satış",
             updatedDateLabel = "Güncel",

@@ -98,7 +98,7 @@ fun LoginScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             LogonPublicFieldLabel(
-                text = "�?ifre"
+                text = "Şifre"
             )
 
             Spacer(modifier = Modifier.weight(1f))
@@ -107,7 +107,7 @@ fun LoginScreen(
                 onClick = onForgotPasswordClick
             ) {
                 Text(
-                    text = "�?ifremi Unuttum",
+                    text = "Şifremi Unuttum",
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.SemiBold,
                     color = BBColors.TextSubtle
@@ -120,7 +120,7 @@ fun LoginScreen(
             onValueChange = {
                 password = it
             },
-            placeholder = "�?ifreniz",
+            placeholder = "Şifreniz",
             trailingContent = {
                 IconButton(
                     onClick = {

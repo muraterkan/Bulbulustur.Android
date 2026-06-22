@@ -155,7 +155,7 @@ private fun LegalNoticeCard() {
                 )
 
                 Text(
-                    text = "�?effaf platform kuralları, kullanıcı hakları ve yasal süreçler tek merkezde toplanır.",
+                    text = "Şeffaf platform kuralları, kullanıcı hakları ve yasal süreçler tek merkezde toplanır.",
                     style = BbTypography.bodySmall,
                     color = BBColors.TextMuted
                 )
@@ -419,7 +419,7 @@ private fun getLegalPolicyGroups(): List<LegalPolicyGroup> {
                 ),
                 LegalPolicyItem(
                     key = "complaint-dispute",
-                    title = "�?ikayet ve Uyuşmazlık Süreci",
+                    title = "Şikayet ve Uyuşmazlık Süreci",
                     description = "Sipariş veya platform işlemlerindeki uyuşmazlık akışı.",
                     icon = Icons.Outlined.ReportProblem
                 ),

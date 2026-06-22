@@ -55,12 +55,6 @@ fun AppearanceSettingsScreen(
             icon = Icons.Outlined.LightMode
         ),
         AppearanceThemeOption(
-            code = "navy",
-            title = "Lacivert Tema",
-            description = "Yumuşak koyu görünüm.",
-            icon = Icons.Outlined.NightsStay
-        ),
-        AppearanceThemeOption(
             code = "dark",
             title = "Koyu Tema",
             description = "Daha kontrastlı gece görünümü.",

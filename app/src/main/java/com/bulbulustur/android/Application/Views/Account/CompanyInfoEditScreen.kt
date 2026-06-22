@@ -164,7 +164,7 @@ fun CompanyInfoEditScreen(
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
                 ) {
                     CompanySectionHeader(
-                        title = "İletişim Ve Adres",
+                        title = "İletişim ve Adres",
                         description = "Firma iletişim bilgileriniz ve resmi adresiniz."
                     )
 

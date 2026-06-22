@@ -93,7 +93,7 @@ fun CompanyEditScreen(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.SectionGap)
     ) {
         BbButton(
-            text = "�?irket Bilgilerime Dön",
+            text = "Şirket Bilgilerime Dön",
             onClick = onBackClick,
             variant = BbButtonVariant.Outline
         )
@@ -103,17 +103,17 @@ fun CompanyEditScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             BbChip(
-                text = "�?irket Profili"
+                text = "Şirket Profili"
             )
 
             Text(
-                text = "�?irketi Düzenle",
+                text = "Şirketi Düzenle",
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
-                text = "�?irket hesabınla ilişkili temel kurumsal, adres ve resmi bilgileri güncelle.",
+                text = "Şirket hesabınla ilişkili temel kurumsal, adres ve resmi bilgileri güncelle.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -140,8 +140,8 @@ fun CompanyEditScreen(
                             validationMessage = null
                         )
                     },
-                    label = "�?irketinizin Resmi Ünvanı",
-                    placeholder = "�?irket resmi ünvanı"
+                    label = "Şirketinizin Resmi Ünvanı",
+                    placeholder = "Şirket resmi ünvanı"
                 )
 
                 BbSelectInput(
@@ -152,8 +152,8 @@ fun CompanyEditScreen(
                             validationMessage = null
                         )
                     },
-                    label = "�?irketinizin Tipi",
-                    placeholder = "�?irket tipi seç",
+                    label = "Şirketinizin Tipi",
+                    placeholder = "Şirket tipi seç",
                     options = companyTypeOptions()
                 )
 
@@ -178,7 +178,7 @@ fun CompanyEditScreen(
                             validationMessage = null
                         )
                     },
-                    label = "�?irket E-postası",
+                    label = "Şirket E-postası",
                     placeholder = "ornek@firma.com"
                 )
 
@@ -190,7 +190,7 @@ fun CompanyEditScreen(
                             validationMessage = null
                         )
                     },
-                    label = "�?irket Web Sitesi",
+                    label = "Şirket Web Sitesi",
                     placeholder = "www.firma.com"
                 )
             }
@@ -204,7 +204,7 @@ fun CompanyEditScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = "�?irket kayıtlı adres ve lokasyon bilgilerini düzenle.",
+                    text = "Şirket kayıtlı adres ve lokasyon bilgilerini düzenle.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -217,7 +217,7 @@ fun CompanyEditScreen(
                             validationMessage = null
                         )
                     },
-                    label = "�?irketinizin Adresi",
+                    label = "Şirketinizin Adresi",
                     placeholder = "Açık şirket adresi"
                 )
 
@@ -243,8 +243,8 @@ fun CompanyEditScreen(
                             validationMessage = null
                         )
                     },
-                    label = "�?ehir",
-                    placeholder = "�?ehir seç",
+                    label = "Şehir",
+                    placeholder = "Şehir seç",
                     options = cityOptions()
                 )
 
@@ -339,7 +339,7 @@ fun CompanyEditScreen(
                     padding = BbCardPadding.Medium
                 ) {
                     Text(
-                        text = "�?irket bilgilerin kurumsal profil, fatura ve platform doğrulama süreçlerinde kullanılabilir.",
+                        text = "Şirket bilgilerin kurumsal profil, fatura ve platform doğrulama süreçlerinde kullanılabilir.",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -386,11 +386,11 @@ private fun getCompanyEditValidationMessage(
     formState: CompanyEditFormState
 ): String {
     if (formState.companyOfficialName.isBlank()) {
-        return "�?irket resmi ünvanı gereklidir."
+        return "Şirket resmi ünvanı gereklidir."
     }
 
     if (formState.companyType.isBlank()) {
-        return "�?irket tipi seçilmelidir."
+        return "Şirket tipi seçilmelidir."
     }
 
     if (formState.establishmentYear.isBlank()) {
@@ -402,11 +402,11 @@ private fun getCompanyEditValidationMessage(
     }
 
     if (formState.companyWebsiteUrl.isBlank()) {
-        return "�?irket web sitesi gereklidir."
+        return "Şirket web sitesi gereklidir."
     }
 
     if (formState.companyAddress.isBlank()) {
-        return "�?irket adresi gereklidir."
+        return "Şirket adresi gereklidir."
     }
 
     if (formState.countryName.isBlank()) {
@@ -414,7 +414,7 @@ private fun getCompanyEditValidationMessage(
     }
 
     if (formState.cityName.isBlank()) {
-        return "�?ehir seçilmelidir."
+        return "Şehir seçilmelidir."
     }
 
     if (formState.districtName.isBlank()) {
@@ -429,22 +429,22 @@ private fun getCompanyEditValidationMessage(
         return "Vergi numarası gereklidir."
     }
 
-    return "�?irket bilgilerini kontrol etmelisin."
+    return "Şirket bilgilerini kontrol etmelisin."
 }
 
 private fun companyTypeOptions(): List<BbSelectOption> {
     return listOf(
         BbSelectOption(
             "limited",
-            "Limited �?irket"
+            "Limited Şirket"
         ),
         BbSelectOption(
             "anonim",
-            "Anonim �?irket"
+            "Anonim Şirket"
         ),
         BbSelectOption(
             "sahis",
-            "�?ahıs �?irketi"
+            "Şahıs Şirketi"
         ),
         BbSelectOption(
             "kooperatif",
@@ -493,7 +493,7 @@ private fun cityOptions(): List<BbSelectOption> {
 
 private fun districtOptions(): List<BbSelectOption> {
     return listOf(
-        BbSelectOption("�?işli", "�?işli"),
+        BbSelectOption("Şişli", "Şişli"),
         BbSelectOption("Kadıköy", "Kadıköy"),
         BbSelectOption("Üsküdar", "Üsküdar"),
         BbSelectOption("Çankaya", "Çankaya"),
@@ -505,7 +505,7 @@ private fun districtOptions(): List<BbSelectOption> {
 private fun createSampleCompanyEditFormState(): CompanyEditFormState {
     return CompanyEditFormState(
         companyId = 2,
-        companyOfficialName = "Türkiye Global Ticaret Limited �?irketi",
+        companyOfficialName = "Türkiye Global Ticaret Limited Şirketi",
         companyType = "limited",
         establishmentYear = "2025",
         companyEmailAddress = "muraterkan500@yandex.com",
@@ -513,9 +513,9 @@ private fun createSampleCompanyEditFormState(): CompanyEditFormState {
         companyAddress = "Fulya Mah., Aytekin Kotil Cad., No: 1/1",
         countryName = "Türkiye",
         cityName = "İstanbul",
-        districtName = "�?işli",
+        districtName = "Şişli",
         postalCode = "34394",
-        taxOffice = "�?işli Vergi Dairesi",
+        taxOffice = "Şişli Vergi Dairesi",
         taxNumber = "789456123",
         mersisNumber = "01881 299217 0001",
         kepAddress = "tglobal@bulbulustur.com"

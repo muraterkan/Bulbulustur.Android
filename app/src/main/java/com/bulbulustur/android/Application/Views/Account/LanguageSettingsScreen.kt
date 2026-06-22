@@ -25,15 +25,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
-import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
+import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBAlpha
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BbTypography
-import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBAlpha
 
 @Composable
 fun LanguageSettingsScreen(
@@ -43,20 +47,64 @@ fun LanguageSettingsScreen(
         mutableStateOf("tr")
     }
 
-    val languages = listOf(
-        LanguageOption("tr", "Türkçe", "Türkiye", "g���g���"),
-        LanguageOption("en", "English", "United States", "g���g���"),
-        LanguageOption("de", "Deutsch", "Deutschland", "g���g���"),
-        LanguageOption("fr", "Français", "France", "g���g���"),
-        LanguageOption("es", "Español", "España", "g���g���"),
-        LanguageOption("ru", "G�уссG�G�G�", "G�G�ссG�я", "g���g���"),
-        LanguageOption("ar", "العربية", "Saudi Arabia", "g���g���"),
-        LanguageOption("zh", "简体中文", "China", "g���g���")
-    )
+    val languages = remember {
+        listOf(
+            LanguageOption(
+                code = "tr",
+                name = "Türkçe",
+                region = "Türkiye",
+                flagFileName = "turkey.svg"
+            ),
+            LanguageOption(
+                code = "en",
+                name = "English",
+                region = "United States",
+                flagFileName = "United States of America.svg"
+            ),
+            LanguageOption(
+                code = "de",
+                name = "Deutsch",
+                region = "Deutschland",
+                flagFileName = "germany.svg"
+            ),
+            LanguageOption(
+                code = "fr",
+                name = "Français",
+                region = "France",
+                flagFileName = "france.svg"
+            ),
+            LanguageOption(
+                code = "es",
+                name = "Español",
+                region = "España",
+                flagFileName = "spain.svg"
+            ),
+            LanguageOption(
+                code = "ru",
+                name = "Русский",
+                region = "Россия",
+                flagFileName = "russia.svg"
+            ),
+            LanguageOption(
+                code = "ar",
+                name = "العربية",
+                region = "Saudi Arabia",
+                flagFileName = "saudi-arabia.svg"
+            ),
+            LanguageOption(
+                code = "zh",
+                name = "简体中文",
+                region = "China",
+                flagFileName = "china.svg"
+            )
+        )
+    }
 
     val pageBackground = Brush.verticalGradient(
         colors = listOf(
-            MaterialTheme.colorScheme.primaryContainer.copy(alpha = BBAlpha.DisabledContainer),
+            MaterialTheme.colorScheme.primaryContainer.copy(
+                alpha = BBAlpha.DisabledContainer
+            ),
             MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.85f),
             MaterialTheme.colorScheme.surfaceVariant
         )
@@ -90,7 +138,9 @@ fun LanguageSettingsScreen(
 
             items(
                 items = languages,
-                key = { language -> language.code }
+                key = { language ->
+                    language.code
+                }
             ) { language ->
                 LanguageRow(
                     item = language,
@@ -139,20 +189,10 @@ private fun LanguageRow(
             horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
-                modifier = Modifier
-                    .size(BBIcon.BoxLg)
-                    .background(
-                        color = MaterialTheme.colorScheme.surfaceVariant,
-                        shape = BBRadius.PillShape
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = item.flag,
-                    style = BbTypography.titleLarge
-                )
-            }
+            LanguageFlag(
+                flagFileName = item.flagFileName,
+                contentDescription = "${item.region} bayrağı"
+            )
 
             Column(
                 modifier = Modifier.weight(1f),
@@ -174,7 +214,7 @@ private fun LanguageRow(
             if (isSelected) {
                 Icon(
                     imageVector = Icons.Outlined.CheckCircle,
-                    contentDescription = null,
+                    contentDescription = "Seçili dil",
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(BBIcon.SizeLg)
                 )
@@ -183,10 +223,36 @@ private fun LanguageRow(
     }
 }
 
+@Composable
+private fun LanguageFlag(
+    flagFileName: String,
+    contentDescription: String
+) {
+    val context = LocalContext.current
+
+    Box(
+        modifier = Modifier
+            .size(BBIcon.BoxLg)
+            .background(
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                shape = BBRadius.PillShape
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        AsyncImage(
+            model = ImageRequest.Builder(context)
+                .data("file:///android_asset/flags/$flagFileName")
+                .build(),
+            contentDescription = contentDescription,
+            modifier = Modifier.size(BBIcon.Size2Xl),
+            contentScale = ContentScale.Fit
+        )
+    }
+}
+
 private data class LanguageOption(
     val code: String,
     val name: String,
     val region: String,
-    val flag: String
+    val flagFileName: String
 )
-

@@ -376,56 +376,56 @@ private fun bankAccountItems(): List<BankAccountItem> {
         BankAccountItem(
             bankAccountId = 1,
             bankName = "Ziraat Bankası",
-            branchName = "Kartal �?ubesi",
-            accountOwner = "BULBULUSTUR İNTERNET TEKNOLOJİLERİ VE TİCARET ANONİM �?İRKETİ",
+            branchName = "Kartal Şubesi",
+            accountOwner = "BULBULUSTUR İNTERNET TEKNOLOJİLERİ VE TİCARET ANONİM ŞİRKETİ",
             iban = "TR12 0000 0000 0000 0000 0000 01",
             icon = Icons.Outlined.AccountBalance
         ),
         BankAccountItem(
             bankAccountId = 2,
             bankName = "Garanti Bankası",
-            branchName = "Kartal �?ubesi",
-            accountOwner = "BULBULUSTUR İNTERNET TEKNOLOJİLERİ VE TİCARET ANONİM �?İRKETİ",
+            branchName = "Kartal Şubesi",
+            accountOwner = "BULBULUSTUR İNTERNET TEKNOLOJİLERİ VE TİCARET ANONİM ŞİRKETİ",
             iban = "TR12 0000 0000 0000 0000 0000 02",
             icon = Icons.Outlined.AccountBalance
         ),
         BankAccountItem(
             bankAccountId = 3,
             bankName = "Kuveyt Türk",
-            branchName = "Kartal �?ubesi",
-            accountOwner = "BULBULUSTUR İNTERNET TEKNOLOJİLERİ VE TİCARET ANONİM �?İRKETİ",
+            branchName = "Kartal Şubesi",
+            accountOwner = "BULBULUSTUR İNTERNET TEKNOLOJİLERİ VE TİCARET ANONİM ŞİRKETİ",
             iban = "TR12 0000 0000 0000 0000 0000 03",
             icon = Icons.Outlined.AccountBalance
         ),
         BankAccountItem(
             bankAccountId = 4,
             bankName = "Yapı Kredi Bankası",
-            branchName = "Kartal �?ubesi",
-            accountOwner = "BULBULUSTUR İNTERNET TEKNOLOJİLERİ VE TİCARET ANONİM �?İRKETİ",
+            branchName = "Kartal Şubesi",
+            accountOwner = "BULBULUSTUR İNTERNET TEKNOLOJİLERİ VE TİCARET ANONİM ŞİRKETİ",
             iban = "TR12 0000 0000 0000 0000 0000 04",
             icon = Icons.Outlined.AccountBalance
         ),
         BankAccountItem(
             bankAccountId = 5,
             bankName = "İş Bankası",
-            branchName = "Kartal �?ubesi",
-            accountOwner = "BULBULUSTUR İNTERNET TEKNOLOJİLERİ VE TİCARET ANONİM �?İRKETİ",
+            branchName = "Kartal Şubesi",
+            accountOwner = "BULBULUSTUR İNTERNET TEKNOLOJİLERİ VE TİCARET ANONİM ŞİRKETİ",
             iban = "TR12 0000 0000 0000 0000 0000 05",
             icon = Icons.Outlined.AccountBalance
         ),
         BankAccountItem(
             bankAccountId = 6,
             bankName = "Halk Bankası",
-            branchName = "Kartal �?ubesi",
-            accountOwner = "BULBULUSTUR İNTERNET TEKNOLOJİLERİ VE TİCARET ANONİM �?İRKETİ",
+            branchName = "Kartal Şubesi",
+            accountOwner = "BULBULUSTUR İNTERNET TEKNOLOJİLERİ VE TİCARET ANONİM ŞİRKETİ",
             iban = "TR12 0000 0000 0000 0000 0000 06",
             icon = Icons.Outlined.AccountBalance
         ),
         BankAccountItem(
             bankAccountId = 7,
             bankName = "Akbank",
-            branchName = "Kartal �?ubesi",
-            accountOwner = "BULBULUSTUR İNTERNET TEKNOLOJİLERİ VE TİCARET ANONİM �?İRKETİ",
+            branchName = "Kartal Şubesi",
+            accountOwner = "BULBULUSTUR İNTERNET TEKNOLOJİLERİ VE TİCARET ANONİM ŞİRKETİ",
             iban = "TR12 0000 0000 0000 0000 0000 07",
             icon = Icons.Outlined.AccountBalance
         )

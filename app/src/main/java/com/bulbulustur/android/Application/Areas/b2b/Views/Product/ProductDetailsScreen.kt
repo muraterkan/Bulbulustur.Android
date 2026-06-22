@@ -759,7 +759,7 @@ private fun WholesaleOrderAndDeliveryCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
             WholesaleSectionLabel(
-                text = "Üretim Ve Teslimat",
+                text = "Üretim ve Teslimat",
                 icon = Icons.Outlined.LocalShipping
             )
 
@@ -806,7 +806,7 @@ private fun WholesaleOrderAndDeliveryCard(
             }
 
             WholesaleInfoBlock(
-                title = "Ambalaj Ve Sevkiyat",
+                title = "Ambalaj ve Sevkiyat",
                 description = product.packagingDescription
             )
 
@@ -2074,7 +2074,7 @@ private fun getWholesaleProductDetail(
             WholesaleProductProperty("Birim Ağırlık", "0,42 Kg"),
             WholesaleProductProperty("Birim Ölçü", "31 × 14 × 42 Cm"),
             WholesaleProductProperty("Tedarik Süresi", "15-25 Gün"),
-            WholesaleProductProperty("Ödeme �?artı", "Teklif Sürecinde Netleşir")
+            WholesaleProductProperty("Ödeme Şartı", "Teklif Sürecinde Netleşir")
         ),
         deliverySteps = listOf(
             WholesaleDeliveryStep("100+", "15 Gün"),

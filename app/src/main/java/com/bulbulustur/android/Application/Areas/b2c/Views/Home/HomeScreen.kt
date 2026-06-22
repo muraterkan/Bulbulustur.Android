@@ -142,7 +142,7 @@ fun RetailHomeScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Kategori keşfi",
+                    title = "Kategori Keşfi",
                     subtitle = "Ana kategorilerden başlayarak alışveriş dünyasına gir."
                 )
             }
@@ -155,7 +155,7 @@ fun RetailHomeScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Bugünün vitrinleri",
+                    title = "Bugünün Vitrinleri",
                     subtitle = "Perakende ana sayfa için seçilmiş hızlı geçişler."
                 )
             }
@@ -170,8 +170,8 @@ fun RetailHomeScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Öne çıkan ürünler",
-                    subtitle = "Demo akış, API sonrası gerçek vitrinlerden beslenecek."
+                    title = "Öne Çıkan Ürünler",
+                    subtitle = "Demo akış, API sonrası gerçek Vitrinlerden beslenecek."
                 )
             }
 
@@ -183,7 +183,7 @@ fun RetailHomeScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Mağaza keşfi",
+                    title = "Mağaza Keşfi",
                     subtitle = "Seçilmiş mağaza ve marka alanları."
                 )
             }
@@ -231,7 +231,7 @@ private fun RetailHomeHeroCard(
                 )
 
                 Text(
-                    text = "Perakende alışveriş",
+                    text = "Perakende Alışveriş",
                     style = MaterialTheme.typography.labelLarge,
                     color = BBColors.TextStrong,
                     fontWeight = FontWeight.SemiBold
@@ -239,7 +239,7 @@ private fun RetailHomeHeroCard(
             }
 
             Text(
-                text = "Ürünleri, mağazaları ve kategori vitrinlerini keşfet.",
+                text = "Ürünleri, mağazaları ve kategori Vitrinlerini keşfet.",
                 style = MaterialTheme.typography.headlineSmall,
                 color = BBColors.TextStrong,
                 fontWeight = FontWeight.Bold
@@ -712,7 +712,7 @@ private fun getRetailHomeGateways(): List<RetailHomeGatewayItem> {
         ),
         RetailHomeGatewayItem(
             title = "Mağazalar",
-            description = "Satıcı ve marka vitrinleri",
+            description = "Satıcı ve marka Vitrinleri",
             icon = Icons.Outlined.Storefront,
             backgroundColor = BBColors.Green.Green50,
             iconColor = BBColors.Green.Green700,
@@ -745,7 +745,7 @@ private fun getRetailHomeCategoryNames(): List<String> {
 private fun getRetailHomeShowcases(): List<RetailHomeShowcaseItem> {
     return listOf(
         RetailHomeShowcaseItem(
-            title = "Yeni gelenler",
+            title = "Yeni Gelenler",
             description = "Bugün eklenen perakende ürünleri keşfet.",
             icon = Icons.Outlined.NewReleases,
             backgroundColor = BBColors.Yellow.Yellow50,
@@ -753,7 +753,7 @@ private fun getRetailHomeShowcases(): List<RetailHomeShowcaseItem> {
             target = RetailHomeShowcaseTarget.Products
         ),
         RetailHomeShowcaseItem(
-            title = "Kampanya vitrinleri",
+            title = "Kampanya Vitrinleri",
             description = "Seçili fırsatlar ve dönemsel ürün akışları.",
             icon = Icons.Outlined.LocalOffer,
             backgroundColor = BBColors.Green.Green50,
@@ -761,7 +761,7 @@ private fun getRetailHomeShowcases(): List<RetailHomeShowcaseItem> {
             target = RetailHomeShowcaseTarget.Products
         ),
         RetailHomeShowcaseItem(
-            title = "Mağaza keşfi",
+            title = "Mağaza Keşfi",
             description = "Öne çıkan mağaza ve koleksiyonlara göz at.",
             icon = Icons.Outlined.Storefront,
             backgroundColor = BBColors.Blue.Blue50,
@@ -769,7 +769,7 @@ private fun getRetailHomeShowcases(): List<RetailHomeShowcaseItem> {
             target = RetailHomeShowcaseTarget.Stores
         ),
         RetailHomeShowcaseItem(
-            title = "Favori akışı",
+            title = "Favori Akışı",
             description = "Beğendiğin ürün ve mağazalara hızlı dönüş.",
             icon = Icons.Outlined.FavoriteBorder,
             backgroundColor = BBColors.Pink.Pink50,

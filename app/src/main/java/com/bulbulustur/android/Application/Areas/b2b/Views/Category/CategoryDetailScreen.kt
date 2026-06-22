@@ -238,7 +238,7 @@ private fun WholesaleCategoryDetailActions(
 
             WholesaleCategoryActionCard(
                 title = "Firmalar",
-                description = "Firma vitrinleri",
+                description = "Firma Vitrinleri",
                 icon = Icons.Outlined.Business,
                 modifier = Modifier.weight(1f),
                 onClick = {

@@ -110,7 +110,7 @@ private fun PhoneCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 PhoneIconBox(
-                    text = "�?"
+                    text = "Ş"
                 )
 
                 Column(
@@ -180,7 +180,7 @@ private fun PhoneEmptyState(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             PhoneIconBox(
-                text = "�?"
+                text = "Ş"
             )
 
             Text(

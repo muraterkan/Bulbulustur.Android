@@ -222,7 +222,7 @@ private fun ProductHistoryIntroCard(
             )
 
             Text(
-                text = "Ürünleri tekrar inceleyebilir, favorilerinize ekleyebilir veya ürün detayına geri dönebilirsiniz.",
+                text = "Ürünleri tekrar inceleyebilir, Favorilerinize ekleyebilir veya ürün detayına geri dönebilirsiniz.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

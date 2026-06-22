@@ -63,6 +63,7 @@ fun AccountSettingsScreen(
     onAppearanceClick: () -> Unit = {},
     onRegionClick: () -> Unit = {},
     onCurrencyClick: () -> Unit = {},
+    onCommunicationPreferenceClick: () -> Unit = {},
     onAboutThisAppClick: () -> Unit = {},
     onLegalPoliciesClick: () -> Unit = {},
     onSignOutClick: () -> Unit = {}
@@ -148,7 +149,7 @@ fun AccountSettingsScreen(
                         title = "Bildirim ve İzinler",
                         value = null,
                         icon = Icons.Outlined.Notifications,
-                        onClick = onPermissionsClick
+                        onClick = onCommunicationPreferenceClick
                     )
                 }
             }

@@ -137,7 +137,7 @@ fun ProfileScreen(
                     ProfileDashedDivider()
 
                     ProfileInfoRow(
-                        title = "Ülke / �?ehir",
+                        title = "Ülke / Şehir",
                         value = "Türkiye / Ankara",
                         icon = Icons.Outlined.LocationOn,
                         onClick = onEditClick
@@ -205,12 +205,12 @@ fun ProfileScreen(
             item {
                 ProfileInfoSection(
                     title = "Kurumsal Bağlantı",
-                    description = "�?irket ve B2B görünürlük bağlantılarınız.",
+                    description = "Şirket ve B2B görünürlük bağlantılarınız.",
                     icon = Icons.Outlined.Business
                 ) {
                     ProfileInfoRow(
-                        title = "�?irket Bilgileri",
-                        value = "Türkiye Global Ticaret Limited �?irketi",
+                        title = "Şirket Bilgileri",
+                        value = "Türkiye Global Ticaret Limited Şirketi",
                         icon = Icons.Outlined.Business,
                         onClick = onCompanyInfoClick
                     )

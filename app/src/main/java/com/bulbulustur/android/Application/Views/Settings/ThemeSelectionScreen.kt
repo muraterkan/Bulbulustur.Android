@@ -52,7 +52,7 @@ fun ThemeSelectionScreen(
 
         item {
             BbSectionHeader(
-                title = "Tema seçimi",
+                title = "Tema Seçimi",
                 subtitle = "Uygulamanın görünüm tercihlerini değiştirin"
             )
         }
@@ -107,7 +107,7 @@ private fun ThemeSelectionHeader(
             }
 
             Text(
-                text = "Tema tercihi",
+                text = "Tema Tercihi",
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -131,7 +131,7 @@ private fun ThemeSelectionHeader(
                 )
 
                 BbChip(
-                    text = "Uygulama ayarı",
+                    text = "Uygulama Ayarı",
                     selected = false,
                     onClick = {}
                 )
@@ -215,7 +215,7 @@ private fun ThemeSelectionInfoCard() {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.xs)
             ) {
                 Text(
-                    text = "Yerel tercih",
+                    text = "Yerel Tercih",
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
@@ -234,9 +234,9 @@ private fun ThemeSelectionInfoCard() {
 enum class AppThemeOption(
     val displayName: String
 ) {
-    System("Sistem varsayılanı"),
-    Light("Açık tema"),
-    Dark("Koyu tema")
+    System("Sistem Varsayılanı"),
+    Light("Açık Tema"),
+    Dark("Koyu Tema")
 }
 
 private data class ThemeOptionItem(
@@ -250,19 +250,19 @@ private fun themeOptions(): List<ThemeOptionItem> {
     return listOf(
         ThemeOptionItem(
             themeOption = AppThemeOption.System,
-            title = "Sistem varsayılanı",
+            title = "Sistem Varsayılanı",
             description = "Uygulama, cihazınızın açık/koyu tema ayarını takip eder.",
             icon = Icons.Outlined.AutoMode
         ),
         ThemeOptionItem(
             themeOption = AppThemeOption.Light,
-            title = "Açık tema",
+            title = "Açık Tema",
             description = "Uygulama her zaman açık tema ile görüntülenir.",
             icon = Icons.Outlined.LightMode
         ),
         ThemeOptionItem(
             themeOption = AppThemeOption.Dark,
-            title = "Koyu tema",
+            title = "Koyu Tema",
             description = "Uygulama her zaman koyu tema ile görüntülenir.",
             icon = Icons.Outlined.DarkMode
         )

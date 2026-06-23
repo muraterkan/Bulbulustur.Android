@@ -24,11 +24,11 @@ sealed interface RfqControllerEvent {
 
 class RfqController(
     private val executeService: IExecuteService,
-    private val defaultRepository: com.bulbulustur.android.Application.Areas.b2b.Controllers.IB2BDefaultRepository
-) : com.bulbulustur.android.Application.Areas.b2b.Controllers.BaseController() {
+    private val defaultRepository: IB2BDefaultRepository
+) : BaseController() {
 
-    private val _state = MutableStateFlow(_root_ide_package_.com.bulbulustur.android.Application.Areas.b2b.Controllers.RfqControllerState())
-    val State: StateFlow<com.bulbulustur.android.Application.Areas.b2b.Controllers.RfqControllerState> = _state.asStateFlow()
+    private val _state = MutableStateFlow(RfqControllerState())
+    val State: StateFlow<RfqControllerState> = _state.asStateFlow()
 
 
     fun Index(parameters: Map<String, Any?> = emptyMap()) {

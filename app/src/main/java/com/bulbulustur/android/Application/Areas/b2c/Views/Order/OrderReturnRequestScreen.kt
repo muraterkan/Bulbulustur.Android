@@ -1,7 +1,6 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.order
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,21 +11,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.AssignmentReturn
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.RadioButtonUnchecked
 import androidx.compose.material.icons.outlined.Send
 import androidx.compose.material.icons.outlined.VerifiedUser
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -37,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
@@ -71,20 +69,32 @@ fun OrderReturnRequestScreen(
         mutableStateOf("")
     }
 
-    OrderReturnPageScaffold(
-        title = "İade Talebi",
-        subtitle = "Teslim edilen ürün için iade talebi oluştur.",
-        onBackClick = onBackClick
-    ) {
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        containerColor = BBColors.SurfaceMuted,
+        topBar = {
+            BbInnerPageHeader(
+                title = "İade Talebi",
+                subtitle = "Teslim edilen ürün için iade talebi oluştur.",
+                onBackClick = onBackClick
+            )
+        }
+    ) { innerPadding ->
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(BBColors.SurfaceMuted)
+                .padding(innerPadding)
+                .navigationBarsPadding(),
             contentPadding = PaddingValues(
                 start = BBSpacing.PageHorizontal,
                 top = BBSpacing.PageTopCompact,
                 end = BBSpacing.PageHorizontal,
                 bottom = BBSpacing.PageBottom
             ),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.CardGap
+            )
         ) {
             item {
                 OrderReturnIntroCard()
@@ -124,91 +134,6 @@ fun OrderReturnRequestScreen(
 }
 
 @Composable
-private fun OrderReturnPageScaffold(
-    title: String,
-    subtitle: String,
-    onBackClick: () -> Unit,
-    content: @Composable () -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(BBColors.SurfaceMuted)
-            .navigationBarsPadding()
-    ) {
-        OrderReturnTopHeader(
-            title = title,
-            subtitle = subtitle,
-            onBackClick = onBackClick
-        )
-
-        Box(
-            modifier = Modifier.weight(1f)
-        ) {
-            content()
-        }
-    }
-}
-
-@Composable
-private fun OrderReturnTopHeader(
-    title: String,
-    subtitle: String,
-    onBackClick: () -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(BBColors.Surface)
-            .statusBarsPadding()
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    horizontal = BBSpacing.PageHorizontal,
-                    vertical = BBSpacing.Space3
-                ),
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(
-                onClick = onBackClick,
-                modifier = Modifier.size(BBIcon.BoxMd)
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.ArrowBack,
-                    contentDescription = "Geri dön",
-                    tint = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.size(BBIcon.TopBarIcon)
-                )
-            }
-
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
-            ) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-
-                Text(
-                    text = subtitle,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-        }
-
-        HorizontalDivider(
-            color = BBColors.Border
-        )
-    }
-}
-
-@Composable
 private fun OrderReturnIntroCard() {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
@@ -217,7 +142,9 @@ private fun OrderReturnIntroCard() {
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+            horizontalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space3
+            ),
             verticalAlignment = Alignment.Top
         ) {
             OrderReturnIconBox(
@@ -228,7 +155,9 @@ private fun OrderReturnIntroCard() {
 
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+                verticalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space1
+                )
             ) {
                 Text(
                     text = "İade Talebi Oluştur",
@@ -259,7 +188,9 @@ private fun OrderReturnReasonCard(
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space4
+            )
         ) {
             OrderReturnSectionTitle(
                 title = "İade Nedeni",
@@ -268,7 +199,9 @@ private fun OrderReturnReasonCard(
 
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+                verticalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space2
+                )
             ) {
                 reasons.forEach { reason ->
                     OrderReturnReasonRow(
@@ -290,33 +223,51 @@ private fun OrderReturnReasonRow(
     selected: Boolean,
     onClick: () -> Unit
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(
-                color = if (selected) BBColors.Yellow.Yellow50 else MaterialTheme.colorScheme.surfaceVariant,
-                shape = BBRadius.LgShape
-            )
-            .clickable {
-                onClick()
-            }
-            .padding(BBSpacing.CardPaddingCompact),
-        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
-        verticalAlignment = Alignment.CenterVertically
+    Surface(
+        onClick = onClick,
+        modifier = Modifier.fillMaxWidth(),
+        shape = BBRadius.LgShape,
+        color = if (selected) {
+            BBColors.Yellow.Yellow50
+        } else {
+            MaterialTheme.colorScheme.surfaceVariant
+        }
     ) {
-        Icon(
-            imageVector = if (selected) Icons.Outlined.CheckCircle else Icons.Outlined.RadioButtonUnchecked,
-            contentDescription = null,
-            tint = if (selected) BBColors.Yellow.Yellow800 else MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.size(BBIcon.Action)
-        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    BBSpacing.CardPaddingCompact
+                ),
+            horizontalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space3
+            ),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = if (selected) {
+                    Icons.Outlined.CheckCircle
+                } else {
+                    Icons.Outlined.RadioButtonUnchecked
+                },
+                contentDescription = null,
+                tint = if (selected) {
+                    BBColors.Yellow.Yellow800
+                } else {
+                    MaterialTheme.colorScheme.onSurfaceVariant
+                },
+                modifier = Modifier.size(
+                    BBIcon.Action
+                )
+            )
 
-        Text(
-            text = text,
-            modifier = Modifier.weight(1f),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface
-        )
+            Text(
+                text = text,
+                modifier = Modifier.weight(1f),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        }
     }
 }
 
@@ -332,7 +283,9 @@ private fun OrderReturnDescriptionCard(
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space3
+            )
         ) {
             OrderReturnSectionTitle(
                 title = "Açıklama",
@@ -370,7 +323,9 @@ private fun OrderReturnProcessCard() {
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+            horizontalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space3
+            ),
             verticalAlignment = Alignment.Top
         ) {
             OrderReturnIconBox(
@@ -381,7 +336,9 @@ private fun OrderReturnProcessCard() {
 
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+                verticalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space1
+                )
             ) {
                 Text(
                     text = "Talep süreci",
@@ -411,7 +368,9 @@ private fun OrderReturnActionCard(
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space3
+            )
         ) {
             BbButton(
                 text = "Talebi Gönder",
@@ -424,7 +383,9 @@ private fun OrderReturnActionCard(
                         imageVector = Icons.Outlined.Send,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onPrimary,
-                        modifier = Modifier.size(BBIcon.ButtonIcon)
+                        modifier = Modifier.size(
+                            BBIcon.ButtonIcon
+                        )
                     )
                 }
             )
@@ -446,7 +407,9 @@ private fun OrderReturnSectionTitle(
     subtitle: String
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+        verticalArrangement = Arrangement.spacedBy(
+            BBSpacing.Space1
+        )
     ) {
         Text(
             text = title,
@@ -470,7 +433,9 @@ private fun OrderReturnIconBox(
 ) {
     Box(
         modifier = Modifier
-            .size(BBIcon.BoxMd)
+            .size(
+                BBIcon.BoxMd
+            )
             .background(
                 color = backgroundColor,
                 shape = BBRadius.LgShape
@@ -481,7 +446,9 @@ private fun OrderReturnIconBox(
             imageVector = icon,
             contentDescription = null,
             tint = iconColor,
-            modifier = Modifier.size(BBIcon.Action)
+            modifier = Modifier.size(
+                BBIcon.Action
+            )
         )
     }
 }

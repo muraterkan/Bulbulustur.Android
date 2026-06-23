@@ -12,20 +12,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.ReceiptLong
 import androidx.compose.material.icons.outlined.Send
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -35,6 +32,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
@@ -65,20 +63,32 @@ fun OrderReviewCreateScreen(
 
     val canSubmit = content.isNotBlank() && accepted
 
-    OrderReviewPageScaffold(
-        title = "Ürün Değerlendirme",
-        subtitle = "Satın aldığınız ürün için yorum yazın.",
-        onBackClick = onBackClick
-    ) {
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        containerColor = BBColors.SurfaceMuted,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Ürün Değerlendirme",
+                subtitle = "Satın aldığınız ürün için yorum yazın.",
+                onBackClick = onBackClick
+            )
+        }
+    ) { innerPadding ->
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(BBColors.SurfaceMuted)
+                .padding(innerPadding)
+                .navigationBarsPadding(),
             contentPadding = PaddingValues(
                 start = BBSpacing.PageHorizontal,
                 top = BBSpacing.PageTopCompact,
                 end = BBSpacing.PageHorizontal,
                 bottom = BBSpacing.PageBottom
             ),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.CardGap
+            )
         ) {
             item {
                 OrderReviewProductCard()
@@ -123,91 +133,6 @@ fun OrderReviewCreateScreen(
 }
 
 @Composable
-private fun OrderReviewPageScaffold(
-    title: String,
-    subtitle: String,
-    onBackClick: () -> Unit,
-    content: @Composable () -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(BBColors.SurfaceMuted)
-            .navigationBarsPadding()
-    ) {
-        OrderReviewTopHeader(
-            title = title,
-            subtitle = subtitle,
-            onBackClick = onBackClick
-        )
-
-        Box(
-            modifier = Modifier.weight(1f)
-        ) {
-            content()
-        }
-    }
-}
-
-@Composable
-private fun OrderReviewTopHeader(
-    title: String,
-    subtitle: String,
-    onBackClick: () -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(BBColors.Surface)
-            .statusBarsPadding()
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    horizontal = BBSpacing.PageHorizontal,
-                    vertical = BBSpacing.Space3
-                ),
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(
-                onClick = onBackClick,
-                modifier = Modifier.size(BBIcon.BoxMd)
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.ArrowBack,
-                    contentDescription = "Geri dön",
-                    tint = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.size(BBIcon.TopBarIcon)
-                )
-            }
-
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
-            ) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-
-                Text(
-                    text = subtitle,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-        }
-
-        HorizontalDivider(
-            color = BBColors.Border
-        )
-    }
-}
-
-@Composable
 private fun OrderReviewProductCard() {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
@@ -216,7 +141,9 @@ private fun OrderReviewProductCard() {
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+            horizontalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space3
+            ),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
@@ -232,13 +159,17 @@ private fun OrderReviewProductCard() {
                     imageVector = Icons.Outlined.ReceiptLong,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.size(BBIcon.Feature)
+                    modifier = Modifier.size(
+                        BBIcon.Feature
+                    )
                 )
             }
 
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+                verticalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space1
+                )
             ) {
                 Text(
                     text = "Değerlendirilecek Ürün",
@@ -274,7 +205,9 @@ private fun OrderReviewRatingCard(
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space4
+            )
         ) {
             OrderReviewSectionTitle(
                 title = "Puanınız",
@@ -283,14 +216,20 @@ private fun OrderReviewRatingCard(
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2),
+                horizontalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space2
+                ),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 (1..5).forEach { value ->
                     Icon(
                         imageVector = Icons.Outlined.Star,
                         contentDescription = "$value yıldız",
-                        tint = if (value <= rating) BBColors.Yellow.Yellow600 else MaterialTheme.colorScheme.outlineVariant,
+                        tint = if (value <= rating) {
+                            BBColors.Yellow.Yellow600
+                        } else {
+                            MaterialTheme.colorScheme.outlineVariant
+                        },
                         modifier = Modifier
                             .size(BBIcon.Size2Xl)
                             .clickable {
@@ -321,7 +260,9 @@ private fun OrderReviewContentCard(
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space3
+            )
         ) {
             OrderReviewSectionTitle(
                 title = "Değerlendirmeniz",
@@ -358,15 +299,16 @@ private fun OrderReviewAgreementCard(
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium
+        padding = BbCardPadding.Medium,
+        onClick = {
+            onAcceptedChange(!accepted)
+        }
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable {
-                    onAcceptedChange(!accepted)
-                },
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2),
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space2
+            ),
             verticalAlignment = Alignment.Top
         ) {
             Checkbox(
@@ -376,7 +318,9 @@ private fun OrderReviewAgreementCard(
 
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+                verticalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space1
+                )
             ) {
                 Text(
                     text = "Değerlendirme kurallarını kabul ediyorum.",
@@ -385,7 +329,7 @@ private fun OrderReviewAgreementCard(
                 )
 
                 Text(
-                    text = "Değerlendirmenizun ürün deneyimine dayalı, doğru ve diğer kullanıcılara yardımcı olacak şekilde yazılması gerekir.",
+                    text = "Değerlendirmenizin ürün deneyimine dayalı, doğru ve diğer kullanıcılara yardımcı olacak şekilde yazılması gerekir.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -407,7 +351,9 @@ private fun OrderReviewActionCard(
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space3
+            )
         ) {
             BbButton(
                 text = "Değerlendir",
@@ -421,7 +367,9 @@ private fun OrderReviewActionCard(
                         imageVector = Icons.Outlined.Send,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onPrimary,
-                        modifier = Modifier.size(BBIcon.ButtonIcon)
+                        modifier = Modifier.size(
+                            BBIcon.ButtonIcon
+                        )
                     )
                 }
             )
@@ -443,7 +391,9 @@ private fun OrderReviewSectionTitle(
     subtitle: String
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+        verticalArrangement = Arrangement.spacedBy(
+            BBSpacing.Space1
+        )
     ) {
         Text(
             text = title,

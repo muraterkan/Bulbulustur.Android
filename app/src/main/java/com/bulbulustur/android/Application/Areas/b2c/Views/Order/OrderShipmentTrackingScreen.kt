@@ -11,10 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.LocalShipping
@@ -23,14 +21,15 @@ import androidx.compose.material.icons.outlined.ReceiptLong
 import androidx.compose.material.icons.outlined.Storefront
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
@@ -81,31 +80,49 @@ fun OrderShipmentTrackingScreen(
         )
     )
 
-    OrderShipmentPageScaffold(
-        title = "Kargom Nerede?",
-        subtitle = "Sipariş kargo durumunu takip edin.",
-        onBackClick = onBackClick
-    ) {
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        containerColor = BBColors.SurfaceMuted,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Kargom Nerede?",
+                subtitle = "Sipariş kargo durumunu takip edin.",
+                onBackClick = onBackClick
+            )
+        }
+    ) { innerPadding ->
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(BBColors.SurfaceMuted)
+                .padding(innerPadding)
+                .navigationBarsPadding(),
             contentPadding = PaddingValues(
                 start = BBSpacing.PageHorizontal,
                 top = BBSpacing.PageTopCompact,
                 end = BBSpacing.PageHorizontal,
                 bottom = BBSpacing.PageBottom
             ),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.CardGap
+            )
         ) {
             item {
-                OrderShipmentSummaryCard(tracking = tracking)
+                OrderShipmentSummaryCard(
+                    tracking = tracking
+                )
             }
 
             item {
-                OrderShipmentInfoGrid(tracking = tracking)
+                OrderShipmentInfoGrid(
+                    tracking = tracking
+                )
             }
 
             item {
-                OrderShipmentTimelineCard(tracking = tracking)
+                OrderShipmentTimelineCard(
+                    tracking = tracking
+                )
             }
 
             item {
@@ -126,91 +143,6 @@ fun OrderShipmentTrackingScreen(
 }
 
 @Composable
-private fun OrderShipmentPageScaffold(
-    title: String,
-    subtitle: String,
-    onBackClick: () -> Unit,
-    content: @Composable () -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(BBColors.SurfaceMuted)
-            .navigationBarsPadding()
-    ) {
-        OrderShipmentTopHeader(
-            title = title,
-            subtitle = subtitle,
-            onBackClick = onBackClick
-        )
-
-        Box(
-            modifier = Modifier.weight(1f)
-        ) {
-            content()
-        }
-    }
-}
-
-@Composable
-private fun OrderShipmentTopHeader(
-    title: String,
-    subtitle: String,
-    onBackClick: () -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(BBColors.Surface)
-            .statusBarsPadding()
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    horizontal = BBSpacing.PageHorizontal,
-                    vertical = BBSpacing.Space3
-                ),
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(
-                onClick = onBackClick,
-                modifier = Modifier.size(BBIcon.BoxMd)
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.ArrowBack,
-                    contentDescription = "Geri dön",
-                    tint = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.size(BBIcon.TopBarIcon)
-                )
-            }
-
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
-            ) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-
-                Text(
-                    text = subtitle,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-        }
-
-        HorizontalDivider(
-            color = BBColors.Border
-        )
-    }
-}
-
-@Composable
 private fun OrderShipmentSummaryCard(
     tracking: OrderShipmentTrackingUiModel
 ) {
@@ -221,7 +153,9 @@ private fun OrderShipmentSummaryCard(
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+            horizontalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space3
+            ),
             verticalAlignment = Alignment.Top
         ) {
             OrderShipmentIconBox(
@@ -232,7 +166,9 @@ private fun OrderShipmentSummaryCard(
 
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+                verticalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space1
+                )
             ) {
                 Text(
                     text = tracking.currentStatus,
@@ -262,7 +198,9 @@ private fun OrderShipmentInfoGrid(
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+        horizontalArrangement = Arrangement.spacedBy(
+            BBSpacing.Space3
+        )
     ) {
         OrderShipmentInfoBox(
             modifier = Modifier.weight(1f),
@@ -291,7 +229,9 @@ private fun OrderShipmentTimelineCard(
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space4
+            )
         ) {
             OrderShipmentSectionTitle(
                 title = "Kargo Akışı",
@@ -299,10 +239,14 @@ private fun OrderShipmentTimelineCard(
             )
 
             tracking.steps.forEachIndexed { index, step ->
-                OrderShipmentStepRow(step = step)
+                OrderShipmentStepRow(
+                    step = step
+                )
 
                 if (index != tracking.steps.lastIndex) {
-                    HorizontalDivider(color = BBColors.Border)
+                    HorizontalDivider(
+                        color = BBColors.Border
+                    )
                 }
             }
         }
@@ -315,18 +259,34 @@ private fun OrderShipmentStepRow(
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+        horizontalArrangement = Arrangement.spacedBy(
+            BBSpacing.Space3
+        ),
         verticalAlignment = Alignment.Top
     ) {
         OrderShipmentIconBox(
-            icon = if (step.completed) Icons.Outlined.CheckCircle else Icons.Outlined.LocationOn,
-            backgroundColor = if (step.completed) BBColors.Green.Green50 else MaterialTheme.colorScheme.surfaceVariant,
-            iconColor = if (step.completed) BBColors.Green.Green600 else MaterialTheme.colorScheme.onSurfaceVariant
+            icon = if (step.completed) {
+                Icons.Outlined.CheckCircle
+            } else {
+                Icons.Outlined.LocationOn
+            },
+            backgroundColor = if (step.completed) {
+                BBColors.Green.Green50
+            } else {
+                MaterialTheme.colorScheme.surfaceVariant
+            },
+            iconColor = if (step.completed) {
+                BBColors.Green.Green600
+            } else {
+                MaterialTheme.colorScheme.onSurfaceVariant
+            }
         )
 
         Column(
             modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space1
+            )
         ) {
             Text(
                 text = step.title,
@@ -352,7 +312,9 @@ private fun OrderShipmentHelpCard() {
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+            horizontalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space3
+            ),
             verticalAlignment = Alignment.Top
         ) {
             OrderShipmentIconBox(
@@ -363,7 +325,9 @@ private fun OrderShipmentHelpCard() {
 
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+                verticalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space1
+                )
             ) {
                 Text(
                     text = "Kargo bilgisi hakkında",
@@ -394,16 +358,22 @@ private fun OrderShipmentInfoBox(
                 color = MaterialTheme.colorScheme.surfaceVariant,
                 shape = BBRadius.LgShape
             )
-            .padding(BBSpacing.CardPaddingCompact)
+            .padding(
+                BBSpacing.CardPaddingCompact
+            )
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space2
+            )
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
                 tint = BBColors.Blue.Blue600,
-                modifier = Modifier.size(BBIcon.Action)
+                modifier = Modifier.size(
+                    BBIcon.Action
+                )
             )
 
             Text(
@@ -427,7 +397,9 @@ private fun OrderShipmentSectionTitle(
     subtitle: String
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+        verticalArrangement = Arrangement.spacedBy(
+            BBSpacing.Space1
+        )
     ) {
         Text(
             text = title,
@@ -451,7 +423,9 @@ private fun OrderShipmentIconBox(
 ) {
     Box(
         modifier = Modifier
-            .size(BBIcon.BoxMd)
+            .size(
+                BBIcon.BoxMd
+            )
             .background(
                 color = backgroundColor,
                 shape = BBRadius.LgShape
@@ -462,7 +436,9 @@ private fun OrderShipmentIconBox(
             imageVector = icon,
             contentDescription = null,
             tint = iconColor,
-            modifier = Modifier.size(BBIcon.Action)
+            modifier = Modifier.size(
+                BBIcon.Action
+            )
         )
     }
 }

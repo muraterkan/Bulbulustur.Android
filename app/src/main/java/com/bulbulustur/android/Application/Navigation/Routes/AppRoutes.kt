@@ -8,6 +8,7 @@ object SplashRoutes {
 object RetailRoutes {
     const val Home = "retail/home"
     const val CategoryHome = "retail/category-home"
+    const val CategoryDetail = "retail/category-detail"
     const val ProductList = "retail/product-list"
     const val ProductDetail = "retail/product-detail"
     const val Search = "retail/search"

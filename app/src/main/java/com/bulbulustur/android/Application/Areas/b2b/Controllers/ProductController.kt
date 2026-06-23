@@ -24,11 +24,11 @@ sealed interface ProductControllerEvent {
 
 class ProductController(
     private val executeService: IExecuteService,
-    private val defaultRepository: com.bulbulustur.android.Application.Areas.b2b.Controllers.IB2BDefaultRepository
-) : com.bulbulustur.android.Application.Areas.b2b.Controllers.BaseController() {
+    private val defaultRepository: IB2BDefaultRepository
+) : BaseController() {
 
-    private val _state = MutableStateFlow(_root_ide_package_.com.bulbulustur.android.Application.Areas.b2b.Controllers.ProductControllerState())
-    val State: StateFlow<com.bulbulustur.android.Application.Areas.b2b.Controllers.ProductControllerState> = _state.asStateFlow()
+    private val _state = MutableStateFlow(ProductControllerState())
+    val State: StateFlow<ProductControllerState> = _state.asStateFlow()
 
 
     fun Index(parameters: Map<String, Any?> = emptyMap()) {

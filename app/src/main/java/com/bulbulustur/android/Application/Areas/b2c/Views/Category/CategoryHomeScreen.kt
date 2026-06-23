@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -48,6 +47,7 @@ import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.Ret
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailBottomNavigationItem
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeader
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeaderLeadingAction
+import com.bulbulustur.android.Application.Views.Shared.Components.BbSectionHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
@@ -55,7 +55,6 @@ import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbChip
-import com.bulbulustur.android.Application.Views.Shared.Components.BbSectionHeader
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
@@ -74,6 +73,7 @@ fun RetailCategoryHomeScreen(
     onAccountClick: () -> Unit = {},
     onProductListClick: () -> Unit = {},
     onSubCategoryClick: () -> Unit = {},
+    onCampaignClick: () -> Unit = {},
     onStoreClick: () -> Unit = {}
 ) {
     var searchText by remember {
@@ -107,11 +107,25 @@ fun RetailCategoryHomeScreen(
                 selectedItem = RetailBottomNavigationItem.Menu,
                 onItemClick = { selectedItem ->
                     when (selectedItem) {
-                        RetailBottomNavigationItem.Home -> onHomeClick()
-                        RetailBottomNavigationItem.Menu -> Unit
-                        RetailBottomNavigationItem.ModeSwitch -> onModeSwitchClick()
-                        RetailBottomNavigationItem.Basket -> onBasketClick()
-                        RetailBottomNavigationItem.Account -> onAccountClick()
+                        RetailBottomNavigationItem.Home -> {
+                            onHomeClick()
+                        }
+
+                        RetailBottomNavigationItem.Menu -> {
+                            Unit
+                        }
+
+                        RetailBottomNavigationItem.ModeSwitch -> {
+                            onModeSwitchClick()
+                        }
+
+                        RetailBottomNavigationItem.Basket -> {
+                            onBasketClick()
+                        }
+
+                        RetailBottomNavigationItem.Account -> {
+                            onAccountClick()
+                        }
                     }
                 }
             )
@@ -123,11 +137,14 @@ fun RetailCategoryHomeScreen(
                 .background(MaterialTheme.colorScheme.background),
             contentPadding = PaddingValues(
                 start = BBSpacing.PageHorizontal,
-                top = innerPadding.calculateTopPadding() + BBSpacing.PageTopCompact,
+                top = innerPadding.calculateTopPadding() +
+                        BBSpacing.PageTopCompact,
                 end = BBSpacing.PageHorizontal,
-                bottom = innerPadding.calculateBottomPadding() + BBSpacing.PageBottom
+                bottom = innerPadding.calculateBottomPadding()
             ),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.SectionGapCompact)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.SectionGapCompact
+            )
         ) {
             item {
                 RetailCategoryHomeHeroCard(
@@ -177,6 +194,7 @@ fun RetailCategoryHomeScreen(
             item {
                 RetailCategoryHomeShowcaseRow(
                     onProductListClick = onProductListClick,
+                    onCampaignClick = onCampaignClick,
                     onStoreClick = onStoreClick,
                     onFavoriteClick = onFavoriteClick
                 )
@@ -191,13 +209,7 @@ fun RetailCategoryHomeScreen(
 
             item {
                 RetailCategoryHomePopularSearchChipRow(
-                    onProductListClick = onProductListClick
-                )
-            }
-
-            item {
-                Spacer(
-                    modifier = Modifier.height(BBSpacing.Space4)
+                    onSearchClick = onSearchClick
                 )
             }
         }
@@ -219,11 +231,15 @@ private fun RetailCategoryHomeHeroCard(
                 .fillMaxWidth()
                 .background(BBColors.Yellow.Yellow100)
                 .padding(BBSpacing.Space5),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space4
+            )
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+                horizontalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space2
+                )
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Category,
@@ -254,7 +270,9 @@ private fun RetailCategoryHomeHeroCard(
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+                horizontalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space2
+                )
             ) {
                 BbButton(
                     text = "Ürünleri Gör",
@@ -283,7 +301,9 @@ private fun RetailCategoryHomeGatewayRow(
     onFavoriteClick: () -> Unit
 ) {
     LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+        horizontalArrangement = Arrangement.spacedBy(
+            BBSpacing.Space3
+        )
     ) {
         items(
             items = getRetailCategoryHomeGateways(),
@@ -295,9 +315,17 @@ private fun RetailCategoryHomeGatewayRow(
                 item = item,
                 onClick = {
                     when (item.target) {
-                        RetailCategoryHomeGatewayTarget.Products -> onProductListClick()
-                        RetailCategoryHomeGatewayTarget.Stores -> onStoreClick()
-                        RetailCategoryHomeGatewayTarget.Favorites -> onFavoriteClick()
+                        RetailCategoryHomeGatewayTarget.Products -> {
+                            onProductListClick()
+                        }
+
+                        RetailCategoryHomeGatewayTarget.Stores -> {
+                            onStoreClick()
+                        }
+
+                        RetailCategoryHomeGatewayTarget.Favorites -> {
+                            onFavoriteClick()
+                        }
                     }
                 }
             )
@@ -317,7 +345,9 @@ private fun RetailCategoryHomeGatewayCard(
         onClick = onClick
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space2
+            )
         ) {
             Box(
                 modifier = Modifier
@@ -361,7 +391,9 @@ private fun RetailCategoryHomeTrustStrip() {
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+            horizontalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space3
+            )
         ) {
             RetailCategoryHomeTrustItem(
                 icon = Icons.Outlined.Verified,
@@ -393,7 +425,9 @@ private fun RetailCategoryHomeTrustItem(
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+        verticalArrangement = Arrangement.spacedBy(
+            BBSpacing.Space1
+        )
     ) {
         Icon(
             imageVector = icon,
@@ -424,7 +458,9 @@ private fun RetailCategoryHomeSubCategoryCard(
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+            horizontalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space3
+            )
         ) {
             Box(
                 modifier = Modifier
@@ -445,7 +481,9 @@ private fun RetailCategoryHomeSubCategoryCard(
 
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+                verticalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space1
+                )
             ) {
                 Text(
                     text = item.title,
@@ -473,11 +511,14 @@ private fun RetailCategoryHomeSubCategoryCard(
 @Composable
 private fun RetailCategoryHomeShowcaseRow(
     onProductListClick: () -> Unit,
+    onCampaignClick: () -> Unit,
     onStoreClick: () -> Unit,
     onFavoriteClick: () -> Unit
 ) {
     LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+        horizontalArrangement = Arrangement.spacedBy(
+            BBSpacing.Space3
+        )
     ) {
         items(
             items = getRetailCategoryHomeShowcases(),
@@ -489,9 +530,21 @@ private fun RetailCategoryHomeShowcaseRow(
                 item = item,
                 onClick = {
                     when (item.target) {
-                        RetailCategoryHomeShowcaseTarget.Products -> onProductListClick()
-                        RetailCategoryHomeShowcaseTarget.Stores -> onStoreClick()
-                        RetailCategoryHomeShowcaseTarget.Favorites -> onFavoriteClick()
+                        RetailCategoryHomeShowcaseTarget.Products -> {
+                            onProductListClick()
+                        }
+
+                        RetailCategoryHomeShowcaseTarget.Campaigns -> {
+                            onCampaignClick()
+                        }
+
+                        RetailCategoryHomeShowcaseTarget.Stores -> {
+                            onStoreClick()
+                        }
+
+                        RetailCategoryHomeShowcaseTarget.Favorites -> {
+                            onFavoriteClick()
+                        }
                     }
                 }
             )
@@ -516,7 +569,9 @@ private fun RetailCategoryHomeShowcaseCard(
     ) {
         Column(
             modifier = Modifier.padding(BBSpacing.Space4),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space3
+            )
         ) {
             Icon(
                 imageVector = item.icon,
@@ -542,10 +597,12 @@ private fun RetailCategoryHomeShowcaseCard(
 
 @Composable
 private fun RetailCategoryHomePopularSearchChipRow(
-    onProductListClick: () -> Unit
+    onSearchClick: (String) -> Unit
 ) {
     LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+        horizontalArrangement = Arrangement.spacedBy(
+            BBSpacing.Space2
+        )
     ) {
         items(
             items = getRetailCategoryHomePopularSearches(),
@@ -556,7 +613,9 @@ private fun RetailCategoryHomePopularSearchChipRow(
             BbChip(
                 text = item,
                 selected = false,
-                onClick = onProductListClick
+                onClick = {
+                    onSearchClick(item)
+                }
             )
         }
     }
@@ -599,6 +658,7 @@ private data class RetailCategoryHomeShowcaseItem(
 
 private enum class RetailCategoryHomeShowcaseTarget {
     Products,
+    Campaigns,
     Stores,
     Favorites
 }
@@ -681,7 +741,7 @@ private fun getRetailCategoryHomeShowcases(): List<RetailCategoryHomeShowcaseIte
             icon = Icons.Outlined.LocalOffer,
             backgroundColor = BBColors.Green.Green50,
             iconColor = BBColors.Green.Green700,
-            target = RetailCategoryHomeShowcaseTarget.Products
+            target = RetailCategoryHomeShowcaseTarget.Campaigns
         ),
         RetailCategoryHomeShowcaseItem(
             title = "Mağaza Keşfi",

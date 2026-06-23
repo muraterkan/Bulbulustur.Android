@@ -11,11 +11,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.LocalShipping
@@ -23,27 +21,27 @@ import androidx.compose.material.icons.outlined.Payments
 import androidx.compose.material.icons.outlined.ReceiptLong
 import androidx.compose.material.icons.outlined.Storefront
 import androidx.compose.material.icons.outlined.Visibility
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
+import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBAlpha
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
-import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBAlpha
 
 @Composable
 fun OrderListScreen(
@@ -52,20 +50,32 @@ fun OrderListScreen(
 ) {
     val orders = getDemoOrders()
 
-    OrderListPageScaffold(
-        title = "Siparişlerim",
-        subtitle = "Sipariş ve teslimat durumlarınızı takip edin.",
-        onBackClick = onBackClick
-    ) {
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        containerColor = BBColors.SurfaceMuted,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Siparişlerim",
+                subtitle = "Sipariş ve teslimat durumlarınızı takip edin.",
+                onBackClick = onBackClick
+            )
+        }
+    ) { innerPadding ->
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(BBColors.SurfaceMuted)
+                .padding(innerPadding)
+                .navigationBarsPadding(),
             contentPadding = PaddingValues(
                 start = BBSpacing.PageHorizontal,
                 top = BBSpacing.PageTopCompact,
                 end = BBSpacing.PageHorizontal,
                 bottom = BBSpacing.PageBottom
             ),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.CardGap
+            )
         ) {
             if (orders.isEmpty()) {
                 item {
@@ -75,14 +85,20 @@ fun OrderListScreen(
                 item {
                     OrderListOverviewCard(
                         totalOrderCount = orders.size,
-                        activeOrderCount = orders.count { it.isActive },
-                        deliveredOrderCount = orders.count { it.statusText == "Teslim Edildi" }
+                        activeOrderCount = orders.count {
+                            it.isActive
+                        },
+                        deliveredOrderCount = orders.count {
+                            it.statusText == "Teslim Edildi"
+                        }
                     )
                 }
 
                 items(
                     items = orders,
-                    key = { order -> order.orderId }
+                    key = { order ->
+                        order.orderId
+                    }
                 ) { order ->
                     OrderCard(
                         order = order,
@@ -91,91 +107,6 @@ fun OrderListScreen(
                 }
             }
         }
-    }
-}
-
-@Composable
-private fun OrderListPageScaffold(
-    title: String,
-    subtitle: String,
-    onBackClick: () -> Unit,
-    content: @Composable () -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(BBColors.SurfaceMuted)
-            .navigationBarsPadding()
-    ) {
-        OrderListTopHeader(
-            title = title,
-            subtitle = subtitle,
-            onBackClick = onBackClick
-        )
-
-        Box(
-            modifier = Modifier.weight(1f)
-        ) {
-            content()
-        }
-    }
-}
-
-@Composable
-private fun OrderListTopHeader(
-    title: String,
-    subtitle: String,
-    onBackClick: () -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(BBColors.Surface)
-            .statusBarsPadding()
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    horizontal = BBSpacing.PageHorizontal,
-                    vertical = BBSpacing.Space3
-                ),
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(
-                onClick = onBackClick,
-                modifier = Modifier.size(BBIcon.BoxMd)
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.ArrowBack,
-                    contentDescription = "Geri dön",
-                    tint = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.size(BBIcon.TopBarIcon)
-                )
-            }
-
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
-            ) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-
-                Text(
-                    text = subtitle,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-        }
-
-        HorizontalDivider(
-            color = BBColors.Border
-        )
     }
 }
 
@@ -192,11 +123,15 @@ private fun OrderListOverviewCard(
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space4
+            )
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+                horizontalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space3
+                ),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 OrderIconBox(
@@ -207,7 +142,9 @@ private fun OrderListOverviewCard(
 
                 Column(
                     modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+                    verticalArrangement = Arrangement.spacedBy(
+                        BBSpacing.Space1
+                    )
                 ) {
                     Text(
                         text = "Sipariş Özeti",
@@ -225,7 +162,9 @@ private fun OrderListOverviewCard(
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+                horizontalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space3
+                )
             ) {
                 OrderStatBox(
                     modifier = Modifier.weight(1f),
@@ -264,11 +203,15 @@ private fun OrderCard(
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space4
+            )
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+                horizontalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space3
+                ),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 OrderIconBox(
@@ -279,7 +222,9 @@ private fun OrderCard(
 
                 Column(
                     modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+                    verticalArrangement = Arrangement.spacedBy(
+                        BBSpacing.Space1
+                    )
                 ) {
                     Text(
                         text = order.orderNumber,
@@ -302,7 +247,9 @@ private fun OrderCard(
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+                horizontalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space3
+                )
             ) {
                 OrderInfoBox(
                     modifier = Modifier.weight(1f),
@@ -321,23 +268,31 @@ private fun OrderCard(
                 )
             }
 
-            OrderProductSummaryBox(order = order)
+            OrderProductSummaryBox(
+                order = order
+            )
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+                horizontalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space3
+                ),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Row(
                     modifier = Modifier.weight(1f),
-                    horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2),
+                    horizontalArrangement = Arrangement.spacedBy(
+                        BBSpacing.Space2
+                    ),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Storefront,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.size(BBIcon.Inline)
+                        modifier = Modifier.size(
+                            BBIcon.Inline
+                        )
                     )
 
                     Text(
@@ -359,7 +314,9 @@ private fun OrderCard(
                             imageVector = Icons.Outlined.Visibility,
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.onPrimary,
-                            modifier = Modifier.size(BBIcon.ButtonIcon)
+                            modifier = Modifier.size(
+                                BBIcon.ButtonIcon
+                            )
                         )
                     },
                     trailingIcon = {
@@ -367,7 +324,9 @@ private fun OrderCard(
                             imageVector = Icons.Outlined.KeyboardArrowRight,
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.onPrimary,
-                            modifier = Modifier.size(BBIcon.ButtonIcon)
+                            modifier = Modifier.size(
+                                BBIcon.ButtonIcon
+                            )
                         )
                     }
                 )
@@ -387,20 +346,28 @@ private fun OrderProductSummaryBox(
                 color = MaterialTheme.colorScheme.surfaceVariant,
                 shape = BBRadius.LgShape
             )
-            .padding(BBSpacing.CardPaddingCompact),
-        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+            .padding(
+                BBSpacing.CardPaddingCompact
+            ),
+        horizontalArrangement = Arrangement.spacedBy(
+            BBSpacing.Space3
+        ),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
             imageVector = Icons.Outlined.ReceiptLong,
             contentDescription = null,
             tint = BBColors.Blue.Blue600,
-            modifier = Modifier.size(BBIcon.Action)
+            modifier = Modifier.size(
+                BBIcon.Action
+            )
         )
 
         Column(
             modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space1
+            )
         ) {
             Text(
                 text = order.productTitle,
@@ -431,16 +398,22 @@ private fun OrderInfoBox(
                 color = MaterialTheme.colorScheme.surfaceVariant,
                 shape = BBRadius.LgShape
             )
-            .padding(BBSpacing.CardPaddingCompact)
+            .padding(
+                BBSpacing.CardPaddingCompact
+            )
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space2
+            )
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
                 tint = iconColor,
-                modifier = Modifier.size(BBIcon.Action)
+                modifier = Modifier.size(
+                    BBIcon.Action
+                )
             )
 
             Text(
@@ -470,10 +443,14 @@ private fun OrderStatBox(
                 color = MaterialTheme.colorScheme.surfaceVariant,
                 shape = BBRadius.LgShape
             )
-            .padding(BBSpacing.CardPaddingCompact)
+            .padding(
+                BBSpacing.CardPaddingCompact
+            )
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space1
+            )
         ) {
             Text(
                 text = value,
@@ -498,7 +475,9 @@ private fun OrderStatusBadge(
     Box(
         modifier = Modifier
             .background(
-                color = color.copy(alpha = BBAlpha.Overlay),
+                color = color.copy(
+                    alpha = BBAlpha.Overlay
+                ),
                 shape = BBRadius.Badge
             )
             .padding(
@@ -522,7 +501,9 @@ private fun OrderIconBox(
 ) {
     Box(
         modifier = Modifier
-            .size(BBIcon.BoxMd)
+            .size(
+                BBIcon.BoxMd
+            )
             .background(
                 color = backgroundColor,
                 shape = BBRadius.LgShape
@@ -533,7 +514,9 @@ private fun OrderIconBox(
             imageVector = icon,
             contentDescription = null,
             tint = iconColor,
-            modifier = Modifier.size(BBIcon.Action)
+            modifier = Modifier.size(
+                BBIcon.Action
+            )
         )
     }
 }
@@ -548,7 +531,9 @@ private fun OrderEmptyState() {
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space3
+            )
         ) {
             OrderIconBox(
                 icon = Icons.Outlined.ReceiptLong,

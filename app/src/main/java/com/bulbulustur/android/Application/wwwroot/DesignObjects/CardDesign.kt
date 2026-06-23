@@ -1,7 +1,6 @@
 ﻿package com.bulbulustur.android.Application.wwwroot.DesignObjects
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -37,64 +36,114 @@ fun BbCard(
     onClick: (() -> Unit)? = null,
     content: @Composable () -> Unit
 ) {
-    val cardModifier = if (onClick != null) {
-        modifier.clickable(enabled = enabled) {
-            onClick()
-        }
-    } else {
-        modifier
-    }
-
     when (variant) {
         BbCardVariant.Default -> {
-            Card(
-                modifier = cardModifier,
-                shape = BBRadius.Card,
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surface
-                )
-            ) {
-                BbCardContent(
-                    padding = padding,
-                    content = content
-                )
+            if (onClick != null) {
+                Card(
+                    onClick = onClick,
+                    modifier = modifier,
+                    enabled = enabled,
+                    shape = BBRadius.Card,
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surface
+                    )
+                ) {
+                    BbCardContent(
+                        padding = padding,
+                        content = content
+                    )
+                }
+            } else {
+                Card(
+                    modifier = modifier,
+                    shape = BBRadius.Card,
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surface
+                    )
+                ) {
+                    BbCardContent(
+                        padding = padding,
+                        content = content
+                    )
+                }
             }
         }
 
         BbCardVariant.Elevated -> {
-            ElevatedCard(
-                modifier = cardModifier,
-                shape = BBRadius.Card,
-                colors = CardDefaults.elevatedCardColors(
-                    containerColor = MaterialTheme.colorScheme.surface
-                ),
-                elevation = CardDefaults.elevatedCardElevation(
-                    defaultElevation = BBSpacing.ElevationSm
-                )
-            ) {
-                BbCardContent(
-                    padding = padding,
-                    content = content
-                )
+            if (onClick != null) {
+                ElevatedCard(
+                    onClick = onClick,
+                    modifier = modifier,
+                    enabled = enabled,
+                    shape = BBRadius.Card,
+                    colors = CardDefaults.elevatedCardColors(
+                        containerColor = MaterialTheme.colorScheme.surface
+                    ),
+                    elevation = CardDefaults.elevatedCardElevation(
+                        defaultElevation = BBSpacing.ElevationSm
+                    )
+                ) {
+                    BbCardContent(
+                        padding = padding,
+                        content = content
+                    )
+                }
+            } else {
+                ElevatedCard(
+                    modifier = modifier,
+                    shape = BBRadius.Card,
+                    colors = CardDefaults.elevatedCardColors(
+                        containerColor = MaterialTheme.colorScheme.surface
+                    ),
+                    elevation = CardDefaults.elevatedCardElevation(
+                        defaultElevation = BBSpacing.ElevationSm
+                    )
+                ) {
+                    BbCardContent(
+                        padding = padding,
+                        content = content
+                    )
+                }
             }
         }
 
         BbCardVariant.Outlined -> {
-            OutlinedCard(
-                modifier = cardModifier,
-                shape = BBRadius.Card,
-                colors = CardDefaults.outlinedCardColors(
-                    containerColor = MaterialTheme.colorScheme.surface
-                ),
-                border = BorderStroke(
-                    width = BBSpacing.BorderThin,
-                    color = MaterialTheme.colorScheme.outlineVariant
-                )
-            ) {
-                BbCardContent(
-                    padding = padding,
-                    content = content
-                )
+            if (onClick != null) {
+                OutlinedCard(
+                    onClick = onClick,
+                    modifier = modifier,
+                    enabled = enabled,
+                    shape = BBRadius.Card,
+                    colors = CardDefaults.outlinedCardColors(
+                        containerColor = MaterialTheme.colorScheme.surface
+                    ),
+                    border = BorderStroke(
+                        width = BBSpacing.BorderThin,
+                        color = MaterialTheme.colorScheme.outlineVariant
+                    )
+                ) {
+                    BbCardContent(
+                        padding = padding,
+                        content = content
+                    )
+                }
+            } else {
+                OutlinedCard(
+                    modifier = modifier,
+                    shape = BBRadius.Card,
+                    colors = CardDefaults.outlinedCardColors(
+                        containerColor = MaterialTheme.colorScheme.surface
+                    ),
+                    border = BorderStroke(
+                        width = BBSpacing.BorderThin,
+                        color = MaterialTheme.colorScheme.outlineVariant
+                    )
+                ) {
+                    BbCardContent(
+                        padding = padding,
+                        content = content
+                    )
+                }
             }
         }
     }
@@ -106,7 +155,9 @@ private fun BbCardContent(
     content: @Composable () -> Unit
 ) {
     Box(
-        modifier = Modifier.padding(bbCardPaddingValues(padding))
+        modifier = Modifier.padding(
+            bbCardPaddingValues(padding)
+        )
     ) {
         content()
     }
@@ -116,9 +167,20 @@ private fun bbCardPaddingValues(
     padding: BbCardPadding
 ): PaddingValues {
     return when (padding) {
-        BbCardPadding.None -> PaddingValues(BBSpacing.None)
-        BbCardPadding.Small -> PaddingValues(BBSpacing.CardPaddingCompact)
-        BbCardPadding.Medium -> PaddingValues(BBSpacing.CardPadding)
-        BbCardPadding.Large -> PaddingValues(BBSpacing.CardPaddingLoose)
+        BbCardPadding.None -> {
+            PaddingValues(BBSpacing.None)
+        }
+
+        BbCardPadding.Small -> {
+            PaddingValues(BBSpacing.CardPaddingCompact)
+        }
+
+        BbCardPadding.Medium -> {
+            PaddingValues(BBSpacing.CardPadding)
+        }
+
+        BbCardPadding.Large -> {
+            PaddingValues(BBSpacing.CardPaddingLoose)
+        }
     }
 }

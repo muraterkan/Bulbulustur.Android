@@ -2,7 +2,6 @@ package com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -80,17 +79,29 @@ fun RetailSearchHeader(
                     .fillMaxWidth()
                     .height(BBLayout.TopBarHeight),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+                horizontalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space2
+                )
             ) {
                 RetailHeaderActionButton(
-                    icon = if (leadingAction == RetailSearchHeaderLeadingAction.Back) {
+                    icon = if (
+                        leadingAction == RetailSearchHeaderLeadingAction.Back
+                    ) {
                         Icons.AutoMirrored.Outlined.ArrowBack
                     } else {
                         Icons.Outlined.Menu
                     },
-                    contentDescription = if (leadingAction == RetailSearchHeaderLeadingAction.Back) "Geri" else "Menü",
+                    contentDescription = if (
+                        leadingAction == RetailSearchHeaderLeadingAction.Back
+                    ) {
+                        "Geri"
+                    } else {
+                        "Menü"
+                    },
                     onClick = {
-                        if (leadingAction == RetailSearchHeaderLeadingAction.Back) {
+                        if (
+                            leadingAction == RetailSearchHeaderLeadingAction.Back
+                        ) {
                             onBackClick?.invoke() ?: onMenuClick()
                         } else {
                             onMenuClick()
@@ -130,9 +141,6 @@ private fun RetailHeaderActionButton(
     onClick: () -> Unit
 ) {
     BbIconBoxIcon(
-        modifier = Modifier.clickable {
-            onClick()
-        },
         icon = icon,
         contentDescription = contentDescription,
         size = BbIconBoxSize.Medium,
@@ -141,7 +149,8 @@ private fun RetailHeaderActionButton(
         borderColor = BBColors.Border,
         borderWidth = BBSpacing.Divider,
         bordered = true,
-        radius = BBRadius.xl
+        radius = BBRadius.xl,
+        onClick = onClick
     )
 }
 
@@ -155,7 +164,9 @@ private fun RetailSearchInput(
     modifier: Modifier = Modifier
 ) {
     Surface(
-        modifier = modifier.height(BBLayout.TopBarHeight - BBSpacing.Space4),
+        modifier = modifier.height(
+            BBLayout.TopBarHeight - BBSpacing.Space4
+        ),
         shape = RoundedCornerShape(BBRadius.xl),
         color = BBColors.SurfaceMuted,
         border = BorderStroke(
@@ -178,21 +189,27 @@ private fun RetailSearchInput(
             },
             leadingIcon = {
                 IconButton(
-                    onClick = { onSearchClick?.invoke() },
+                    onClick = {
+                        onSearchClick?.invoke()
+                    },
                     enabled = onSearchClick != null
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Search,
                         contentDescription = "Ara",
                         tint = BBColors.TextMuted,
-                        modifier = Modifier.height(BBIcon.TopBarIcon)
+                        modifier = Modifier.height(
+                            BBIcon.TopBarIcon
+                        )
                     )
                 }
             },
             trailingIcon = {
                 if (searchText.isNotBlank()) {
                     IconButton(
-                        onClick = { onClearClick?.invoke() }
+                        onClick = {
+                            onClearClick?.invoke()
+                        }
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.Close,

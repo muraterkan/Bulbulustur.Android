@@ -11,10 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.KeyboardArrowRight
@@ -23,14 +21,15 @@ import androidx.compose.material.icons.outlined.Print
 import androidx.compose.material.icons.outlined.ReceiptLong
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
@@ -56,20 +55,32 @@ fun OrderContractScreen(
         contractDate = contractDate
     )
 
-    OrderContractPageScaffold(
-        title = "Sözleşme",
-        subtitle = "Siparişe ait mesafeli satış sözleşmesi.",
-        onBackClick = onBackClick
-    ) {
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        containerColor = BBColors.SurfaceMuted,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Sözleşme",
+                subtitle = "Siparişe ait mesafeli satış sözleşmesi.",
+                onBackClick = onBackClick
+            )
+        }
+    ) { innerPadding ->
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(BBColors.SurfaceMuted)
+                .padding(innerPadding)
+                .navigationBarsPadding(),
             contentPadding = PaddingValues(
                 start = BBSpacing.PageHorizontal,
                 top = BBSpacing.PageTopCompact,
                 end = BBSpacing.PageHorizontal,
                 bottom = BBSpacing.PageBottom
             ),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.CardGap
+            )
         ) {
             item {
                 OrderContractSummaryCard(
@@ -81,7 +92,9 @@ fun OrderContractScreen(
             item {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+                    horizontalArrangement = Arrangement.spacedBy(
+                        BBSpacing.Space3
+                    )
                 ) {
                     OrderContractInfoBox(
                         modifier = Modifier.weight(1f),
@@ -102,11 +115,15 @@ fun OrderContractScreen(
             }
 
             item {
-                OrderContractPartiesCard(contract = contract)
+                OrderContractPartiesCard(
+                    contract = contract
+                )
             }
 
             item {
-                OrderContractLegalTextCard(contract = contract)
+                OrderContractLegalTextCard(
+                    contract = contract
+                )
             }
 
             item {
@@ -115,91 +132,6 @@ fun OrderContractScreen(
                 )
             }
         }
-    }
-}
-
-@Composable
-private fun OrderContractPageScaffold(
-    title: String,
-    subtitle: String,
-    onBackClick: () -> Unit,
-    content: @Composable () -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(BBColors.SurfaceMuted)
-            .navigationBarsPadding()
-    ) {
-        OrderContractTopHeader(
-            title = title,
-            subtitle = subtitle,
-            onBackClick = onBackClick
-        )
-
-        Box(
-            modifier = Modifier.weight(1f)
-        ) {
-            content()
-        }
-    }
-}
-
-@Composable
-private fun OrderContractTopHeader(
-    title: String,
-    subtitle: String,
-    onBackClick: () -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(BBColors.Surface)
-            .statusBarsPadding()
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    horizontal = BBSpacing.PageHorizontal,
-                    vertical = BBSpacing.Space3
-                ),
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(
-                onClick = onBackClick,
-                modifier = Modifier.size(BBIcon.BoxMd)
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.ArrowBack,
-                    contentDescription = "Geri dön",
-                    tint = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.size(BBIcon.TopBarIcon)
-                )
-            }
-
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
-            ) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-
-                Text(
-                    text = subtitle,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-        }
-
-        HorizontalDivider(
-            color = BBColors.Border
-        )
     }
 }
 
@@ -215,11 +147,15 @@ private fun OrderContractSummaryCard(
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space4
+            )
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+                horizontalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space3
+                ),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 OrderContractIconBox(
@@ -230,7 +166,9 @@ private fun OrderContractSummaryCard(
 
                 Column(
                     modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+                    verticalArrangement = Arrangement.spacedBy(
+                        BBSpacing.Space1
+                    )
                 ) {
                     Text(
                         text = "Mesafeli Satış Sözleşmesi",
@@ -261,7 +199,9 @@ private fun OrderContractSummaryCard(
                         imageVector = Icons.Outlined.Print,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onPrimary,
-                        modifier = Modifier.size(BBIcon.ButtonIcon)
+                        modifier = Modifier.size(
+                            BBIcon.ButtonIcon
+                        )
                     )
                 }
             )
@@ -280,7 +220,9 @@ private fun OrderContractPartiesCard(
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space4
+            )
         ) {
             OrderContractSectionTitle(
                 title = "Taraf Bilgileri",
@@ -321,9 +263,15 @@ private fun OrderContractLegalTextCard(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(BBColors.SurfaceMuted)
-                    .padding(BBSpacing.CardPadding),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+                    .background(
+                        BBColors.SurfaceMuted
+                    )
+                    .padding(
+                        BBSpacing.CardPadding
+                    ),
+                verticalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space1
+                )
             ) {
                 Text(
                     text = "HUKUKİ METİN",
@@ -341,9 +289,15 @@ private fun OrderContractLegalTextCard(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(BBColors.Surface)
-                    .padding(BBSpacing.CardPadding),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space5)
+                    .background(
+                        BBColors.Surface
+                    )
+                    .padding(
+                        BBSpacing.CardPadding
+                    ),
+                verticalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space5
+                )
             ) {
                 contract.sections.forEach { section ->
                     OrderContractLegalSection(
@@ -371,7 +325,9 @@ private fun OrderContractBottomActionCard(
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space3
+            )
         ) {
             OrderContractSectionTitle(
                 title = "Belge İşlemleri",
@@ -389,7 +345,9 @@ private fun OrderContractBottomActionCard(
                         imageVector = Icons.Outlined.Print,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.size(BBIcon.ButtonIcon)
+                        modifier = Modifier.size(
+                            BBIcon.ButtonIcon
+                        )
                     )
                 },
                 trailingIcon = {
@@ -397,7 +355,9 @@ private fun OrderContractBottomActionCard(
                         imageVector = Icons.Outlined.KeyboardArrowRight,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.size(BBIcon.ButtonIcon)
+                        modifier = Modifier.size(
+                            BBIcon.ButtonIcon
+                        )
                     )
                 }
             )
@@ -419,16 +379,22 @@ private fun OrderContractInfoBox(
                 color = MaterialTheme.colorScheme.surfaceVariant,
                 shape = BBRadius.LgShape
             )
-            .padding(BBSpacing.CardPaddingCompact)
+            .padding(
+                BBSpacing.CardPaddingCompact
+            )
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space2
+            )
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
                 tint = iconColor,
-                modifier = Modifier.size(BBIcon.Action)
+                modifier = Modifier.size(
+                    BBIcon.Action
+                )
             )
 
             Text(
@@ -454,7 +420,9 @@ private fun OrderContractPartyRow(
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+        horizontalArrangement = Arrangement.spacedBy(
+            BBSpacing.Space3
+        ),
         verticalAlignment = Alignment.Top
     ) {
         OrderContractIconBox(
@@ -465,7 +433,9 @@ private fun OrderContractPartyRow(
 
         Column(
             modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space1
+            )
         ) {
             Text(
                 text = title.uppercase(),
@@ -495,7 +465,9 @@ private fun OrderContractLegalSection(
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+        verticalArrangement = Arrangement.spacedBy(
+            BBSpacing.Space2
+        )
     ) {
         Text(
             text = title,
@@ -517,7 +489,9 @@ private fun OrderContractSectionTitle(
     subtitle: String
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+        verticalArrangement = Arrangement.spacedBy(
+            BBSpacing.Space1
+        )
     ) {
         Text(
             text = title,
@@ -544,7 +518,9 @@ private fun OrderContractNoticeBox(
                 color = BBColors.Yellow.Yellow50,
                 shape = BBRadius.LgShape
             )
-            .padding(BBSpacing.CardPaddingCompact)
+            .padding(
+                BBSpacing.CardPaddingCompact
+            )
     ) {
         Text(
             text = text,
@@ -565,7 +541,9 @@ private fun OrderContractDateBox(
                 color = BBColors.Yellow.Yellow50,
                 shape = BBRadius.LgShape
             )
-            .padding(BBSpacing.CardPaddingCompact)
+            .padding(
+                BBSpacing.CardPaddingCompact
+            )
     ) {
         Text(
             text = dateText,
@@ -583,7 +561,9 @@ private fun OrderContractIconBox(
 ) {
     Box(
         modifier = Modifier
-            .size(BBIcon.BoxMd)
+            .size(
+                BBIcon.BoxMd
+            )
             .background(
                 color = backgroundColor,
                 shape = BBRadius.LgShape
@@ -594,7 +574,9 @@ private fun OrderContractIconBox(
             imageVector = icon,
             contentDescription = null,
             tint = iconColor,
-            modifier = Modifier.size(BBIcon.Action)
+            modifier = Modifier.size(
+                BBIcon.Action
+            )
         )
     }
 }

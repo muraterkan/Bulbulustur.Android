@@ -1,13 +1,13 @@
 ﻿package com.bulbulustur.android.Application.Views.Shared.Components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
@@ -32,6 +32,7 @@ fun BbInnerPageHeader(
     title: String,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
+    subtitle: String? = null,
     actionIcon: ImageVector? = null,
     actionContentDescription: String? = null,
     onActionClick: (() -> Unit)? = null,
@@ -46,8 +47,12 @@ fun BbInnerPageHeader(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.surface)
-                .windowInsetsPadding(WindowInsets.statusBars)
+                .background(
+                    color = MaterialTheme.colorScheme.surface
+                )
+                .windowInsetsPadding(
+                    WindowInsets.statusBars
+                )
                 .padding(
                     start = BBSpacing.Space2,
                     top = BBSpacing.Space2,
@@ -58,9 +63,13 @@ fun BbInnerPageHeader(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(BBLayout.TopBarHeight),
+                    .heightIn(
+                        min = BBLayout.TopBarHeight
+                    ),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.IconTextGap)
+                horizontalArrangement = Arrangement.spacedBy(
+                    BBSpacing.IconTextGap
+                )
             ) {
                 BbInnerHeaderActionButton(
                     icon = Icons.AutoMirrored.Outlined.ArrowBack,
@@ -68,14 +77,30 @@ fun BbInnerPageHeader(
                     onClick = onBackClick
                 )
 
-                Text(
-                    text = title,
+                Column(
                     modifier = Modifier.weight(1f),
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
+                    verticalArrangement = Arrangement.spacedBy(
+                        BBSpacing.Space1
+                    )
+                ) {
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+
+                    if (!subtitle.isNullOrBlank()) {
+                        Text(
+                            text = subtitle,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+                }
 
                 when {
                     actionContent != null -> {
@@ -85,7 +110,8 @@ fun BbInnerPageHeader(
                     actionIcon != null && onActionClick != null -> {
                         BbInnerHeaderActionButton(
                             icon = actionIcon,
-                            contentDescription = actionContentDescription ?: title,
+                            contentDescription = actionContentDescription
+                                ?: title,
                             onClick = onActionClick
                         )
                     }
@@ -102,9 +128,6 @@ private fun BbInnerHeaderActionButton(
     onClick: () -> Unit
 ) {
     BbIconBoxIcon(
-        modifier = Modifier.clickable {
-            onClick()
-        },
         icon = icon,
         contentDescription = contentDescription,
         size = BbIconBoxSize.Medium,
@@ -113,6 +136,7 @@ private fun BbInnerHeaderActionButton(
         borderColor = MaterialTheme.colorScheme.outlineVariant,
         borderWidth = BBSpacing.BorderThin,
         bordered = true,
-        radius = BBRadius.xl
+        radius = BBRadius.xl,
+        onClick = onClick
     )
 }

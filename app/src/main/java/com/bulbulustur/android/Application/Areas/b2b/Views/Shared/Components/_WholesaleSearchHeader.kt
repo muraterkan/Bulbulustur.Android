@@ -2,7 +2,6 @@ package com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -80,21 +79,29 @@ fun WholesaleSearchHeader(
                     .fillMaxWidth()
                     .height(BBLayout.TopBarHeight),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+                horizontalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space2
+                )
             ) {
                 WholesaleHeaderActionButton(
-                    icon = if (leadingAction == WholesaleSearchHeaderLeadingAction.Back) {
+                    icon = if (
+                        leadingAction == WholesaleSearchHeaderLeadingAction.Back
+                    ) {
                         Icons.AutoMirrored.Outlined.ArrowBack
                     } else {
                         Icons.Outlined.Menu
                     },
-                    contentDescription = if (leadingAction == WholesaleSearchHeaderLeadingAction.Back) {
+                    contentDescription = if (
+                        leadingAction == WholesaleSearchHeaderLeadingAction.Back
+                    ) {
                         "Geri"
                     } else {
                         "Menü"
                     },
                     onClick = {
-                        if (leadingAction == WholesaleSearchHeaderLeadingAction.Back) {
+                        if (
+                            leadingAction == WholesaleSearchHeaderLeadingAction.Back
+                        ) {
                             onBackClick?.invoke() ?: onMenuClick()
                         } else {
                             onMenuClick()
@@ -134,9 +141,6 @@ private fun WholesaleHeaderActionButton(
     onClick: () -> Unit
 ) {
     BbIconBoxIcon(
-        modifier = Modifier.clickable {
-            onClick()
-        },
         icon = icon,
         contentDescription = contentDescription,
         size = BbIconBoxSize.Medium,
@@ -145,7 +149,8 @@ private fun WholesaleHeaderActionButton(
         borderColor = BBColors.Border,
         borderWidth = BBSpacing.Divider,
         bordered = true,
-        radius = BBRadius.xl
+        radius = BBRadius.xl,
+        onClick = onClick
     )
 }
 
@@ -159,7 +164,9 @@ private fun WholesaleSearchInput(
     modifier: Modifier = Modifier
 ) {
     Surface(
-        modifier = modifier.height(BBLayout.TopBarHeight - BBSpacing.Space4),
+        modifier = modifier.height(
+            BBLayout.TopBarHeight - BBSpacing.Space4
+        ),
         shape = RoundedCornerShape(BBRadius.xl),
         color = BBColors.SurfaceMuted,
         border = BorderStroke(
@@ -191,7 +198,9 @@ private fun WholesaleSearchInput(
                         imageVector = Icons.Outlined.Search,
                         contentDescription = "Ara",
                         tint = BBColors.TextMuted,
-                        modifier = Modifier.height(BBIcon.TopBarIcon)
+                        modifier = Modifier.height(
+                            BBIcon.TopBarIcon
+                        )
                     )
                 }
             },

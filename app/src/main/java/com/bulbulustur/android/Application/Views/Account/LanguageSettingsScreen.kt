@@ -176,13 +176,10 @@ private fun LanguageRow(
     onClick: () -> Unit
 ) {
     BbCard(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-                onClick()
-            },
+        modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium
+        padding = BbCardPadding.Medium,
+        onClick = onClick
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),

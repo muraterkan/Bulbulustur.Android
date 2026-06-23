@@ -70,17 +70,17 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBAlpha
 @Composable
 fun BasketScreen(
     onBackClick: () -> Unit = {},
-    onCheckoutClick: (List<com.bulbulustur.android.Application.Areas.b2c.Views.Basket.BasketLineItem>) -> Unit = {},
-    onProductClick: (com.bulbulustur.android.Application.Areas.b2c.Views.Basket.BasketLineItem) -> Unit = {},
-    onStoreClick: (com.bulbulustur.android.Application.Areas.b2c.Views.Basket.BasketStoreGroup) -> Unit = {},
+    onCheckoutClick: (List<BasketLineItem>) -> Unit = {},
+    onProductClick: (BasketLineItem) -> Unit = {},
+    onStoreClick: (BasketStoreGroup) -> Unit = {},
     onHomeClick: () -> Unit = {},
     onMenuClick: () -> Unit = {},
     onModeSwitchClick: () -> Unit = {},
     onAccountClick: () -> Unit = {}
 ) {
     val basketLines = remember {
-        mutableStateListOf<com.bulbulustur.android.Application.Areas.b2c.Views.Basket.BasketLineItem>().apply {
-            addAll(_root_ide_package_.com.bulbulustur.android.Application.Areas.b2c.Views.Basket.getBasketLineItems())
+        mutableStateListOf<BasketLineItem>().apply {
+            addAll(getBasketLineItems())
         }
     }
 
@@ -91,7 +91,7 @@ fun BasketScreen(
     val storeGroups = basketLines
         .groupBy { it.storeId }
         .map { basketGroup ->
-            _root_ide_package_.com.bulbulustur.android.Application.Areas.b2c.Views.Basket.BasketStoreGroup(
+            BasketStoreGroup(
                 storeId = basketGroup.key,
                 storeName = basketGroup.value.first().storeName,
                 storeLogoText = basketGroup.value.first().storeLogoText,
@@ -108,7 +108,7 @@ fun BasketScreen(
     val payableTotal = productTotal + cargoTotal - discountTotal
 
     if (showCouponSheet) {
-        _root_ide_package_.com.bulbulustur.android.Application.Areas.b2c.Views.Basket.BasketCouponSheet(
+        BasketCouponSheet(
             couponApplied = couponApplied,
             onApplyCouponClick = {
                 couponApplied = true
@@ -121,7 +121,7 @@ fun BasketScreen(
     }
 
     if (showFavoriteSheet) {
-        _root_ide_package_.com.bulbulustur.android.Application.Areas.b2c.Views.Basket.BasketFavoriteSheet(
+        BasketFavoriteSheet(
             onAddFavoriteClick = {
                 showFavoriteSheet = false
             },

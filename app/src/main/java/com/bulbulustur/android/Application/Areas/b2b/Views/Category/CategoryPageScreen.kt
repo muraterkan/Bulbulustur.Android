@@ -592,7 +592,7 @@ private fun getWholesaleQuickActions(): List<WholesaleCategoryQuickActionItem> {
         ),
         WholesaleCategoryQuickActionItem(
             title = "Numune",
-            description = "Sipariş öncesi örnek iste",
+            description = "Sipariş öncesi örnek",
             icon = Icons.Outlined.LocalShipping,
             backgroundColor = BBColors.Purple.Purple50,
             iconColor = BBColors.Purple.Purple700,

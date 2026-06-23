@@ -175,7 +175,7 @@ private fun CompanyListHero(
             )
 
             Text(
-                text = "Güvenilir firmaları keşfedin",
+                text = "Güvenilir Firmaları Keşfedin",
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -351,7 +351,7 @@ private fun CompanyListCard(
                 )
             ) {
                 CompanySmallActionCard(
-                    title = "Ürünleri gör",
+                    title = "Ürünler",
                     icon = Icons.Outlined.Inventory2,
                     modifier = Modifier.weight(1f),
                     onClick = onProductListClick

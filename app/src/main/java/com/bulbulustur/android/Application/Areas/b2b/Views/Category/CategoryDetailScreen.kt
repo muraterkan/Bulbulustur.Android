@@ -47,10 +47,12 @@ import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
 @Composable
 fun CategoryDetailScreen(
     categoryId: Int = 1,
+    onBackClick: () -> Unit = {},
     onSubCategoryClick: (Int) -> Unit = {},
     onProductListClick: (Int) -> Unit = {},
     onCompanyListClick: (Int) -> Unit = {},
     onRfqCreateClick: (Int) -> Unit = {},
+    onPopularProductGroupClick: (Int, String) -> Unit = { _, _ -> },
     onSearchClick: (String) -> Unit = {}
 ) {
     val category = remember(categoryId) {

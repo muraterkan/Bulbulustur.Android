@@ -346,7 +346,7 @@ private fun WholesaleHeroCard(
                 )
 
                 BbButton(
-                    text = "Ürünleri gör",
+                    text = "Ürünler",
                     onClick = onProductListClick,
                     modifier = Modifier.weight(1f),
                     variant = BbButtonVariant.Outline,

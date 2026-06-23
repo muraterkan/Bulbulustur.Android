@@ -1,64 +1,65 @@
 package com.bulbulustur.android.Application.Areas.b2b.Views.Product
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Inventory2
-import androidx.compose.material3.Icon
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.bulbulustur.android.R
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleBottomNavigation
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleBottomNavigationItem
+import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleProductCard
+import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleProductCardModel
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleSearchHeader
+import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleSearchHeaderLeadingAction
 import com.bulbulustur.android.Application.Views.Shared.Components.BbProductGrid
-import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
-import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbChip
 import com.bulbulustur.android.Application.Views.Shared.Components.BbSectionHeader
-import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
-import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
+import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
+import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
+import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
+import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbChip
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
 
 @Composable
 fun ProductListScreen(
+    onBackClick: () -> Unit = {},
     onSearchClick: (String) -> Unit = {},
-    onMenuClick: () -> Unit = {},
     onFavoriteClick: () -> Unit = {},
-    onHomeClick: () -> Unit = {},
     onMessageClick: () -> Unit = {},
+    onHomeClick: () -> Unit = {},
+    onMenuClick: () -> Unit = {},
     onModeSwitchClick: () -> Unit = {},
     onBasketClick: () -> Unit = {},
     onAccountClick: () -> Unit = {},
-    onProductDetailClick: () -> Unit = {}
+    onProductDetailClick: (Int) -> Unit = {},
+    onProductFavoriteClick: (Int) -> Unit = {},
+    onRfqClick: (Int) -> Unit = {}
 ) {
     val products = remember {
         getWholesaleProductListItems()
     }
 
-    val categories = remember {
+    val categoryFilters = remember {
         listOf(
             "Tümü",
             "Ambalaj",
@@ -69,13 +70,17 @@ fun ProductListScreen(
         )
     }
 
-    val sortOptions = remember {
+    val sortFilters = remember {
         listOf(
             "Öne çıkan",
             "Min. sipariş",
             "Yeni tedarik",
             "Hızlı teklif"
         )
+    }
+
+    val favoriteStates = remember {
+        mutableStateMapOf<Int, Boolean>()
     }
 
     var searchText by remember {
@@ -86,52 +91,68 @@ fun ProductListScreen(
         mutableStateOf("Tümü")
     }
 
-    var selectedSortOption by remember {
+    var selectedSort by remember {
         mutableStateOf("Öne çıkan")
     }
 
     val filteredProducts = remember(
+        products,
         searchText,
         selectedCategory,
-        selectedSortOption,
-        products
+        selectedSort
     ) {
-        val searchFilteredProducts = if (searchText.isBlank()) {
+        val searchResult = if (searchText.isBlank()) {
             products
         } else {
             products.filter { product ->
-                product.name.contains(searchText, ignoreCase = true) ||
-                        product.companyName.contains(searchText, ignoreCase = true) ||
-                        product.categoryName.contains(searchText, ignoreCase = true)
+                product.Card.Title.contains(
+                    other = searchText,
+                    ignoreCase = true
+                ) ||
+                        product.Card.Category.contains(
+                            other = searchText,
+                            ignoreCase = true
+                        ) ||
+                        product.Card.SupplierText.contains(
+                            other = searchText,
+                            ignoreCase = true
+                        )
             }
         }
 
-        val categoryFilteredProducts = if (selectedCategory == "Tümü") {
-            searchFilteredProducts
+        val categoryResult = if (selectedCategory == "Tümü") {
+            searchResult
         } else {
-            searchFilteredProducts.filter { product ->
-                product.categoryName == selectedCategory
+            searchResult.filter { product ->
+                product.Card.Category == selectedCategory
             }
         }
 
-        when (selectedSortOption) {
-            "Min. sipariş" -> categoryFilteredProducts.sortedBy { product ->
-                product.minimumOrderValue
+        when (selectedSort) {
+            "Min. sipariş" -> {
+                categoryResult.sortedBy { product ->
+                    product.MinimumOrderValue
+                }
             }
 
-            "Yeni tedarik" -> categoryFilteredProducts.filter { product ->
-                product.isNew
+            "Yeni tedarik" -> {
+                categoryResult.filter { product ->
+                    product.IsNew
+                }
             }
 
-            "Hızlı teklif" -> categoryFilteredProducts.filter { product ->
-                product.hasFastQuote
+            "Hızlı teklif" -> {
+                categoryResult.filter { product ->
+                    product.HasFastQuote
+                }
             }
 
-            else -> categoryFilteredProducts
+            else -> categoryResult
         }
     }
 
     Scaffold(
+        modifier = Modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             WholesaleSearchHeader(
@@ -141,12 +162,16 @@ fun ProductListScreen(
                 },
                 onMenuClick = onMenuClick,
                 onFavoriteClick = onFavoriteClick,
+                placeholder = "Ürün, firma veya RFQ ara",
                 onSearchClick = {
                     onSearchClick(searchText)
                 },
                 onClearClick = {
                     searchText = ""
-                }
+                },
+                leadingAction = WholesaleSearchHeaderLeadingAction.Back,
+                onBackClick = onBackClick,
+                onMessageClick = onMessageClick
             )
         },
         bottomBar = {
@@ -154,11 +179,25 @@ fun ProductListScreen(
                 selectedItem = WholesaleBottomNavigationItem.Menu,
                 onItemClick = { selectedItem ->
                     when (selectedItem) {
-                        WholesaleBottomNavigationItem.Home -> onHomeClick()
-                        WholesaleBottomNavigationItem.Menu -> onMenuClick()
-                        WholesaleBottomNavigationItem.ModeSwitch -> onModeSwitchClick()
-                        WholesaleBottomNavigationItem.Basket -> onBasketClick()
-                        WholesaleBottomNavigationItem.Account -> onAccountClick()
+                        WholesaleBottomNavigationItem.Home -> {
+                            onHomeClick()
+                        }
+
+                        WholesaleBottomNavigationItem.Menu -> {
+                            onMenuClick()
+                        }
+
+                        WholesaleBottomNavigationItem.ModeSwitch -> {
+                            onModeSwitchClick()
+                        }
+
+                        WholesaleBottomNavigationItem.Basket -> {
+                            onBasketClick()
+                        }
+
+                        WholesaleBottomNavigationItem.Account -> {
+                            onAccountClick()
+                        }
                     }
                 }
             )
@@ -166,46 +205,45 @@ fun ProductListScreen(
     ) { innerPadding ->
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.background)
+                .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            BbSectionHeader(
-                title = "Toptan Ürünler",
-                subtitle = "Sektörlerden, tedarikçilerden ve teklif akışlarından ürün keşfet"
-            )
+            WholesaleProductListIntroCard()
 
-            Spacer(
-                modifier = Modifier.height(BBSpacing.Space2)
-            )
-
-            WholesaleProductListHorizontalFilters(
-                items = categories,
+            WholesaleProductFilterRow(
+                items = categoryFilters,
                 selectedItem = selectedCategory,
-                onItemClick = {
-                    selectedCategory = it
+                modifier = Modifier.padding(
+                    top = BBSpacing.SectionGapCompact
+                ),
+                onItemClick = { category ->
+                    selectedCategory = category
                 }
             )
 
-            Spacer(
-                modifier = Modifier.height(BBSpacing.Space2)
-            )
-
-            WholesaleProductListHorizontalFilters(
-                items = sortOptions,
-                selectedItem = selectedSortOption,
-                onItemClick = {
-                    selectedSortOption = it
+            WholesaleProductFilterRow(
+                items = sortFilters,
+                selectedItem = selectedSort,
+                modifier = Modifier.padding(
+                    top = BBSpacing.Space3
+                ),
+                onItemClick = { sort ->
+                    selectedSort = sort
                 }
             )
 
-            Spacer(
-                modifier = Modifier.height(BBSpacing.Space2)
-            )
-
-            WholesaleProductListResultHeader(
-                productCount = filteredProducts.size,
-                selectedCategory = selectedCategory
+            BbSectionHeader(
+                title = if (selectedCategory == "Tümü") {
+                    "Tüm toptan ürünler"
+                } else {
+                    selectedCategory
+                },
+                subtitle = "${filteredProducts.size} ürün grubu listeleniyor",
+                modifier = Modifier.padding(
+                    start = BBSpacing.PageHorizontal,
+                    top = BBSpacing.SectionGapCompact,
+                    end = BBSpacing.PageHorizontal
+                )
             )
 
             BbProductGrid(
@@ -221,12 +259,29 @@ fun ProductListScreen(
                 items(
                     items = filteredProducts,
                     key = { product ->
-                        product.id
+                        product.Card.Id
                     }
                 ) { product ->
-                    WholesaleProductListCard(
-                        product = product,
-                        onClick = onProductDetailClick
+                    val productId = product.Card.Id
+
+                    val isFavorite = favoriteStates[productId]
+                        ?: product.Card.IsFavorite
+
+                    WholesaleProductCard(
+                        product = product.Card.copy(
+                            IsFavorite = isFavorite
+                        ),
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                            onProductDetailClick(productId)
+                        },
+                        onFavoriteClick = {
+                            favoriteStates[productId] = !isFavorite
+                            onProductFavoriteClick(productId)
+                        },
+                        onRfqClick = {
+                            onRfqClick(productId)
+                        }
                     )
                 }
             }
@@ -235,18 +290,65 @@ fun ProductListScreen(
 }
 
 @Composable
-private fun WholesaleProductListHorizontalFilters(
-    items: List<String>,
-    selectedItem: String,
-    onItemClick: (String) -> Unit
-) {
-    Row(
+private fun WholesaleProductListIntroCard() {
+    BbCard(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = BBSpacing.PageHorizontal),
-        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+            .padding(
+                start = BBSpacing.PageHorizontal,
+                top = BBSpacing.PageTopCompact,
+                end = BBSpacing.PageHorizontal
+            ),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Large
     ) {
-        items.take(4).forEach { item ->
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space2
+            )
+        ) {
+            Text(
+                text = "Toptan Ürünler",
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
+            Text(
+                text = "Sektörlerden, tedarikçilerden ve teklif akışlarından ürün keşfet.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun WholesaleProductFilterRow(
+    items: List<String>,
+    selectedItem: String,
+    modifier: Modifier = Modifier,
+    onItemClick: (String) -> Unit
+) {
+    FlowRow(
+        modifier = modifier
+            .fillMaxWidth()
+            .horizontalScroll(
+                rememberScrollState()
+            )
+            .padding(
+                horizontal = BBSpacing.PageHorizontal
+            ),
+        horizontalArrangement = Arrangement.spacedBy(
+            BBSpacing.ChipGap
+        ),
+        verticalArrangement = Arrangement.spacedBy(
+            BBSpacing.ChipGap
+        )
+    ) {
+        items.forEach { item ->
             BbChip(
                 text = item,
                 selected = selectedItem == item,
@@ -258,276 +360,95 @@ private fun WholesaleProductListHorizontalFilters(
     }
 }
 
-@Composable
-private fun WholesaleProductListResultHeader(
-    productCount: Int,
-    selectedCategory: String
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(
-                start = BBSpacing.PageHorizontal,
-                end = BBSpacing.PageHorizontal,
-                top = BBSpacing.Space1,
-                bottom = BBSpacing.Space1
-            ),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Column(
-            modifier = Modifier.weight(1f)
-        ) {
-            Text(
-                text = if (selectedCategory == "Tümü") {
-                    "Tüm toptan ürünler"
-                } else {
-                    selectedCategory
-                },
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Bold,
-                color = BBColors.TextStrong
-            )
-
-            Text(
-                text = "$productCount ürün grubu listeleniyor",
-                style = MaterialTheme.typography.bodySmall,
-                color = BBColors.TextMuted
-            )
-        }
-
-        Text(
-            text = "Filtrele",
-            style = MaterialTheme.typography.labelMedium,
-            fontWeight = FontWeight.Bold,
-            color = BBColors.Primary
-        )
-    }
-}
-
-@Composable
-private fun WholesaleProductListCard(
-    product: WholesaleProductListItem,
-    onClick: () -> Unit
-) {
-    BbCard {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable {
-                    onClick()
-                },
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
-        ) {
-            WholesaleProductImagePlaceholder(
-                imageText = product.imageText,
-                badgeText = product.badgeText
-            )
-
-            Text(
-                text = product.name,
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.SemiBold,
-                color = BBColors.TextStrong,
-                maxLines = 2
-            )
-
-            Text(
-                text = product.companyName,
-                style = MaterialTheme.typography.bodySmall,
-                color = BBColors.TextMuted,
-                maxLines = 1
-            )
-
-            Text(
-                text = product.priceText,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                color = BBColors.Primary
-            )
-
-            Text(
-                text = product.minimumOrderText,
-                style = MaterialTheme.typography.bodySmall,
-                color = BBColors.TextMuted,
-                maxLines = 1
-            )
-
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space1),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                WholesaleProductSmallPill(
-                    text = product.locationText
-                )
-
-                if (product.hasFastQuote) {
-                    WholesaleProductSmallPill(
-                        text = "Hızlı teklif"
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun WholesaleProductImagePlaceholder(
-    imageText: String,
-    badgeText: String
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(BBSpacing.Space16 + BBSpacing.Space8)
-            .clip(RoundedCornerShape(BBRadius.lg))
-            .background(MaterialTheme.colorScheme.surfaceVariant),
-        contentAlignment = Alignment.Center
-    ) {
-        Icon(
-            imageVector = Icons.Outlined.Inventory2,
-            contentDescription = null,
-            tint = BBColors.TextMuted
-        )
-
-        Text(
-            text = imageText,
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
-            color = BBColors.TextMuted,
-            modifier = Modifier.align(Alignment.BottomCenter)
-        )
-
-        if (badgeText.isNotBlank()) {
-            Box(
-                modifier = Modifier
-                    .align(Alignment.TopStart)
-                    .padding(BBSpacing.Space1)
-                    .clip(RoundedCornerShape(BBRadius.pill))
-                    .background(BBColors.Primary)
-                    .padding(
-                        horizontal = BBSpacing.Space2,
-                        vertical = BBSpacing.Space1
-                    )
-            ) {
-                Text(
-                    text = badgeText,
-                    style = MaterialTheme.typography.labelSmall,
-                    fontWeight = FontWeight.Bold,
-                    color = BBColors.TextStrong
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun WholesaleProductSmallPill(
-    text: String
-) {
-    Box(
-        modifier = Modifier
-            .clip(RoundedCornerShape(BBRadius.pill))
-            .background(MaterialTheme.colorScheme.surfaceVariant)
-            .padding(
-                horizontal = BBSpacing.Space2,
-                vertical = BBSpacing.Space1
-            )
-    ) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.labelSmall,
-            color = BBColors.TextMuted
-        )
-    }
-}
-
 @Immutable
-data class WholesaleProductListItem(
-    val id: Int,
-    val name: String,
-    val companyName: String,
-    val categoryName: String,
-    val priceText: String,
-    val minimumOrderText: String,
-    val minimumOrderValue: Int,
-    val locationText: String,
-    val badgeText: String,
-    val imageText: String,
-    val isNew: Boolean,
-    val hasFastQuote: Boolean
+private data class WholesaleProductListEntry(
+    val Card: WholesaleProductCardModel,
+    val MinimumOrderValue: Int,
+    val IsNew: Boolean,
+    val HasFastQuote: Boolean
 )
 
-private fun getWholesaleProductListItems(): List<WholesaleProductListItem> {
+private fun getWholesaleProductListItems(): List<WholesaleProductListEntry> {
     return listOf(
-        WholesaleProductListItem(
-            id = 1,
-            name = "Endüstriyel karton koli seti",
-            companyName = "Anadolu Ambalaj",
-            categoryName = "Ambalaj",
-            priceText = "₺12,40 / adet",
-            minimumOrderText = "Min. sipariş: 1.000 adet",
-            minimumOrderValue = 1000,
-            locationText = "İstanbul",
-            badgeText = "Toptan",
-            imageText = "W1",
-            isNew = true,
-            hasFastQuote = true
+        WholesaleProductListEntry(
+            Card = WholesaleProductCardModel(
+                Id = 1,
+                Title = "Endüstriyel karton koli seti",
+                Category = "Ambalaj",
+                PriceText = "₺12,40 / adet",
+                MoqText = "Min. 1.000 adet",
+                SupplierText = "Anadolu Ambalaj",
+                BadgeText = "Toptan",
+                ImageResId = R.drawable.h3ff3b33d6a1447c898cee6e336867bach,
+                IsFavorite = false
+            ),
+            MinimumOrderValue = 1000,
+            IsNew = false,
+            HasFastQuote = true
         ),
-        WholesaleProductListItem(
-            id = 2,
-            name = "Paslanmaz makine yedek parçası",
-            companyName = "Delta Makine",
-            categoryName = "Makine",
-            priceText = "Teklif iste",
-            minimumOrderText = "Min. sipariş: 50 adet",
-            minimumOrderValue = 50,
-            locationText = "Konya",
-            badgeText = "RFQ",
-            imageText = "W2",
-            isNew = true,
-            hasFastQuote = true
+        WholesaleProductListEntry(
+            Card = WholesaleProductCardModel(
+                Id = 2,
+                Title = "Paslanmaz makine yedek parçası",
+                Category = "Makine",
+                PriceText = "Teklif iste",
+                MoqText = "Min. 50 adet",
+                SupplierText = "Delta Makine",
+                BadgeText = "RFQ",
+                ImageResId = R.drawable.h3ff3b33d6a1447c898cee6e336867bachvar1,
+                IsFavorite = false
+            ),
+            MinimumOrderValue = 50,
+            IsNew = false,
+            HasFastQuote = true
         ),
-        WholesaleProductListItem(
-            id = 3,
-            name = "Elektronik güç modülü",
-            companyName = "Tekno Bileşen",
-            categoryName = "Elektronik",
-            priceText = "₺84,90 / adet",
-            minimumOrderText = "Min. sipariş: 250 adet",
-            minimumOrderValue = 250,
-            locationText = "İzmir",
-            badgeText = "Yeni",
-            imageText = "W3",
-            isNew = true,
-            hasFastQuote = false
+        WholesaleProductListEntry(
+            Card = WholesaleProductCardModel(
+                Id = 3,
+                Title = "Elektronik güç modülü",
+                Category = "Elektronik",
+                PriceText = "₺84,90 / adet",
+                MoqText = "Min. 250 adet",
+                SupplierText = "Tekno Bileşen",
+                BadgeText = "Yeni",
+                ImageResId = R.drawable.h3ff3b33d6a1447c898cee6e336867bachvar2,
+                IsFavorite = false
+            ),
+            MinimumOrderValue = 250,
+            IsNew = true,
+            HasFastQuote = false
         ),
-        WholesaleProductListItem(
-            id = 4,
-            name = "Toptan pamuklu kumaş rulosu",
-            companyName = "Mira Tekstil",
-            categoryName = "Tekstil",
-            priceText = "₺68,00 / metre",
-            minimumOrderText = "Min. sipariş: 500 metre",
-            minimumOrderValue = 500,
-            locationText = "Denizli",
-            badgeText = "",
-            imageText = "W4",
-            isNew = false,
-            hasFastQuote = true
+        WholesaleProductListEntry(
+            Card = WholesaleProductCardModel(
+                Id = 4,
+                Title = "Toptan pamuklu kumaş rulosu",
+                Category = "Tekstil",
+                PriceText = "₺68,00 / metre",
+                MoqText = "Min. 500 metre",
+                SupplierText = "Mira Tekstil",
+                BadgeText = "Toptan",
+                ImageResId = R.drawable.h3ff3b33d6a1447c898cee6e336867bachvar3,
+                IsFavorite = false
+            ),
+            MinimumOrderValue = 500,
+            IsNew = false,
+            HasFastQuote = true
         ),
-        WholesaleProductListItem(
-            id = 5,
-            name = "Gıda ambalaj poşeti",
-            companyName = "Ege Paket",
-            categoryName = "Gıda",
-            priceText = "₺0,92 / adet",
-            minimumOrderText = "Min. sipariş: 5.000 adet",
-            minimumOrderValue = 5000,
-            locationText = "Manisa",
-            badgeText = "Popüler",
-            imageText = "W5",
-            isNew = false,
-            hasFastQuote = true
+        WholesaleProductListEntry(
+            Card = WholesaleProductCardModel(
+                Id = 5,
+                Title = "Gıda ambalaj poşeti",
+                Category = "Gıda",
+                PriceText = "₺0,92 / adet",
+                MoqText = "Min. 5.000 adet",
+                SupplierText = "Ege Paket",
+                BadgeText = "Popüler",
+                ImageResId = R.drawable.h3ff3b33d6a1447c898cee6e336867bach,
+                IsFavorite = false
+            ),
+            MinimumOrderValue = 5000,
+            IsNew = false,
+            HasFastQuote = true
         )
     )
 }

@@ -22,7 +22,6 @@ import com.bulbulustur.android.Application.Navigation.Routes.WholesaleRoutes
 fun NavGraphBuilder.wholesaleGraph(
     navigator: BulbulusturNavigator
 ) {
-
     composable(
         route = WholesaleRoutes.Home
     ) {
@@ -136,14 +135,6 @@ fun NavGraphBuilder.wholesaleGraph(
                     WholesaleRoutes.ProductList
                 )
             },
-
-            /*
-             * WholesaleCategoryHomeScreen tarafındaki callback halen
-             * () -> Unit olduğu için şimdilik başlangıç kategorisi açılıyor.
-             *
-             * Bu callback daha sonra (Int) -> Unit olduğunda buraya
-             * doğrudan gelen categoryId verilecek.
-             */
             onSubCategoryClick = {
                 navigator.navController.navigate(
                     WholesaleRoutes.categoryDetail(
@@ -189,7 +180,6 @@ fun NavGraphBuilder.wholesaleGraph(
             }
         )
     ) { backStackEntry ->
-
         val categoryId = backStackEntry.arguments
             ?.getInt(
                 WholesaleRoutes.ArgCategoryId
@@ -201,32 +191,29 @@ fun NavGraphBuilder.wholesaleGraph(
             onBackClick = {
                 navigator.back()
             },
-            onSubCategoryClick = { subCategoryId: Int ->
+            onSubCategoryClick = { subCategoryId ->
                 navigator.navController.navigate(
                     WholesaleRoutes.categoryDetail(
                         categoryId = subCategoryId
                     )
                 )
             },
-            onProductListClick = { _: Int ->
+            onProductListClick = {
                 navigator.navController.navigate(
                     WholesaleRoutes.ProductList
                 )
             },
-            onCompanyListClick = { _: Int ->
+            onCompanyListClick = {
                 navigator.navController.navigate(
                     CompanyRoutes.CompanyList
                 )
             },
-            onRfqCreateClick = { _: Int ->
+            onRfqCreateClick = {
                 navigator.navController.navigate(
                     RfqRoutes.Create
                 )
             },
-            onPopularProductGroupClick = {
-                    _: Int,
-                    _: String ->
-
+            onPopularProductGroupClick = { _, _ ->
                 navigator.navController.navigate(
                     WholesaleRoutes.ProductList
                 )
@@ -238,14 +225,55 @@ fun NavGraphBuilder.wholesaleGraph(
         route = WholesaleRoutes.ProductList
     ) {
         WholesaleProductListScreen(
+            onBackClick = {
+                navigator.back()
+            },
+            onSearchClick = {
+                navigator.navController.navigate(
+                    WholesaleRoutes.Search
+                )
+            },
+            onFavoriteClick = {
+                navigator.navController.navigate(
+                    AccountRoutes.Favorites
+                )
+            },
             onMessageClick = {
                 navigator.navigateToInbox()
+            },
+            onHomeClick = {
+                navigator.navController.navigate(
+                    WholesaleRoutes.Home
+                ) {
+                    launchSingleTop = true
+                }
+            },
+            onMenuClick = {
+                navigator.navigateToWholesaleCategories()
+            },
+            onModeSwitchClick = {
+                navigator.openModeSheet()
+            },
+            onBasketClick = {
+                navigator.navController.navigate(
+                    RfqRoutes.List
+                )
             },
             onAccountClick = {
                 navigator.navigateToAccount()
             },
-            onModeSwitchClick = {
-                navigator.openModeSheet()
+            onProductDetailClick = {
+                navigator.navController.navigate(
+                    WholesaleRoutes.ProductDetail
+                )
+            },
+            onProductFavoriteClick = {
+                // API entegrasyonunda favori işlemi bağlanacak.
+            },
+            onRfqClick = {
+                navigator.navController.navigate(
+                    RfqRoutes.Create
+                )
             }
         )
     }
@@ -287,7 +315,7 @@ fun NavGraphBuilder.wholesaleGraph(
                 )
             },
             onDeleteClick = {
-                // API entegrasyonunda silme işlemi burada bağlanacak.
+                // API entegrasyonunda silme işlemi bağlanacak.
             },
             onCreateRfqClick = {
                 navigator.navController.navigate(
@@ -340,7 +368,6 @@ fun NavGraphBuilder.wholesaleGraph(
             }
         )
     ) { backStackEntry ->
-
         val buyerRequestId = backStackEntry.arguments
             ?.getInt(
                 RfqRoutes.ArgBuyerRequestId
@@ -383,7 +410,6 @@ fun NavGraphBuilder.wholesaleGraph(
             }
         )
     ) { backStackEntry ->
-
         val buyerRequestId = backStackEntry.arguments
             ?.getInt(
                 RfqRoutes.ArgBuyerRequestId

@@ -343,7 +343,7 @@ private fun ProductQuestionFilterSection(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
     ) {
         ProductQuestionSectionTitle(
-            title = "Soru filtresi",
+            title = "Soru Filtresi",
             description = "Cevap durumuna veya konuya göre daralt."
         )
 

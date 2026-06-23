@@ -127,7 +127,7 @@ private fun FavoriteIntroCard(
     }
 
     val description = when (selectedTab) {
-        FavoriteTab.Retail -> "Perakende Alışveriş için favoriye eklediğiniz ürünleri burada görebilir, daha sonra incelemek veya sepete eklemek için hızlıca geri dönebilirsiniz."
+        FavoriteTab.Retail -> "Perakende Alışveriş için favoriye eklediğiniz ürünleri burada görebilir, daha sonra incelemek veya sepete Eklemek için hızlıca geri dönebilirsiniz."
         FavoriteTab.Wholesale -> "Toptan alışveriş için favoriye eklediğiniz ürünleri burada görebilir, teklif ve tedarik süreçlerine hızlıca dönebilirsiniz."
     }
 
@@ -428,7 +428,7 @@ private fun FavoriteEmptyState(
     }
 
     val description = when (tab) {
-        FavoriteTab.Retail -> "Perakende ürünleri Favorilerinize ekleyerek daha sonra hızlıca ulaşabilirsiniz."
+        FavoriteTab.Retail -> "Perakende Ürünleri Favorilerinize ekleyerek daha sonra hızlıca ulaşabilirsiniz."
         FavoriteTab.Wholesale -> "Toptan ürünleri Favorilerinize ekleyerek teklif ve tedarik süreçlerine hızlıca dönebilirsiniz."
     }
 
@@ -515,7 +515,7 @@ private fun getDemoRetailFavoriteProducts(): List<FavoriteProductUiModel> {
             storeName = "Ortobella",
             priceText = "₺849,90",
             metaTitle = "PERAKENDE",
-            metaValue = "Sepete eklenebilir ürün",
+            metaValue = "Sepete Eklenebilir ürün",
             mode = FavoriteMode.Retail
         ),
         FavoriteProductUiModel(

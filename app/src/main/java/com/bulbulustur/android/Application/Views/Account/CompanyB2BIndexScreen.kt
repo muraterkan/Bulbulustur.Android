@@ -113,7 +113,7 @@ fun CompanyB2BIndexScreen(
                 ) {
                     CompanyB2BIndexBenefitRow(
                         title = "Global Görünürlük",
-                        description = "Şirket profiliniz uluslararası alıcılar için daha keşfedilebilir hale gelir.",
+                        description = "Şirket profiliniz uluslararası alıcılar için daha Keşfedilebilir hale gelir.",
                         icon = Icons.Outlined.Public
                     )
 

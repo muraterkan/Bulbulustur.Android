@@ -1,15 +1,12 @@
 package com.bulbulustur.android.Application.Areas.b2b.Views.Home
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -40,19 +37,23 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
 import com.bulbulustur.android.R
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleBottomNavigation
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleBottomNavigationItem
+import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleProductCard
+import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleProductCardModel
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleSearchHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
@@ -64,65 +65,75 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
+import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
 
 @Composable
 fun WholesaleHomeScreen(
-    onSearchClick: () -> Unit = {},
+    onSearchClick: (String) -> Unit = {},
     onMenuClick: () -> Unit = {},
-
     onCategoryClick: () -> Unit = {},
-    onCategoriesClick: () -> Unit = onCategoryClick,
-    onCategoryHomeClick: () -> Unit = onCategoryClick,
-
     onProductListClick: () -> Unit = {},
-    onProductDetailClick: () -> Unit = {},
-    onProductClick: () -> Unit = onProductDetailClick,
-    onProductsClick: () -> Unit = onProductListClick,
-
-    onSupplierClick: () -> Unit = {},
-    onSupplierListClick: () -> Unit = onSupplierClick,
-    onCompanyClick: () -> Unit = onSupplierClick,
-    onCompaniesClick: () -> Unit = onSupplierClick,
-    onCompanyListClick: () -> Unit = onSupplierClick,
-
-    onQuotationRequestsClick: () -> Unit = {},
-    onRfqListClick: () -> Unit = onQuotationRequestsClick,
-    onRfqClick: () -> Unit = onRfqListClick,
+    onProductDetailClick: (Int) -> Unit = {},
+    onRfqListClick: () -> Unit = {},
     onRfqCreateClick: () -> Unit = {},
     onLastPriceRequestClick: () -> Unit = {},
     onSampleRequestClick: () -> Unit = {},
     onCustomizationRequestClick: () -> Unit = {},
-
     onModeSwitchClick: () -> Unit = {},
-    onModeClick: () -> Unit = onModeSwitchClick,
-
-    onBasketClick: () -> Unit = onRfqListClick,
     onFavoriteClick: () -> Unit = {},
-    onFavoritesClick: () -> Unit = onFavoriteClick,
     onMessageClick: () -> Unit = {},
     onAccountClick: () -> Unit = {}
 ) {
-    val categories = wholesaleCategoryItems()
-    val showcaseProducts = wholesaleShowcaseProducts()
-    val actionItems = wholesaleActionItems(
-        onQuotationRequestsClick = onRfqClick,
-        onRfqCreateClick = onRfqCreateClick,
-        onLastPriceRequestClick = onLastPriceRequestClick,
-        onSampleRequestClick = onSampleRequestClick,
-        onCustomizationRequestClick = onCustomizationRequestClick
-    )
+    val categories = remember {
+        wholesaleCategoryItems()
+    }
+
+    val showcaseProducts = remember {
+        wholesaleShowcaseProducts()
+    }
+
+    var searchText by remember {
+        mutableStateOf("")
+    }
+
+    var favoriteProductIds by remember {
+        mutableStateOf<Set<Int>>(emptySet())
+    }
+
+    val actionItems = remember(
+        onRfqListClick,
+        onRfqCreateClick,
+        onLastPriceRequestClick,
+        onSampleRequestClick,
+        onCustomizationRequestClick
+    ) {
+        wholesaleActionItems(
+            onRfqListClick = onRfqListClick,
+            onRfqCreateClick = onRfqCreateClick,
+            onLastPriceRequestClick = onLastPriceRequestClick,
+            onSampleRequestClick = onSampleRequestClick,
+            onCustomizationRequestClick = onCustomizationRequestClick
+        )
+    }
 
     Scaffold(
+        modifier = Modifier.fillMaxSize(),
         containerColor = BBColors.SurfaceSoft,
         topBar = {
             WholesaleSearchHeader(
-                searchText = "",
-                onSearchTextChange = {},
+                searchText = searchText,
+                onSearchTextChange = {
+                    searchText = it
+                },
                 onMenuClick = onMenuClick,
-                onFavoriteClick = onFavoritesClick,
-                placeholder = "Ürün, Firma Veya RFQ Ara",
-                onSearchClick = onSearchClick,
-                onClearClick = {},
+                onFavoriteClick = onFavoriteClick,
+                placeholder = "Ürün, firma veya RFQ ara",
+                onSearchClick = {
+                    onSearchClick(searchText)
+                },
+                onClearClick = {
+                    searchText = ""
+                },
                 onMessageClick = onMessageClick
             )
         },
@@ -131,11 +142,25 @@ fun WholesaleHomeScreen(
                 selectedItem = WholesaleBottomNavigationItem.Home,
                 onItemClick = { item ->
                     when (item) {
-                        WholesaleBottomNavigationItem.Home -> Unit
-                        WholesaleBottomNavigationItem.Menu -> onCategoryHomeClick()
-                        WholesaleBottomNavigationItem.ModeSwitch -> onModeClick()
-                        WholesaleBottomNavigationItem.Basket -> onBasketClick()
-                        WholesaleBottomNavigationItem.Account -> onAccountClick()
+                        WholesaleBottomNavigationItem.Home -> {
+                            Unit
+                        }
+
+                        WholesaleBottomNavigationItem.Menu -> {
+                            onCategoryClick()
+                        }
+
+                        WholesaleBottomNavigationItem.ModeSwitch -> {
+                            onModeSwitchClick()
+                        }
+
+                        WholesaleBottomNavigationItem.Basket -> {
+                            onRfqListClick()
+                        }
+
+                        WholesaleBottomNavigationItem.Account -> {
+                            onAccountClick()
+                        }
                     }
                 }
             )
@@ -147,11 +172,13 @@ fun WholesaleHomeScreen(
                 .padding(innerPadding),
             contentPadding = PaddingValues(
                 start = BBSpacing.PageHorizontal,
-                end = BBSpacing.PageHorizontal,
                 top = BBSpacing.PageTopCompact,
+                end = BBSpacing.PageHorizontal,
                 bottom = BBSpacing.PageBottom
             ),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.SectionGap)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.SectionGap
+            )
         ) {
             item {
                 WholesaleHeroCard(
@@ -174,24 +201,60 @@ fun WholesaleHomeScreen(
             item {
                 WholesaleCategoryGrid(
                     items = categories,
-                    onCategoryClick = onCategoryHomeClick
+                    onCategoryClick = onCategoryClick
                 )
             }
 
             item {
                 WholesaleSectionTitleWithAction(
                     title = "Toptan Vitrin Ürünleri",
-                    description = "Tedarikçi ürünlerini hızlıca incele.",
-                    actionText = "Tümünü Gör",
+                    description = "Tedarikçi Ürünlerini hızlıca incele.",
+                    actionText = "Tümünü gör",
                     onActionClick = onProductListClick
                 )
             }
 
             item {
-                WholesaleProductShowcaseRow(
-                    products = showcaseProducts,
-                    onProductClick = onProductClick
-                )
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(
+                        BBSpacing.Space3
+                    ),
+                    contentPadding = PaddingValues(
+                        end = BBSpacing.PageHorizontal
+                    )
+                ) {
+                    items(
+                        items = showcaseProducts,
+                        key = { product ->
+                            product.Id
+                        }
+                    ) { product ->
+                        val isFavorite =
+                            favoriteProductIds.contains(product.Id)
+
+                        WholesaleProductCard(
+                            product = product.copy(
+                                IsFavorite = isFavorite
+                            ),
+                            modifier = Modifier.width(
+                                BBSpacing.Space24 +
+                                        BBSpacing.Space24
+                            ),
+                            onClick = {
+                                onProductDetailClick(product.Id)
+                            },
+                            onFavoriteClick = {
+                                favoriteProductIds =
+                                    if (isFavorite) {
+                                        favoriteProductIds - product.Id
+                                    } else {
+                                        favoriteProductIds + product.Id
+                                    }
+                            },
+                            onRfqClick = onRfqCreateClick
+                        )
+                    }
+                }
             }
 
             item {
@@ -221,11 +284,15 @@ private fun WholesaleHeroCard(
         padding = BbCardPadding.Large
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space4
+            )
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
+                horizontalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space4
+                )
             ) {
                 WholesaleIconBox(
                     icon = Icons.Outlined.Business,
@@ -235,7 +302,9 @@ private fun WholesaleHeroCard(
 
                 Column(
                     modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+                    verticalArrangement = Arrangement.spacedBy(
+                        BBSpacing.Space1
+                    )
                 ) {
                     Text(
                         text = "Toptan Ticaret Merkezi",
@@ -253,23 +322,44 @@ private fun WholesaleHeroCard(
             }
 
             Row(
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space3
+                ),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 BbButton(
-                    text = "RFQ Oluştur",
+                    text = "Teklif İste",
                     onClick = onRfqCreateClick,
                     modifier = Modifier.weight(1f),
                     variant = BbButtonVariant.Primary,
-                    size = BbButtonSize.Medium
+                    size = BbButtonSize.Medium,
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Outlined.RequestQuote,
+                            contentDescription = null,
+                            modifier = Modifier.size(
+                                BBIcon.ButtonIcon
+                            )
+                        )
+                    }
                 )
 
                 BbButton(
-                    text = "Ürünleri Gör",
+                    text = "Ürünleri gör",
                     onClick = onProductListClick,
                     modifier = Modifier.weight(1f),
                     variant = BbButtonVariant.Outline,
-                    size = BbButtonSize.Medium
+                    size = BbButtonSize.Medium,
+                    trailingIcon = {
+                        Icon(
+                            imageVector = Icons.Outlined.ArrowForward,
+                            contentDescription = null,
+                            modifier = Modifier.size(
+                                BBIcon.ButtonIcon
+                            )
+                        )
+                    }
                 )
             }
         }
@@ -290,22 +380,19 @@ private fun WholesaleTrustRail() {
             WholesaleTrustItem(
                 modifier = Modifier.weight(1f),
                 icon = Icons.Outlined.Verified,
-                title = "Doğrulanmış",
-                tint = BBColors.Yellow.Yellow600
+                title = "Doğrulanmış"
             )
 
             WholesaleTrustItem(
                 modifier = Modifier.weight(1f),
                 icon = Icons.Outlined.Language,
-                title = "41 Dil",
-                tint = BBColors.Yellow.Yellow600
+                title = "41 dil"
             )
 
             WholesaleTrustItem(
                 modifier = Modifier.weight(1f),
                 icon = Icons.Outlined.Shield,
-                title = "Güvenli",
-                tint = BBColors.Yellow.Yellow600
+                title = "Güvenli"
             )
         }
     }
@@ -315,19 +402,22 @@ private fun WholesaleTrustRail() {
 private fun WholesaleTrustItem(
     modifier: Modifier,
     icon: ImageVector,
-    title: String,
-    tint: Color
+    title: String
 ) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+        verticalArrangement = Arrangement.spacedBy(
+            BBSpacing.Space2
+        )
     ) {
         Icon(
             imageVector = icon,
             contentDescription = title,
-            modifier = Modifier.size(BBIcon.SizeXl),
-            tint = tint
+            modifier = Modifier.size(
+                BBIcon.SizeXl
+            ),
+            tint = BBColors.Yellow.Yellow600
         )
 
         Text(
@@ -346,7 +436,9 @@ private fun WholesaleSectionTitle(
     description: String
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+        verticalArrangement = Arrangement.spacedBy(
+            BBSpacing.Space1
+        )
     ) {
         Text(
             text = title,
@@ -373,11 +465,15 @@ private fun WholesaleSectionTitleWithAction(
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.Bottom,
-        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+        horizontalArrangement = Arrangement.spacedBy(
+            BBSpacing.Space3
+        )
     ) {
         Column(
             modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space1
+            )
         ) {
             Text(
                 text = title,
@@ -402,12 +498,18 @@ private fun WholesaleSectionTitleWithAction(
                 color = BBColors.Navy.Navy700
             )
 
-            Spacer(modifier = Modifier.width(BBSpacing.Space1))
+            Spacer(
+                modifier = Modifier.width(
+                    BBSpacing.Space1
+                )
+            )
 
             Icon(
                 imageVector = Icons.Outlined.ArrowForward,
                 contentDescription = actionText,
-                modifier = Modifier.size(BBIcon.SizeSm),
+                modifier = Modifier.size(
+                    BBIcon.SizeSm
+                ),
                 tint = BBColors.Navy.Navy700
             )
         }
@@ -420,12 +522,16 @@ private fun WholesaleCategoryGrid(
     onCategoryClick: () -> Unit
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+        verticalArrangement = Arrangement.spacedBy(
+            BBSpacing.Space3
+        )
     ) {
         items.chunked(2).forEach { rowItems ->
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+                horizontalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space3
+                )
             ) {
                 rowItems.forEach { item ->
                     WholesaleCategoryCard(
@@ -436,7 +542,9 @@ private fun WholesaleCategoryGrid(
                 }
 
                 if (rowItems.size == 1) {
-                    Spacer(modifier = Modifier.weight(1f))
+                    Spacer(
+                        modifier = Modifier.weight(1f)
+                    )
                 }
             }
         }
@@ -450,12 +558,15 @@ private fun WholesaleCategoryCard(
     modifier: Modifier = Modifier
 ) {
     Surface(
-        modifier = modifier.height(BBSpacing.Space24 + BBSpacing.Space16),
+        modifier = modifier.height(
+            BBSpacing.Space24 +
+                    BBSpacing.Space16
+        ),
         onClick = onClick,
         shape = BBRadius.XlShape,
         color = BBColors.Surface,
         border = BorderStroke(
-            width = 1.dp,
+            width = BBSpacing.BorderThin,
             color = BBColors.Border
         )
     ) {
@@ -466,16 +577,18 @@ private fun WholesaleCategoryCard(
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             WholesaleIconBox(
-                icon = item.icon,
-                tint = item.tint,
-                backgroundColor = item.backgroundColor
+                icon = item.Icon,
+                tint = item.Tint,
+                backgroundColor = item.BackgroundColor
             )
 
             Column(
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+                verticalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space1
+                )
             ) {
                 Text(
-                    text = item.title,
+                    text = item.Title,
                     style = MaterialTheme.typography.titleSmall,
                     color = BBColors.TextStrong,
                     fontWeight = FontWeight.SemiBold,
@@ -484,129 +597,12 @@ private fun WholesaleCategoryCard(
                 )
 
                 Text(
-                    text = item.description,
+                    text = item.Description,
                     style = MaterialTheme.typography.bodySmall,
                     color = BBColors.TextMuted,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
-            }
-        }
-    }
-}
-
-@Composable
-private fun WholesaleProductShowcaseRow(
-    products: List<WholesaleShowcaseProduct>,
-    onProductClick: () -> Unit
-) {
-    LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
-        contentPadding = PaddingValues(end = BBSpacing.PageHorizontal)
-    ) {
-        items(
-            items = products,
-            key = { it.id }
-        ) { product ->
-            WholesaleProductShowcaseCard(
-                product = product,
-                onClick = onProductClick
-            )
-        }
-    }
-}
-
-@Composable
-private fun WholesaleProductShowcaseCard(
-    product: WholesaleShowcaseProduct,
-    onClick: () -> Unit
-) {
-    BbCard(
-        modifier = Modifier.width(BBSpacing.Space24 + BBSpacing.Space24),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.None,
-        onClick = onClick
-    ) {
-        Column {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(BBSpacing.Space24 + BBSpacing.Space20)
-                    .background(BBColors.Gray.Gray50),
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-                    painter = painterResource(id = product.imageRes),
-                    contentDescription = product.title,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight()
-                        .clip(BBRadius.XlShape),
-                    contentScale = ContentScale.Crop
-                )
-
-                Surface(
-                    modifier = Modifier
-                        .align(Alignment.TopStart)
-                        .padding(BBSpacing.Space3),
-                    shape = BBRadius.PillShape,
-                    color = BBColors.Navy.Navy900.copy(alpha = 0.88f)
-                ) {
-                    Text(
-                        text = product.badge,
-                        modifier = Modifier.padding(
-                            horizontal = BBSpacing.Space3,
-                            vertical = BBSpacing.Space1
-                        ),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = BBColors.White,
-                        maxLines = 1
-                    )
-                }
-            }
-
-            Column(
-                modifier = Modifier.padding(BBSpacing.CardPadding),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
-            ) {
-                Text(
-                    text = product.title,
-                    style = MaterialTheme.typography.titleSmall,
-                    color = BBColors.TextStrong,
-                    fontWeight = FontWeight.SemiBold,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-                )
-
-                Text(
-                    text = product.category,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = BBColors.TextMuted,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-
-                Text(
-                    text = product.price,
-                    style = MaterialTheme.typography.titleSmall,
-                    color = BBColors.Navy.Navy800,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 1
-                )
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    WholesaleMiniPill(
-                        text = product.moq
-                    )
-
-                    WholesaleMiniPill(
-                        text = product.supplier
-                    )
-                }
             }
         }
     }
@@ -617,42 +613,59 @@ private fun WholesaleActionRow(
     items: List<WholesaleHomeActionItem>
 ) {
     LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
-        contentPadding = PaddingValues(end = BBSpacing.PageHorizontal)
+        horizontalArrangement = Arrangement.spacedBy(
+            BBSpacing.Space3
+        ),
+        contentPadding = PaddingValues(
+            end = BBSpacing.PageHorizontal
+        )
     ) {
         items(
             items = items,
-            key = { it.title }
+            key = { item ->
+                item.Title
+            }
         ) { item ->
             Surface(
                 modifier = Modifier
-                    .widthIn(min = BBSpacing.Space24 + BBSpacing.Space20)
-                    .heightIn(min = BBSpacing.Space20),
-                onClick = item.onClick,
+                    .widthIn(
+                        min = BBSpacing.Space24 +
+                                BBSpacing.Space20
+                    )
+                    .heightIn(
+                        min = BBSpacing.Space20
+                    ),
+                onClick = item.OnClick,
                 shape = BBRadius.XlShape,
                 color = BBColors.Surface,
                 border = BorderStroke(
-                    width = 1.dp,
+                    width = BBSpacing.BorderThin,
                     color = BBColors.Border
                 )
             ) {
                 Row(
-                    modifier = Modifier.padding(BBSpacing.CardPadding),
+                    modifier = Modifier.padding(
+                        BBSpacing.CardPadding
+                    ),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+                    horizontalArrangement = Arrangement.spacedBy(
+                        BBSpacing.Space3
+                    )
                 ) {
                     WholesaleIconBox(
-                        icon = item.icon,
-                        tint = item.tint,
-                        backgroundColor = item.backgroundColor,
+                        icon = item.Icon,
+                        tint = item.Tint,
+                        backgroundColor = item.BackgroundColor,
                         compact = true
                     )
 
                     Column(
-                        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+                        verticalArrangement = Arrangement.spacedBy(
+                            BBSpacing.Space1
+                        )
                     ) {
                         Text(
-                            text = item.title,
+                            text = item.Title,
                             style = MaterialTheme.typography.titleSmall,
                             color = BBColors.TextStrong,
                             fontWeight = FontWeight.SemiBold,
@@ -660,7 +673,7 @@ private fun WholesaleActionRow(
                         )
 
                         Text(
-                            text = item.description,
+                            text = item.Description,
                             style = MaterialTheme.typography.bodySmall,
                             color = BBColors.TextMuted,
                             maxLines = 1,
@@ -680,8 +693,17 @@ private fun WholesaleIconBox(
     backgroundColor: Color,
     compact: Boolean = false
 ) {
-    val boxSize = if (compact) BBIcon.BoxMd else BBIcon.BoxXl
-    val iconSize = if (compact) BBIcon.SizeMd else BBIcon.SizeXl
+    val boxSize = if (compact) {
+        BBIcon.BoxMd
+    } else {
+        BBIcon.BoxXl
+    }
+
+    val iconSize = if (compact) {
+        BBIcon.SizeMd
+    } else {
+        BBIcon.SizeXl
+    }
 
     Surface(
         modifier = Modifier.size(boxSize),
@@ -702,166 +724,129 @@ private fun WholesaleIconBox(
     }
 }
 
-@Composable
-private fun WholesaleMiniPill(
-    text: String
-) {
-    Surface(
-        shape = BBRadius.PillShape,
-        color = BBColors.Gray.Gray50,
-        border = BorderStroke(
-            width = 1.dp,
-            color = BBColors.Border
-        )
-    ) {
-        Text(
-            text = text,
-            modifier = Modifier.padding(
-                horizontal = BBSpacing.Space2,
-                vertical = BBSpacing.Space1
-            ),
-            style = MaterialTheme.typography.labelSmall,
-            color = BBColors.TextMuted,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
-    }
-}
-
+@Immutable
 private data class WholesaleCategoryHomeItem(
-    val title: String,
-    val description: String,
-    val icon: ImageVector,
-    val tint: Color,
-    val backgroundColor: Color
+    val Title: String,
+    val Description: String,
+    val Icon: ImageVector,
+    val Tint: Color,
+    val BackgroundColor: Color
 )
 
-private data class WholesaleShowcaseProduct(
-    val id: Int,
-    val title: String,
-    val category: String,
-    val price: String,
-    val moq: String,
-    val supplier: String,
-    val badge: String,
-    val imageRes: Int
-)
-
+@Immutable
 private data class WholesaleHomeActionItem(
-    val title: String,
-    val description: String,
-    val icon: ImageVector,
-    val tint: Color,
-    val backgroundColor: Color,
-    val onClick: () -> Unit
+    val Title: String,
+    val Description: String,
+    val Icon: ImageVector,
+    val Tint: Color,
+    val BackgroundColor: Color,
+    val OnClick: () -> Unit
 )
 
 private fun wholesaleCategoryItems(): List<WholesaleCategoryHomeItem> {
     return listOf(
         WholesaleCategoryHomeItem(
-            title = "Elektronik",
-            description = "Cihaz ve Bileşenler",
-            icon = Icons.Outlined.Inventory2,
-            tint = BBColors.Blue.Blue700,
-            backgroundColor = BBColors.Blue.Blue50
+            Title = "Elektronik",
+            Description = "Cihaz ve bileşenler",
+            Icon = Icons.Outlined.Inventory2,
+            Tint = BBColors.Blue.Blue700,
+            BackgroundColor = BBColors.Blue.Blue50
         ),
         WholesaleCategoryHomeItem(
-            title = "Ambalaj",
-            description = "Kutu, Etiket ve Paketleme",
-            icon = Icons.Outlined.Category,
-            tint = BBColors.Yellow.Yellow800,
-            backgroundColor = BBColors.Yellow.Yellow100
+            Title = "Ambalaj",
+            Description = "Kutu, etiket ve paketleme",
+            Icon = Icons.Outlined.Category,
+            Tint = BBColors.Yellow.Yellow800,
+            BackgroundColor = BBColors.Yellow.Yellow100
         ),
         WholesaleCategoryHomeItem(
-            title = "Tekstil",
-            description = "Kumaş, Giyim ve Aksesuar",
-            icon = Icons.Outlined.Storefront,
-            tint = BBColors.Green.Green700,
-            backgroundColor = BBColors.Green.Green50
+            Title = "Tekstil",
+            Description = "Kumaş, giyim ve aksesuar",
+            Icon = Icons.Outlined.Storefront,
+            Tint = BBColors.Green.Green700,
+            BackgroundColor = BBColors.Green.Green50
         ),
         WholesaleCategoryHomeItem(
-            title = "Makine",
-            description = "Üretim ve Sanayi Ekipmanı",
-            icon = Icons.Outlined.Business,
-            tint = BBColors.Navy.Navy700,
-            backgroundColor = BBColors.Navy.Navy50
+            Title = "Makine",
+            Description = "Üretim ve sanayi ekipmanı",
+            Icon = Icons.Outlined.Business,
+            Tint = BBColors.Navy.Navy700,
+            BackgroundColor = BBColors.Navy.Navy50
         ),
         WholesaleCategoryHomeItem(
-            title = "Gıda",
-            description = "Toptan Gıda Ürünleri",
-            icon = Icons.Outlined.LocalShipping,
-            tint = BBColors.Orange.Orange700,
-            backgroundColor = BBColors.Orange.Orange50
+            Title = "Gıda",
+            Description = "Toptan gıda ürünleri",
+            Icon = Icons.Outlined.LocalShipping,
+            Tint = BBColors.Orange.Orange700,
+            BackgroundColor = BBColors.Orange.Orange50
         ),
         WholesaleCategoryHomeItem(
-            title = "Kimya",
-            description = "Endüstriyel Hammaddeler",
-            icon = Icons.Outlined.LocalOffer,
-            tint = BBColors.Purple.Purple700,
-            backgroundColor = BBColors.Purple.Purple50
+            Title = "Kimya",
+            Description = "Endüstriyel hammaddeler",
+            Icon = Icons.Outlined.LocalOffer,
+            Tint = BBColors.Purple.Purple700,
+            BackgroundColor = BBColors.Purple.Purple50
         )
     )
 }
 
-private fun wholesaleShowcaseProducts(): List<WholesaleShowcaseProduct> {
-    val defaultImage = R.drawable.h3ff3b33d6a1447c898cee6e336867bach
-
+private fun wholesaleShowcaseProducts(): List<WholesaleProductCardModel> {
     return listOf(
-        WholesaleShowcaseProduct(
-            id = 1,
-            title = "Endüstriyel Ambalaj Kutusu",
-            category = "Ambalaj ve Paketleme",
-            price = "₺18,90 / Adet",
-            moq = "MOQ 500",
-            supplier = "3 Firma",
-            badge = "Vitrin",
-            imageRes = defaultImage
+        WholesaleProductCardModel(
+            Id = 1,
+            Title = "Endüstriyel ambalaj kutusu",
+            Category = "Ambalaj ve paketleme",
+            PriceText = "₺18,90 / adet",
+            MoqText = "MOQ 500",
+            SupplierText = "3 firma",
+            BadgeText = "Vitrin",
+            ImageResId = R.drawable.h3ff3b33d6a1447c898cee6e336867bach
         ),
-        WholesaleShowcaseProduct(
-            id = 2,
-            title = "Toptan Üretim Kumaşı",
-            category = "Tekstil ve Giyim",
-            price = "₺74,50 / Metre",
-            moq = "MOQ 250",
-            supplier = "5 Firma",
-            badge = "Yeni",
-            imageRes = defaultImage
+        WholesaleProductCardModel(
+            Id = 2,
+            Title = "Toptan üretim kumaşı",
+            Category = "Tekstil ve giyim",
+            PriceText = "₺74,50 / metre",
+            MoqText = "MOQ 250",
+            SupplierText = "5 firma",
+            BadgeText = "Yeni",
+            ImageResId = R.drawable.h3ff3b33d6a1447c898cee6e336867bachvar1
         ),
-        WholesaleShowcaseProduct(
-            id = 3,
-            title = "Paslanmaz Üretim Parçası",
-            category = "Makine ve Sanayi",
-            price = "₺42,00 / Adet",
-            moq = "MOQ 100",
-            supplier = "4 Firma",
-            badge = "RFQ",
-            imageRes = defaultImage
+        WholesaleProductCardModel(
+            Id = 3,
+            Title = "Paslanmaz üretim parçası",
+            Category = "Makine ve sanayi",
+            PriceText = "₺42,00 / adet",
+            MoqText = "MOQ 100",
+            SupplierText = "4 firma",
+            BadgeText = "RFQ",
+            ImageResId = R.drawable.h3ff3b33d6a1447c898cee6e336867bachvar2
         ),
-        WholesaleShowcaseProduct(
-            id = 4,
-            title = "Toptan Elektronik Modül",
-            category = "Elektronik Bileşen",
-            price = "₺96,00 / Adet",
-            moq = "MOQ 200",
-            supplier = "6 Firma",
-            badge = "Popüler",
-            imageRes = defaultImage
+        WholesaleProductCardModel(
+            Id = 4,
+            Title = "Toptan elektronik modül",
+            Category = "Elektronik bileşen",
+            PriceText = "₺96,00 / adet",
+            MoqText = "MOQ 200",
+            SupplierText = "6 firma",
+            BadgeText = "Popüler",
+            ImageResId = R.drawable.h3ff3b33d6a1447c898cee6e336867bachvar3
         ),
-        WholesaleShowcaseProduct(
-            id = 5,
-            title = "Özel Baskılı Etiket Rulosu",
-            category = "Etiket ve Baskı",
-            price = "₺31,75 / Rulo",
-            moq = "MOQ 300",
-            supplier = "2 Firma",
-            badge = "Özel",
-            imageRes = defaultImage
+        WholesaleProductCardModel(
+            Id = 5,
+            Title = "Özel baskılı etiket rulosu",
+            Category = "Etiket ve baskı",
+            PriceText = "₺31,75 / rulo",
+            MoqText = "MOQ 300",
+            SupplierText = "2 firma",
+            BadgeText = "Özel",
+            ImageResId = R.drawable.h3ff3b33d6a1447c898cee6e336867bach
         )
     )
 }
 
 private fun wholesaleActionItems(
-    onQuotationRequestsClick: () -> Unit,
+    onRfqListClick: () -> Unit,
     onRfqCreateClick: () -> Unit,
     onLastPriceRequestClick: () -> Unit,
     onSampleRequestClick: () -> Unit,
@@ -869,44 +854,52 @@ private fun wholesaleActionItems(
 ): List<WholesaleHomeActionItem> {
     return listOf(
         WholesaleHomeActionItem(
-            title = "Teklifler",
-            description = "RFQ kayıtlarını gör",
-            icon = Icons.Outlined.RequestQuote,
-            tint = BBColors.Orange.Orange700,
-            backgroundColor = BBColors.Orange.Orange50,
-            onClick = onQuotationRequestsClick
+            Title = "Teklifler",
+            Description = "RFQ kayıtlarını gör",
+            Icon = Icons.Outlined.RequestQuote,
+            Tint = BBColors.Orange.Orange700,
+            BackgroundColor = BBColors.Orange.Orange50,
+            OnClick = onRfqListClick
         ),
         WholesaleHomeActionItem(
-            title = "RFQ Oluştur",
-            description = "Yeni teklif iste",
-            icon = Icons.Outlined.LocalOffer,
-            tint = BBColors.Orange.Orange700,
-            backgroundColor = BBColors.Orange.Orange50,
-            onClick = onRfqCreateClick
+            Title = "Teklif İste",
+            Description = "Yeni teklif iste",
+            Icon = Icons.Outlined.LocalOffer,
+            Tint = BBColors.Orange.Orange700,
+            BackgroundColor = BBColors.Orange.Orange50,
+            OnClick = onRfqCreateClick
         ),
         WholesaleHomeActionItem(
-            title = "Son Fiyat",
-            description = "Fiyat pazarlığı başlat",
-            icon = Icons.Outlined.LocalOffer,
-            tint = BBColors.Red.Red700,
-            backgroundColor = BBColors.Red.Red50,
-            onClick = onLastPriceRequestClick
+            Title = "Son fiyat",
+            Description = "Fiyat pazarlığı başlat",
+            Icon = Icons.Outlined.LocalOffer,
+            Tint = BBColors.Red.Red700,
+            BackgroundColor = BBColors.Red.Red50,
+            OnClick = onLastPriceRequestClick
         ),
         WholesaleHomeActionItem(
-            title = "Numune",
-            description = "Numune talebi gönder",
-            icon = Icons.Outlined.Inventory2,
-            tint = BBColors.Blue.Blue700,
-            backgroundColor = BBColors.Blue.Blue50,
-            onClick = onSampleRequestClick
+            Title = "Numune",
+            Description = "Numune talebi gönder",
+            Icon = Icons.Outlined.Inventory2,
+            Tint = BBColors.Blue.Blue700,
+            BackgroundColor = BBColors.Blue.Blue50,
+            OnClick = onSampleRequestClick
         ),
         WholesaleHomeActionItem(
-            title = "Özelleştirme",
-            description = "Logo, renk ve üretim detayı",
-            icon = Icons.Outlined.Category,
-            tint = BBColors.Purple.Purple700,
-            backgroundColor = BBColors.Purple.Purple50,
-            onClick = onCustomizationRequestClick
+            Title = "Özelleştirme",
+            Description = "Logo, renk ve üretim detayı",
+            Icon = Icons.Outlined.Category,
+            Tint = BBColors.Purple.Purple700,
+            BackgroundColor = BBColors.Purple.Purple50,
+            OnClick = onCustomizationRequestClick
         )
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun WholesaleHomeScreenPreview() {
+    BbTheme {
+        WholesaleHomeScreen()
+    }
 }

@@ -699,7 +699,7 @@ private fun RetailProductDetailVariantCard(
                     )
 
                     Text(
-                        text = "Sepete eklenecek ürün adedi",
+                        text = "Sepete Eklenecek ürün adedi",
                         style = MaterialTheme.typography.bodySmall,
                         color = BBColors.TextMuted
                     )

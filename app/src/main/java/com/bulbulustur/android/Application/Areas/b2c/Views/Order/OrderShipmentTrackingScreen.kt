@@ -336,7 +336,7 @@ private fun OrderShipmentHelpCard() {
                 )
 
                 Text(
-                    text = "Kargo hareketleri taşıyıcı firmadan gelen bilgiye göre güncellenir. Gecikme veya teslimat sorunu varsa sipariş detayından talep oluşturabilirsiniz.",
+                    text = "Kargo hareketleri taşıyıcı firmadan gelen bilgiye göre güncellenir. Gecikme veya teslimat sorunu varsa sipariş detayından talep Oluşturabilirsiniz.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

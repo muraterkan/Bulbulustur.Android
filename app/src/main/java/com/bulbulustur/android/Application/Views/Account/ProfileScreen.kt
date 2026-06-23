@@ -11,12 +11,14 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Badge
 import androidx.compose.material.icons.outlined.Business
+import androidx.compose.material.icons.outlined.CameraAlt
 import androidx.compose.material.icons.outlined.ChevronRight
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Email
@@ -35,6 +37,10 @@ import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -42,15 +48,17 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
-import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
+import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbIconBoxIcon
+import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbIconBoxSize
+import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBAlpha
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BbTypography
-import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBAlpha
 
 @Composable
 fun ProfileScreen(
@@ -62,6 +70,41 @@ fun ProfileScreen(
     onCompanyInfoClick: () -> Unit = {},
     onB2BStatusClick: () -> Unit = {}
 ) {
+    var showProfilePhotoSheet by remember {
+        mutableStateOf(false)
+    }
+
+    var hasProfilePhoto by remember {
+        mutableStateOf(false)
+    }
+
+    val profileCompletion = if (hasProfilePhoto) {
+        0.90f
+    } else {
+        0.70f
+    }
+
+    if (showProfilePhotoSheet) {
+        ProfilePhotoSheet(
+            hasProfilePhoto = hasProfilePhoto,
+            onDismiss = {
+                showProfilePhotoSheet = false
+            },
+            onTakePhotoClick = {
+                hasProfilePhoto = true
+                showProfilePhotoSheet = false
+            },
+            onSelectFromGalleryClick = {
+                hasProfilePhoto = true
+                showProfilePhotoSheet = false
+            },
+            onRemovePhotoClick = {
+                hasProfilePhoto = false
+                showProfilePhotoSheet = false
+            }
+        )
+    }
+
     val pageBackground = Brush.verticalGradient(
         colors = listOf(
             MaterialTheme.colorScheme.primaryContainer.copy(alpha = BBAlpha.DisabledLabel),
@@ -96,11 +139,19 @@ fun ProfileScreen(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
             item {
-                ProfileHeroCard()
+                ProfileHeroCard(
+                    hasProfilePhoto = hasProfilePhoto,
+                    onProfilePhotoClick = {
+                        showProfilePhotoSheet = true
+                    }
+                )
             }
 
             item {
-                ProfileCompletionCard()
+                ProfileCompletionCard(
+                    progress = profileCompletion,
+                    percentText = "%${(profileCompletion * 100).toInt()}"
+                )
             }
 
             item {
@@ -109,39 +160,13 @@ fun ProfileScreen(
                     description = "Hesabınızın görünen temel bilgileri.",
                     icon = Icons.Outlined.PermIdentity
                 ) {
-                    ProfileInfoRow(
-                        title = "Hesap ID",
-                        value = "ME-10000",
-                        icon = Icons.Outlined.Badge,
-                        onClick = onEditClick
-                    )
-
+                    ProfileInfoRow("Hesap ID", "ME-10000", Icons.Outlined.Badge, onEditClick)
                     ProfileDashedDivider()
-
-                    ProfileInfoRow(
-                        title = "Ad Soyad",
-                        value = "Murat Erkan",
-                        icon = Icons.Outlined.PermIdentity,
-                        onClick = onEditClick
-                    )
-
+                    ProfileInfoRow("Ad Soyad", "Murat Erkan", Icons.Outlined.PermIdentity, onEditClick)
                     ProfileDashedDivider()
-
-                    ProfileInfoRow(
-                        title = "Cinsiyet",
-                        value = "Erkek",
-                        icon = Icons.Outlined.Man,
-                        onClick = onEditClick
-                    )
-
+                    ProfileInfoRow("Cinsiyet", "Erkek", Icons.Outlined.Man, onEditClick)
                     ProfileDashedDivider()
-
-                    ProfileInfoRow(
-                        title = "Ülke / Şehir",
-                        value = "Türkiye / Ankara",
-                        icon = Icons.Outlined.LocationOn,
-                        onClick = onEditClick
-                    )
+                    ProfileInfoRow("Ülke / Şehir", "Türkiye / Ankara", Icons.Outlined.LocationOn, onEditClick)
                 }
             }
 
@@ -151,30 +176,11 @@ fun ProfileScreen(
                     description = "Güvenlik ve hesap doğrulama bilgileri.",
                     icon = Icons.Outlined.Security
                 ) {
-                    ProfileInfoRow(
-                        title = "E-Posta",
-                        value = "muraterkan500@gmail.com",
-                        icon = Icons.Outlined.Email,
-                        onClick = onEmailClick
-                    )
-
+                    ProfileInfoRow("E-Posta", "muraterkan500@gmail.com", Icons.Outlined.Email, onEmailClick)
                     ProfileDashedDivider()
-
-                    ProfileInfoRow(
-                        title = "Telefonlarım",
-                        value = "1 telefon kayıtlı · doğrulama bekliyor",
-                        icon = Icons.Outlined.PhoneIphone,
-                        onClick = onPhonesClick
-                    )
-
+                    ProfileInfoRow("Telefonlarım", "1 telefon kayıtlı · doğrulama bekliyor", Icons.Outlined.PhoneIphone, onPhonesClick)
                     ProfileDashedDivider()
-
-                    ProfileInfoRow(
-                        title = "E-Posta Doğrulama",
-                        value = "Doğrulanmış",
-                        icon = Icons.Outlined.Verified,
-                        onClick = onEmailClick
-                    )
+                    ProfileInfoRow("E-Posta Doğrulama", "Doğrulanmış", Icons.Outlined.Verified, onEmailClick)
                 }
             }
 
@@ -184,21 +190,9 @@ fun ProfileScreen(
                     description = "Uygulama deneyimini şekillendiren bilgiler.",
                     icon = Icons.Outlined.Tune
                 ) {
-                    ProfileInfoRow(
-                        title = "Kullanım Amacı",
-                        value = "Toptan ve perakende alışveriş",
-                        icon = Icons.Outlined.Tune,
-                        onClick = onUsagePurposeClick
-                    )
-
+                    ProfileInfoRow("Kullanım Amacı", "Toptan ve perakende alışveriş", Icons.Outlined.Tune, onUsagePurposeClick)
                     ProfileDashedDivider()
-
-                    ProfileInfoRow(
-                        title = "Hesap Modu",
-                        value = "Toptan / Perakende",
-                        icon = Icons.Outlined.Storefront,
-                        onClick = onUsagePurposeClick
-                    )
+                    ProfileInfoRow("Hesap Modu", "Toptan / Perakende", Icons.Outlined.Storefront, onUsagePurposeClick)
                 }
             }
 
@@ -230,7 +224,10 @@ fun ProfileScreen(
 }
 
 @Composable
-private fun ProfileHeroCard() {
+private fun ProfileHeroCard(
+    hasProfilePhoto: Boolean,
+    onProfilePhotoClick: () -> Unit
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -245,21 +242,10 @@ private fun ProfileHeroCard() {
             horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
-                modifier = Modifier
-                    .size(BBIcon.Box2Xl)
-                    .background(
-                        color = MaterialTheme.colorScheme.primary,
-                        shape = BBRadius.XlShape
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "ME",
-                    style = BbTypography.titleLarge,
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
-            }
+            ProfileAvatarBox(
+                hasProfilePhoto = hasProfilePhoto,
+                onClick = onProfilePhotoClick
+            )
 
             Column(
                 modifier = Modifier.weight(1f),
@@ -288,7 +274,72 @@ private fun ProfileHeroCard() {
 }
 
 @Composable
-private fun ProfileCompletionCard() {
+private fun ProfileAvatarBox(
+    hasProfilePhoto: Boolean,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier.size(BBIcon.Box2Xl),
+        contentAlignment = Alignment.Center
+    ) {
+        BbCard(
+            modifier = Modifier.size(BBIcon.Box2Xl),
+            variant = BbCardVariant.Default,
+            padding = BbCardPadding.None,
+            onClick = onClick
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        color = MaterialTheme.colorScheme.primary,
+                        shape = BBRadius.XlShape
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                if (hasProfilePhoto) {
+                    Icon(
+                        imageVector = Icons.Outlined.PermIdentity,
+                        contentDescription = "Profil fotoğrafı",
+                        tint = MaterialTheme.colorScheme.onPrimary,
+                        modifier = Modifier.size(BBIcon.Size3Xl)
+                    )
+                } else {
+                    Text(
+                        text = "ME",
+                        style = BbTypography.titleLarge,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
+            }
+        }
+
+        BbIconBoxIcon(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .offset(
+                    x = BBSpacing.Space1,
+                    y = BBSpacing.Space1
+                ),
+            icon = Icons.Outlined.CameraAlt,
+            contentDescription = "Profil fotoğrafı değiştir",
+            size = BbIconBoxSize.Small,
+            backgroundColor = MaterialTheme.colorScheme.surface,
+            iconColor = MaterialTheme.colorScheme.onSurface,
+            borderColor = MaterialTheme.colorScheme.outlineVariant,
+            borderWidth = BBSpacing.BorderThin,
+            bordered = true,
+            radius = BBRadius.md,
+            onClick = onClick
+        )
+    }
+}
+
+@Composable
+private fun ProfileCompletionCard(
+    progress: Float,
+    percentText: String
+) {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
@@ -337,7 +388,7 @@ private fun ProfileCompletionCard() {
                 }
 
                 Text(
-                    text = "%70",
+                    text = percentText,
                     style = BbTypography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -345,7 +396,7 @@ private fun ProfileCompletionCard() {
 
             LinearProgressIndicator(
                 progress = {
-                    0.70f
+                    progress
                 },
                 modifier = Modifier.fillMaxWidth(),
                 color = MaterialTheme.colorScheme.primary,
@@ -516,4 +567,3 @@ private fun ProfileDashedDivider() {
         )
     }
 }
-

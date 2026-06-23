@@ -35,9 +35,15 @@ object StoreRoutes {
 }
 
 object WholesaleRoutes {
+
+    const val ArgCategoryId = "categoryId"
+
     const val Home = "wholesale/home"
     const val CategoryHome = "wholesale/category-home"
-    const val CategoryDetail = "wholesale/category-detail"
+
+    const val CategoryDetail =
+        "wholesale/category-detail/{$ArgCategoryId}"
+
     const val ProductList = "wholesale/product-list"
     const val ProductDetail = "wholesale/product-detail"
     const val Search = "wholesale/search"
@@ -46,9 +52,20 @@ object WholesaleRoutes {
     const val QuotationRequests = "wholesale/rfq/list"
     const val RfqCreate = "wholesale/rfq/create"
 
-    const val LastPriceRequest = "wholesale/last-price-request"
-    const val SampleRequest = "wholesale/sample-request"
-    const val CustomizationRequest = "wholesale/customization-request"
+    const val LastPriceRequest =
+        "wholesale/last-price-request"
+
+    const val SampleRequest =
+        "wholesale/sample-request"
+
+    const val CustomizationRequest =
+        "wholesale/customization-request"
+
+    fun categoryDetail(
+        categoryId: Int
+    ): String {
+        return "wholesale/category-detail/$categoryId"
+    }
 }
 
 object RfqRoutes {
@@ -198,7 +215,7 @@ object SettingsRoutes {
     const val Currency = "settings/currency"
     const val LegalPolicies = "settings/legal-policies"
     const val AboutThisApp = "settings/about-this-app"
-
+    const val SystemStatus = "settings/system-status"
     const val LegalPolicyDetail = "settings/legal-policy-detail/{policyKey}"
 
     fun legalPolicyDetail(policyKey: String): String {

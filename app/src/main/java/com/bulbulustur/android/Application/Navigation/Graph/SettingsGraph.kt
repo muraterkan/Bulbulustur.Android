@@ -5,6 +5,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
+import com.bulbulustur.android.Application.Navigation.Routes.AccountRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.SettingsRoutes
 import com.bulbulustur.android.Application.Views.Account.AboutThisAppScreen
 import com.bulbulustur.android.Application.Views.Account.AccountSettingsScreen
@@ -15,6 +16,7 @@ import com.bulbulustur.android.Application.Views.Account.LanguageSettingsScreen
 import com.bulbulustur.android.Application.Views.Account.LegalPoliciesScreen
 import com.bulbulustur.android.Application.Views.Account.LegalPolicyDetailScreen
 import com.bulbulustur.android.Application.Views.Account.RegionSettingsScreen
+import com.bulbulustur.android.Application.Views.Account.SystemStatusScreen
 
 fun NavGraphBuilder.settingsGraph(
     navigator: BulbulusturNavigator
@@ -24,6 +26,26 @@ fun NavGraphBuilder.settingsGraph(
         AccountSettingsScreen(
             onBackClick = {
                 navigator.back()
+            },
+            onAccountSecurityClick = {
+                navigator.navController.navigate(
+                    AccountRoutes.Security
+                )
+            },
+            onPrivacyClick = {
+                navigator.navController.navigate(
+                    SettingsRoutes.LegalPolicies
+                )
+            },
+            onPermissionsClick = {
+                navigator.navController.navigate(
+                    SettingsRoutes.Communication
+                )
+            },
+            onHelpCenterClick = {
+                navigator.navController.navigate(
+                    AccountRoutes.QuestionAnswers
+                )
             },
             onLanguageClick = {
                 navigator.navController.navigate(
@@ -107,6 +129,21 @@ fun NavGraphBuilder.settingsGraph(
         AboutThisAppScreen(
             onBackClick = {
                 navigator.back()
+            },
+            onSystemStatusClick = {
+                navigator.navController.navigate(
+                    SettingsRoutes.SystemStatus
+                )
+            }
+        )
+    }
+
+    composable(SettingsRoutes.SystemStatus) {
+        SystemStatusScreen(
+            onBackClick = {
+                navigator.back()
+            },
+            onOpenStatusPageClick = {
             }
         )
     }

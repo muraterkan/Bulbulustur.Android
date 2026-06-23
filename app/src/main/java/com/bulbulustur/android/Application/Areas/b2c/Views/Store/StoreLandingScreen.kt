@@ -106,7 +106,7 @@ fun SellerLandingScreen(
             item {
                 SellerLandingSectionTitle(
                     title = selectedTab,
-                    description = "Bulbulustur’da satışa başlamak isteyen mağazalar için kısa bilgiler."
+                    description = "Bulbulustur’da satışa başlamak isteyen Mağazalar için kısa bilgiler."
                 )
             }
 
@@ -202,7 +202,7 @@ private fun SellerLandingHero(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Perakende ve toptan satış kanallarına tek ekosistemden ulaşmak isteyen mağazalar için başlangıç alanı.",
+                text = "Perakende ve toptan satış kanallarına tek ekosistemden ulaşmak isteyen Mağazalar için başlangıç alanı.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onPrimaryContainer
             )
@@ -581,7 +581,7 @@ private fun getRetailSellerLandingScreenData(): RetailSellerLandingScreenData {
                 id = 2,
                 groupName = "Avantajlar",
                 title = "Kategori bazlı görünürlük",
-                description = "Ürünlerin kategori, mağaza ve kampanya akışlarında keşfedilebilir hale gelir.",
+                description = "Ürünlerin kategori, mağaza ve kampanya akışlarında Keşfedilebilir hale gelir.",
                 iconText = "KG"
             ),
             RetailSellerInfoItem(

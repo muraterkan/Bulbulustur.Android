@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
@@ -24,15 +25,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
+import com.bulbulustur.android.Application.Views.Shared.Components.BbSectionHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
@@ -40,38 +44,49 @@ import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbChip
-import com.bulbulustur.android.Application.Views.Shared.Components.BbSectionHeader
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
 
 @Composable
 fun CompanyListScreen(
+    onBackClick: () -> Unit = {},
     onCompanyClick: (Int) -> Unit = {},
     onProductListClick: (Int) -> Unit = {},
     onMessageClick: (Int) -> Unit = {},
     onRfqCreateClick: () -> Unit = {},
-    onSearchClick: (String) -> Unit = {}
+    onFilterClick: (String) -> Unit = {}
 ) {
-    var searchText by remember {
-        mutableStateOf("")
-    }
-
     val companies = remember {
         getCompanyListItems()
     }
 
+    var selectedFilter by remember {
+        mutableStateOf("Tüm firmalar")
+    }
+
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.background
+        modifier = Modifier.fillMaxSize(),
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Firmalar",
+                onBackClick = onBackClick
+            )
+        }
     ) { innerPadding ->
         LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(
                 start = BBSpacing.PageHorizontal,
-                top = innerPadding.calculateTopPadding() + BBSpacing.PageTopCompact,
+                top = innerPadding.calculateTopPadding() +
+                        BBSpacing.PageTopCompact,
                 end = BBSpacing.PageHorizontal,
-                bottom = innerPadding.calculateBottomPadding() + BBSpacing.PageBottom
+                bottom = innerPadding.calculateBottomPadding() +
+                        BBSpacing.PageBottom
             ),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.SectionGapCompact)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.SectionGapCompact
+            )
         ) {
             item {
                 CompanyListHero(
@@ -80,36 +95,44 @@ fun CompanyListScreen(
             }
 
             item {
-
-            }
-
-            item {
-                CompanyFilterChips()
+                CompanyFilterChips(
+                    selectedFilter = selectedFilter,
+                    onFilterClick = { filterName ->
+                        selectedFilter = filterName
+                        onFilterClick(filterName)
+                    }
+                )
             }
 
             item {
                 BbSectionHeader(
-                    title = "Firma listesi",
-                    subtitle = "Ürünleri, firma yetkinliklerini ve güven bilgilerini karşılaştır"
+                    title = "Firma Listesi",
+                    subtitle = "Ürünleri, firma yetkinliklerini ve güven bilgilerini karşılaştır."
                 )
             }
 
             items(
                 items = companies,
                 key = { company ->
-                    company.companyId
+                    company.CompanyId
                 }
             ) { company ->
                 CompanyListCard(
                     company = company,
                     onCompanyClick = {
-                        onCompanyClick(company.companyId)
+                        onCompanyClick(
+                            company.CompanyId
+                        )
                     },
                     onProductListClick = {
-                        onProductListClick(company.companyId)
+                        onProductListClick(
+                            company.CompanyId
+                        )
                     },
                     onMessageClick = {
-                        onMessageClick(company.companyId)
+                        onMessageClick(
+                            company.CompanyId
+                        )
                     }
                 )
             }
@@ -121,7 +144,11 @@ fun CompanyListScreen(
             }
 
             item {
-                Spacer(modifier = Modifier.height(BBSpacing.Space4))
+                Spacer(
+                    modifier = Modifier.height(
+                        BBSpacing.Space4
+                    )
+                )
             }
         }
     }
@@ -138,7 +165,9 @@ private fun CompanyListHero(
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space4
+            )
         ) {
             CompanyIconTitleRow(
                 icon = Icons.Outlined.Business,
@@ -178,17 +207,26 @@ private fun CompanyListHero(
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun CompanyFilterChips() {
+private fun CompanyFilterChips(
+    selectedFilter: String,
+    onFilterClick: (String) -> Unit
+) {
     FlowRow(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(BBSpacing.ChipGap),
-        verticalArrangement = Arrangement.spacedBy(BBSpacing.ChipGap)
+        horizontalArrangement = Arrangement.spacedBy(
+            BBSpacing.ChipGap
+        ),
+        verticalArrangement = Arrangement.spacedBy(
+            BBSpacing.ChipGap
+        )
     ) {
         getCompanyFilterNames().forEach { filterName ->
             BbChip(
                 text = filterName,
-                selected = false,
-                onClick = {}
+                selected = selectedFilter == filterName,
+                onClick = {
+                    onFilterClick(filterName)
+                }
             )
         }
     }
@@ -210,50 +248,58 @@ private fun CompanyListCard(
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space3
+            )
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.Top,
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+                horizontalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space3
+                )
             ) {
                 CompanyLogoBox(
-                    logoText = company.logoText,
-                    icon = company.icon
+                    logoText = company.LogoText,
+                    icon = company.Icon
                 )
 
                 Column(
                     modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+                    verticalArrangement = Arrangement.spacedBy(
+                        BBSpacing.Space1
+                    )
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(BBSpacing.IconTextGapSmall)
+                        horizontalArrangement = Arrangement.spacedBy(
+                            BBSpacing.IconTextGapSmall
+                        )
                     ) {
                         Text(
-                            text = company.name,
+                            text = company.Name,
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onSurface
                         )
 
-                        if (company.isVerified) {
+                        if (company.IsVerified) {
                             Icon(
                                 imageVector = Icons.Outlined.Verified,
-                                contentDescription = null,
+                                contentDescription = "Doğrulanmış firma",
                                 tint = MaterialTheme.colorScheme.primary
                             )
                         }
                     }
 
                     Text(
-                        text = company.description,
+                        text = company.Description,
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
 
                     Text(
-                        text = "${company.country} • ${company.city}",
+                        text = "${company.Country} • ${company.City}",
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -261,32 +307,36 @@ private fun CompanyListCard(
 
                 Icon(
                     imageVector = Icons.Outlined.ChevronRight,
-                    contentDescription = null,
+                    contentDescription = "Firma profilini aç",
                     tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
             FlowRow(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.ChipGap),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.ChipGap)
+                horizontalArrangement = Arrangement.spacedBy(
+                    BBSpacing.ChipGap
+                ),
+                verticalArrangement = Arrangement.spacedBy(
+                    BBSpacing.ChipGap
+                )
             ) {
                 BbChip(
-                    text = company.businessModel,
+                    text = company.BusinessModel,
                     selected = false,
-                    onClick = {}
+                    onClick = onCompanyClick
                 )
 
                 BbChip(
-                    text = "${company.productCount} ürün",
+                    text = "${company.ProductCount} ürün",
                     selected = false,
-                    onClick = {}
+                    onClick = onProductListClick
                 )
 
                 BbChip(
-                    text = "Puan ${company.rating}",
+                    text = "Puan ${company.Rating}",
                     selected = false,
-                    onClick = {}
+                    onClick = onCompanyClick
                 )
             }
 
@@ -296,17 +346,19 @@ private fun CompanyListCard(
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.CardGapCompact)
+                horizontalArrangement = Arrangement.spacedBy(
+                    BBSpacing.CardGapCompact
+                )
             ) {
                 CompanySmallActionCard(
-                    title = "Ürünleri Gör",
+                    title = "Ürünleri gör",
                     icon = Icons.Outlined.Inventory2,
                     modifier = Modifier.weight(1f),
                     onClick = onProductListClick
                 )
 
                 CompanySmallActionCard(
-                    title = "İletişime Geç",
+                    title = "İletişime geç",
                     icon = Icons.Outlined.Mail,
                     modifier = Modifier.weight(1f),
                     onClick = onMessageClick
@@ -327,7 +379,9 @@ private fun CompanyLogoBox(
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space1
+            )
         ) {
             Icon(
                 imageVector = icon,
@@ -351,38 +405,44 @@ private fun CompanyInfoGrid(
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGapCompact)
+        verticalArrangement = Arrangement.spacedBy(
+            BBSpacing.CardGapCompact
+        )
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.CardGapCompact)
+            horizontalArrangement = Arrangement.spacedBy(
+                BBSpacing.CardGapCompact
+            )
         ) {
             CompanyInfoBox(
                 title = "Sıralama",
-                value = company.rating,
+                value = company.Rating,
                 modifier = Modifier.weight(1f)
             )
 
             CompanyInfoBox(
-                title = "Ticaret Sicil",
-                value = company.tradeRegistryNumber,
+                title = "Ticaret sicil",
+                value = company.TradeRegistryNumber,
                 modifier = Modifier.weight(1f)
             )
         }
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.CardGapCompact)
+            horizontalArrangement = Arrangement.spacedBy(
+                BBSpacing.CardGapCompact
+            )
         ) {
             CompanyInfoBox(
                 title = "Yetenekler",
-                value = company.capability,
+                value = company.Capability,
                 modifier = Modifier.weight(1f)
             )
 
             CompanyInfoBox(
-                title = "İş Modeli",
-                value = company.businessModel,
+                title = "İş modeli",
+                value = company.BusinessModel,
                 modifier = Modifier.weight(1f)
             )
         }
@@ -402,7 +462,9 @@ private fun CompanyInfoBox(
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space1
+            )
         ) {
             Text(
                 text = title,
@@ -436,7 +498,9 @@ private fun CompanySmallActionCard(
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.IconTextGap)
+            horizontalArrangement = Arrangement.spacedBy(
+                BBSpacing.IconTextGap
+            )
         ) {
             Icon(
                 imageVector = icon,
@@ -467,7 +531,9 @@ private fun CompanyListBottomCallout(
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+            horizontalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space3
+            )
         ) {
             Icon(
                 imageVector = Icons.Outlined.RequestQuote,
@@ -477,7 +543,9 @@ private fun CompanyListBottomCallout(
 
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+                verticalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space1
+                )
             ) {
                 Text(
                     text = "Aradığınız firmayı bulamadınız mı?",
@@ -495,7 +563,7 @@ private fun CompanyListBottomCallout(
 
             Icon(
                 imageVector = Icons.Outlined.ChevronRight,
-                contentDescription = null,
+                contentDescription = "Talep oluştur",
                 tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
@@ -509,7 +577,9 @@ private fun CompanyIconTitleRow(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(BBSpacing.IconTextGap)
+        horizontalArrangement = Arrangement.spacedBy(
+            BBSpacing.IconTextGap
+        )
     ) {
         Icon(
             imageVector = icon,
@@ -526,20 +596,21 @@ private fun CompanyIconTitleRow(
     }
 }
 
+@Immutable
 data class CompanyListItem(
-    val companyId: Int,
-    val name: String,
-    val description: String,
-    val country: String,
-    val city: String,
-    val rating: String,
-    val tradeRegistryNumber: String,
-    val capability: String,
-    val businessModel: String,
-    val productCount: Int,
-    val logoText: String,
-    val isVerified: Boolean,
-    val icon: ImageVector
+    val CompanyId: Int,
+    val Name: String,
+    val Description: String,
+    val Country: String,
+    val City: String,
+    val Rating: String,
+    val TradeRegistryNumber: String,
+    val Capability: String,
+    val BusinessModel: String,
+    val ProductCount: Int,
+    val LogoText: String,
+    val IsVerified: Boolean,
+    val Icon: ImageVector
 )
 
 private fun getCompanyFilterNames(): List<String> {
@@ -558,49 +629,49 @@ private fun getCompanyFilterNames(): List<String> {
 private fun getCompanyListItems(): List<CompanyListItem> {
     return listOf(
         CompanyListItem(
-            companyId = 1,
-            name = "Bulbulustur İnternet Teknolojileri ve Tic. A.Ş.",
-            description = "Yazılım, dijital dönüşüm ve ticaret altyapıları alanında çözüm sağlayan firma.",
-            country = "Türkiye",
-            city = "İstanbul",
-            rating = "4,2",
-            tradeRegistryNumber = "-",
-            capability = "Tasarım kaynaklı özelleştirme, yurt dışı mühendis hizmeti",
-            businessModel = "Perakendeci, Toptancı",
-            productCount = 12,
-            logoText = "BB",
-            isVerified = true,
-            icon = Icons.Outlined.Business
+            CompanyId = 1,
+            Name = "Bulbulustur İnternet Teknolojileri ve Tic. A.Ş.",
+            Description = "Yazılım, dijital dönüşüm ve ticaret altyapıları alanında çözüm sağlayan firma.",
+            Country = "Türkiye",
+            City = "İstanbul",
+            Rating = "4,2",
+            TradeRegistryNumber = "-",
+            Capability = "Tasarım kaynaklı özelleştirme, yurt dışı mühendis hizmeti",
+            BusinessModel = "Perakendeci, Toptancı",
+            ProductCount = 12,
+            LogoText = "BB",
+            IsVerified = true,
+            Icon = Icons.Outlined.Business
         ),
         CompanyListItem(
-            companyId = 2,
-            name = "Anadolu Ambalaj Sanayi",
-            description = "Koli, kutu, poşet ve endüstriyel ambalaj ürünleri tedarikçisi.",
-            country = "Türkiye",
-            city = "Kocaeli",
-            rating = "4,6",
-            tradeRegistryNumber = "245981",
-            capability = "Özel üretim, baskılı ambalaj, hızlı sevkiyat",
-            businessModel = "Üretici, Toptancı",
-            productCount = 42,
-            logoText = "AA",
-            isVerified = true,
-            icon = Icons.Outlined.Factory
+            CompanyId = 2,
+            Name = "Anadolu Ambalaj Sanayi",
+            Description = "Koli, kutu, poşet ve endüstriyel ambalaj ürünleri tedarikçisi.",
+            Country = "Türkiye",
+            City = "Kocaeli",
+            Rating = "4,6",
+            TradeRegistryNumber = "245981",
+            Capability = "Özel üretim, baskılı ambalaj, hızlı sevkiyat",
+            BusinessModel = "Üretici, Toptancı",
+            ProductCount = 42,
+            LogoText = "AA",
+            IsVerified = true,
+            Icon = Icons.Outlined.Factory
         ),
         CompanyListItem(
-            companyId = 3,
-            name = "Marmara Endüstriyel Tedarik",
-            description = "Sanayi, depo, bakım ve üretim hattı sarf malzemeleri sağlar.",
-            country = "Türkiye",
-            city = "Bursa",
-            rating = "4,1",
-            tradeRegistryNumber = "118204",
-            capability = "Toplu tedarik, sözleşmeli satış, hızlı termin",
-            businessModel = "Tedarikçi",
-            productCount = 31,
-            logoText = "MET",
-            isVerified = false,
-            icon = Icons.Outlined.Inventory2
+            CompanyId = 3,
+            Name = "Marmara Endüstriyel Tedarik",
+            Description = "Sanayi, depo, bakım ve üretim hattı sarf malzemeleri sağlar.",
+            Country = "Türkiye",
+            City = "Bursa",
+            Rating = "4,1",
+            TradeRegistryNumber = "118204",
+            Capability = "Toplu tedarik, sözleşmeli satış, hızlı termin",
+            BusinessModel = "Tedarikçi",
+            ProductCount = 31,
+            LogoText = "MET",
+            IsVerified = false,
+            Icon = Icons.Outlined.Inventory2
         )
     )
 }

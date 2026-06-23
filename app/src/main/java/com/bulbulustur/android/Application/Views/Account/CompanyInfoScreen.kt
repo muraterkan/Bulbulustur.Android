@@ -464,7 +464,7 @@ private fun CompanyActionSection(
     ) {
         CompanyActionRow(
             title = "Şirketimi B2B Index’e Dahil Et",
-            description = "Tedarikçiler ve toptan alıcılar tarafından keşfedil.",
+            description = "Tedarikçiler ve toptan alıcılar tarafından Keşfedil.",
             icon = Icons.Outlined.Storefront,
             onClick = onB2BIndexClick
         )

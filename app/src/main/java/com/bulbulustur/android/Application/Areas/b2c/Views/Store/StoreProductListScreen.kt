@@ -341,7 +341,7 @@ private fun StoreProductCategoryFilterSection(
         modifier = Modifier.fillMaxWidth()
     ) {
         StoreProductListSectionTitle(
-            title = "Kategori filtresi",
+            title = "Kategori Filtresi",
             description = "Mağaza ürünlerini kategoriye göre daralt."
         )
 

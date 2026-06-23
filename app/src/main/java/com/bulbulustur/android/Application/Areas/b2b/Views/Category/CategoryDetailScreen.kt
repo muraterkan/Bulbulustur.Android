@@ -97,7 +97,7 @@ fun CategoryDetailScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Alt kategoriler",
+                    title = "Alt Kategoriler",
                     subtitle = "Bu sektör altındaki ana ürün grupları"
                 )
             }
@@ -135,7 +135,7 @@ fun CategoryDetailScreen(
             item {
                 BbSectionHeader(
                     title = "Sektör özeti",
-                    subtitle = "Dummy Toptan kategori istatistikleri"
+                    subtitle = "Dummy Toptan Kategori istatistikleri"
                 )
             }
 

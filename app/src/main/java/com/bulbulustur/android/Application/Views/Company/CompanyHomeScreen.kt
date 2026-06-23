@@ -103,7 +103,7 @@ fun CompanyHomeScreen(
             item {
                 CompanyHomeSectionCard(
                     title = "Ortobella Comfort Ürün Vitrinleri",
-                    subtitle = "Firmanın öne çıkardığı özel ürün gruplarını ve toptan alıma uygun koleksiyonlarını keşfedin.",
+                    subtitle = "Firmanın öne çıkardığı özel ürün gruplarını ve toptan alıma uygun koleksiyonlarını Keşfedin.",
                     items = listOf(
                         "Yeni Ürünler",
                         "Popüler Ürünler",

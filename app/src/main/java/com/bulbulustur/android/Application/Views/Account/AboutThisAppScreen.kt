@@ -19,11 +19,11 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Cached
 import androidx.compose.material.icons.outlined.ChevronRight
 import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.Dns
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Policy
@@ -48,7 +48,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
@@ -58,18 +57,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.bulbulustur.android.R
+import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
-import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
+import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBAlpha
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
+import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBLayout
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BbTypography
-import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBLayout
-import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBAlpha
+import com.bulbulustur.android.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -79,7 +78,8 @@ fun AboutThisAppScreen(
     onCompanyPageClick: () -> Unit = {},
     onContactUsClick: () -> Unit = {},
     onLegalPoliciesClick: () -> Unit = {},
-    onVersionClick: () -> Unit = {},
+    onCheckUpdatesClick: () -> Unit = {},
+    onSystemStatusClick: () -> Unit = {},
     onClearCacheClick: () -> Unit = {},
     onShareAppClick: () -> Unit = {},
     onRateAppClick: () -> Unit = {}
@@ -135,12 +135,23 @@ fun AboutThisAppScreen(
             item {
                 AboutMenuGroup {
                     AboutMenuRow(
-                        icon = Icons.Outlined.Info,
-                        title = "Sürüm",
-                        value = appVersion.fullLabel,
-                        showArrow = false,
-                        enabled = false,
-                        onClick = onVersionClick
+                        icon = Icons.Outlined.Cached,
+                        title = "Güncellemeleri Kontrol Et",
+                        value = "Güncel",
+                        showArrow = true,
+                        enabled = true,
+                        onClick = onCheckUpdatesClick
+                    )
+
+                    AboutDashedDivider()
+
+                    AboutMenuRow(
+                        icon = Icons.Outlined.Dns,
+                        title = "Sistem Durumu",
+                        value = "Tüm sistemler çalışıyor",
+                        showArrow = true,
+                        enabled = true,
+                        onClick = onSystemStatusClick
                     )
 
                     AboutDashedDivider()
@@ -263,8 +274,8 @@ private fun AboutAppHero(
 
             Text(
                 text = "Sürüm $versionLabel",
-                style = BbTypography.labelLarge,
-                color = BBColors.Yellow.Yellow800,
+                style = BbTypography.titleSmall,
+                color = BBColors.TextStrong,
                 fontWeight = FontWeight.Bold
             )
         }
@@ -283,44 +294,26 @@ private fun AboutLogoShowcase(
             },
         contentAlignment = Alignment.Center
     ) {
-        Box(
-            modifier = Modifier
-                .size(102.dp)
-                .shadow(
-                    elevation = 22.dp,
-                    shape = BBRadius.XxlShape,
-                    ambientColor = BBColors.Primary.copy(alpha = 0.36f),
-                    spotColor = BBColors.Primary.copy(alpha = 0.50f)
-                )
-                .background(
-                    color = BBColors.Primary.copy(alpha = 0.08f),
-                    shape = BBRadius.XxlShape
-                )
-                .padding(6.dp),
-            contentAlignment = Alignment.Center
+        Surface(
+            modifier = Modifier.size(102.dp),
+            shape = BBRadius.XxlShape,
+            color = BBColors.Surface,
+            border = BorderStroke(
+                width = 1.dp,
+                color = BBColors.Border
+            )
         ) {
-            Surface(
-                modifier = Modifier.fillMaxSize(),
-                shape = BBRadius.XxlShape,
-                color = BBColors.Surface,
-                shadowElevation = 8.dp,
-                border = BorderStroke(
-                    width = 1.dp,
-                    color = BBColors.Border
-                )
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(BBSpacing.Space4),
+                contentAlignment = Alignment.Center
             ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(BBSpacing.Space4),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.logo_black),
-                        contentDescription = "Bulbulustur Logo",
-                        modifier = Modifier.fillMaxSize()
-                    )
-                }
+                Image(
+                    painter = painterResource(id = R.drawable.logo_black),
+                    contentDescription = "Bulbulustur Logo",
+                    modifier = Modifier.fillMaxSize()
+                )
             }
         }
     }
@@ -387,19 +380,23 @@ private fun AboutMenuRow(
             )
         }
 
-        Text(
-            text = title,
-            style = BbTypography.titleSmall,
-            color = BBColors.TextStrong,
-            modifier = Modifier.weight(1f)
-        )
-
-        if (!value.isNullOrBlank()) {
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+        ) {
             Text(
-                text = value,
-                style = BbTypography.bodyMedium,
-                color = BBColors.TextMuted
+                text = title,
+                style = BbTypography.titleSmall,
+                color = BBColors.TextStrong
             )
+
+            if (!value.isNullOrBlank()) {
+                Text(
+                    text = value,
+                    style = BbTypography.labelSmall,
+                    color = BBColors.TextMuted
+                )
+            }
         }
 
         if (showArrow) {
@@ -492,7 +489,7 @@ private fun AboutClearCacheSheet(
         )
 
         Text(
-            text = "Bu işlem geçici uygulama verilerini temizler. Hesabınız, siparişleriniz, Favorileriniz ve kayıtlı bilgileriniz etkilenmez.",
+            text = "Bu işlem geçici uygulama verilerini temizler. Hesabınız, siparişleriniz, favorileriniz ve kayıtlı bilgileriniz etkilenmez.",
             style = BbTypography.bodyMedium.copy(
                 lineHeight = 20.sp
             ),
@@ -880,4 +877,3 @@ private fun getAppVersionLabel(
         )
     }
 }
-

@@ -528,7 +528,7 @@ private fun aboutPlatformItems(): List<AboutPlatformItem> {
     return listOf(
         AboutPlatformItem(
             title = "Alıcılar",
-            description = "Perakende ürünleri, toptan ürünleri, tedarikçileri ve teklif akışlarını tek uygulamada keşfeder.",
+            description = "Perakende Ürünleri, toptan ürünleri, tedarikçileri ve teklif akışlarını tek uygulamada keşfeder.",
             icon = Icons.Outlined.Storefront
         ),
         AboutPlatformItem(

@@ -168,8 +168,32 @@ fun NavGraphBuilder.retailGraph(
         route = RetailRoutes.ProductList
     ) {
         RetailProductListScreen(
+            onBackClick = {
+                navigator.back()
+            },
+            onSearchClick = {
+                navigator.navController.navigate(
+                    RetailRoutes.ProductList
+                )
+            },
+            onMenuClick = {
+                navigator.navigateToRetailCategories()
+            },
+            onFavoriteClick = {
+                navigator.navController.navigate(
+                    AccountRoutes.Favorites
+                )
+            },
+            onHomeClick = {
+                navigator.navController.navigate(
+                    RetailRoutes.Home
+                )
+            },
             onMessageClick = {
                 navigator.navigateToInbox()
+            },
+            onModeSwitchClick = {
+                navigator.openModeSheet()
             },
             onBasketClick = {
                 navigator.navigateToRetailBasket()
@@ -177,8 +201,16 @@ fun NavGraphBuilder.retailGraph(
             onAccountClick = {
                 navigator.navigateToAccount()
             },
-            onModeSwitchClick = {
-                navigator.openModeSheet()
+            onProductDetailClick = {
+                navigator.navController.navigate(
+                    RetailRoutes.ProductDetail
+                )
+            },
+            onProductFavoriteClick = {
+                Unit
+            },
+            onAddToBasketClick = {
+                navigator.navigateToRetailBasket()
             }
         )
     }
@@ -298,6 +330,36 @@ fun NavGraphBuilder.retailGraph(
         CampaignDetailScreen(
             onBackClick = {
                 navigator.back()
+            },
+            onSearchClick = {
+                navigator.navController.navigate(
+                    RetailRoutes.ProductList
+                )
+            },
+            onMenuClick = {
+                navigator.navigateToRetailCategories()
+            },
+            onFavoriteClick = {
+                navigator.navController.navigate(
+                    AccountRoutes.Favorites
+                )
+            },
+            onMessageClick = {
+                navigator.navigateToInbox()
+            },
+            onHomeClick = {
+                navigator.navController.navigate(
+                    RetailRoutes.Home
+                )
+            },
+            onModeSwitchClick = {
+                navigator.openModeSheet()
+            },
+            onBasketClick = {
+                navigator.navigateToRetailBasket()
+            },
+            onAccountClick = {
+                navigator.navigateToAccount()
             },
             onProductClick = {
                 navigator.navController.navigate(

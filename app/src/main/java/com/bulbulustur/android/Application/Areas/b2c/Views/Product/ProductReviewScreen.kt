@@ -298,7 +298,7 @@ private fun ProductReviewFilterSection(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
     ) {
         ProductReviewSectionTitle(
-            title = "Yorum filtresi",
+            title = "Yorum Filtresi",
             description = "Yorumları deneyim türüne göre daralt."
         )
 

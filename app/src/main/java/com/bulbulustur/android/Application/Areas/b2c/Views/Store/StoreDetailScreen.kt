@@ -516,7 +516,7 @@ private fun StoreOtherStoresCard(
                 )
 
                 Text(
-                    text = "Bulbulustur’daki diğer perakende mağazalarını keşfedin.",
+                    text = "Bulbulustur’daki diğer perakende mağazalarını Keşfedin.",
                     style = MaterialTheme.typography.bodySmall,
                     color = BBColors.TextMuted
                 )
@@ -545,7 +545,7 @@ private fun StoreCategoryFilterSection(
     ) {
         StoreDetailSectionTitle(
             title = "Ürün Kategorileri",
-            description = "Mağaza kategorilerine göre ürünleri keşfedin."
+            description = "Mağaza kategorilerine göre ürünleri Keşfedin."
         )
 
         FlowRow(
@@ -848,7 +848,7 @@ private fun getRetailStoreDetail(
         name = "Ortobella Store",
         logoText = "OS",
         shortDescription = "Ayakkabı ve günlük moda ürünleri",
-        description = "Ortobella Store, seçili ayakkabı ve günlük kullanım ürünlerini perakende alışveriş akışında sunan doğrulanmış mağaza Vitrinidir.",
+        description = "Ortobella Store, seçili ayakkabı ve günlük kullanım Ürünlerini perakende alışveriş akışında sunan doğrulanmış mağaza Vitrinidir.",
         productCount = 248,
         ratingText = "4.8",
         cargoText = "Hızlı",

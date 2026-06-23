@@ -182,7 +182,7 @@ private fun RfqDetailSummaryCard(
             }
 
             BbButton(
-                text = "Yeni RFQ Oluştur",
+                text = "Yeni Teklif İste",
                 onClick = onCreateRfqClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Light,

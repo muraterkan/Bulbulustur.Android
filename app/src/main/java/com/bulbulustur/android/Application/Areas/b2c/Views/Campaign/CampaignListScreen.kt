@@ -524,7 +524,7 @@ private fun getRetailCampaignListItems(): List<RetailCampaignListItem> {
         RetailCampaignListItem(
             id = 3,
             title = "Ev & Yaşam Vitrinleri",
-            description = "Mutfak, dekorasyon ve ev tekstili ürünlerinde öne çıkan mağazalar.",
+            description = "Mutfak, dekorasyon ve ev tekstili ürünlerinde öne çıkan Mağazalar.",
             badgeText = "Vitrin",
             iconText = "EV",
             categoryName = "Ev & Yaşam",

@@ -69,7 +69,7 @@ fun RfqListScreen(
                 title = "Fiyat Teklifi İstekleri",
                 onBackClick = onBackClick,
                 actionIcon = Icons.Outlined.Add,
-                actionContentDescription = "RFQ Oluştur",
+                actionContentDescription = "Teklif İste",
                 onActionClick = onCreateRfqClick
             )
         },
@@ -155,7 +155,7 @@ private fun RfqCreateActionCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Yeni RFQ Oluştur",
+                    text = "Yeni Teklif İste",
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -405,13 +405,13 @@ private fun RfqEmptyState(
             )
 
             Text(
-                text = "Henüz RFQ Oluşturmadınız",
+                text = "Henüz Teklif İstemadınız",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
-                text = "Tedarikçilerden fiyat teklifi alarak ihtiyaçlarınıza en uygun çözümleri keşfedin.",
+                text = "Tedarikçilerden fiyat teklifi alarak ihtiyaçlarınıza en uygun çözümleri Keşfedin.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

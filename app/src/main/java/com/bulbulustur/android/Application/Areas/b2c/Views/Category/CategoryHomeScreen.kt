@@ -263,7 +263,7 @@ private fun RetailCategoryHomeHeroCard(
             )
 
             Text(
-                text = "Alt kategorileri, ürün Vitrinlerini ve mağaza geçişlerini bu alandan keşfet.",
+                text = "Alt Kategorileri, ürün Vitrinlerini ve mağaza geçişlerini bu alandan keşfet.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = BBColors.TextSubtle
             )
@@ -717,7 +717,7 @@ private fun getRetailCategoryHomeSubCategories(): List<RetailCategoryHomeSubCate
         ),
         RetailCategoryHomeSubCategoryItem(
             title = "Ses ve Görüntü",
-            description = "Kulaklık, hoparlör ve medya ürünleri",
+            description = "Kulaklık, hoparlör ve medya Ürünleri",
             icon = Icons.Outlined.Category,
             backgroundColor = BBColors.Purple.Purple50,
             iconColor = BBColors.Purple.Purple700
@@ -745,7 +745,7 @@ private fun getRetailCategoryHomeShowcases(): List<RetailCategoryHomeShowcaseIte
         ),
         RetailCategoryHomeShowcaseItem(
             title = "Mağaza Keşfi",
-            description = "Bu kategoride öne çıkan mağazaları incele.",
+            description = "Bu kategoride öne çıkan Mağazaları incele.",
             icon = Icons.Outlined.Storefront,
             backgroundColor = BBColors.Blue.Blue50,
             iconColor = BBColors.Blue.Blue700,

@@ -14,6 +14,8 @@ import com.bulbulustur.android.Application.Areas.b2b.Views.Rfq.RfqDetailScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Rfq.RfqListScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Rfq.RfqOfferDetailScreen
 import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
+import com.bulbulustur.android.Application.Navigation.Routes.AccountRoutes
+import com.bulbulustur.android.Application.Navigation.Routes.CompanyRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.RfqRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.WholesaleRoutes
 
@@ -25,22 +27,65 @@ fun NavGraphBuilder.wholesaleGraph(
         route = WholesaleRoutes.Home
     ) {
         WholesaleHomeScreen(
+            onSearchClick = {
+                navigator.navController.navigate(
+                    WholesaleRoutes.Search
+                )
+            },
             onMenuClick = {
                 navigator.navigateToWholesaleCategories()
+            },
+            onCategoryClick = {
+                navigator.navigateToWholesaleCategories()
+            },
+            onProductListClick = {
+                navigator.navController.navigate(
+                    WholesaleRoutes.ProductList
+                )
+            },
+            onProductDetailClick = {
+                navigator.navController.navigate(
+                    WholesaleRoutes.ProductDetail
+                )
+            },
+            onRfqListClick = {
+                navigator.navController.navigate(
+                    RfqRoutes.List
+                )
+            },
+            onRfqCreateClick = {
+                navigator.navController.navigate(
+                    RfqRoutes.Create
+                )
+            },
+            onLastPriceRequestClick = {
+                navigator.navController.navigate(
+                    RfqRoutes.Create
+                )
+            },
+            onSampleRequestClick = {
+                navigator.navController.navigate(
+                    RfqRoutes.Create
+                )
+            },
+            onCustomizationRequestClick = {
+                navigator.navController.navigate(
+                    RfqRoutes.Create
+                )
+            },
+            onModeSwitchClick = {
+                navigator.openModeSheet()
+            },
+            onFavoriteClick = {
+                navigator.navController.navigate(
+                    AccountRoutes.Favorites
+                )
             },
             onMessageClick = {
                 navigator.navigateToInbox()
             },
             onAccountClick = {
                 navigator.navigateToAccount()
-            },
-            onModeSwitchClick = {
-                navigator.openModeSheet()
-            },
-            onQuotationRequestsClick = {
-                navigator.navController.navigate(
-                    RfqRoutes.List
-                )
             }
         )
     }
@@ -51,14 +96,142 @@ fun NavGraphBuilder.wholesaleGraph(
         WholesaleCategoryHomeScreen(
             onBackClick = {
                 navigator.back()
+            },
+            onSearchClick = {
+                navigator.navController.navigate(
+                    WholesaleRoutes.Search
+                )
+            },
+            onMenuClick = {
+                navigator.navigateToWholesaleCategories()
+            },
+            onFavoriteClick = {
+                navigator.navController.navigate(
+                    AccountRoutes.Favorites
+                )
+            },
+            onMessageClick = {
+                navigator.navigateToInbox()
+            },
+            onHomeClick = {
+                navigator.navController.navigate(
+                    WholesaleRoutes.Home
+                ) {
+                    launchSingleTop = true
+                }
+            },
+            onModeSwitchClick = {
+                navigator.openModeSheet()
+            },
+            onBasketClick = {
+                navigator.navController.navigate(
+                    RfqRoutes.List
+                )
+            },
+            onAccountClick = {
+                navigator.navigateToAccount()
+            },
+            onProductListClick = {
+                navigator.navController.navigate(
+                    WholesaleRoutes.ProductList
+                )
+            },
+
+            /*
+             * WholesaleCategoryHomeScreen tarafındaki callback halen
+             * () -> Unit olduğu için şimdilik başlangıç kategorisi açılıyor.
+             *
+             * Bu callback daha sonra (Int) -> Unit olduğunda buraya
+             * doğrudan gelen categoryId verilecek.
+             */
+            onSubCategoryClick = {
+                navigator.navController.navigate(
+                    WholesaleRoutes.categoryDetail(
+                        categoryId = 1
+                    )
+                )
+            },
+            onCompanyListClick = {
+                navigator.navController.navigate(
+                    CompanyRoutes.CompanyList
+                )
+            },
+            onRfqClick = {
+                navigator.navController.navigate(
+                    RfqRoutes.Create
+                )
+            },
+            onLastPriceRequestClick = {
+                navigator.navController.navigate(
+                    RfqRoutes.Create
+                )
+            },
+            onSampleRequestClick = {
+                navigator.navController.navigate(
+                    RfqRoutes.Create
+                )
+            },
+            onCustomizationRequestClick = {
+                navigator.navController.navigate(
+                    RfqRoutes.Create
+                )
             }
         )
     }
 
     composable(
-        route = WholesaleRoutes.CategoryDetail
-    ) {
-        WholesaleCategoryDetailScreen()
+        route = WholesaleRoutes.CategoryDetail,
+        arguments = listOf(
+            navArgument(
+                name = WholesaleRoutes.ArgCategoryId
+            ) {
+                type = NavType.IntType
+            }
+        )
+    ) { backStackEntry ->
+
+        val categoryId = backStackEntry.arguments
+            ?.getInt(
+                WholesaleRoutes.ArgCategoryId
+            )
+            ?: return@composable
+
+        WholesaleCategoryDetailScreen(
+            categoryId = categoryId,
+            onBackClick = {
+                navigator.back()
+            },
+            onSubCategoryClick = { subCategoryId: Int ->
+                navigator.navController.navigate(
+                    WholesaleRoutes.categoryDetail(
+                        categoryId = subCategoryId
+                    )
+                )
+            },
+            onProductListClick = { _: Int ->
+                navigator.navController.navigate(
+                    WholesaleRoutes.ProductList
+                )
+            },
+            onCompanyListClick = { _: Int ->
+                navigator.navController.navigate(
+                    CompanyRoutes.CompanyList
+                )
+            },
+            onRfqCreateClick = { _: Int ->
+                navigator.navController.navigate(
+                    RfqRoutes.Create
+                )
+            },
+            onPopularProductGroupClick = {
+                    _: Int,
+                    _: String ->
+
+                navigator.navController.navigate(
+                    WholesaleRoutes.ProductList
+                )
+            }
+        )
     }
 
     composable(
@@ -124,7 +297,9 @@ fun NavGraphBuilder.wholesaleGraph(
             onHomeClick = {
                 navigator.navController.navigate(
                     WholesaleRoutes.Home
-                )
+                ) {
+                    launchSingleTop = true
+                }
             },
             onMenuClick = {
                 navigator.navigateToWholesaleCategories()
@@ -135,7 +310,9 @@ fun NavGraphBuilder.wholesaleGraph(
             onBasketClick = {
                 navigator.navController.navigate(
                     RfqRoutes.List
-                )
+                ) {
+                    launchSingleTop = true
+                }
             },
             onAccountClick = {
                 navigator.navigateToAccount()
@@ -165,7 +342,9 @@ fun NavGraphBuilder.wholesaleGraph(
     ) { backStackEntry ->
 
         val buyerRequestId = backStackEntry.arguments
-            ?.getInt(RfqRoutes.ArgBuyerRequestId)
+            ?.getInt(
+                RfqRoutes.ArgBuyerRequestId
+            )
             ?: return@composable
 
         RfqDetailScreen(
@@ -206,11 +385,15 @@ fun NavGraphBuilder.wholesaleGraph(
     ) { backStackEntry ->
 
         val buyerRequestId = backStackEntry.arguments
-            ?.getInt(RfqRoutes.ArgBuyerRequestId)
+            ?.getInt(
+                RfqRoutes.ArgBuyerRequestId
+            )
             ?: return@composable
 
         val sendedOfferId = backStackEntry.arguments
-            ?.getInt(RfqRoutes.ArgSendedOfferId)
+            ?.getInt(
+                RfqRoutes.ArgSendedOfferId
+            )
             ?: return@composable
 
         RfqOfferDetailScreen(
@@ -220,7 +403,9 @@ fun NavGraphBuilder.wholesaleGraph(
                 navigator.back()
             },
             onSellerClick = {
-                // Satıcı detay route'u bağlandığında eklenecek.
+                navigator.navController.navigate(
+                    CompanyRoutes.CompanyDetail
+                )
             },
             onMessageClick = {
                 navigator.navigateToInbox()

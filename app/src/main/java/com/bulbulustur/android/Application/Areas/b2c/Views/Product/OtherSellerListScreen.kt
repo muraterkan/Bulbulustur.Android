@@ -118,7 +118,7 @@ fun OtherSellerListScreen(
             item {
                 OtherSellerSectionTitle(
                     title = "Satıcı seçenekleri",
-                    description = "Aynı ürünü satan mağazaları fiyat, kargo ve puana göre karşılaştır."
+                    description = "Aynı ürünü satan Mağazaları fiyat, kargo ve puana göre karşılaştır."
                 )
             }
 
@@ -336,7 +336,7 @@ private fun OtherSellerCard(
                 }
 
                 BbButton(
-                    text = "Sepete ekle",
+                    text = "Sepete Ekle",
                     onClick = onAddToBasketClick,
                     variant = BbButtonVariant.Primary,
                     size = BbButtonSize.Small

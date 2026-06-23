@@ -325,7 +325,7 @@ private fun RetailMenuSectionTitle() {
         )
 
         Text(
-            text = "Alt kategoriler kategori ana sayfasında listelenecek.",
+            text = "Alt Kategoriler kategori ana sayfasında listelenecek.",
             style = MaterialTheme.typography.bodySmall,
             color = BBColors.TextMuted
         )

@@ -1,7 +1,6 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Category
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,20 +12,21 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.LocalOffer
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.Storefront
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -35,9 +35,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailBottomNavigation
+import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailBottomNavigationItem
+import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeader
+import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeaderLeadingAction
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
@@ -53,6 +56,13 @@ import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
 fun CategoryDetailScreen(
     categoryId: Int = 1,
     onBackClick: () -> Unit = {},
+    onMenuClick: () -> Unit = {},
+    onFavoriteClick: () -> Unit = {},
+    onMessageClick: () -> Unit = {},
+    onHomeClick: () -> Unit = {},
+    onModeSwitchClick: () -> Unit = {},
+    onBasketClick: () -> Unit = {},
+    onAccountClick: () -> Unit = {},
     onSubCategoryClick: (RetailSubCategoryItem) -> Unit = {},
     onProductClick: (RetailCategoryProductItem) -> Unit = {},
     onCampaignClick: (RetailCategoryCampaignItem) -> Unit = {},
@@ -66,12 +76,50 @@ fun CategoryDetailScreen(
         mutableStateOf("")
     }
 
-    Surface(
+    Scaffold(
         modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            RetailSearchHeader(
+                searchText = searchText,
+                onSearchTextChange = {
+                    searchText = it
+                },
+                placeholder = "Ürün, kategori veya marka ara",
+                leadingAction = RetailSearchHeaderLeadingAction.Back,
+                onBackClick = onBackClick,
+                onMenuClick = onMenuClick,
+                onFavoriteClick = onFavoriteClick,
+                onMessageClick = onMessageClick,
+                onSearchClick = {
+                    onSearchClick(searchText)
+                },
+                onClearClick = {
+                    searchText = ""
+                }
+            )
+        },
+        bottomBar = {
+            RetailBottomNavigation(
+                selectedItem = RetailBottomNavigationItem.Menu,
+                onItemClick = { item ->
+                    when (item) {
+                        RetailBottomNavigationItem.Home -> onHomeClick()
+                        RetailBottomNavigationItem.Menu -> onMenuClick()
+                        RetailBottomNavigationItem.ModeSwitch -> onModeSwitchClick()
+                        RetailBottomNavigationItem.Basket -> onBasketClick()
+                        RetailBottomNavigationItem.Account -> onAccountClick()
+                    }
+                }
+            )
+        }
+    ) { innerPadding ->
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(innerPadding)
+                .navigationBarsPadding(),
             contentPadding = PaddingValues(
                 start = BBSpacing.PageHorizontal,
                 top = BBSpacing.PageTopCompact,
@@ -81,22 +129,7 @@ fun CategoryDetailScreen(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.SectionGapCompact)
         ) {
             item {
-                CategoryDetailTopBar(
-                    title = category.name,
-                    onBackClick = onBackClick
-                )
-            }
-
-            item {
                 CategoryDetailHero(category = category)
-            }
-
-            item {
-                CategoryDetailSearchBox(
-                    searchText = searchText,
-                    onSearchTextChange = { searchText = it },
-                    onSearchClick = { onSearchClick(searchText) }
-                )
             }
 
             item {
@@ -124,43 +157,12 @@ fun CategoryDetailScreen(
             items(category.products) { product ->
                 CategoryProductRow(
                     product = product,
-                    onClick = { onProductClick(product) }
+                    onClick = {
+                        onProductClick(product)
+                    }
                 )
             }
         }
-    }
-}
-
-@Composable
-private fun CategoryDetailTopBar(
-    title: String,
-    onBackClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        BbIconBox(
-            modifier = Modifier.clickable { onBackClick() },
-            size = BbIconBoxSize.Medium,
-            backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
-            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
-        ) {
-            Icon(
-                imageVector = Icons.Outlined.ArrowBack,
-                contentDescription = "Geri",
-                modifier = Modifier.size(BBIcon.TopBarIcon)
-            )
-        }
-
-        Spacer(modifier = Modifier.width(BBSpacing.Space3))
-
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onBackground
-        )
     }
 }
 
@@ -182,7 +184,8 @@ private fun CategoryDetailHero(
                 BbIconBox(
                     size = BbIconBoxSize.Xl,
                     backgroundColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                    radius = BBRadius.xl
                 ) {
                     Text(
                         text = category.iconText,
@@ -234,8 +237,10 @@ private fun CategoryStatPill(
 ) {
     Column(
         modifier = Modifier
-            .clip(BBRadius.PillShape)
-            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .background(
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                shape = BBRadius.PillShape
+            )
             .padding(
                 horizontal = BBSpacing.Space3,
                 vertical = BBSpacing.Space2
@@ -257,54 +262,6 @@ private fun CategoryStatPill(
 }
 
 @Composable
-private fun CategoryDetailSearchBox(
-    searchText: String,
-    onSearchTextChange: (String) -> Unit,
-    onSearchClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(BBRadius.Input)
-            .background(MaterialTheme.colorScheme.surfaceVariant)
-            .padding(
-                horizontal = BBSpacing.InputPaddingHorizontal,
-                vertical = BBSpacing.InputPaddingVertical
-            ),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        BasicTextField(
-            value = searchText,
-            onValueChange = onSearchTextChange,
-            modifier = Modifier.weight(1f),
-            singleLine = true,
-            textStyle = MaterialTheme.typography.bodyMedium.copy(
-                color = MaterialTheme.colorScheme.onSurface
-            ),
-            decorationBox = { innerTextField ->
-                if (searchText.isEmpty()) {
-                    Text(
-                        text = "Bu kategoride ara",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-                innerTextField()
-            }
-        )
-
-        Icon(
-            imageVector = Icons.Outlined.Search,
-            contentDescription = "Ara",
-            modifier = Modifier
-                .size(BBIcon.Action)
-                .clickable { onSearchClick() },
-            tint = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-    }
-}
-
-@Composable
 private fun CategorySubCategorySection(
     subCategories: List<RetailSubCategoryItem>,
     onSubCategoryClick: (RetailSubCategoryItem) -> Unit
@@ -313,7 +270,7 @@ private fun CategorySubCategorySection(
         modifier = Modifier.fillMaxWidth()
     ) {
         RetailSectionTitle(
-            title = "Alt kategoriler",
+            title = "Alt Kategoriler",
             description = "Doğrudan ürün akışına inmek için hızlı seçim."
         )
 
@@ -325,7 +282,9 @@ private fun CategorySubCategorySection(
             items(subCategories) { subCategory ->
                 SubCategoryCard(
                     subCategory = subCategory,
-                    onClick = { onSubCategoryClick(subCategory) }
+                    onClick = {
+                        onSubCategoryClick(subCategory)
+                    }
                 )
             }
         }
@@ -338,17 +297,17 @@ private fun SubCategoryCard(
     onClick: () -> Unit
 ) {
     BbCard(
-        modifier = Modifier
-            .width(BBSpacing.Space24 + BBSpacing.Space12)
-            .clickable { onClick() },
+        modifier = Modifier.width(BBSpacing.Space24 + BBSpacing.Space12),
         variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium
+        padding = BbCardPadding.Medium,
+        onClick = onClick
     ) {
         Column {
             BbIconBox(
                 size = BbIconBoxSize.Medium,
                 backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
-                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                radius = BBRadius.lg
             ) {
                 Text(
                     text = subCategory.iconText,
@@ -387,8 +346,8 @@ private fun CategoryCampaignSection(
         modifier = Modifier.fillMaxWidth()
     ) {
         RetailSectionTitle(
-            title = "Kategori fırsatları",
-            description = "Bu kategoriye bağlı aktif Vitrinler ve kampanyalar."
+            title = "Kategori Vitrinleri",
+            description = "Ürün, mağaza ve kampanya akışlarına hızlı geç."
         )
 
         Spacer(modifier = Modifier.height(BBSpacing.Space3))
@@ -399,7 +358,9 @@ private fun CategoryCampaignSection(
             items(campaigns) { campaign ->
                 CategoryCampaignCard(
                     campaign = campaign,
-                    onClick = { onCampaignClick(campaign) }
+                    onClick = {
+                        onCampaignClick(campaign)
+                    }
                 )
             }
         }
@@ -412,18 +373,38 @@ private fun CategoryCampaignCard(
     onClick: () -> Unit
 ) {
     BbCard(
-        modifier = Modifier
-            .width(BBSpacing.Space20 + BBSpacing.Space16)
-            .clickable { onClick() },
-        variant = BbCardVariant.Default,
-        padding = BbCardPadding.Medium
+        modifier = Modifier.width(BBSpacing.Space24 + BBSpacing.Space16),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Large,
+        onClick = onClick
     ) {
-        Column {
+        Column(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(BBIcon.BoxMd)
+                    .background(
+                        color = campaign.backgroundColor,
+                        shape = BBRadius.LgShape
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = campaign.icon,
+                    contentDescription = null,
+                    tint = campaign.iconColor,
+                    modifier = Modifier.size(BBIcon.Ui)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(BBSpacing.Space4))
+
             Text(
                 text = campaign.badge,
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.Bold,
-                color = BBColors.Purple.Purple600
+                color = campaign.iconColor
             )
 
             Spacer(modifier = Modifier.height(BBSpacing.Space2))
@@ -455,7 +436,7 @@ private fun CategoryQuickFilterSection(
         modifier = Modifier.fillMaxWidth()
     ) {
         RetailSectionTitle(
-            title = "Hızlı filtreler",
+            title = "Hızlı Filtreler",
             description = "Listeye geçmeden önce akışı daralt."
         )
 
@@ -492,11 +473,10 @@ private fun CategoryProductRow(
     onClick: () -> Unit
 ) {
     BbCard(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() },
+        modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium
+        padding = BbCardPadding.Medium,
+        onClick = onClick
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -505,8 +485,10 @@ private fun CategoryProductRow(
             Box(
                 modifier = Modifier
                     .size(BBSpacing.Space16 + BBSpacing.Space1)
-                    .clip(BBRadius.XlShape)
-                    .background(MaterialTheme.colorScheme.surfaceVariant),
+                    .background(
+                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        shape = BBRadius.XlShape
+                    ),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -606,7 +588,10 @@ data class RetailCategoryCampaignItem(
     val id: Int,
     val title: String,
     val description: String,
-    val badge: String
+    val badge: String,
+    val icon: androidx.compose.ui.graphics.vector.ImageVector,
+    val backgroundColor: androidx.compose.ui.graphics.Color,
+    val iconColor: androidx.compose.ui.graphics.Color
 )
 
 data class RetailCategoryProductItem(
@@ -621,7 +606,7 @@ private fun getRetailCategoryDetail(categoryId: Int): RetailCategoryDetail {
     return RetailCategoryDetail(
         id = categoryId,
         name = "Moda",
-        description = "Giyim, ayakkabı, çanta ve aksesuar ürünlerinde seçili mağazaları ve fırsatları keşfedin.",
+        description = "Giyim, ayakkabı, çanta ve aksesuar ürünlerinde seçili mağazaları ve fırsatları Keşfedin.",
         iconText = "MO",
         productCount = 18420,
         storeCount = 624,
@@ -637,19 +622,28 @@ private fun getRetailCategoryDetail(categoryId: Int): RetailCategoryDetail {
                 id = 1,
                 title = "Sezonun öne çıkanları",
                 description = "Yeni gelen ürünlerde seçili fırsatlar.",
-                badge = "Yeni sezon"
+                badge = "Yeni sezon",
+                icon = Icons.Outlined.LocalOffer,
+                backgroundColor = BBColors.Yellow.Yellow50,
+                iconColor = BBColors.Yellow.Yellow800
             ),
             RetailCategoryCampaignItem(
                 id = 2,
                 title = "Haftanın Vitrinleri",
                 description = "Popüler mağazalardan hızlı keşif.",
-                badge = "Vitrin"
+                badge = "Vitrin",
+                icon = Icons.Outlined.Storefront,
+                backgroundColor = BBColors.Green.Green50,
+                iconColor = BBColors.Green.Green600
             ),
             RetailCategoryCampaignItem(
                 id = 3,
                 title = "Avantajlı ürünler",
                 description = "Fiyat/performans ürünleri bir arada.",
-                badge = "Fırsat"
+                badge = "Fırsat",
+                icon = Icons.Outlined.Search,
+                backgroundColor = BBColors.Blue.Blue50,
+                iconColor = BBColors.Blue.Blue600
             )
         ),
         quickFilters = listOf(

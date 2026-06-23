@@ -1,34 +1,36 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Campaign
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbIconBoxSize
-import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbIconBox
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.FilterChip
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.KeyboardArrowRight
+import androidx.compose.material.icons.outlined.LocalOffer
+import androidx.compose.material.icons.outlined.Storefront
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,14 +40,35 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
+import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailBottomNavigation
+import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailBottomNavigationItem
+import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeader
+import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeaderLeadingAction
+import com.bulbulustur.android.Application.Views.Shared.Components.BbSectionHeader
+import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
+import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
+import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
+import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbChip
+import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbIconBox
+import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbIconBoxSize
+import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBLayout
+import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
+import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
+import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
 
 @Composable
 fun CampaignDetailScreen(
     campaignId: Int = 1,
     onBackClick: () -> Unit = {},
+    onSearchClick: (String) -> Unit = {},
+    onMenuClick: () -> Unit = {},
+    onFavoriteClick: () -> Unit = {},
+    onMessageClick: () -> Unit = {},
+    onHomeClick: () -> Unit = {},
+    onModeSwitchClick: () -> Unit = {},
+    onBasketClick: () -> Unit = {},
+    onAccountClick: () -> Unit = {},
     onProductClick: (RetailCampaignProductItem) -> Unit = {},
     onCategoryClick: (RetailCampaignCategoryItem) -> Unit = {},
     onStoreClick: (RetailCampaignStoreItem) -> Unit = {}
@@ -54,38 +77,104 @@ fun CampaignDetailScreen(
         getRetailCampaignDetail(campaignId)
     }
 
-    var selectedFilter by remember {
-        mutableStateOf(campaign.productFilters.firstOrNull().orEmpty())
+    var searchText by remember {
+        mutableStateOf("")
     }
 
-    val filteredProducts = remember(selectedFilter, campaign.products) {
-        if (selectedFilter.isBlank() || selectedFilter == "Tümü") {
+    var selectedFilter by remember(campaignId) {
+        mutableStateOf(
+            campaign.productFilters.firstOrNull().orEmpty()
+        )
+    }
+
+    val filteredProducts = remember(
+        selectedFilter,
+        campaign.products
+    ) {
+        if (
+            selectedFilter.isBlank() ||
+            selectedFilter == "Tümü"
+        ) {
             campaign.products
         } else {
-            campaign.products.filter {
-                it.filterTags.contains(selectedFilter)
+            campaign.products.filter { product ->
+                product.filterTags.contains(selectedFilter)
             }
         }
     }
 
-    Surface(
+    Scaffold(
         modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            RetailSearchHeader(
+                searchText = searchText,
+                onSearchTextChange = {
+                    searchText = it
+                },
+                onMenuClick = onMenuClick,
+                onFavoriteClick = onFavoriteClick,
+                onMessageClick = onMessageClick,
+                placeholder = "Ürün, kategori veya marka ara",
+                onSearchClick = {
+                    onSearchClick(searchText)
+                },
+                onClearClick = {
+                    searchText = ""
+                },
+                leadingAction = RetailSearchHeaderLeadingAction.Back,
+                onBackClick = onBackClick
+            )
+        },
+        bottomBar = {
+            RetailBottomNavigation(
+                selectedItem = RetailBottomNavigationItem.Menu,
+                onItemClick = { selectedItem ->
+                    when (selectedItem) {
+                        RetailBottomNavigationItem.Home -> {
+                            onHomeClick()
+                        }
+
+                        RetailBottomNavigationItem.Menu -> {
+                            onMenuClick()
+                        }
+
+                        RetailBottomNavigationItem.ModeSwitch -> {
+                            onModeSwitchClick()
+                        }
+
+                        RetailBottomNavigationItem.Basket -> {
+                            onBasketClick()
+                        }
+
+                        RetailBottomNavigationItem.Account -> {
+                            onAccountClick()
+                        }
+                    }
+                }
+            )
+        }
+    ) { innerPadding ->
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    MaterialTheme.colorScheme.background
+                ),
             contentPadding = PaddingValues(
-                start = 16.dp,
-                top = 14.dp,
-                end = 16.dp,
-                bottom = 28.dp
+                start = BBSpacing.PageHorizontal,
+                top = innerPadding.calculateTopPadding() +
+                        BBSpacing.PageTopCompact,
+                end = BBSpacing.PageHorizontal,
+                bottom = innerPadding.calculateBottomPadding() +
+                        BBSpacing.PageBottomCompact
             ),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.SectionGapCompact
+            )
         ) {
             item {
-                CampaignDetailTopBar(
-                    onBackClick = onBackClick
-                )
+                CampaignDetailPageHeading()
             }
 
             item {
@@ -131,13 +220,18 @@ fun CampaignDetailScreen(
             }
 
             item {
-                CampaignDetailSectionTitle(
-                    title = "Kampanya ürünleri",
-                    description = "Bu kampanyaya dahil seçili ürünler."
+                BbSectionHeader(
+                    title = "Kampanya Ürünleri",
+                    subtitle = "Bu kampanyaya dahil seçili ürünler."
                 )
             }
 
-            items(filteredProducts) { product ->
+            items(
+                items = filteredProducts,
+                key = { product ->
+                    product.id
+                }
+            ) { product ->
                 CampaignProductRow(
                     product = product,
                     onClick = {
@@ -150,46 +244,25 @@ fun CampaignDetailScreen(
 }
 
 @Composable
-private fun CampaignDetailTopBar(
-    onBackClick: () -> Unit
-) {
-    Row(
+private fun CampaignDetailPageHeading() {
+    Column(
         modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        verticalArrangement = Arrangement.spacedBy(
+            BBSpacing.Space1
+        )
     ) {
-        BbIconBox(
-            modifier = Modifier.clickable {
-                onBackClick()
-            },
-            size = BbIconBoxSize.Medium,
-            backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
-            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
-        ) {
-            Text(
-                text = "‹",
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
+        Text(
+            text = "Kampanya Detayları",
+            style = MaterialTheme.typography.headlineSmall,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onBackground
+        )
 
-        Spacer(modifier = Modifier.width(12.dp))
-
-        Column(
-            modifier = Modifier.weight(1f)
-        ) {
-            Text(
-                text = "Kampanya detayı",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-
-            Text(
-                text = "Fırsat kapsamı, koşullar ve ürünler.",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
+        Text(
+            text = "Fırsat kapsamını, koşulları ve kampanya Ürünlerini incele.",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }
 
@@ -197,29 +270,33 @@ private fun CampaignDetailTopBar(
 private fun CampaignDetailHero(
     campaign: RetailCampaignDetail
 ) {
-    Card(
+    Surface(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(28.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
-        ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 0.dp
-        )
+        shape = BBRadius.XxlShape,
+        color = MaterialTheme.colorScheme.primaryContainer
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(18.dp)
+                .padding(BBSpacing.Space5),
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space4
+            )
         ) {
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space3
+                )
             ) {
                 Box(
                     modifier = Modifier
-                        .size(58.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(MaterialTheme.colorScheme.primary),
+                        .size(BBSpacing.Space14)
+                        .clip(BBRadius.XlShape)
+                        .background(
+                            MaterialTheme.colorScheme.primary
+                        ),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
@@ -230,19 +307,18 @@ private fun CampaignDetailHero(
                     )
                 }
 
-                Spacer(modifier = Modifier.width(14.dp))
-
                 Column(
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(
+                        BBSpacing.Space1
+                    )
                 ) {
                     Text(
                         text = campaign.badgeText,
-                        style = MaterialTheme.typography.labelMedium,
-                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.labelLarge,
+                        fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onPrimaryContainer
                     )
-
-                    Spacer(modifier = Modifier.height(4.dp))
 
                     Text(
                         text = campaign.title,
@@ -253,33 +329,37 @@ private fun CampaignDetailHero(
                 }
             }
 
-            Spacer(modifier = Modifier.height(14.dp))
-
             Text(
                 text = campaign.description,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onPrimaryContainer
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space2
+                )
             ) {
-                CampaignDetailHeroPill(
-                    title = campaign.discountText,
-                    subtitle = "avantaj"
-                )
+                item {
+                    CampaignDetailHeroPill(
+                        title = campaign.discountText,
+                        subtitle = "avantaj"
+                    )
+                }
 
-                CampaignDetailHeroPill(
-                    title = campaign.endDateText,
-                    subtitle = "süre"
-                )
+                item {
+                    CampaignDetailHeroPill(
+                        title = campaign.endDateText,
+                        subtitle = "süre"
+                    )
+                }
 
-                CampaignDetailHeroPill(
-                    title = "${campaign.productCount}",
-                    subtitle = "ürün"
-                )
+                item {
+                    CampaignDetailHeroPill(
+                        title = campaign.productCount.toString(),
+                        subtitle = "ürün"
+                    )
+                }
             }
         }
     }
@@ -290,16 +370,18 @@ private fun CampaignDetailHeroPill(
     title: String,
     subtitle: String
 ) {
-    Box(
-        modifier = Modifier
-            .clip(RoundedCornerShape(18.dp))
-            .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.72f))
-            .padding(
-                horizontal = 12.dp,
-                vertical = 8.dp
-            )
+    Surface(
+        shape = BBRadius.XlShape,
+        color = MaterialTheme.colorScheme.surface.copy(
+            alpha = 0.72f
+        )
     ) {
-        Column {
+        Column(
+            modifier = Modifier.padding(
+                horizontal = BBSpacing.Space3,
+                vertical = BBSpacing.Space2
+            )
+        ) {
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleSmall,
@@ -322,17 +404,19 @@ private fun CampaignSummaryCards(
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
+        horizontalArrangement = Arrangement.spacedBy(
+            BBSpacing.Space2
+        )
     ) {
         CampaignSummaryCard(
             modifier = Modifier.weight(1f),
-            title = "${campaign.storeCount}",
+            title = campaign.storeCount.toString(),
             subtitle = "mağaza"
         )
 
         CampaignSummaryCard(
             modifier = Modifier.weight(1f),
-            title = "${campaign.categoryCount}",
+            title = campaign.categoryCount.toString(),
             subtitle = "kategori"
         )
 
@@ -346,23 +430,21 @@ private fun CampaignSummaryCards(
 
 @Composable
 private fun CampaignSummaryCard(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     title: String,
     subtitle: String
 ) {
-    Card(
+    BbCard(
         modifier = modifier,
-        shape = RoundedCornerShape(22.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 1.dp
-        )
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
     ) {
         Column(
-            modifier = Modifier.padding(14.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space1
+            )
         ) {
             Text(
                 text = title,
@@ -370,8 +452,6 @@ private fun CampaignSummaryCard(
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary
             )
-
-            Spacer(modifier = Modifier.height(3.dp))
 
             Text(
                 text = subtitle,
@@ -388,19 +468,27 @@ private fun CampaignCategorySection(
     onCategoryClick: (RetailCampaignCategoryItem) -> Unit
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(
+            BBSpacing.Space3
+        )
     ) {
-        CampaignDetailSectionTitle(
-            title = "Kapsamdaki kategoriler",
-            description = "Kampanya hangi alışveriş alanlarında geçerli?"
+        BbSectionHeader(
+            title = "Kapsamdaki Kategoriler",
+            subtitle = "Kampanyanın geçerli olduğu alışveriş alanları."
         )
 
-        Spacer(modifier = Modifier.height(10.dp))
-
         LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
+            horizontalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space3
+            )
         ) {
-            items(categories) { category ->
+            items(
+                items = categories,
+                key = { category ->
+                    category.id
+                }
+            ) { category ->
                 CampaignCategoryCard(
                     category = category,
                     onClick = {
@@ -417,22 +505,18 @@ private fun CampaignCategoryCard(
     category: RetailCampaignCategoryItem,
     onClick: () -> Unit
 ) {
-    Card(
-        modifier = Modifier
-            .width(BBLayout.FixedWidth150)
-            .clickable {
-                onClick()
-            },
-        shape = RoundedCornerShape(22.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
+    BbCard(
+        modifier = Modifier.width(
+            BBLayout.FixedWidth150
         ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 1.dp
-        )
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium,
+        onClick = onClick
     ) {
         Column(
-            modifier = Modifier.padding(14.dp)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space2
+            )
         ) {
             BbIconBox(
                 size = BbIconBoxSize.Medium,
@@ -447,16 +531,12 @@ private fun CampaignCategoryCard(
                 )
             }
 
-            Spacer(modifier = Modifier.height(10.dp))
-
             Text(
                 text = category.name,
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onSurface
             )
-
-            Spacer(modifier = Modifier.height(4.dp))
 
             Text(
                 text = "${category.productCount} ürün",
@@ -473,19 +553,27 @@ private fun CampaignStoreSection(
     onStoreClick: (RetailCampaignStoreItem) -> Unit
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(
+            BBSpacing.Space3
+        )
     ) {
-        CampaignDetailSectionTitle(
-            title = "Katılan mağazalar",
-            description = "Bu kampanyada öne çıkan mağazalar."
+        BbSectionHeader(
+            title = "Katılan Mağazalar",
+            subtitle = "Bu kampanyada öne çıkan Mağazalar."
         )
 
-        Spacer(modifier = Modifier.height(10.dp))
-
         LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
+            horizontalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space3
+            )
         ) {
-            items(stores) { store ->
+            items(
+                items = stores,
+                key = { store ->
+                    store.id
+                }
+            ) { store ->
                 CampaignStoreCard(
                     store = store,
                     onClick = {
@@ -502,23 +590,21 @@ private fun CampaignStoreCard(
     store: RetailCampaignStoreItem,
     onClick: () -> Unit
 ) {
-    Card(
-        modifier = Modifier
-            .width(180.dp)
-            .clickable {
-                onClick()
-            },
-        shape = RoundedCornerShape(22.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
+    BbCard(
+        modifier = Modifier.width(
+            BBSpacing.Space20 +
+                    BBSpacing.Space20 +
+                    BBSpacing.Space5
         ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 1.dp
-        )
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium,
+        onClick = onClick
     ) {
         Row(
-            modifier = Modifier.padding(14.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space3
+            )
         ) {
             BbIconBox(
                 size = BbIconBoxSize.Medium,
@@ -533,17 +619,18 @@ private fun CampaignStoreCard(
                 )
             }
 
-            Spacer(modifier = Modifier.width(10.dp))
-
-            Column {
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space1
+                )
+            ) {
                 Text(
                     text = store.name,
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onSurface
                 )
-
-                Spacer(modifier = Modifier.height(3.dp))
 
                 Text(
                     text = "${store.productCount} ürün",
@@ -559,32 +646,29 @@ private fun CampaignStoreCard(
 private fun CampaignConditionSection(
     conditions: List<String>
 ) {
-    Card(
+    BbCard(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 1.dp
-        )
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
     ) {
         Column(
-            modifier = Modifier.padding(BBSpacing.Space4)
-        ) {
-            CampaignDetailSectionTitle(
-                title = "Kampanya koşulları",
-                description = "Alışverişten önce bilinmesi gereken kısa notlar."
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space3
             )
-
-            Spacer(modifier = Modifier.height(12.dp))
+        ) {
+            BbSectionHeader(
+                title = "Kampanya Koşulları",
+                subtitle = "Alışverişten önce bilinmesi gereken kısa notlar."
+            )
 
             conditions.forEach { condition ->
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 5.dp),
-                    verticalAlignment = Alignment.Top
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.Top,
+                    horizontalArrangement = Arrangement.spacedBy(
+                        BBSpacing.Space2
+                    )
                 ) {
                     Text(
                         text = "•",
@@ -592,10 +676,9 @@ private fun CampaignConditionSection(
                         color = MaterialTheme.colorScheme.primary
                     )
 
-                    Spacer(modifier = Modifier.width(8.dp))
-
                     Text(
                         text = condition,
+                        modifier = Modifier.weight(1f),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -613,28 +696,31 @@ private fun CampaignProductFilterSection(
     onFilterChange: (String) -> Unit
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        CampaignDetailSectionTitle(
-            title = "Ürün filtresi",
-            description = "Kampanya ürünlerini hızlıca daralt."
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(
+            BBSpacing.Space3
         )
-
-        Spacer(modifier = Modifier.height(8.dp))
+    ) {
+        BbSectionHeader(
+            title = "Ürün Filtresi",
+            subtitle = "Kampanya Ürünlerini hızlıca daralt."
+        )
 
         FlowRow(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+            horizontalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space2
+            ),
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space2
+            )
         ) {
             filters.forEach { filter ->
-                FilterChip(
+                BbChip(
+                    text = filter,
                     selected = selectedFilter == filter,
                     onClick = {
                         onFilterChange(filter)
-                    },
-                    label = {
-                        Text(text = filter)
                     }
                 )
             }
@@ -647,31 +733,26 @@ private fun CampaignProductRow(
     product: RetailCampaignProductItem,
     onClick: () -> Unit
 ) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-                onClick()
-            },
-        shape = RoundedCornerShape(22.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 1.dp
-        )
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium,
+        onClick = onClick
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(14.dp),
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space3
+            )
         ) {
             Box(
                 modifier = Modifier
-                    .size(70.dp)
-                    .clip(RoundedCornerShape(18.dp))
-                    .background(MaterialTheme.colorScheme.surfaceVariant),
+                    .size(BBSpacing.Space16)
+                    .clip(BBRadius.XlShape)
+                    .background(
+                        MaterialTheme.colorScheme.surfaceVariant
+                    ),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -682,10 +763,11 @@ private fun CampaignProductRow(
                 )
             }
 
-            Spacer(modifier = Modifier.width(14.dp))
-
             Column(
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space1
+                )
             ) {
                 Text(
                     text = product.name,
@@ -694,18 +776,17 @@ private fun CampaignProductRow(
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
-                Spacer(modifier = Modifier.height(4.dp))
-
                 Text(
                     text = product.storeName,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
-
                 Row(
-                    verticalAlignment = Alignment.Bottom
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(
+                        BBSpacing.Space2
+                    )
                 ) {
                     Text(
                         text = product.discountedPriceText,
@@ -713,8 +794,6 @@ private fun CampaignProductRow(
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.primary
                     )
-
-                    Spacer(modifier = Modifier.width(8.dp))
 
                     Text(
                         text = product.discountText,
@@ -725,40 +804,16 @@ private fun CampaignProductRow(
                 }
             }
 
-            Text(
-                text = "›",
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+            Icon(
+                imageVector = Icons.Outlined.KeyboardArrowRight,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
 }
 
-@Composable
-private fun CampaignDetailSectionTitle(
-    title: String,
-    description: String
-) {
-    Column(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onBackground
-        )
-
-        Spacer(modifier = Modifier.height(3.dp))
-
-        Text(
-            text = description,
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-    }
-}
-
+@Immutable
 data class RetailCampaignDetail(
     val id: Int,
     val title: String,
@@ -778,6 +833,7 @@ data class RetailCampaignDetail(
     val products: List<RetailCampaignProductItem>
 )
 
+@Immutable
 data class RetailCampaignCategoryItem(
     val id: Int,
     val name: String,
@@ -785,6 +841,7 @@ data class RetailCampaignCategoryItem(
     val productCount: Int
 )
 
+@Immutable
 data class RetailCampaignStoreItem(
     val id: Int,
     val name: String,
@@ -792,6 +849,7 @@ data class RetailCampaignStoreItem(
     val productCount: Int
 )
 
+@Immutable
 data class RetailCampaignProductItem(
     val id: Int,
     val name: String,
@@ -802,11 +860,13 @@ data class RetailCampaignProductItem(
     val filterTags: List<String>
 )
 
-private fun getRetailCampaignDetail(campaignId: Int): RetailCampaignDetail {
+private fun getRetailCampaignDetail(
+    campaignId: Int
+): RetailCampaignDetail {
     return RetailCampaignDetail(
         id = campaignId,
         title = "Sezonun öne çıkanları",
-        description = "Moda kategorisinde yeni sezon ürünleri, seçili mağaza Vitrinleri ve avantajlı fiyatlarla hazırlanmış perakende kampanyası.",
+        description = "Moda kategorisinde yeni sezon ürünleri, seçili mağaza vitrinleri ve avantajlı fiyatlarla hazırlanmış perakende kampanyası.",
         badgeText = "Yeni sezon kampanyası",
         iconText = "MO",
         discountText = "%35'e varan",
@@ -818,7 +878,7 @@ private fun getRetailCampaignDetail(campaignId: Int): RetailCampaignDetail {
         categories = listOf(
             RetailCampaignCategoryItem(
                 id = 1,
-                name = "Kadın Giyim",
+                name = "Kadın giyim",
                 iconText = "KG",
                 productCount = 420
             ),
@@ -856,7 +916,7 @@ private fun getRetailCampaignDetail(campaignId: Int): RetailCampaignDetail {
             )
         ),
         conditions = listOf(
-            "Kampanya seçili ürünlerde ve kampanyaya katılan mağazalarda geçerlidir.",
+            "Kampanya seçili ürünlerde ve kampanyaya katılan Mağazalarda geçerlidir.",
             "Stok durumuna göre ürün görünürlüğü ve fiyatlar değişebilir.",
             "Kargo avantajı mağaza ve ürün koşullarına göre farklılık gösterebilir.",
             "Sepet ve ödeme adımlarında nihai fiyat tekrar gösterilir."
@@ -876,7 +936,11 @@ private fun getRetailCampaignDetail(campaignId: Int): RetailCampaignDetail {
                 discountedPriceText = "₺899,90",
                 discountText = "%20",
                 imageText = "P1",
-                filterTags = listOf("Yeni sezon", "İndirimli", "Çok satan")
+                filterTags = listOf(
+                    "Yeni sezon",
+                    "İndirimli",
+                    "Çok satan"
+                )
             ),
             RetailCampaignProductItem(
                 id = 2,
@@ -885,7 +949,10 @@ private fun getRetailCampaignDetail(campaignId: Int): RetailCampaignDetail {
                 discountedPriceText = "₺349,90",
                 discountText = "%15",
                 imageText = "P2",
-                filterTags = listOf("Yeni sezon", "İndirimli")
+                filterTags = listOf(
+                    "Yeni sezon",
+                    "İndirimli"
+                )
             ),
             RetailCampaignProductItem(
                 id = 3,
@@ -894,7 +961,10 @@ private fun getRetailCampaignDetail(campaignId: Int): RetailCampaignDetail {
                 discountedPriceText = "₺649,90",
                 discountText = "%25",
                 imageText = "P3",
-                filterTags = listOf("Ücretsiz kargo", "İndirimli")
+                filterTags = listOf(
+                    "Ücretsiz kargo",
+                    "İndirimli"
+                )
             ),
             RetailCampaignProductItem(
                 id = 4,
@@ -903,7 +973,10 @@ private fun getRetailCampaignDetail(campaignId: Int): RetailCampaignDetail {
                 discountedPriceText = "₺749,90",
                 discountText = "%18",
                 imageText = "P4",
-                filterTags = listOf("Çok satan", "Ücretsiz kargo")
+                filterTags = listOf(
+                    "Çok satan",
+                    "Ücretsiz kargo"
+                )
             )
         )
     )
@@ -912,8 +985,7 @@ private fun getRetailCampaignDetail(campaignId: Int): RetailCampaignDetail {
 @Preview(showBackground = true)
 @Composable
 private fun CampaignDetailScreenPreview() {
-    MaterialTheme {
+    BbTheme {
         CampaignDetailScreen()
     }
 }
-

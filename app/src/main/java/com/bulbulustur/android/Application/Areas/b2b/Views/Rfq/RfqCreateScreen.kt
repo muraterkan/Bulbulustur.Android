@@ -114,7 +114,7 @@ fun RfqCreateScreen(
         containerColor = BBColors.SurfaceMuted,
         topBar = {
             BbInnerPageHeader(
-                title = "RFQ Oluştur",
+                title = "Teklif İste",
                 onBackClick = onBackClick
             )
         },

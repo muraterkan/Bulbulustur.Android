@@ -482,7 +482,7 @@ private fun RequestEmptyState(
             )
 
             Text(
-                text = "Henüz oluşturulmuş iade veya sipariş talebiniz bulunmuyor. Sipariş detayından yeni talep oluşturabilirsiniz.",
+                text = "Henüz oluşturulmuş iade veya sipariş talebiniz bulunmuyor. Sipariş detayından yeni talep Oluşturabilirsiniz.",
                 style = BbTypography.bodySmall,
                 color = BBColors.TextMuted
             )

@@ -173,7 +173,7 @@ fun WholesaleCategoryHomeScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Toptan kategori akışı",
+                    title = "Toptan Kategori akışı",
                     subtitle = "Ürün, tedarikçi ve teklif kanallarına hızlı geç."
                 )
             }
@@ -237,7 +237,7 @@ private fun WholesaleCategoryHeroCard(
                 )
 
                 Text(
-                    text = "Toptan kategori",
+                    text = "Toptan Kategori",
                     style = MaterialTheme.typography.labelLarge,
                     color = BBColors.Primary,
                     fontWeight = FontWeight.SemiBold

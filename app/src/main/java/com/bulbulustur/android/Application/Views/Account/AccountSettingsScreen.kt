@@ -2,7 +2,6 @@ package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,6 +31,7 @@ import androidx.compose.material.icons.outlined.SupportAgent
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -41,11 +41,10 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
-import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
@@ -282,13 +281,10 @@ private fun SettingsQuickCard(
     onClick: () -> Unit
 ) {
     BbCard(
-        modifier = modifier
-            .height(124.dp)
-            .clickable {
-                onClick()
-            },
+        modifier = modifier.height(BBIcon.Box5Xl),
         variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium
+        padding = BbCardPadding.Medium,
+        onClick = onClick
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -374,67 +370,70 @@ private fun SettingsMenuRow(
     danger: Boolean = false,
     onClick: () -> Unit
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-                onClick()
-            }
-            .padding(BBSpacing.CardPadding),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        color = BBColors.Surface,
+        onClick = onClick
     ) {
-        Box(
+        Row(
             modifier = Modifier
-                .size(BBIcon.BoxMd)
-                .background(
-                    color = if (danger) {
-                        BBColors.Red.Red50
-                    } else {
-                        BBColors.SurfaceMuted
-                    },
-                    shape = BBRadius.LgShape
-                ),
-            contentAlignment = Alignment.Center
+                .fillMaxWidth()
+                .padding(BBSpacing.CardPadding),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = if (danger) {
-                    BBColors.Red.Red600
+            Box(
+                modifier = Modifier
+                    .size(BBIcon.BoxMd)
+                    .background(
+                        color = if (danger) {
+                            BBColors.Red.Red50
+                        } else {
+                            BBColors.SurfaceMuted
+                        },
+                        shape = BBRadius.LgShape
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = if (danger) {
+                        BBColors.Red.Red600
+                    } else {
+                        BBColors.TextStrong
+                    },
+                    modifier = Modifier.size(BBIcon.Ui)
+                )
+            }
+
+            Text(
+                text = title,
+                style = BbTypography.titleSmall,
+                color = if (danger) {
+                    BBColors.Red.Red700
                 } else {
                     BBColors.TextStrong
                 },
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.weight(1f)
+            )
+
+            if (!value.isNullOrBlank()) {
+                Text(
+                    text = value,
+                    style = BbTypography.bodyMedium,
+                    color = BBColors.TextMuted
+                )
+            }
+
+            Icon(
+                imageVector = Icons.Outlined.ChevronRight,
+                contentDescription = null,
+                tint = BBColors.TextMuted,
                 modifier = Modifier.size(BBIcon.Ui)
             )
         }
-
-        Text(
-            text = title,
-            style = BbTypography.titleSmall,
-            color = if (danger) {
-                BBColors.Red.Red700
-            } else {
-                BBColors.TextStrong
-            },
-            fontWeight = FontWeight.SemiBold,
-            modifier = Modifier.weight(1f)
-        )
-
-        if (!value.isNullOrBlank()) {
-            Text(
-                text = value,
-                style = BbTypography.bodyMedium,
-                color = BBColors.TextMuted
-            )
-        }
-
-        Icon(
-            imageVector = Icons.Outlined.ChevronRight,
-            contentDescription = null,
-            tint = BBColors.TextMuted,
-            modifier = Modifier.size(BBIcon.Ui)
-        )
     }
 }
 
@@ -453,7 +452,7 @@ private fun SettingsDashedDivider() {
             color = BBColors.Border,
             start = Offset(0f, 0f),
             end = Offset(size.width, 0f),
-            strokeWidth = 1.dp.toPx(),
+            strokeWidth = BBSpacing.BorderThin.toPx(),
             pathEffect = PathEffect.dashPathEffect(
                 intervals = floatArrayOf(10f, 8f),
                 phase = 0f
@@ -461,4 +460,3 @@ private fun SettingsDashedDivider() {
         )
     }
 }
-

@@ -291,7 +291,7 @@ private fun StoreListHeroCard(
             )
 
             Text(
-                text = "Bulbulustur’da yer alan perakende mağazaları inceleyin, ürünlerini keşfedin ve favori satıcılarınıza hızlıca ulaşın.",
+                text = "Bulbulustur’da yer alan perakende mağazaları inceleyin, ürünlerini Keşfedin ve favori satıcılarınıza hızlıca ulaşın.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = BBColors.TextMuted
             )
@@ -531,7 +531,7 @@ private fun StoreListResultHeader(
             text = if (selectedFilter == "Tümü") {
                 "$storeCount mağaza listeleniyor"
             } else {
-                "$selectedFilter filtresinde $storeCount mağaza"
+                "$selectedFilter Filtresinde $storeCount mağaza"
             },
             style = MaterialTheme.typography.bodySmall,
             color = BBColors.TextMuted

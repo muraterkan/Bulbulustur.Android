@@ -947,7 +947,7 @@ private fun OrderDetailActionsCard(
         ) {
             OrderDetailSectionTitle(
                 title = "Sipariş İşlemleri",
-                subtitle = "Sözleşme ve destek aksiyonları"
+                subtitle = "Sözleşme ve destek Aksiyonları"
             )
 
             BbButton(

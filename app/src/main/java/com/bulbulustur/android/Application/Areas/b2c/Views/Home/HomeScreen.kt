@@ -746,7 +746,7 @@ private fun getRetailHomeShowcases(): List<RetailHomeShowcaseItem> {
     return listOf(
         RetailHomeShowcaseItem(
             title = "Yeni Gelenler",
-            description = "Bugün eklenen perakende ürünleri keşfet.",
+            description = "Bugün eklenen perakende Ürünleri keşfet.",
             icon = Icons.Outlined.NewReleases,
             backgroundColor = BBColors.Yellow.Yellow50,
             iconColor = BBColors.Navy.Navy900,

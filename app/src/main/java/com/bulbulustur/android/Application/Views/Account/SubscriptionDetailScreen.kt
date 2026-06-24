@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -80,14 +80,14 @@ fun SubscriptionDetailScreen(
                 ) {
                     SubscriptionDetailInfoBox(
                         modifier = Modifier.weight(1f),
-                        title = "BAŞLANGIÇ",
+                        title = "BAÅLANGIÃ‡",
                         value = subscription.startDate,
                         iconColor = BBColors.Blue.Blue600
                     )
 
                     SubscriptionDetailInfoBox(
                         modifier = Modifier.weight(1f),
-                        title = "BİTİŞ",
+                        title = "BÄ°TÄ°Å",
                         value = subscription.endDate,
                         iconColor = BBColors.Orange.Orange600
                     )
@@ -180,7 +180,7 @@ private fun SubscriptionHeroCard(
                 )
 
                 Text(
-                    text = "Abonelik dönemi ve plan ücretiniz aşağıdaki bilgilerle kayıtlıdır.",
+                    text = "Abonelik dönemi ve plan ücretiniz aşaĞıdaki bilgilerle kayıtlıdır.",
                     style = MaterialTheme.typography.bodySmall,
                     color = BBColors.White.copy(alpha = 0.78f)
                 )
@@ -296,7 +296,7 @@ private fun SubscriptionPlanInfoCard(
                 )
 
                 Text(
-                    text = "Aboneliğinize ait temel plan, dönem ve ücret bilgileri.",
+                    text = "AboneliĞinize ait temel plan, dönem ve ücret bilgileri.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -396,4 +396,5 @@ private data class SubscriptionDetailUiModel(
     val endDate: String,
     val statusText: String
 )
+
 

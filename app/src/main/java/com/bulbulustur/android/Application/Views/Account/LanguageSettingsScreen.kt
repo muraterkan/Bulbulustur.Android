@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -75,25 +75,25 @@ fun LanguageSettingsScreen(
             ),
             LanguageOption(
                 code = "es",
-                name = "Español",
-                region = "España",
+                name = "EspaÃ±ol",
+                region = "EspaÃ±a",
                 flagFileName = "spain.svg"
             ),
             LanguageOption(
                 code = "ru",
-                name = "Русский",
-                region = "Россия",
+                name = "Ğ ÑƒÑÑĞºĞ¸Ğ¹",
+                region = "Ğ Ğ¾ÑÑĞ¸Ñ",
                 flagFileName = "russia.svg"
             ),
             LanguageOption(
                 code = "ar",
-                name = "العربية",
+                name = "Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©",
                 region = "Saudi Arabia",
                 flagFileName = "saudi-arabia.svg"
             ),
             LanguageOption(
                 code = "zh",
-                name = "简体中文",
+                name = "ç®€ä½“ä¸­æ–‡",
                 region = "China",
                 flagFileName = "china.svg"
             )
@@ -188,7 +188,7 @@ private fun LanguageRow(
         ) {
             LanguageFlag(
                 flagFileName = item.flagFileName,
-                contentDescription = "${item.region} bayrağı"
+                contentDescription = "${item.region} bayraĞı"
             )
 
             Column(

@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -107,13 +107,13 @@ fun CompanyB2BIndexScreen(
 
             item {
                 CompanyB2BIndexSection(
-                    title = "B2B Index Ne Sağlar?",
+                    title = "B2B Index Ne SaĞlar?",
                     description = "Firmanızın toptan ticaret akışlarında daha görünür olmasına yardımcı olur.",
                     icon = Icons.Outlined.WorkspacePremium
                 ) {
                     CompanyB2BIndexBenefitRow(
                         title = "Global Görünürlük",
-                        description = "Şirket profiliniz uluslararası alıcılar için daha Keşfedilebilir hale gelir.",
+                        description = "Åirket profiliniz uluslararası alıcılar için daha Keşfedilebilir hale gelir.",
                         icon = Icons.Outlined.Public
                     )
 
@@ -129,7 +129,7 @@ fun CompanyB2BIndexScreen(
 
                     CompanyB2BIndexBenefitRow(
                         title = "Kurumsal Vitrin",
-                        description = "Şirket bilgileriniz daha düzenli ve güven veren bir B2B profilinde sunulur.",
+                        description = "Åirket bilgileriniz daha düzenli ve güven veren bir B2B profilinde sunulur.",
                         icon = Icons.Outlined.Storefront
                     )
                 }
@@ -146,7 +146,7 @@ fun CompanyB2BIndexScreen(
 
             item {
                 BbButton(
-                    text = "Şirketimi B2B Index’e Dahil Et",
+                    text = "Åirketimi B2B Indexâ€™e Dahil Et",
                     onClick = {
                         if (agreementAcceptedState.value) {
                             onActivateClick()
@@ -199,13 +199,13 @@ private fun CompanyB2BIndexIntroCard() {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Şirketinizi Global Alıcılara Açın",
+                    text = "Åirketinizi Global Alıcılara Açın",
                     style = BbTypography.titleLarge,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = "Toptan alıcıların firmanızı keşfetmesi, teklif süreçlerinize ulaşması ve kurumsal profilinizi görmesi için şirketinizi B2B Index’e dahil edin.",
+                    text = "Toptan alıcıların firmanızı keşfetmesi, teklif süreçlerinize ulaşması ve kurumsal profilinizi görmesi için şirketinizi B2B Indexâ€™e dahil edin.",
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -251,13 +251,13 @@ private fun CompanyB2BIndexSummaryCard() {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Türkiye Global Ticaret Limited Şirketi",
+                    text = "Türkiye Global Ticaret Limited Åirketi",
                     style = BbTypography.titleMedium,
                     color = MaterialTheme.colorScheme.inverseOnSurface
                 )
 
                 Text(
-                    text = "Limited Şirket · İstanbul / Türkiye",
+                    text = "Limited Åirket Â· Ä°stanbul / Türkiye",
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.inverseOnSurface.copy(alpha = BBAlpha.Muted)
                 )
@@ -326,7 +326,7 @@ private fun CompanyB2BIndexStatsGrid() {
             CompanyB2BIndexStatCard(
                 modifier = Modifier.weight(1f),
                 icon = Icons.Outlined.Storefront,
-                label = "Firma Kimliği",
+                label = "Firma KimliĞi",
                 value = "2-FGA0IBO7EGAZ5nB"
             )
 
@@ -334,7 +334,7 @@ private fun CompanyB2BIndexStatsGrid() {
                 modifier = Modifier.weight(1f),
                 icon = Icons.Outlined.LocationOn,
                 label = "Lokasyon",
-                value = "İstanbul"
+                value = "Ä°stanbul"
             )
         }
 
@@ -558,13 +558,13 @@ private fun CompanyB2BIndexAgreementCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Bulbulustur Kullanıcı Sözleşmesi’ni okudum ve kabul ediyorum.",
+                    text = "Bulbulustur Kullanıcı Sözleşmesiâ€™ni okudum ve kabul ediyorum.",
                     style = BbTypography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = "B2B Index’e dahil olduğunuzda şirket profiliniz ve uygun kurumsal bilgileriniz platform üzerinde görünür olabilir.",
+                    text = "B2B Indexâ€™e dahil olduĞunuzda şirket profiliniz ve uygun kurumsal bilgileriniz platform üzerinde görünür olabilir.",
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -598,4 +598,5 @@ private fun CompanyDashedDivider() {
         )
     }
 }
+
 

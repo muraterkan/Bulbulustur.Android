@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -177,7 +177,7 @@ private fun AlarmEmptyState() {
             )
 
             Text(
-                text = "Ürün detay sayfalarından alarm oluşturarak takip etmek istediğiniz ürünleri buradan yönetebilirsiniz.",
+                text = "Ürün detay sayfalarından alarm oluşturarak takip etmek istediĞiniz ürünleri buradan yönetebilirsiniz.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -216,7 +216,7 @@ private fun AlarmIconBox() {
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "⏰",
+            text = "â°",
             style = MaterialTheme.typography.headlineSmall,
             color = BBColors.Yellow.Yellow800
         )
@@ -240,4 +240,5 @@ private data class AccountAlarmUiModel(
     val productName: String,
     val insertedDate: String
 )
+
 

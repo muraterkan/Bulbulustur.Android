@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -64,7 +64,7 @@ fun ChangeEmailScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "E-Posta Değiştir",
+                title = "E-Posta DeĞiştir",
                 onBackClick = onBackClick
             )
         }
@@ -143,7 +143,7 @@ fun ChangeEmailScreen(
                         message.isNotBlank()
                     }?.let { message ->
                         EmailMessageBox(
-                            title = "İşlem Tamamlanamadı",
+                            title = "Ä°şlem Tamamlanamadı",
                             message = message,
                             type = EmailMessageType.Error
                         )
@@ -184,7 +184,7 @@ private fun ChangeEmailIntroCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Hesabınıza bağlı e-posta adresini güncelleyin. Yeni e-posta için doğrulama süreci gerekebilir.",
+            text = "Hesabınıza baĞlı e-posta adresini güncelleyin. Yeni e-posta için doĞrulama süreci gerekebilir.",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -275,13 +275,13 @@ private fun ChangeEmailInfoBox() {
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
         ) {
             Text(
-                text = "Doğrulama Gerekebilir",
+                text = "DoĞrulama Gerekebilir",
                 style = MaterialTheme.typography.labelLarge,
                 color = BBColors.Blue.Blue700
             )
 
             Text(
-                text = "E-posta değişikliğinden sonra hesabınızın güvenliği için yeni adresin doğrulanması istenebilir.",
+                text = "E-posta deĞişikliĞinden sonra hesabınızın güvenliĞi için yeni adresin doĞrulanması istenebilir.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -384,4 +384,5 @@ private data class EmailValidationState(
                     !isSameEmail
         }
 }
+
 

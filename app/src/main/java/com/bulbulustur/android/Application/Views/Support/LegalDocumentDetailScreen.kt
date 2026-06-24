@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Support
+﻿package com.bulbulustur.android.Application.Views.Support
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,7 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material.icons.outlined.CalendarMonth
-import androidx.compose.material.icons.outlined.Description
+import androidx.compose.material.icons.outlined.RequestQuote
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Policy
 import androidx.compose.material.icons.outlined.Security
@@ -79,8 +79,8 @@ fun LegalDocumentDetailScreen(
 
             item {
                 BbSectionHeader(
-                    title = "İçerik",
-                    subtitle = "Bu metin API bağlantısından sonra gerçek içerikle beslenecek"
+                    title = "Ä°çerik",
+                    subtitle = "Bu metin API baĞlantısından sonra gerçek içerikle beslenecek"
                 )
             }
 
@@ -221,7 +221,7 @@ private fun LegalDocumentMetaCard(
             LegalDocumentMetaRow(
                 title = "Metin türü",
                 value = document.categoryName,
-                icon = Icons.Outlined.Description
+                icon = Icons.Outlined.RequestQuote
             )
 
             LegalDocumentMetaRow(
@@ -329,7 +329,7 @@ private fun LegalDocumentInfoCard() {
                 )
 
                 Text(
-                    text = "Bu ekrandaki metinler mobil API bağlantısından sonra web tarafındaki güncel içeriklerle eşleşecek.",
+                    text = "Bu ekrandaki metinler mobil API baĞlantısından sonra web tarafındaki güncel içeriklerle eşleşecek.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -387,7 +387,7 @@ private fun getLegalDocumentDetail(
             categoryName = "Satış",
             updatedDateLabel = "Güncel",
             sectionCount = 4,
-            icon = Icons.Outlined.Description,
+            icon = Icons.Outlined.RequestQuote,
             sections = getLegalDistanceSalesSections()
         )
 
@@ -411,8 +411,8 @@ private fun getLegalPrivacySections(): List<LegalDocumentSection> {
             body = "Bu bölümde Bulbulustur üzerinde kullanılan kişisel veriler, işlem süreçleri ve kullanıcı sorumlulukları hakkında özet bilgi yer alacak."
         ),
         LegalDocumentSection(
-            title = "Topladığımız kişisel veriler",
-            body = "Hesap, iletişim, sipariş, ödeme, teslimat ve platform kullanımına ilişkin veriler gerçek içerik API bağlantısından sonra gösterilecek."
+            title = "TopladıĞımız kişisel veriler",
+            body = "Hesap, iletişim, sipariş, ödeme, teslimat ve platform kullanımına ilişkin veriler gerçek içerik API baĞlantısından sonra gösterilecek."
         ),
         LegalDocumentSection(
             title = "Verilerin kullanım amacı",
@@ -432,11 +432,11 @@ private fun getLegalKvkkSections(): List<LegalDocumentSection> {
             body = "KVKK kapsamında veri sorumlusu bilgileri ve iletişim kanalları gerçek metinle birlikte gösterilecek."
         ),
         LegalDocumentSection(
-            title = "İşlenen veri kategorileri",
-            body = "Kimlik, iletişim, işlem güvenliği, sipariş ve müşteri işlem verileri gibi kategoriler burada listelenecek."
+            title = "Ä°şlenen veri kategorileri",
+            body = "Kimlik, iletişim, işlem güvenliĞi, sipariş ve müşteri işlem verileri gibi kategoriler burada listelenecek."
         ),
         LegalDocumentSection(
-            title = "İşleme amaçları",
+            title = "Ä°şleme amaçları",
             body = "Platform hizmetlerinin sunulması, güvenlik, destek, ticari süreç ve yasal yükümlülükler kapsamında veri işlenebilir."
         ),
         LegalDocumentSection(
@@ -453,7 +453,7 @@ private fun getLegalTermsSections(): List<LegalDocumentSection> {
             body = "Kullanıcıların Bulbulustur uygulamasını kullanırken uyması gereken temel kurallar burada yer alacak."
         ),
         LegalDocumentSection(
-            title = "Üyelik ve hesap güvenliği",
+            title = "Üyelik ve hesap güvenliĞi",
             body = "Hesap bilgilerinin korunması, yetkisiz kullanım ve kullanıcı sorumlulukları bu bölümde açıklanacak."
         ),
         LegalDocumentSection(
@@ -461,7 +461,7 @@ private fun getLegalTermsSections(): List<LegalDocumentSection> {
             body = "Alıcı, satıcı, firma ve platform arasındaki temel işlem prensipleri burada gösterilecek."
         ),
         LegalDocumentSection(
-            title = "Değişiklikler",
+            title = "DeĞişiklikler",
             body = "Kullanım koşullarında yapılabilecek güncellemeler ve kullanıcı bilgilendirme süreçleri açıklanacak."
         )
     )
@@ -495,3 +495,4 @@ private fun LegalDocumentDetailScreenPreview() {
         LegalDocumentDetailScreen()
     }
 }
+

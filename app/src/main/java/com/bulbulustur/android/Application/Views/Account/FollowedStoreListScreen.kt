@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -45,7 +45,7 @@ fun FollowedStoreListScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Takip Edilen Mağazalar",
+                title = "Takip Edilen MaĞazalar",
                 onBackClick = onBackClick
             )
         }
@@ -128,7 +128,7 @@ private fun FollowedStoreCard(
                 Spacer(modifier = Modifier.height(BBSpacing.Space1))
 
                 BbButton(
-                    text = "Mağaza Profilini Görüntüle",
+                    text = "MaĞaza Profilini Görüntüle",
                     onClick = {
                         onStoreClick(store.storeId)
                     },
@@ -138,7 +138,7 @@ private fun FollowedStoreCard(
                 )
 
                 BbButton(
-                    text = "Takipten Çıkar",
+                    text = "Takipten Ã‡ıkar",
                     onClick = {
                         onUnfollowStoreClick(store.followedStoreId)
                     },
@@ -226,7 +226,7 @@ private fun FollowedStoreEmptyState() {
             )
 
             Text(
-                text = "Henüz takip ettiğiniz mağaza bulunmuyor. Mağaza profillerini takip ederek burada hızlı erişim listesi oluşturabilirsiniz.",
+                text = "Henüz takip ettiĞiniz maĞaza bulunmuyor. MaĞaza profillerini takip ederek burada hızlı erişim listesi oluşturabilirsiniz.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -247,7 +247,7 @@ private fun StoreEmptyIconBox() {
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "▣",
+            text = "â–£",
             style = MaterialTheme.typography.headlineSmall,
             color = BBColors.Yellow.Yellow800
         )
@@ -260,7 +260,7 @@ private fun getDemoFollowedStores(): List<FollowedStoreUiModel> {
             followedStoreId = 1,
             storeId = 501,
             storeName = "Base & Quality Store",
-            description = "Takip ettiğiniz mağaza",
+            description = "Takip ettiĞiniz maĞaza",
             logoText = "B&Q",
             logoBackgroundColor = BBColors.Orange.Orange300,
             logoTextColor = BBColors.White
@@ -269,8 +269,8 @@ private fun getDemoFollowedStores(): List<FollowedStoreUiModel> {
             followedStoreId = 2,
             storeId = 502,
             storeName = "Ortobella Comfort",
-            description = "Takip ettiğiniz mağaza",
-            logoText = "CİTRİX",
+            description = "Takip ettiĞiniz maĞaza",
+            logoText = "CÄ°TRÄ°X",
             logoBackgroundColor = BBColors.Green.Green700,
             logoTextColor = BBColors.White
         ),
@@ -278,8 +278,8 @@ private fun getDemoFollowedStores(): List<FollowedStoreUiModel> {
             followedStoreId = 3,
             storeId = 503,
             storeName = "Ortobella Comfort",
-            description = "Takip ettiğiniz mağaza",
-            logoText = "CİTRİX",
+            description = "Takip ettiĞiniz maĞaza",
+            logoText = "CÄ°TRÄ°X",
             logoBackgroundColor = BBColors.Green.Green700,
             logoTextColor = BBColors.White
         )
@@ -295,4 +295,5 @@ private data class FollowedStoreUiModel(
     val logoBackgroundColor: Color,
     val logoTextColor: Color
 )
+
 

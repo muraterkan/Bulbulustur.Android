@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -19,7 +19,7 @@ import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material.icons.outlined.Balance
 import androidx.compose.material.icons.outlined.ChevronRight
 import androidx.compose.material.icons.outlined.Cookie
-import androidx.compose.material.icons.outlined.Description
+import androidx.compose.material.icons.outlined.RequestQuote
 import androidx.compose.material.icons.outlined.Gavel
 import androidx.compose.material.icons.outlined.Policy
 import androidx.compose.material.icons.outlined.PrivacyTip
@@ -155,7 +155,7 @@ private fun LegalNoticeCard() {
                 )
 
                 Text(
-                    text = "Şeffaf platform kuralları, kullanıcı hakları ve yasal süreçler tek merkezde toplanır.",
+                    text = "Åeffaf platform kuralları, kullanıcı hakları ve yasal süreçler tek merkezde toplanır.",
                     style = BbTypography.bodySmall,
                     color = BBColors.TextMuted
                 )
@@ -352,13 +352,13 @@ private fun getLegalPolicyGroups(): List<LegalPolicyGroup> {
                 LegalPolicyItem(
                     key = "privacy-policy",
                     title = "Gizlilik Politikası",
-                    description = "Kişisel verilerin nasıl işlendiğini ve korunduğunu inceleyin.",
+                    description = "Kişisel verilerin nasıl işlendiĞini ve korunduĞunu inceleyin.",
                     icon = Icons.Outlined.PrivacyTip
                 ),
                 LegalPolicyItem(
                     key = "cookie-policy",
-                    title = "Çerez Politikası",
-                    description = "Çerez ve benzeri teknolojilerin kullanım detayları.",
+                    title = "Ã‡erez Politikası",
+                    description = "Ã‡erez ve benzeri teknolojilerin kullanım detayları.",
                     icon = Icons.Outlined.Cookie
                 ),
                 LegalPolicyItem(
@@ -369,13 +369,13 @@ private fun getLegalPolicyGroups(): List<LegalPolicyGroup> {
                 ),
                 LegalPolicyItem(
                     key = "review-policy",
-                    title = "Değerlendirme Politikası",
-                    description = "Ürün yorumları ve değerlendirme süreçleri.",
+                    title = "DeĞerlendirme Politikası",
+                    description = "Ürün yorumları ve deĞerlendirme süreçleri.",
                     icon = Icons.Outlined.VerifiedUser
                 ),
                 LegalPolicyItem(
                     key = "content-policy",
-                    title = "İçerik Yayınlama Politikası",
+                    title = "Ä°çerik Yayınlama Politikası",
                     description = "Platformda yayınlanan içerikler için temel kurallar.",
                     icon = Icons.Outlined.Article
                 )
@@ -390,7 +390,7 @@ private fun getLegalPolicyGroups(): List<LegalPolicyGroup> {
                     key = "terms-of-use",
                     title = "Kullanım Koşulları",
                     description = "Bulbulustur hizmetlerini kullanırken geçerli temel koşullar.",
-                    icon = Icons.Outlined.Description
+                    icon = Icons.Outlined.RequestQuote
                 ),
                 LegalPolicyItem(
                     key = "buyer-rules",
@@ -419,18 +419,19 @@ private fun getLegalPolicyGroups(): List<LegalPolicyGroup> {
                 ),
                 LegalPolicyItem(
                     key = "complaint-dispute",
-                    title = "Şikayet ve Uyuşmazlık Süreci",
+                    title = "Åikayet ve Uyuşmazlık Süreci",
                     description = "Sipariş veya platform işlemlerindeki uyuşmazlık akışı.",
                     icon = Icons.Outlined.ReportProblem
                 ),
                 LegalPolicyItem(
                     key = "secure-payment",
-                    title = "Güvenli Ödeme Süreci",
-                    description = "Ödeme, koruma ve işlem güvenliği hakkında bilgiler.",
+                    title = "Güvenli Ã–deme Süreci",
+                    description = "Ã–deme, koruma ve işlem güvenliĞi hakkında bilgiler.",
                     icon = Icons.Outlined.Security
                 )
             )
         )
     )
 }
+
 

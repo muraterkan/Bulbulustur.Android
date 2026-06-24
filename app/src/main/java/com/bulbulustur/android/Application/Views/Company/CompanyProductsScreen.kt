@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Company
+﻿package com.bulbulustur.android.Application.Views.Company
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -274,7 +274,7 @@ private fun CompanyProductsHero(
                         if (company.IsVerified) {
                             Icon(
                                 imageVector = Icons.Outlined.Verified,
-                                contentDescription = "Doğrulanmış firma",
+                                contentDescription = "DoĞrulanmış firma",
                                 tint = BBColors.Primary,
                                 modifier = Modifier.size(
                                     BBIcon.SizeSm
@@ -333,7 +333,7 @@ private fun CompanyProductsHero(
                 )
 
                 BbButton(
-                    text = "İletişim",
+                    text = "Ä°letişim",
                     onClick = onCompanyContactClick,
                     modifier = Modifier.weight(1f),
                     variant = BbButtonVariant.Secondary,
@@ -483,12 +483,12 @@ private fun getCompanyProducts(
         CompanyId = companyId,
         Name = "Ortobella Comfort",
         LogoText = "OC",
-        Description = "Firmanın toptan satışa sunduğu ürünleri kategori bazında inceleyin, fiyat aralıklarını karşılaştırın ve ürün detaylarından tedarik sürecine geçin.",
+        Description = "Firmanın toptan satışa sunduĞu ürünleri kategori bazında inceleyin, fiyat aralıklarını karşılaştırın ve ürün detaylarından tedarik sürecine geçin.",
         IsVerified = true,
         Chips = listOf(
             "Türkiye",
             "Samsun",
-            "Doğrulanmış",
+            "DoĞrulanmış",
             "120+ ürün",
             "Hızlı teklif"
         ),
@@ -504,7 +504,7 @@ private fun getCompanyProducts(
                 Id = 1,
                 Title = "Endüstriyel karton koli seti",
                 Category = "Ambalaj ve paketleme",
-                PriceText = "₺12,40 / adet",
+                PriceText = "â‚º12,40 / adet",
                 MoqText = "MOQ 1.000",
                 SupplierText = "Ortobella",
                 BadgeText = "Toptan",
@@ -530,7 +530,7 @@ private fun getCompanyProducts(
                 Id = 3,
                 Title = "Elektronik güç modülü",
                 Category = "Elektronik bileşen",
-                PriceText = "₺420,00 / adet",
+                PriceText = "â‚º420,00 / adet",
                 MoqText = "MOQ 200",
                 SupplierText = "Ortobella",
                 BadgeText = "Yeni",
@@ -543,7 +543,7 @@ private fun getCompanyProducts(
                 Id = 4,
                 Title = "Toptan pamuklu kumaş rulosu",
                 Category = "Tekstil ve giyim",
-                PriceText = "₺78,50 / metre",
+                PriceText = "â‚º78,50 / metre",
                 MoqText = "MOQ 500",
                 SupplierText = "Ortobella",
                 BadgeText = "Popüler",
@@ -554,7 +554,7 @@ private fun getCompanyProducts(
             ),
             CompanyWholesaleProduct(
                 Id = 5,
-                Title = "Özel baskılı promosyon çanta",
+                Title = "Ã–zel baskılı promosyon çanta",
                 Category = "Promosyon ürünleri",
                 PriceText = "Teklif iste",
                 MoqText = "MOQ 300",

@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2c.Views.Store
+﻿package com.bulbulustur.android.Application.Areas.b2c.Views.Store
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -151,7 +151,7 @@ fun SearchScreen(
                     item {
                         SearchSectionTitle(
                             title = "Kategori sonuçları",
-                            description = "İlgili kategori ve alt kategori önerileri."
+                            description = "Ä°lgili kategori ve alt kategori önerileri."
                         )
                     }
 
@@ -186,8 +186,8 @@ fun SearchScreen(
                 RetailSearchType.Store -> {
                     item {
                         SearchSectionTitle(
-                            title = "Mağaza sonuçları",
-                            description = "Ürün satan mağaza ve Vitrinler."
+                            title = "MaĞaza sonuçları",
+                            description = "Ürün satan maĞaza ve Vitrinler."
                         )
                     }
 
@@ -222,7 +222,7 @@ private fun SearchTopBar(
             contentColor = MaterialTheme.colorScheme.onSurfaceVariant
         ) {
             Text(
-                text = "‹",
+                text = "â€¹",
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -241,7 +241,7 @@ private fun SearchTopBar(
             )
 
             Text(
-                text = "Ürün, kategori, marka veya mağaza bul.",
+                text = "Ürün, kategori, marka veya maĞaza bul.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -358,7 +358,7 @@ private fun PopularSearchSection(
     ) {
         SearchSectionTitle(
             title = "Popüler Aramalar",
-            description = "Şu an en çok bakılan Aramalar."
+            description = "Åu an en çok bakılan Aramalar."
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -480,7 +480,7 @@ private fun SearchCategoryCard(
     SearchSimpleCard(
         iconText = category.iconText,
         title = category.name,
-        description = "${category.productCount} ürün · ${category.subCategoryCount} alt kategori",
+        description = "${category.productCount} ürün Â· ${category.subCategoryCount} alt kategori",
         onClick = onClick
     )
 }
@@ -493,7 +493,7 @@ private fun SearchBrandCard(
     SearchSimpleCard(
         iconText = brand.logoText,
         title = brand.name,
-        description = "${brand.productCount} ürün · ${brand.storeCount} mağaza",
+        description = "${brand.productCount} ürün Â· ${brand.storeCount} maĞaza",
         onClick = onClick
     )
 }
@@ -506,7 +506,7 @@ private fun SearchStoreCard(
     SearchSimpleCard(
         iconText = store.logoText,
         title = store.name,
-        description = "${store.productCount} ürün · ${store.ratingText} puan",
+        description = "${store.productCount} ürün Â· ${store.ratingText} puan",
         onClick = onClick
     )
 }
@@ -600,7 +600,7 @@ private fun SearchImagePlaceholder(
 @Composable
 private fun SearchArrow() {
     Text(
-        text = "›",
+        text = "â€º",
         style = MaterialTheme.typography.headlineSmall,
         color = MaterialTheme.colorScheme.onSurfaceVariant
     )
@@ -612,7 +612,7 @@ enum class RetailSearchType(
     Product("Ürün"),
     Category("Kategori"),
     Brand("Marka"),
-    Store("Mağaza")
+    Store("MaĞaza")
 }
 
 data class RetailSearchScreenData(
@@ -675,21 +675,21 @@ private fun getRetailSearchScreenData(): RetailSearchScreenData {
                 id = 1,
                 name = "Kadın klasik sneaker ayakkabı",
                 storeName = "Ortobella",
-                priceText = "₺899,90",
+                priceText = "â‚º899,90",
                 imageText = "P1"
             ),
             RetailSearchProductItem(
                 id = 2,
                 name = "Kablosuz bluetooth kulaklık",
                 storeName = "Tekno Sepet",
-                priceText = "₺649,90",
+                priceText = "â‚º649,90",
                 imageText = "P2"
             ),
             RetailSearchProductItem(
                 id = 3,
                 name = "Pamuklu oversize basic tişört",
                 storeName = "Moda Nova",
-                priceText = "₺349,90",
+                priceText = "â‚º349,90",
                 imageText = "P3"
             )
         ),
@@ -772,4 +772,5 @@ private fun SearchScreenPreview() {
         SearchScreen()
     }
 }
+
 

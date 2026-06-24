@@ -155,3 +155,4 @@ private fun getBbPageBottomPadding(
     BbPageSpacing.Loose -> BBSpacing.PageBottomLoose
     BbPageSpacing.Flush -> BBSpacing.None
 }
+

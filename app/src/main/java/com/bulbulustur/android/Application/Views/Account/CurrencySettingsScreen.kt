@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -66,7 +66,7 @@ fun CurrencySettingsScreen(
             ),
             CurrencyOption(
                 code = "GBP",
-                name = "İngiliz Sterlini",
+                name = "Ä°ngiliz Sterlini",
                 flagFileName = "United Kingdom.svg"
             ),
             CurrencyOption(
@@ -81,7 +81,7 @@ fun CurrencySettingsScreen(
             ),
             CurrencyOption(
                 code = "CNY",
-                name = "Çin Yuanı",
+                name = "Ã‡in Yuanı",
                 flagFileName = "china.svg"
             )
         )
@@ -181,7 +181,7 @@ private fun CurrencyRow(
         ) {
             CurrencyFlag(
                 flagFileName = item.flagFileName,
-                contentDescription = "${item.name} bayrağı"
+                contentDescription = "${item.name} bayraĞı"
             )
 
             Column(

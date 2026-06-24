@@ -31,6 +31,7 @@ object StoreRoutes {
     const val StoreList = "store/list"
     const val StoreDetail = "store/detail"
     const val StoreProductList = "store/product-list"
+    const val StoreOnboardingInfo = "b2c/store/onboarding-info"
     const val StoreLanding = "store/landing"
 }
 
@@ -244,3 +245,4 @@ object MessageRoutes {
         return "message/detail/$messageId"
     }
 }
+

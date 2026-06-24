@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Question
+﻿package com.bulbulustur.android.Application.Views.Question
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -332,3 +332,4 @@ private data class QuestionAnswerItem(
     val statusText: String,
     val statusIcon: ImageVector
 )
+

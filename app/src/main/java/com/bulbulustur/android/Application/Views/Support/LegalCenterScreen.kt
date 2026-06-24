@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Support
+﻿package com.bulbulustur.android.Application.Views.Support
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,7 +13,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material.icons.outlined.ChevronRight
-import androidx.compose.material.icons.outlined.Description
+import androidx.compose.material.icons.outlined.RequestQuote
 import androidx.compose.material.icons.outlined.Gavel
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Policy
@@ -311,7 +311,7 @@ private fun LegalCenterInfoCard() {
                 )
 
                 Text(
-                    text = "Bu ekran şimdilik yasal metin listesi skeleton’ıdır. Detay ekranında gerçek içerikler servis üzerinden gösterilecek.",
+                    text = "Bu ekran şimdilik yasal metin listesi skeletonâ€™ıdır. Detay ekranında gerçek içerikler servis üzerinden gösterilecek.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -361,7 +361,7 @@ private fun legalDocumentItems(): List<LegalDocumentItem> {
             description = "Perakende Alışveriş süreçlerinde geçerli satış ve teslimat hükümleri.",
             categoryName = "Satış",
             updatedDateLabel = "Güncel",
-            icon = Icons.Outlined.Description
+            icon = Icons.Outlined.RequestQuote
         )
     )
 }
@@ -370,7 +370,7 @@ private fun platformRuleItems(): List<LegalDocumentItem> {
     return listOf(
         LegalDocumentItem(
             legalDocumentId = 5,
-            title = "Çerez Politikası",
+            title = "Ã‡erez Politikası",
             description = "Uygulama ve web deneyiminde kullanılan çerez ve benzeri teknolojilere ilişkin bilgiler.",
             categoryName = "Politikalar",
             updatedDateLabel = "Güncel",
@@ -378,7 +378,7 @@ private fun platformRuleItems(): List<LegalDocumentItem> {
         ),
         LegalDocumentItem(
             legalDocumentId = 6,
-            title = "İçerik Yayınlama Politikası",
+            title = "Ä°çerik Yayınlama Politikası",
             description = "Platformda yayınlanan ürün, firma ve içeriklere ilişkin temel kurallar.",
             categoryName = "Platform",
             updatedDateLabel = "Güncel",
@@ -394,7 +394,7 @@ private fun platformRuleItems(): List<LegalDocumentItem> {
         ),
         LegalDocumentItem(
             legalDocumentId = 8,
-            title = "İptal ve İade Şartları",
+            title = "Ä°ptal ve Ä°ade Åartları",
             description = "Sipariş iptali, iade süreci ve kullanıcı haklarına ilişkin bilgiler.",
             categoryName = "Satış",
             updatedDateLabel = "Güncel",
@@ -410,3 +410,4 @@ private fun LegalCenterScreenPreview() {
         LegalCenterScreen()
     }
 }
+

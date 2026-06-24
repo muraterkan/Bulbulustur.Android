@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2c.Views.Category
+﻿package com.bulbulustur.android.Application.Areas.b2c.Views.Category
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -223,7 +223,7 @@ private fun CategoryDetailHero(
                 horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
             ) {
                 CategoryStatPill("${category.productCount}", "ürün")
-                CategoryStatPill("${category.storeCount}", "mağaza")
+                CategoryStatPill("${category.storeCount}", "maĞaza")
                 CategoryStatPill("${category.campaignCount}", "kampanya")
             }
         }
@@ -271,7 +271,7 @@ private fun CategorySubCategorySection(
     ) {
         RetailSectionTitle(
             title = "Alt Kategoriler",
-            description = "Doğrudan ürün akışına inmek için hızlı seçim."
+            description = "DoĞrudan ürün akışına inmek için hızlı seçim."
         )
 
         Spacer(modifier = Modifier.height(BBSpacing.Space3))
@@ -347,7 +347,7 @@ private fun CategoryCampaignSection(
     ) {
         RetailSectionTitle(
             title = "Kategori Vitrinleri",
-            description = "Ürün, mağaza ve kampanya akışlarına hızlı geç."
+            description = "Ürün, maĞaza ve kampanya akışlarına hızlı geç."
         )
 
         Spacer(modifier = Modifier.height(BBSpacing.Space3))
@@ -462,7 +462,7 @@ private fun CategoryQuickFilterSection(
 @Composable
 private fun CategoryProductSectionHeader() {
     RetailSectionTitle(
-        title = "Öne Çıkan Ürünler",
+        title = "Ã–ne Ã‡ıkan Ürünler",
         description = "Bu kategoride dikkat çeken ürünlerden kısa bir seçki."
     )
 }
@@ -530,7 +530,7 @@ private fun CategoryProductRow(
             }
 
             Text(
-                text = "›",
+                text = "â€º",
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -606,7 +606,7 @@ private fun getRetailCategoryDetail(categoryId: Int): RetailCategoryDetail {
     return RetailCategoryDetail(
         id = categoryId,
         name = "Moda",
-        description = "Giyim, ayakkabı, çanta ve aksesuar ürünlerinde seçili mağazaları ve fırsatları Keşfedin.",
+        description = "Giyim, ayakkabı, çanta ve aksesuar ürünlerinde seçili maĞazaları ve fırsatları Keşfedin.",
         iconText = "MO",
         productCount = 18420,
         storeCount = 624,
@@ -615,7 +615,7 @@ private fun getRetailCategoryDetail(categoryId: Int): RetailCategoryDetail {
             RetailSubCategoryItem(1, "Kadın Giyim", "KG", 5320),
             RetailSubCategoryItem(2, "Erkek Giyim", "EG", 4210),
             RetailSubCategoryItem(3, "Ayakkabı", "AY", 3170),
-            RetailSubCategoryItem(4, "Çanta", "ÇA", 1460)
+            RetailSubCategoryItem(4, "Ã‡anta", "Ã‡A", 1460)
         ),
         campaigns = listOf(
             RetailCategoryCampaignItem(
@@ -630,7 +630,7 @@ private fun getRetailCategoryDetail(categoryId: Int): RetailCategoryDetail {
             RetailCategoryCampaignItem(
                 id = 2,
                 title = "Haftanın Vitrinleri",
-                description = "Popüler mağazalardan hızlı keşif.",
+                description = "Popüler maĞazalardan hızlı keşif.",
                 badge = "Vitrin",
                 icon = Icons.Outlined.Storefront,
                 backgroundColor = BBColors.Green.Green50,
@@ -649,8 +649,8 @@ private fun getRetailCategoryDetail(categoryId: Int): RetailCategoryDetail {
         quickFilters = listOf(
             "Popüler",
             "Yeni Gelenler",
-            "Çok satanlar",
-            "İndirimli",
+            "Ã‡ok satanlar",
+            "Ä°ndirimli",
             "Ücretsiz kargo",
             "Yüksek puanlı"
         ),
@@ -659,21 +659,21 @@ private fun getRetailCategoryDetail(categoryId: Int): RetailCategoryDetail {
                 id = 1,
                 name = "Kadın klasik sneaker ayakkabı",
                 storeName = "Ortobella",
-                priceText = "₺899,90",
+                priceText = "â‚º899,90",
                 imageText = "P1"
             ),
             RetailCategoryProductItem(
                 id = 2,
                 name = "Oversize pamuklu basic tişört",
                 storeName = "Moda Nova",
-                priceText = "₺349,90",
+                priceText = "â‚º349,90",
                 imageText = "P2"
             ),
             RetailCategoryProductItem(
                 id = 3,
                 name = "Günlük kullanım omuz çantası",
                 storeName = "Urban Touch",
-                priceText = "₺649,90",
+                priceText = "â‚º649,90",
                 imageText = "P3"
             )
         )

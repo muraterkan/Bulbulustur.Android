@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
@@ -112,7 +112,7 @@ fun AccountScreen(
             profileSubtitle = "Profili Görüntüle veya Düzenle",
             initials = "ME",
             profileId = "ID: 54108878",
-            city = "İstanbul",
+            city = "Ä°stanbul",
             orderCount = "0",
             favoriteCount = "0",
             quotationCount = "2"
@@ -188,7 +188,7 @@ fun AccountScreen(
 
             item {
                 AccountMenuSection(
-                    title = "Hesap İşlemleri"
+                    title = "Hesap Ä°şlemleri"
                 ) {
                     AccountMenuRow(
                         title = "Siparişlerim",
@@ -209,7 +209,7 @@ fun AccountScreen(
                     AccountDashedDivider()
 
                     AccountMenuRow(
-                        title = "Fiyat Teklifi İstekleri",
+                        title = "Fiyat Teklifi Ä°stekleri",
                         description = "Toptan teklif ve RFQ süreçlerini takip et.",
                         icon = Icons.Outlined.RequestQuote,
                         onClick = onQuotationRequestsClick
@@ -240,7 +240,7 @@ fun AccountScreen(
                     title = "Ticari Profil"
                 ) {
                     AccountMenuRow(
-                        title = "Şirket Bilgileri",
+                        title = "Åirket Bilgileri",
                         description = "Firma ve ticari hesap bilgilerini yönet.",
                         icon = Icons.Outlined.Business,
                         onClick = onCompanyInfoClick
@@ -249,8 +249,8 @@ fun AccountScreen(
                     AccountDashedDivider()
 
                     AccountMenuRow(
-                        title = "Takip Ettiğim Mağazalar",
-                        description = "Takip ettiğin mağaza ve firmaları görüntüle.",
+                        title = "Takip EttiĞim MaĞazalar",
+                        description = "Takip ettiĞin maĞaza ve firmaları görüntüle.",
                         icon = Icons.Outlined.Storefront,
                         onClick = onFollowedStoresClick
                     )
@@ -280,8 +280,8 @@ fun AccountScreen(
                     AccountDashedDivider()
 
                     AccountMenuRow(
-                        title = "Değerlendirmelerim",
-                        description = "Yorum ve ürün değerlendirmelerini görüntüle.",
+                        title = "DeĞerlendirmelerim",
+                        description = "Yorum ve ürün deĞerlendirmelerini görüntüle.",
                         icon = Icons.Outlined.Reviews,
                         onClick = onReviewsClick
                     )
@@ -299,7 +299,7 @@ fun AccountScreen(
 
                     AccountMenuRow(
                         title = "Taleplerim",
-                        description = "İade, destek ve işlem taleplerini takip et.",
+                        description = "Ä°ade, destek ve işlem taleplerini takip et.",
                         icon = Icons.Outlined.HelpOutline,
                         onClick = onRequestsClick
                     )
@@ -469,7 +469,7 @@ private fun AccountAvatar(
         if (useProfilePhoto) {
             Image(
                 painter = painterResource(id = R.drawable.murat_erkan),
-                contentDescription = "Profil fotoğrafı",
+                contentDescription = "Profil fotoĞrafı",
                 modifier = Modifier
                     .fillMaxSize()
                     .clip(BBRadius.IconBoxSoft),
@@ -656,7 +656,7 @@ private fun AccountPrimaryActions(
         AccountPrimaryActionCard(
             modifier = Modifier.weight(1f),
             title = "Toptan Teklif Al",
-            description = "Özel fiyat iste.",
+            description = "Ã–zel fiyat iste.",
             icon = Icons.Outlined.RequestQuote,
             accent = AccountActionAccent.Red,
             onClick = onQuotationRequestsClick
@@ -664,7 +664,7 @@ private fun AccountPrimaryActions(
 
         AccountPrimaryActionCard(
             modifier = Modifier.weight(1f),
-            title = "Şirketini Kaydet",
+            title = "Åirketini Kaydet",
             description = "Ticari profilini güçlendir.",
             icon = Icons.Outlined.Business,
             accent = AccountActionAccent.Green,
@@ -821,7 +821,7 @@ private fun AccountUsagePurposeDarkCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Bulbulustur’u Hangi Amaçla Kullanıyorsun?",
+                    text = "Bulbulusturâ€™u Hangi Amaçla Kullanıyorsun?",
                     style = BbTypography.titleMedium,
                     color = BBColors.Surface,
                     fontWeight = FontWeight.Bold
@@ -956,7 +956,7 @@ private fun AccountSupportAndSettingsGroup(
         title = "Destek ve Ayarlar"
     ) {
         AccountMenuRow(
-            title = "Yardıma mı İhtiyacın Var?",
+            title = "Yardıma mı Ä°htiyacın Var?",
             description = "Destek merkezi, sipariş, iade ve hesap yardımına ulaş.",
             icon = Icons.Outlined.SupportAgent,
             onClick = onSupportClick
@@ -1033,4 +1033,5 @@ private enum class AccountActionAccent {
     Red,
     Green
 }
+
 

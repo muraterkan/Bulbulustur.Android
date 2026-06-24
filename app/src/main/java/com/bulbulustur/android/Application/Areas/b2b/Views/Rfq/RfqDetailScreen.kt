@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2b.Views.Rfq
+﻿package com.bulbulustur.android.Application.Areas.b2b.Views.Rfq
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -169,7 +169,7 @@ private fun RfqDetailSummaryCard(
                     )
 
                     Text(
-                        text = "Fiyat teklifi isteğinizin ürün, miktar, ödeme, teslimat ve teklif detaylarını inceleyin.",
+                        text = "Fiyat teklifi isteĞinizin ürün, miktar, ödeme, teslimat ve teklif detaylarını inceleyin.",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -182,7 +182,7 @@ private fun RfqDetailSummaryCard(
             }
 
             BbButton(
-                text = "Yeni Teklif İste",
+                text = "Yeni Teklif Ä°ste",
                 onClick = onCreateRfqClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Light,
@@ -309,14 +309,14 @@ private fun RfqDetailTradeCard(
             )
 
             RfqInfoRow(
-                title = "Ticaret Şartı",
+                title = "Ticaret Åartı",
                 value = rfq.tradeTermName
             )
 
             HorizontalDivider(color = BBColors.Border)
 
             RfqInfoRow(
-                title = "Ödeme Şartı",
+                title = "Ã–deme Åartı",
                 value = rfq.paymentTermName
             )
 
@@ -542,7 +542,7 @@ private fun RfqOffersEmptyCard() {
             )
 
             Text(
-                text = "Bu fiyat teklifi isteği için henüz gönderilmiş teklif bulunmuyor.",
+                text = "Bu fiyat teklifi isteĞi için henüz gönderilmiş teklif bulunmuyor.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -712,7 +712,7 @@ private fun getDemoRfqDetail(
         tradeTermName = "FOB",
         paymentTermName = "Vadeli / Görüşülebilir",
         materialTypeName = "Karton / Kraft",
-        shippingTarget = "Türkiye / İstanbul / Ambarlı Port",
+        shippingTarget = "Türkiye / Ä°stanbul / Ambarlı Port",
         offers = listOf(
             RfqOfferUiModel(
                 sendedOfferId = 501,
@@ -753,3 +753,4 @@ private data class RfqOfferUiModel(
     val offerDetail: String,
     val insertedDate: String
 )
+

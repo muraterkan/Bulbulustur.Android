@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -69,11 +69,11 @@ fun AddressFormScreen(
     }
 
     val cityState = remember {
-        mutableStateOf(if (isEditMode) "İstanbul" else "")
+        mutableStateOf(if (isEditMode) "Ä°stanbul" else "")
     }
 
     val districtState = remember {
-        mutableStateOf(if (isEditMode) "Şişli" else "")
+        mutableStateOf(if (isEditMode) "Åişli" else "")
     }
 
     val addressTextState = remember {
@@ -206,8 +206,8 @@ fun AddressFormScreen(
                     onValueChange = { value ->
                         cityState.value = value
                     },
-                    label = "Şehir",
-                    placeholder = "Şehir seçiniz"
+                    label = "Åehir",
+                    placeholder = "Åehir seçiniz"
                 )
 
                 BbAddressTextField(
@@ -215,14 +215,14 @@ fun AddressFormScreen(
                     onValueChange = { value ->
                         districtState.value = value
                     },
-                    label = "İlçe",
-                    placeholder = "İlçe seçiniz"
+                    label = "Ä°lçe",
+                    placeholder = "Ä°lçe seçiniz"
                 )
             }
 
             AddressFormSectionCard(
                 title = "Adres Detayı",
-                description = "Açık adresinizi ve bu adres için kullanacağınız başlığı yazın."
+                description = "Açık adresinizi ve bu adres için kullanacaĞınız başlıĞı yazın."
             ) {
                 BbAddressTextArea(
                     value = addressTextState.value,
@@ -291,7 +291,7 @@ private fun AddressFormIntroCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Siparişlerinizde kullanmak üzere teslimat adresi oluşturun. Teslimatın doğru ilerlemesi için adres bilgilerini eksiksiz girin.",
+            text = "Siparişlerinizde kullanmak üzere teslimat adresi oluşturun. Teslimatın doĞru ilerlemesi için adres bilgilerini eksiksiz girin.",
             style = BbTypography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -615,4 +615,5 @@ private data class AddressFormValidationState(
                     hasAddressTitle
         }
 }
+
 

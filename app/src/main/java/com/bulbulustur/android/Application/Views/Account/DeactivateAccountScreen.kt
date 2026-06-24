@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -108,7 +108,7 @@ fun DeactivateAccountScreen(
                 ) {
                     DeactivateSectionHeader(
                         title = "Devre Dışı Bırakma Nedeni",
-                        description = "Hesabınızı neden devre dışı bırakmak istediğinizi kısaca yazın."
+                        description = "Hesabınızı neden devre dışı bırakmak istediĞinizi kısaca yazın."
                     )
 
                     OutlinedTextField(
@@ -158,7 +158,7 @@ fun DeactivateAccountScreen(
                         message.isNotBlank()
                     }?.let { message ->
                         DeactivateMessageBox(
-                            title = "İşlem Tamamlanamadı",
+                            title = "Ä°şlem Tamamlanamadı",
                             message = message,
                             type = DeactivateMessageType.Error
                         )
@@ -168,7 +168,7 @@ fun DeactivateAccountScreen(
                         message.isNotBlank()
                     }?.let { message ->
                         DeactivateMessageBox(
-                            title = "İşlem Alındı",
+                            title = "Ä°şlem Alındı",
                             message = message,
                             type = DeactivateMessageType.Success
                         )
@@ -206,7 +206,7 @@ private fun DeactivateWarningCard() {
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             Text(
-                text = "Bu İşlem Dikkat Gerektirir",
+                text = "Bu Ä°şlem Dikkat Gerektirir",
                 style = MaterialTheme.typography.titleSmall,
                 color = BBColors.Red.Red700
             )
@@ -418,4 +418,5 @@ private data class DeactivateAccountValidationState(
             return hasReason && accepted
         }
 }
+
 

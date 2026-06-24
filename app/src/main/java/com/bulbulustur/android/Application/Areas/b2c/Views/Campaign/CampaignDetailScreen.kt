@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2c.Views.Campaign
+﻿package com.bulbulustur.android.Application.Areas.b2c.Views.Campaign
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -411,7 +411,7 @@ private fun CampaignSummaryCards(
         CampaignSummaryCard(
             modifier = Modifier.weight(1f),
             title = campaign.storeCount.toString(),
-            subtitle = "mağaza"
+            subtitle = "maĞaza"
         )
 
         CampaignSummaryCard(
@@ -475,7 +475,7 @@ private fun CampaignCategorySection(
     ) {
         BbSectionHeader(
             title = "Kapsamdaki Kategoriler",
-            subtitle = "Kampanyanın geçerli olduğu alışveriş alanları."
+            subtitle = "Kampanyanın geçerli olduĞu alışveriş alanları."
         )
 
         LazyRow(
@@ -559,8 +559,8 @@ private fun CampaignStoreSection(
         )
     ) {
         BbSectionHeader(
-            title = "Katılan Mağazalar",
-            subtitle = "Bu kampanyada öne çıkan Mağazalar."
+            title = "Katılan MaĞazalar",
+            subtitle = "Bu kampanyada öne çıkan MaĞazalar."
         )
 
         LazyRow(
@@ -671,7 +671,7 @@ private fun CampaignConditionSection(
                     )
                 ) {
                     Text(
-                        text = "•",
+                        text = "â€¢",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.primary
                     )
@@ -866,7 +866,7 @@ private fun getRetailCampaignDetail(
     return RetailCampaignDetail(
         id = campaignId,
         title = "Sezonun öne çıkanları",
-        description = "Moda kategorisinde yeni sezon ürünleri, seçili mağaza vitrinleri ve avantajlı fiyatlarla hazırlanmış perakende kampanyası.",
+        description = "Moda kategorisinde yeni sezon ürünleri, seçili maĞaza vitrinleri ve avantajlı fiyatlarla hazırlanmış perakende kampanyası.",
         badgeText = "Yeni sezon kampanyası",
         iconText = "MO",
         discountText = "%35'e varan",
@@ -890,8 +890,8 @@ private fun getRetailCampaignDetail(
             ),
             RetailCampaignCategoryItem(
                 id = 3,
-                name = "Çanta",
-                iconText = "ÇA",
+                name = "Ã‡anta",
+                iconText = "Ã‡A",
                 productCount = 180
             )
         ),
@@ -916,65 +916,65 @@ private fun getRetailCampaignDetail(
             )
         ),
         conditions = listOf(
-            "Kampanya seçili ürünlerde ve kampanyaya katılan Mağazalarda geçerlidir.",
-            "Stok durumuna göre ürün görünürlüğü ve fiyatlar değişebilir.",
-            "Kargo avantajı mağaza ve ürün koşullarına göre farklılık gösterebilir.",
+            "Kampanya seçili ürünlerde ve kampanyaya katılan MaĞazalarda geçerlidir.",
+            "Stok durumuna göre ürün görünürlüĞü ve fiyatlar deĞişebilir.",
+            "Kargo avantajı maĞaza ve ürün koşullarına göre farklılık gösterebilir.",
             "Sepet ve ödeme adımlarında nihai fiyat tekrar gösterilir."
         ),
         productFilters = listOf(
             "Tümü",
             "Yeni sezon",
-            "İndirimli",
+            "Ä°ndirimli",
             "Ücretsiz kargo",
-            "Çok satan"
+            "Ã‡ok satan"
         ),
         products = listOf(
             RetailCampaignProductItem(
                 id = 1,
                 name = "Kadın klasik sneaker ayakkabı",
                 storeName = "Ortobella",
-                discountedPriceText = "₺899,90",
+                discountedPriceText = "â‚º899,90",
                 discountText = "%20",
                 imageText = "P1",
                 filterTags = listOf(
                     "Yeni sezon",
-                    "İndirimli",
-                    "Çok satan"
+                    "Ä°ndirimli",
+                    "Ã‡ok satan"
                 )
             ),
             RetailCampaignProductItem(
                 id = 2,
                 name = "Oversize pamuklu basic tişört",
                 storeName = "Moda Nova",
-                discountedPriceText = "₺349,90",
+                discountedPriceText = "â‚º349,90",
                 discountText = "%15",
                 imageText = "P2",
                 filterTags = listOf(
                     "Yeni sezon",
-                    "İndirimli"
+                    "Ä°ndirimli"
                 )
             ),
             RetailCampaignProductItem(
                 id = 3,
                 name = "Günlük kullanım omuz çantası",
                 storeName = "Urban Touch",
-                discountedPriceText = "₺649,90",
+                discountedPriceText = "â‚º649,90",
                 discountText = "%25",
                 imageText = "P3",
                 filterTags = listOf(
                     "Ücretsiz kargo",
-                    "İndirimli"
+                    "Ä°ndirimli"
                 )
             ),
             RetailCampaignProductItem(
                 id = 4,
                 name = "Rahat taban günlük ayakkabı",
                 storeName = "Ortobella",
-                discountedPriceText = "₺749,90",
+                discountedPriceText = "â‚º749,90",
                 discountText = "%18",
                 imageText = "P4",
                 filterTags = listOf(
-                    "Çok satan",
+                    "Ã‡ok satan",
                     "Ücretsiz kargo"
                 )
             )

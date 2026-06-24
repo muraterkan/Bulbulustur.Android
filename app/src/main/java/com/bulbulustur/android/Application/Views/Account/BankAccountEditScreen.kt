@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -42,7 +42,7 @@ fun BankAccountEditScreen(
     val isEditMode = bankAccountId != null
 
     val title = if (isEditMode) {
-        "IBAN Numarasını Değiştir"
+        "IBAN Numarasını DeĞiştir"
     } else {
         "IBAN Numarası Ekle"
     }
@@ -138,9 +138,9 @@ private fun BankAccountEditIntroCard(
     isEditMode: Boolean
 ) {
     val description = if (isEditMode) {
-        "Kayıtlı banka hesabınıza ait IBAN bilgisini düzenleyebilirsiniz. Girdiğiniz IBAN vadeli hesaba ait olmamalıdır."
+        "Kayıtlı banka hesabınıza ait IBAN bilgisini düzenleyebilirsiniz. GirdiĞiniz IBAN vadeli hesaba ait olmamalıdır."
     } else {
-        "Para aktarımı ve ödeme sürecinde kullanılacak banka hesabını güvenli şekilde kaydedebilirsiniz. Girdiğiniz IBAN vadeli hesaba ait olmamalıdır."
+        "Para aktarımı ve ödeme sürecinde kullanılacak banka hesabını güvenli şekilde kaydedebilirsiniz. GirdiĞiniz IBAN vadeli hesaba ait olmamalıdır."
     }
 
     BbCard(
@@ -175,10 +175,11 @@ private fun BankAccountWarningBox() {
         )
 
         Text(
-            text = "Güncellediğiniz banka hesabı bilgileri ödeme ve aktarım süreçlerinde kullanılacağı için doğru girilmelidir.",
+            text = "GüncellediĞiniz banka hesabı bilgileri ödeme ve aktarım süreçlerinde kullanılacaĞı için doĞru girilmelidir.",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
+
 

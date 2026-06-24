@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -17,7 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ChevronRight
-import androidx.compose.material.icons.outlined.Description
+import androidx.compose.material.icons.outlined.RequestQuote
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Lock
@@ -145,7 +145,7 @@ fun AccountSettingsScreen(
                     SettingsDashedDivider()
 
                     SettingsMenuRow(
-                        title = "Bildirim ve İzinler",
+                        title = "Bildirim ve Ä°zinler",
                         value = null,
                         icon = Icons.Outlined.Notifications,
                         onClick = onCommunicationPreferenceClick
@@ -174,7 +174,7 @@ fun AccountSettingsScreen(
                     SettingsMenuRow(
                         title = "Yasal Metinler ve Politikalar",
                         value = null,
-                        icon = Icons.Outlined.Description,
+                        icon = Icons.Outlined.RequestQuote,
                         onClick = onLegalPoliciesClick
                     )
                 }
@@ -190,7 +190,7 @@ fun AccountSettingsScreen(
             item {
                 SettingsMenuGroup {
                     SettingsMenuRow(
-                        title = "Çıkış Yap",
+                        title = "Ã‡ıkış Yap",
                         value = null,
                         icon = Icons.Outlined.Logout,
                         danger = true,
@@ -238,7 +238,7 @@ private fun SettingsProtectionBlock(
             ) {
                 SettingsQuickCard(
                     modifier = Modifier.weight(1f),
-                    title = "Hesap Güvenliği",
+                    title = "Hesap GüvenliĞi",
                     icon = Icons.Outlined.Security,
                     onClick = onAccountSecurityClick
                 )
@@ -257,7 +257,7 @@ private fun SettingsProtectionBlock(
             ) {
                 SettingsQuickCard(
                     modifier = Modifier.weight(1f),
-                    title = "İzinler",
+                    title = "Ä°zinler",
                     icon = Icons.Outlined.Lock,
                     onClick = onPermissionsClick
                 )

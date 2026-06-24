@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -45,7 +45,7 @@ fun PhoneVerifyScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Telefon Doğrulama",
+                title = "Telefon DoĞrulama",
                 onBackClick = onBackClick
             )
         }
@@ -83,7 +83,7 @@ fun PhoneVerifyScreen(
                         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                     ) {
                         Text(
-                            text = "Doğrulama Kodu",
+                            text = "DoĞrulama Kodu",
                             style = MaterialTheme.typography.titleSmall,
                             color = MaterialTheme.colorScheme.onSurface
                         )
@@ -123,7 +123,7 @@ fun PhoneVerifyScreen(
                     )
 
                     BbButton(
-                        text = "Telefonu Doğrula",
+                        text = "Telefonu DoĞrula",
                         onClick = {
                             onVerifyClick(verificationCodeState.value)
                         },
@@ -155,10 +155,11 @@ private fun PhoneVerifyIntroCard(
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Telefon numaranıza gönderilen doğrulama kodunu girerek $phone numarasını hesabınıza doğrulanmış olarak bağlayabilirsiniz.",
+            text = "Telefon numaranıza gönderilen doĞrulama kodunu girerek $phone numarasını hesabınıza doĞrulanmış olarak baĞlayabilirsiniz.",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
+
 

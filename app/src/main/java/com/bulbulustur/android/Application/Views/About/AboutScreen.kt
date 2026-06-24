@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.About
+﻿package com.bulbulustur.android.Application.Views.About
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -194,7 +194,7 @@ private fun AboutEcosystemCard() {
                 )
 
                 AboutTrustRow(
-                    title = "Tedarikçi ve Mağaza Ağı",
+                    title = "Tedarikçi ve MaĞaza AĞı",
                     icon = Icons.Outlined.Storefront
                 )
 
@@ -291,7 +291,7 @@ private fun AboutCapabilityGrid() {
 
             AboutCapabilityCard(
                 title = "Perakende",
-                description = "Mağaza, ürün ve sipariş deneyimi.",
+                description = "MaĞaza, ürün ve sipariş deneyimi.",
                 icon = Icons.Outlined.Storefront,
                 modifier = Modifier.weight(1f)
             )
@@ -310,7 +310,7 @@ private fun AboutCapabilityGrid() {
 
             AboutCapabilityCard(
                 title = "Global",
-                description = "Çok dilli ticaret omurgası.",
+                description = "Ã‡ok dilli ticaret omurgası.",
                 icon = Icons.Outlined.Public,
                 modifier = Modifier.weight(1f)
             )
@@ -407,7 +407,7 @@ private fun AboutActionArea(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
     ) {
         AboutActionCard(
-            title = "Yatırımcı İlişkileri",
+            title = "Yatırımcı Ä°lişkileri",
             description = "Kurumsal bilgi ve yatırımcı iletişim alanına geç.",
             icon = Icons.Outlined.Business,
             onClick = onInvestorClick
@@ -416,7 +416,7 @@ private fun AboutActionArea(
         AboutActionCard(
             title = "Kariyer",
             description = "Bulbulustur ekosisteminde açık roller ve ekip kültürü.",
-            icon = Icons.Outlined.Groups,
+            icon = Icons.Outlined.Business,
             onClick = onCareerClick
         )
 
@@ -428,8 +428,8 @@ private fun AboutActionArea(
         )
 
         AboutActionCard(
-            title = "İletişim",
-            description = "Doğru ekibe hızlıca ulaş.",
+            title = "Ä°letişim",
+            description = "DoĞru ekibe hızlıca ulaş.",
             icon = Icons.Outlined.ChevronRight,
             onClick = onContactClick
         )
@@ -503,17 +503,17 @@ private fun aboutStoryItems(): List<AboutStoryItem> {
     return listOf(
         AboutStoryItem(
             title = "Bizim Hikayemiz",
-            description = "Bulbulustur, üretici, tedarikçi, mağaza ve alıcıları aynı dijital omurgada buluşturmak için geliştirilen bir ticaret altyapısıdır.",
+            description = "Bulbulustur, üretici, tedarikçi, maĞaza ve alıcıları aynı dijital omurgada buluşturmak için geliştirilen bir ticaret altyapısıdır.",
             icon = Icons.Outlined.HistoryEdu
         ),
         AboutStoryItem(
             title = "Neler Yapıyoruz?",
-            description = "Toptan tedarik, perakende satış, RFQ, mağaza, marka, ödeme, kargo ve dijital site altyapılarını tek ekosistemde birleştiriyoruz.",
+            description = "Toptan tedarik, perakende satış, RFQ, maĞaza, marka, ödeme, kargo ve dijital site altyapılarını tek ekosistemde birleştiriyoruz.",
             icon = Icons.Outlined.Lightbulb
         ),
         AboutStoryItem(
-            title = "Neye İnanıyoruz?",
-            description = "Ticaretin daha görünür, izlenebilir, erişilebilir ve dijital altyapılarla daha güçlü hale gelmesi gerektiğine inanıyoruz.",
+            title = "Neye Ä°nanıyoruz?",
+            description = "Ticaretin daha görünür, izlenebilir, erişilebilir ve dijital altyapılarla daha güçlü hale gelmesi gerektiĞine inanıyoruz.",
             icon = Icons.Outlined.AutoAwesome
         ),
         AboutStoryItem(
@@ -532,7 +532,7 @@ private fun aboutPlatformItems(): List<AboutPlatformItem> {
             icon = Icons.Outlined.Storefront
         ),
         AboutPlatformItem(
-            title = "Tedarikçiler ve Şirketler",
+            title = "Tedarikçiler ve Åirketler",
             description = "Firma profili, ürün Vitrinleri, belgeler ve RFQ akışlarıyla görünürlük kazanır.",
             icon = Icons.Outlined.Business
         ),
@@ -556,3 +556,4 @@ private fun AboutScreenPreview() {
         AboutScreen()
     }
 }
+

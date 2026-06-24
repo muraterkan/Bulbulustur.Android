@@ -17,6 +17,7 @@ import com.bulbulustur.android.Application.Navigation.Routes.AccountRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.BasketRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.RetailRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.StoreRoutes
+import com.bulbulustur.android.Application.Areas.b2c.Views.Store.StoreOnboardingInfoScreen
 
 fun NavGraphBuilder.retailGraph(
     navigator: BulbulusturNavigator
@@ -241,6 +242,26 @@ fun NavGraphBuilder.retailGraph(
                 navigator.navController.navigate(
                     StoreRoutes.StoreDetail
                 )
+            },
+            onSellerInfoClick = {
+                navigator.navController.navigate(
+                    StoreRoutes.StoreOnboardingInfo
+                )
+            },
+            onHowItWorksClick = {
+                navigator.navController.navigate(
+                    StoreRoutes.StoreOnboardingInfo
+                )
+            }
+        )
+    }
+
+    composable(
+        route = StoreRoutes.StoreOnboardingInfo
+    ) {
+        StoreOnboardingInfoScreen(
+            onBackClick = {
+                navigator.back()
             }
         )
     }

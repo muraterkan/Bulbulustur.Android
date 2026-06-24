@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Message
+﻿package com.bulbulustur.android.Application.Views.Message
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -501,3 +501,4 @@ private fun getDemoMessages(): List<MessageInboxUiModel> {
         )
     )
 }
+

@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -49,7 +49,7 @@ fun ReviewEditScreen(
     var rating by remember { mutableIntStateOf(5) }
     var comment by remember {
         mutableStateOf(
-            "Makineyi 7 gündür kullanıyorum. Bu süre içinde hem deneyim kazandım hem de internetten okuduğum birçok bilgiyle karşılaştırdım. Ürünü almayı düşünenler için detaylı bir deneyim paylaşmak istedim."
+            "Makineyi 7 gündür kullanıyorum. Bu süre içinde hem deneyim kazandım hem de internetten okuduĞum birçok bilgiyle karşılaştırdım. Ürünü almayı düşünenler için detaylı bir deneyim paylaşmak istedim."
         )
     }
 
@@ -57,7 +57,7 @@ fun ReviewEditScreen(
         containerColor = BBColors.SurfaceMuted,
         topBar = {
             BbInnerPageHeader(
-                title = "Değerlendirmeyi Düzenle",
+                title = "DeĞerlendirmeyi Düzenle",
                 onBackClick = onBackClick
             )
         }
@@ -137,7 +137,7 @@ private fun ReviewEditProductCard() {
             )
 
             Text(
-                text = "Bu değerlendirme ürün detayında ve sipariş deneyimi alanlarında görünebilir.",
+                text = "Bu deĞerlendirme ürün detayında ve sipariş deneyimi alanlarında görünebilir.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -213,7 +213,7 @@ private fun ReviewEditCommentCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             Text(
-                text = "Değerlendirme Metni",
+                text = "DeĞerlendirme Metni",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -226,7 +226,7 @@ private fun ReviewEditCommentCard(
                 shape = BBRadius.Input,
                 textStyle = MaterialTheme.typography.bodySmall,
                 label = {
-                    Text(text = "Değerlendirmeniz")
+                    Text(text = "DeĞerlendirmeniz")
                 }
             )
         }
@@ -248,7 +248,7 @@ private fun ReviewEditActionCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             BbButton(
-                text = "Değerlendirmeyi Kaydet",
+                text = "DeĞerlendirmeyi Kaydet",
                 onClick = onSaveClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Primary,
@@ -264,7 +264,7 @@ private fun ReviewEditActionCard(
             )
 
             BbButton(
-                text = "Değerlendirmeyi Sil",
+                text = "DeĞerlendirmeyi Sil",
                 onClick = onDeleteClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Danger,
@@ -281,4 +281,5 @@ private fun ReviewEditActionCard(
         }
     }
 }
+
 

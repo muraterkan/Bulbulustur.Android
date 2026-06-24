@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -110,7 +110,7 @@ private fun PhoneCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 PhoneIconBox(
-                    text = "Ş"
+                    text = "Å"
                 )
 
                 Column(
@@ -141,7 +141,7 @@ private fun PhoneCard(
             ) {
                 if (!phone.verified) {
                     BbButton(
-                        text = "Doğrula",
+                        text = "DoĞrula",
                         onClick = {
                             onVerifyPhoneClick(phone.memberPhoneId)
                         },
@@ -180,7 +180,7 @@ private fun PhoneEmptyState(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             PhoneIconBox(
-                text = "Ş"
+                text = "Å"
             )
 
             Text(
@@ -190,7 +190,7 @@ private fun PhoneEmptyState(
             )
 
             Text(
-                text = "Telefon ekleyerek doğrulama ve güvenlik süreçlerini daha sağlam hale getirebilirsiniz.",
+                text = "Telefon ekleyerek doĞrulama ve güvenlik süreçlerini daha saĞlam hale getirebilirsiniz.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -224,9 +224,9 @@ private fun PhoneStatusBadge(
     }
 
     val text = if (verified) {
-        "Doğrulandı"
+        "DoĞrulandı"
     } else {
-        "Doğrulanmadı"
+        "DoĞrulanmadı"
     }
 
     Box(
@@ -289,4 +289,5 @@ private data class AccountPhoneUiModel(
     val phone: String,
     val verified: Boolean
 )
+
 

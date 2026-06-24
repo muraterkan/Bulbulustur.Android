@@ -1,6 +1,8 @@
-package com.bulbulustur.android.Application.Views.Home
+﻿package com.bulbulustur.android.Application.Views.Home
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,17 +12,19 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
-import androidx.compose.material.icons.outlined.Description
-import androidx.compose.material.icons.outlined.Groups
+import androidx.compose.material.icons.outlined.Business
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.LocalMall
+import androidx.compose.material.icons.outlined.RequestQuote
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -36,14 +40,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
+import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBLayout
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
+import com.bulbulustur.android.R
 
 @Composable
 fun ModeSelectionScreen(
@@ -54,6 +63,7 @@ fun ModeSelectionScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(BBColors.Yellow.Yellow50)
             .statusBarsPadding()
             .navigationBarsPadding()
             .padding(
@@ -66,9 +76,7 @@ fun ModeSelectionScreen(
     ) {
         ModeSelectionHeader()
 
-        Spacer(
-            modifier = Modifier.weight(1f)
-        )
+        Spacer(modifier = Modifier.weight(1f))
 
         ModeSelectionContent(
             onRetailClick = onRetailClick,
@@ -76,9 +84,7 @@ fun ModeSelectionScreen(
             onRfqClick = onRfqClick
         )
 
-        Spacer(
-            modifier = Modifier.weight(1f)
-        )
+        Spacer(modifier = Modifier.weight(1f))
 
         ModeSelectionLegalFooter()
     }
@@ -86,9 +92,7 @@ fun ModeSelectionScreen(
 
 @Composable
 private fun ModeSelectionHeader() {
-    var expanded by remember {
-        mutableStateOf(false)
-    }
+    var expanded by remember { mutableStateOf(false) }
 
     var selectedLanguage by remember {
         mutableStateOf(
@@ -101,14 +105,8 @@ private fun ModeSelectionHeader() {
 
     val languages = remember {
         listOf(
-            ModeSelectionLanguage(
-                code = "tr",
-                label = "Türkçe"
-            ),
-            ModeSelectionLanguage(
-                code = "en",
-                label = "English"
-            )
+            ModeSelectionLanguage("tr", "Türkçe"),
+            ModeSelectionLanguage("en", "English")
         )
     }
 
@@ -116,45 +114,47 @@ private fun ModeSelectionHeader() {
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        ModeSelectionWordmark()
-
-        Spacer(
-            modifier = Modifier.weight(1f)
-        )
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .height(BBLayout.LogoHeightLarge),
+            contentAlignment = Alignment.CenterStart
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.logo_black),
+                contentDescription = "Bulbulustur",
+                modifier = Modifier
+                    .width(BBLayout.LogoWidthLarge)
+                    .height(BBLayout.LogoHeightLarge),
+                contentScale = ContentScale.Fit
+            )
+        }
 
         Box {
             Surface(
                 modifier = Modifier
-                    .defaultMinSize(
-                        minHeight = BBIcon.BoxLg
-                    )
-                    .clickable {
-                        expanded = true
-                    },
+                    .defaultMinSize(minHeight = BBIcon.BoxLg)
+                    .clickable { expanded = true },
                 shape = BBRadius.XlShape,
                 color = BBColors.Yellow.Yellow500,
                 border = BorderStroke(
                     width = BBSpacing.Divider,
-                    color = BBColors.Yellow.Yellow300
+                    color = BBColors.Yellow.Yellow400
                 )
             ) {
                 Row(
                     modifier = Modifier.padding(
-                        horizontal = BBSpacing.Space3,
+                        horizontal = BBSpacing.Space4,
                         vertical = BBSpacing.Space2
                     ),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(
-                        BBSpacing.Space2
-                    )
+                    horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Language,
                         contentDescription = null,
                         tint = BBColors.Ink.Ink900,
-                        modifier = Modifier.size(
-                            BBIcon.SizeMd
-                        )
+                        modifier = Modifier.size(BBIcon.SizeMd)
                     )
 
                     Text(
@@ -168,18 +168,14 @@ private fun ModeSelectionHeader() {
                         imageVector = Icons.Outlined.KeyboardArrowDown,
                         contentDescription = null,
                         tint = BBColors.Ink.Ink900,
-                        modifier = Modifier.size(
-                            BBIcon.SizeMd
-                        )
+                        modifier = Modifier.size(BBIcon.SizeMd)
                     )
                 }
             }
 
             DropdownMenu(
                 expanded = expanded,
-                onDismissRequest = {
-                    expanded = false
-                }
+                onDismissRequest = { expanded = false }
             ) {
                 languages.forEach { language ->
                     DropdownMenuItem(
@@ -204,27 +200,6 @@ private fun ModeSelectionHeader() {
 }
 
 @Composable
-private fun ModeSelectionWordmark() {
-    Row(
-        verticalAlignment = Alignment.Bottom
-    ) {
-        Text(
-            text = "bulbulustur",
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.ExtraBold,
-            color = BBColors.Ink.Ink900
-        )
-
-        Text(
-            text = ".",
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.ExtraBold,
-            color = BBColors.Yellow.Yellow500
-        )
-    }
-}
-
-@Composable
 private fun ModeSelectionContent(
     onRetailClick: () -> Unit,
     onWholesaleClick: () -> Unit,
@@ -234,101 +209,71 @@ private fun ModeSelectionContent(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Surface(
-            modifier = Modifier.fillMaxWidth(),
-            shape = BBRadius.XxlShape,
-            color = BBColors.Ink.Ink900
+        Text(
+            text = "Alışveriş Modunu Seç",
+            style = MaterialTheme.typography.headlineSmall,
+            fontWeight = FontWeight.ExtraBold,
+            color = BBColors.Ink.Ink900,
+            textAlign = TextAlign.Center
+        )
+
+        Text(
+            text = "Perakende veya toptan dünyasına hızlıca giriş yap.",
+            modifier = Modifier.padding(top = BBSpacing.Space2),
+            style = MaterialTheme.typography.bodyMedium,
+            color = BBColors.Gray.Gray700,
+            textAlign = TextAlign.Center
+        )
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = BBSpacing.Space8),
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        horizontal = BBSpacing.Space5,
-                        vertical = BBSpacing.Space6
-                    ),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "Alışveriş Modunu Seç",
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.ExtraBold,
-                    color = BBColors.White,
-                    textAlign = TextAlign.Center
-                )
+            ModeSelectionCommerceCard(
+                title = "Perakende Alışveriş",
+                description = "Ürünleri keşfet, favorilerine ekle ve güvenle sepetine taşı.",
+                icon = Icons.Outlined.LocalMall,
+                containerColor = BBColors.Ink.Ink900,
+                iconContainerColor = BBColors.Yellow.Yellow500,
+                iconColor = BBColors.Ink.Ink900,
+                titleColor = BBColors.White,
+                descriptionColor = BBColors.Gray.Gray300,
+                arrowColor = BBColors.Yellow.Yellow500,
+                borderColor = BBColors.Ink.Ink100,
+                onClick = onRetailClick
+            )
 
-                Text(
-                    text = "Perakende veya toptan dünyasına hızlıca giriş yap.",
-                    modifier = Modifier.padding(
-                        top = BBSpacing.Space2
-                    ),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = BBColors.Gray.Gray300,
-                    textAlign = TextAlign.Center
-                )
+            ModeSelectionCommerceCard(
+                title = "Toptan Ticaret",
+                description = "Tedarikçileri, toplu ürünleri ve teklif süreçlerini keşfet.",
+                icon = Icons.Outlined.Business,
+                containerColor = BBColors.Ink.Ink900,
+                iconContainerColor = BBColors.Yellow.Yellow500,
+                iconColor = BBColors.Ink.Ink900,
+                titleColor = BBColors.White,
+                descriptionColor = BBColors.Gray.Gray300,
+                arrowColor = BBColors.Yellow.Yellow500,
+                borderColor = BBColors.Ink.Ink100,
+                onClick = onWholesaleClick
+            )
 
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            top = BBSpacing.Space7
-                        ),
-                    verticalArrangement = Arrangement.spacedBy(
-                        BBSpacing.Space4
-                    )
-                ) {
-                    ModeSelectionRetailCard(
-                        onClick = onRetailClick
-                    )
-
-                    ModeSelectionWholesaleCard(
-                        onClick = onWholesaleClick
-                    )
-
-                    ModeSelectionRfqShortcut(
-                        onClick = onRfqClick
-                    )
-                }
-            }
+            ModeSelectionCommerceCard(
+                title = "RFQ Talebi Gönder",
+                description = "Toptan alım için tedarikçilerden son fiyat iste.",
+                icon = Icons.Outlined.RequestQuote,
+                containerColor = BBColors.Yellow.Yellow50,
+                iconContainerColor = BBColors.Yellow.Yellow500,
+                iconColor = BBColors.Ink.Ink900,
+                titleColor = BBColors.Ink.Ink900,
+                descriptionColor = BBColors.Gray.Gray700,
+                arrowColor = BBColors.Yellow.Yellow800,
+                borderColor = BBColors.Yellow.Yellow300,
+                onClick = onRfqClick
+            )
         }
     }
-}
-
-@Composable
-private fun ModeSelectionRetailCard(
-    onClick: () -> Unit
-) {
-    ModeSelectionCommerceCard(
-        title = "Perakende Alışveriş",
-        description = "Ürünleri keşfet, favorilerine ekle ve güvenle sepetine taşı.",
-        icon = Icons.Outlined.LocalMall,
-        containerColor = BBColors.Yellow.Yellow500,
-        iconContainerColor = BBColors.Ink.Ink900,
-        iconColor = BBColors.Yellow.Yellow500,
-        titleColor = BBColors.Ink.Ink900,
-        descriptionColor = BBColors.Gray.Gray800,
-        arrowColor = BBColors.Ink.Ink900,
-        borderColor = BBColors.Yellow.Yellow400,
-        onClick = onClick
-    )
-}
-
-@Composable
-private fun ModeSelectionWholesaleCard(
-    onClick: () -> Unit
-) {
-    ModeSelectionCommerceCard(
-        title = "Toptan Ticaret",
-        description = "Tedarikçileri, toplu ürünleri ve teklif süreçlerini keşfet.",
-        icon = Icons.Outlined.Groups,
-        containerColor = BBColors.Navy.Navy900,
-        iconContainerColor = BBColors.Yellow.Yellow500,
-        iconColor = BBColors.Ink.Ink900,
-        titleColor = BBColors.White,
-        descriptionColor = BBColors.Gray.Gray300,
-        arrowColor = BBColors.Yellow.Yellow500,
-        borderColor = BBColors.Ink.Ink100,
-        onClick = onClick
-    )
 }
 
 @Composable
@@ -336,21 +281,20 @@ private fun ModeSelectionCommerceCard(
     title: String,
     description: String,
     icon: ImageVector,
-    containerColor: androidx.compose.ui.graphics.Color,
-    iconContainerColor: androidx.compose.ui.graphics.Color,
-    iconColor: androidx.compose.ui.graphics.Color,
-    titleColor: androidx.compose.ui.graphics.Color,
-    descriptionColor: androidx.compose.ui.graphics.Color,
-    arrowColor: androidx.compose.ui.graphics.Color,
-    borderColor: androidx.compose.ui.graphics.Color,
+    containerColor: Color,
+    iconContainerColor: Color,
+    iconColor: Color,
+    titleColor: Color,
+    descriptionColor: Color,
+    arrowColor: Color,
+    borderColor: Color,
     onClick: () -> Unit
 ) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable {
-                onClick()
-            },
+            .defaultMinSize(minHeight = BBSpacing.Space24)
+            .clickable { onClick() },
         shape = BBRadius.XxlShape,
         color = containerColor,
         border = BorderStroke(
@@ -363,26 +307,20 @@ private fun ModeSelectionCommerceCard(
                 .fillMaxWidth()
                 .padding(BBSpacing.Space4),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(
-                BBSpacing.Space4
-            )
+            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
             Surface(
                 shape = BBRadius.XlShape,
                 color = iconContainerColor
             ) {
                 Box(
-                    modifier = Modifier.size(
-                        BBIcon.BoxXl
-                    ),
+                    modifier = Modifier.size(BBIcon.BoxXl),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         imageVector = icon,
                         contentDescription = null,
-                        modifier = Modifier.size(
-                            BBIcon.SizeXl
-                        ),
+                        modifier = Modifier.size(BBIcon.SizeXl),
                         tint = iconColor
                     )
                 }
@@ -390,9 +328,7 @@ private fun ModeSelectionCommerceCard(
 
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(
-                    BBSpacing.Space1
-                )
+                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
                     text = title,
@@ -411,89 +347,8 @@ private fun ModeSelectionCommerceCard(
             Icon(
                 imageVector = Icons.AutoMirrored.Outlined.ArrowForward,
                 contentDescription = null,
-                modifier = Modifier.size(
-                    BBIcon.Size2Xl
-                ),
+                modifier = Modifier.size(BBIcon.Size2Xl),
                 tint = arrowColor
-            )
-        }
-    }
-}
-
-@Composable
-private fun ModeSelectionRfqShortcut(
-    onClick: () -> Unit
-) {
-    Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-                onClick()
-            },
-        shape = BBRadius.XxlShape,
-        color = BBColors.Yellow.Yellow50,
-        border = BorderStroke(
-            width = BBSpacing.Divider,
-            color = BBColors.Yellow.Yellow300
-        )
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(BBSpacing.Space4),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(
-                BBSpacing.Space3
-            )
-        ) {
-            Surface(
-                shape = BBRadius.XlShape,
-                color = BBColors.Yellow.Yellow500
-            ) {
-                Box(
-                    modifier = Modifier.size(
-                        BBIcon.BoxLg
-                    ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Description,
-                        contentDescription = null,
-                        modifier = Modifier.size(
-                            BBIcon.SizeMd
-                        ),
-                        tint = BBColors.Ink.Ink900
-                    )
-                }
-            }
-
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(
-                    BBSpacing.Space1
-                )
-            ) {
-                Text(
-                    text = "RFQ Talebi Gönder",
-                    style = MaterialTheme.typography.titleSmall,
-                    color = BBColors.Ink.Ink900,
-                    fontWeight = FontWeight.Bold
-                )
-
-                Text(
-                    text = "Toptan alım için tedarikçilerden son fiyat iste.",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = BBColors.Gray.Gray700
-                )
-            }
-
-            Icon(
-                imageVector = Icons.AutoMirrored.Outlined.ArrowForward,
-                contentDescription = null,
-                modifier = Modifier.size(
-                    BBIcon.Action
-                ),
-                tint = BBColors.Yellow.Yellow800
             )
         }
     }

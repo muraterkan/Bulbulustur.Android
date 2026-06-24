@@ -46,3 +46,4 @@ private fun BuyerBottomNavigationItem.toWholesaleItem(): WholesaleBottomNavigati
         BuyerBottomNavigationItem.Account -> WholesaleBottomNavigationItem.Account
     }
 }
+

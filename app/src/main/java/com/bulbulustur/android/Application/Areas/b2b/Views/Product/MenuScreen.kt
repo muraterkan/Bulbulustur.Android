@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2b.Views.Product
+﻿package com.bulbulustur.android.Application.Areas.b2b.Views.Product
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -240,7 +240,7 @@ private fun WholesaleMenuQuickActions(
         )
 
         WholesaleMenuQuickActionCard(
-            title = "Teklif İste",
+            title = "Teklif Ä°ste",
             icon = {
                 Icon(
                     imageVector = Icons.Rounded.Description,
@@ -438,7 +438,7 @@ private data class WholesaleMenuCategory(
 private fun wholesaleMenuCategories(): List<WholesaleMenuCategory> {
     return listOf(
         WholesaleMenuCategory(1, "Otomobil Parça ve Aksesuarları"),
-        WholesaleMenuCategory(2, "Tüketici Elektroniği"),
+        WholesaleMenuCategory(2, "Tüketici ElektroniĞi"),
         WholesaleMenuCategory(3, "Elektronik Parçalar"),
         WholesaleMenuCategory(4, "Moda Aksesuarları ve Ayakkabılar"),
         WholesaleMenuCategory(5, "Moda Giyim ve Kumaşlar"),
@@ -446,14 +446,15 @@ private fun wholesaleMenuCategories(): List<WholesaleMenuCategory> {
         WholesaleMenuCategory(7, "Mobilya ve Ev Dekorasyonu"),
         WholesaleMenuCategory(8, "Hediyeler ve Primer"),
         WholesaleMenuCategory(9, "Donanım"),
-        WholesaleMenuCategory(10, "Sağlık ve Kişisel Bakım"),
+        WholesaleMenuCategory(10, "SaĞlık ve Kişisel Bakım"),
         WholesaleMenuCategory(11, "Ev Aletleri"),
         WholesaleMenuCategory(12, "Endüstriyel Malzemeler"),
         WholesaleMenuCategory(13, "Makine ve Ekipman"),
         WholesaleMenuCategory(14, "Mobil Elektronik"),
-        WholesaleMenuCategory(15, "Anne, Çocuk ve Oyuncaklar"),
+        WholesaleMenuCategory(15, "Anne, Ã‡ocuk ve Oyuncaklar"),
         WholesaleMenuCategory(16, "Baskı ve Paketleme"),
-        WholesaleMenuCategory(17, "Akıllı Yaşam Elektroniği"),
+        WholesaleMenuCategory(17, "Akıllı Yaşam ElektroniĞi"),
         WholesaleMenuCategory(18, "Spor ve Dış Mekan")
     )
 }
+

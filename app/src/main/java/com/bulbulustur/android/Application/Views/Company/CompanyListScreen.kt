@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Company
+﻿package com.bulbulustur.android.Application.Views.Company
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -286,7 +286,7 @@ private fun CompanyListCard(
                         if (company.IsVerified) {
                             Icon(
                                 imageVector = Icons.Outlined.Verified,
-                                contentDescription = "Doğrulanmış firma",
+                                contentDescription = "DoĞrulanmış firma",
                                 tint = MaterialTheme.colorScheme.primary
                             )
                         }
@@ -299,7 +299,7 @@ private fun CompanyListCard(
                     )
 
                     Text(
-                        text = "${company.Country} • ${company.City}",
+                        text = "${company.Country} â€¢ ${company.City}",
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -358,7 +358,7 @@ private fun CompanyListCard(
                 )
 
                 CompanySmallActionCard(
-                    title = "İletişime geç",
+                    title = "Ä°letişime geç",
                     icon = Icons.Outlined.Mail,
                     modifier = Modifier.weight(1f),
                     onClick = onMessageClick
@@ -441,7 +441,7 @@ private fun CompanyInfoGrid(
             )
 
             CompanyInfoBox(
-                title = "İş modeli",
+                title = "Ä°ş modeli",
                 value = company.BusinessModel,
                 modifier = Modifier.weight(1f)
             )
@@ -548,7 +548,7 @@ private fun CompanyListBottomCallout(
                 )
             ) {
                 Text(
-                    text = "Aradığınız firmayı bulamadınız mı?",
+                    text = "AradıĞınız firmayı bulamadınız mı?",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
@@ -616,13 +616,13 @@ data class CompanyListItem(
 private fun getCompanyFilterNames(): List<String> {
     return listOf(
         "Tüm firmalar",
-        "Doğrulanmış",
+        "DoĞrulanmış",
         "Üretici",
         "Toptancı",
-        "İhracatçı",
-        "İstanbul",
+        "Ä°hracatçı",
+        "Ä°stanbul",
         "Ankara",
-        "İzmir"
+        "Ä°zmir"
     )
 }
 
@@ -630,10 +630,10 @@ private fun getCompanyListItems(): List<CompanyListItem> {
     return listOf(
         CompanyListItem(
             CompanyId = 1,
-            Name = "Bulbulustur İnternet Teknolojileri ve Tic. A.Ş.",
-            Description = "Yazılım, dijital dönüşüm ve ticaret altyapıları alanında çözüm sağlayan firma.",
+            Name = "Bulbulustur Ä°nternet Teknolojileri ve Tic. A.Å.",
+            Description = "Yazılım, dijital dönüşüm ve ticaret altyapıları alanında çözüm saĞlayan firma.",
             Country = "Türkiye",
-            City = "İstanbul",
+            City = "Ä°stanbul",
             Rating = "4,2",
             TradeRegistryNumber = "-",
             Capability = "Tasarım kaynaklı özelleştirme, yurt dışı mühendis hizmeti",
@@ -651,7 +651,7 @@ private fun getCompanyListItems(): List<CompanyListItem> {
             City = "Kocaeli",
             Rating = "4,6",
             TradeRegistryNumber = "245981",
-            Capability = "Özel üretim, baskılı ambalaj, hızlı sevkiyat",
+            Capability = "Ã–zel üretim, baskılı ambalaj, hızlı sevkiyat",
             BusinessModel = "Üretici, Toptancı",
             ProductCount = 42,
             LogoText = "AA",
@@ -661,7 +661,7 @@ private fun getCompanyListItems(): List<CompanyListItem> {
         CompanyListItem(
             CompanyId = 3,
             Name = "Marmara Endüstriyel Tedarik",
-            Description = "Sanayi, depo, bakım ve üretim hattı sarf malzemeleri sağlar.",
+            Description = "Sanayi, depo, bakım ve üretim hattı sarf malzemeleri saĞlar.",
             Country = "Türkiye",
             City = "Bursa",
             Rating = "4,1",

@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.wwwroot.DesignObjects
+﻿package com.bulbulustur.android.Application.wwwroot.DesignObjects
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -118,3 +118,4 @@ private fun BbPasswordSupportText(
         )
     }
 }
+

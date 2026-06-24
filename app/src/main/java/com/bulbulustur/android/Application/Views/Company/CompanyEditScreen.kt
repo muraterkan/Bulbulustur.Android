@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Company
+﻿package com.bulbulustur.android.Application.Views.Company
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -93,7 +93,7 @@ fun CompanyEditScreen(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.SectionGap)
     ) {
         BbButton(
-            text = "Şirket Bilgilerime Dön",
+            text = "Åirket Bilgilerime Dön",
             onClick = onBackClick,
             variant = BbButtonVariant.Outline
         )
@@ -103,17 +103,17 @@ fun CompanyEditScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             BbChip(
-                text = "Şirket Profili"
+                text = "Åirket Profili"
             )
 
             Text(
-                text = "Şirketi Düzenle",
+                text = "Åirketi Düzenle",
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
-                text = "Şirket hesabınla ilişkili temel kurumsal, adres ve resmi bilgileri güncelle.",
+                text = "Åirket hesabınla ilişkili temel kurumsal, adres ve resmi bilgileri güncelle.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -140,8 +140,8 @@ fun CompanyEditScreen(
                             validationMessage = null
                         )
                     },
-                    label = "Şirketinizin Resmi Ünvanı",
-                    placeholder = "Şirket resmi ünvanı"
+                    label = "Åirketinizin Resmi Ünvanı",
+                    placeholder = "Åirket resmi ünvanı"
                 )
 
                 BbSelectInput(
@@ -152,8 +152,8 @@ fun CompanyEditScreen(
                             validationMessage = null
                         )
                     },
-                    label = "Şirketinizin Tipi",
-                    placeholder = "Şirket tipi seç",
+                    label = "Åirketinizin Tipi",
+                    placeholder = "Åirket tipi seç",
                     options = companyTypeOptions()
                 )
 
@@ -178,7 +178,7 @@ fun CompanyEditScreen(
                             validationMessage = null
                         )
                     },
-                    label = "Şirket E-postası",
+                    label = "Åirket E-postası",
                     placeholder = "ornek@firma.com"
                 )
 
@@ -190,7 +190,7 @@ fun CompanyEditScreen(
                             validationMessage = null
                         )
                     },
-                    label = "Şirket Web Sitesi",
+                    label = "Åirket Web Sitesi",
                     placeholder = "www.firma.com"
                 )
             }
@@ -204,7 +204,7 @@ fun CompanyEditScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = "Şirket kayıtlı adres ve lokasyon bilgilerini düzenle.",
+                    text = "Åirket kayıtlı adres ve lokasyon bilgilerini düzenle.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -217,7 +217,7 @@ fun CompanyEditScreen(
                             validationMessage = null
                         )
                     },
-                    label = "Şirketinizin Adresi",
+                    label = "Åirketinizin Adresi",
                     placeholder = "Açık şirket adresi"
                 )
 
@@ -243,8 +243,8 @@ fun CompanyEditScreen(
                             validationMessage = null
                         )
                     },
-                    label = "Şehir",
-                    placeholder = "Şehir seç",
+                    label = "Åehir",
+                    placeholder = "Åehir seç",
                     options = cityOptions()
                 )
 
@@ -256,8 +256,8 @@ fun CompanyEditScreen(
                             validationMessage = null
                         )
                     },
-                    label = "İlçe",
-                    placeholder = "İlçe seç",
+                    label = "Ä°lçe",
+                    placeholder = "Ä°lçe seç",
                     options = districtOptions()
                 )
 
@@ -339,7 +339,7 @@ fun CompanyEditScreen(
                     padding = BbCardPadding.Medium
                 ) {
                     Text(
-                        text = "Şirket bilgilerin kurumsal profil, fatura ve platform doğrulama süreçlerinde kullanılabilir.",
+                        text = "Åirket bilgilerin kurumsal profil, fatura ve platform doĞrulama süreçlerinde kullanılabilir.",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -386,11 +386,11 @@ private fun getCompanyEditValidationMessage(
     formState: CompanyEditFormState
 ): String {
     if (formState.companyOfficialName.isBlank()) {
-        return "Şirket resmi ünvanı gereklidir."
+        return "Åirket resmi ünvanı gereklidir."
     }
 
     if (formState.companyType.isBlank()) {
-        return "Şirket tipi seçilmelidir."
+        return "Åirket tipi seçilmelidir."
     }
 
     if (formState.establishmentYear.isBlank()) {
@@ -402,11 +402,11 @@ private fun getCompanyEditValidationMessage(
     }
 
     if (formState.companyWebsiteUrl.isBlank()) {
-        return "Şirket web sitesi gereklidir."
+        return "Åirket web sitesi gereklidir."
     }
 
     if (formState.companyAddress.isBlank()) {
-        return "Şirket adresi gereklidir."
+        return "Åirket adresi gereklidir."
     }
 
     if (formState.countryName.isBlank()) {
@@ -414,11 +414,11 @@ private fun getCompanyEditValidationMessage(
     }
 
     if (formState.cityName.isBlank()) {
-        return "Şehir seçilmelidir."
+        return "Åehir seçilmelidir."
     }
 
     if (formState.districtName.isBlank()) {
-        return "İlçe seçilmelidir."
+        return "Ä°lçe seçilmelidir."
     }
 
     if (formState.taxOffice.isBlank()) {
@@ -429,22 +429,22 @@ private fun getCompanyEditValidationMessage(
         return "Vergi numarası gereklidir."
     }
 
-    return "Şirket bilgilerini kontrol etmelisin."
+    return "Åirket bilgilerini kontrol etmelisin."
 }
 
 private fun companyTypeOptions(): List<BbSelectOption> {
     return listOf(
         BbSelectOption(
             "limited",
-            "Limited Şirket"
+            "Limited Åirket"
         ),
         BbSelectOption(
             "anonim",
-            "Anonim Şirket"
+            "Anonim Åirket"
         ),
         BbSelectOption(
             "sahis",
-            "Şahıs Şirketi"
+            "Åahıs Åirketi"
         ),
         BbSelectOption(
             "kooperatif",
@@ -475,16 +475,16 @@ private fun countryOptions(): List<BbSelectOption> {
         BbSelectOption("Türkiye", "Türkiye"),
         BbSelectOption("Almanya", "Almanya"),
         BbSelectOption("Amerika Birleşik Devletleri", "Amerika Birleşik Devletleri"),
-        BbSelectOption("Çin", "Çin"),
+        BbSelectOption("Ã‡in", "Ã‡in"),
         BbSelectOption("Birleşik Krallık", "Birleşik Krallık")
     )
 }
 
 private fun cityOptions(): List<BbSelectOption> {
     return listOf(
-        BbSelectOption("İstanbul", "İstanbul"),
+        BbSelectOption("Ä°stanbul", "Ä°stanbul"),
         BbSelectOption("Ankara", "Ankara"),
-        BbSelectOption("İzmir", "İzmir"),
+        BbSelectOption("Ä°zmir", "Ä°zmir"),
         BbSelectOption("Bursa", "Bursa"),
         BbSelectOption("Kayseri", "Kayseri"),
         BbSelectOption("Konya", "Konya")
@@ -493,10 +493,10 @@ private fun cityOptions(): List<BbSelectOption> {
 
 private fun districtOptions(): List<BbSelectOption> {
     return listOf(
-        BbSelectOption("Şişli", "Şişli"),
+        BbSelectOption("Åişli", "Åişli"),
         BbSelectOption("Kadıköy", "Kadıköy"),
         BbSelectOption("Üsküdar", "Üsküdar"),
-        BbSelectOption("Çankaya", "Çankaya"),
+        BbSelectOption("Ã‡ankaya", "Ã‡ankaya"),
         BbSelectOption("Nilüfer", "Nilüfer"),
         BbSelectOption("Melikgazi", "Melikgazi")
     )
@@ -505,19 +505,20 @@ private fun districtOptions(): List<BbSelectOption> {
 private fun createSampleCompanyEditFormState(): CompanyEditFormState {
     return CompanyEditFormState(
         companyId = 2,
-        companyOfficialName = "Türkiye Global Ticaret Limited Şirketi",
+        companyOfficialName = "Türkiye Global Ticaret Limited Åirketi",
         companyType = "limited",
         establishmentYear = "2025",
         companyEmailAddress = "muraterkan500@yandex.com",
         companyWebsiteUrl = "www.turkiyeglobal.com",
         companyAddress = "Fulya Mah., Aytekin Kotil Cad., No: 1/1",
         countryName = "Türkiye",
-        cityName = "İstanbul",
-        districtName = "Şişli",
+        cityName = "Ä°stanbul",
+        districtName = "Åişli",
         postalCode = "34394",
-        taxOffice = "Şişli Vergi Dairesi",
+        taxOffice = "Åişli Vergi Dairesi",
         taxNumber = "789456123",
         mersisNumber = "01881 299217 0001",
         kepAddress = "tglobal@bulbulustur.com"
     )
 }
+

@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2b.Views.Category
+﻿package com.bulbulustur.android.Application.Areas.b2b.Views.Category
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -513,8 +513,8 @@ private fun getWholesaleSubCategories(): List<WholesaleSubCategoryItem> {
         ),
         WholesaleSubCategoryItem(
             categoryId = 102,
-            name = "Poşet ve Çanta",
-            description = "Mağaza, kargo ve üretim süreçleri için poşet çözümleri.",
+            name = "Poşet ve Ã‡anta",
+            description = "MaĞaza, kargo ve üretim süreçleri için poşet çözümleri.",
             productCount = 28,
             icon = Icons.Outlined.Business
         ),
@@ -528,7 +528,7 @@ private fun getWholesaleSubCategories(): List<WholesaleSubCategoryItem> {
         WholesaleSubCategoryItem(
             categoryId = 104,
             name = "Streç ve Koruyucu Ambalaj",
-            description = "Paletleme, sarma ve taşıma güvenliği için ürünler.",
+            description = "Paletleme, sarma ve taşıma güvenliĞi için ürünler.",
             productCount = 43,
             icon = Icons.Outlined.Factory
         )
@@ -554,3 +554,4 @@ private fun CategoryDetailScreenPreview() {
         CategoryDetailScreen()
     }
 }
+

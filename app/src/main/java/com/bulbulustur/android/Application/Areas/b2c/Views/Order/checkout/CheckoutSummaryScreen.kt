@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout
+﻿package com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -94,7 +94,7 @@ fun CheckoutSummaryScreen(
                     CheckoutProgressCard(
                         currentStep = "4",
                         title = "Sipariş özeti",
-                        description = "Ödeme öncesi bilgilerini son kez kontrol et."
+                        description = "Ã–deme öncesi bilgilerini son kez kontrol et."
                     )
                 }
 
@@ -187,7 +187,7 @@ private fun CheckoutSummaryTopBar(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "‹",
+                text = "â€¹",
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -275,7 +275,7 @@ private fun CheckoutSummaryAddressCard(
 ) {
     CheckoutSummaryInfoCard(
         title = "Teslimat adresi",
-        actionText = "Değiştir",
+        actionText = "DeĞiştir",
         onActionClick = onEditAddressClick
     ) {
         Text(
@@ -310,7 +310,7 @@ private fun CheckoutSummaryCargoCard(
 ) {
     CheckoutSummaryInfoCard(
         title = "Kargo bilgisi",
-        actionText = "Değiştir",
+        actionText = "DeĞiştir",
         onActionClick = onEditCargoClick
     ) {
         Text(
@@ -344,8 +344,8 @@ private fun CheckoutSummaryPaymentCard(
     onEditPaymentClick: () -> Unit
 ) {
     CheckoutSummaryInfoCard(
-        title = "Ödeme yöntemi",
-        actionText = "Değiştir",
+        title = "Ã–deme yöntemi",
+        actionText = "DeĞiştir",
         onActionClick = onEditPaymentClick
     ) {
         Text(
@@ -452,7 +452,7 @@ private fun CheckoutSummaryProductCard(
                 Spacer(modifier = Modifier.height(BBSpacing.Space1))
 
                 Text(
-                    text = "${product.storeName} · ${product.variantText}",
+                    text = "${product.storeName} Â· ${product.variantText}",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -501,7 +501,7 @@ private fun CheckoutSummaryTotalCard(
             )
 
             CheckoutSummaryTotalRow(
-                title = "İndirim",
+                title = "Ä°ndirim",
                 value = total.discountText
             )
 
@@ -510,7 +510,7 @@ private fun CheckoutSummaryTotalCard(
             )
 
             CheckoutSummaryTotalRow(
-                title = "Ödenecek tutar",
+                title = "Ã–denecek tutar",
                 value = total.totalPriceText,
                 isStrong = true
             )
@@ -595,7 +595,7 @@ private fun CheckoutSummaryAgreementCard(
             BbCheckboxRow(
                 checked = preliminaryInformationApproved,
                 onCheckedChange = onPreliminaryInformationChange,
-                title = "Ön bilgilendirme formunu okudum ve onaylıyorum."
+                title = "Ã–n bilgilendirme formunu okudum ve onaylıyorum."
             )
         }
     }
@@ -732,24 +732,24 @@ private fun getCheckoutSummaryScreenData(): CheckoutSummaryScreenData {
         address = CheckoutSummaryAddress(
             title = "Ev adresim",
             fullName = "Murat Erkan",
-            fullAddress = "Kızılay Mah. Atatürk Bulvarı No: 12 Daire: 8 Çankaya / Ankara"
+            fullAddress = "Kızılay Mah. Atatürk Bulvarı No: 12 Daire: 8 Ã‡ankaya / Ankara"
         ),
         cargo = CheckoutSummaryCargo(
-            companySummaryText = "2 mağaza için kargo seçildi",
+            companySummaryText = "2 maĞaza için kargo seçildi",
             deliveryEstimateText = "Tahmini teslimat: 1-4 iş günü",
             packageSummaryText = "2 ayrı paket gönderimi"
         ),
         payment = CheckoutSummaryPayment(
             methodTitle = "Yeni kart ile ödeme",
-            description = "3D Secure doğrulama ödeme sağlayıcısı üzerinden tamamlanır."
+            description = "3D Secure doĞrulama ödeme saĞlayıcısı üzerinden tamamlanır."
         ),
         products = listOf(
             CheckoutSummaryProductItem(
                 id = 1,
                 name = "Kadın klasik sneaker ayakkabı",
                 storeName = "Ortobella Store",
-                variantText = "Beyaz · 38",
-                priceText = "₺899,90",
+                variantText = "Beyaz Â· 38",
+                priceText = "â‚º899,90",
                 quantity = 1,
                 imageText = "P1"
             ),
@@ -757,8 +757,8 @@ private fun getCheckoutSummaryScreenData(): CheckoutSummaryScreenData {
                 id = 2,
                 name = "Rahat taban günlük ayakkabı",
                 storeName = "Ortobella Store",
-                variantText = "Siyah · 39",
-                priceText = "₺749,90",
+                variantText = "Siyah Â· 39",
+                priceText = "â‚º749,90",
                 quantity = 1,
                 imageText = "P2"
             ),
@@ -766,17 +766,17 @@ private fun getCheckoutSummaryScreenData(): CheckoutSummaryScreenData {
                 id = 3,
                 name = "Oversize pamuklu basic tişört",
                 storeName = "Moda Nova",
-                variantText = "Lacivert · M",
-                priceText = "₺349,90",
+                variantText = "Lacivert Â· M",
+                priceText = "â‚º349,90",
                 quantity = 2,
                 imageText = "P3"
             )
         ),
         total = CheckoutSummaryTotal(
-            productTotalText = "₺2.759,80",
-            cargoTotalText = "₺89,80",
-            discountText = "-₺120,00",
-            totalPriceText = "₺2.729,60"
+            productTotalText = "â‚º2.759,80",
+            cargoTotalText = "â‚º89,80",
+            discountText = "-â‚º120,00",
+            totalPriceText = "â‚º2.729,60"
         )
     )
 }
@@ -788,4 +788,5 @@ private fun CheckoutSummaryScreenPreview() {
         CheckoutSummaryScreen()
     }
 }
+
 

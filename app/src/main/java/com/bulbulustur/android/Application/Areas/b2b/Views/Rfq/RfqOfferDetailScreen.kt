@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2b.Views.Rfq
+﻿package com.bulbulustur.android.Application.Areas.b2b.Views.Rfq
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -130,7 +130,7 @@ private fun RfqOfferSummaryCard(
                 )
 
                 Text(
-                    text = "RFQ No: ${offer.buyerRequestId} · Teklif No: ${offer.sendedOfferId}",
+                    text = "RFQ No: ${offer.buyerRequestId} Â· Teklif No: ${offer.sendedOfferId}",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -166,7 +166,7 @@ private fun RfqOfferInfoCard(
 
             RfqOfferInfoRow(
                 icon = Icons.Outlined.RequestQuote,
-                title = "Bağlı RFQ",
+                title = "BaĞlı RFQ",
                 value = "RFQ-${offer.buyerRequestId}"
             )
         }
@@ -191,7 +191,7 @@ private fun RfqOfferMessageCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
-                    imageVector = Icons.Outlined.Description,
+                    imageVector = Icons.Outlined.RequestQuote,
                     contentDescription = null,
                     tint = BBColors.Yellow.Yellow800,
                     modifier = Modifier.size(BBIcon.Ui)
@@ -325,7 +325,7 @@ private fun getDemoRfqOfferDetail(
         sendedOfferId = sendedOfferId,
         sellerName = "Anadolu Endüstriyel Tedarik",
         insertedDate = "14 Mayıs 2026",
-        offerDetail = "Belirttiğiniz ambalaj ürünleri için 10.000 adet üretim kapasitemiz bulunmaktadır. Teslim süresi yaklaşık 12 iş günüdür. Ödeme ve sevkiyat koşulları görüşmeye açıktır."
+        offerDetail = "BelirttiĞiniz ambalaj ürünleri için 10.000 adet üretim kapasitemiz bulunmaktadır. Teslim süresi yaklaşık 12 iş günüdür. Ã–deme ve sevkiyat koşulları görüşmeye açıktır."
     )
 }
 
@@ -336,3 +336,4 @@ private data class RfqOfferDetailUiModel(
     val insertedDate: String,
     val offerDetail: String
 )
+

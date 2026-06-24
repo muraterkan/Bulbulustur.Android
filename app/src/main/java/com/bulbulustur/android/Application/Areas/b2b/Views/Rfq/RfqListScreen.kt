@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2b.Views.Rfq
+﻿package com.bulbulustur.android.Application.Areas.b2b.Views.Rfq
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -66,10 +66,10 @@ fun RfqListScreen(
         containerColor = BBColors.SurfaceMuted,
         topBar = {
             BbInnerPageHeader(
-                title = "Fiyat Teklifi İstekleri",
+                title = "Fiyat Teklifi Ä°stekleri",
                 onBackClick = onBackClick,
                 actionIcon = Icons.Outlined.Add,
-                actionContentDescription = "Teklif İste",
+                actionContentDescription = "Teklif Ä°ste",
                 onActionClick = onCreateRfqClick
             )
         },
@@ -155,7 +155,7 @@ private fun RfqCreateActionCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Yeni Teklif İste",
+                    text = "Yeni Teklif Ä°ste",
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -405,7 +405,7 @@ private fun RfqEmptyState(
             )
 
             Text(
-                text = "Henüz Teklif İstemadınız",
+                text = "Henüz Teklif Ä°stemadınız",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -488,3 +488,4 @@ private data class RfqRequestUiModel(
     val statusText: String,
     val statusColor: Color
 )
+

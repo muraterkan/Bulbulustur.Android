@@ -14,3 +14,4 @@ interface IB2CDefaultRepository {
         body: Any? = null
     ): Result<Any?>
 }
+

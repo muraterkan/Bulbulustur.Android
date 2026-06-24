@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Report
+﻿package com.bulbulustur.android.Application.Views.Report
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -158,7 +158,7 @@ private fun ReportAbuseIntroCard(
             )
 
             Text(
-                text = "Listelenen ${targetType.displayName.lowercase()} isminin, açıklamasının veya içeriğinin Bulbulustur kurallarını ihlal ettiğini düşünüyorsanız bize bildirebilirsiniz.",
+                text = "Listelenen ${targetType.displayName.lowercase()} isminin, açıklamasının veya içeriĞinin Bulbulustur kurallarını ihlal ettiĞini düşünüyorsanız bize bildirebilirsiniz.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -235,7 +235,7 @@ private fun ReportSafetyInfoCard() {
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             Text(
-                text = "Bildiriminiz İncelenir",
+                text = "Bildiriminiz Ä°ncelenir",
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -276,7 +276,7 @@ private fun ReportSafetyBullet(
         verticalAlignment = Alignment.Top
     ) {
         Text(
-            text = "✓",
+            text = "âœ“",
             style = MaterialTheme.typography.bodySmall,
             fontWeight = FontWeight.Bold,
             color = BBColors.Green.Green700
@@ -301,8 +301,8 @@ private fun ReportReasonSection(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
     ) {
         BbSectionHeader(
-            title = "Şikayet Nedenini Seç",
-            subtitle = "Bildirimini daha hızlı değerlendirebilmemiz için uygun nedeni seç."
+            title = "Åikayet Nedenini Seç",
+            subtitle = "Bildirimini daha hızlı deĞerlendirebilmemiz için uygun nedeni seç."
         )
 
         FlowRow(
@@ -401,7 +401,7 @@ private fun ReportPrivacyNoticeCard() {
             }
 
             Text(
-                text = "Kişisel bilgi, ödeme bilgisi veya üçüncü kişilere ait özel bilgiler paylaşmayın. Bildirimin kalite ve güvenlik kontrolleri kapsamında değerlendirilebilir.",
+                text = "Kişisel bilgi, ödeme bilgisi veya üçüncü kişilere ait özel bilgiler paylaşmayın. Bildirimin kalite ve güvenlik kontrolleri kapsamında deĞerlendirilebilir.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.weight(1f)
@@ -470,7 +470,7 @@ enum class ReportTargetType(
         shortCode = "Ü"
     ),
     Store(
-        displayName = "Mağaza",
+        displayName = "MaĞaza",
         shortCode = "M"
     ),
     Review(
@@ -512,7 +512,7 @@ private fun getReportReasonItems(): List<ReportReasonItem> {
         ),
         ReportReasonItem(
             id = 3,
-            title = "Sahte Ürün Şüphesi"
+            title = "Sahte Ürün Åüphesi"
         ),
         ReportReasonItem(
             id = 4,
@@ -524,7 +524,7 @@ private fun getReportReasonItems(): List<ReportReasonItem> {
         ),
         ReportReasonItem(
             id = 6,
-            title = "Diğer"
+            title = "DiĞer"
         )
     )
 }
@@ -534,3 +534,4 @@ private fun getReportReasonItems(): List<ReportReasonItem> {
 private fun ReportAbuseScreenPreview() {
     ReportAbuseScreen()
 }
+

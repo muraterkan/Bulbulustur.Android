@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2c.Views.order
+﻿package com.bulbulustur.android.Application.Areas.b2c.Views.order
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -14,7 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CheckCircle
-import androidx.compose.material.icons.outlined.Description
+import androidx.compose.material.icons.outlined.RequestQuote
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.RadioButtonUnchecked
 import androidx.compose.material.icons.outlined.ReceiptLong
@@ -54,10 +54,10 @@ fun OrderCancelRequestScreen(
     val reasons = remember {
         listOf(
             "Yanlış ürün sipariş verdim",
-            "Teslimat süresi bana uygun değil",
+            "Teslimat süresi bana uygun deĞil",
             "Adres veya sipariş bilgisi hatalı",
             "Üründen vazgeçtim",
-            "Diğer"
+            "DiĞer"
         )
     }
 
@@ -74,7 +74,7 @@ fun OrderCancelRequestScreen(
         containerColor = BBColors.SurfaceMuted,
         topBar = {
             BbInnerPageHeader(
-                title = "İptal Talebi",
+                title = "Ä°ptal Talebi",
                 subtitle = "Sipariş satırı için iptal talebi oluştur.",
                 onBackClick = onBackClick
             )
@@ -160,13 +160,13 @@ private fun OrderCancelIntroCard() {
                 )
             ) {
                 Text(
-                    text = "İptal Talebi Oluştur",
+                    text = "Ä°ptal Talebi Oluştur",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = "İptal nedeninizi seçin ve sorunu kısaca açıklayın. Talep sonucunu sipariş detayından takip edebilirsiniz.",
+                    text = "Ä°ptal nedeninizi seçin ve sorunu kısaca açıklayın. Talep sonucunu sipariş detayından takip edebilirsiniz.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -193,8 +193,8 @@ private fun OrderCancelReasonCard(
             )
         ) {
             OrderCancelSectionTitle(
-                title = "İptal Nedeni",
-                subtitle = "Bu ürünü neden iptal etmek istediğinizi seçin."
+                title = "Ä°ptal Nedeni",
+                subtitle = "Bu ürünü neden iptal etmek istediĞinizi seçin."
             )
 
             Column(
@@ -289,7 +289,7 @@ private fun OrderCancelDescriptionCard(
         ) {
             OrderCancelSectionTitle(
                 title = "Açıklama",
-                subtitle = "Talebin daha hızlı değerlendirilmesi için kısa bir açıklama yazın."
+                subtitle = "Talebin daha hızlı deĞerlendirilmesi için kısa bir açıklama yazın."
             )
 
             OutlinedTextField(
@@ -305,7 +305,7 @@ private fun OrderCancelDescriptionCard(
                 },
                 leadingIcon = {
                     Icon(
-                        imageVector = Icons.Outlined.Description,
+                        imageVector = Icons.Outlined.RequestQuote,
                         contentDescription = null
                     )
                 }
@@ -341,13 +341,13 @@ private fun OrderCancelWarningCard() {
                 )
             ) {
                 Text(
-                    text = "İptal Süreci",
+                    text = "Ä°ptal Süreci",
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = "İptal talebiniz sipariş durumuna göre değerlendirilir. Talep sonucunu sipariş detayınızdan takip edebilirsiniz.",
+                    text = "Ä°ptal talebiniz sipariş durumuna göre deĞerlendirilir. Talep sonucunu sipariş detayınızdan takip edebilirsiniz.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

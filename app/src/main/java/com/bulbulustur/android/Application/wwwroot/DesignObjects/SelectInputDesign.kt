@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.wwwroot.DesignObjects
+﻿package com.bulbulustur.android.Application.wwwroot.DesignObjects
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -73,9 +73,9 @@ fun BbSelectInput(
                 trailingIcon = {
                     Text(
                         text = if (isExpanded) {
-                            "▴"
+                            "â–´"
                         } else {
-                            "▾"
+                            "â–¾"
                         },
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -143,3 +143,4 @@ private fun BbSelectSupportText(
         )
     }
 }
+

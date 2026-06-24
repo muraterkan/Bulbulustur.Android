@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2c.Views.Basket
+﻿package com.bulbulustur.android.Application.Areas.b2c.Views.Basket
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -291,7 +291,7 @@ private fun BasketHeaderCard(
 
                 Text(
                     text = if (lineCount > 0) {
-                        "$storeCount mağazadan gönderim yapılacak"
+                        "$storeCount maĞazadan gönderim yapılacak"
                     } else {
                         "Ürün Keşfine dönüp sepetini doldurabilirsin."
                     },
@@ -330,7 +330,7 @@ private fun BasketCouponCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Kupon ve İndirimler",
+                    text = "Kupon ve Ä°ndirimler",
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
@@ -340,7 +340,7 @@ private fun BasketCouponCard(
                     text = if (couponApplied) {
                         "WELCOME75 kuponu uygulandı."
                     } else {
-                        "İndirim kodu ekle veya kullanılabilir kuponlarını görüntüle."
+                        "Ä°ndirim kodu ekle veya kullanılabilir kuponlarını görüntüle."
                     },
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -390,7 +390,7 @@ private fun BasketFavoriteShortcutCard(
                 )
 
                 Text(
-                    text = "Daha önce beğendiğin ürünleri hızlıca sepete aktar.",
+                    text = "Daha önce beĞendiĞin ürünleri hızlıca sepete aktar.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -686,7 +686,7 @@ private fun BasketSummaryCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             Text(
-                text = "Sepet Özeti",
+                text = "Sepet Ã–zeti",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -694,12 +694,12 @@ private fun BasketSummaryCard(
 
             BasketSummaryRow("Ürün Toplamı", productTotalText)
             BasketSummaryRow("Kargo", cargoTotalText)
-            BasketSummaryRow("İndirim", discountTotalText)
+            BasketSummaryRow("Ä°ndirim", discountTotalText)
 
             HorizontalDivider(color = BBColors.Border)
 
             BasketSummaryRow(
-                title = "Ödenecek Tutar",
+                title = "Ã–denecek Tutar",
                 value = payableTotalText,
                 isStrong = true
             )
@@ -967,7 +967,7 @@ private fun BasketCouponSheet(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
             Text(
-                text = "Kupon ve İndirimler",
+                text = "Kupon ve Ä°ndirimler",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -978,7 +978,7 @@ private fun BasketCouponSheet(
                 onValueChange = { couponCode = it },
                 modifier = Modifier.fillMaxWidth(),
                 label = {
-                    Text(text = "İndirim kodu")
+                    Text(text = "Ä°ndirim kodu")
                 },
                 singleLine = true,
                 shape = BBRadius.Input
@@ -1000,7 +1000,7 @@ private fun BasketCouponSheet(
 
             BasketCouponOption(
                 title = "KARGO50",
-                description = "Seçili mağazalarda kargo indirimi",
+                description = "Seçili maĞazalarda kargo indirimi",
                 onClick = onApplyCouponClick
             )
         }
@@ -1193,22 +1193,22 @@ private fun getFavoriteSuggestions(): List<BasketFavoriteSuggestion> {
     return listOf(
         BasketFavoriteSuggestion(
             name = "Ortobella deri terlik",
-            priceText = "₺849,90",
+            priceText = "â‚º849,90",
             imageText = "F1"
         ),
         BasketFavoriteSuggestion(
             name = "Pamuklu basic tişört",
-            priceText = "₺349,90",
+            priceText = "â‚º349,90",
             imageText = "F2"
         ),
         BasketFavoriteSuggestion(
             name = "Kışlık bot koleksiyonu",
-            priceText = "₺1.249,00",
+            priceText = "â‚º1.249,00",
             imageText = "F3"
         ),
         BasketFavoriteSuggestion(
             name = "Rahat taban günlük ayakkabı",
-            priceText = "₺749,90",
+            priceText = "â‚º749,90",
             imageText = "F4"
         )
     )
@@ -1223,12 +1223,12 @@ private fun getBasketLineItems(): List<BasketLineItem> {
             storeName = "Ortobella Store",
             storeLogoText = "OS",
             productName = "Kadın klasik sneaker ayakkabı",
-            variantText = "Beyaz · 38 numara",
-            priceText = "₺899,90",
+            variantText = "Beyaz Â· 38 numara",
+            priceText = "â‚º899,90",
             priceValue = 899.90,
             discountValue = 80.0,
             quantity = 1,
-            cargoText = "Yurtiçi Kargo · 1-3 iş günü",
+            cargoText = "Yurtiçi Kargo Â· 1-3 iş günü",
             cargoPriceValue = 49.90,
             imageText = "P1"
         ),
@@ -1239,12 +1239,12 @@ private fun getBasketLineItems(): List<BasketLineItem> {
             storeName = "Ortobella Store",
             storeLogoText = "OS",
             productName = "Rahat taban günlük ayakkabı",
-            variantText = "Siyah · 39 numara",
-            priceText = "₺749,90",
+            variantText = "Siyah Â· 39 numara",
+            priceText = "â‚º749,90",
             priceValue = 749.90,
             discountValue = 40.0,
             quantity = 1,
-            cargoText = "Yurtiçi Kargo · 1-3 iş günü",
+            cargoText = "Yurtiçi Kargo Â· 1-3 iş günü",
             cargoPriceValue = 49.90,
             imageText = "P2"
         ),
@@ -1255,12 +1255,12 @@ private fun getBasketLineItems(): List<BasketLineItem> {
             storeName = "Moda Nova",
             storeLogoText = "MN",
             productName = "Oversize pamuklu basic tişört",
-            variantText = "Lacivert · M beden",
-            priceText = "₺349,90",
+            variantText = "Lacivert Â· M beden",
+            priceText = "â‚º349,90",
             priceValue = 349.90,
             discountValue = 0.0,
             quantity = 2,
-            cargoText = "Yurtiçi Kargo · 2-4 iş günü",
+            cargoText = "Yurtiçi Kargo Â· 2-4 iş günü",
             cargoPriceValue = 39.90,
             imageText = "P3"
         )
@@ -1268,7 +1268,7 @@ private fun getBasketLineItems(): List<BasketLineItem> {
 }
 
 private fun formatPrice(value: Double): String {
-    return "₺${String.format("%.2f", value).replace(".", ",")}"
+    return "â‚º${String.format("%.2f", value).replace(".", ",")}"
 }
 
 @Preview(showBackground = true)
@@ -1276,3 +1276,4 @@ private fun formatPrice(value: Double): String {
 private fun BasketScreenPreview() {
     BasketScreen()
 }
+

@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -93,7 +93,7 @@ fun ChangePasswordScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Şifre Değiştir",
+                title = "Åifre DeĞiştir",
                 onBackClick = onBackClick
             )
         }
@@ -130,7 +130,7 @@ fun ChangePasswordScreen(
                         onValueChange = { value ->
                             oldPasswordState.value = value
                         },
-                        label = "Mevcut Şifre",
+                        label = "Mevcut Åifre",
                         visible = showOldPasswordState.value,
                         onVisibilityChange = {
                             showOldPasswordState.value = !showOldPasswordState.value
@@ -142,7 +142,7 @@ fun ChangePasswordScreen(
                         onValueChange = { value ->
                             newPasswordState.value = value
                         },
-                        label = "Yeni Şifre",
+                        label = "Yeni Åifre",
                         visible = showNewPasswordState.value,
                         onVisibilityChange = {
                             showNewPasswordState.value = !showNewPasswordState.value
@@ -154,7 +154,7 @@ fun ChangePasswordScreen(
                         onValueChange = { value ->
                             newPasswordAgainState.value = value
                         },
-                        label = "Yeni Şifre Tekrar",
+                        label = "Yeni Åifre Tekrar",
                         visible = showNewPasswordAgainState.value,
                         onVisibilityChange = {
                             showNewPasswordAgainState.value = !showNewPasswordAgainState.value
@@ -169,7 +169,7 @@ fun ChangePasswordScreen(
                         message.isNotBlank()
                     }?.let { message ->
                         PasswordMessageBox(
-                            title = "İşlem Tamamlanamadı",
+                            title = "Ä°şlem Tamamlanamadı",
                             message = message,
                             type = PasswordMessageType.Error
                         )
@@ -179,14 +179,14 @@ fun ChangePasswordScreen(
                         message.isNotBlank()
                     }?.let { message ->
                         PasswordMessageBox(
-                            title = "Şifre Güncellendi",
+                            title = "Åifre Güncellendi",
                             message = message,
                             type = PasswordMessageType.Success
                         )
                     }
 
                     BbButton(
-                        text = "Şifreyi Güncelle",
+                        text = "Åifreyi Güncelle",
                         onClick = {
                             onSaveClick(
                                 oldPasswordState.value,
@@ -291,7 +291,7 @@ private fun PasswordRuleBox(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
         ) {
             Text(
-                text = "Güçlü Şifre Kontrolü",
+                text = "Güçlü Åifre Kontrolü",
                 style = MaterialTheme.typography.labelLarge,
                 color = BBColors.Yellow.Yellow800
             )
@@ -330,9 +330,9 @@ private fun PasswordRuleRow(
     ) {
         Text(
             text = if (valid) {
-                "✓"
+                "âœ“"
             } else {
-                "•"
+                "â€¢"
             },
             style = MaterialTheme.typography.labelLarge,
             color = if (valid) {
@@ -443,4 +443,5 @@ private data class PasswordValidationState(
                     passwordsMatch
         }
 }
+
 

@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2c.Views.order
+﻿package com.bulbulustur.android.Application.Areas.b2c.Views.order
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -14,7 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CalendarMonth
-import androidx.compose.material.icons.outlined.Description
+import androidx.compose.material.icons.outlined.RequestQuote
 import androidx.compose.material.icons.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Numbers
 import androidx.compose.material.icons.outlined.Print
@@ -98,7 +98,7 @@ fun OrderContractScreen(
                 ) {
                     OrderContractInfoBox(
                         modifier = Modifier.weight(1f),
-                        title = "SİPARİŞ",
+                        title = "SÄ°PARÄ°Å",
                         value = contract.orderCode,
                         icon = Icons.Outlined.Numbers,
                         iconColor = BBColors.Yellow.Yellow800
@@ -106,7 +106,7 @@ fun OrderContractScreen(
 
                     OrderContractInfoBox(
                         modifier = Modifier.weight(1f),
-                        title = "TARİH",
+                        title = "TARÄ°H",
                         value = contract.createdDate,
                         icon = Icons.Outlined.CalendarMonth,
                         iconColor = BBColors.Blue.Blue600
@@ -274,13 +274,13 @@ private fun OrderContractLegalTextCard(
                 )
             ) {
                 Text(
-                    text = "HUKUKİ METİN",
+                    text = "HUKUKÄ° METÄ°N",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
                 Text(
-                    text = "Sözleşme İçeriği",
+                    text = "Sözleşme Ä°çeriĞi",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -330,7 +330,7 @@ private fun OrderContractBottomActionCard(
             )
         ) {
             OrderContractSectionTitle(
-                title = "Belge İşlemleri",
+                title = "Belge Ä°şlemleri",
                 subtitle = "Sözleşmeyi görüntüleyebilir veya yazdırabilirsiniz."
             )
 
@@ -426,7 +426,7 @@ private fun OrderContractPartyRow(
         verticalAlignment = Alignment.Top
     ) {
         OrderContractIconBox(
-            icon = Icons.Outlined.Description,
+            icon = Icons.Outlined.RequestQuote,
             backgroundColor = BBColors.SurfaceMuted,
             iconColor = BBColors.TextStrong
         )
@@ -591,9 +591,9 @@ private fun getDemoOrderContract(
         createdDate = createdDate,
         contractDate = contractDate,
         buyerName = "Murat Erkan",
-        buyerAddress = "İstanbul / Türkiye · Alıcı adresi API bağlandığında gerçek sipariş adresinden beslenecek.",
+        buyerAddress = "Ä°stanbul / Türkiye Â· Alıcı adresi API baĞlandıĞında gerçek sipariş adresinden beslenecek.",
         sellerName = "Ortobella",
-        sellerAddress = "Satıcı firma ve mağaza bilgileri API bağlandığında gerçek sipariş satıcısından beslenecek.",
+        sellerAddress = "Satıcı firma ve maĞaza bilgileri API baĞlandıĞında gerçek sipariş satıcısından beslenecek.",
         sections = listOf(
             OrderContractSectionUiModel(
                 title = "1 - Sözleşmenin Tarafları ve Konusu",
@@ -605,14 +605,14 @@ private fun getDemoOrderContract(
             ),
             OrderContractSectionUiModel(
                 title = "3 - Teslimat Koşulları",
-                body = "Teslimat, alıcının sipariş sırasında belirttiği adrese yapılır. Kargo süreci satıcı ve taşıyıcı firma operasyonuna göre güncellenir."
+                body = "Teslimat, alıcının sipariş sırasında belirttiĞi adrese yapılır. Kargo süreci satıcı ve taşıyıcı firma operasyonuna göre güncellenir."
             ),
             OrderContractSectionUiModel(
-                title = "4 - Cayma, İade ve İptal",
-                body = "Alıcı, ilgili mevzuat ve platform kuralları çerçevesinde iptal, iade ve cayma haklarını kullanabilir. Ürün niteliğine göre istisnai durumlar oluşabilir."
+                title = "4 - Cayma, Ä°ade ve Ä°ptal",
+                body = "Alıcı, ilgili mevzuat ve platform kuralları çerçevesinde iptal, iade ve cayma haklarını kullanabilir. Ürün niteliĞine göre istisnai durumlar oluşabilir."
             ),
             OrderContractSectionUiModel(
-                title = "5 - Uyuşmazlıkların Çözümü",
+                title = "5 - Uyuşmazlıkların Ã‡özümü",
                 body = "Taraflar arasında uyuşmazlık oluşması halinde ilgili mevzuat kapsamında yetkili kurumlara başvurulabilir."
             )
         )

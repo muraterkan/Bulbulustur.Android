@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout
+﻿package com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -79,7 +79,7 @@ fun OrderSuccessScreen(
                 item {
                     OrderSuccessSectionTitle(
                         title = "Sipariş paketleri",
-                        description = "Mağaza bazlı gönderim bilgileri."
+                        description = "MaĞaza bazlı gönderim bilgileri."
                     )
                 }
 
@@ -136,7 +136,7 @@ private fun OrderSuccessHero(
                 contentColor = MaterialTheme.colorScheme.onPrimary
             ) {
                 Text(
-                    text = "✓",
+                    text = "âœ“",
                     style = MaterialTheme.typography.headlineLarge,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onPrimary
@@ -279,7 +279,7 @@ private fun OrderSuccessShipmentCard(
                     Spacer(modifier = Modifier.height(4.dp))
 
                     Text(
-                        text = "${shipmentGroup.productCount} ürün · ${shipmentGroup.cargoCompanyName}",
+                        text = "${shipmentGroup.productCount} ürün Â· ${shipmentGroup.cargoCompanyName}",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -349,7 +349,7 @@ private fun OrderSuccessProductLine(
             Spacer(modifier = Modifier.height(2.dp))
 
             Text(
-                text = "${product.variantText} · x${product.quantity}",
+                text = "${product.variantText} Â· x${product.quantity}",
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -418,7 +418,7 @@ private fun OrderSuccessTotalCard(
             Spacer(modifier = Modifier.height(8.dp))
 
             OrderSuccessTotalRow(
-                title = "İndirim",
+                title = "Ä°ndirim",
                 value = total.discountText
             )
 
@@ -434,7 +434,7 @@ private fun OrderSuccessTotalCard(
             Spacer(modifier = Modifier.height(12.dp))
 
             OrderSuccessTotalRow(
-                title = "Ödenen tutar",
+                title = "Ã–denen tutar",
                 value = total.paidPriceText,
                 isStrong = true
             )
@@ -514,7 +514,7 @@ private fun OrderSuccessInfoCard() {
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "Mağazalar siparişini hazırlamaya başladığında kargo bilgileri sipariş detayına düşer. Bildirimler ve e-posta ile süreç hakkında bilgi alırsın.",
+                text = "MaĞazalar siparişini hazırlamaya başladıĞında kargo bilgileri sipariş detayına düşer. Bildirimler ve e-posta ile süreç hakkında bilgi alırsın.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -706,17 +706,17 @@ private fun getOrderSuccessScreenData(orderId: Int): OrderSuccessScreenData {
                     OrderSuccessProductItem(
                         id = 1,
                         name = "Kadın klasik sneaker ayakkabı",
-                        variantText = "Beyaz · 38",
+                        variantText = "Beyaz Â· 38",
                         quantity = 1,
-                        priceText = "₺899,90",
+                        priceText = "â‚º899,90",
                         imageText = "P1"
                     ),
                     OrderSuccessProductItem(
                         id = 2,
                         name = "Rahat taban günlük ayakkabı",
-                        variantText = "Siyah · 39",
+                        variantText = "Siyah Â· 39",
                         quantity = 1,
-                        priceText = "₺749,90",
+                        priceText = "â‚º749,90",
                         imageText = "P2"
                     )
                 )
@@ -733,19 +733,19 @@ private fun getOrderSuccessScreenData(orderId: Int): OrderSuccessScreenData {
                     OrderSuccessProductItem(
                         id = 3,
                         name = "Oversize pamuklu basic tişört",
-                        variantText = "Lacivert · M",
+                        variantText = "Lacivert Â· M",
                         quantity = 2,
-                        priceText = "₺699,80",
+                        priceText = "â‚º699,80",
                         imageText = "P3"
                     )
                 )
             )
         ),
         total = OrderSuccessTotal(
-            productTotalText = "₺2.759,80",
-            cargoTotalText = "₺89,80",
-            discountText = "-₺120,00",
-            paidPriceText = "₺2.729,60"
+            productTotalText = "â‚º2.759,80",
+            cargoTotalText = "â‚º89,80",
+            discountText = "-â‚º120,00",
+            paidPriceText = "â‚º2.729,60"
         )
     )
 }
@@ -757,4 +757,5 @@ private fun OrderSuccessScreenPreview() {
         OrderSuccessScreen()
     }
 }
+
 

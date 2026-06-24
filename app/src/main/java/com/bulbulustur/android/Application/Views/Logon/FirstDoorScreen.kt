@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Logon
+﻿package com.bulbulustur.android.Application.Views.Logon
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -53,7 +53,7 @@ fun FirstDoorScreen(
         LogonPublicPageTitle(
             eyebrow = "Üyelik Kapısı",
             title = "Nasıl Devam Edelim?",
-            description = "Bulbulustur hesabınızı doğru akışla oluşturalım. Seçiminize göre sonraki adımı hazırlayacağız."
+            description = "Bulbulustur hesabınızı doĞru akışla oluşturalım. Seçiminize göre sonraki adımı hazırlayacaĞız."
         )
 
         Spacer(modifier = Modifier.height(BBSpacing.Space8))
@@ -227,3 +227,4 @@ private fun FirstDoorScreenPreview() {
         FirstDoorScreen()
     }
 }
+

@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -172,7 +172,7 @@ private fun RegionIntroCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Seçiminiz ürün görünürlüğü, teslimat seçenekleri, ödeme deneyimi ve yerel içeriklerde kullanılacaktır.",
+            text = "Seçiminiz ürün görünürlüĞü, teslimat seçenekleri, ödeme deneyimi ve yerel içeriklerde kullanılacaktır.",
             style = BbTypography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -195,7 +195,7 @@ private fun SelectedRegionCard(
         ) {
             RegionFlag(
                 flagFileName = selectedRegion.flagFileName,
-                contentDescription = "${selectedRegion.countryName} bayrağı",
+                contentDescription = "${selectedRegion.countryName} bayraĞı",
                 highlighted = true
             )
 
@@ -247,7 +247,7 @@ private fun RegionRow(
         ) {
             RegionFlag(
                 flagFileName = item.flagFileName,
-                contentDescription = "${item.countryName} bayrağı"
+                contentDescription = "${item.countryName} bayraĞı"
             )
 
             Column(

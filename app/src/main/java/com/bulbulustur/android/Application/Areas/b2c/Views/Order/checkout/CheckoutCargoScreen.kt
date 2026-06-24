@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout
+﻿package com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -72,7 +72,7 @@ fun CheckoutCargoScreen(
         if (totalCargoPrice == 0.0) {
             "Ücretsiz"
         } else {
-            "₺${String.format("%.2f", totalCargoPrice).replace(".", ",")}"
+            "â‚º${String.format("%.2f", totalCargoPrice).replace(".", ",")}"
         }
     }
 
@@ -105,7 +105,7 @@ fun CheckoutCargoScreen(
                     CheckoutProgressCard(
                         currentStep = "2",
                         title = "Kargo seçimi",
-                        description = "Mağaza bazlı kargo seçeneklerini belirle."
+                        description = "MaĞaza bazlı kargo seçeneklerini belirle."
                     )
                 }
 
@@ -118,7 +118,7 @@ fun CheckoutCargoScreen(
                 item {
                     CheckoutCargoSectionTitle(
                         title = "Kargo paketleri",
-                        description = "Her mağaza kendi kargo seçeneğiyle ayrı paketlenebilir."
+                        description = "Her maĞaza kendi kargo seçeneĞiyle ayrı paketlenebilir."
                     )
                 }
 
@@ -164,7 +164,7 @@ private fun CheckoutCargoTopBar(
             contentColor = MaterialTheme.colorScheme.onSurfaceVariant
         ) {
             Text(
-                text = "‹",
+                text = "â€¹",
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -373,7 +373,7 @@ private fun CheckoutStoreCargoHeader(
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
-                text = "${cargoGroup.productCount} ürün · ${cargoGroup.packageCount} paket",
+                text = "${cargoGroup.productCount} ürün Â· ${cargoGroup.packageCount} paket",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -482,7 +482,7 @@ private fun CheckoutCargoInfoCard() {
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "Siparişin birden fazla mağazadan oluşuyorsa ürünler ayrı paketler halinde gönderilebilir. Teslimat süreleri mağaza ve kargo firmasına göre değişebilir.",
+                text = "Siparişin birden fazla maĞazadan oluşuyorsa ürünler ayrı paketler halinde gönderilebilir. Teslimat süreleri maĞaza ve kargo firmasına göre deĞişebilir.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -544,7 +544,7 @@ private fun CheckoutCargoBottomBar(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "Ödemeye geç",
+                    text = "Ã–demeye geç",
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onPrimary
@@ -611,7 +611,7 @@ private fun getCheckoutCargoScreenData(): CheckoutCargoScreenData {
     return CheckoutCargoScreenData(
         deliveryAddress = CheckoutCargoDeliveryAddress(
             title = "Ev adresim",
-            fullAddress = "Kızılay Mah. Atatürk Bulvarı No: 12 Daire: 8 Çankaya / Ankara"
+            fullAddress = "Kızılay Mah. Atatürk Bulvarı No: 12 Daire: 8 Ã‡ankaya / Ankara"
         ),
         storeCargoGroups = listOf(
             CheckoutStoreCargoGroup(
@@ -625,7 +625,7 @@ private fun getCheckoutCargoScreenData(): CheckoutCargoScreenData {
                         id = 1,
                         companyName = "Yurtiçi Kargo",
                         deliveryEstimateText = "Tahmini teslimat: 1-3 iş günü",
-                        priceText = "₺49,90",
+                        priceText = "â‚º49,90",
                         priceValue = 49.90,
                         note = "Hızlı gönderim"
                     ),
@@ -635,7 +635,7 @@ private fun getCheckoutCargoScreenData(): CheckoutCargoScreenData {
                         deliveryEstimateText = "Tahmini teslimat: 3-5 iş günü",
                         priceText = "Ücretsiz",
                         priceValue = 0.0,
-                        note = "Mağaza kampanyası"
+                        note = "MaĞaza kampanyası"
                     )
                 )
             ),
@@ -650,7 +650,7 @@ private fun getCheckoutCargoScreenData(): CheckoutCargoScreenData {
                         id = 3,
                         companyName = "Yurtiçi Kargo",
                         deliveryEstimateText = "Tahmini teslimat: 2-4 iş günü",
-                        priceText = "₺39,90",
+                        priceText = "â‚º39,90",
                         priceValue = 39.90,
                         note = ""
                     ),
@@ -658,7 +658,7 @@ private fun getCheckoutCargoScreenData(): CheckoutCargoScreenData {
                         id = 4,
                         companyName = "Ekonomik Kargo",
                         deliveryEstimateText = "Tahmini teslimat: 4-6 iş günü",
-                        priceText = "₺19,90",
+                        priceText = "â‚º19,90",
                         priceValue = 19.90,
                         note = "Ekonomik seçenek"
                     )
@@ -675,4 +675,5 @@ private fun CheckoutCargoScreenPreview() {
         CheckoutCargoScreen()
     }
 }
+
 

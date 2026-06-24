@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Shared
+﻿package com.bulbulustur.android.Application.Views.Shared
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -248,3 +248,4 @@ private fun BuyerBottomNavigationCenterAction(
         )
     }
 }
+

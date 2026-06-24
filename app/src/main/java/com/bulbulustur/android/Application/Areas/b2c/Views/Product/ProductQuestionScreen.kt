@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2c.Views.Product
+﻿package com.bulbulustur.android.Application.Areas.b2c.Views.Product
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -256,14 +256,14 @@ private fun ProductQuestionAskCard(
                 )
 
                 Text(
-                    text = "${product.storeName} mağazasına ürün hakkında soru gönderebilirsin.",
+                    text = "${product.storeName} maĞazasına ürün hakkında soru gönderebilirsin.",
                     style = MaterialTheme.typography.bodySmall,
                     color = BBColors.TextMuted
                 )
             }
 
             Text(
-                text = "›",
+                text = "â€º",
                 style = MaterialTheme.typography.headlineSmall,
                 color = BBColors.TextMuted
             )
@@ -638,7 +638,7 @@ private fun getRetailProductQuestionScreenData(
             id = productId,
             name = "Kadın klasik sneaker ayakkabı",
             storeName = "Ortobella Store",
-            variantText = "Beyaz · 38 numara",
+            variantText = "Beyaz Â· 38 numara",
             imageText = "P1"
         ),
         summary = RetailProductQuestionSummary(
@@ -661,7 +661,7 @@ private fun getRetailProductQuestionScreenData(
                 customerInitials = "AK",
                 dateText = "2 gün önce",
                 question = "Kalıbı dar mı? Normalde 38 giyiyorum, 38 olur mu?",
-                answer = "Merhaba, ürün standart kalıptır. Ayağınız taraklı değilse kendi numaranızı tercih edebilirsiniz.",
+                answer = "Merhaba, ürün standart kalıptır. AyaĞınız taraklı deĞilse kendi numaranızı tercih edebilirsiniz.",
                 answerDateText = "1 gün önce yanıtlandı",
                 storeName = "Ortobella Store",
                 statusText = "Cevaplı",
@@ -705,13 +705,13 @@ private fun getRetailProductQuestionScreenData(
                 customerName = "Ece D.",
                 customerInitials = "ED",
                 dateText = "2 hafta önce",
-                question = "İade sürecinde kutunun zarar görmemiş olması gerekiyor mu?",
+                question = "Ä°ade sürecinde kutunun zarar görmemiş olması gerekiyor mu?",
                 answer = "Merhaba, ürünün kullanılmamış olması ve orijinal kutusuyla gönderilmesi yeterlidir.",
                 answerDateText = "2 hafta önce yanıtlandı",
                 storeName = "Ortobella Store",
                 statusText = "Cevaplı",
                 variantText = "",
-                topicText = "İade",
+                topicText = "Ä°ade",
                 helpfulCount = 6,
                 filterTags = listOf("Cevaplı")
             )
@@ -726,3 +726,4 @@ private fun ProductQuestionScreenPreview() {
         ProductQuestionScreen()
     }
 }
+

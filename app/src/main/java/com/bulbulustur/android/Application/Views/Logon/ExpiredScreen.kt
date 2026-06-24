@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Logon
+﻿package com.bulbulustur.android.Application.Views.Logon
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -137,7 +137,7 @@ private fun ExpiredEmailBox(
             horizontalAlignment = Alignment.Start
         ) {
             Text(
-                text = "İşlem yapılan adres",
+                text = "Ä°şlem yapılan adres",
                 style = MaterialTheme.typography.labelMedium,
                 color = BBColors.TextMuted
             )
@@ -164,13 +164,13 @@ private fun ExpiredReasonList(
     ) {
         ExpiredReasonItem(
             number = "1",
-            title = "Bağlantı süresi doldu",
+            title = "BaĞlantı süresi doldu",
             description = expiredType.firstReason
         )
 
         ExpiredReasonItem(
             number = "2",
-            title = "Yeni bağlantı gerekli",
+            title = "Yeni baĞlantı gerekli",
             description = expiredType.secondReason
         )
     }
@@ -273,7 +273,7 @@ private fun ExpiredSecurityInfoBox() {
                 Spacer(modifier = Modifier.height(BBSpacing.Space1))
 
                 Text(
-                    text = "Süresi dolan bağlantılar tekrar kullanılamaz. Yeni bağlantı oluşturmanız gerekir.",
+                    text = "Süresi dolan baĞlantılar tekrar kullanılamaz. Yeni baĞlantı oluşturmanız gerekir.",
                     style = MaterialTheme.typography.bodySmall,
                     color = BBColors.TextSubtle
                 )
@@ -291,28 +291,28 @@ enum class ExpiredType(
     val secondReason: String
 ) {
     EmailVerification(
-        badgeText = "Doğrulama Süresi Doldu",
-        title = "E-posta Bağlantısı Geçersiz",
-        description = "E-posta doğrulama bağlantınızın süresi dolmuş olabilir.",
-        primaryButtonText = "Doğrulama E-postasını Yeniden Gönder",
-        firstReason = "E-posta doğrulama bağlantıları güvenlik için sınırlı süre geçerlidir.",
-        secondReason = "Yeni doğrulama e-postası göndererek hesabınızı aktifleştirebilirsiniz."
+        badgeText = "DoĞrulama Süresi Doldu",
+        title = "E-posta BaĞlantısı Geçersiz",
+        description = "E-posta doĞrulama baĞlantınızın süresi dolmuş olabilir.",
+        primaryButtonText = "DoĞrulama E-postasını Yeniden Gönder",
+        firstReason = "E-posta doĞrulama baĞlantıları güvenlik için sınırlı süre geçerlidir.",
+        secondReason = "Yeni doĞrulama e-postası göndererek hesabınızı aktifleştirebilirsiniz."
     ),
 
     PasswordReset(
-        badgeText = "Şifre Bağlantısı Geçersiz",
-        title = "Şifre Yenileme Süresi Doldu",
-        description = "Şifre yenileme bağlantınız artık kullanılamıyor.",
-        primaryButtonText = "Yeni Şifre Bağlantısı Gönder",
-        firstReason = "Şifre yenileme bağlantıları tek kullanımlık ve süre sınırlıdır.",
-        secondReason = "Yeni bağlantı göndererek şifre yenileme işlemini tekrar başlatabilirsiniz."
+        badgeText = "Åifre BaĞlantısı Geçersiz",
+        title = "Åifre Yenileme Süresi Doldu",
+        description = "Åifre yenileme baĞlantınız artık kullanılamıyor.",
+        primaryButtonText = "Yeni Åifre BaĞlantısı Gönder",
+        firstReason = "Åifre yenileme baĞlantıları tek kullanımlık ve süre sınırlıdır.",
+        secondReason = "Yeni baĞlantı göndererek şifre yenileme işlemini tekrar başlatabilirsiniz."
     ),
 
     RegisterSession(
         badgeText = "Kayıt Oturumu Kapandı",
-        title = "Kayıt Bağlantısı Geçersiz",
-        description = "Kayıt işleminiz yarıda kalmış veya bağlantı süresi dolmuş olabilir.",
-        primaryButtonText = "Kayıt İşlemini Yeniden Başlat",
+        title = "Kayıt BaĞlantısı Geçersiz",
+        description = "Kayıt işleminiz yarıda kalmış veya baĞlantı süresi dolmuş olabilir.",
+        primaryButtonText = "Kayıt Ä°şlemini Yeniden Başlat",
         firstReason = "Yarım kalan kayıt oturumları güvenlik için otomatik kapatılır.",
         secondReason = "Yeni kayıt akışı başlatarak hesabınızı güvenli şekilde oluşturabilirsiniz."
     )
@@ -325,3 +325,4 @@ private fun ExpiredScreenPreview() {
         ExpiredScreen()
     }
 }
+

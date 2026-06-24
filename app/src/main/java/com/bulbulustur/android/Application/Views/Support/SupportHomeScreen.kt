@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Support
+﻿package com.bulbulustur.android.Application.Views.Support
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,7 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material.icons.outlined.Business
 import androidx.compose.material.icons.outlined.ChevronRight
-import androidx.compose.material.icons.outlined.Description
+import androidx.compose.material.icons.outlined.RequestQuote
 import androidx.compose.material.icons.outlined.HelpCenter
 import androidx.compose.material.icons.outlined.IntegrationInstructions
 import androidx.compose.material.icons.outlined.PlayCircle
@@ -83,8 +83,8 @@ fun SupportHomeScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Doğru Alandan Başlayın",
-                    subtitle = "Kullandığınız alana göre yardım kategorisini seçin"
+                    title = "DoĞru Alandan Başlayın",
+                    subtitle = "KullandıĞınız alana göre yardım kategorisini seçin"
                 )
             }
 
@@ -105,7 +105,7 @@ fun SupportHomeScreen(
             item {
                 BbSectionHeader(
                     title = "Video Rehberler",
-                    subtitle = "Sık kullanılan işlemleri hızlıca öğrenin"
+                    subtitle = "Sık kullanılan işlemleri hızlıca öĞrenin"
                 )
             }
 
@@ -238,7 +238,7 @@ private fun SupportCategoryCard(
                 )
 
                 Text(
-                    text = "${category.articleCount} yardım başlığı",
+                    text = "${category.articleCount} yardım başlıĞı",
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -414,7 +414,7 @@ data class SupportArticleItem(
 private fun getSupportQuickSearchTerms(): List<String> {
     return listOf(
         "Sipariş",
-        "Ödeme",
+        "Ã–deme",
         "Entegrasyon",
         "Hesap Yönetimi",
         "Tedarik",
@@ -434,7 +434,7 @@ private fun getSupportCategoryItems(): List<SupportCategoryItem> {
         SupportCategoryItem(
             categoryId = 2,
             title = "Perakende",
-            description = "Perakende satış, mağaza yönetimi ve sipariş destekleri.",
+            description = "Perakende satış, maĞaza yönetimi ve sipariş destekleri.",
             articleCount = 22,
             icon = Icons.Outlined.Storefront
         ),
@@ -448,7 +448,7 @@ private fun getSupportCategoryItems(): List<SupportCategoryItem> {
         SupportCategoryItem(
             categoryId = 4,
             title = "Entegrasyon",
-            description = "API, kargo, ödeme ve dış sistem bağlantıları.",
+            description = "API, kargo, ödeme ve dış sistem baĞlantıları.",
             articleCount = 15,
             icon = Icons.Outlined.IntegrationInstructions
         )
@@ -488,7 +488,7 @@ private fun getSupportPopularArticleItems(): List<SupportArticleItem> {
             title = "KVKK Aydınlatma Metni",
             description = "Kişisel verilerle ilgili bilgilendirme metinleri.",
             categoryName = "Yardım Merkezi",
-            icon = Icons.Outlined.Description
+            icon = Icons.Outlined.RequestQuote
         ),
         SupportArticleItem(
             articleId = 2,
@@ -499,15 +499,15 @@ private fun getSupportPopularArticleItems(): List<SupportArticleItem> {
         ),
         SupportArticleItem(
             articleId = 3,
-            title = "Fiyat ve Teslimat Şartlarının Görünmesi",
+            title = "Fiyat ve Teslimat Åartlarının Görünmesi",
             description = "Toptan teklif ve teslimat bilgilerinin yönetimi.",
             categoryName = "Ticaret Merkezi",
             icon = Icons.Outlined.Business
         ),
         SupportArticleItem(
             articleId = 4,
-            title = "Şifre Yönetimi",
-            description = "Hesap güvenliği ve şifre değiştirme adımları.",
+            title = "Åifre Yönetimi",
+            description = "Hesap güvenliĞi ve şifre deĞiştirme adımları.",
             categoryName = "Hesap Merkezi",
             icon = Icons.Outlined.Security
         )
@@ -521,3 +521,4 @@ private fun SupportHomeScreenPreview() {
         SupportHomeScreen()
     }
 }
+

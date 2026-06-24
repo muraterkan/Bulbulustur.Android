@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import android.content.pm.PackageManager
 import androidx.compose.foundation.BorderStroke
@@ -158,7 +158,7 @@ fun AboutThisAppScreen(
 
                     AboutMenuRow(
                         icon = Icons.Outlined.Cached,
-                        title = "Önbelleği Temizle",
+                        title = "Ã–nbelleĞi Temizle",
                         value = null,
                         showArrow = true,
                         enabled = true,
@@ -171,7 +171,7 @@ fun AboutThisAppScreen(
 
                     AboutMenuRow(
                         icon = Icons.Outlined.StarRate,
-                        title = "Bizi Değerlendir",
+                        title = "Bizi DeĞerlendir",
                         value = null,
                         showArrow = true,
                         enabled = true,
@@ -430,7 +430,7 @@ private fun AboutBrandLinksSheet(
     ) {
         AboutBottomSheetHeader(
             title = "Bulbulustur",
-            subtitle = "Platform bilgileri ve güven bağlantıları."
+            subtitle = "Platform bilgileri ve güven baĞlantıları."
         )
 
         AboutMenuGroup {
@@ -452,7 +452,7 @@ private fun AboutBrandLinksSheet(
 
             AboutSheetLinkRow(
                 icon = Icons.Outlined.SupportAgent,
-                title = "Yardım ve İletişim",
+                title = "Yardım ve Ä°letişim",
                 onClick = onContactUsClick
             )
 
@@ -484,7 +484,7 @@ private fun AboutClearCacheSheet(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
     ) {
         AboutBottomSheetTopBar(
-            title = "Önbelleği Temizle",
+            title = "Ã–nbelleĞi Temizle",
             onCloseClick = onDismissClick
         )
 
@@ -501,7 +501,7 @@ private fun AboutClearCacheSheet(
             horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
         ) {
             AboutSheetButton(
-                text = "İptal",
+                text = "Ä°ptal",
                 modifier = Modifier.weight(1f),
                 containerColor = BBColors.SurfaceMuted,
                 contentColor = BBColors.TextStrong,
@@ -546,7 +546,7 @@ private fun AboutRateAppSheet(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
     ) {
         AboutBottomSheetTopBar(
-            title = "Bizi Değerlendir",
+            title = "Bizi DeĞerlendir",
             onCloseClick = onDismissClick
         )
 
@@ -615,8 +615,8 @@ private fun AboutRateAppSheet(
                 Text(
                     text = when {
                         selectedRating == 0 -> "Bir puan seçerek devam edebilirsin."
-                        selectedRating <= 3 -> "Neyi daha iyi yapabileceğimizi yazabilirsin."
-                        else -> "Teşekkürler. İstersen Google Play’de de değerlendirebilirsin."
+                        selectedRating <= 3 -> "Neyi daha iyi yapabileceĞimizi yazabilirsin."
+                        else -> "Teşekkürler. Ä°stersen Google Playâ€™de de deĞerlendirebilirsin."
                     },
                     style = BbTypography.bodySmall.copy(
                         lineHeight = 18.sp
@@ -651,7 +651,7 @@ private fun AboutRateAppSheet(
 
         if (selectedRating >= 4) {
             AboutSheetButton(
-                text = "Google Play’de Değerlendir",
+                text = "Google Playâ€™de DeĞerlendir",
                 modifier = Modifier.fillMaxWidth(),
                 containerColor = BBColors.Primary,
                 contentColor = BBColors.TextStrong,
@@ -661,7 +661,7 @@ private fun AboutRateAppSheet(
         }
 
         AboutSheetButton(
-            text = "Şimdi Değil",
+            text = "Åimdi DeĞil",
             modifier = Modifier.fillMaxWidth(),
             containerColor = BBColors.TextStrong,
             contentColor = Color.White,

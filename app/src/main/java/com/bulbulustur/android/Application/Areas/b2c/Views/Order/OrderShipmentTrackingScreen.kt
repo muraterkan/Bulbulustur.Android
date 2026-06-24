@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2c.Views.order
+﻿package com.bulbulustur.android.Application.Areas.b2c.Views.order
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -49,7 +49,7 @@ fun OrderShipmentTrackingScreen(
         orderNumber = "Sipariş #1000001",
         cargoCompany = "Yurtiçi Kargo",
         trackingNumber = "YK-2026-00012345",
-        currentStatus = "Dağıtım şubesinde",
+        currentStatus = "DaĞıtım şubesinde",
         estimatedDelivery = "Bugün teslim edilebilir",
         steps = listOf(
             OrderShipmentStepUiModel(
@@ -68,13 +68,13 @@ fun OrderShipmentTrackingScreen(
                 completed = true
             ),
             OrderShipmentStepUiModel(
-                title = "Dağıtım şubesinde",
+                title = "DaĞıtım şubesinde",
                 description = "Gönderi teslimat şubesine ulaştı.",
                 completed = true
             ),
             OrderShipmentStepUiModel(
                 title = "Teslimat bekleniyor",
-                description = "Kurye dağıtım süreci başladığında durum güncellenir.",
+                description = "Kurye daĞıtım süreci başladıĞında durum güncellenir.",
                 completed = false
             )
         )

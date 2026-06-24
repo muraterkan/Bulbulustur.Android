@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2b.Views.Product
+﻿package com.bulbulustur.android.Application.Areas.b2b.Views.Product
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -68,7 +68,7 @@ fun CustomizationRequestScreen(
         containerColor = BBColors.SurfaceSoft,
         topBar = {
             BbInnerPageHeader(
-                title = "Özelleştirme Talebi",
+                title = "Ã–zelleştirme Talebi",
                 onBackClick = onBackClick
             )
         }
@@ -100,8 +100,8 @@ fun CustomizationRequestScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Özelleştirme Detayları",
-                    subtitle = "Tedarikçinin doğru dönüş yapabilmesi için değişiklikleri açık yazın"
+                    title = "Ã–zelleştirme Detayları",
+                    subtitle = "Tedarikçinin doĞru dönüş yapabilmesi için deĞişiklikleri açık yazın"
                 )
             }
 
@@ -111,8 +111,8 @@ fun CustomizationRequestScreen(
                     onValueChange = {
                         detail.value = it
                     },
-                    label = "Diğer Detaylar",
-                    placeholder = "Talep ettiğiniz ürün özelleştirmesi hakkında daha fazla detay verin."
+                    label = "DiĞer Detaylar",
+                    placeholder = "Talep ettiĞiniz ürün özelleştirmesi hakkında daha fazla detay verin."
                 )
             }
 
@@ -127,7 +127,7 @@ fun CustomizationRequestScreen(
             item {
                 BbSectionHeader(
                     title = "Hızlı Detay Alanları",
-                    subtitle = "İsterseniz özelleştirme bilgisini ayrı ayrı da yazabilirsiniz"
+                    subtitle = "Ä°sterseniz özelleştirme bilgisini ayrı ayrı da yazabilirsiniz"
                 )
             }
 
@@ -138,7 +138,7 @@ fun CustomizationRequestScreen(
                         colorMaterial.value = it
                     },
                     label = "Renk / Malzeme",
-                    placeholder = "Örn. siyah, metal, mat yüzey, titanyum",
+                    placeholder = "Ã–rn. siyah, metal, mat yüzey, titanyum",
                     icon = Icons.Outlined.ColorLens
                 )
             }
@@ -149,8 +149,8 @@ fun CustomizationRequestScreen(
                     onValueChange = {
                         sizeTechnical.value = it
                     },
-                    label = "Ölçü / Teknik Detay",
-                    placeholder = "Örn. 30x20 cm, kalınlık, bağlantı detayı",
+                    label = "Ã–lçü / Teknik Detay",
+                    placeholder = "Ã–rn. 30x20 cm, kalınlık, baĞlantı detayı",
                     icon = Icons.Outlined.Straighten
                 )
             }
@@ -162,7 +162,7 @@ fun CustomizationRequestScreen(
                         packageLogo.value = it
                     },
                     label = "Ambalaj / Logo",
-                    placeholder = "Örn. logolu ambalaj, özel kutu, etiket baskısı",
+                    placeholder = "Ã–rn. logolu ambalaj, özel kutu, etiket baskısı",
                     icon = Icons.Outlined.Style
                 )
             }
@@ -206,7 +206,7 @@ private fun CustomizationRequestHeader(
                 )
 
                 Text(
-                    text = "Özelleştirme Talebi",
+                    text = "Ã–zelleştirme Talebi",
                     style = MaterialTheme.typography.labelLarge,
                     color = BBColors.Primary,
                     fontWeight = FontWeight.SemiBold
@@ -214,7 +214,7 @@ private fun CustomizationRequestHeader(
             }
 
             Text(
-                text = "Ürün Özelleştirme İsteği Oluştur",
+                text = "Ürün Ã–zelleştirme Ä°steĞi Oluştur",
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = BBColors.TextStrong
@@ -279,7 +279,7 @@ private fun CustomizationProductSummaryCard(
                 )
 
                 BbChip(
-                    text = "Özel Üretim Desteklenir",
+                    text = "Ã–zel Üretim Desteklenir",
                     selected = false,
                     onClick = {}
                 )
@@ -401,7 +401,7 @@ private fun CustomizationHintCard() {
             )
 
             Text(
-                text = "Özelleştirme talebinde ölçü, renk, malzeme, kullanım amacı ve minimum sipariş miktarını belirtmek tedarikçi dönüşünü hızlandırır.",
+                text = "Ã–zelleştirme talebinde ölçü, renk, malzeme, kullanım amacı ve minimum sipariş miktarını belirtmek tedarikçi dönüşünü hızlandırır.",
                 style = MaterialTheme.typography.bodySmall,
                 color = BBColors.TextMuted,
                 modifier = Modifier.weight(1f)
@@ -443,7 +443,7 @@ private fun CustomizationSendCard(
                 )
 
                 Text(
-                    text = "Özelleştirme isteği API bağlantısından sonra gerçek endpoint’e gönderilecek.",
+                    text = "Ã–zelleştirme isteĞi API baĞlantısından sonra gerçek endpointâ€™e gönderilecek.",
                     style = MaterialTheme.typography.bodySmall,
                     color = BBColors.TextMuted
                 )
@@ -470,7 +470,7 @@ private fun customizationSuggestionTexts(): List<CustomizationSuggestionText> {
             description = "Ürün için özel renk, malzeme ve yüzey seçenekleri hakkında teklif almak istiyorum."
         ),
         CustomizationSuggestionText(
-            title = "Ölçü / Teknik Detay",
+            title = "Ã–lçü / Teknik Detay",
             description = "Ürün ölçülerinin ve teknik detayların ihtiyacıma göre özelleştirilmesini istiyorum."
         ),
         CustomizationSuggestionText(
@@ -478,7 +478,7 @@ private fun customizationSuggestionTexts(): List<CustomizationSuggestionText> {
             description = "Ürün ambalajı, logo baskısı ve etiketleme seçenekleriyle birlikte fiyat almak istiyorum."
         ),
         CustomizationSuggestionText(
-            title = "Özel Üretim",
+            title = "Ã–zel Üretim",
             description = "Bu ürünün özel üretim koşulları, minimum sipariş miktarı ve teslim süresi hakkında bilgi almak istiyorum."
         )
     )
@@ -491,3 +491,4 @@ private fun CustomizationRequestScreenPreview() {
         CustomizationRequestScreen()
     }
 }
+

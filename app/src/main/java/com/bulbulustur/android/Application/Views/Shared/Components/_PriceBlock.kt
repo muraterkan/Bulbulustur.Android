@@ -91,3 +91,4 @@ private fun bbFormatPrice(
     val formatter = DecimalFormat(pattern, symbols)
     return formatter.format(price) + currencySymbol
 }
+

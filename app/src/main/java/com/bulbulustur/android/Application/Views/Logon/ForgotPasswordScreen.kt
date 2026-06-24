@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Logon
+﻿package com.bulbulustur.android.Application.Views.Logon
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -47,8 +47,8 @@ fun ForgotPasswordScreen(
     ) {
         LogonPublicPageTitle(
             eyebrow = "Hesap Kurtarma",
-            title = "Şifremi Unuttum",
-            description = "E-posta adresinizi yazın. Şifre yenileme bağlantısını size gönderelim."
+            title = "Åifremi Unuttum",
+            description = "E-posta adresinizi yazın. Åifre yenileme baĞlantısını size gönderelim."
         )
 
         Spacer(modifier = Modifier.height(BBSpacing.Space8))
@@ -74,7 +74,7 @@ fun ForgotPasswordScreen(
 
         BbButton(
             modifier = Modifier.fillMaxWidth(),
-            text = "Şifre Yenileme Bağlantısı Gönder",
+            text = "Åifre Yenileme BaĞlantısı Gönder",
             onClick = {
                 onSendResetLinkClick(email)
             },
@@ -142,7 +142,7 @@ private fun ResetPasswordInfoBox() {
             Spacer(modifier = Modifier.height(BBSpacing.Space1))
 
             Text(
-                text = "Bağlantı yalnızca kısa süre geçerli olur. Hesabınızı korumak için yeni şifrenizi kimseyle paylaşmayın.",
+                text = "BaĞlantı yalnızca kısa süre geçerli olur. Hesabınızı korumak için yeni şifrenizi kimseyle paylaşmayın.",
                 style = MaterialTheme.typography.bodySmall,
                 color = BBColors.TextSubtle
             )
@@ -157,3 +157,4 @@ private fun ForgotPasswordScreenPreview() {
         ForgotPasswordScreen()
     }
 }
+

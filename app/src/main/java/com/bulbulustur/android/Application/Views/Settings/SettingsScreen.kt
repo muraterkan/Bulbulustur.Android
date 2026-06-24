@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Settings
+﻿package com.bulbulustur.android.Application.Views.Settings
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -52,14 +52,14 @@ fun SettingsScreen(
         item {
             BbSectionHeader(
                 title = "Uygulama Ayarları",
-                subtitle = "Bu alan yalnızca uygulamanın görünüm ve dil tercihlerini değiştirir"
+                subtitle = "Bu alan yalnızca uygulamanın görünüm ve dil tercihlerini deĞiştirir"
             )
         }
 
         item {
             SettingsOptionCard(
                 title = "Görünüm",
-                description = "Tema Tercihini Değiştir",
+                description = "Tema Tercihini DeĞiştir",
                 currentValue = currentThemeName,
                 icon = Icons.Outlined.Palette,
                 onClick = onThemeClick
@@ -69,7 +69,7 @@ fun SettingsScreen(
         item {
             SettingsOptionCard(
                 title = "Dil",
-                description = "Uygulama Dilini Değiştir",
+                description = "Uygulama Dilini DeĞiştir",
                 currentValue = currentLanguageName,
                 icon = Icons.Outlined.Language,
                 onClick = onLanguageClick
@@ -121,7 +121,7 @@ private fun SettingsHeader() {
             )
 
             Text(
-                text = "Tema ve dil tercihlerinizi buradan değiştirin.",
+                text = "Tema ve dil tercihlerinizi buradan deĞiştirin.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -242,7 +242,7 @@ private fun SettingsInfoCard() {
                 )
 
                 Text(
-                    text = "Tema ve dil tercihleri daha sonra yerel kayıt alanında saklanacak. API bağlantısından sonra aktif diller servis üzerinden beslenecek.",
+                    text = "Tema ve dil tercihleri daha sonra yerel kayıt alanında saklanacak. API baĞlantısından sonra aktif diller servis üzerinden beslenecek.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -264,3 +264,4 @@ private fun SettingsScreenPreview() {
         SettingsScreen()
     }
 }
+

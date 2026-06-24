@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Shared
+﻿package com.bulbulustur.android.Application.Views.Shared
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -391,7 +391,7 @@ fun LogonPublicDefaultFooter(
 ) {
     Text(
         modifier = modifier.fillMaxWidth(),
-        text = "© 2026 Bulbulustur - Tüm hakları saklıdır",
+        text = "Â© 2026 Bulbulustur - Tüm hakları saklıdır",
         style = MaterialTheme.typography.bodySmall,
         color = BBColors.TextMuted,
         textAlign = TextAlign.Center
@@ -407,7 +407,7 @@ fun LogonPublicRegisterLegalFooter(
     val uriHandler = LocalUriHandler.current
 
     val text = buildAnnotatedString {
-        append("Hesap oluşturduğunuzda, Bulbulustur'un ")
+        append("Hesap oluşturduĞunuzda, Bulbulustur'un ")
 
         pushStringAnnotation(
             tag = "terms",
@@ -468,3 +468,4 @@ fun LogonPublicRegisterLegalFooter(
         }
     )
 }
+

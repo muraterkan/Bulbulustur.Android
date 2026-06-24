@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2b.ViewComponents
+﻿package com.bulbulustur.android.Application.Areas.b2b.ViewComponents
 
 import androidx.lifecycle.viewModelScope
 import com.bulbulustur.android.Application.Areas.b2b.Controllers.BaseController

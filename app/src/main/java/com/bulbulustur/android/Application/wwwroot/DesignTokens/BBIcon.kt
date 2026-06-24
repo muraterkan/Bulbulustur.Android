@@ -147,3 +147,4 @@ object BBIcon {
     val CompanyMediaIcon: Dp = Size4Xl
     val CampaignMediaIcon: Dp = Size4Xl
 }
+

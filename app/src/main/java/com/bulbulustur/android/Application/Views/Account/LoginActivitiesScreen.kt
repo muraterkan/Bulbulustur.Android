@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -160,7 +160,7 @@ private fun LoginActivitiesEmptyState() {
             )
 
             Text(
-                text = "Hesabınıza ait giriş hareketleri oluştuğunda burada listelenir.",
+                text = "Hesabınıza ait giriş hareketleri oluştuĞunda burada listelenir.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -310,4 +310,5 @@ private data class LoginActivityUiModel(
     val shortCode: String,
     val trusted: Boolean
 )
+
 

@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2b.Views.Search
+﻿package com.bulbulustur.android.Application.Areas.b2b.Views.Search
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -104,7 +104,7 @@ fun SearchScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Önerilen kategoriler",
+                    title = "Ã–nerilen kategoriler",
                     subtitle = "Aramaya başlamadan hızlı kategori girişi"
                 )
             }
@@ -128,7 +128,7 @@ fun SearchScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Öne çıkan firmalar",
+                    title = "Ã–ne çıkan firmalar",
                     subtitle = "Dummy firma sonuçları"
                 )
             }
@@ -142,7 +142,7 @@ fun SearchScreen(
                 WholesaleSearchResultCard(
                     title = company.name,
                     description = company.description,
-                    meta = "${company.productCount} ürün • ${company.city}",
+                    meta = "${company.productCount} ürün â€¢ ${company.city}",
                     icon = company.icon,
                     onClick = {
                         onCompanyClick(company.companyId)
@@ -152,7 +152,7 @@ fun SearchScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Öne Çıkan Ürünler",
+                    title = "Ã–ne Ã‡ıkan Ürünler",
                     subtitle = "API sonrası gerçek arama sonuçları burada listelenecek"
                 )
             }
@@ -166,7 +166,7 @@ fun SearchScreen(
                 WholesaleSearchResultCard(
                     title = product.name,
                     description = product.description,
-                    meta = "Min. ${product.minimumOrderQuantity} adet • ${product.companyName}",
+                    meta = "Min. ${product.minimumOrderQuantity} adet â€¢ ${product.companyName}",
                     icon = product.icon,
                     onClick = {
                         onProductClick(product.productId)
@@ -205,7 +205,7 @@ private fun WholesaleSearchHeader() {
             )
 
             Text(
-                text = "Toptan akışında arama sadece ürün değil; firma, kategori ve teklif ihtiyacına da kapı açar.",
+                text = "Toptan akışında arama sadece ürün deĞil; firma, kategori ve teklif ihtiyacına da kapı açar.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -250,7 +250,7 @@ private fun WholesaleSearchModeCards(
         }
 
         BbButton(
-            text = "Aradığını bulamadın mı? Teklif talebi oluştur",
+            text = "AradıĞını bulamadın mı? Teklif talebi oluştur",
             onClick = {
                 onRfqCreateClick(searchText)
             },
@@ -476,7 +476,7 @@ private fun getWholesaleSearchCompanyResults(): List<WholesaleSearchCompanyResul
             companyId = 1,
             name = "Anadolu Ambalaj Sanayi",
             description = "Koli, kutu ve e-ticaret ambalaj ürünleri firması.",
-            city = "İstanbul",
+            city = "Ä°stanbul",
             productCount = 42,
             icon = Icons.Outlined.Business
         ),
@@ -496,14 +496,14 @@ private fun getWholesaleSearchProductResults(): List<WholesaleSearchProductResul
         WholesaleSearchProductResult(
             productId = 1,
             name = "E-ticaret Kargo Kolisi",
-            description = "Çoklu ölçü seçeneğiyle toptan koli ürünü.",
+            description = "Ã‡oklu ölçü seçeneĞiyle toptan koli ürünü.",
             companyName = "Anadolu Ambalaj",
             minimumOrderQuantity = 100,
             icon = Icons.Outlined.Inventory2
         ),
         WholesaleSearchProductResult(
             productId = 2,
-            name = "Baskılı Mağaza Poşeti",
+            name = "Baskılı MaĞaza Poşeti",
             description = "Logo baskılı, farklı ebat seçenekli poşet grubu.",
             companyName = "Marmara Tedarik",
             minimumOrderQuantity = 500,
@@ -519,3 +519,4 @@ private fun SearchScreenPreview() {
         SearchScreen()
     }
 }
+

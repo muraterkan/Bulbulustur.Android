@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -346,7 +346,7 @@ private fun RequestPhotoBox(
                 )
 
                 Text(
-                    text = "İade Edilen Ürünün Fotoğrafları",
+                    text = "Ä°ade Edilen Ürünün FotoĞrafları",
                     style = BbTypography.labelSmall,
                     color = BBColors.TextMuted
                 )
@@ -364,7 +364,7 @@ private fun RequestPhotoBox(
                 }
             } else {
                 Text(
-                    text = "Fotoğraf bulunmuyor.",
+                    text = "FotoĞraf bulunmuyor.",
                     style = BbTypography.bodySmall,
                     color = BBColors.TextMuted
                 )
@@ -506,7 +506,7 @@ private fun getDemoRequests(): List<RequestUiModel> {
             sellerName = "Base & Quality Store",
             reason = "Ürün Defolu/Hasarlı Geldi",
             productName = "Ortobella Comfort Genç Garson Bot 8028",
-            description = "Ürünün sağ tarafında dikiş hatası mevcut, değişim veya iade talep ediyorum.",
+            description = "Ürünün saĞ tarafında dikiş hatası mevcut, deĞişim veya iade talep ediyorum.",
             photoCount = 1,
             status = RequestStatus.DamagedProduct
         ),
@@ -517,7 +517,7 @@ private fun getDemoRequests(): List<RequestUiModel> {
             sellerName = "Ortobella Comfort",
             reason = "Yanlış Ürün Gönderildi",
             productName = "Ortobella Comfort Hakiki Deri Terlik M13",
-            description = "Sipariş ettiğim varyanttan farklı bir ürün teslim edildi. Değişim sürecini başlatmak istiyorum.",
+            description = "Sipariş ettiĞim varyanttan farklı bir ürün teslim edildi. DeĞişim sürecini başlatmak istiyorum.",
             photoCount = 2,
             status = RequestStatus.WaitingReview
         )
@@ -531,7 +531,7 @@ private enum class RequestStatus(
         title = "Ürün Defolu/Hasarlı Geldi"
     ),
     WaitingReview(
-        title = "İncelemede"
+        title = "Ä°ncelemede"
     ),
     Approved(
         title = "Onaylandı"
@@ -552,4 +552,5 @@ private data class RequestUiModel(
     val photoCount: Int,
     val status: RequestStatus
 )
+
 

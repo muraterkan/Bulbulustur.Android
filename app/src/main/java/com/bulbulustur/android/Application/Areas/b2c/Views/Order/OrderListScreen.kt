@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2c.Views.order
+﻿package com.bulbulustur.android.Application.Areas.b2c.Views.order
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -147,7 +147,7 @@ private fun OrderListOverviewCard(
                     )
                 ) {
                     Text(
-                        text = "Sipariş Özeti",
+                        text = "Sipariş Ã–zeti",
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -548,7 +548,7 @@ private fun OrderEmptyState() {
             )
 
             Text(
-                text = "Geçmiş veya devam eden siparişleriniz oluştuğunda burada listelenir.",
+                text = "Geçmiş veya devam eden siparişleriniz oluştuĞunda burada listelenir.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -565,7 +565,7 @@ private fun getDemoOrders(): List<OrderListUiModel> {
             statusText = "Hazırlanıyor",
             productTitle = "Kadın Sneaker Günlük Ayakkabı",
             productCountText = "2 ürün",
-            totalText = "1.250,50 ₺",
+            totalText = "1.250,50 â‚º",
             storeName = "Ortobella",
             statusColor = BBColors.Orange.Orange600,
             isActive = true
@@ -577,7 +577,7 @@ private fun getDemoOrders(): List<OrderListUiModel> {
             statusText = "Teslim Edildi",
             productTitle = "Pamuklu Basic Tişört",
             productCountText = "2 ürün",
-            totalText = "3.450,00 ₺",
+            totalText = "3.450,00 â‚º",
             storeName = "ModaLine",
             statusColor = BBColors.Green.Green600,
             isActive = false
@@ -587,9 +587,9 @@ private fun getDemoOrders(): List<OrderListUiModel> {
             orderNumber = "Sipariş #1000002",
             orderDate = "9 Mayıs 2026",
             statusText = "Hazırlanıyor",
-            productTitle = "Minimal Sırt Çantası",
+            productTitle = "Minimal Sırt Ã‡antası",
             productCountText = "1 ürün",
-            totalText = "850,25 ₺",
+            totalText = "850,25 â‚º",
             storeName = "UrbanBag",
             statusColor = BBColors.Orange.Orange600,
             isActive = true
@@ -598,10 +598,10 @@ private fun getDemoOrders(): List<OrderListUiModel> {
             orderId = 4,
             orderNumber = "Sipariş #1000003",
             orderDate = "9 Mayıs 2026",
-            statusText = "Ödeme Alındı",
+            statusText = "Ã–deme Alındı",
             productTitle = "Ofis Aksesuar Seti",
             productCountText = "5 ürün",
-            totalText = "15.600,00 ₺",
+            totalText = "15.600,00 â‚º",
             storeName = "OfficePlus",
             statusColor = BBColors.Blue.Blue600,
             isActive = true
@@ -613,7 +613,7 @@ private fun getDemoOrders(): List<OrderListUiModel> {
             statusText = "Teslim Edildi",
             productTitle = "Seramik Kupa",
             productCountText = "1 ürün",
-            totalText = "210,00 ₺",
+            totalText = "210,00 â‚º",
             storeName = "HomeCraft",
             statusColor = BBColors.Green.Green600,
             isActive = false

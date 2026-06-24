@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2c.Views.Product
+﻿package com.bulbulustur.android.Application.Areas.b2c.Views.Product
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -62,7 +62,7 @@ fun ProductListScreen(
             "Tümü",
             "Ayakkabı",
             "Giyim",
-            "Çanta",
+            "Ã‡anta",
             "Elektronik",
             "Ev ve yaşam"
         )
@@ -70,7 +70,7 @@ fun ProductListScreen(
 
     val sortOptions = remember {
         listOf(
-            "Öne çıkan",
+            "Ã–ne çıkan",
             "En düşük fiyat",
             "En yüksek fiyat",
             "Yeni gelenler"
@@ -86,7 +86,7 @@ fun ProductListScreen(
     }
 
     var selectedSortOption by remember {
-        mutableStateOf("Öne çıkan")
+        mutableStateOf("Ã–ne çıkan")
     }
 
     var favoriteProductIds by remember {
@@ -229,7 +229,7 @@ fun ProductListScreen(
             ) {
                 BbSectionHeader(
                     title = "Perakende Ürünler",
-                    subtitle = "Kategorilerden, mağazalardan ve kampanyalardan ürün keşfet."
+                    subtitle = "Kategorilerden, maĞazalardan ve kampanyalardan ürün keşfet."
                 )
             }
 
@@ -442,7 +442,7 @@ private fun getRetailProductListItems(): List<RetailProductListItem> {
             StoreName = "Ortobella Store",
             CategoryName = "Ayakkabı",
             ImageResId = R.drawable.h3ff3b33d6a1447c898cee6e336867bach,
-            PriceText = "₺3.750,00",
+            PriceText = "â‚º3.750,00",
             OldPriceText = "",
             PriceValue = 3750.00,
             RatingText = "4.8",
@@ -456,8 +456,8 @@ private fun getRetailProductListItems(): List<RetailProductListItem> {
             StoreName = "Ortobella Store",
             CategoryName = "Ayakkabı",
             ImageResId = R.drawable.h3ff3b33d6a1447c898cee6e336867bachvar1,
-            PriceText = "₺3.450,00",
-            OldPriceText = "₺3.750,00",
+            PriceText = "â‚º3.450,00",
+            OldPriceText = "â‚º3.750,00",
             PriceValue = 3450.00,
             RatingText = "4.7",
             CargoText = "Ücretsiz kargo",
@@ -470,7 +470,7 @@ private fun getRetailProductListItems(): List<RetailProductListItem> {
             StoreName = "Ortobella Store",
             CategoryName = "Ayakkabı",
             ImageResId = R.drawable.h3ff3b33d6a1447c898cee6e336867bachvar2,
-            PriceText = "₺3.590,00",
+            PriceText = "â‚º3.590,00",
             OldPriceText = "",
             PriceValue = 3590.00,
             RatingText = "4.6",
@@ -484,8 +484,8 @@ private fun getRetailProductListItems(): List<RetailProductListItem> {
             StoreName = "Ortobella Store",
             CategoryName = "Ayakkabı",
             ImageResId = R.drawable.h3ff3b33d6a1447c898cee6e336867bachvar3,
-            PriceText = "₺3.290,00",
-            OldPriceText = "₺3.690,00",
+            PriceText = "â‚º3.290,00",
+            OldPriceText = "â‚º3.690,00",
             PriceValue = 3290.00,
             RatingText = "4.5",
             CargoText = "Hızlı kargo",
@@ -498,8 +498,8 @@ private fun getRetailProductListItems(): List<RetailProductListItem> {
             StoreName = "Ortobella Store",
             CategoryName = "Ayakkabı",
             ImageResId = R.drawable.h3ff3b33d6a1447c898cee6e336867bach,
-            PriceText = "₺2.899,90",
-            OldPriceText = "₺3.199,90",
+            PriceText = "â‚º2.899,90",
+            OldPriceText = "â‚º3.199,90",
             PriceValue = 2899.90,
             RatingText = "4.4",
             CargoText = "Ücretsiz kargo",
@@ -512,7 +512,7 @@ private fun getRetailProductListItems(): List<RetailProductListItem> {
             StoreName = "Ortobella Store",
             CategoryName = "Ayakkabı",
             ImageResId = R.drawable.h3ff3b33d6a1447c898cee6e336867bachvar1,
-            PriceText = "₺3.150,00",
+            PriceText = "â‚º3.150,00",
             OldPriceText = "",
             PriceValue = 3150.00,
             RatingText = "4.7",

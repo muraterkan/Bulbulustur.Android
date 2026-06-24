@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2b.Views.Category
+﻿package com.bulbulustur.android.Application.Areas.b2b.Views.Category
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -252,7 +252,7 @@ private fun WholesaleCategoryHeroCard(
             )
 
             Text(
-                text = "Alt sektörleri incele, doğrulanmış tedarikçilere ulaş ve seçili kategori için teklif akışını başlat.",
+                text = "Alt sektörleri incele, doĞrulanmış tedarikçilere ulaş ve seçili kategori için teklif akışını başlat.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = BBColors.Gray.Gray200
             )
@@ -270,7 +270,7 @@ private fun WholesaleCategoryHeroCard(
                 )
 
                 BbButton(
-                    text = "Teklif İste",
+                    text = "Teklif Ä°ste",
                     onClick = onRfqClick,
                     modifier = Modifier.weight(1f),
                     variant = BbButtonVariant.Light,
@@ -575,8 +575,8 @@ private fun getWholesaleQuickActions(): List<WholesaleCategoryQuickActionItem> {
             target = WholesaleCategoryQuickActionTarget.Companies
         ),
         WholesaleCategoryQuickActionItem(
-            title = "Teklif İste",
-            description = "İhtiyacını firmalara ilet",
+            title = "Teklif Ä°ste",
+            description = "Ä°htiyacını firmalara ilet",
             icon = Icons.Outlined.RequestQuote,
             backgroundColor = BBColors.Blue.Blue50,
             iconColor = BBColors.Blue.Blue700,
@@ -599,8 +599,8 @@ private fun getWholesaleQuickActions(): List<WholesaleCategoryQuickActionItem> {
             target = WholesaleCategoryQuickActionTarget.Sample
         ),
         WholesaleCategoryQuickActionItem(
-            title = "Özelleştir",
-            description = "Özel üretim talebi oluştur",
+            title = "Ã–zelleştir",
+            description = "Ã–zel üretim talebi oluştur",
             icon = Icons.Outlined.Tune,
             backgroundColor = BBColors.Orange.Orange50,
             iconColor = BBColors.Orange.Orange700,
@@ -634,7 +634,7 @@ private fun getWholesaleSubCategories(): List<WholesaleCategoryHomeSubCategoryIt
         ),
         WholesaleCategoryHomeSubCategoryItem(
             title = "Entegre Devreler",
-            description = "Çip, modül ve devre ürünleri",
+            description = "Ã‡ip, modül ve devre ürünleri",
             icon = Icons.Outlined.Category,
             backgroundColor = BBColors.Purple.Purple50,
             iconColor = BBColors.Purple.Purple700
@@ -653,7 +653,7 @@ private fun getWholesaleCategoryShowcases(): List<WholesaleCategoryShowcaseItem>
             target = WholesaleCategoryShowcaseTarget.Products
         ),
         WholesaleCategoryShowcaseItem(
-            title = "Doğrulanmış Tedarikçiler",
+            title = "DoĞrulanmış Tedarikçiler",
             description = "Bu kategoride satış yapan firmalara ulaş.",
             icon = Icons.Outlined.Verified,
             backgroundColor = BBColors.Blue.Blue50,
@@ -674,7 +674,7 @@ private fun getWholesaleCategoryShowcases(): List<WholesaleCategoryShowcaseItem>
 private fun getWholesalePopularSearches(): List<String> {
     return listOf(
         "LED sürücü",
-        "Güç kaynağı",
+        "Güç kaynaĞı",
         "Sensör",
         "Konnektör",
         "PCB",
@@ -691,3 +691,4 @@ private fun WholesaleCategoryHomeScreenPreview() {
         WholesaleCategoryHomeScreen()
     }
 }
+

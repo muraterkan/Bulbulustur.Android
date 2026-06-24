@@ -363,3 +363,4 @@ private fun getBbChipVerticalPadding(
     BbChipSize.Small -> BBSpacing.Space1
     BbChipSize.Medium -> BBSpacing.ChipPaddingVertical
 }
+

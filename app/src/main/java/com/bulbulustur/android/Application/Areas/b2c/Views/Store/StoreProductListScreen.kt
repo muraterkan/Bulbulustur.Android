@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2c.Views.Store
+﻿package com.bulbulustur.android.Application.Areas.b2c.Views.Store
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -63,7 +63,7 @@ fun StoreProductListScreen(
     }
 
     var selectedSort by remember {
-        mutableStateOf("Öne çıkan")
+        mutableStateOf("Ã–ne çıkan")
     }
 
     val filteredProducts = remember(selectedCategory, selectedSort, screenData.products) {
@@ -143,7 +143,7 @@ fun StoreProductListScreen(
 
             item {
                 StoreProductListSectionTitle(
-                    title = "Mağaza ürünleri",
+                    title = "MaĞaza ürünleri",
                     description = "${filteredProducts.size} ürün listeleniyor."
                 )
             }
@@ -177,7 +177,7 @@ private fun StoreProductListTopBar(
             contentColor = MaterialTheme.colorScheme.onSurfaceVariant
         ) {
             Text(
-                text = "‹",
+                text = "â€¹",
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -189,14 +189,14 @@ private fun StoreProductListTopBar(
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = "Mağaza ürünleri",
+                text = "MaĞaza ürünleri",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onBackground
             )
 
             Text(
-                text = "Mağaza Vitrininin tüm ürün akışı.",
+                text = "MaĞaza Vitrininin tüm ürün akışı.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -264,7 +264,7 @@ private fun StoreProductListStoreSummary(
                 Spacer(modifier = Modifier.height(5.dp))
 
                 Text(
-                    text = "${store.productCount} ürün · ${store.ratingText} puan · ${store.cargoText}",
+                    text = "${store.productCount} ürün Â· ${store.ratingText} puan Â· ${store.cargoText}",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
@@ -285,7 +285,7 @@ private fun StoreProductVerifiedBadge() {
             )
     ) {
         Text(
-            text = "Doğrulanmış",
+            text = "DoĞrulanmış",
             style = MaterialTheme.typography.labelSmall,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.primary
@@ -306,7 +306,7 @@ private fun StoreProductSearchBox(
             .fillMaxWidth()
             .clip(RoundedCornerShape(18.dp)),
         placeholder = {
-            Text(text = "Bu mağazada ürün ara")
+            Text(text = "Bu maĞazada ürün ara")
         },
         singleLine = true,
         shape = RoundedCornerShape(18.dp),
@@ -342,7 +342,7 @@ private fun StoreProductCategoryFilterSection(
     ) {
         StoreProductListSectionTitle(
             title = "Kategori Filtresi",
-            description = "Mağaza ürünlerini kategoriye göre daralt."
+            description = "MaĞaza ürünlerini kategoriye göre daralt."
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -379,7 +379,7 @@ private fun StoreProductSortFilterSection(
     ) {
         StoreProductListSectionTitle(
             title = "Sıralama",
-            description = "Ürün akışını alışveriş önceliğine göre düzenle."
+            description = "Ürün akışını alışveriş önceliĞine göre düzenle."
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -511,7 +511,7 @@ private fun StoreProductListCard(
             }
 
             Text(
-                text = "›",
+                text = "â€º",
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -610,11 +610,11 @@ private fun getRetailStoreProductListScreenData(storeId: Int): RetailStoreProduc
             "Tümü",
             "Ayakkabı",
             "Kadın Giyim",
-            "Çanta",
+            "Ã‡anta",
             "Aksesuar"
         ),
         sortOptions = listOf(
-            "Öne çıkan",
+            "Ã–ne çıkan",
             "En düşük fiyat",
             "En yüksek fiyat",
             "Yeni Gelenler"
@@ -625,7 +625,7 @@ private fun getRetailStoreProductListScreenData(storeId: Int): RetailStoreProduc
                 name = "Kadın klasik sneaker ayakkabı",
                 shortDescription = "Günlük kullanım için rahat tabanlı sneaker.",
                 categoryName = "Ayakkabı",
-                priceText = "₺899,90",
+                priceText = "â‚º899,90",
                 priceValue = 899.90,
                 discountText = "%20",
                 imageText = "P1",
@@ -636,7 +636,7 @@ private fun getRetailStoreProductListScreenData(storeId: Int): RetailStoreProduc
                 name = "Rahat taban günlük ayakkabı",
                 shortDescription = "Yumuşak iç taban ve hafif yapı.",
                 categoryName = "Ayakkabı",
-                priceText = "₺749,90",
+                priceText = "â‚º749,90",
                 priceValue = 749.90,
                 discountText = "",
                 imageText = "P2",
@@ -646,8 +646,8 @@ private fun getRetailStoreProductListScreenData(storeId: Int): RetailStoreProduc
                 id = 3,
                 name = "Günlük kullanım omuz çantası",
                 shortDescription = "Minimal tasarım, günlük kullanım bölmeleri.",
-                categoryName = "Çanta",
-                priceText = "₺649,90",
+                categoryName = "Ã‡anta",
+                priceText = "â‚º649,90",
                 priceValue = 649.90,
                 discountText = "%15",
                 imageText = "P3",
@@ -658,7 +658,7 @@ private fun getRetailStoreProductListScreenData(storeId: Int): RetailStoreProduc
                 name = "Basic pamuklu kadın tişört",
                 shortDescription = "Pamuklu kumaş, regular fit günlük model.",
                 categoryName = "Kadın Giyim",
-                priceText = "₺329,90",
+                priceText = "â‚º329,90",
                 priceValue = 329.90,
                 discountText = "%10",
                 imageText = "P4",
@@ -669,7 +669,7 @@ private fun getRetailStoreProductListScreenData(storeId: Int): RetailStoreProduc
                 name = "Minimal bileklik seti",
                 shortDescription = "Günlük kombinler için aksesuar seti.",
                 categoryName = "Aksesuar",
-                priceText = "₺219,90",
+                priceText = "â‚º219,90",
                 priceValue = 219.90,
                 discountText = "",
                 imageText = "P5",
@@ -686,4 +686,5 @@ private fun StoreProductListScreenPreview() {
         StoreProductListScreen()
     }
 }
+
 

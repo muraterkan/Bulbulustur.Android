@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Logon
+﻿package com.bulbulustur.android.Application.Views.Logon
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -98,7 +98,7 @@ fun LoginScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             LogonPublicFieldLabel(
-                text = "Şifre"
+                text = "Åifre"
             )
 
             Spacer(modifier = Modifier.weight(1f))
@@ -107,7 +107,7 @@ fun LoginScreen(
                 onClick = onForgotPasswordClick
             ) {
                 Text(
-                    text = "Şifremi Unuttum",
+                    text = "Åifremi Unuttum",
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.SemiBold,
                     color = BBColors.TextSubtle
@@ -120,7 +120,7 @@ fun LoginScreen(
             onValueChange = {
                 password = it
             },
-            placeholder = "Şifreniz",
+            placeholder = "Åifreniz",
             trailingContent = {
                 IconButton(
                     onClick = {
@@ -245,3 +245,4 @@ private fun LoginScreenPreview() {
         LoginScreen()
     }
 }
+

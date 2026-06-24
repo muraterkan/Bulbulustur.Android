@@ -284,3 +284,4 @@ private fun getBbButtonMinHeight(
     BbButtonSize.Medium -> BBLayout.ControlHeightMedium
     BbButtonSize.Large -> BBLayout.ControlHeightLarge
 }
+

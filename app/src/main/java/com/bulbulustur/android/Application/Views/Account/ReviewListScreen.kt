@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.getValue
@@ -69,7 +69,7 @@ fun ReviewListScreen(
         containerColor = BBColors.SurfaceMuted,
         topBar = {
             BbInnerPageHeader(
-                title = "Değerlendirmelerim",
+                title = "DeĞerlendirmelerim",
                 onBackClick = onBackClick
             )
         }
@@ -138,7 +138,7 @@ private fun ReviewIntroCard() {
             )
 
             Text(
-                text = "Ürün, mağaza ve firma değerlendirmelerinizi burada görüntüleyebilir, gerektiğinde düzenleyebilir veya silebilirsiniz.",
+                text = "Ürün, maĞaza ve firma deĞerlendirmelerinizi burada görüntüleyebilir, gerektiĞinde düzenleyebilir veya silebilirsiniz.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -323,7 +323,7 @@ private fun ReviewCard(
                 }
 
                 BbButton(
-                    text = "Değerlendirmeyi Sil",
+                    text = "DeĞerlendirmeyi Sil",
                     onClick = {
                         onDeleteReviewClick(review.reviewId)
                     },
@@ -504,7 +504,7 @@ private fun ReviewEmptyState(
             )
 
             Text(
-                text = "Henüz ${selectedTab.emptyText} bulunmuyor. Değerlendirme yaptığınızda burada listelenecek.",
+                text = "Henüz ${selectedTab.emptyText} bulunmuyor. DeĞerlendirme yaptıĞınızda burada listelenecek.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -529,8 +529,8 @@ private fun getDemoProductReviews(): List<ReviewUiModel> {
             targetId = 101,
             type = AccountReviewTab.Product,
             title = "Ortobella Comfort Genç Garson Bot 8028",
-            badgeText = "ÜRÜN DEĞERLENDİRMESİ",
-            comment = "Makineyi 7 gündür kullanıyorum. Bu süre içinde hem deneyim kazandım hem de internetten okuduğum birçok bilgiyle karşılaştırdım. Ürünü almayı düşünenler için detaylı bir deneyim paylaşmak istedim.",
+            badgeText = "ÜRÜN DEÄERLENDÄ°RMESÄ°",
+            comment = "Makineyi 7 gündür kullanıyorum. Bu süre içinde hem deneyim kazandım hem de internetten okuduĞum birçok bilgiyle karşılaştırdım. Ürünü almayı düşünenler için detaylı bir deneyim paylaşmak istedim.",
             rating = 5,
             dateText = "22 Eylül 2025 00:31 tarihinde eklendi",
             mediaBackgroundColor = BBColors.Beige.Beige200,
@@ -547,8 +547,8 @@ private fun getDemoStoreReviews(): List<ReviewUiModel> {
             targetId = 501,
             type = AccountReviewTab.Store,
             title = "Ortobella Comfort",
-            badgeText = "MAĞAZA DEĞERLENDİRMESİ",
-            comment = "Mağaza iletişimi hızlıydı. Sipariş süreci ve kargo bilgilendirmesi anlaşılır şekilde ilerledi.",
+            badgeText = "MAÄAZA DEÄERLENDÄ°RMESÄ°",
+            comment = "MaĞaza iletişimi hızlıydı. Sipariş süreci ve kargo bilgilendirmesi anlaşılır şekilde ilerledi.",
             rating = 5,
             dateText = "12 Ekim 2025 14:20 tarihinde eklendi",
             mediaBackgroundColor = BBColors.Green.Green700,
@@ -565,7 +565,7 @@ private fun getDemoCompanyReviews(): List<ReviewUiModel> {
             targetId = 701,
             type = AccountReviewTab.Company,
             title = "Citrix Tedarik",
-            badgeText = "FİRMA DEĞERLENDİRMESİ",
+            badgeText = "FÄ°RMA DEÄERLENDÄ°RMESÄ°",
             comment = "Firma bilgileri netti, ürün açıklamaları yeterliydi. Toptan iletişim tarafında hızlı dönüş aldım.",
             rating = 5,
             dateText = "10 Ekim 2025 09:12 tarihinde eklendi",
@@ -583,17 +583,17 @@ private enum class AccountReviewTab(
 ) {
     Product(
         title = "Ürün",
-        emptyText = "ürün değerlendirmesi",
+        emptyText = "ürün deĞerlendirmesi",
         icon = Icons.Outlined.Comment
     ),
     Store(
-        title = "Mağaza",
-        emptyText = "mağaza değerlendirmesi",
+        title = "MaĞaza",
+        emptyText = "maĞaza deĞerlendirmesi",
         icon = Icons.Outlined.Storefront
     ),
     Company(
         title = "Firma",
-        emptyText = "firma değerlendirmesi",
+        emptyText = "firma deĞerlendirmesi",
         icon = Icons.Outlined.Domain
     )
 }
@@ -601,7 +601,7 @@ private enum class AccountReviewTab(
 private val ReviewUiModel.primaryActionText: String
     get() = when (type) {
         AccountReviewTab.Product -> "Ürünü Gör"
-        AccountReviewTab.Store -> "Mağazayı Gör"
+        AccountReviewTab.Store -> "MaĞazayı Gör"
         AccountReviewTab.Company -> "Firmayı Gör"
     }
 
@@ -618,4 +618,5 @@ private data class ReviewUiModel(
     val mediaTextColor: Color,
     val imageResId: Int?
 )
+
 

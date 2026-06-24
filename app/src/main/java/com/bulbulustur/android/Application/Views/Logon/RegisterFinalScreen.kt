@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Logon
+﻿package com.bulbulustur.android.Application.Views.Logon
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -85,7 +85,7 @@ fun RegisterFinalScreen(
 
             BbButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = "Doğrulama E-postasını Tekrar Gönder",
+                text = "DoĞrulama E-postasını Tekrar Gönder",
                 onClick = onResendVerificationClick,
                 variant = BbButtonVariant.Outline,
                 size = BbButtonSize.Large
@@ -146,7 +146,7 @@ private fun RegisterFinalEmailBox(
             horizontalAlignment = Alignment.Start
         ) {
             Text(
-                text = "Doğrulama adresi",
+                text = "DoĞrulama adresi",
                 style = MaterialTheme.typography.labelMedium,
                 color = BBColors.TextMuted
             )
@@ -181,13 +181,13 @@ private fun RegisterFinalStepList(
         RegisterFinalStepItem(
             number = "2",
             title = when (finalState) {
-                RegisterFinalState.Completed -> "E-posta doğrulandı"
-                RegisterFinalState.WaitingEmailVerification -> "E-posta doğrulaması bekleniyor"
+                RegisterFinalState.Completed -> "E-posta doĞrulandı"
+                RegisterFinalState.WaitingEmailVerification -> "E-posta doĞrulaması bekleniyor"
                 RegisterFinalState.WaitingApproval -> "Firma kontrolü bekleniyor"
             },
             description = when (finalState) {
                 RegisterFinalState.Completed -> "Hesabınız giriş için hazır."
-                RegisterFinalState.WaitingEmailVerification -> "Size gönderilen bağlantıya tıklayarak hesabınızı doğrulayın."
+                RegisterFinalState.WaitingEmailVerification -> "Size gönderilen baĞlantıya tıklayarak hesabınızı doĞrulayın."
                 RegisterFinalState.WaitingApproval -> "Kurumsal hesap bilgileriniz kontrol edildikten sonra aktifleşir."
             },
             isCompleted = finalState == RegisterFinalState.Completed
@@ -303,15 +303,15 @@ enum class RegisterFinalState(
     ),
 
     WaitingEmailVerification(
-        badgeText = "Doğrulama Bekleniyor",
+        badgeText = "DoĞrulama Bekleniyor",
         title = "E-postanızı Kontrol Edin",
-        description = "Hesabınızı aktifleştirmek için e-posta adresinize gönderilen doğrulama bağlantısını kullanın."
+        description = "Hesabınızı aktifleştirmek için e-posta adresinize gönderilen doĞrulama baĞlantısını kullanın."
     ),
 
     WaitingApproval(
         badgeText = "Kontrol Bekleniyor",
-        title = "Kurumsal Hesap İnceleniyor",
-        description = "Firma hesabınız kontrol sürecine alındı. Onaylandığında giriş yapabilirsiniz."
+        title = "Kurumsal Hesap Ä°nceleniyor",
+        description = "Firma hesabınız kontrol sürecine alındı. OnaylandıĞında giriş yapabilirsiniz."
     )
 }
 
@@ -322,3 +322,4 @@ private fun RegisterFinalScreenPreview() {
         RegisterFinalScreen()
     }
 }
+

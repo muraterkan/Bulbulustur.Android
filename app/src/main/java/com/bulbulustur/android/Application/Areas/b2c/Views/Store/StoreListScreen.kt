@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2c.Views.Store
+﻿package com.bulbulustur.android.Application.Areas.b2c.Views.Store
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -45,11 +45,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
-import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
@@ -60,52 +59,19 @@ import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
 fun StoreListScreen(
     onBackClick: () -> Unit = {},
     onStoreClick: (StoreListItem) -> Unit = {},
-    onOpenStoreClick: () -> Unit = {},
-    onHowItWorksClick: () -> Unit = {}
+    onSellerInfoClick: () -> Unit = {},
+    onHowItWorksClick: () -> Unit = onSellerInfoClick
 ) {
-    val stores = remember {
-        getStoreListItems()
-    }
+    val stores = remember { getStoreListItems() }
 
     val alphabetFilters = remember {
-        listOf(
-            "Tümü",
-            "0-9",
-            "A",
-            "B",
-            "C",
-            "D",
-            "E",
-            "F",
-            "G",
-            "H",
-            "I",
-            "İ",
-            "K",
-            "M",
-            "O",
-            "P",
-            "S",
-            "T",
-            "U",
-            "V",
-            "Z"
-        )
+        listOf("Tümü", "0-9", "A", "B", "C", "D", "E", "F", "G", "H", "I", "Ä°", "K", "M", "O", "P", "S", "T", "U", "V", "Z")
     }
 
-    var searchText by remember {
-        mutableStateOf("")
-    }
+    var searchText by remember { mutableStateOf("") }
+    var selectedAlphabetFilter by remember { mutableStateOf("Tümü") }
 
-    var selectedAlphabetFilter by remember {
-        mutableStateOf("Tümü")
-    }
-
-    val filteredStores = remember(
-        searchText,
-        selectedAlphabetFilter,
-        stores
-    ) {
+    val filteredStores = remember(searchText, selectedAlphabetFilter, stores) {
         val searchFilteredStores = if (searchText.isBlank()) {
             stores
         } else {
@@ -116,16 +82,10 @@ fun StoreListScreen(
             }
         }
 
-        if (selectedAlphabetFilter == "Tümü") {
-            searchFilteredStores
-        } else if (selectedAlphabetFilter == "0-9") {
-            searchFilteredStores.filter {
-                it.name.firstOrNull()?.isDigit() == true
-            }
-        } else {
-            searchFilteredStores.filter {
-                it.name.startsWith(selectedAlphabetFilter, ignoreCase = true)
-            }
+        when (selectedAlphabetFilter) {
+            "Tümü" -> searchFilteredStores
+            "0-9" -> searchFilteredStores.filter { it.name.firstOrNull()?.isDigit() == true }
+            else -> searchFilteredStores.filter { it.name.startsWith(selectedAlphabetFilter, ignoreCase = true) }
         }
     }
 
@@ -133,13 +93,13 @@ fun StoreListScreen(
         containerColor = BBColors.SurfaceMuted,
         topBar = {
             BbInnerPageHeader(
-                title = "Mağazalar",
+                title = "MaĞazalar",
                 onBackClick = onBackClick,
                 actionContent = {
                     StoreListHeaderActionButton(
-                        text = "Mağaza Aç",
+                        text = "Satıcı Ol",
                         icon = Icons.Outlined.Storefront,
-                        onClick = onOpenStoreClick
+                        onClick = onSellerInfoClick
                     )
                 }
             )
@@ -161,7 +121,6 @@ fun StoreListScreen(
         ) {
             item {
                 StoreListHeroCard(
-                    onOpenStoreClick = onOpenStoreClick,
                     onHowItWorksClick = onHowItWorksClick
                 )
             }
@@ -169,9 +128,7 @@ fun StoreListScreen(
             item {
                 StoreListSearchCard(
                     searchText = searchText,
-                    onSearchTextChange = {
-                        searchText = it
-                    }
+                    onSearchTextChange = { searchText = it }
                 )
             }
 
@@ -179,9 +136,7 @@ fun StoreListScreen(
                 StoreAlphabetFilterRow(
                     filters = alphabetFilters,
                     selectedFilter = selectedAlphabetFilter,
-                    onFilterClick = {
-                        selectedAlphabetFilter = it
-                    }
+                    onFilterClick = { selectedAlphabetFilter = it }
                 )
             }
 
@@ -195,7 +150,7 @@ fun StoreListScreen(
             if (filteredStores.isEmpty()) {
                 item {
                     StoreListEmptyState(
-                        onOpenStoreClick = onOpenStoreClick
+                        onSellerInfoClick = onSellerInfoClick
                     )
                 }
             } else {
@@ -205,15 +160,13 @@ fun StoreListScreen(
                 ) { store ->
                     StoreListCard(
                         store = store,
-                        onClick = {
-                            onStoreClick(store)
-                        }
+                        onClick = { onStoreClick(store) }
                     )
                 }
 
                 item {
-                    StoreListOpenStoreBanner(
-                        onOpenStoreClick = onOpenStoreClick
+                    StoreListSellerInfoBanner(
+                        onSellerInfoClick = onSellerInfoClick
                     )
                 }
             }
@@ -231,13 +184,11 @@ private fun StoreListHeaderActionButton(
         modifier = Modifier
             .height(BBSpacing.Space10)
             .clip(BBRadius.PillShape)
-            .clickable {
-                onClick()
-            },
+            .clickable { onClick() },
         shape = BBRadius.PillShape,
         color = BBColors.Primary,
         border = BorderStroke(
-            width = 1.dp,
+            width = BBSpacing.Divider,
             color = BBColors.Primary
         )
     ) {
@@ -268,7 +219,6 @@ private fun StoreListHeaderActionButton(
 
 @Composable
 private fun StoreListHeroCard(
-    onOpenStoreClick: () -> Unit,
     onHowItWorksClick: () -> Unit
 ) {
     BbCard(
@@ -279,40 +229,26 @@ private fun StoreListHeroCard(
         Column(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
-            StoreListStatusPill(
-                text = "Mağaza Rehberi"
-            )
+            StoreListStatusPill(text = "MaĞaza Rehberi")
 
             Text(
-                text = "Bulbulustur Mağazalarını Keşfet",
+                text = "Bulbulustur MaĞazalarını Keşfet",
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = BBColors.TextStrong
             )
 
             Text(
-                text = "Bulbulustur’da yer alan perakende mağazaları inceleyin, ürünlerini Keşfedin ve favori satıcılarınıza hızlıca ulaşın.",
+                text = "DoĞrulanmış satıcıları, favori maĞazaları ve maĞaza vitrinlerindeki ürünleri tek yerden inceleyin.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = BBColors.TextMuted
             )
 
-            Row(
+            StoreListSecondaryButton(
+                text = "Satıcı Başvurusu Nasıl Ã‡alışır?",
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
-            ) {
-                StoreListPrimaryButton(
-                    text = "Ücretsiz Mağaza Aç",
-                    icon = Icons.Outlined.Storefront,
-                    modifier = Modifier.weight(1f),
-                    onClick = onOpenStoreClick
-                )
-
-                StoreListSecondaryButton(
-                    text = "Nasıl Çalışır?",
-                    modifier = Modifier.weight(1f),
-                    onClick = onHowItWorksClick
-                )
-            }
+                onClick = onHowItWorksClick
+            )
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -321,14 +257,14 @@ private fun StoreListHeroCard(
                 StoreListHeroMiniCard(
                     modifier = Modifier.weight(1f),
                     title = "Güvenilir Satıcılar",
-                    subtitle = "Doğrulanmış mağaza Vitrinlerini inceleyin.",
+                    subtitle = "DoĞrulanmış maĞaza vitrinlerini inceleyin.",
                     icon = Icons.Outlined.Verified
                 )
 
                 StoreListHeroMiniCard(
                     modifier = Modifier.weight(1f),
-                    title = "Favori Mağazalar",
-                    subtitle = "Beğendiğiniz mağazaları takip edin.",
+                    title = "Favori MaĞazalar",
+                    subtitle = "BeĞendiĞiniz maĞazaları takip edin.",
                     icon = Icons.Outlined.FavoriteBorder
                 )
             }
@@ -348,7 +284,7 @@ private fun StoreListHeroMiniCard(
         shape = BBRadius.XlShape,
         color = BBColors.SurfaceMuted,
         border = BorderStroke(
-            width = 1.dp,
+            width = BBSpacing.Divider,
             color = BBColors.Border
         )
     ) {
@@ -406,7 +342,7 @@ private fun StoreListSearchCard(
         shape = BBRadius.XlShape,
         color = BBColors.Surface,
         border = BorderStroke(
-            width = 1.dp,
+            width = BBSpacing.Divider,
             color = BBColors.Border
         )
     ) {
@@ -426,7 +362,7 @@ private fun StoreListSearchCard(
             },
             placeholder = {
                 Text(
-                    text = "Mağaza, kategori veya ürün ara",
+                    text = "MaĞaza, kategori veya ürün ara",
                     style = MaterialTheme.typography.bodySmall,
                     color = BBColors.TextMuted
                 )
@@ -463,9 +399,7 @@ private fun StoreAlphabetFilterRow(
             StoreAlphabetChip(
                 text = filter,
                 selected = selectedFilter == filter,
-                onClick = {
-                    onFilterClick(filter)
-                }
+                onClick = { onFilterClick(filter) }
             )
         }
     }
@@ -480,22 +414,12 @@ private fun StoreAlphabetChip(
     Surface(
         modifier = Modifier
             .clip(BBRadius.PillShape)
-            .clickable {
-                onClick()
-            },
+            .clickable { onClick() },
         shape = BBRadius.PillShape,
-        color = if (selected) {
-            BBColors.Primary
-        } else {
-            BBColors.Surface
-        },
+        color = if (selected) BBColors.Primary else BBColors.Surface,
         border = BorderStroke(
-            width = 1.dp,
-            color = if (selected) {
-                BBColors.Primary
-            } else {
-                BBColors.Border
-            }
+            width = BBSpacing.Divider,
+            color = if (selected) BBColors.Primary else BBColors.Border
         )
     ) {
         Text(
@@ -521,7 +445,7 @@ private fun StoreListResultHeader(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
     ) {
         Text(
-            text = "Mağaza Listesi",
+            text = "MaĞaza Listesi",
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
             color = BBColors.TextStrong
@@ -529,9 +453,9 @@ private fun StoreListResultHeader(
 
         Text(
             text = if (selectedFilter == "Tümü") {
-                "$storeCount mağaza listeleniyor"
+                "$storeCount maĞaza listeleniyor"
             } else {
-                "$selectedFilter Filtresinde $storeCount mağaza"
+                "$selectedFilter filtresinde $storeCount maĞaza"
             },
             style = MaterialTheme.typography.bodySmall,
             color = BBColors.TextMuted
@@ -558,11 +482,11 @@ private fun StoreListCard(
                 horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
             ) {
                 Surface(
-                    modifier = Modifier.size(64.dp),
+                    modifier = Modifier.size(BBIcon.Box2Xl),
                     shape = BBRadius.XlShape,
                     color = BBColors.PrimarySoft,
                     border = BorderStroke(
-                        width = 1.dp,
+                        width = BBSpacing.Divider,
                         color = BBColors.Primary.copy(alpha = 0.35f)
                     )
                 ) {
@@ -596,9 +520,7 @@ private fun StoreListCard(
                         )
 
                         if (store.isVerified) {
-                            StoreListMiniBadge(
-                                text = "Doğrulanmış"
-                            )
+                            StoreListMiniBadge(text = "DoĞrulanmış")
                         }
                     }
 
@@ -622,21 +544,13 @@ private fun StoreListCard(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
             ) {
-                StoreListMetaPill(
-                    text = "${store.productCount} Ürün"
-                )
-
-                StoreListMetaPill(
-                    text = store.ratingText
-                )
-
-                StoreListMetaPill(
-                    text = store.categoryName
-                )
+                StoreListMetaPill(text = "${store.productCount} Ürün")
+                StoreListMetaPill(text = store.ratingText)
+                StoreListMetaPill(text = store.categoryName)
             }
 
             StoreListPrimaryButton(
-                text = "Mağazayı İncele",
+                text = "MaĞazayı Ä°ncele",
                 icon = Icons.Outlined.Storefront,
                 modifier = Modifier.fillMaxWidth(),
                 onClick = onClick
@@ -647,7 +561,7 @@ private fun StoreListCard(
 
 @Composable
 private fun StoreListEmptyState(
-    onOpenStoreClick: () -> Unit
+    onSellerInfoClick: () -> Unit
 ) {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
@@ -664,7 +578,7 @@ private fun StoreListEmptyState(
                 shape = BBRadius.XlShape,
                 color = BBColors.SurfaceMuted,
                 border = BorderStroke(
-                    width = 1.dp,
+                    width = BBSpacing.Divider,
                     color = BBColors.Border
                 )
             ) {
@@ -673,7 +587,7 @@ private fun StoreListEmptyState(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "∅",
+                        text = "âˆ…",
                         style = MaterialTheme.typography.headlineMedium,
                         fontWeight = FontWeight.Bold,
                         color = BBColors.Primary
@@ -681,42 +595,40 @@ private fun StoreListEmptyState(
                 }
             }
 
-            StoreListStatusPill(
-                text = "Mağaza Bulunamadı"
-            )
+            StoreListStatusPill(text = "MaĞaza Bulunamadı")
 
             Text(
-                text = "Listelenecek Mağaza Bulunmuyor",
+                text = "Listelenecek MaĞaza Bulunmuyor",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = BBColors.TextStrong
             )
 
             Text(
-                text = "Daha sonra tekrar kontrol edebilir veya kendi mağazanızı açarak ürünlerinizi listeleyebilirsiniz.",
+                text = "Bu filtrede maĞaza bulunamadı. Satıcı olmak istiyorsanız başvuru süreci web panelinde tamamlanır.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = BBColors.TextMuted
             )
 
             StoreListPrimaryButton(
-                text = "Mağaza Aç",
+                text = "Satıcı Başvurusu Hakkında",
                 icon = Icons.Outlined.Storefront,
                 modifier = Modifier.fillMaxWidth(),
-                onClick = onOpenStoreClick
+                onClick = onSellerInfoClick
             )
         }
     }
 }
 
 @Composable
-private fun StoreListOpenStoreBanner(
-    onOpenStoreClick: () -> Unit
+private fun StoreListSellerInfoBanner(
+    onSellerInfoClick: () -> Unit
 ) {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
         padding = BbCardPadding.Medium,
-        onClick = onOpenStoreClick
+        onClick = onSellerInfoClick
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -746,14 +658,14 @@ private fun StoreListOpenStoreBanner(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Bulbulustur’da Mağaza Açın",
+                    text = "Satıcı olmak ister misiniz?",
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
                     color = BBColors.TextStrong
                 )
 
                 Text(
-                    text = "Ürünlerinizi listeleyin, mağazanızı yönetin ve müşterilere tek platformdan ulaşın.",
+                    text = "Başvuru ve maĞaza yönetimi web paneli üzerinden tamamlanır.",
                     style = MaterialTheme.typography.bodySmall,
                     color = BBColors.TextMuted
                 )
@@ -770,14 +682,12 @@ private fun StoreListOpenStoreBanner(
 }
 
 @Composable
-private fun StoreListStatusPill(
-    text: String
-) {
+private fun StoreListStatusPill(text: String) {
     Surface(
         shape = BBRadius.PillShape,
         color = BBColors.PrimarySoft,
         border = BorderStroke(
-            width = 1.dp,
+            width = BBSpacing.Divider,
             color = BBColors.Primary.copy(alpha = 0.35f)
         )
     ) {
@@ -795,14 +705,12 @@ private fun StoreListStatusPill(
 }
 
 @Composable
-private fun StoreListMiniBadge(
-    text: String
-) {
+private fun StoreListMiniBadge(text: String) {
     Surface(
         shape = BBRadius.PillShape,
         color = BBColors.PrimarySoft,
         border = BorderStroke(
-            width = 1.dp,
+            width = BBSpacing.Divider,
             color = BBColors.Primary.copy(alpha = 0.35f)
         )
     ) {
@@ -832,14 +740,12 @@ private fun StoreListMiniBadge(
 }
 
 @Composable
-private fun StoreListMetaPill(
-    text: String
-) {
+private fun StoreListMetaPill(text: String) {
     Surface(
         shape = BBRadius.PillShape,
         color = BBColors.SurfaceMuted,
         border = BorderStroke(
-            width = 1.dp,
+            width = BBSpacing.Divider,
             color = BBColors.Border
         )
     ) {
@@ -866,13 +772,11 @@ private fun StoreListPrimaryButton(
         modifier = modifier
             .height(BBSpacing.Space11)
             .clip(BBRadius.PillShape)
-            .clickable {
-                onClick()
-            },
+            .clickable { onClick() },
         shape = BBRadius.PillShape,
         color = BBColors.Primary,
         border = BorderStroke(
-            width = 1.dp,
+            width = BBSpacing.Divider,
             color = BBColors.Primary
         )
     ) {
@@ -913,13 +817,11 @@ private fun StoreListSecondaryButton(
         modifier = modifier
             .height(BBSpacing.Space11)
             .clip(BBRadius.PillShape)
-            .clickable {
-                onClick()
-            },
+            .clickable { onClick() },
         shape = BBRadius.PillShape,
         color = BBColors.SurfaceMuted,
         border = BorderStroke(
-            width = 1.dp,
+            width = BBSpacing.Divider,
             color = BBColors.Border
         )
     ) {
@@ -954,11 +856,11 @@ private fun getStoreListItems(): List<StoreListItem> {
         StoreListItem(
             id = 1,
             name = "Ortobella Comfort",
-            description = "Ayakkabı ve günlük konfor ürünleri mağazası.",
+            description = "Ayakkabı ve günlük konfor ürünleri maĞazası.",
             logoText = "OC",
             categoryName = "Ayakkabı",
             productCount = 48,
-            ratingText = "★ 4.8",
+            ratingText = "â˜… 4.8",
             isVerified = true
         ),
         StoreListItem(
@@ -968,17 +870,17 @@ private fun getStoreListItems(): List<StoreListItem> {
             logoText = "MN",
             categoryName = "Giyim",
             productCount = 124,
-            ratingText = "★ 4.6",
+            ratingText = "â˜… 4.6",
             isVerified = true
         ),
         StoreListItem(
             id = 3,
             name = "Urban Touch",
-            description = "Çanta, aksesuar ve şehir yaşamı ürünleri.",
+            description = "Ã‡anta, aksesuar ve şehir yaşamı ürünleri.",
             logoText = "UT",
             categoryName = "Aksesuar",
             productCount = 72,
-            ratingText = "★ 4.5",
+            ratingText = "â˜… 4.5",
             isVerified = false
         ),
         StoreListItem(
@@ -988,7 +890,7 @@ private fun getStoreListItems(): List<StoreListItem> {
             logoText = "CL",
             categoryName = "Ev & Yaşam",
             productCount = 96,
-            ratingText = "★ 4.7",
+            ratingText = "â˜… 4.7",
             isVerified = true
         )
     )

@@ -233,3 +233,4 @@ object BBLayout {
     val FixedHeight188: Dp = 188.dp
     val FixedHeight390: Dp = 390.dp
 }
+

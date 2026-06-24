@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
@@ -248,14 +248,14 @@ private fun RequestDetailProductCard(
                     )
 
                     Text(
-                        text = "Satıcı mağaza bilgileri",
+                        text = "Satıcı maĞaza bilgileri",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
                 BbButton(
-                    text = "Mağaza",
+                    text = "MaĞaza",
                     onClick = onStoreClick,
                     variant = BbButtonVariant.Light,
                     size = BbButtonSize.Small
@@ -318,8 +318,8 @@ private fun RequestDetailPhotosCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
             RequestDetailSectionTitle(
-                title = "Fotoğraflar",
-                subtitle = "Talep sırasında eklenen ürün fotoğrafları"
+                title = "FotoĞraflar",
+                subtitle = "Talep sırasında eklenen ürün fotoĞrafları"
             )
 
             Row(
@@ -378,8 +378,8 @@ private fun RequestDetailActionsCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             RequestDetailSectionTitle(
-                title = "İşlemler",
-                subtitle = "Talebe bağlı hızlı aksiyonlar"
+                title = "Ä°şlemler",
+                subtitle = "Talebe baĞlı hızlı aksiyonlar"
             )
 
             BbButton(
@@ -399,7 +399,7 @@ private fun RequestDetailActionsCard(
             )
 
             BbButton(
-                text = "Mağazaya Git",
+                text = "MaĞazaya Git",
                 onClick = onStoreClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Light,
@@ -596,13 +596,13 @@ private fun getDemoRequestDetail(
         requestId = requestId,
         requestNumber = "Talep #$requestId",
         createdDate = "10 Mayıs 2026",
-        statusText = "İncelemede",
+        statusText = "Ä°ncelemede",
         statusColor = BBColors.Orange.Orange700,
         sellerName = "Base & Quality Store",
         reason = "Ürün Defolu / Hasarlı Geldi",
         productName = "Ortobella Comfort Genç Garson Bot 8028",
         productPriceText = "1.250 Amerikan Doları",
-        description = "Ürünün sağ tarafında dikiş hatası mevcut, değişim veya iade talep ediyorum.",
+        description = "Ürünün saĞ tarafında dikiş hatası mevcut, deĞişim veya iade talep ediyorum.",
         photoCount = 3,
         steps = listOf(
             RequestStepUiModel(
@@ -613,14 +613,14 @@ private fun getDemoRequestDetail(
                 isCompleted = true
             ),
             RequestStepUiModel(
-                title = "Fotoğraflar Eklendi",
-                description = "Talebe ait ürün fotoğrafları kaydedildi.",
+                title = "FotoĞraflar Eklendi",
+                description = "Talebe ait ürün fotoĞrafları kaydedildi.",
                 icon = Icons.Outlined.Image,
                 color = BBColors.Green.Green600,
                 isCompleted = true
             ),
             RequestStepUiModel(
-                title = "Satıcı İncelemesi",
+                title = "Satıcı Ä°ncelemesi",
                 description = "Satıcının talebi incelemesi bekleniyor.",
                 icon = Icons.Outlined.Timeline,
                 color = BBColors.Orange.Orange600,
@@ -652,4 +652,5 @@ private data class RequestStepUiModel(
     val color: Color,
     val isCompleted: Boolean
 )
+
 

@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2b.Views.Rfq
+﻿package com.bulbulustur.android.Application.Areas.b2b.Views.Rfq
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -114,7 +114,7 @@ fun RfqCreateScreen(
         containerColor = BBColors.SurfaceMuted,
         topBar = {
             BbInnerPageHeader(
-                title = "Teklif İste",
+                title = "Teklif Ä°ste",
                 onBackClick = onBackClick
             )
         },
@@ -164,7 +164,7 @@ fun RfqCreateScreen(
                             productName.value = it
                         },
                         label = "Ürün adı",
-                        placeholder = "Örn. Endüstriyel vana",
+                        placeholder = "Ã–rn. Endüstriyel vana",
                         icon = Icons.Outlined.Inventory2
                     )
 
@@ -174,7 +174,7 @@ fun RfqCreateScreen(
                             categoryName.value = it
                         },
                         label = "Kategori",
-                        placeholder = "Örn. Ambalaj ve Paketleme",
+                        placeholder = "Ã–rn. Ambalaj ve Paketleme",
                         icon = Icons.Outlined.Category
                     )
 
@@ -245,7 +245,7 @@ fun RfqCreateScreen(
                             materialName.value = it
                         },
                         label = "Malzeme",
-                        placeholder = "Örn. Kraft / Metal / Plastik",
+                        placeholder = "Ã–rn. Kraft / Metal / Plastik",
                         icon = Icons.Outlined.Verified
                     )
 
@@ -254,7 +254,7 @@ fun RfqCreateScreen(
                         onValueChange = {
                             paymentTerm.value = it
                         },
-                        label = "Ödeme şartı",
+                        label = "Ã–deme şartı",
                         placeholder = "Peşin / Vadeli / Görüşülebilir",
                         icon = Icons.Outlined.Payments
                     )
@@ -275,7 +275,7 @@ fun RfqCreateScreen(
                             shippingTarget.value = it
                         },
                         label = "Nakliye hedefi",
-                        placeholder = "Türkiye / İstanbul / Ambarlı Port",
+                        placeholder = "Türkiye / Ä°stanbul / Ambarlı Port",
                         icon = Icons.Outlined.LocalShipping
                     )
                 }
@@ -292,7 +292,7 @@ fun RfqCreateScreen(
                             description.value = it
                         },
                         label = "Ürün açıklaması",
-                        placeholder = "Aradığınız ürünü ve beklentilerinizi detaylandırın."
+                        placeholder = "AradıĞınız ürünü ve beklentilerinizi detaylandırın."
                     )
                 }
             }
@@ -344,14 +344,14 @@ private fun RfqCreateIntroCard(
                 )
 
                 Text(
-                    text = "Doğru talebi yaz, daha kaliteli teklif al.",
+                    text = "DoĞru talebi yaz, daha kaliteli teklif al.",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
                     text = buildString {
-                        append("Ürün, miktar, ticari şart ve teslimat hedefini netleştirerek tedarikçilerden daha sağlıklı dönüş alın.")
+                        append("Ürün, miktar, ticari şart ve teslimat hedefini netleştirerek tedarikçilerden daha saĞlıklı dönüş alın.")
                         if (productId != null) {
                             append(" Bu talep ürün üzerinden başlatıldı.")
                         }
@@ -549,7 +549,7 @@ private fun RfqSubmitCard(
             )
 
             Text(
-                text = "API bağlantısından sonra bu form gerçek RFQ endpoint’ine gönderilecek.",
+                text = "API baĞlantısından sonra bu form gerçek RFQ endpointâ€™ine gönderilecek.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -607,7 +607,7 @@ private fun rfqSuggestionTexts(): List<RfqSuggestionText> {
             description = "Ürünün renk, malzeme ve yüzey özellikleri için teklif almak istiyorum."
         ),
         RfqSuggestionText(
-            title = "Ölçü / Teknik Detay",
+            title = "Ã–lçü / Teknik Detay",
             description = "Ürün için teknik ölçüler, üretim toleransları ve kullanım alanı hakkında teklif almak istiyorum."
         ),
         RfqSuggestionText(
@@ -615,8 +615,9 @@ private fun rfqSuggestionTexts(): List<RfqSuggestionText> {
             description = "Ürünün ambalaj, etiket ve logo baskı seçenekleriyle birlikte fiyatlandırılmasını istiyorum."
         ),
         RfqSuggestionText(
-            title = "Teslimat / Ödeme",
+            title = "Teslimat / Ã–deme",
             description = "Teslimat süresi, ödeme şartı, nakliye hedefi ve ticari koşulların teklifte belirtilmesini istiyorum."
         )
     )
 }
+

@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Message
+﻿package com.bulbulustur.android.Application.Views.Message
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -16,7 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Business
-import androidx.compose.material.icons.outlined.Description
+import androidx.compose.material.icons.outlined.RequestQuote
 import androidx.compose.material.icons.outlined.Reply
 import androidx.compose.material.icons.outlined.Send
 import androidx.compose.material.icons.outlined.Verified
@@ -134,7 +134,7 @@ private fun MessageSubjectCard(
                 verticalAlignment = Alignment.Top
             ) {
                 MessageIconBox(
-                    icon = Icons.Outlined.Description,
+                    icon = Icons.Outlined.RequestQuote,
                     backgroundColor = BBColors.Yellow.Yellow100,
                     iconColor = BBColors.Yellow.Yellow800
                 )
@@ -495,7 +495,7 @@ private fun getMessageConversation(
         messageId = messageId,
         subject = "450W paneller için fiyat teklifi",
         companyName = "Anadolu Ambalaj Sanayi",
-        companyDescription = "Toptan ürün, numune ve RFQ görüşmeleri için doğrulanmış firma.",
+        companyDescription = "Toptan ürün, numune ve RFQ görüşmeleri için doĞrulanmış firma.",
         commerceModeName = "Toptan",
         messageTypeName = "Gelen Kutusu",
         statusName = "Okundu",
@@ -505,7 +505,7 @@ private fun getMessageConversation(
             MessageConversationItem(
                 conversationItemId = 1,
                 senderName = "Anadolu Ambalaj Sanayi",
-                body = "RFQ talebinize istinaden numune ve fiyat bilgilerini paylaşmak isteriz. Miktar ve teslimat hedefinizi netleştirirseniz daha doğru fiyat sunabiliriz.",
+                body = "RFQ talebinize istinaden numune ve fiyat bilgilerini paylaşmak isteriz. Miktar ve teslimat hedefinizi netleştirirseniz daha doĞru fiyat sunabiliriz.",
                 sentAt = "10.05.2026 12:47",
                 isMine = false,
                 attachments = emptyList()
@@ -513,11 +513,12 @@ private fun getMessageConversation(
             MessageConversationItem(
                 conversationItemId = 2,
                 senderName = "Bulbulustur",
-                body = "Merhaba, 10.000 adet için İstanbul teslim fiyat ve termin süresini paylaşabilir misiniz?",
+                body = "Merhaba, 10.000 adet için Ä°stanbul teslim fiyat ve termin süresini paylaşabilir misiniz?",
                 sentAt = "10.05.2026 13:37",
                 isMine = true,
-                attachments = listOf("RFQ Özeti", "Teknik Not")
+                attachments = listOf("RFQ Ã–zeti", "Teknik Not")
             )
         )
     )
 }
+

@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2b.Views.Product
+﻿package com.bulbulustur.android.Application.Areas.b2b.Views.Product
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -92,7 +92,7 @@ fun SampleRequestScreen(
             item {
                 BbSectionHeader(
                     title = "Numune Detayları",
-                    subtitle = "Kaç adet numune istediğinizi ve özel notlarınızı yazın"
+                    subtitle = "Kaç adet numune istediĞinizi ve özel notlarınızı yazın"
                 )
             }
 
@@ -114,7 +114,7 @@ fun SampleRequestScreen(
                     onValueChange = {
                         detail.value = it
                     },
-                    label = "Diğer Detaylar",
+                    label = "DiĞer Detaylar",
                     placeholder = "Bilmemiz gereken başka bir şey var mı? Tüm detayları buraya yazın."
                 )
             }
@@ -166,7 +166,7 @@ private fun SampleRequestHeader(
             }
 
             Text(
-                text = "Numune İsteği Oluştur",
+                text = "Numune Ä°steĞi Oluştur",
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = BBColors.TextStrong
@@ -259,7 +259,7 @@ private fun SampleRequestHintCard() {
             )
 
             Text(
-                text = "Numune talebinizde hedef kullanım amacını, istediğiniz adet bilgisini ve teslimat notlarını belirtmeniz tedarikçi dönüşünü hızlandırır.",
+                text = "Numune talebinizde hedef kullanım amacını, istediĞiniz adet bilgisini ve teslimat notlarını belirtmeniz tedarikçi dönüşünü hızlandırır.",
                 style = MaterialTheme.typography.bodySmall,
                 color = BBColors.TextMuted,
                 modifier = Modifier.weight(1f)
@@ -373,7 +373,7 @@ private fun SampleRequestSendCard(
                 )
 
                 Text(
-                    text = "Numune isteği API bağlantısından sonra gerçek endpoint’e gönderilecek.",
+                    text = "Numune isteĞi API baĞlantısından sonra gerçek endpointâ€™e gönderilecek.",
                     style = MaterialTheme.typography.bodySmall,
                     color = BBColors.TextMuted
                 )
@@ -395,3 +395,4 @@ private fun SampleRequestScreenPreview() {
         SampleRequestScreen()
     }
 }
+

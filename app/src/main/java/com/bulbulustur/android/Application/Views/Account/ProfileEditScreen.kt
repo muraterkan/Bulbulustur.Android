@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -114,7 +114,7 @@ fun ProfileScreen(
                 ) {
                     AccountFormSectionHeader(
                         title = "Kişisel Bilgiler",
-                        description = "Ad, soyad, meslek ve doğum tarihi bilgilerinizi güncelleyin."
+                        description = "Ad, soyad, meslek ve doĞum tarihi bilgilerinizi güncelleyin."
                     )
 
                     AccountTextField(
@@ -122,8 +122,8 @@ fun ProfileScreen(
                         onValueChange = { value ->
                             nameState.value = value
                         },
-                        label = "İsim",
-                        placeholder = "İsminiz"
+                        label = "Ä°sim",
+                        placeholder = "Ä°sminiz"
                     )
 
                     AccountTextField(
@@ -150,7 +150,7 @@ fun ProfileScreen(
                             professionState.value = value
                         },
                         label = "Meslek",
-                        placeholder = "Mesleğiniz"
+                        placeholder = "MesleĞiniz"
                     )
 
                     AccountTextField(
@@ -158,7 +158,7 @@ fun ProfileScreen(
                         onValueChange = { value ->
                             birthDateState.value = value
                         },
-                        label = "Doğum Günü",
+                        label = "DoĞum Günü",
                         placeholder = "gg.aa.yyyy",
                         keyboardType = KeyboardType.Number
                     )
@@ -193,8 +193,8 @@ fun ProfileScreen(
                         onValueChange = { value ->
                             cityState.value = value
                         },
-                        label = "Şehir",
-                        placeholder = "Şehir seçiniz"
+                        label = "Åehir",
+                        placeholder = "Åehir seçiniz"
                     )
 
                     AccountTextField(
@@ -202,8 +202,8 @@ fun ProfileScreen(
                         onValueChange = { value ->
                             districtState.value = value
                         },
-                        label = "İlçe",
-                        placeholder = "İlçe seçiniz"
+                        label = "Ä°lçe",
+                        placeholder = "Ä°lçe seçiniz"
                     )
                 }
             }
@@ -302,4 +302,5 @@ private fun AccountTextField(
         )
     )
 }
+
 

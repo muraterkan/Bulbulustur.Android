@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -141,10 +141,11 @@ private fun PhoneCreateIntroCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Hesabınıza yeni bir cep telefonu numarası ekleyin. Numara doğrulama adımından sonra hesabınıza bağlanır.",
+            text = "Hesabınıza yeni bir cep telefonu numarası ekleyin. Numara doĞrulama adımından sonra hesabınıza baĞlanır.",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
+
 

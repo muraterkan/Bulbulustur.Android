@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -98,7 +98,7 @@ fun BankAccountCreateScreen(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        text = "IBAN bilgisini boşluk bırakmadan ya da boşluklu olarak girebilirsin. Sistem doğrulama kurallarını çalıştırmaya devam eder.",
+                        text = "IBAN bilgisini boşluk bırakmadan ya da boşluklu olarak girebilirsin. Sistem doĞrulama kurallarını çalıştırmaya devam eder.",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -116,7 +116,7 @@ fun BankAccountCreateScreen(
                     )
 
                     Text(
-                        text = "IBAN, sana ait geçerli bir vadesiz hesaba ait olmalıdır. Vadeli hesap IBAN’ları ödeme süreçlerinden çıkarılabilir.",
+                        text = "IBAN, sana ait geçerli bir vadesiz hesaba ait olmalıdır. Vadeli hesap IBANâ€™ları ödeme süreçlerinden çıkarılabilir.",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -165,7 +165,7 @@ private fun BankAccountCreateIntroCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Para aktarımı ve ödeme sürecinde kullanılacak banka hesabını güvenli şekilde kaydet. Girdiğin IBAN numarası vadeli bir hesaba ait olmamalıdır.",
+            text = "Para aktarımı ve ödeme sürecinde kullanılacak banka hesabını güvenli şekilde kaydet. GirdiĞin IBAN numarası vadeli bir hesaba ait olmamalıdır.",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -232,7 +232,7 @@ private fun BankAccountFinancialInfoCard() {
             )
 
             Text(
-                text = "Banka hesabı bilgileri ödeme ve aktarım süreçlerinde kullanılacağı için doğru girilmelidir.",
+                text = "Banka hesabı bilgileri ödeme ve aktarım süreçlerinde kullanılacaĞı için doĞru girilmelidir.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -262,10 +262,10 @@ private fun getIbanLengthMessage(
     }
 
     if (formState.hasExpectedLength) {
-        return "IBAN uzunluğu uygun görünüyor."
+        return "IBAN uzunluĞu uygun görünüyor."
     }
 
-    return "IBAN uzunluğu kontrol edilmeli. Türkiye IBAN numarası 26 karakter olmalıdır."
+    return "IBAN uzunluĞu kontrol edilmeli. Türkiye IBAN numarası 26 karakter olmalıdır."
 }
 
 private fun getBankAccountCreateValidationMessage(
@@ -281,4 +281,5 @@ private fun getBankAccountCreateValidationMessage(
 
     return "IBAN bilgisini kontrol etmelisin."
 }
+
 

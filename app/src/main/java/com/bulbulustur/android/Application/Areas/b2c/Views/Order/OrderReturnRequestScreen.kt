@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2c.Views.order
+﻿package com.bulbulustur.android.Application.Areas.b2c.Views.order
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -15,7 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AssignmentReturn
 import androidx.compose.material.icons.outlined.CheckCircle
-import androidx.compose.material.icons.outlined.Description
+import androidx.compose.material.icons.outlined.RequestQuote
 import androidx.compose.material.icons.outlined.RadioButtonUnchecked
 import androidx.compose.material.icons.outlined.Send
 import androidx.compose.material.icons.outlined.VerifiedUser
@@ -57,7 +57,7 @@ fun OrderReturnRequestScreen(
             "Yanlış ürün gönderildi",
             "Ürün hasarlı veya kusurlu geldi",
             "Eksik ürün veya parça var",
-            "Diğer"
+            "DiĞer"
         )
     }
 
@@ -74,7 +74,7 @@ fun OrderReturnRequestScreen(
         containerColor = BBColors.SurfaceMuted,
         topBar = {
             BbInnerPageHeader(
-                title = "İade Talebi",
+                title = "Ä°ade Talebi",
                 subtitle = "Teslim edilen ürün için iade talebi oluştur.",
                 onBackClick = onBackClick
             )
@@ -160,13 +160,13 @@ private fun OrderReturnIntroCard() {
                 )
             ) {
                 Text(
-                    text = "İade Talebi Oluştur",
+                    text = "Ä°ade Talebi Oluştur",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = "İade nedeninizi seçin. Talep gönderildikten sonra ilgili sipariş satırı üzerinden takip edilebilir.",
+                    text = "Ä°ade nedeninizi seçin. Talep gönderildikten sonra ilgili sipariş satırı üzerinden takip edilebilir.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -193,8 +193,8 @@ private fun OrderReturnReasonCard(
             )
         ) {
             OrderReturnSectionTitle(
-                title = "İade Nedeni",
-                subtitle = "Bu ürünü neden iade etmek istediğinizi seçin."
+                title = "Ä°ade Nedeni",
+                subtitle = "Bu ürünü neden iade etmek istediĞinizi seçin."
             )
 
             Column(
@@ -289,7 +289,7 @@ private fun OrderReturnDescriptionCard(
         ) {
             OrderReturnSectionTitle(
                 title = "Açıklama",
-                subtitle = "İsterseniz iade talebinizle ilgili ek bilgi yazabilirsiniz."
+                subtitle = "Ä°sterseniz iade talebinizle ilgili ek bilgi yazabilirsiniz."
             )
 
             OutlinedTextField(
@@ -300,12 +300,12 @@ private fun OrderReturnDescriptionCard(
                 shape = BBRadius.Input,
                 placeholder = {
                     Text(
-                        text = "Üründe yaşadığınız sorunu kısaca açıklayın."
+                        text = "Üründe yaşadıĞınız sorunu kısaca açıklayın."
                     )
                 },
                 leadingIcon = {
                     Icon(
-                        imageVector = Icons.Outlined.Description,
+                        imageVector = Icons.Outlined.RequestQuote,
                         contentDescription = null
                     )
                 }

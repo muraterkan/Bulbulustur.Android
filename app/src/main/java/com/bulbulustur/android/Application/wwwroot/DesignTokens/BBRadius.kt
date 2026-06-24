@@ -105,3 +105,4 @@ object BBRadius {
     val IconBoxSoft: Shape = XlShape
     val Avatar: Shape = PillShape
 }
+

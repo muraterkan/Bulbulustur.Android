@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -355,7 +355,7 @@ private fun CouponEmptyState() {
             )
 
             Text(
-                text = "Hesabınıza tanımlı kupon oluştuğunda burada listelenecek.",
+                text = "Hesabınıza tanımlı kupon oluştuĞunda burada listelenecek.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -368,7 +368,7 @@ private fun getDemoCoupons(): List<CouponUiModel> {
         CouponUiModel(
             couponId = 1,
             code = "WELCOME2026",
-            amountText = "150,00 ₺",
+            amountText = "150,00 â‚º",
             expireDate = "1.01.0001 00:00:00",
             usageText = "-",
             status = CouponStatus.Active
@@ -376,7 +376,7 @@ private fun getDemoCoupons(): List<CouponUiModel> {
         CouponUiModel(
             couponId = 2,
             code = "BULBUL25",
-            amountText = "250,00 ₺",
+            amountText = "250,00 â‚º",
             expireDate = "1.01.0001 00:00:00",
             usageText = "-",
             status = CouponStatus.Used
@@ -406,4 +406,5 @@ private data class CouponUiModel(
     val usageText: String,
     val status: CouponStatus
 )
+
 

@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -113,7 +113,7 @@ fun AccountSecurityScreen(
             item {
                 AccountSecuritySection(
                     title = "Giriş ve Güvenlik",
-                    description = "E-posta, şifre ve giriş güvenliği ayarları.",
+                    description = "E-posta, şifre ve giriş güvenliĞi ayarları.",
                     icon = Icons.Outlined.Security
                 ) {
                     AccountSecurityRow(
@@ -126,7 +126,7 @@ fun AccountSecurityScreen(
                     AccountSecurityDashedDivider()
 
                     AccountSecurityRow(
-                        title = "Şifre",
+                        title = "Åifre",
                         value = "Hesabınıza giriş yapmak için kullanılır",
                         icon = Icons.Outlined.Key,
                         onClick = onPasswordChangeClick
@@ -136,7 +136,7 @@ fun AccountSecurityScreen(
 
                     AccountSecurityRow(
                         title = "Telefonlarım",
-                        value = "SMS doğrulama ve güvenlik işlemleri",
+                        value = "SMS doĞrulama ve güvenlik işlemleri",
                         icon = Icons.Outlined.PhoneIphone,
                         onClick = onPhonesClick
                     )
@@ -169,7 +169,7 @@ private fun AccountSecurityIntroCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Profil, giriş ve doğrulama bilgilerinizi güvenle yönetin.",
+            text = "Profil, giriş ve doĞrulama bilgilerinizi güvenle yönetin.",
             style = BbTypography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -212,13 +212,13 @@ private fun AccountSecurityStrengthCard() {
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                 ) {
                     Text(
-                        text = "Hesap Güvenliği",
+                        text = "Hesap GüvenliĞi",
                         style = BbTypography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurface
                     )
 
                     Text(
-                        text = "Telefon doğrulaması tamamlandığında güvenlik seviyeniz artar.",
+                        text = "Telefon doĞrulaması tamamlandıĞında güvenlik seviyeniz artar.",
                         style = BbTypography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -404,4 +404,5 @@ private fun AccountSecurityDashedDivider() {
         )
     }
 }
+
 

@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Company
+﻿package com.bulbulustur.android.Application.Views.Company
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
@@ -207,7 +207,7 @@ private fun CompanyContactHero(
                         if (company.isVerified) {
                             Icon(
                                 imageVector = Icons.Outlined.Verified,
-                                contentDescription = "Doğrulanmış firma",
+                                contentDescription = "DoĞrulanmış firma",
                                 tint = BBColors.Primary,
                                 modifier = Modifier.size(
                                     BBIcon.SizeSm
@@ -224,7 +224,7 @@ private fun CompanyContactHero(
                     )
 
                     Text(
-                        text = "Firma yetkilisine mesaj gönderin; ürün, teklif, numune veya özel üretim talepleriniz için doğrudan bağlantı kurun.",
+                        text = "Firma yetkilisine mesaj gönderin; ürün, teklif, numune veya özel üretim talepleriniz için doĞrudan baĞlantı kurun.",
                         style = MaterialTheme.typography.bodyMedium,
                         color = BBColors.TextMuted
                     )
@@ -593,7 +593,7 @@ private fun CompanyMessageCard(
                     )
 
                     Text(
-                        text = "$companyName firmasına teklif, ürün bilgisi, numune veya iş birliği mesajı bırakabilirsiniz.",
+                        text = "$companyName firmasına teklif, ürün bilgisi, numune veya iş birliĞi mesajı bırakabilirsiniz.",
                         style = MaterialTheme.typography.bodySmall,
                         color = BBColors.TextMuted
                     )
@@ -705,12 +705,12 @@ private fun getCompanyContact(
             imageResId = R.drawable.murat_erkan
         ),
         website = "www.ortobella.com",
-        address = "Yeni Mah. Çarşamba Cad. No:52 Piazza AVM -1 Kat / Canik / Samsun",
+        address = "Yeni Mah. Ã‡arşamba Cad. No:52 Piazza AVM -1 Kat / Canik / Samsun",
         email = "sales@ortobella.com",
         chips = listOf(
             "Türkiye",
             "Samsun",
-            "Doğrulanmış",
+            "DoĞrulanmış",
             "Tedarikçi",
             "Hızlı yanıt"
         )

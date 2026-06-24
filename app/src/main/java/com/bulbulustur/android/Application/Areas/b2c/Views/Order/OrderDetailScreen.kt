@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2c.Views.order
+﻿package com.bulbulustur.android.Application.Areas.b2c.Views.order
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -14,7 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CalendarMonth
-import androidx.compose.material.icons.outlined.Description
+import androidx.compose.material.icons.outlined.RequestQuote
 import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.LocalShipping
@@ -191,13 +191,13 @@ private fun OrderSupportBottomSheet(
                 )
             ) {
                 Text(
-                    text = "Sipariş Desteği",
+                    text = "Sipariş DesteĞi",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = "$orderNumber için destek almak istediğiniz konuyu seçin.",
+                    text = "$orderNumber için destek almak istediĞiniz konuyu seçin.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -218,8 +218,8 @@ private fun OrderSupportBottomSheet(
             )
 
             OrderSupportActionRow(
-                icon = Icons.Outlined.Description,
-                title = "İptal ve İade Koşulları",
+                icon = Icons.Outlined.RequestQuote,
+                title = "Ä°ptal ve Ä°ade Koşulları",
                 subtitle = "Siparişe ait iptal/iade süreci hakkında bilgi",
                 onClick = onDismiss
             )
@@ -494,7 +494,7 @@ private fun OrderDetailStoreGroupCard(
                 size = BbButtonSize.Small,
                 leadingIcon = {
                     Icon(
-                        imageVector = Icons.Outlined.Description,
+                        imageVector = Icons.Outlined.RequestQuote,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.size(
@@ -591,7 +591,7 @@ private fun OrderDetailCargoCard(
                     )
 
                     Text(
-                        text = "${storeGroup.cargoCompany} · ${storeGroup.cargoTrackingNumber}",
+                        text = "${storeGroup.cargoCompany} Â· ${storeGroup.cargoTrackingNumber}",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -676,7 +676,7 @@ private fun OrderDetailProductRow(
                 )
 
                 Text(
-                    text = "${product.quantity} adet · ${product.unitPriceText}",
+                    text = "${product.quantity} adet Â· ${product.unitPriceText}",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -745,7 +745,7 @@ private fun OrderDetailProductActions(
             when (action) {
                 OrderDetailLineAction.Cancel -> {
                     BbButton(
-                        text = "İptal Et",
+                        text = "Ä°ptal Et",
                         onClick = {
                             onCancelRequestClick(
                                 product.orderStoreLineId,
@@ -760,7 +760,7 @@ private fun OrderDetailProductActions(
 
                 OrderDetailLineAction.Return -> {
                     BbButton(
-                        text = "İade Talebi",
+                        text = "Ä°ade Talebi",
                         onClick = {
                             onReturnRequestClick(
                                 product.orderStoreLineId,
@@ -795,7 +795,7 @@ private fun OrderDetailProductActions(
 
                 OrderDetailLineAction.Review -> {
                     BbButton(
-                        text = "Değerlendir",
+                        text = "DeĞerlendir",
                         onClick = {
                             onReviewCreateClick(
                                 product.orderStoreLineId,
@@ -902,8 +902,8 @@ private fun OrderDetailPaymentCard(
             )
         ) {
             OrderDetailSectionTitle(
-                title = "Ödeme Özeti",
-                subtitle = "Siparişe ait tutar dağılımı"
+                title = "Ã–deme Ã–zeti",
+                subtitle = "Siparişe ait tutar daĞılımı"
             )
 
             OrderDetailAmountRow(
@@ -946,7 +946,7 @@ private fun OrderDetailActionsCard(
             )
         ) {
             OrderDetailSectionTitle(
-                title = "Sipariş İşlemleri",
+                title = "Sipariş Ä°şlemleri",
                 subtitle = "Sözleşme ve destek Aksiyonları"
             )
 
@@ -958,7 +958,7 @@ private fun OrderDetailActionsCard(
                 size = BbButtonSize.Medium,
                 leadingIcon = {
                     Icon(
-                        imageVector = Icons.Outlined.Description,
+                        imageVector = Icons.Outlined.RequestQuote,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.size(
@@ -969,7 +969,7 @@ private fun OrderDetailActionsCard(
             )
 
             BbButton(
-                text = "Sipariş İçin Destek Al",
+                text = "Sipariş Ä°çin Destek Al",
                 onClick = onSupportClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Primary,
@@ -1342,14 +1342,14 @@ private fun getDemoOrderDetail(
         orderKey = "ORD-F4QO-AFPR-J5EX",
         orderNumber = "Sipariş #1000000",
         orderDate = "9 Mayıs 2026",
-        statusText = "İşlemde",
+        statusText = "Ä°şlemde",
         statusColor = BBColors.Orange.Orange600,
         productCountText = "3 ürün",
-        productTotalText = "2.400,75 ₺",
-        cargoText = "50,00 ₺",
-        totalText = "2.450,75 ₺",
+        productTotalText = "2.400,75 â‚º",
+        cargoText = "50,00 â‚º",
+        totalText = "2.450,75 â‚º",
         estimatedDelivery = "12 Mayıs 2026",
-        addressText = "Murat Erkan · İstanbul / Türkiye · Teslimat adresi API bağlandığında gerçek kullanıcı adresinden beslenecek.",
+        addressText = "Murat Erkan Â· Ä°stanbul / Türkiye Â· Teslimat adresi API baĞlandıĞında gerçek kullanıcı adresinden beslenecek.",
         storeGroups = listOf(
             OrderDetailStoreGroupUiModel(
                 storeKey = "STORE-ORTOBELLA",
@@ -1361,10 +1361,10 @@ private fun getDemoOrderDetail(
                         orderStoreLineId = 10001L,
                         productId = 501L,
                         memberKey = "MEMBER-SECURE-501",
-                        name = "Minimal Sırt Çantası",
+                        name = "Minimal Sırt Ã‡antası",
                         quantity = 1,
-                        unitPriceText = "850,25 ₺",
-                        totalText = "850,25 ₺",
+                        unitPriceText = "850,25 â‚º",
+                        totalText = "850,25 â‚º",
                         statusText = "Sipariş Alındı",
                         status = OrderDetailLineStatus.Received
                     ),
@@ -1374,8 +1374,8 @@ private fun getDemoOrderDetail(
                         memberKey = "MEMBER-SECURE-502",
                         name = "Kadın Sneaker Günlük Ayakkabı",
                         quantity = 1,
-                        unitPriceText = "1.200,25 ₺",
-                        totalText = "1.200,25 ₺",
+                        unitPriceText = "1.200,25 â‚º",
+                        totalText = "1.200,25 â‚º",
                         statusText = "Kargoya Verildi",
                         status = OrderDetailLineStatus.Shipped
                     ),
@@ -1385,8 +1385,8 @@ private fun getDemoOrderDetail(
                         memberKey = "MEMBER-SECURE-503",
                         name = "Pamuklu Basic Tişört",
                         quantity = 1,
-                        unitPriceText = "350,25 ₺",
-                        totalText = "350,25 ₺",
+                        unitPriceText = "350,25 â‚º",
+                        totalText = "350,25 â‚º",
                         statusText = "Teslim Edildi",
                         status = OrderDetailLineStatus.Delivered
                     )
@@ -1402,14 +1402,14 @@ private fun getDemoOrderDetail(
                 isCompleted = true
             ),
             OrderDetailStepUiModel(
-                title = "Ödeme Onaylandı",
-                description = "Ödeme işlemi tamamlandı.",
+                title = "Ã–deme Onaylandı",
+                description = "Ã–deme işlemi tamamlandı.",
                 icon = Icons.Outlined.Payments,
                 color = BBColors.Green.Green600,
                 isCompleted = true
             ),
             OrderDetailStepUiModel(
-                title = "Sipariş İşlemde",
+                title = "Sipariş Ä°şlemde",
                 description = "Satıcı ve kargo süreçleri ürün satırlarına göre güncelleniyor.",
                 icon = Icons.Outlined.LocalShipping,
                 color = BBColors.Orange.Orange600,

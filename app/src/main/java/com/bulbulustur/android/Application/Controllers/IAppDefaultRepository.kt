@@ -14,3 +14,4 @@ interface IAppDefaultRepository {
         body: Any? = null
     ): Result<Any?>
 }
+

@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2c.Views.Product
+﻿package com.bulbulustur.android.Application.Areas.b2c.Views.Product
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -75,7 +75,7 @@ fun OtherSellerListScreen(
         containerColor = BBColors.SurfaceMuted,
         topBar = {
             BbInnerPageHeader(
-                title = "Diğer Satıcılar",
+                title = "DiĞer Satıcılar",
                 onBackClick = onBackClick,
                 /*actionIcon = Icons.Outlined.Tune,
                 actionContentDescription = "Filtreler",
@@ -118,7 +118,7 @@ fun OtherSellerListScreen(
             item {
                 OtherSellerSectionTitle(
                     title = "Satıcı seçenekleri",
-                    description = "Aynı ürünü satan Mağazaları fiyat, kargo ve puana göre karşılaştır."
+                    description = "Aynı ürünü satan MaĞazaları fiyat, kargo ve puana göre karşılaştır."
                 )
             }
 
@@ -216,7 +216,7 @@ private fun OtherSellerFilterSection(
     ) {
         OtherSellerSectionTitle(
             title = "Hızlı filtre",
-            description = "Satıcıları alışveriş önceliğine göre daralt."
+            description = "Satıcıları alışveriş önceliĞine göre daralt."
         )
 
         FlowRow(
@@ -299,14 +299,14 @@ private fun OtherSellerCard(
                     }
 
                     Text(
-                        text = "${seller.ratingText} puan · ${seller.cargoText}",
+                        text = "${seller.ratingText} puan Â· ${seller.cargoText}",
                         style = MaterialTheme.typography.bodySmall,
                         color = BBColors.TextMuted
                     )
                 }
 
                 Text(
-                    text = "›",
+                    text = "â€º",
                     style = MaterialTheme.typography.headlineSmall,
                     color = BBColors.TextMuted
                 )
@@ -363,7 +363,7 @@ private fun OtherSellerVerifiedBadge() {
         )
     ) {
         Text(
-            text = "Doğrulanmış",
+            text = "DoĞrulanmış",
             modifier = Modifier.padding(
                 horizontal = BBSpacing.Space2,
                 vertical = BBSpacing.Space1
@@ -457,7 +457,7 @@ private fun getRetailOtherSellerScreenData(
         product = RetailOtherSellerProductSummary(
             id = productId,
             name = "Kadın klasik sneaker ayakkabı",
-            variantText = "Beyaz · 38 numara",
+            variantText = "Beyaz Â· 38 numara",
             imageText = "P1",
             sellerCount = 5
         ),
@@ -465,7 +465,7 @@ private fun getRetailOtherSellerScreenData(
             "Tümü",
             "En düşük fiyat",
             "Hızlı kargo",
-            "Doğrulanmış",
+            "DoĞrulanmış",
             "Yüksek puan"
         ),
         sellers = listOf(
@@ -475,11 +475,11 @@ private fun getRetailOtherSellerScreenData(
                 logoText = "OS",
                 ratingText = "4.8",
                 cargoText = "Hızlı kargo",
-                priceText = "₺899,90",
+                priceText = "â‚º899,90",
                 stockText = "Stokta var",
                 badgeText = "En uygun fiyat",
                 isVerified = true,
-                filterTags = listOf("En düşük fiyat", "Hızlı kargo", "Doğrulanmış", "Yüksek puan")
+                filterTags = listOf("En düşük fiyat", "Hızlı kargo", "DoĞrulanmış", "Yüksek puan")
             ),
             RetailOtherSellerItem(
                 id = 2,
@@ -487,11 +487,11 @@ private fun getRetailOtherSellerScreenData(
                 logoText = "MN",
                 ratingText = "4.6",
                 cargoText = "Standart kargo",
-                priceText = "₺929,90",
+                priceText = "â‚º929,90",
                 stockText = "Stokta var",
                 badgeText = "",
                 isVerified = true,
-                filterTags = listOf("Doğrulanmış", "Yüksek puan")
+                filterTags = listOf("DoĞrulanmış", "Yüksek puan")
             ),
             RetailOtherSellerItem(
                 id = 3,
@@ -499,7 +499,7 @@ private fun getRetailOtherSellerScreenData(
                 logoText = "UT",
                 ratingText = "4.7",
                 cargoText = "Hızlı kargo",
-                priceText = "₺949,90",
+                priceText = "â‚º949,90",
                 stockText = "Son 3 ürün",
                 badgeText = "Az stok",
                 isVerified = false,
@@ -511,7 +511,7 @@ private fun getRetailOtherSellerScreenData(
                 logoText = "SH",
                 ratingText = "4.4",
                 cargoText = "Standart kargo",
-                priceText = "₺979,90",
+                priceText = "â‚º979,90",
                 stockText = "Stokta var",
                 badgeText = "",
                 isVerified = false,
@@ -523,11 +523,11 @@ private fun getRetailOtherSellerScreenData(
                 logoText = "AM",
                 ratingText = "4.5",
                 cargoText = "Hızlı kargo",
-                priceText = "₺999,90",
+                priceText = "â‚º999,90",
                 stockText = "Stokta var",
                 badgeText = "Kargo avantajı",
                 isVerified = true,
-                filterTags = listOf("Hızlı kargo", "Doğrulanmış")
+                filterTags = listOf("Hızlı kargo", "DoĞrulanmış")
             )
         )
     )
@@ -540,3 +540,4 @@ private fun OtherSellerListScreenPreview() {
         OtherSellerListScreen()
     }
 }
+

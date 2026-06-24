@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Shared.Components
+﻿package com.bulbulustur.android.Application.Views.Shared.Components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -40,13 +40,13 @@ fun AccountSecurityBottomMenu(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
             Text(
-                text = "Hesap Güvenliği",
+                text = "Hesap GüvenliĞi",
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
-                text = "Şifre, e-posta, giriş hareketleri ve hesap durumu işlemlerini buradan yönetebilirsin.",
+                text = "Åifre, e-posta, giriş hareketleri ve hesap durumu işlemlerini buradan yönetebilirsin.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -59,15 +59,15 @@ fun AccountSecurityBottomMenu(
             )
 
             AccountSecurityBottomMenuRow(
-                title = "Şifre Değiştir",
+                title = "Åifre DeĞiştir",
                 description = "Hesabın için yeni ve güçlü bir şifre belirle.",
                 selected = selectedItem == AccountSecurityMenuItem.ChangePassword,
                 onClick = onChangePasswordClick
             )
 
             AccountSecurityBottomMenuRow(
-                title = "E-Posta Değiştir",
-                description = "Hesabına bağlı e-posta adresini güncelle.",
+                title = "E-Posta DeĞiştir",
+                description = "Hesabına baĞlı e-posta adresini güncelle.",
                 selected = selectedItem == AccountSecurityMenuItem.ChangeEmail,
                 onClick = onChangeEmailClick
             )
@@ -128,4 +128,5 @@ private fun AccountSecurityBottomMenuRow(
         }
     }
 }
+
 

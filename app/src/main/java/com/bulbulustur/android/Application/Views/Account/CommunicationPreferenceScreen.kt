@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -65,7 +65,7 @@ fun CommunicationPreferenceScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Bildirim ve İzinler",
+                title = "Bildirim ve Ä°zinler",
                 onBackClick = onBackClick
             )
         }
@@ -172,7 +172,7 @@ private fun CommunicationPreferenceCard(
 
             CommunicationPreferenceRow(
                 title = "SMS Bildirimleri",
-                description = "Kısa bilgilendirme ve doğrulama mesajları SMS ile gönderilebilir.",
+                description = "Kısa bilgilendirme ve doĞrulama mesajları SMS ile gönderilebilir.",
                 checked = smsAllowed,
                 onCheckedChange = onSmsAllowedChange
             )
@@ -274,4 +274,5 @@ private fun CommunicationDashedDivider() {
         )
     }
 }
+
 

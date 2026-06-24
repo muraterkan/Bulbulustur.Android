@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2b.Views.Product
+﻿package com.bulbulustur.android.Application.Areas.b2b.Views.Product
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -123,7 +123,7 @@ fun LastPriceRequestScreen(
                             quantity.value = it
                         },
                         label = "Miktar",
-                        placeholder = "Örn. 1000",
+                        placeholder = "Ã–rn. 1000",
                         icon = Icons.Outlined.Inventory2,
                         modifier = Modifier.weight(1f)
                     )
@@ -134,7 +134,7 @@ fun LastPriceRequestScreen(
                             targetPrice.value = it
                         },
                         label = "Hedef Fiyat",
-                        placeholder = "Örn. 18 $",
+                        placeholder = "Ã–rn. 18 $",
                         icon = Icons.Outlined.PriceCheck,
                         modifier = Modifier.weight(1f)
                     )
@@ -151,7 +151,7 @@ fun LastPriceRequestScreen(
                         onValueChange = {
                             paymentTerm.value = it
                         },
-                        label = "Ödeme Şartı",
+                        label = "Ã–deme Åartı",
                         placeholder = "Peşin / vadeli",
                         icon = Icons.Outlined.Payments,
                         modifier = Modifier.weight(1f)
@@ -163,7 +163,7 @@ fun LastPriceRequestScreen(
                             deliveryTarget.value = it
                         },
                         label = "Teslimat Hedefi",
-                        placeholder = "İstanbul / depo",
+                        placeholder = "Ä°stanbul / depo",
                         icon = Icons.Outlined.LocalShipping,
                         modifier = Modifier.weight(1f)
                     )
@@ -176,7 +176,7 @@ fun LastPriceRequestScreen(
                     onValueChange = {
                         detail.value = it
                     },
-                    label = "Diğer Detaylar",
+                    label = "DiĞer Detaylar",
                     placeholder = "Bilmemiz gereken başka bir şey var mı? Miktar, hedef fiyat, ödeme ve teslimat beklentinizi yazın."
                 )
             }
@@ -236,7 +236,7 @@ private fun LastPriceRequestHeader(
             }
 
             Text(
-                text = "Son Fiyat İsteği Oluştur",
+                text = "Son Fiyat Ä°steĞi Oluştur",
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = BBColors.TextStrong
@@ -425,7 +425,7 @@ private fun LastPriceHintCard() {
             )
 
             Text(
-                text = "Net miktar, hedef fiyat, ödeme yöntemi ve teslimat beklentisi yazarsanız tedarikçi daha doğru son fiyat verebilir.",
+                text = "Net miktar, hedef fiyat, ödeme yöntemi ve teslimat beklentisi yazarsanız tedarikçi daha doĞru son fiyat verebilir.",
                 style = MaterialTheme.typography.bodySmall,
                 color = BBColors.TextMuted,
                 modifier = Modifier.weight(1f)
@@ -467,7 +467,7 @@ private fun LastPriceSendCard(
                 )
 
                 Text(
-                    text = "Son fiyat isteği API bağlantısından sonra gerçek endpoint’e gönderilecek.",
+                    text = "Son fiyat isteĞi API baĞlantısından sonra gerçek endpointâ€™e gönderilecek.",
                     style = MaterialTheme.typography.bodySmall,
                     color = BBColors.TextMuted
                 )
@@ -491,10 +491,10 @@ private fun lastPriceSuggestionTexts(): List<LastPriceSuggestionText> {
     return listOf(
         LastPriceSuggestionText(
             title = "Toplu Alım",
-            description = "Belirttiğim miktar için en iyi son fiyatı rica ederim."
+            description = "BelirttiĞim miktar için en iyi son fiyatı rica ederim."
         ),
         LastPriceSuggestionText(
-            title = "Ödeme Şartı",
+            title = "Ã–deme Åartı",
             description = "Peşin ve vadeli ödeme seçeneklerine göre son fiyat bilgisini paylaşabilir misiniz?"
         ),
         LastPriceSuggestionText(
@@ -515,3 +515,4 @@ private fun LastPriceRequestScreenPreview() {
         LastPriceRequestScreen()
     }
 }
+

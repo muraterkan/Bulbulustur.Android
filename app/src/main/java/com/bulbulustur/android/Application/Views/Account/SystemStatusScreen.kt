@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -98,7 +98,7 @@ fun SystemStatusScreen(
             item {
                 SystemStatusIncidentCard(
                     title = "Aktif Olaylar",
-                    subtitle = "Şu anda kullanıcıları etkileyen olaylar.",
+                    subtitle = "Åu anda kullanıcıları etkileyen olaylar.",
                     emptyText = "Aktif olay bulunmuyor.",
                     incidents = activeIncidents
                 )
@@ -161,7 +161,7 @@ private fun SystemStatusHeroCard() {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Tüm Sistemler Çalışıyor",
+                    text = "Tüm Sistemler Ã‡alışıyor",
                     style = BbTypography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -282,7 +282,7 @@ private fun SystemStatusMaintenanceCard() {
                 )
 
                 Text(
-                    text = "Yaklaşan bakım olduğunda burada gösterilecek.",
+                    text = "Yaklaşan bakım olduĞunda burada gösterilecek.",
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -492,7 +492,7 @@ private fun getDemoSystemStatusComponents(): List<SystemStatusComponentUiModel> 
             status = SystemStatusLevel.Operational
         ),
         SystemStatusComponentUiModel(
-            title = "Ödeme Servisleri",
+            title = "Ã–deme Servisleri",
             description = "Sepet, ödeme ve sipariş operasyonları.",
             icon = Icons.Outlined.Payments,
             status = SystemStatusLevel.Operational
@@ -525,7 +525,7 @@ private fun getDemoActiveIncidents(): List<SystemStatusIncidentUiModel> {
 private fun getDemoRecentIncidents(): List<SystemStatusIncidentUiModel> {
     return listOf(
         SystemStatusIncidentUiModel(
-            title = "Bildirim kuyruğu gecikmesi",
+            title = "Bildirim kuyruĞu gecikmesi",
             description = "Kısa süreli e-posta gecikmesi izlendi ve kapatıldı.",
             dateText = "22 Haziran 2026",
             icon = Icons.Outlined.History,
@@ -533,7 +533,7 @@ private fun getDemoRecentIncidents(): List<SystemStatusIncidentUiModel> {
         ),
         SystemStatusIncidentUiModel(
             title = "Web arayüz yavaşlaması",
-            description = "Bölgesel ağ gecikmesi sonrası servis normal duruma döndü.",
+            description = "Bölgesel aĞ gecikmesi sonrası servis normal duruma döndü.",
             dateText = "18 Haziran 2026",
             icon = Icons.Outlined.Info,
             status = SystemStatusLevel.Resolved
@@ -562,7 +562,7 @@ private enum class SystemStatusLevel(
     val contentColor: Color
 ) {
     Operational(
-        label = "Çalışıyor",
+        label = "Ã‡alışıyor",
         backgroundColor = BBColors.Green.Green50,
         contentColor = BBColors.Green.Green600
     ),
@@ -587,7 +587,7 @@ private enum class SystemStatusLevel(
         contentColor = BBColors.Blue.Blue600
     ),
     Resolved(
-        label = "Çözüldü",
+        label = "Ã‡özüldü",
         backgroundColor = BBColors.Green.Green50,
         contentColor = BBColors.Green.Green600
     )

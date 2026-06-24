@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views
+﻿package com.bulbulustur.android.Application.Views
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -118,7 +118,7 @@ private fun AppearanceIntroCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Bulbulustur uygulamasında kullanmak istediğiniz görünüm modunu seçin.",
+            text = "Bulbulustur uygulamasında kullanmak istediĞiniz görünüm modunu seçin.",
             style = BbTypography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -191,3 +191,4 @@ private data class AppearanceThemeOption(
     val description: String,
     val icon: ImageVector
 )
+

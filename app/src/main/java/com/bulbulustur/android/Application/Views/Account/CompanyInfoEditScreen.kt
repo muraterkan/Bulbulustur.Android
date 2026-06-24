@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -110,7 +110,7 @@ fun CompanyInfoEditScreen(
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
                 ) {
                     CompanySectionHeader(
-                        title = "Firma Kimliği",
+                        title = "Firma KimliĞi",
                         description = "Firma adınız ve vergi bilgileriniz."
                     )
 
@@ -147,8 +147,8 @@ fun CompanyInfoEditScreen(
                         onValueChange = { value ->
                             mersisNoState.value = value
                         },
-                        label = "MERSİS No",
-                        placeholder = "MERSİS numarası",
+                        label = "MERSÄ°S No",
+                        placeholder = "MERSÄ°S numarası",
                         keyboardType = KeyboardType.Number
                     )
                 }
@@ -164,7 +164,7 @@ fun CompanyInfoEditScreen(
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
                 ) {
                     CompanySectionHeader(
-                        title = "İletişim ve Adres",
+                        title = "Ä°letişim ve Adres",
                         description = "Firma iletişim bilgileriniz ve resmi adresiniz."
                     )
 
@@ -331,11 +331,12 @@ private fun CompanyInfoNote() {
             )
 
             Text(
-                text = "Bu bilgiler teklif, fatura ve kurumsal işlem süreçlerinde kullanılabilir. Gerçek API bağlandığında doğrulama kuralları ayrıca uygulanacaktır.",
+                text = "Bu bilgiler teklif, fatura ve kurumsal işlem süreçlerinde kullanılabilir. Gerçek API baĞlandıĞında doĞrulama kuralları ayrıca uygulanacaktır.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
 }
+
 

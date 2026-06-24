@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2c.Views.Category
+﻿package com.bulbulustur.android.Application.Areas.b2c.Views.Category
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -187,7 +187,7 @@ fun RetailCategoryHomeScreen(
             item {
                 BbSectionHeader(
                     title = "Kategori Vitrinleri",
-                    subtitle = "Ürün, mağaza ve kampanya akışlarına hızlı geç."
+                    subtitle = "Ürün, maĞaza ve kampanya akışlarına hızlı geç."
                 )
             }
 
@@ -263,7 +263,7 @@ private fun RetailCategoryHomeHeroCard(
             )
 
             Text(
-                text = "Alt Kategorileri, ürün Vitrinlerini ve mağaza geçişlerini bu alandan keşfet.",
+                text = "Alt Kategorileri, ürün Vitrinlerini ve maĞaza geçişlerini bu alandan keşfet.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = BBColors.TextSubtle
             )
@@ -283,7 +283,7 @@ private fun RetailCategoryHomeHeroCard(
                 )
 
                 BbButton(
-                    text = "Mağazalar",
+                    text = "MaĞazalar",
                     onClick = onStoreClick,
                     modifier = Modifier.weight(1f),
                     variant = BbButtonVariant.Light,
@@ -409,7 +409,7 @@ private fun RetailCategoryHomeTrustStrip() {
 
             RetailCategoryHomeTrustItem(
                 icon = Icons.Outlined.Storefront,
-                title = "Mağazalar",
+                title = "MaĞazalar",
                 modifier = Modifier.weight(1f)
             )
         }
@@ -674,8 +674,8 @@ private fun getRetailCategoryHomeGateways(): List<RetailCategoryHomeGatewayItem>
             target = RetailCategoryHomeGatewayTarget.Products
         ),
         RetailCategoryHomeGatewayItem(
-            title = "Mağazalar",
-            description = "Kategori mağazaları",
+            title = "MaĞazalar",
+            description = "Kategori maĞazaları",
             icon = Icons.Outlined.Storefront,
             backgroundColor = BBColors.Green.Green50,
             iconColor = BBColors.Green.Green700,
@@ -683,7 +683,7 @@ private fun getRetailCategoryHomeGateways(): List<RetailCategoryHomeGatewayItem>
         ),
         RetailCategoryHomeGatewayItem(
             title = "Favoriler",
-            description = "Beğenilen ürünler",
+            description = "BeĞenilen ürünler",
             icon = Icons.Outlined.FavoriteBorder,
             backgroundColor = BBColors.Pink.Pink50,
             iconColor = BBColors.Pink.Pink700,
@@ -744,8 +744,8 @@ private fun getRetailCategoryHomeShowcases(): List<RetailCategoryHomeShowcaseIte
             target = RetailCategoryHomeShowcaseTarget.Campaigns
         ),
         RetailCategoryHomeShowcaseItem(
-            title = "Mağaza Keşfi",
-            description = "Bu kategoride öne çıkan Mağazaları incele.",
+            title = "MaĞaza Keşfi",
+            description = "Bu kategoride öne çıkan MaĞazaları incele.",
             icon = Icons.Outlined.Storefront,
             backgroundColor = BBColors.Blue.Blue50,
             iconColor = BBColors.Blue.Blue700,
@@ -761,9 +761,9 @@ private fun getRetailCategoryHomePopularSearches(): List<String> {
         "Notebook",
         "Akıllı saat",
         "Tablet",
-        "Şarj adaptörü",
+        "Åarj adaptörü",
         "Oyuncu ekipmanı",
-        "Ev elektroniği"
+        "Ev elektroniĞi"
     )
 }
 

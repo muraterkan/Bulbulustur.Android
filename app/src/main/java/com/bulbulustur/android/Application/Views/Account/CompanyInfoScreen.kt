@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -96,13 +96,13 @@ fun CompanyInfoScreen(
 
             item {
                 CompanyInfoSection(
-                    title = "Şirket Kimliği",
+                    title = "Åirket KimliĞi",
                     description = "Ünvan, şirket tipi ve kurumsal profil bilgileri.",
                     icon = Icons.Outlined.Badge
                 ) {
-                    CompanyInfoRow("Şirket Ünvanı", "Türkiye Global Ticaret Limited Şirketi")
+                    CompanyInfoRow("Åirket Ünvanı", "Türkiye Global Ticaret Limited Åirketi")
                     CompanyDashedDivider()
-                    CompanyInfoRow("Şirket Tipi", "Limited Şirket")
+                    CompanyInfoRow("Åirket Tipi", "Limited Åirket")
                     CompanyDashedDivider()
                     CompanyInfoRow("Abonelik Planı", "B2B e-marketplace / Free")
                     CompanyDashedDivider()
@@ -113,16 +113,16 @@ fun CompanyInfoScreen(
             item {
                 CompanyInfoSection(
                     title = "Adres Bilgileri",
-                    description = "Şirketin kayıtlı lokasyon bilgileri.",
+                    description = "Åirketin kayıtlı lokasyon bilgileri.",
                     icon = Icons.Outlined.LocationOn
                 ) {
                     CompanyInfoRow("Adres", "Fulya Mah., Aytekin Kotil Cad., No: 11/1")
                     CompanyDashedDivider()
                     CompanyInfoRow("Ülke", "Türkiye")
                     CompanyDashedDivider()
-                    CompanyInfoRow("Şehir", "İstanbul")
+                    CompanyInfoRow("Åehir", "Ä°stanbul")
                     CompanyDashedDivider()
-                    CompanyInfoRow("İlçe", "Şişli")
+                    CompanyInfoRow("Ä°lçe", "Åişli")
                     CompanyDashedDivider()
                     CompanyInfoRow("Posta Kodu", "34394")
                 }
@@ -134,11 +134,11 @@ fun CompanyInfoScreen(
                     description = "Fatura ve resmi kayıt süreçlerinde kullanılan bilgiler.",
                     icon = Icons.Outlined.ReceiptLong
                 ) {
-                    CompanyInfoRow("Vergi Dairesi", "Şişli Vergi Dairesi")
+                    CompanyInfoRow("Vergi Dairesi", "Åişli Vergi Dairesi")
                     CompanyDashedDivider()
                     CompanyInfoRow("Vergi Numarası", "789456123")
                     CompanyDashedDivider()
-                    CompanyInfoRow("MERSİS", "0188129921700001")
+                    CompanyInfoRow("MERSÄ°S", "0188129921700001")
                     CompanyDashedDivider()
                     CompanyInfoRow("KEP", "tglobal@bulbulustur.com")
                     CompanyDashedDivider()
@@ -203,13 +203,13 @@ private fun CompanyHeroCard() {
                     )
 
                     Text(
-                        text = "Türkiye Global Ticaret Limited Şirketi",
+                        text = "Türkiye Global Ticaret Limited Åirketi",
                         style = BbTypography.titleLarge,
                         color = MaterialTheme.colorScheme.inverseOnSurface
                     )
 
                     Text(
-                        text = "Limited Şirket",
+                        text = "Limited Åirket",
                         style = BbTypography.bodySmall,
                         color = MaterialTheme.colorScheme.inverseOnSurface.copy(alpha = BBAlpha.Muted)
                     )
@@ -221,7 +221,7 @@ private fun CompanyHeroCard() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 CompanyHeroBadge(
-                    text = "Doğrulanmış Firma",
+                    text = "DoĞrulanmış Firma",
                     icon = Icons.Outlined.Verified
                 )
 
@@ -298,8 +298,8 @@ private fun CompanyStatsGrid() {
             CompanyStatCard(
                 modifier = Modifier.weight(1f),
                 icon = Icons.Outlined.LocationOn,
-                label = "Ülke / Şehir",
-                value = "Türkiye / İstanbul"
+                label = "Ülke / Åehir",
+                value = "Türkiye / Ä°stanbul"
             )
 
             CompanyStatCard(
@@ -458,12 +458,12 @@ private fun CompanyActionSection(
     onB2CStoreClick: () -> Unit
 ) {
     CompanyInfoSection(
-        title = "Kurumsal İşlemler",
-        description = "Şirket profilini ticaret akışlarına bağla.",
+        title = "Kurumsal Ä°şlemler",
+        description = "Åirket profilini ticaret akışlarına baĞla.",
         icon = Icons.Outlined.Business
     ) {
         CompanyActionRow(
-            title = "Şirketimi B2B Index’e Dahil Et",
+            title = "Åirketimi B2B Indexâ€™e Dahil Et",
             description = "Tedarikçiler ve toptan alıcılar tarafından Keşfedil.",
             icon = Icons.Outlined.Storefront,
             onClick = onB2BIndexClick
@@ -472,8 +472,8 @@ private fun CompanyActionSection(
         CompanyDashedDivider()
 
         CompanyActionRow(
-            title = "B2C Mağazamı Yönet",
-            description = "Perakende mağaza görünürlüğünü ve satış akışını yönet.",
+            title = "B2C MaĞazamı Yönet",
+            description = "Perakende maĞaza görünürlüĞünü ve satış akışını yönet.",
             icon = Icons.Outlined.HomeWork,
             onClick = onB2CStoreClick
         )
@@ -575,4 +575,5 @@ private fun CompanyDashedDivider() {
         )
     }
 }
+
 

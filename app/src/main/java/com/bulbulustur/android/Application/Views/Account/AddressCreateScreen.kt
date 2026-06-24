@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -168,7 +168,7 @@ private fun AddressCreateIntroCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Siparişlerinde kullanmak üzere yeni bir teslimat adresi oluştur. Teslimatın doğru ilerlemesi için adres bilgilerini eksiksiz gir.",
+            text = "Siparişlerinde kullanmak üzere yeni bir teslimat adresi oluştur. Teslimatın doĞru ilerlemesi için adres bilgilerini eksiksiz gir.",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -301,8 +301,8 @@ private fun AddressCreateLocationFields(
                     )
                 )
             },
-            label = "Şehir",
-            placeholder = "Şehir seçiniz",
+            label = "Åehir",
+            placeholder = "Åehir seçiniz",
             options = addressCityOptions()
         )
 
@@ -316,8 +316,8 @@ private fun AddressCreateLocationFields(
                     )
                 )
             },
-            label = "İlçe",
-            placeholder = "İlçe seçiniz",
+            label = "Ä°lçe",
+            placeholder = "Ä°lçe seçiniz",
             options = addressDistrictOptions()
         )
     }
@@ -368,7 +368,7 @@ private fun AddressCreateDetailFields(
                     )
                 )
             },
-            label = "Adres Başlığı",
+            label = "Adres BaşlıĞı",
             placeholder = "Ev adresim, iş adresim gibi"
         )
 
@@ -395,7 +395,7 @@ private fun AddressCreateInfoCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Adres bilgileriniz, siparişlerinizin teslimatının sağlanması amacıyla işlenir. Detaylar için gizlilik politikasını inceleyebilirsiniz.",
+            text = "Adres bilgileriniz, siparişlerinizin teslimatının saĞlanması amacıyla işlenir. Detaylar için gizlilik politikasını inceleyebilirsiniz.",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -426,11 +426,11 @@ private fun getAddressCreateValidationMessage(
     }
 
     if (formState.cityName.isBlank()) {
-        return "Şehir seçilmelidir."
+        return "Åehir seçilmelidir."
     }
 
     if (formState.districtName.isBlank()) {
-        return "İlçe seçilmelidir."
+        return "Ä°lçe seçilmelidir."
     }
 
     if (formState.addressLine.isBlank()) {
@@ -438,7 +438,7 @@ private fun getAddressCreateValidationMessage(
     }
 
     if (formState.addressTitle.isBlank()) {
-        return "Adres başlığı gereklidir."
+        return "Adres başlıĞı gereklidir."
     }
 
     return "Adres bilgilerini kontrol etmelisin."
@@ -449,16 +449,16 @@ private fun addressCountryOptions(): List<BbSelectOption> {
         BbSelectOption("Türkiye", "Türkiye"),
         BbSelectOption("Almanya", "Almanya"),
         BbSelectOption("Amerika Birleşik Devletleri", "Amerika Birleşik Devletleri"),
-        BbSelectOption("Çin", "Çin"),
+        BbSelectOption("Ã‡in", "Ã‡in"),
         BbSelectOption("Birleşik Krallık", "Birleşik Krallık")
     )
 }
 
 private fun addressCityOptions(): List<BbSelectOption> {
     return listOf(
-        BbSelectOption("İstanbul", "İstanbul"),
+        BbSelectOption("Ä°stanbul", "Ä°stanbul"),
         BbSelectOption("Ankara", "Ankara"),
-        BbSelectOption("İzmir", "İzmir"),
+        BbSelectOption("Ä°zmir", "Ä°zmir"),
         BbSelectOption("Bursa", "Bursa"),
         BbSelectOption("Kayseri", "Kayseri"),
         BbSelectOption("Konya", "Konya")
@@ -467,12 +467,13 @@ private fun addressCityOptions(): List<BbSelectOption> {
 
 private fun addressDistrictOptions(): List<BbSelectOption> {
     return listOf(
-        BbSelectOption("Şişli", "Şişli"),
+        BbSelectOption("Åişli", "Åişli"),
         BbSelectOption("Kadıköy", "Kadıköy"),
         BbSelectOption("Üsküdar", "Üsküdar"),
-        BbSelectOption("Çankaya", "Çankaya"),
+        BbSelectOption("Ã‡ankaya", "Ã‡ankaya"),
         BbSelectOption("Nilüfer", "Nilüfer"),
         BbSelectOption("Melikgazi", "Melikgazi")
     )
 }
+
 

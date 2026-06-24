@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Company
+﻿package com.bulbulustur.android.Application.Views.Company
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -103,7 +103,7 @@ fun CompanyHomeScreen(
             item {
                 CompanyHomeSectionCard(
                     title = "Ortobella Comfort Ürün Vitrinleri",
-                    subtitle = "Firmanın öne çıkardığı özel ürün gruplarını ve toptan alıma uygun koleksiyonlarını Keşfedin.",
+                    subtitle = "Firmanın öne çıkardıĞı özel ürün gruplarını ve toptan alıma uygun koleksiyonlarını Keşfedin.",
                     items = listOf(
                         "Yeni Ürünler",
                         "Popüler Ürünler",
@@ -116,12 +116,12 @@ fun CompanyHomeScreen(
 
             item {
                 CompanyHomeSectionCard(
-                    title = "Şirket Vitrini",
-                    subtitle = "Firmanın öne çıkardığı ürün gruplarını, özel koleksiyonlarını ve ticari Vitrinlerini inceleyin.",
+                    title = "Åirket Vitrini",
+                    subtitle = "Firmanın öne çıkardıĞı ürün gruplarını, özel koleksiyonlarını ve ticari Vitrinlerini inceleyin.",
                     items = listOf(
-                        "Öne Çıkan Ürün Koleksiyonları",
+                        "Ã–ne Ã‡ıkan Ürün Koleksiyonları",
                         "Kurumsal Tedarikçi Profili",
-                        "Hızlı İletişim ve Teklif Süreci"
+                        "Hızlı Ä°letişim ve Teklif Süreci"
                     ),
                     icon = Icons.Outlined.Security,
                     onClick = onProfileClick
@@ -167,7 +167,7 @@ private fun CompanyHomeHero(
                         horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                     ) {
                         BbChip(
-                            text = "Tedarikçi Mağazası",
+                            text = "Tedarikçi MaĞazası",
                             selected = false,
                             onClick = {}
                         )
@@ -233,7 +233,7 @@ private fun CompanyHomeHero(
             }
 
             BbButton(
-                text = "İletişime Geç",
+                text = "Ä°letişime Geç",
                 onClick = onContactClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Secondary,
@@ -306,7 +306,7 @@ private fun CompanyHomeShowcaseCard() {
 
                 Column {
                     Text(
-                        text = "Şirket Vitrini",
+                        text = "Åirket Vitrini",
                         style = MaterialTheme.typography.titleMedium,
                         color = BBColors.TextStrong,
                         fontWeight = FontWeight.Bold
@@ -320,9 +320,9 @@ private fun CompanyHomeShowcaseCard() {
                 }
             }
 
-            CompanyHomeInfoLine("Öne Çıkan Ürün Koleksiyonları")
+            CompanyHomeInfoLine("Ã–ne Ã‡ıkan Ürün Koleksiyonları")
             CompanyHomeInfoLine("Kurumsal Tedarikçi Profili")
-            CompanyHomeInfoLine("Hızlı İletişim ve Teklif Süreci")
+            CompanyHomeInfoLine("Hızlı Ä°letişim ve Teklif Süreci")
         }
     }
 }
@@ -403,7 +403,7 @@ private fun CompanyHomeTabs(
             )
 
             CompanyHomeTabChip(
-                text = "İletişim",
+                text = "Ä°letişim",
                 icon = Icons.Outlined.ContactMail,
                 selected = false,
                 onClick = onContactClick
@@ -519,12 +519,12 @@ private fun getCompanyHome(
         companyId = companyId,
         name = "Ortobella Comfort",
         logoText = "OC",
-        description = "Çanta, tekstil ve promosyon ürünleri alanında çalışan doğrulanmış tedarikçi.",
+        description = "Ã‡anta, tekstil ve promosyon ürünleri alanında çalışan doĞrulanmış tedarikçi.",
         isVerified = true,
         chips = listOf(
             "Türkiye",
             "Samsun",
-            "Doğrulanmış",
+            "DoĞrulanmış",
             "Toptancı",
             "120+ Ürün"
         )
@@ -538,3 +538,4 @@ private fun CompanyHomeScreenPreview() {
         CompanyHomeScreen()
     }
 }
+

@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2b.Views.Home
+﻿package com.bulbulustur.android.Application.Areas.b2b.Views.Home
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -329,7 +329,7 @@ private fun WholesaleHeroCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 BbButton(
-                    text = "Teklif İste",
+                    text = "Teklif Ä°ste",
                     onClick = onRfqCreateClick,
                     modifier = Modifier.weight(1f),
                     variant = BbButtonVariant.Primary,
@@ -380,7 +380,7 @@ private fun WholesaleTrustRail() {
             WholesaleTrustItem(
                 modifier = Modifier.weight(1f),
                 icon = Icons.Outlined.Verified,
-                title = "Doğrulanmış"
+                title = "DoĞrulanmış"
             )
 
             WholesaleTrustItem(
@@ -796,7 +796,7 @@ private fun wholesaleShowcaseProducts(): List<WholesaleProductCardModel> {
             Id = 1,
             Title = "Endüstriyel ambalaj kutusu",
             Category = "Ambalaj ve paketleme",
-            PriceText = "₺18,90 / adet",
+            PriceText = "â‚º18,90 / adet",
             MoqText = "MOQ 500",
             SupplierText = "3 firma",
             BadgeText = "Vitrin",
@@ -806,7 +806,7 @@ private fun wholesaleShowcaseProducts(): List<WholesaleProductCardModel> {
             Id = 2,
             Title = "Toptan üretim kumaşı",
             Category = "Tekstil ve giyim",
-            PriceText = "₺74,50 / metre",
+            PriceText = "â‚º74,50 / metre",
             MoqText = "MOQ 250",
             SupplierText = "5 firma",
             BadgeText = "Yeni",
@@ -816,7 +816,7 @@ private fun wholesaleShowcaseProducts(): List<WholesaleProductCardModel> {
             Id = 3,
             Title = "Paslanmaz üretim parçası",
             Category = "Makine ve sanayi",
-            PriceText = "₺42,00 / adet",
+            PriceText = "â‚º42,00 / adet",
             MoqText = "MOQ 100",
             SupplierText = "4 firma",
             BadgeText = "RFQ",
@@ -826,7 +826,7 @@ private fun wholesaleShowcaseProducts(): List<WholesaleProductCardModel> {
             Id = 4,
             Title = "Toptan elektronik modül",
             Category = "Elektronik bileşen",
-            PriceText = "₺96,00 / adet",
+            PriceText = "â‚º96,00 / adet",
             MoqText = "MOQ 200",
             SupplierText = "6 firma",
             BadgeText = "Popüler",
@@ -834,12 +834,12 @@ private fun wholesaleShowcaseProducts(): List<WholesaleProductCardModel> {
         ),
         WholesaleProductCardModel(
             Id = 5,
-            Title = "Özel baskılı etiket rulosu",
+            Title = "Ã–zel baskılı etiket rulosu",
             Category = "Etiket ve baskı",
-            PriceText = "₺31,75 / rulo",
+            PriceText = "â‚º31,75 / rulo",
             MoqText = "MOQ 300",
             SupplierText = "2 firma",
-            BadgeText = "Özel",
+            BadgeText = "Ã–zel",
             ImageResId = R.drawable.h3ff3b33d6a1447c898cee6e336867bach
         )
     )
@@ -862,7 +862,7 @@ private fun wholesaleActionItems(
             OnClick = onRfqListClick
         ),
         WholesaleHomeActionItem(
-            Title = "Teklif İste",
+            Title = "Teklif Ä°ste",
             Description = "Yeni teklif iste",
             Icon = Icons.Outlined.LocalOffer,
             Tint = BBColors.Orange.Orange700,
@@ -871,7 +871,7 @@ private fun wholesaleActionItems(
         ),
         WholesaleHomeActionItem(
             Title = "Son fiyat",
-            Description = "Fiyat pazarlığı başlat",
+            Description = "Fiyat pazarlıĞı başlat",
             Icon = Icons.Outlined.LocalOffer,
             Tint = BBColors.Red.Red700,
             BackgroundColor = BBColors.Red.Red50,
@@ -886,7 +886,7 @@ private fun wholesaleActionItems(
             OnClick = onSampleRequestClick
         ),
         WholesaleHomeActionItem(
-            Title = "Özelleştirme",
+            Title = "Ã–zelleştirme",
             Description = "Logo, renk ve üretim detayı",
             Icon = Icons.Outlined.Category,
             Tint = BBColors.Purple.Purple700,

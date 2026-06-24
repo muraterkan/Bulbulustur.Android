@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -117,7 +117,7 @@ private fun SubscriptionIntroCard() {
                 )
 
                 Text(
-                    text = "Hesabınıza bağlı aktif veya geçmiş abonelikleri, dönem aralıklarını ve plan ücretlerini buradan takip edebilirsiniz.",
+                    text = "Hesabınıza baĞlı aktif veya geçmiş abonelikleri, dönem aralıklarını ve plan ücretlerini buradan takip edebilirsiniz.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -158,7 +158,7 @@ private fun SubscriptionCard(
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                 ) {
                     Text(
-                        text = "ABONELİK PLANI",
+                        text = "ABONELÄ°K PLANI",
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -186,14 +186,14 @@ private fun SubscriptionCard(
             ) {
                 SubscriptionInfoBox(
                     modifier = Modifier.weight(1f),
-                    title = "BAŞLANGIÇ",
+                    title = "BAÅLANGIÃ‡",
                     value = subscription.startDate,
                     iconColor = BBColors.Blue.Blue600
                 )
 
                 SubscriptionInfoBox(
                     modifier = Modifier.weight(1f),
-                    title = "BİTİŞ",
+                    title = "BÄ°TÄ°Å",
                     value = subscription.endDate,
                     iconColor = BBColors.Orange.Orange600
                 )
@@ -247,7 +247,7 @@ private fun SubscriptionPriceBox(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
         ) {
             Text(
-                text = "PLAN ÜCRETİ",
+                text = "PLAN ÜCRETÄ°",
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -371,13 +371,13 @@ private fun SubscriptionEmptyState() {
             )
 
             Text(
-                text = "Aktif aboneliğiniz yok",
+                text = "Aktif aboneliĞiniz yok",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
-                text = "Abonelik veya paket bilgileriniz oluştuğunda burada görüntülenir.",
+                text = "Abonelik veya paket bilgileriniz oluştuĞunda burada görüntülenir.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -390,7 +390,7 @@ private fun getDemoSubscriptions(): List<SubscriptionUiModel> {
         SubscriptionUiModel(
             subscriptionId = 1,
             title = "B2B e-marketplace / Free",
-            priceText = "0 ₺",
+            priceText = "0 â‚º",
             startDate = "25.09.2025",
             endDate = "25.09.2026",
             statusText = "Aktif Plan",
@@ -408,4 +408,5 @@ private data class SubscriptionUiModel(
     val statusText: String,
     val active: Boolean
 )
+
 

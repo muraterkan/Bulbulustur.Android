@@ -111,3 +111,4 @@ private fun bbFormatRating(rating: Double): String {
     val formatter = DecimalFormat("0.0", symbols)
     return formatter.format(rating)
 }
+

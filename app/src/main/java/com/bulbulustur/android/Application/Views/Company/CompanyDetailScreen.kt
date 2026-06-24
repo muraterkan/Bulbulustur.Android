@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Company
+﻿package com.bulbulustur.android.Application.Views.Company
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -21,7 +21,7 @@ import androidx.compose.ui.res.painterResource
 import com.bulbulustur.android.R
 import androidx.compose.material.icons.outlined.Business
 import androidx.compose.material.icons.outlined.ChevronRight
-import androidx.compose.material.icons.outlined.Description
+import androidx.compose.material.icons.outlined.RequestQuote
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Factory
 import androidx.compose.material.icons.outlined.Home
@@ -183,7 +183,7 @@ fun CompanyDetailScreen(
             item {
                 BbSectionHeader(
                     title = "Belgeler ve Sertifikalar",
-                    subtitle = "Firma güveni için doğrulama bilgileri"
+                    subtitle = "Firma güveni için doĞrulama bilgileri"
                 )
             }
 
@@ -300,7 +300,7 @@ private fun CompanyDetailHero(
                         add(company.businessModel)
 
                         if (company.isVerified) {
-                            add("Doğrulanmış")
+                            add("DoĞrulanmış")
                         }
                     }
                 )
@@ -356,7 +356,7 @@ private fun CompanyDetailMainActions(
             )
 
             CompanyActionCard(
-                title = "İletişime Geç",
+                title = "Ä°letişime Geç",
                 description = "Yetkili kişiye ulaş",
                 icon = Icons.Outlined.Mail,
                 modifier = Modifier.weight(1f),
@@ -367,7 +367,7 @@ private fun CompanyDetailMainActions(
         }
 
         BbButton(
-            text = "İletişime Geç",
+            text = "Ä°letişime Geç",
             onClick = {
                 onContactClick(company.companyId)
             },
@@ -428,7 +428,7 @@ private fun CompanyDetailTabs(
             )
 
             CompanyTabChip(
-                text = "İletişim",
+                text = "Ä°letişim",
                 icon = Icons.Outlined.Email,
                 selected = false,
                 onClick = {
@@ -568,7 +568,7 @@ private fun CompanyAboutCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             Text(
-                text = "Şirket Hakkında",
+                text = "Åirket Hakkında",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = BBColors.TextStrong
@@ -617,7 +617,7 @@ private fun CompanyInfoGrid(
             )
 
             CompanyInfoCard(
-                title = "Çalışan",
+                title = "Ã‡alışan",
                 value = company.employeeCount,
                 icon = Icons.Outlined.Business,
                 modifier = Modifier.weight(1f)
@@ -629,7 +629,7 @@ private fun CompanyInfoGrid(
             horizontalArrangement = Arrangement.spacedBy(BBSpacing.CardGapCompact)
         ) {
             CompanyInfoCard(
-                title = "İhracat Pazarı",
+                title = "Ä°hracat Pazarı",
                 value = company.exportMarkets,
                 icon = Icons.Outlined.Language,
                 modifier = Modifier.weight(1f)
@@ -767,7 +767,7 @@ private fun CompanyCertificateCard(
             horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             Icon(
-                imageVector = Icons.Outlined.Description,
+                imageVector = Icons.Outlined.RequestQuote,
                 contentDescription = null,
                 tint = BBColors.Primary
             )
@@ -820,7 +820,7 @@ private fun CompanyTrustPanel(
             )
 
             Text(
-                text = "Firma profili, ürünleri ve belgeleri üzerinden firmayı daha yakından değerlendirin.",
+                text = "Firma profili, ürünleri ve belgeleri üzerinden firmayı daha yakından deĞerlendirin.",
                 style = MaterialTheme.typography.bodySmall,
                 color = BBColors.TextMuted
             )
@@ -840,7 +840,7 @@ private fun CompanyTrustPanel(
                 )
 
                 Text(
-                    text = "İletişime Geç",
+                    text = "Ä°letişime Geç",
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.SemiBold,
                     color = BBColors.TextStrong
@@ -966,18 +966,18 @@ data class CompanyCertificate(
 private fun getCompanyDetail(companyId: Int): CompanyDetail {
     return CompanyDetail(
         companyId = companyId,
-        name = "Bulbulustur İnternet Teknolojileri ve Tic. A.Ş.",
-        shortDescription = "Yazılım, dijital dönüşüm ve ticaret altyapıları alanında çözüm sağlayan firma.",
+        name = "Bulbulustur Ä°nternet Teknolojileri ve Tic. A.Å.",
+        shortDescription = "Yazılım, dijital dönüşüm ve ticaret altyapıları alanında çözüm saĞlayan firma.",
         about = "Firma; üretim, tedarik, satış ve e-ticaret operasyonlarını dijital altyapılarla güçlendiren çözümler geliştirir. Mobil uygulamada bu alan ileride gerçek firma açıklaması, yetenekler ve ticari profil bilgileriyle beslenecek.",
         whyUs = "Firma profili, ürünleri, belgeleri ve iletişim bilgileri tek ekranda sunularak alıcının daha hızlı karar vermesine yardımcı olur.",
         country = "Türkiye",
-        city = "İstanbul",
+        city = "Ä°stanbul",
         businessModel = "Perakendeci, Toptancı",
         productCount = 12,
         foundationYear = "2025",
         employeeCount = "1-5 kişi",
         exportMarkets = "Southern Africa, South America",
-        addressSummary = "İçerenköy / İstanbul",
+        addressSummary = "Ä°çerenköy / Ä°stanbul",
         website = "www.bulbulustur.com",
         galleryImageCount = 11,
         isVerified = true,
@@ -1034,12 +1034,12 @@ private fun getCompanyCertificates(): List<CompanyCertificate> {
         CompanyCertificate(
             certificateId = 2,
             name = "ISO 14001",
-            description = "Çevre yönetim sistemi sertifikası."
+            description = "Ã‡evre yönetim sistemi sertifikası."
         ),
         CompanyCertificate(
             certificateId = 3,
             name = "ISO 45001",
-            description = "İş sağlığı ve güvenliği yönetim sistemi sertifikası."
+            description = "Ä°ş saĞlıĞı ve güvenliĞi yönetim sistemi sertifikası."
         )
     )
 }
@@ -1051,3 +1051,4 @@ private fun CompanyDetailScreenPreview() {
         CompanyDetailScreen()
     }
 }
+

@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Settings
+﻿package com.bulbulustur.android.Application.Views.Settings
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -53,7 +53,7 @@ fun ThemeSelectionScreen(
         item {
             BbSectionHeader(
                 title = "Tema Seçimi",
-                subtitle = "Uygulamanın görünüm tercihlerini değiştirin"
+                subtitle = "Uygulamanın görünüm tercihlerini deĞiştirin"
             )
         }
 
@@ -114,7 +114,7 @@ private fun ThemeSelectionHeader(
             )
 
             Text(
-                text = "Uygulamanın açık, koyu veya cihaz ayarına bağlı görünmesini seçin.",
+                text = "Uygulamanın açık, koyu veya cihaz ayarına baĞlı görünmesini seçin.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -276,3 +276,4 @@ private fun ThemeSelectionScreenPreview() {
         ThemeSelectionScreen()
     }
 }
+

@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Shared.Components
+﻿package com.bulbulustur.android.Application.Views.Shared.Components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -12,10 +12,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
-import androidx.compose.material.icons.outlined.Description
+import androidx.compose.material.icons.outlined.RequestQuote
 import androidx.compose.material.icons.outlined.KeyboardArrowRight
-import androidx.compose.material.icons.outlined.ShoppingBasket
-import androidx.compose.material.icons.outlined.Storefront
+import androidx.compose.material.icons.outlined.Business
+import androidx.compose.material.icons.outlined.LocalMall
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -88,7 +88,7 @@ fun BuyerModeSheet(
                 iconContainerColor = BBColors.PrimarySoft,
                 icon = {
                     Icon(
-                        imageVector = Icons.Outlined.ShoppingBasket,
+                        imageVector = Icons.Outlined.LocalMall,
                         contentDescription = null,
                         tint = BBColors.TextStrong,
                         modifier = Modifier.size(BBIcon.SizeLg)
@@ -104,7 +104,7 @@ fun BuyerModeSheet(
                 iconContainerColor = BBColors.Orange.Orange100,
                 icon = {
                     Icon(
-                        imageVector = Icons.Outlined.Storefront,
+                        imageVector = Icons.Outlined.Business,
                         contentDescription = null,
                         tint = BBColors.Orange.Orange700,
                         modifier = Modifier.size(BBIcon.SizeLg)
@@ -232,7 +232,7 @@ private fun BuyerRfqShortcutCard(
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    imageVector = Icons.Outlined.Description,
+                    imageVector = Icons.Outlined.RequestQuote,
                     contentDescription = null,
                     tint = BBColors.Primary,
                     modifier = Modifier.size(BBIcon.SizeLg)
@@ -265,3 +265,4 @@ private fun BuyerRfqShortcutCard(
         }
     }
 }
+

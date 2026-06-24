@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2c.Views.order
+﻿package com.bulbulustur.android.Application.Areas.b2c.Views.order
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,7 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Description
+import androidx.compose.material.icons.outlined.RequestQuote
 import androidx.compose.material.icons.outlined.ReceiptLong
 import androidx.compose.material.icons.outlined.Send
 import androidx.compose.material.icons.outlined.Star
@@ -68,8 +68,8 @@ fun OrderReviewCreateScreen(
         containerColor = BBColors.SurfaceMuted,
         topBar = {
             BbInnerPageHeader(
-                title = "Ürün Değerlendirme",
-                subtitle = "Satın aldığınız ürün için yorum yazın.",
+                title = "Ürün DeĞerlendirme",
+                subtitle = "Satın aldıĞınız ürün için yorum yazın.",
                 onBackClick = onBackClick
             )
         }
@@ -172,7 +172,7 @@ private fun OrderReviewProductCard() {
                 )
             ) {
                 Text(
-                    text = "Değerlendirilecek Ürün",
+                    text = "DeĞerlendirilecek Ürün",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -184,7 +184,7 @@ private fun OrderReviewProductCard() {
                 )
 
                 Text(
-                    text = "Bu ürünü satın aldığınız için yorum yazabilirsiniz.",
+                    text = "Bu ürünü satın aldıĞınız için yorum yazabilirsiniz.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -265,7 +265,7 @@ private fun OrderReviewContentCard(
             )
         ) {
             OrderReviewSectionTitle(
-                title = "Değerlendirmeniz",
+                title = "DeĞerlendirmeniz",
                 subtitle = "Ürün deneyiminizi birkaç cümleyle anlatın."
             )
 
@@ -277,12 +277,12 @@ private fun OrderReviewContentCard(
                 shape = BBRadius.Input,
                 placeholder = {
                     Text(
-                        text = "Aldığınız ürün için bir değerlendirme yazarak başkalarına yardımcı olabilirsiniz."
+                        text = "AldıĞınız ürün için bir deĞerlendirme yazarak başkalarına yardımcı olabilirsiniz."
                     )
                 },
                 leadingIcon = {
                     Icon(
-                        imageVector = Icons.Outlined.Description,
+                        imageVector = Icons.Outlined.RequestQuote,
                         contentDescription = null
                     )
                 }
@@ -323,13 +323,13 @@ private fun OrderReviewAgreementCard(
                 )
             ) {
                 Text(
-                    text = "Değerlendirme kurallarını kabul ediyorum.",
+                    text = "DeĞerlendirme kurallarını kabul ediyorum.",
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = "Değerlendirmenizin ürün deneyimine dayalı, doğru ve diğer kullanıcılara yardımcı olacak şekilde yazılması gerekir.",
+                    text = "DeĞerlendirmenizin ürün deneyimine dayalı, doĞru ve diĞer kullanıcılara yardımcı olacak şekilde yazılması gerekir.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -356,7 +356,7 @@ private fun OrderReviewActionCard(
             )
         ) {
             BbButton(
-                text = "Değerlendir",
+                text = "DeĞerlendir",
                 onClick = onSubmitClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Primary,

@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -356,4 +356,5 @@ private data class AddressUiModel(
     val fullAddress: String,
     val isDefault: Boolean
 )
+
 

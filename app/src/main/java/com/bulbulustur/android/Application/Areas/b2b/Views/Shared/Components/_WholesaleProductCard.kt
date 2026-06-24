@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components
+﻿package com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
@@ -135,7 +135,7 @@ fun WholesaleProductCard(
                 }
 
                 BbButton(
-                    text = "Teklif İste",
+                    text = "Teklif Ä°ste",
                     onClick = onRfqClick,
                     modifier = Modifier.fillMaxWidth(),
                     variant = BbButtonVariant.Primary,
@@ -152,7 +152,7 @@ fun WholesaleProductCard(
                 )
 
                 BbButton(
-                    text = "Ürünü İncele",
+                    text = "Ürünü Ä°ncele",
                     onClick = onClick,
                     modifier = Modifier.fillMaxWidth(),
                     variant = BbButtonVariant.Outline,

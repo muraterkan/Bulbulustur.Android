@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -96,12 +96,12 @@ fun CompanyB2BStatusScreen(
             item {
                 CompanyB2BStatusSection(
                     title = "B2B Listeleme Bilgileri",
-                    description = "Bu bilgiler şirketinizin Bulbulustur toptan satış tarafındaki görünürlüğünü gösterir.",
+                    description = "Bu bilgiler şirketinizin Bulbulustur toptan satış tarafındaki görünürlüĞünü gösterir.",
                     icon = Icons.Outlined.WorkspacePremium
                 ) {
                     CompanyB2BStatusInfoRow(
-                        title = "Şirket Adı",
-                        value = "Bulbulustur İnternet Teknolojileri ve Tic. A.Ş.",
+                        title = "Åirket Adı",
+                        value = "Bulbulustur Ä°nternet Teknolojileri ve Tic. A.Å.",
                         icon = Icons.Outlined.Business
                     )
 
@@ -124,7 +124,7 @@ fun CompanyB2BStatusScreen(
                     CompanyStatusDashedDivider()
 
                     CompanyB2BStatusInfoRow(
-                        title = "Firma Kimliği",
+                        title = "Firma KimliĞi",
                         value = "FGA0IBO7EGAZ5nB",
                         icon = Icons.Outlined.Language
                     )
@@ -173,7 +173,7 @@ private fun CompanyB2BStatusIntroCard() {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Şirketiniz Toptan Ticaret Görünürlüğünde",
+                    text = "Åirketiniz Toptan Ticaret GörünürlüĞünde",
                     style = BbTypography.titleLarge,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -228,7 +228,7 @@ private fun CompanyB2BActiveSummaryCard() {
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                 ) {
                     Text(
-                        text = "Bulbulustur İnternet Teknolojileri ve Tic. A.Ş.",
+                        text = "Bulbulustur Ä°nternet Teknolojileri ve Tic. A.Å.",
                         style = BbTypography.titleMedium,
                         color = MaterialTheme.colorScheme.inverseOnSurface
                     )
@@ -546,7 +546,7 @@ private fun CompanyB2BManagementPanelCard(
                 )
 
                 Text(
-                    text = "Şirket profilinizi, ürünlerinizi ve toptan satış operasyonlarınızı yönetmek için panel tarafına geçin.",
+                    text = "Åirket profilinizi, ürünlerinizi ve toptan satış operasyonlarınızı yönetmek için panel tarafına geçin.",
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.78f)
                 )
@@ -597,4 +597,5 @@ private fun CompanyStatusDashedDivider() {
         )
     }
 }
+
 

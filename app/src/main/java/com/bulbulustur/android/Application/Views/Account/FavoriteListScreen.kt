@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -127,8 +127,8 @@ private fun FavoriteIntroCard(
     }
 
     val description = when (selectedTab) {
-        FavoriteTab.Retail -> "Perakende Alışveriş için favoriye eklediğiniz ürünleri burada görebilir, daha sonra incelemek veya sepete Eklemek için hızlıca geri dönebilirsiniz."
-        FavoriteTab.Wholesale -> "Toptan alışveriş için favoriye eklediğiniz ürünleri burada görebilir, teklif ve tedarik süreçlerine hızlıca dönebilirsiniz."
+        FavoriteTab.Retail -> "Perakende Alışveriş için favoriye eklediĞiniz ürünleri burada görebilir, daha sonra incelemek veya sepete Eklemek için hızlıca geri dönebilirsiniz."
+        FavoriteTab.Wholesale -> "Toptan alışveriş için favoriye eklediĞiniz ürünleri burada görebilir, teklif ve tedarik süreçlerine hızlıca dönebilirsiniz."
     }
 
     Box(
@@ -328,7 +328,7 @@ private fun FavoriteProductCard(
                 horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
             ) {
                 BbButton(
-                    text = "İncele",
+                    text = "Ä°ncele",
                     onClick = {
                         onProductClick(favorite.productId)
                     },
@@ -338,7 +338,7 @@ private fun FavoriteProductCard(
                 )
 
                 BbButton(
-                    text = if (favorite.mode == FavoriteMode.Retail) "Sepete Ekle" else "Teklif İste",
+                    text = if (favorite.mode == FavoriteMode.Retail) "Sepete Ekle" else "Teklif Ä°ste",
                     onClick = {
                         onAddToBasketClick(favorite.productId)
                     },
@@ -513,7 +513,7 @@ private fun getDemoRetailFavoriteProducts(): List<FavoriteProductUiModel> {
             productId = 101,
             productName = "Ortobella Comfort Hakiki Deri Topuk Dikeni Terlik M13",
             storeName = "Ortobella",
-            priceText = "₺849,90",
+            priceText = "â‚º849,90",
             metaTitle = "PERAKENDE",
             metaValue = "Sepete Eklenebilir ürün",
             mode = FavoriteMode.Retail
@@ -523,7 +523,7 @@ private fun getDemoRetailFavoriteProducts(): List<FavoriteProductUiModel> {
             productId = 102,
             productName = "Kadın Siyah Kışlık Bot",
             storeName = "PetPlace",
-            priceText = "₺1.249,00",
+            priceText = "â‚º1.249,00",
             metaTitle = "PERAKENDE",
             metaValue = "Stokta mevcut",
             mode = FavoriteMode.Retail
@@ -540,7 +540,7 @@ private fun getDemoWholesaleFavoriteProducts(): List<FavoriteProductUiModel> {
             storeName = "Ortobella",
             priceText = "Teklif ile",
             metaTitle = "TOPTAN",
-            metaValue = "MOQ 100 adet · Teklif istenebilir",
+            metaValue = "MOQ 100 adet Â· Teklif istenebilir",
             mode = FavoriteMode.Wholesale
         ),
         FavoriteProductUiModel(
@@ -576,4 +576,5 @@ private data class FavoriteProductUiModel(
     val metaValue: String,
     val mode: FavoriteMode
 )
+
 

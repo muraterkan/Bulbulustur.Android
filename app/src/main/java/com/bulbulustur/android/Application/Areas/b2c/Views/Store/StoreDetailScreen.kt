@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2c.Views.Store
+﻿package com.bulbulustur.android.Application.Areas.b2c.Views.Store
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -92,7 +92,7 @@ fun StoreDetailScreen(
         containerColor = BBColors.SurfaceMuted,
         topBar = {
             BbInnerPageHeader(
-                title = "Mağaza Detayı",
+                title = "MaĞaza Detayı",
                 onBackClick = onBackClick,
                 actionContent = {
                     StoreFollowButton(
@@ -158,7 +158,7 @@ fun StoreDetailScreen(
             item {
                 StoreDetailSectionTitle(
                     title = "${store.name} Ürünleri",
-                    description = "Mağazanın ürünlerini inceleyin, Favorilerinize ekleyin ve alışverişe devam edin."
+                    description = "MaĞazanın ürünlerini inceleyin, Favorilerinize ekleyin ve alışverişe devam edin."
                 )
             }
 
@@ -345,7 +345,7 @@ private fun StoreVerifiedBadge() {
             )
 
             Text(
-                text = "Doğrulanmış",
+                text = "DoĞrulanmış",
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.Bold,
                 color = BBColors.TextStrong
@@ -451,14 +451,14 @@ private fun StoreTrustInfoCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Satıcı Şirket Bilgileri",
+                    text = "Satıcı Åirket Bilgileri",
                     style = MaterialTheme.typography.titleSmall,
                     color = BBColors.TextStrong,
                     fontWeight = FontWeight.Bold
                 )
 
                 Text(
-                    text = "${store.name} mağazası, Bulbulustur store kayıtları üzerinden doğrulanmış mağaza Vitrini olarak listelenir.",
+                    text = "${store.name} maĞazası, Bulbulustur store kayıtları üzerinden doĞrulanmış maĞaza Vitrini olarak listelenir.",
                     style = MaterialTheme.typography.bodySmall,
                     color = BBColors.TextMuted
                 )
@@ -509,14 +509,14 @@ private fun StoreOtherStoresCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Diğer Mağazalar",
+                    text = "DiĞer MaĞazalar",
                     style = MaterialTheme.typography.titleSmall,
                     color = BBColors.TextStrong,
                     fontWeight = FontWeight.Bold
                 )
 
                 Text(
-                    text = "Bulbulustur’daki diğer perakende mağazalarını Keşfedin.",
+                    text = "Bulbulusturâ€™daki diĞer perakende maĞazalarını Keşfedin.",
                     style = MaterialTheme.typography.bodySmall,
                     color = BBColors.TextMuted
                 )
@@ -545,7 +545,7 @@ private fun StoreCategoryFilterSection(
     ) {
         StoreDetailSectionTitle(
             title = "Ürün Kategorileri",
-            description = "Mağaza kategorilerine göre ürünleri Keşfedin."
+            description = "MaĞaza kategorilerine göre ürünleri Keşfedin."
         )
 
         FlowRow(
@@ -848,7 +848,7 @@ private fun getRetailStoreDetail(
         name = "Ortobella Store",
         logoText = "OS",
         shortDescription = "Ayakkabı ve günlük moda ürünleri",
-        description = "Ortobella Store, seçili ayakkabı ve günlük kullanım Ürünlerini perakende alışveriş akışında sunan doğrulanmış mağaza Vitrinidir.",
+        description = "Ortobella Store, seçili ayakkabı ve günlük kullanım Ürünlerini perakende alışveriş akışında sunan doĞrulanmış maĞaza Vitrinidir.",
         productCount = 248,
         ratingText = "4.8",
         cargoText = "Hızlı",
@@ -857,7 +857,7 @@ private fun getRetailStoreDetail(
             "Tümü",
             "Ayakkabı",
             "Kadın Giyim",
-            "Çanta",
+            "Ã‡anta",
             "Aksesuar"
         ),
         products = listOf(
@@ -865,7 +865,7 @@ private fun getRetailStoreDetail(
                 id = 1,
                 name = "Kadın Klasik Sneaker Ayakkabı",
                 categoryName = "Ayakkabı",
-                priceText = "₺899,90",
+                priceText = "â‚º899,90",
                 badgeText = "%20",
                 imageText = "P1"
             ),
@@ -873,15 +873,15 @@ private fun getRetailStoreDetail(
                 id = 2,
                 name = "Rahat Taban Günlük Ayakkabı",
                 categoryName = "Ayakkabı",
-                priceText = "₺749,90",
+                priceText = "â‚º749,90",
                 badgeText = "Yeni",
                 imageText = "P2"
             ),
             RetailStoreProductItem(
                 id = 3,
-                name = "Günlük Kullanım Omuz Çantası",
-                categoryName = "Çanta",
-                priceText = "₺649,90",
+                name = "Günlük Kullanım Omuz Ã‡antası",
+                categoryName = "Ã‡anta",
+                priceText = "â‚º649,90",
                 badgeText = "",
                 imageText = "P3"
             ),
@@ -889,7 +889,7 @@ private fun getRetailStoreDetail(
                 id = 4,
                 name = "Basic Pamuklu Kadın Tişört",
                 categoryName = "Kadın Giyim",
-                priceText = "₺329,90",
+                priceText = "â‚º329,90",
                 badgeText = "%15",
                 imageText = "P4"
             ),
@@ -897,7 +897,7 @@ private fun getRetailStoreDetail(
                 id = 5,
                 name = "Yeni Sezon Kadın Spor Ayakkabı",
                 categoryName = "Ayakkabı",
-                priceText = "₺1.099,90",
+                priceText = "â‚º1.099,90",
                 badgeText = "Yeni",
                 imageText = "P5"
             )
@@ -912,3 +912,4 @@ private fun StoreDetailScreenPreview() {
         StoreDetailScreen()
     }
 }
+

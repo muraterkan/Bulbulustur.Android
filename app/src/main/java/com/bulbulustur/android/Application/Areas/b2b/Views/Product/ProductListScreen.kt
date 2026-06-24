@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2b.Views.Product
+﻿package com.bulbulustur.android.Application.Areas.b2b.Views.Product
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -72,7 +72,7 @@ fun ProductListScreen(
 
     val sortFilters = remember {
         listOf(
-            "Öne çıkan",
+            "Ã–ne çıkan",
             "Min. sipariş",
             "Yeni tedarik",
             "Hızlı teklif"
@@ -92,7 +92,7 @@ fun ProductListScreen(
     }
 
     var selectedSort by remember {
-        mutableStateOf("Öne çıkan")
+        mutableStateOf("Ã–ne çıkan")
     }
 
     val filteredProducts = remember(
@@ -375,7 +375,7 @@ private fun getWholesaleProductListItems(): List<WholesaleProductListEntry> {
                 Id = 1,
                 Title = "Endüstriyel karton koli seti",
                 Category = "Ambalaj",
-                PriceText = "₺12,40 / adet",
+                PriceText = "â‚º12,40 / adet",
                 MoqText = "Min. 1.000 adet",
                 SupplierText = "Anadolu Ambalaj",
                 BadgeText = "Toptan",
@@ -407,7 +407,7 @@ private fun getWholesaleProductListItems(): List<WholesaleProductListEntry> {
                 Id = 3,
                 Title = "Elektronik güç modülü",
                 Category = "Elektronik",
-                PriceText = "₺84,90 / adet",
+                PriceText = "â‚º84,90 / adet",
                 MoqText = "Min. 250 adet",
                 SupplierText = "Tekno Bileşen",
                 BadgeText = "Yeni",
@@ -423,7 +423,7 @@ private fun getWholesaleProductListItems(): List<WholesaleProductListEntry> {
                 Id = 4,
                 Title = "Toptan pamuklu kumaş rulosu",
                 Category = "Tekstil",
-                PriceText = "₺68,00 / metre",
+                PriceText = "â‚º68,00 / metre",
                 MoqText = "Min. 500 metre",
                 SupplierText = "Mira Tekstil",
                 BadgeText = "Toptan",
@@ -439,7 +439,7 @@ private fun getWholesaleProductListItems(): List<WholesaleProductListEntry> {
                 Id = 5,
                 Title = "Gıda ambalaj poşeti",
                 Category = "Gıda",
-                PriceText = "₺0,92 / adet",
+                PriceText = "â‚º0,92 / adet",
                 MoqText = "Min. 5.000 adet",
                 SupplierText = "Ege Paket",
                 BadgeText = "Popüler",

@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Settings
+﻿package com.bulbulustur.android.Application.Views.Settings
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -118,7 +118,7 @@ private fun LanguageSelectionHeader(
             )
 
             Text(
-                text = "Bulbulustur uygulamasında kullanılacak dili buradan değiştirebilirsiniz.",
+                text = "Bulbulustur uygulamasında kullanılacak dili buradan deĞiştirebilirsiniz.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -233,7 +233,7 @@ private fun LanguageSelectionInfoCard() {
                 )
 
                 Text(
-                    text = "Dil seçimi daha sonra DataStore üzerinde saklanacak. Aktif diller API’den beslendiğinde bu liste dinamik hale getirilecek.",
+                    text = "Dil seçimi daha sonra DataStore üzerinde saklanacak. Aktif diller APIâ€™den beslendiĞinde bu liste dinamik hale getirilecek.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -287,3 +287,4 @@ private fun LanguageSelectionScreenPreview() {
         LanguageSelectionScreen()
     }
 }
+

@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Logon
+﻿package com.bulbulustur.android.Application.Views.Logon
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -192,7 +192,7 @@ fun RegisterStartScreen(
         Spacer(modifier = Modifier.height(BBSpacing.Space4))
 
         LogonPublicFieldLabel(
-            text = "Şifre"
+            text = "Åifre"
         )
 
         Spacer(modifier = Modifier.height(BBSpacing.Space2))
@@ -202,7 +202,7 @@ fun RegisterStartScreen(
             onValueChange = {
                 password = it
             },
-            placeholder = "Şifreniz",
+            placeholder = "Åifreniz",
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password
@@ -346,3 +346,4 @@ private fun RegisterStartScreenPreview() {
         RegisterStartScreen()
     }
 }
+

@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Contact
+﻿package com.bulbulustur.android.Application.Views.Contact
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -65,7 +65,7 @@ fun ContactScreen(
 
         item {
             BbSectionHeader(
-                title = "Doğru ekibimize daha hızlı ulaşın",
+                title = "DoĞru ekibimize daha hızlı ulaşın",
                 subtitle = "Talebinize uygun iletişim alanını seçin"
             )
         }
@@ -86,7 +86,7 @@ fun ContactScreen(
 
         item {
             BbSectionHeader(
-                title = "İletişime geçmenin başka yolu da var",
+                title = "Ä°letişime geçmenin başka yolu da var",
                 subtitle = "Genel iletişim ve yardım merkezi kanalları"
             )
         }
@@ -101,7 +101,7 @@ fun ContactScreen(
         item {
             BbSectionHeader(
                 title = "Sık sorulan sorular",
-                subtitle = "İletişim öncesi hızlı cevaplar"
+                subtitle = "Ä°letişim öncesi hızlı cevaplar"
             )
         }
 
@@ -155,7 +155,7 @@ private fun ContactHeader() {
             )
 
             Text(
-                text = "Bulbulustur ekibi; satıcı, tedarikçi, müşteri desteği, yatırımcı desteği ve iş birlikleri için doğru kanala yönlendirir.",
+                text = "Bulbulustur ekibi; satıcı, tedarikçi, müşteri desteĞi, yatırımcı desteĞi ve iş birlikleri için doĞru kanala yönlendirir.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -172,7 +172,7 @@ private fun ContactHeader() {
                 )
 
                 BbChip(
-                    text = "Satıcı desteği",
+                    text = "Satıcı desteĞi",
                     selected = false,
                     onClick = {}
                 )
@@ -221,14 +221,14 @@ private fun ContactQuickInfoCard() {
             )
 
             ContactInfoRow(
-                title = "Çalışma saatleri",
+                title = "Ã‡alışma saatleri",
                 value = "Pazartesi - Cuma / 09:00 - 18:00",
                 icon = Icons.Outlined.Work
             )
 
             ContactInfoRow(
                 title = "Konum",
-                value = "İstanbul, Türkiye",
+                value = "Ä°stanbul, Türkiye",
                 icon = Icons.Outlined.LocationOn
             )
         }
@@ -527,7 +527,7 @@ private fun contactChannelItems(): List<ContactChannelItem> {
         ),
         ContactChannelItem(
             channelId = 2,
-            title = "Müşteri desteği",
+            title = "Müşteri desteĞi",
             description = "Sipariş, ödeme, üyelik ve kullanım deneyimiyle ilgili destek alın.",
             actionLabel = "Yardım merkezine git",
             target = ContactChannelTarget.Support,
@@ -561,7 +561,7 @@ private fun contactChannelItems(): List<ContactChannelItem> {
             channelId = 6,
             title = "Marka ve iş birlikleri",
             description = "Marka iş birlikleri, kampanya ortaklıkları ve stratejik çalışmalar için iletişime geçin.",
-            actionLabel = "İş birliğini başlat",
+            actionLabel = "Ä°ş birliĞini başlat",
             target = ContactChannelTarget.Partnership,
             icon = Icons.Outlined.Handshake
         )
@@ -572,17 +572,17 @@ private fun contactFaqItems(): List<ContactFaqItem> {
     return listOf(
         ContactFaqItem(
             faqId = 1,
-            question = "Doğru ekibe daha hızlı ulaşmak için ne yapmalıyım?",
+            question = "DoĞru ekibe daha hızlı ulaşmak için ne yapmalıyım?",
             shortAnswer = "Talebinizin türüne göre ilgili iletişim kanalını seçmeniz yeterlidir."
         ),
         ContactFaqItem(
             faqId = 2,
-            question = "Yardım merkezi hangi konularda destek sağlar?",
+            question = "Yardım merkezi hangi konularda destek saĞlar?",
             shortAnswer = "Sipariş, ödeme, hesap, ürün, tedarik ve entegrasyon konularında rehberler sunar."
         ),
         ContactFaqItem(
             faqId = 3,
-            question = "Telefon veya e-posta ile doğrudan ulaşabilir miyim?",
+            question = "Telefon veya e-posta ile doĞrudan ulaşabilir miyim?",
             shortAnswer = "Genel iletişim için info@bulbulustur.com adresini kullanabilirsiniz."
         ),
         ContactFaqItem(
@@ -600,3 +600,4 @@ private fun ContactScreenPreview() {
         ContactScreen()
     }
 }
+

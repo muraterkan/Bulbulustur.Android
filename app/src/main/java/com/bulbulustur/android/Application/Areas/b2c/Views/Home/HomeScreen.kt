@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2c.Views.Home
+﻿package com.bulbulustur.android.Application.Areas.b2c.Views.Home
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -170,7 +170,7 @@ fun RetailHomeScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Öne Çıkan Ürünler",
+                    title = "Ã–ne Ã‡ıkan Ürünler",
                     subtitle = "Demo akış, API sonrası gerçek Vitrinlerden beslenecek."
                 )
             }
@@ -183,8 +183,8 @@ fun RetailHomeScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Mağaza Keşfi",
-                    subtitle = "Seçilmiş mağaza ve marka alanları."
+                    title = "MaĞaza Keşfi",
+                    subtitle = "Seçilmiş maĞaza ve marka alanları."
                 )
             }
 
@@ -239,7 +239,7 @@ private fun RetailHomeHeroCard(
             }
 
             Text(
-                text = "Ürünleri, mağazaları ve kategori Vitrinlerini keşfet.",
+                text = "Ürünleri, maĞazaları ve Kategori Vitrinlerini Keşfet.",
                 style = MaterialTheme.typography.headlineSmall,
                 color = BBColors.TextStrong,
                 fontWeight = FontWeight.Bold
@@ -378,7 +378,7 @@ private fun RetailHomeTrustStrip() {
 
             RetailHomeTrustItem(
                 icon = Icons.Outlined.Storefront,
-                title = "Mağazalar",
+                title = "MaĞazalar",
                 modifier = Modifier.weight(1f)
             )
         }
@@ -711,7 +711,7 @@ private fun getRetailHomeGateways(): List<RetailHomeGatewayItem> {
             target = RetailHomeGatewayTarget.Products
         ),
         RetailHomeGatewayItem(
-            title = "Mağazalar",
+            title = "MaĞazalar",
             description = "Satıcı ve marka Vitrinleri",
             icon = Icons.Outlined.Storefront,
             backgroundColor = BBColors.Green.Green50,
@@ -720,7 +720,7 @@ private fun getRetailHomeGateways(): List<RetailHomeGatewayItem> {
         ),
         RetailHomeGatewayItem(
             title = "Favoriler",
-            description = "Beğendiğin alanlara dön",
+            description = "BeĞendiĞin alanlara dön",
             icon = Icons.Outlined.FavoriteBorder,
             backgroundColor = BBColors.Pink.Pink50,
             iconColor = BBColors.Pink.Pink700,
@@ -761,8 +761,8 @@ private fun getRetailHomeShowcases(): List<RetailHomeShowcaseItem> {
             target = RetailHomeShowcaseTarget.Products
         ),
         RetailHomeShowcaseItem(
-            title = "Mağaza Keşfi",
-            description = "Öne çıkan mağaza ve koleksiyonlara göz at.",
+            title = "MaĞaza Keşfi",
+            description = "Ã–ne çıkan maĞaza ve koleksiyonlara göz at.",
             icon = Icons.Outlined.Storefront,
             backgroundColor = BBColors.Blue.Blue50,
             iconColor = BBColors.Blue.Blue700,
@@ -770,7 +770,7 @@ private fun getRetailHomeShowcases(): List<RetailHomeShowcaseItem> {
         ),
         RetailHomeShowcaseItem(
             title = "Favori Akışı",
-            description = "Beğendiğin ürün ve mağazalara hızlı dönüş.",
+            description = "BeĞendiĞin ürün ve maĞazalara hızlı dönüş.",
             icon = Icons.Outlined.FavoriteBorder,
             backgroundColor = BBColors.Pink.Pink50,
             iconColor = BBColors.Pink.Pink700,
@@ -783,25 +783,25 @@ private fun getRetailHomeProducts(): List<RetailHomeProductItem> {
     return listOf(
         RetailHomeProductItem(
             title = "Akıllı ev ürünü",
-            price = "₺749,90",
+            price = "â‚º749,90",
             backgroundColor = BBColors.Blue.Blue50,
             iconColor = BBColors.Blue.Blue700
         ),
         RetailHomeProductItem(
             title = "Mutfak yardımcısı",
-            price = "₺399,90",
+            price = "â‚º399,90",
             backgroundColor = BBColors.Green.Green50,
             iconColor = BBColors.Green.Green700
         ),
         RetailHomeProductItem(
             title = "Yeni sezon çanta",
-            price = "₺1.249,90",
+            price = "â‚º1.249,90",
             backgroundColor = BBColors.Pink.Pink50,
             iconColor = BBColors.Pink.Pink700
         ),
         RetailHomeProductItem(
             title = "Spor aksesuarı",
-            price = "₺219,90",
+            price = "â‚º219,90",
             backgroundColor = BBColors.Purple.Purple50,
             iconColor = BBColors.Purple.Purple700
         )
@@ -832,4 +832,5 @@ private fun RetailHomeScreenPreview() {
         RetailHomeScreen()
     }
 }
+
 

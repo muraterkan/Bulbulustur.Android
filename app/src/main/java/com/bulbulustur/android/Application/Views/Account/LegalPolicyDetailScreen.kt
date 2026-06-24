@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -337,7 +337,7 @@ private fun LegalPolicyOpenWebCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Web’de Aç",
+                    text = "Webâ€™de Aç",
                     style = BbTypography.titleSmall,
                     color = BBColors.TextStrong,
                     fontWeight = FontWeight.Bold
@@ -403,19 +403,19 @@ private fun getLegalPolicyDetail(
     val baseSections = listOf(
         LegalPolicyDetailSection(
             title = "Bu Metin Neyi Kapsar?",
-            body = "Bu bölüm, Bulbulustur platformunda kullanıcı, alıcı, satıcı ve ziyaretçi süreçlerinde geçerli temel kuralları açıklar. Mobil uygulamada gösterilen metinler bilgilendirme amaçlıdır ve API bağlantısı tamamlandığında güncel içerikle beslenecektir."
+            body = "Bu bölüm, Bulbulustur platformunda kullanıcı, alıcı, satıcı ve ziyaretçi süreçlerinde geçerli temel kuralları açıklar. Mobil uygulamada gösterilen metinler bilgilendirme amaçlıdır ve API baĞlantısı tamamlandıĞında güncel içerikle beslenecektir."
         ),
         LegalPolicyDetailSection(
             title = "Kullanıcı Sorumlulukları",
-            body = "Kullanıcılar platformu kullanırken doğru bilgi paylaşmak, hesap güvenliğini korumak ve platform kurallarına uygun hareket etmekle yükümlüdür."
+            body = "Kullanıcılar platformu kullanırken doĞru bilgi paylaşmak, hesap güvenliĞini korumak ve platform kurallarına uygun hareket etmekle yükümlüdür."
         ),
         LegalPolicyDetailSection(
-            title = "Veri ve İşlem Güvenliği",
-            body = "Bulbulustur, kullanıcı verilerinin korunması ve işlem güvenliğinin sağlanması için teknik ve idari önlemler alır. Detaylı içerik ilgili politika metninde açıklanır."
+            title = "Veri ve Ä°şlem GüvenliĞi",
+            body = "Bulbulustur, kullanıcı verilerinin korunması ve işlem güvenliĞinin saĞlanması için teknik ve idari önlemler alır. Detaylı içerik ilgili politika metninde açıklanır."
         ),
         LegalPolicyDetailSection(
             title = "Güncellemeler",
-            body = "Platform kuralları, mevzuat veya hizmet kapsamındaki değişikliklere göre güncellenebilir. Güncel ve bağlayıcı metinler web üzerindeki yasal merkezde yayınlanır."
+            body = "Platform kuralları, mevzuat veya hizmet kapsamındaki deĞişikliklere göre güncellenebilir. Güncel ve baĞlayıcı metinler web üzerindeki yasal merkezde yayınlanır."
         )
     )
 
@@ -424,16 +424,16 @@ private fun getLegalPolicyDetail(
             key = key,
             title = "Gizlilik Politikası",
             category = "Politikalar",
-            summary = "Kişisel verilerin nasıl işlendiğini ve korunduğunu açıklayan temel politika.",
+            summary = "Kişisel verilerin nasıl işlendiĞini ve korunduĞunu açıklayan temel politika.",
             updatedAt = "01/30/2025",
             webUrl = "https://www.bulbulustur.com/support/condition/2/politikalar",
             sections = listOf(
                 LegalPolicyDetailSection(
                     title = "Gizlilik Politikası Nedir?",
-                    body = "Gizlilik politikası, platformda kişisel verilerin hangi amaçlarla toplandığını, nasıl işlendiğini, kimlerle paylaşılabileceğini ve hangi güvenlik önlemleriyle korunduğunu açıklar."
+                    body = "Gizlilik politikası, platformda kişisel verilerin hangi amaçlarla toplandıĞını, nasıl işlendiĞini, kimlerle paylaşılabileceĞini ve hangi güvenlik önlemleriyle korunduĞunu açıklar."
                 ),
                 LegalPolicyDetailSection(
-                    title = "Topladığımız Kişisel Veriler",
+                    title = "TopladıĞımız Kişisel Veriler",
                     body = "Hesap bilgileri, iletişim bilgileri, sipariş ve talep hareketleri, cihaz ve kullanım verileri gibi platform hizmetlerinin sunulması için gerekli bilgiler işlenebilir."
                 ),
                 LegalPolicyDetailSection(
@@ -449,9 +449,9 @@ private fun getLegalPolicyDetail(
 
         "cookie-policy" -> LegalPolicyDetail(
             key = key,
-            title = "Çerez Politikası",
+            title = "Ã‡erez Politikası",
             category = "Politikalar",
-            summary = "Çerez ve benzeri teknolojilerin kullanım detayları.",
+            summary = "Ã‡erez ve benzeri teknolojilerin kullanım detayları.",
             updatedAt = "01/30/2025",
             webUrl = "https://www.bulbulustur.com/support/condition/2/politikalar",
             sections = baseSections
@@ -488,4 +488,5 @@ private fun getLegalPolicyDetail(
         )
     }
 }
+
 

@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2c.Views.Product
+﻿package com.bulbulustur.android.Application.Areas.b2c.Views.Product
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
@@ -540,7 +540,7 @@ private fun RetailProductRatingSummaryCard(
             }
 
             Text(
-                text = ratingText.replace("★ ", ""),
+                text = ratingText.replace("â˜… ", ""),
                 style = MaterialTheme.typography.labelLarge,
                 color = BBColors.TextStrong,
                 fontWeight = FontWeight.Bold
@@ -548,7 +548,7 @@ private fun RetailProductRatingSummaryCard(
 
             Text(
                 modifier = Modifier.weight(1f),
-                text = "$reviewCount değerlendirme",
+                text = "$reviewCount deĞerlendirme",
                 style = MaterialTheme.typography.bodySmall,
                 color = BBColors.TextMuted
             )
@@ -1125,7 +1125,7 @@ private fun RetailProductStockAlertCard(
                         )
 
                         Text(
-                            text = "Bu ürün tekrar stoğa girdiğinde haberdar olabilirsin.",
+                            text = "Bu ürün tekrar stoĞa girdiĞinde haberdar olabilirsin.",
                             style = MaterialTheme.typography.bodySmall,
                             color = BBColors.TextSubtle
                         )
@@ -1168,7 +1168,7 @@ private fun RetailProductStockAlertCard(
                     )
 
                     Text(
-                        text = "Stoğa Gelince Haber Ver",
+                        text = "StoĞa Gelince Haber Ver",
                         style = MaterialTheme.typography.labelLarge,
                         color = BBColors.White,
                         fontWeight = FontWeight.Bold
@@ -1214,7 +1214,7 @@ private fun RetailProductTrustLinksCard(
             RetailDashedDivider()
 
             RetailProductTrustLinkRow(
-                title = "İptal ve İade Koşulları",
+                title = "Ä°ptal ve Ä°ade Koşulları",
                 icon = Icons.Outlined.VerifiedUser,
                 onClick = onReturnPolicyClick
             )
@@ -1314,8 +1314,8 @@ private fun RetailSellerProductsCarousel(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
     ) {
         RetailSectionTitle(
-            title = "Satıcının Diğer Ürünleri",
-            actionText = "Mağazaya Git",
+            title = "Satıcının DiĞer Ürünleri",
+            actionText = "MaĞazaya Git",
             onActionClick = onStoreClick
         )
 
@@ -1444,14 +1444,14 @@ private fun RetailSellerMoreProductsCard(
             )
 
             Text(
-                text = "Diğer Ürünler",
+                text = "DiĞer Ürünler",
                 style = MaterialTheme.typography.titleSmall,
                 color = BBColors.TextStrong,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
-                text = "Mağazaya Git",
+                text = "MaĞazaya Git",
                 style = MaterialTheme.typography.bodySmall,
                 color = BBColors.TextSubtle
             )
@@ -1473,7 +1473,7 @@ private fun RetailReviewCarousel(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
     ) {
         RetailSectionTitle(
-            title = "Ürün Değerlendirmeleri",
+            title = "Ürün DeĞerlendirmeleri",
             actionText = "Tüm Yorumlar",
             onActionClick = onReviewClick
         )
@@ -1495,7 +1495,7 @@ private fun RetailReviewCarousel(
                     horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
                 ) {
                     Text(
-                        text = ratingText.replace("★ ", ""),
+                        text = ratingText.replace("â˜… ", ""),
                         style = MaterialTheme.typography.headlineSmall,
                         color = BBColors.TextStrong,
                         fontWeight = FontWeight.ExtraBold
@@ -1684,14 +1684,14 @@ private fun RetailProductDetailStoreCard(
 
                     if (store.isVerified) {
                         RetailProductDetailPill(
-                            text = "Doğrulanmış",
+                            text = "DoĞrulanmış",
                             icon = Icons.Outlined.Verified
                         )
                     }
                 }
 
                 Text(
-                    text = "${store.ratingText} Puan · ${store.productCount} Ürün",
+                    text = "${store.ratingText} Puan Â· ${store.productCount} Ürün",
                     style = MaterialTheme.typography.bodySmall,
                     color = BBColors.TextMuted
                 )
@@ -1722,7 +1722,7 @@ private fun RetailProductDetailQuickActions(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
     ) {
         RetailProductDetailActionRow(
-            title = "Diğer Satıcılar",
+            title = "DiĞer Satıcılar",
             subtitle = "${product.otherSellerCount} Satıcı daha bu ürünü sunuyor",
             onClick = onOtherSellerClick
         )
@@ -1822,7 +1822,7 @@ private fun RetailRelatedCategoryChipsSection(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
     ) {
         RetailSectionTitle(
-            title = "İlgili Kategoriler",
+            title = "Ä°lgili Kategoriler",
             actionText = "",
             onActionClick = {}
         )
@@ -1998,7 +1998,7 @@ private fun RetailProductDetailBottomBar(
                 }
             } else {
                 RetailProductBottomActionButton(
-                    text = "Stoğa Gelince Haber Ver",
+                    text = "StoĞa Gelince Haber Ver",
                     onClick = onStockAlarmClick,
                     modifier = Modifier.fillMaxWidth(),
                     containerColor = BBColors.Success,
@@ -2208,20 +2208,20 @@ private fun RetailSizeGuideSheet(
     onCloseClick: () -> Unit
 ) {
     RetailSheetContainer(
-        title = "Ölçü Rehberi",
-        subtitle = "Doğru beden seçimi için kısa rehber",
+        title = "Ã–lçü Rehberi",
+        subtitle = "DoĞru beden seçimi için kısa rehber",
         icon = Icons.Outlined.Straighten,
         onCloseClick = onCloseClick
     ) {
         RetailSheetInfoBox(
-            title = "Pratik Öneri",
-            description = "Ölçüm yaparken ürünü kullanacağınız koşulları dikkate alın. Ayakkabı için çorap kalınlığı, kıyafet için kullanım rahatlığı önemlidir."
+            title = "Pratik Ã–neri",
+            description = "Ã–lçüm yaparken ürünü kullanacaĞınız koşulları dikkate alın. Ayakkabı için çorap kalınlıĞı, kıyafet için kullanım rahatlıĞı önemlidir."
         )
 
         RetailSizeGuideTable()
 
         RetailSheetMutedBox(
-            text = "Ölçü tabloları genel bilgilendirme amaçlıdır. Marka, model ve üretim kalıbına göre küçük farklılıklar olabilir."
+            text = "Ã–lçü tabloları genel bilgilendirme amaçlıdır. Marka, model ve üretim kalıbına göre küçük farklılıklar olabilir."
         )
 
         RetailSheetPrimaryButton(
@@ -2237,20 +2237,20 @@ private fun RetailReturnPolicySheet(
     onStoreClick: () -> Unit
 ) {
     RetailSheetContainer(
-        title = "İptal ve İade Koşulları",
+        title = "Ä°ptal ve Ä°ade Koşulları",
         subtitle = "Cayma hakkı, iade ve sipariş iptali",
         icon = Icons.Outlined.VerifiedUser,
         onCloseClick = onCloseClick
     ) {
         Text(
-            text = "İptal ve İade Süreci",
+            text = "Ä°ptal ve Ä°ade Süreci",
             style = MaterialTheme.typography.titleSmall,
             color = BBColors.TextStrong,
             fontWeight = FontWeight.Bold
         )
 
         Text(
-            text = "Sipariş iptali ve iade süreçleri ürün, satıcı, teslimat durumu ve ilgili mevzuat kapsamında değerlendirilir. İade talebinizi sipariş detayınız üzerinden başlatabilirsiniz.",
+            text = "Sipariş iptali ve iade süreçleri ürün, satıcı, teslimat durumu ve ilgili mevzuat kapsamında deĞerlendirilir. Ä°ade talebinizi sipariş detayınız üzerinden başlatabilirsiniz.",
             style = MaterialTheme.typography.bodyMedium,
             color = BBColors.TextMuted
         )
@@ -2260,11 +2260,11 @@ private fun RetailReturnPolicySheet(
         )
 
         RetailSheetCheckRow(
-            text = "İade koşulları ürün türüne, kullanım durumuna ve satıcı politikalarına göre değişebilir."
+            text = "Ä°ade koşulları ürün türüne, kullanım durumuna ve satıcı politikalarına göre deĞişebilir."
         )
 
         RetailSheetCheckRow(
-            text = "Cayma hakkı ve iade süreci yürürlükteki tüketici mevzuatı kapsamında değerlendirilir."
+            text = "Cayma hakkı ve iade süreci yürürlükteki tüketici mevzuatı kapsamında deĞerlendirilir."
         )
 
         RetailSheetMutedBox(
@@ -2272,7 +2272,7 @@ private fun RetailReturnPolicySheet(
         )
 
         RetailSheetPrimaryButton(
-            text = "Mağazaya Git",
+            text = "MaĞazaya Git",
             onClick = onStoreClick
         )
     }
@@ -2313,7 +2313,7 @@ private fun RetailLowerPriceSheet(
         )
 
         Text(
-            text = "Aynı ürünü başka bir platformda daha uygun fiyata gördüyseniz bize bildirin. Bilgiler kontrol edilerek değerlendirilecektir.",
+            text = "Aynı ürünü başka bir platformda daha uygun fiyata gördüyseniz bize bildirin. Bilgiler kontrol edilerek deĞerlendirilecektir.",
             style = MaterialTheme.typography.bodyMedium,
             color = BBColors.TextMuted
         )
@@ -2324,7 +2324,7 @@ private fun RetailLowerPriceSheet(
                 competitorName = it
             },
             label = "Rakip Firma Adı",
-            placeholder = "Örn: Amazon, Trendyol, Hepsiburada"
+            placeholder = "Ã–rn: Amazon, Trendyol, Hepsiburada"
         )
 
         RetailSheetTextField(
@@ -2347,7 +2347,7 @@ private fun RetailLowerPriceSheet(
         )
 
         RetailSheetMutedBox(
-            text = "Lütfen yalnızca herkesin erişebileceği ürün linklerini paylaşın. Sepet, kişisel hesap veya ödeme ekranı bağlantıları göndermeyin."
+            text = "Lütfen yalnızca herkesin erişebileceĞi ürün linklerini paylaşın. Sepet, kişisel hesap veya ödeme ekranı baĞlantıları göndermeyin."
         )
 
         RetailSheetPrimaryButton(
@@ -2366,7 +2366,7 @@ private fun RetailReportAbuseSheet(
         "Yanıltıcı Bilgi",
         "Uygunsuz Görsel",
         "Sahte Ürün",
-        "Yasaklı İçerik"
+        "Yasaklı Ä°çerik"
     )
 
     var selectedReason by remember {
@@ -2388,7 +2388,7 @@ private fun RetailReportAbuseSheet(
         )
 
         Text(
-            text = "Şikayet Nedeni",
+            text = "Åikayet Nedeni",
             style = MaterialTheme.typography.labelLarge,
             color = BBColors.TextStrong,
             fontWeight = FontWeight.Bold
@@ -2417,7 +2417,7 @@ private fun RetailReportAbuseSheet(
                 detailText = it
             },
             label = "Detay",
-            placeholder = "Bildirmek istediğiniz durumu kısaca yazın.",
+            placeholder = "Bildirmek istediĞiniz durumu kısaca yazın.",
             minLines = 4
         )
 
@@ -2589,7 +2589,7 @@ private fun RetailSizeGuideTable() {
         ) {
             RetailSizeGuideTableRow(
                 first = "Beden",
-                second = "Önerilen Ölçü",
+                second = "Ã–nerilen Ã–lçü",
                 third = "Not",
                 strong = true,
                 backgroundColor = BBColors.SurfaceMuted
@@ -2598,7 +2598,7 @@ private fun RetailSizeGuideTable() {
             RetailSizeGuideTableRow(
                 first = "Standart",
                 second = "Ürün Açıklamasını Kontrol Edin",
-                third = "Marka ve Modele Göre Değişebilir"
+                third = "Marka ve Modele Göre DeĞişebilir"
             )
 
             RetailSizeGuideTableRow(
@@ -2610,7 +2610,7 @@ private fun RetailSizeGuideTable() {
             RetailSizeGuideTableRow(
                 first = "Geniş Kalıp",
                 second = "Normal Beden Tercih Edilebilir",
-                third = "Müşteri Sorularını İnceleyin"
+                third = "Müşteri Sorularını Ä°nceleyin"
             )
         }
     }
@@ -2955,7 +2955,7 @@ private fun getRetailProductDetail(
         RetailSellerProductItem(
             id = index,
             name = "Ortobella Günlük Sneaker Modeli $index",
-            priceText = "₺${799 + index * 20},90",
+            priceText = "â‚º${799 + index * 20},90",
             imageLabel = "P$index",
             drawableResId = if (index <= 4) {
                 R.drawable.h3ff3b33d6a1447c898cee6e336867bach
@@ -2971,13 +2971,13 @@ private fun getRetailProductDetail(
         brandName = "Ortobella",
         searchPlaceholder = "Ürün, kategori veya marka ara",
         shortDescription = "Günlük kullanım için rahat tabanlı, sade ve modern sneaker modeli.",
-        description = "Hafif tabanı, yumuşak iç yüzeyi ve günlük kombinlere uyum sağlayan sade tasarımıyla şehir içi kullanım için hazırlanmıştır. Ürün kalıbı standarttır. Taraklı ayaklarda yarım numara büyük tercih edilebilir.",
+        description = "Hafif tabanı, yumuşak iç yüzeyi ve günlük kombinlere uyum saĞlayan sade tasarımıyla şehir içi kullanım için hazırlanmıştır. Ürün kalıbı standarttır. Taraklı ayaklarda yarım numara büyük tercih edilebilir.",
         categoryName = "Ayakkabı",
-        priceText = "₺899,90",
-        oldPriceText = "₺1.099,90",
-        discountText = "%20 İndirim",
+        priceText = "â‚º899,90",
+        oldPriceText = "â‚º1.099,90",
+        discountText = "%20 Ä°ndirim",
         badgeText = "%20",
-        ratingText = "★ 4.8",
+        ratingText = "â˜… 4.8",
         cargoText = "Hızlı Kargo",
         stockText = "Stokta Var",
         isInStock = true,
@@ -3097,7 +3097,7 @@ private fun getRetailProductDetail(
                 avatarText = "AK",
                 rating = 5,
                 dateText = "2 gün önce",
-                comment = "Kalıbı rahat, günlük kullanım için gayet başarılı. Rengi fotoğraftaki gibi geldi."
+                comment = "Kalıbı rahat, günlük kullanım için gayet başarılı. Rengi fotoĞraftaki gibi geldi."
             ),
             RetailReviewItem(
                 id = 2,
@@ -3158,3 +3158,4 @@ private fun ProductDetailScreenPreview() {
         ProductDetailScreen()
     }
 }
+

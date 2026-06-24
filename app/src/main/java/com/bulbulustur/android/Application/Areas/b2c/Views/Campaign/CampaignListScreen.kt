@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2c.Views.Campaign
+﻿package com.bulbulustur.android.Application.Areas.b2c.Views.Campaign
 
 
 import androidx.compose.foundation.background
@@ -153,7 +153,7 @@ private fun CampaignListTopBar(
             contentColor = MaterialTheme.colorScheme.onSurfaceVariant
         ) {
             Text(
-                text = "‹",
+                text = "â€¹",
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -207,7 +207,7 @@ private fun CampaignListHero() {
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "Seçili mağazalar, kategori Vitrinleri ve indirimli ürün akışları burada toplanır.",
+                text = "Seçili maĞazalar, kategori Vitrinleri ve indirimli ürün akışları burada toplanır.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onPrimaryContainer
             )
@@ -419,7 +419,7 @@ private fun CampaignListCard(
                 }
 
                 Text(
-                    text = "›",
+                    text = "â€º",
                     style = MaterialTheme.typography.headlineSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -479,7 +479,7 @@ enum class RetailCampaignType(
     val title: String
 ) {
     All("Tümü"),
-    Discount("İndirim"),
+    Discount("Ä°ndirim"),
     Showcase("Vitrin"),
     NewSeason("Yeni sezon"),
     Cargo("Kargo")
@@ -502,7 +502,7 @@ private fun getRetailCampaignListItems(): List<RetailCampaignListItem> {
         RetailCampaignListItem(
             id = 1,
             title = "Sezonun öne çıkanları",
-            description = "Moda kategorisinde yeni sezon ürünleri ve seçili mağaza Vitrinleri.",
+            description = "Moda kategorisinde yeni sezon ürünleri ve seçili maĞaza Vitrinleri.",
             badgeText = "Yeni sezon",
             iconText = "MO",
             categoryName = "Moda",
@@ -514,7 +514,7 @@ private fun getRetailCampaignListItems(): List<RetailCampaignListItem> {
             id = 2,
             title = "Elektronikte hızlı fırsatlar",
             description = "Telefon aksesuarı, kulaklık ve günlük teknoloji ürünlerinde avantajlı seçimler.",
-            badgeText = "İndirim",
+            badgeText = "Ä°ndirim",
             iconText = "EL",
             categoryName = "Elektronik",
             productCount = 680,
@@ -524,7 +524,7 @@ private fun getRetailCampaignListItems(): List<RetailCampaignListItem> {
         RetailCampaignListItem(
             id = 3,
             title = "Ev & Yaşam Vitrinleri",
-            description = "Mutfak, dekorasyon ve ev tekstili ürünlerinde öne çıkan Mağazalar.",
+            description = "Mutfak, dekorasyon ve ev tekstili ürünlerinde öne çıkan MaĞazalar.",
             badgeText = "Vitrin",
             iconText = "EV",
             categoryName = "Ev & Yaşam",
@@ -535,7 +535,7 @@ private fun getRetailCampaignListItems(): List<RetailCampaignListItem> {
         RetailCampaignListItem(
             id = 4,
             title = "Ücretsiz kargo seçkisi",
-            description = "Seçili mağazalarda kargo avantajı sunan ürünleri tek akışta keşfet.",
+            description = "Seçili maĞazalarda kargo avantajı sunan ürünleri tek akışta keşfet.",
             badgeText = "Kargo",
             iconText = "KG",
             categoryName = "Karışık",
@@ -547,7 +547,7 @@ private fun getRetailCampaignListItems(): List<RetailCampaignListItem> {
             id = 5,
             title = "Anne & Bebek fırsatları",
             description = "Bebek bakım, oyuncak ve tekstil ürünlerinde günlük fırsat ürünleri.",
-            badgeText = "İndirim",
+            badgeText = "Ä°ndirim",
             iconText = "AB",
             categoryName = "Anne & Bebek",
             productCount = 420,
@@ -564,4 +564,5 @@ private fun CampaignListScreenPreview() {
         CampaignListScreen()
     }
 }
+
 

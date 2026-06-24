@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:width="132dp"
+        android:height="132dp"
+        android:gravity="center">
+
+        <shape android:shape="rectangle">
+            <solid android:color="#FED700" />
+            <corners android:radius="34dp" />
+        </shape>
+
+    </item>
+
+    <item
+        android:width="58dp"
+        android:height="58dp"
+        android:gravity="center"
+        android:drawable="@drawable/ic_splash_bag" />
+
+</layer-list>

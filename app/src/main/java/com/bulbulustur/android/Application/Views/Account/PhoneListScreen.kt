@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Account
+package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -110,7 +110,7 @@ private fun PhoneCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 PhoneIconBox(
-                    text = "Å"
+                    text = "Ş"
                 )
 
                 Column(
@@ -180,7 +180,7 @@ private fun PhoneEmptyState(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             PhoneIconBox(
-                text = "Å"
+                text = "Ş"
             )
 
             Text(

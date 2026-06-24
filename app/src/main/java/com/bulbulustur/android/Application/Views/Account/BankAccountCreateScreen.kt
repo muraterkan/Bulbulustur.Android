@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Account
+package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -116,7 +116,7 @@ fun BankAccountCreateScreen(
                     )
 
                     Text(
-                        text = "IBAN, sana ait geçerli bir vadesiz hesaba ait olmalıdır. Vadeli hesap IBANâ€™ları ödeme süreçlerinden çıkarılabilir.",
+                        text = "IBAN, sana ait geçerli bir vadesiz hesaba ait olmalıdır. Vadeli hesap IBANy'ları ödeme süreçlerinden çıkarılabilir.",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

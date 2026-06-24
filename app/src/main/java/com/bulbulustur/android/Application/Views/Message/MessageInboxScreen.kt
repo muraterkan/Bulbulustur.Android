@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Message
+package com.bulbulustur.android.Application.Views.Message
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -53,7 +53,7 @@ fun MessageInboxScreen(
     val messages = getDemoMessages().filterBy(selectedFilter.value)
 
     Scaffold(
-        containerColor = BBColors.SurfaceMuted,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
                 title = "Mesajlar",
@@ -64,7 +64,7 @@ fun MessageInboxScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BBColors.SurfaceMuted)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding),
             contentPadding = PaddingValues(
                 start = BBSpacing.PageHorizontal,
@@ -317,7 +317,7 @@ private fun MessageCard(
                     Text(
                         text = message.dateText,
                         style = MaterialTheme.typography.labelSmall,
-                        color = BBColors.TextMuted
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 

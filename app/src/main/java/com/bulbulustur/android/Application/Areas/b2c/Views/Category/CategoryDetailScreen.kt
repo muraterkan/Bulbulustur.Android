@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2c.Views.Category
+package com.bulbulustur.android.Application.Areas.b2c.Views.Category
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -462,7 +462,7 @@ private fun CategoryQuickFilterSection(
 @Composable
 private fun CategoryProductSectionHeader() {
     RetailSectionTitle(
-        title = "Ã–ne Ã‡ıkan Ürünler",
+        title = "Öne Çıkan Ürünler",
         description = "Bu kategoride dikkat çeken ürünlerden kısa bir seçki."
     )
 }
@@ -615,7 +615,7 @@ private fun getRetailCategoryDetail(categoryId: Int): RetailCategoryDetail {
             RetailSubCategoryItem(1, "Kadın Giyim", "KG", 5320),
             RetailSubCategoryItem(2, "Erkek Giyim", "EG", 4210),
             RetailSubCategoryItem(3, "Ayakkabı", "AY", 3170),
-            RetailSubCategoryItem(4, "Ã‡anta", "Ã‡A", 1460)
+            RetailSubCategoryItem(4, "Çanta", "ÇA", 1460)
         ),
         campaigns = listOf(
             RetailCategoryCampaignItem(
@@ -649,8 +649,8 @@ private fun getRetailCategoryDetail(categoryId: Int): RetailCategoryDetail {
         quickFilters = listOf(
             "Popüler",
             "Yeni Gelenler",
-            "Ã‡ok satanlar",
-            "Ä°ndirimli",
+            "Çok satanlar",
+            "İndirimli",
             "Ücretsiz kargo",
             "Yüksek puanlı"
         ),

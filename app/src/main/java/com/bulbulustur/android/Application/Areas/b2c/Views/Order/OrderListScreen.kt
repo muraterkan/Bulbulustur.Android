@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2c.Views.order
+package com.bulbulustur.android.Application.Areas.b2c.Views.order
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -52,7 +52,7 @@ fun OrderListScreen(
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        containerColor = BBColors.SurfaceMuted,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
                 title = "Siparişlerim",
@@ -64,7 +64,7 @@ fun OrderListScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BBColors.SurfaceMuted)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding)
                 .navigationBarsPadding(),
             contentPadding = PaddingValues(
@@ -147,7 +147,7 @@ private fun OrderListOverviewCard(
                     )
                 ) {
                     Text(
-                        text = "Sipariş Ã–zeti",
+                        text = "Sipariş Özeti",
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -587,7 +587,7 @@ private fun getDemoOrders(): List<OrderListUiModel> {
             orderNumber = "Sipariş #1000002",
             orderDate = "9 Mayıs 2026",
             statusText = "Hazırlanıyor",
-            productTitle = "Minimal Sırt Ã‡antası",
+            productTitle = "Minimal Sırt Çantası",
             productCountText = "1 ürün",
             totalText = "850,25 â‚º",
             storeName = "UrbanBag",
@@ -598,7 +598,7 @@ private fun getDemoOrders(): List<OrderListUiModel> {
             orderId = 4,
             orderNumber = "Sipariş #1000003",
             orderDate = "9 Mayıs 2026",
-            statusText = "Ã–deme Alındı",
+            statusText = "Ödeme Alındı",
             productTitle = "Ofis Aksesuar Seti",
             productCountText = "5 ürün",
             totalText = "15.600,00 â‚º",

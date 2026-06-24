@@ -20,6 +20,7 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.LocalOffer
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -51,7 +52,7 @@ fun BuyerBottomNavigation(
         modifier = Modifier
             .fillMaxWidth()
             .navigationBarsPadding(),
-        color = BBColors.Surface,
+        color = MaterialTheme.colorScheme.surface,
         shadowElevation = BBSpacing.Space5
     ) {
         Column(
@@ -61,7 +62,7 @@ fun BuyerBottomNavigation(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(BBSpacing.BorderThin)
-                    .background(BBColors.Border)
+                    .background(MaterialTheme.colorScheme.outlineVariant)
             )
 
             Row(
@@ -172,7 +173,7 @@ private fun BuyerBottomNavigationItemView(
             modifier = if (selected) {
                 Modifier
                     .background(
-                        color = BBColors.PrimarySoft,
+                        color = MaterialTheme.colorScheme.primaryContainer,
                         shape = BBRadius.PillShape
                     )
                     .padding(
@@ -221,7 +222,7 @@ private fun BuyerBottomNavigationCenterAction(
         Surface(
             modifier = Modifier.size(BBIcon.BoxXl),
             shape = BBRadius.XlShape,
-            color = BBColors.Primary,
+            color = MaterialTheme.colorScheme.primary,
             contentColor = BBColors.Black,
             border = BorderStroke(
                 width = BBSpacing.Space1,

@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Company
+package com.bulbulustur.android.Application.Views.Company
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -60,7 +60,7 @@ fun CompanyHomeScreen(
     }
 
     Scaffold(
-        containerColor = BBColors.SurfaceSoft,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
                 title = "Tedarikçi Ana Sayfası",
@@ -116,12 +116,12 @@ fun CompanyHomeScreen(
 
             item {
                 CompanyHomeSectionCard(
-                    title = "Åirket Vitrini",
+                    title = "Şirket Vitrini",
                     subtitle = "Firmanın öne çıkardıĞı ürün gruplarını, özel koleksiyonlarını ve ticari Vitrinlerini inceleyin.",
                     items = listOf(
-                        "Ã–ne Ã‡ıkan Ürün Koleksiyonları",
+                        "Öne Çıkan Ürün Koleksiyonları",
                         "Kurumsal Tedarikçi Profili",
-                        "Hızlı Ä°letişim ve Teklif Süreci"
+                        "Hızlı İletişim ve Teklif Süreci"
                     ),
                     icon = Icons.Outlined.Security,
                     onClick = onProfileClick
@@ -176,7 +176,7 @@ private fun CompanyHomeHero(
                             Icon(
                                 imageVector = Icons.Outlined.Verified,
                                 contentDescription = null,
-                                tint = BBColors.Primary,
+                                tint = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.size(BBIcon.SizeSm)
                             )
                         }
@@ -185,14 +185,14 @@ private fun CompanyHomeHero(
                     Text(
                         text = company.name,
                         style = MaterialTheme.typography.headlineSmall,
-                        color = BBColors.TextStrong,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold
                     )
 
                     Text(
                         text = company.description,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = BBColors.TextMuted
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -233,7 +233,7 @@ private fun CompanyHomeHero(
             }
 
             BbButton(
-                text = "Ä°letişime Geç",
+                text = "İletişime Geç",
                 onClick = onContactClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Secondary,
@@ -250,10 +250,10 @@ private fun CompanyLogoMark(
     Surface(
         modifier = Modifier.size(72.dp),
         shape = BBRadius.XlShape,
-        color = BBColors.Surface,
+        color = MaterialTheme.colorScheme.surface,
         border = BorderStroke(
             width = 1.dp,
-            color = BBColors.Border
+            color = MaterialTheme.colorScheme.outlineVariant
         )
     ) {
         Column(
@@ -263,14 +263,14 @@ private fun CompanyLogoMark(
             Icon(
                 imageVector = Icons.Outlined.Business,
                 contentDescription = null,
-                tint = BBColors.Primary,
+                tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(BBIcon.SizeLg)
             )
 
             Text(
                 text = logoText,
                 style = MaterialTheme.typography.labelLarge,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
         }
@@ -294,35 +294,35 @@ private fun CompanyHomeShowcaseCard() {
                 Surface(
                     modifier = Modifier.size(42.dp),
                     shape = BBRadius.LgShape,
-                    color = BBColors.Primary
+                    color = MaterialTheme.colorScheme.primary
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Security,
                         contentDescription = null,
-                        tint = BBColors.TextStrong,
+                        tint = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.size(BBIcon.SizeMd)
                     )
                 }
 
                 Column {
                     Text(
-                        text = "Åirket Vitrini",
+                        text = "Şirket Vitrini",
                         style = MaterialTheme.typography.titleMedium,
-                        color = BBColors.TextStrong,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold
                     )
 
                     Text(
                         text = "Firma güveni, tedarik yapısı ve öne çıkan ticari bilgiler.",
                         style = MaterialTheme.typography.bodySmall,
-                        color = BBColors.TextMuted
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
 
-            CompanyHomeInfoLine("Ã–ne Ã‡ıkan Ürün Koleksiyonları")
+            CompanyHomeInfoLine("Öne Çıkan Ürün Koleksiyonları")
             CompanyHomeInfoLine("Kurumsal Tedarikçi Profili")
-            CompanyHomeInfoLine("Hızlı Ä°letişim ve Teklif Süreci")
+            CompanyHomeInfoLine("Hızlı İletişim ve Teklif Süreci")
         }
     }
 }
@@ -334,10 +334,10 @@ private fun CompanyHomeInfoLine(
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = BBRadius.LgShape,
-        color = BBColors.PrimarySoft,
+        color = MaterialTheme.colorScheme.primaryContainer,
         border = BorderStroke(
             width = 1.dp,
-            color = BBColors.Border
+            color = MaterialTheme.colorScheme.outlineVariant
         )
     ) {
         Row(
@@ -348,7 +348,7 @@ private fun CompanyHomeInfoLine(
             Icon(
                 imageVector = Icons.Outlined.Verified,
                 contentDescription = null,
-                tint = BBColors.Primary,
+                tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
                     .size(BBIcon.SizeMd)
                     .weight(BBAlpha.Overlay)
@@ -358,7 +358,7 @@ private fun CompanyHomeInfoLine(
                 modifier = Modifier.weight(1f),
                 text = text,
                 style = MaterialTheme.typography.bodySmall,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.SemiBold
             )
         }
@@ -403,7 +403,7 @@ private fun CompanyHomeTabs(
             )
 
             CompanyHomeTabChip(
-                text = "Ä°letişim",
+                text = "İletişim",
                 icon = Icons.Outlined.ContactMail,
                 selected = false,
                 onClick = onContactClick
@@ -422,10 +422,10 @@ private fun CompanyHomeTabChip(
     Surface(
         onClick = onClick,
         shape = BBRadius.PillShape,
-        color = if (selected) BBColors.Blue.Blue50 else BBColors.Surface,
+        color = if (selected) BBColors.Blue.Blue50 else MaterialTheme.colorScheme.surface,
         border = BorderStroke(
             width = 1.dp,
-            color = if (selected) BBColors.Blue.Blue200 else BBColors.Border
+            color = if (selected) BBColors.Blue.Blue200 else MaterialTheme.colorScheme.outlineVariant
         )
     ) {
         Row(
@@ -438,14 +438,14 @@ private fun CompanyHomeTabChip(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = if (selected) BBColors.Blue.Blue700 else BBColors.TextStrong,
+                tint = if (selected) BBColors.Blue.Blue700 else MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.size(BBIcon.SizeSm)
             )
 
             Text(
                 text = text,
                 style = MaterialTheme.typography.labelMedium,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
 
@@ -478,13 +478,13 @@ private fun CompanyHomeSectionCard(
                 Icon(
                     imageVector = icon,
                     contentDescription = null,
-                    tint = BBColors.Primary
+                    tint = MaterialTheme.colorScheme.primary
                 )
 
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleMedium,
-                    color = BBColors.TextStrong,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -492,7 +492,7 @@ private fun CompanyHomeSectionCard(
             Text(
                 text = subtitle,
                 style = MaterialTheme.typography.bodySmall,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             items.forEach { item ->
@@ -519,7 +519,7 @@ private fun getCompanyHome(
         companyId = companyId,
         name = "Ortobella Comfort",
         logoText = "OC",
-        description = "Ã‡anta, tekstil ve promosyon ürünleri alanında çalışan doĞrulanmış tedarikçi.",
+        description = "Çanta, tekstil ve promosyon ürünleri alanında çalışan doĞrulanmış tedarikçi.",
         isVerified = true,
         chips = listOf(
             "Türkiye",

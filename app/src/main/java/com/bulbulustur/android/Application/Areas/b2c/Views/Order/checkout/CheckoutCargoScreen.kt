@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout
+package com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -544,7 +544,7 @@ private fun CheckoutCargoBottomBar(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "Ã–demeye geç",
+                    text = "Ödemeye geç",
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onPrimary
@@ -611,7 +611,7 @@ private fun getCheckoutCargoScreenData(): CheckoutCargoScreenData {
     return CheckoutCargoScreenData(
         deliveryAddress = CheckoutCargoDeliveryAddress(
             title = "Ev adresim",
-            fullAddress = "Kızılay Mah. Atatürk Bulvarı No: 12 Daire: 8 Ã‡ankaya / Ankara"
+            fullAddress = "Kızılay Mah. Atatürk Bulvarı No: 12 Daire: 8 Çankaya / Ankara"
         ),
         storeCargoGroups = listOf(
             CheckoutStoreCargoGroup(

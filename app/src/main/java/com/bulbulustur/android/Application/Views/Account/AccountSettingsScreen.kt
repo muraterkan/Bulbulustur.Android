@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Account
+package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -30,6 +30,7 @@ import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material.icons.outlined.SupportAgent
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -68,7 +69,7 @@ fun AccountSettingsScreen(
     onSignOutClick: () -> Unit = {}
 ) {
     Scaffold(
-        containerColor = BBColors.SurfaceMuted,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
                 title = "Ayarlar",
@@ -79,7 +80,7 @@ fun AccountSettingsScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BBColors.SurfaceMuted)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding)
                 .navigationBarsPadding(),
             contentPadding = PaddingValues(
@@ -145,7 +146,7 @@ fun AccountSettingsScreen(
                     SettingsDashedDivider()
 
                     SettingsMenuRow(
-                        title = "Bildirim ve Ä°zinler",
+                        title = "Bildirim ve İzinler",
                         value = null,
                         icon = Icons.Outlined.Notifications,
                         onClick = onCommunicationPreferenceClick
@@ -190,7 +191,7 @@ fun AccountSettingsScreen(
             item {
                 SettingsMenuGroup {
                     SettingsMenuRow(
-                        title = "Ã‡ıkış Yap",
+                        title = "Çıkış Yap",
                         value = null,
                         icon = Icons.Outlined.Logout,
                         danger = true,
@@ -218,14 +219,14 @@ private fun SettingsProtectionBlock(
             Text(
                 text = "Hesabın Güvende",
                 style = BbTypography.headlineSmall,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
                 text = "Hesap, gizlilik ve izin ayarlarını tek merkezden yönet.",
                 style = BbTypography.bodyMedium,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
 
@@ -257,7 +258,7 @@ private fun SettingsProtectionBlock(
             ) {
                 SettingsQuickCard(
                     modifier = Modifier.weight(1f),
-                    title = "Ä°zinler",
+                    title = "İzinler",
                     icon = Icons.Outlined.Lock,
                     onClick = onPermissionsClick
                 )
@@ -311,7 +312,7 @@ private fun SettingsQuickCard(
             Text(
                 text = title,
                 style = BbTypography.titleSmall,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.SemiBold,
                 textAlign = TextAlign.Center,
                 maxLines = 2
@@ -331,14 +332,14 @@ private fun SettingsSectionTitle(
         Text(
             text = title,
             style = BbTypography.titleMedium,
-            color = BBColors.TextStrong,
+            color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold
         )
 
         Text(
             text = subtitle,
             style = BbTypography.bodySmall,
-            color = BBColors.TextMuted
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -355,7 +356,7 @@ private fun SettingsMenuGroup(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(BBColors.Surface)
+                .background(MaterialTheme.colorScheme.surface)
         ) {
             content()
         }
@@ -372,7 +373,7 @@ private fun SettingsMenuRow(
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        color = BBColors.Surface,
+        color = MaterialTheme.colorScheme.surface,
         onClick = onClick
     ) {
         Row(
@@ -389,7 +390,7 @@ private fun SettingsMenuRow(
                         color = if (danger) {
                             BBColors.Red.Red50
                         } else {
-                            BBColors.SurfaceMuted
+                            MaterialTheme.colorScheme.surfaceVariant
                         },
                         shape = BBRadius.LgShape
                     ),
@@ -401,7 +402,7 @@ private fun SettingsMenuRow(
                     tint = if (danger) {
                         BBColors.Red.Red600
                     } else {
-                        BBColors.TextStrong
+                        MaterialTheme.colorScheme.onSurface
                     },
                     modifier = Modifier.size(BBIcon.Ui)
                 )
@@ -413,7 +414,7 @@ private fun SettingsMenuRow(
                 color = if (danger) {
                     BBColors.Red.Red700
                 } else {
-                    BBColors.TextStrong
+                    MaterialTheme.colorScheme.onSurface
                 },
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.weight(1f)
@@ -423,14 +424,14 @@ private fun SettingsMenuRow(
                 Text(
                     text = value,
                     style = BbTypography.bodyMedium,
-                    color = BBColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
             Icon(
                 imageVector = Icons.Outlined.ChevronRight,
                 contentDescription = null,
-                tint = BBColors.TextMuted,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.size(BBIcon.Ui)
             )
         }
@@ -439,6 +440,8 @@ private fun SettingsMenuRow(
 
 @Composable
 private fun SettingsDashedDivider() {
+    val dividerColor = MaterialTheme.colorScheme.outlineVariant
+
     Canvas(
         modifier = Modifier
             .fillMaxWidth()
@@ -449,7 +452,7 @@ private fun SettingsDashedDivider() {
             .height(BBSpacing.BorderThin)
     ) {
         drawLine(
-            color = BBColors.Border,
+            color = dividerColor,
             start = Offset(0f, 0f),
             end = Offset(size.width, 0f),
             strokeWidth = BBSpacing.BorderThin.toPx(),

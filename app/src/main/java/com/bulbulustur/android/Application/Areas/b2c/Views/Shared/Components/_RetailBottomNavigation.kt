@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components
+package com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components
 
 import androidx.compose.runtime.Composable
 import com.bulbulustur.android.Application.Views.Shared.BuyerBottomNavigation

@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2c.Views.Basket
+package com.bulbulustur.android.Application.Areas.b2c.Views.Basket
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -132,7 +132,7 @@ fun BasketScreen(
     }
 
     Scaffold(
-        containerColor = BBColors.SurfaceMuted,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
                 title = "Sepetim",
@@ -170,7 +170,7 @@ fun BasketScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BBColors.SurfaceMuted)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding),
             contentPadding = PaddingValues(
                 start = BBSpacing.PageHorizontal,
@@ -330,7 +330,7 @@ private fun BasketCouponCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Kupon ve Ä°ndirimler",
+                    text = "Kupon ve İndirimler",
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
@@ -340,7 +340,7 @@ private fun BasketCouponCard(
                     text = if (couponApplied) {
                         "WELCOME75 kuponu uygulandı."
                     } else {
-                        "Ä°ndirim kodu ekle veya kullanılabilir kuponlarını görüntüle."
+                        "İndirim kodu ekle veya kullanılabilir kuponlarını görüntüle."
                     },
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -447,7 +447,7 @@ private fun BasketStoreGroupCard(
                 )
 
                 if (index != storeGroup.lines.lastIndex) {
-                    HorizontalDivider(color = BBColors.Border)
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                 }
             }
         }
@@ -558,7 +558,7 @@ private fun BasketLineCard(
             modifier = Modifier
                 .size(BBSpacing.Space16)
                 .background(
-                    color = BBColors.Surface,
+                    color = MaterialTheme.colorScheme.surface,
                     shape = BBRadius.LgShape
                 ),
             contentAlignment = Alignment.Center
@@ -654,7 +654,7 @@ private fun BasketQuantityButton(
         modifier = Modifier
             .size(BBIcon.BoxSm)
             .background(
-                color = BBColors.Surface,
+                color = MaterialTheme.colorScheme.surface,
                 shape = BBRadius.IconBoxSoft
             )
             .clickable { onClick() },
@@ -686,7 +686,7 @@ private fun BasketSummaryCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             Text(
-                text = "Sepet Ã–zeti",
+                text = "Sepet Özeti",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -694,12 +694,12 @@ private fun BasketSummaryCard(
 
             BasketSummaryRow("Ürün Toplamı", productTotalText)
             BasketSummaryRow("Kargo", cargoTotalText)
-            BasketSummaryRow("Ä°ndirim", discountTotalText)
+            BasketSummaryRow("İndirim", discountTotalText)
 
-            HorizontalDivider(color = BBColors.Border)
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
             BasketSummaryRow(
-                title = "Ã–denecek Tutar",
+                title = "Ödenecek Tutar",
                 value = payableTotalText,
                 isStrong = true
             )
@@ -757,7 +757,7 @@ private fun BasketCheckoutBar(
     onCheckoutClick: () -> Unit
 ) {
     Surface(
-        color = BBColors.TextStrong,
+        color = MaterialTheme.colorScheme.onSurface,
         tonalElevation = BBSpacing.Space1,
         shadowElevation = BBSpacing.Space2
     ) {
@@ -785,14 +785,14 @@ private fun BasketCheckoutBar(
                     text = payableTotalText,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = BBColors.Primary
+                    color = MaterialTheme.colorScheme.primary
                 )
             }
 
             Box(
                 modifier = Modifier
                     .background(
-                        color = BBColors.Primary,
+                        color = MaterialTheme.colorScheme.primary,
                         shape = BBRadius.PillShape
                     )
                     .clickable { onCheckoutClick() }
@@ -806,7 +806,7 @@ private fun BasketCheckoutBar(
                     text = "Siparişi Tamamla",
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
-                    color = BBColors.TextStrong
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
         }
@@ -953,7 +953,7 @@ private fun BasketCouponSheet(
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
-        containerColor = BBColors.Surface
+        containerColor = MaterialTheme.colorScheme.surface
     ) {
         Column(
             modifier = Modifier
@@ -967,7 +967,7 @@ private fun BasketCouponSheet(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
             Text(
-                text = "Kupon ve Ä°ndirimler",
+                text = "Kupon ve İndirimler",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -978,7 +978,7 @@ private fun BasketCouponSheet(
                 onValueChange = { couponCode = it },
                 modifier = Modifier.fillMaxWidth(),
                 label = {
-                    Text(text = "Ä°ndirim kodu")
+                    Text(text = "İndirim kodu")
                 },
                 singleLine = true,
                 shape = BBRadius.Input
@@ -1061,7 +1061,7 @@ private fun BasketFavoriteSheet(
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
-        containerColor = BBColors.Surface
+        containerColor = MaterialTheme.colorScheme.surface
     ) {
         Column(
             modifier = Modifier
@@ -1120,7 +1120,7 @@ private fun BasketFavoriteSuggestionCard(
                 .fillMaxWidth()
                 .height(BBSpacing.Space20)
                 .background(
-                    color = BBColors.Surface,
+                    color = MaterialTheme.colorScheme.surface,
                     shape = BBRadius.LgShape
                 ),
             contentAlignment = Alignment.Center

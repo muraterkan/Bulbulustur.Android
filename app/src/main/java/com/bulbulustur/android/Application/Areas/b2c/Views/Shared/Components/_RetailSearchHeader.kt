@@ -21,6 +21,7 @@ import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -59,13 +60,13 @@ fun RetailSearchHeader(
 ) {
     Surface(
         modifier = modifier.fillMaxWidth(),
-        color = BBColors.Surface,
+        color = MaterialTheme.colorScheme.surface,
         shadowElevation = BBSpacing.Space1
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(BBColors.Surface)
+                .background(MaterialTheme.colorScheme.surface)
                 .windowInsetsPadding(WindowInsets.statusBars)
                 .padding(
                     start = BBSpacing.Space2,
@@ -144,9 +145,9 @@ private fun RetailHeaderActionButton(
         icon = icon,
         contentDescription = contentDescription,
         size = BbIconBoxSize.Medium,
-        backgroundColor = BBColors.SurfaceMuted,
-        iconColor = BBColors.TextStrong,
-        borderColor = BBColors.Border,
+        backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+        iconColor = MaterialTheme.colorScheme.onSurface,
+        borderColor = MaterialTheme.colorScheme.outlineVariant,
         borderWidth = BBSpacing.Divider,
         bordered = true,
         radius = BBRadius.xl,
@@ -168,10 +169,10 @@ private fun RetailSearchInput(
             BBLayout.TopBarHeight - BBSpacing.Space4
         ),
         shape = RoundedCornerShape(BBRadius.xl),
-        color = BBColors.SurfaceMuted,
+        color = MaterialTheme.colorScheme.surfaceVariant,
         border = BorderStroke(
             width = BBSpacing.Divider,
-            color = BBColors.BorderStrong
+            color = MaterialTheme.colorScheme.outlineVariant
         )
     ) {
         TextField(
@@ -184,7 +185,7 @@ private fun RetailSearchInput(
                 Text(
                     text = placeholder,
                     style = BbTypography.bodySmall,
-                    color = BBColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             },
             leadingIcon = {
@@ -197,7 +198,7 @@ private fun RetailSearchInput(
                     Icon(
                         imageVector = Icons.Outlined.Search,
                         contentDescription = "Ara",
-                        tint = BBColors.TextMuted,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.height(
                             BBIcon.TopBarIcon
                         )
@@ -214,22 +215,22 @@ private fun RetailSearchInput(
                         Icon(
                             imageVector = Icons.Outlined.Close,
                             contentDescription = "Temizle",
-                            tint = BBColors.TextMuted
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
             },
             colors = TextFieldDefaults.colors(
-                focusedTextColor = BBColors.TextStrong,
-                unfocusedTextColor = BBColors.TextStrong,
-                disabledTextColor = BBColors.TextMuted,
+                focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                disabledTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 focusedContainerColor = BBColors.Transparent,
                 unfocusedContainerColor = BBColors.Transparent,
                 disabledContainerColor = BBColors.Transparent,
                 focusedIndicatorColor = BBColors.Transparent,
                 unfocusedIndicatorColor = BBColors.Transparent,
                 disabledIndicatorColor = BBColors.Transparent,
-                cursorColor = BBColors.Primary
+                cursorColor = MaterialTheme.colorScheme.primary
             )
         )
     }

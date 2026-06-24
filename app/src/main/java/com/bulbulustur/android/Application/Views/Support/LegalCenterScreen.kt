@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Support
+package com.bulbulustur.android.Application.Views.Support
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -115,13 +115,13 @@ private fun LegalCenterHeader() {
                 Icon(
                     imageVector = Icons.Outlined.Gavel,
                     contentDescription = null,
-                    tint = BBColors.Primary
+                    tint = MaterialTheme.colorScheme.primary
                 )
 
                 Text(
                     text = "Bulbulustur Legal Center",
                     style = MaterialTheme.typography.labelLarge,
-                    color = BBColors.Primary,
+                    color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.SemiBold
                 )
             }
@@ -184,7 +184,7 @@ private fun LegalCenterContactCard(
             Icon(
                 imageVector = Icons.Outlined.SupportAgent,
                 contentDescription = null,
-                tint = BBColors.Primary
+                tint = MaterialTheme.colorScheme.primary
             )
 
             Column(
@@ -208,7 +208,7 @@ private fun LegalCenterContactCard(
             Icon(
                 imageVector = Icons.Outlined.ChevronRight,
                 contentDescription = null,
-                tint = BBColors.TextMuted
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -233,7 +233,7 @@ private fun LegalDocumentCard(
             Icon(
                 imageVector = document.icon,
                 contentDescription = null,
-                tint = BBColors.Primary
+                tint = MaterialTheme.colorScheme.primary
             )
 
             Column(
@@ -261,13 +261,13 @@ private fun LegalDocumentCard(
                         text = document.categoryName,
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.SemiBold,
-                        color = BBColors.Primary
+                        color = MaterialTheme.colorScheme.primary
                     )
 
                     Text(
                         text = document.updatedDateLabel,
                         style = MaterialTheme.typography.labelMedium,
-                        color = BBColors.TextMuted
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -275,7 +275,7 @@ private fun LegalDocumentCard(
             Icon(
                 imageVector = Icons.Outlined.ChevronRight,
                 contentDescription = null,
-                tint = BBColors.TextMuted
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -296,7 +296,7 @@ private fun LegalCenterInfoCard() {
             Icon(
                 imageVector = Icons.Outlined.VerifiedUser,
                 contentDescription = null,
-                tint = BBColors.Primary
+                tint = MaterialTheme.colorScheme.primary
             )
 
             Column(
@@ -311,7 +311,7 @@ private fun LegalCenterInfoCard() {
                 )
 
                 Text(
-                    text = "Bu ekran şimdilik yasal metin listesi skeletonâ€™ıdır. Detay ekranında gerçek içerikler servis üzerinden gösterilecek.",
+                    text = "Bu ekran şimdilik yasal metin listesi skeletony'ıdır. Detay ekranında gerçek içerikler servis üzerinden gösterilecek.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -370,7 +370,7 @@ private fun platformRuleItems(): List<LegalDocumentItem> {
     return listOf(
         LegalDocumentItem(
             legalDocumentId = 5,
-            title = "Ã‡erez Politikası",
+            title = "Çerez Politikası",
             description = "Uygulama ve web deneyiminde kullanılan çerez ve benzeri teknolojilere ilişkin bilgiler.",
             categoryName = "Politikalar",
             updatedDateLabel = "Güncel",
@@ -378,7 +378,7 @@ private fun platformRuleItems(): List<LegalDocumentItem> {
         ),
         LegalDocumentItem(
             legalDocumentId = 6,
-            title = "Ä°çerik Yayınlama Politikası",
+            title = "İçerik Yayınlama Politikası",
             description = "Platformda yayınlanan ürün, firma ve içeriklere ilişkin temel kurallar.",
             categoryName = "Platform",
             updatedDateLabel = "Güncel",
@@ -394,7 +394,7 @@ private fun platformRuleItems(): List<LegalDocumentItem> {
         ),
         LegalDocumentItem(
             legalDocumentId = 8,
-            title = "Ä°ptal ve Ä°ade Åartları",
+            title = "İptal ve İade Şartları",
             description = "Sipariş iptali, iade süreci ve kullanıcı haklarına ilişkin bilgiler.",
             categoryName = "Satış",
             updatedDateLabel = "Güncel",

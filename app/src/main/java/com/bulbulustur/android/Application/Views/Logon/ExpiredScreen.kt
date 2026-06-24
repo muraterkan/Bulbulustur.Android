@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Logon
+package com.bulbulustur.android.Application.Views.Logon
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -129,7 +129,7 @@ private fun ExpiredEmailBox(
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        color = BBColors.SurfaceMuted,
+        color = MaterialTheme.colorScheme.surfaceVariant,
         shape = BBRadius.Card
     ) {
         Column(
@@ -137,9 +137,9 @@ private fun ExpiredEmailBox(
             horizontalAlignment = Alignment.Start
         ) {
             Text(
-                text = "Ä°şlem yapılan adres",
+                text = "İşlem yapılan adres",
                 style = MaterialTheme.typography.labelMedium,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Spacer(modifier = Modifier.height(BBSpacing.Space1))
@@ -148,7 +148,7 @@ private fun ExpiredEmailBox(
                 text = email,
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
-                color = BBColors.TextStrong
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
     }
@@ -184,7 +184,7 @@ private fun ExpiredReasonItem(
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        color = BBColors.SurfaceMuted,
+        color = MaterialTheme.colorScheme.surfaceVariant,
         shape = BBRadius.Card
     ) {
         Row(
@@ -216,7 +216,7 @@ private fun ExpiredReasonItem(
                     text = title,
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
-                    color = BBColors.TextStrong
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Spacer(modifier = Modifier.height(BBSpacing.Space1))
@@ -224,7 +224,7 @@ private fun ExpiredReasonItem(
                 Text(
                     text = description,
                     style = MaterialTheme.typography.bodySmall,
-                    color = BBColors.TextSubtle
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -235,7 +235,7 @@ private fun ExpiredReasonItem(
 private fun ExpiredSecurityInfoBox() {
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        color = BBColors.PrimarySoft,
+        color = MaterialTheme.colorScheme.primaryContainer,
         shape = BBRadius.Card
     ) {
         Row(
@@ -254,7 +254,7 @@ private fun ExpiredSecurityInfoBox() {
                     Icon(
                         imageVector = Icons.Outlined.Refresh,
                         contentDescription = null,
-                        tint = BBColors.TextStrong,
+                        tint = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.size(BBIcon.SizeMd)
                     )
                 }
@@ -267,7 +267,7 @@ private fun ExpiredSecurityInfoBox() {
                     text = "Güvenlik nedeniyle",
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
-                    color = BBColors.TextStrong
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Spacer(modifier = Modifier.height(BBSpacing.Space1))
@@ -275,7 +275,7 @@ private fun ExpiredSecurityInfoBox() {
                 Text(
                     text = "Süresi dolan baĞlantılar tekrar kullanılamaz. Yeni baĞlantı oluşturmanız gerekir.",
                     style = MaterialTheme.typography.bodySmall,
-                    color = BBColors.TextSubtle
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -300,11 +300,11 @@ enum class ExpiredType(
     ),
 
     PasswordReset(
-        badgeText = "Åifre BaĞlantısı Geçersiz",
-        title = "Åifre Yenileme Süresi Doldu",
-        description = "Åifre yenileme baĞlantınız artık kullanılamıyor.",
-        primaryButtonText = "Yeni Åifre BaĞlantısı Gönder",
-        firstReason = "Åifre yenileme baĞlantıları tek kullanımlık ve süre sınırlıdır.",
+        badgeText = "Şifre BaĞlantısı Geçersiz",
+        title = "Şifre Yenileme Süresi Doldu",
+        description = "Şifre yenileme baĞlantınız artık kullanılamıyor.",
+        primaryButtonText = "Yeni Şifre BaĞlantısı Gönder",
+        firstReason = "Şifre yenileme baĞlantıları tek kullanımlık ve süre sınırlıdır.",
         secondReason = "Yeni baĞlantı göndererek şifre yenileme işlemini tekrar başlatabilirsiniz."
     ),
 
@@ -312,7 +312,7 @@ enum class ExpiredType(
         badgeText = "Kayıt Oturumu Kapandı",
         title = "Kayıt BaĞlantısı Geçersiz",
         description = "Kayıt işleminiz yarıda kalmış veya baĞlantı süresi dolmuş olabilir.",
-        primaryButtonText = "Kayıt Ä°şlemini Yeniden Başlat",
+        primaryButtonText = "Kayıt İşlemini Yeniden Başlat",
         firstReason = "Yarım kalan kayıt oturumları güvenlik için otomatik kapatılır.",
         secondReason = "Yeni kayıt akışı başlatarak hesabınızı güvenli şekilde oluşturabilirsiniz."
     )

@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2b.Views.Category
+package com.bulbulustur.android.Application.Areas.b2b.Views.Category
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -233,13 +233,13 @@ private fun WholesaleCategoryHeroCard(
                 Icon(
                     imageVector = Icons.Outlined.Factory,
                     contentDescription = null,
-                    tint = BBColors.Primary
+                    tint = MaterialTheme.colorScheme.primary
                 )
 
                 Text(
                     text = "Toptan Kategori",
                     style = MaterialTheme.typography.labelLarge,
-                    color = BBColors.Primary,
+                    color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.SemiBold
                 )
             }
@@ -270,7 +270,7 @@ private fun WholesaleCategoryHeroCard(
                 )
 
                 BbButton(
-                    text = "Teklif Ä°ste",
+                    text = "Teklif İste",
                     onClick = onRfqClick,
                     modifier = Modifier.weight(1f),
                     variant = BbButtonVariant.Light,
@@ -469,7 +469,7 @@ private fun WholesaleCategoryShowcaseCard(
         color = item.backgroundColor,
         border = BorderStroke(
             width = 1.dp,
-            color = BBColors.Border
+            color = MaterialTheme.colorScheme.outlineVariant
         ),
         onClick = onClick
     ) {
@@ -486,14 +486,14 @@ private fun WholesaleCategoryShowcaseCard(
             Text(
                 text = item.title,
                 style = MaterialTheme.typography.titleMedium,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.SemiBold
             )
 
             Text(
                 text = item.description,
                 style = MaterialTheme.typography.bodySmall,
-                color = BBColors.TextSubtle
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -575,8 +575,8 @@ private fun getWholesaleQuickActions(): List<WholesaleCategoryQuickActionItem> {
             target = WholesaleCategoryQuickActionTarget.Companies
         ),
         WholesaleCategoryQuickActionItem(
-            title = "Teklif Ä°ste",
-            description = "Ä°htiyacını firmalara ilet",
+            title = "Teklif İste",
+            description = "İhtiyacını firmalara ilet",
             icon = Icons.Outlined.RequestQuote,
             backgroundColor = BBColors.Blue.Blue50,
             iconColor = BBColors.Blue.Blue700,
@@ -599,8 +599,8 @@ private fun getWholesaleQuickActions(): List<WholesaleCategoryQuickActionItem> {
             target = WholesaleCategoryQuickActionTarget.Sample
         ),
         WholesaleCategoryQuickActionItem(
-            title = "Ã–zelleştir",
-            description = "Ã–zel üretim talebi oluştur",
+            title = "Özelleştir",
+            description = "Özel üretim talebi oluştur",
             icon = Icons.Outlined.Tune,
             backgroundColor = BBColors.Orange.Orange50,
             iconColor = BBColors.Orange.Orange700,
@@ -634,7 +634,7 @@ private fun getWholesaleSubCategories(): List<WholesaleCategoryHomeSubCategoryIt
         ),
         WholesaleCategoryHomeSubCategoryItem(
             title = "Entegre Devreler",
-            description = "Ã‡ip, modül ve devre ürünleri",
+            description = "Çip, modül ve devre ürünleri",
             icon = Icons.Outlined.Category,
             backgroundColor = BBColors.Purple.Purple50,
             iconColor = BBColors.Purple.Purple700

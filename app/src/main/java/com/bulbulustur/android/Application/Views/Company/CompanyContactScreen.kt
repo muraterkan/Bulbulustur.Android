@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Company
+package com.bulbulustur.android.Application.Views.Company
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
@@ -81,7 +81,7 @@ fun CompanyContactScreen(
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        containerColor = BBColors.SurfaceSoft,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
                 title = "Firma iletişim",
@@ -208,7 +208,7 @@ private fun CompanyContactHero(
                             Icon(
                                 imageVector = Icons.Outlined.Verified,
                                 contentDescription = "DoĞrulanmış firma",
-                                tint = BBColors.Primary,
+                                tint = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.size(
                                     BBIcon.SizeSm
                                 )
@@ -219,14 +219,14 @@ private fun CompanyContactHero(
                     Text(
                         text = "${company.name} ile iletişime geç",
                         style = MaterialTheme.typography.headlineSmall,
-                        color = BBColors.TextStrong,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold
                     )
 
                     Text(
                         text = "Firma yetkilisine mesaj gönderin; ürün, teklif, numune veya özel üretim talepleriniz için doĞrudan baĞlantı kurun.",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = BBColors.TextMuted
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -284,10 +284,10 @@ private fun CompanyContactLogo(
             BBIcon.BoxXl
         ),
         shape = BBRadius.XlShape,
-        color = BBColors.Surface,
+        color = MaterialTheme.colorScheme.surface,
         border = BorderStroke(
             width = BBSpacing.BorderThin,
-            color = BBColors.Border
+            color = MaterialTheme.colorScheme.outlineVariant
         )
     ) {
         Column(
@@ -298,7 +298,7 @@ private fun CompanyContactLogo(
             Icon(
                 imageVector = Icons.Outlined.Business,
                 contentDescription = null,
-                tint = BBColors.Primary,
+                tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(
                     BBIcon.SizeLg
                 )
@@ -307,7 +307,7 @@ private fun CompanyContactLogo(
             Text(
                 text = logoText,
                 style = MaterialTheme.typography.labelLarge,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
         }
@@ -344,21 +344,21 @@ private fun CompanyContactPersonCard(
                 Text(
                     text = contactPerson.fullName,
                     style = MaterialTheme.typography.titleMedium,
-                    color = BBColors.TextStrong,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
                 )
 
                 Text(
                     text = contactPerson.title,
                     style = MaterialTheme.typography.bodySmall,
-                    color = BBColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
                 if (contactPerson.isAuthorized) {
                     Text(
                         text = "Firma yetkilisi",
                         style = MaterialTheme.typography.labelSmall,
-                        color = BBColors.Primary,
+                        color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.SemiBold
                     )
                 }
@@ -377,10 +377,10 @@ private fun CompanyContactPersonAvatar(
             BBIcon.BoxXl
         ),
         shape = BBRadius.XlShape,
-        color = BBColors.PrimarySoft,
+        color = MaterialTheme.colorScheme.primaryContainer,
         border = BorderStroke(
             width = BBSpacing.BorderThin,
-            color = BBColors.Border
+            color = MaterialTheme.colorScheme.outlineVariant
         )
     ) {
         if (imageResId != null) {
@@ -402,7 +402,7 @@ private fun CompanyContactPersonAvatar(
                 Text(
                     text = getInitials(fullName),
                     style = MaterialTheme.typography.titleMedium,
-                    color = BBColors.Primary,
+                    color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -431,7 +431,7 @@ private fun CompanyContactInfoCard(
             Text(
                 text = "Adres ve kurumsal iletişim",
                 style = MaterialTheme.typography.titleMedium,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
 
@@ -469,10 +469,10 @@ private fun CompanyContactInfoRow(
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = BBRadius.LgShape,
-        color = BBColors.SurfaceMuted,
+        color = MaterialTheme.colorScheme.surfaceVariant,
         border = BorderStroke(
             width = BBSpacing.BorderThin,
-            color = BBColors.Border
+            color = MaterialTheme.colorScheme.outlineVariant
         ),
         onClick = onClick
     ) {
@@ -490,7 +490,7 @@ private fun CompanyContactInfoRow(
                     BBIcon.BoxMd
                 ),
                 shape = BBRadius.LgShape,
-                color = BBColors.PrimarySoft
+                color = MaterialTheme.colorScheme.primaryContainer
             ) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -499,7 +499,7 @@ private fun CompanyContactInfoRow(
                     Icon(
                         imageVector = icon,
                         contentDescription = null,
-                        tint = BBColors.Primary,
+                        tint = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.size(
                             BBIcon.SizeMd
                         )
@@ -516,13 +516,13 @@ private fun CompanyContactInfoRow(
                 Text(
                     text = title,
                     style = MaterialTheme.typography.labelMedium,
-                    color = BBColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
                 Text(
                     text = value,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = BBColors.TextStrong,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.SemiBold,
                     maxLines = 3,
                     overflow = TextOverflow.Ellipsis
@@ -562,7 +562,7 @@ private fun CompanyMessageCard(
                         BBIcon.BoxMd
                     ),
                     shape = BBRadius.LgShape,
-                    color = BBColors.Primary
+                    color = MaterialTheme.colorScheme.primary
                 ) {
                     Box(
                         modifier = Modifier.fillMaxSize(),
@@ -571,7 +571,7 @@ private fun CompanyMessageCard(
                         Icon(
                             imageVector = Icons.Outlined.Send,
                             contentDescription = null,
-                            tint = BBColors.TextStrong,
+                            tint = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.size(
                                 BBIcon.SizeMd
                             )
@@ -588,14 +588,14 @@ private fun CompanyMessageCard(
                     Text(
                         text = "Mesaj gönder",
                         style = MaterialTheme.typography.titleMedium,
-                        color = BBColors.TextStrong,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold
                     )
 
                     Text(
                         text = "$companyName firmasına teklif, ürün bilgisi, numune veya iş birliĞi mesajı bırakabilirsiniz.",
                         style = MaterialTheme.typography.bodySmall,
-                        color = BBColors.TextMuted
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -620,15 +620,15 @@ private fun CompanyMessageCard(
                     )
                 },
                 colors = TextFieldDefaults.colors(
-                    focusedTextColor = BBColors.TextStrong,
-                    unfocusedTextColor = BBColors.TextStrong,
-                    focusedContainerColor = BBColors.Surface,
-                    unfocusedContainerColor = BBColors.Surface,
-                    focusedIndicatorColor = BBColors.Primary,
-                    unfocusedIndicatorColor = BBColors.Border,
-                    focusedLabelColor = BBColors.Primary,
-                    unfocusedLabelColor = BBColors.TextMuted,
-                    cursorColor = BBColors.Primary
+                    focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                    focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+                    unfocusedIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
+                    focusedLabelColor = MaterialTheme.colorScheme.primary,
+                    unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    cursorColor = MaterialTheme.colorScheme.primary
                 )
             )
 
@@ -705,7 +705,7 @@ private fun getCompanyContact(
             imageResId = R.drawable.murat_erkan
         ),
         website = "www.ortobella.com",
-        address = "Yeni Mah. Ã‡arşamba Cad. No:52 Piazza AVM -1 Kat / Canik / Samsun",
+        address = "Yeni Mah. Çarşamba Cad. No:52 Piazza AVM -1 Kat / Canik / Samsun",
         email = "sales@ortobella.com",
         chips = listOf(
             "Türkiye",

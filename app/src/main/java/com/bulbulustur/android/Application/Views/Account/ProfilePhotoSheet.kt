@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Account
+package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -69,13 +69,13 @@ fun ProfilePhotoSheet(
                 ) {
                     ProfilePhotoSheetActionRow(
                         icon = Icons.Outlined.CameraAlt,
-                        title = "FotoĞraf Ã‡ek",
+                        title = "FotoĞraf Çek",
                         subtitle = "Kamerayı açarak yeni profil fotoĞrafı çek.",
                         onClick = onTakePhotoClick
                     )
 
                     HorizontalDivider(
-                        color = BBColors.Border
+                        color = MaterialTheme.colorScheme.outlineVariant
                     )
 
                     ProfilePhotoSheetActionRow(
@@ -87,7 +87,7 @@ fun ProfilePhotoSheet(
 
                     if (hasProfilePhoto) {
                         HorizontalDivider(
-                            color = BBColors.Border
+                            color = MaterialTheme.colorScheme.outlineVariant
                         )
 
                         ProfilePhotoSheetActionRow(

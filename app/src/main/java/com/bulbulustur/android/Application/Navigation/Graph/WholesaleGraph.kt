@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Navigation.Graph
+package com.bulbulustur.android.Application.Navigation.Graph
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType

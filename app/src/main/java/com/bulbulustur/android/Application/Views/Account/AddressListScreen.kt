@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Account
+package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -109,7 +109,7 @@ private fun AddressCard(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(BBColors.Surface)
+                .background(MaterialTheme.colorScheme.surface)
         ) {
             AddressCardHeader(
                 address = address
@@ -153,7 +153,7 @@ private fun AddressCard(
                             Icon(
                                 imageVector = Icons.Outlined.Edit,
                                 contentDescription = null,
-                                tint = BBColors.TextStrong,
+                                tint = MaterialTheme.colorScheme.onSurface,
                                 modifier = Modifier.size(BBIcon.ButtonIcon)
                             )
                         }
@@ -203,13 +203,13 @@ private fun AddressCardHeader(
             Text(
                 text = address.title,
                 style = BbTypography.titleMedium,
-                color = BBColors.TextStrong
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
                 text = address.receiverName,
                 style = BbTypography.bodySmall,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -225,7 +225,7 @@ private fun AddressInfoRow(
         modifier = Modifier
             .fillMaxWidth()
             .background(
-                color = BBColors.SurfaceMuted,
+                color = MaterialTheme.colorScheme.surfaceVariant,
                 shape = BBRadius.LgShape
             )
             .padding(BBSpacing.CardPaddingCompact),
@@ -235,7 +235,7 @@ private fun AddressInfoRow(
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = BBColors.TextMuted,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.size(BBIcon.Ui)
         )
 
@@ -246,13 +246,13 @@ private fun AddressInfoRow(
             Text(
                 text = title,
                 style = BbTypography.labelSmall,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Text(
                 text = value,
                 style = BbTypography.bodyMedium,
-                color = BBColors.TextStrong
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
     }
@@ -298,13 +298,13 @@ private fun AddressEmptyState(
             Text(
                 text = "Kayıt Bulunamadı",
                 style = BbTypography.titleMedium,
-                color = BBColors.TextStrong
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
                 text = "Henüz kayıtlı adresiniz bulunmuyor. Teslimat ve fatura süreçleri için yeni adres ekleyebilirsiniz.",
                 style = BbTypography.bodySmall,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             BbButton(

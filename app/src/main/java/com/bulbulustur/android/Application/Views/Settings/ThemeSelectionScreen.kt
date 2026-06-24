@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Settings
+package com.bulbulustur.android.Application.Views.Settings
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -95,13 +95,13 @@ private fun ThemeSelectionHeader(
                 Icon(
                     imageVector = Icons.Outlined.Palette,
                     contentDescription = null,
-                    tint = BBColors.Primary
+                    tint = MaterialTheme.colorScheme.primary
                 )
 
                 Text(
                     text = "Görünüm",
                     style = MaterialTheme.typography.labelLarge,
-                    color = BBColors.Primary,
+                    color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.SemiBold
                 )
             }
@@ -160,7 +160,7 @@ private fun ThemeOptionCard(
             Icon(
                 imageVector = option.icon,
                 contentDescription = null,
-                tint = BBColors.Primary
+                tint = MaterialTheme.colorScheme.primary
             )
 
             Column(
@@ -185,7 +185,7 @@ private fun ThemeOptionCard(
                 Icon(
                     imageVector = Icons.Outlined.CheckCircle,
                     contentDescription = null,
-                    tint = BBColors.Primary
+                    tint = MaterialTheme.colorScheme.primary
                 )
             }
         }
@@ -207,7 +207,7 @@ private fun ThemeSelectionInfoCard() {
             Icon(
                 imageVector = Icons.Outlined.PhoneAndroid,
                 contentDescription = null,
-                tint = BBColors.Primary
+                tint = MaterialTheme.colorScheme.primary
             )
 
             Column(

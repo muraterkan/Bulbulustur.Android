@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Shared
+package com.bulbulustur.android.Application.Views.Shared
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -173,7 +173,7 @@ private fun LogonPublicHeader(
                 color = MaterialTheme.colorScheme.surface,
                 border = BorderStroke(
                     width = 1.dp,
-                    color = BBColors.Border
+                    color = MaterialTheme.colorScheme.outlineVariant
                 )
             ) {
                 Row(
@@ -195,7 +195,7 @@ private fun LogonPublicHeader(
                         text = selectedLanguage.label,
                         style = MaterialTheme.typography.labelLarge,
                         fontWeight = FontWeight.SemiBold,
-                        color = BBColors.TextStrong
+                        color = MaterialTheme.colorScheme.onSurface
                     )
 
                     Icon(
@@ -219,7 +219,7 @@ private fun LogonPublicHeader(
                             Text(
                                 text = language.label,
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = BBColors.TextStrong
+                                color = MaterialTheme.colorScheme.onSurface
                             )
                         },
                         onClick = {
@@ -227,7 +227,7 @@ private fun LogonPublicHeader(
                             onLanguageSelected(language)
                         },
                         colors = MenuDefaults.itemColors(
-                            textColor = BBColors.TextStrong
+                            textColor = MaterialTheme.colorScheme.onSurface
                         )
                     )
                 }
@@ -247,7 +247,7 @@ fun LogonPublicPageTitle(
         modifier = modifier.fillMaxWidth()
     ) {
         Surface(
-            color = BBColors.PrimarySoft,
+            color = MaterialTheme.colorScheme.primaryContainer,
             shape = BBRadius.Badge
         ) {
             Text(
@@ -257,7 +257,7 @@ fun LogonPublicPageTitle(
                 ),
                 text = eyebrow,
                 style = MaterialTheme.typography.labelMedium,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.SemiBold
             )
         }
@@ -268,7 +268,7 @@ fun LogonPublicPageTitle(
             text = title,
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold,
-            color = BBColors.TextStrong
+            color = MaterialTheme.colorScheme.onSurface
         )
 
         Spacer(modifier = Modifier.height(BBSpacing.Space2))
@@ -276,7 +276,7 @@ fun LogonPublicPageTitle(
         Text(
             text = description,
             style = MaterialTheme.typography.bodyMedium,
-            color = BBColors.TextSubtle
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -305,7 +305,7 @@ fun LogonPublicFieldLabel(
             }
         },
         style = MaterialTheme.typography.labelLarge,
-        color = BBColors.TextStrong
+        color = MaterialTheme.colorScheme.onSurface
     )
 }
 
@@ -331,7 +331,7 @@ fun LogonPublicTextField(
                 Text(
                     text = placeholder,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = BBColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         },
@@ -339,19 +339,19 @@ fun LogonPublicTextField(
         visualTransformation = visualTransformation,
         keyboardOptions = keyboardOptions,
         colors = TextFieldDefaults.colors(
-            focusedContainerColor = BBColors.SurfaceMuted,
-            unfocusedContainerColor = BBColors.SurfaceMuted,
-            disabledContainerColor = BBColors.SurfaceMuted,
-            focusedIndicatorColor = BBColors.BorderStrong,
-            unfocusedIndicatorColor = BBColors.Border,
-            disabledIndicatorColor = BBColors.Border,
+            focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+            disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+            focusedIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
+            unfocusedIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
+            disabledIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
             cursorColor = MaterialTheme.colorScheme.primary,
-            focusedTextColor = BBColors.TextStrong,
-            unfocusedTextColor = BBColors.TextStrong,
-            focusedPlaceholderColor = BBColors.TextMuted,
-            unfocusedPlaceholderColor = BBColors.TextMuted,
-            focusedTrailingIconColor = BBColors.TextSubtle,
-            unfocusedTrailingIconColor = BBColors.TextSubtle
+            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+            focusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            focusedTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            unfocusedTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant
         ),
         shape = BBRadius.Input
     )
@@ -368,19 +368,19 @@ fun LogonDividerWithText(
     ) {
         HorizontalDivider(
             modifier = Modifier.weight(1f),
-            color = BBColors.Border
+            color = MaterialTheme.colorScheme.outlineVariant
         )
 
         Text(
             modifier = Modifier.padding(horizontal = BBSpacing.Space4),
             text = text,
             style = MaterialTheme.typography.bodySmall,
-            color = BBColors.TextMuted
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         HorizontalDivider(
             modifier = Modifier.weight(1f),
-            color = BBColors.Border
+            color = MaterialTheme.colorScheme.outlineVariant
         )
     }
 }
@@ -393,7 +393,7 @@ fun LogonPublicDefaultFooter(
         modifier = modifier.fillMaxWidth(),
         text = "Â© 2026 Bulbulustur - Tüm hakları saklıdır",
         style = MaterialTheme.typography.bodySmall,
-        color = BBColors.TextMuted,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
         textAlign = TextAlign.Center
     )
 }
@@ -415,7 +415,7 @@ fun LogonPublicRegisterLegalFooter(
         )
         withStyle(
             style = SpanStyle(
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
         ) {
@@ -431,7 +431,7 @@ fun LogonPublicRegisterLegalFooter(
         )
         withStyle(
             style = SpanStyle(
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
         ) {
@@ -446,7 +446,7 @@ fun LogonPublicRegisterLegalFooter(
         modifier = modifier.fillMaxWidth(),
         text = text,
         style = MaterialTheme.typography.bodySmall.copy(
-            color = BBColors.TextMuted,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center
         ),
         onClick = { offset ->

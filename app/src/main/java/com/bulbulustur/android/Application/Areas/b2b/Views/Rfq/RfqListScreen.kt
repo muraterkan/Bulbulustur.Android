@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2b.Views.Rfq
+package com.bulbulustur.android.Application.Areas.b2b.Views.Rfq
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -63,13 +63,13 @@ fun RfqListScreen(
     val rfqRequests = getDemoRfqRequests()
 
     Scaffold(
-        containerColor = BBColors.SurfaceMuted,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "Fiyat Teklifi Ä°stekleri",
+                title = "Fiyat Teklifi İstekleri",
                 onBackClick = onBackClick,
                 actionIcon = Icons.Outlined.Add,
-                actionContentDescription = "Teklif Ä°ste",
+                actionContentDescription = "Teklif İste",
                 onActionClick = onCreateRfqClick
             )
         },
@@ -91,7 +91,7 @@ fun RfqListScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BBColors.SurfaceMuted)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding),
             contentPadding = PaddingValues(
                 start = BBSpacing.PageHorizontal,
@@ -155,7 +155,7 @@ private fun RfqCreateActionCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Yeni Teklif Ä°ste",
+                    text = "Yeni Teklif İste",
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -263,7 +263,7 @@ private fun RfqRequestCard(
             )
 
             HorizontalDivider(
-                color = BBColors.Border
+                color = MaterialTheme.colorScheme.outlineVariant
             )
 
             Row(
@@ -405,7 +405,7 @@ private fun RfqEmptyState(
             )
 
             Text(
-                text = "Henüz Teklif Ä°stemadınız",
+                text = "Henüz Teklif İstemadınız",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )

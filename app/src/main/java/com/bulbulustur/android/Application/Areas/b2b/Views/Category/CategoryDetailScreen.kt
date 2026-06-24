@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2b.Views.Category
+package com.bulbulustur.android.Application.Areas.b2b.Views.Category
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -513,7 +513,7 @@ private fun getWholesaleSubCategories(): List<WholesaleSubCategoryItem> {
         ),
         WholesaleSubCategoryItem(
             categoryId = 102,
-            name = "Poşet ve Ã‡anta",
+            name = "Poşet ve Çanta",
             description = "MaĞaza, kargo ve üretim süreçleri için poşet çözümleri.",
             productCount = 28,
             icon = Icons.Outlined.Business

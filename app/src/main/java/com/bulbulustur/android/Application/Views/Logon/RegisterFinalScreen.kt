@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Logon
+package com.bulbulustur.android.Application.Views.Logon
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -105,8 +105,8 @@ private fun RegisterFinalStatusIcon(
     Surface(
         color = when (finalState) {
             RegisterFinalState.Completed -> BBColors.Green.Green50
-            RegisterFinalState.WaitingEmailVerification -> BBColors.SurfaceMuted
-            RegisterFinalState.WaitingApproval -> BBColors.PrimarySoft
+            RegisterFinalState.WaitingEmailVerification -> MaterialTheme.colorScheme.surfaceVariant
+            RegisterFinalState.WaitingApproval -> MaterialTheme.colorScheme.primaryContainer
         },
         shape = BBRadius.PillShape
     ) {
@@ -123,8 +123,8 @@ private fun RegisterFinalStatusIcon(
                 contentDescription = null,
                 tint = when (finalState) {
                     RegisterFinalState.Completed -> BBColors.Green.Green700
-                    RegisterFinalState.WaitingEmailVerification -> BBColors.TextStrong
-                    RegisterFinalState.WaitingApproval -> BBColors.TextStrong
+                    RegisterFinalState.WaitingEmailVerification -> MaterialTheme.colorScheme.onSurface
+                    RegisterFinalState.WaitingApproval -> MaterialTheme.colorScheme.onSurface
                 },
                 modifier = Modifier.size(BBIcon.Size3Xl)
             )
@@ -138,7 +138,7 @@ private fun RegisterFinalEmailBox(
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        color = BBColors.SurfaceMuted,
+        color = MaterialTheme.colorScheme.surfaceVariant,
         shape = BBRadius.Card
     ) {
         Column(
@@ -148,7 +148,7 @@ private fun RegisterFinalEmailBox(
             Text(
                 text = "DoĞrulama adresi",
                 style = MaterialTheme.typography.labelMedium,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Spacer(modifier = Modifier.height(BBSpacing.Space1))
@@ -157,7 +157,7 @@ private fun RegisterFinalEmailBox(
                 text = email,
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
-                color = BBColors.TextStrong
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
     }
@@ -205,18 +205,18 @@ private fun RegisterFinalStepItem(
     val numberBackground = if (isCompleted) {
         MaterialTheme.colorScheme.primary
     } else {
-        BBColors.Surface
+        MaterialTheme.colorScheme.surface
     }
 
     val numberColor = if (isCompleted) {
         MaterialTheme.colorScheme.onPrimary
     } else {
-        BBColors.TextMuted
+        MaterialTheme.colorScheme.onSurfaceVariant
     }
 
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        color = BBColors.SurfaceMuted,
+        color = MaterialTheme.colorScheme.surfaceVariant,
         shape = BBRadius.Card
     ) {
         Row(
@@ -248,7 +248,7 @@ private fun RegisterFinalStepItem(
                     text = title,
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
-                    color = BBColors.TextStrong
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Spacer(modifier = Modifier.height(BBSpacing.Space1))
@@ -256,7 +256,7 @@ private fun RegisterFinalStepItem(
                 Text(
                     text = description,
                     style = MaterialTheme.typography.bodySmall,
-                    color = BBColors.TextSubtle
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -267,7 +267,7 @@ private fun RegisterFinalStepItem(
 private fun RegisterFinalInfoBox() {
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        color = BBColors.PrimarySoft,
+        color = MaterialTheme.colorScheme.primaryContainer,
         shape = BBRadius.Card
     ) {
         Column(
@@ -277,7 +277,7 @@ private fun RegisterFinalInfoBox() {
                 text = "Küçük not",
                 style = MaterialTheme.typography.labelLarge,
                 fontWeight = FontWeight.Bold,
-                color = BBColors.TextStrong
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Spacer(modifier = Modifier.height(BBSpacing.Space1))
@@ -285,7 +285,7 @@ private fun RegisterFinalInfoBox() {
             Text(
                 text = "E-postayı görmüyorsanız spam veya gereksiz klasörünü kontrol edin.",
                 style = MaterialTheme.typography.bodySmall,
-                color = BBColors.TextSubtle
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -310,7 +310,7 @@ enum class RegisterFinalState(
 
     WaitingApproval(
         badgeText = "Kontrol Bekleniyor",
-        title = "Kurumsal Hesap Ä°nceleniyor",
+        title = "Kurumsal Hesap İnceleniyor",
         description = "Firma hesabınız kontrol sürecine alındı. OnaylandıĞında giriş yapabilirsiniz."
     )
 }

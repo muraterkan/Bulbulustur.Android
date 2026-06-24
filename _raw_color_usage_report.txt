@@ -1,0 +1,30 @@
+﻿=== Raw Color(...) Usage Outside BBColors ===
+C:\DEV\Mobile\Bulbulustur.Android\app\src\main\java\com\bulbulustur\android\Application\wwwroot\DesignObjects\BadgeDesign.kt:55: val containerColor = getBbBadgeContainerColor(variant)
+C:\DEV\Mobile\Bulbulustur.Android\app\src\main\java\com\bulbulustur\android\Application\wwwroot\DesignObjects\BadgeDesign.kt:56: val contentColor = getBbBadgeContentColor(variant)
+C:\DEV\Mobile\Bulbulustur.Android\app\src\main\java\com\bulbulustur\android\Application\wwwroot\DesignObjects\BadgeDesign.kt:75: color = getBbBadgeBorderColor(variant)
+C:\DEV\Mobile\Bulbulustur.Android\app\src\main\java\com\bulbulustur\android\Application\wwwroot\DesignObjects\BadgeDesign.kt:117: containerColor = getBbBadgeContainerColor(variant),
+C:\DEV\Mobile\Bulbulustur.Android\app\src\main\java\com\bulbulustur\android\Application\wwwroot\DesignObjects\BadgeDesign.kt:118: contentColor = getBbBadgeContentColor(variant)
+C:\DEV\Mobile\Bulbulustur.Android\app\src\main\java\com\bulbulustur\android\Application\wwwroot\DesignObjects\BadgeDesign.kt:134: private fun getBbBadgeContainerColor(
+C:\DEV\Mobile\Bulbulustur.Android\app\src\main\java\com\bulbulustur\android\Application\wwwroot\DesignObjects\BadgeDesign.kt:153: private fun getBbBadgeContentColor(
+C:\DEV\Mobile\Bulbulustur.Android\app\src\main\java\com\bulbulustur\android\Application\wwwroot\DesignObjects\BadgeDesign.kt:172: private fun getBbBadgeBorderColor(
+C:\DEV\Mobile\Bulbulustur.Android\app\src\main\java\com\bulbulustur\android\Application\wwwroot\DesignObjects\ChipDesign.kt:81: selectedContainerColor = getBbChipContainerColor(variant, selected = true),
+C:\DEV\Mobile\Bulbulustur.Android\app\src\main\java\com\bulbulustur\android\Application\wwwroot\DesignObjects\ChipDesign.kt:82: selectedLabelColor = getBbChipContentColor(variant, selected = true),
+C:\DEV\Mobile\Bulbulustur.Android\app\src\main\java\com\bulbulustur\android\Application\wwwroot\DesignObjects\ChipDesign.kt:83: selectedLeadingIconColor = getBbChipContentColor(variant, selected = true),
+C:\DEV\Mobile\Bulbulustur.Android\app\src\main\java\com\bulbulustur\android\Application\wwwroot\DesignObjects\ChipDesign.kt:84: selectedTrailingIconColor = getBbChipContentColor(variant, selected = true),
+C:\DEV\Mobile\Bulbulustur.Android\app\src\main\java\com\bulbulustur\android\Application\wwwroot\DesignObjects\ChipDesign.kt:85: containerColor = getBbChipContainerColor(variant, selected = false),
+C:\DEV\Mobile\Bulbulustur.Android\app\src\main\java\com\bulbulustur\android\Application\wwwroot\DesignObjects\ChipDesign.kt:86: labelColor = getBbChipContentColor(variant, selected = false),
+C:\DEV\Mobile\Bulbulustur.Android\app\src\main\java\com\bulbulustur\android\Application\wwwroot\DesignObjects\ChipDesign.kt:87: disabledContainerColor = getBbChipContainerColor(variant, selected = false).copy(alpha = BBAlpha.DisabledContainer),
+C:\DEV\Mobile\Bulbulustur.Android\app\src\main\java\com\bulbulustur\android\Application\wwwroot\DesignObjects\ChipDesign.kt:88: disabledLabelColor = getBbChipContentColor(variant, selected = false).copy(alpha = BBAlpha.DisabledLabel)
+C:\DEV\Mobile\Bulbulustur.Android\app\src\main\java\com\bulbulustur\android\Application\wwwroot\DesignObjects\ChipDesign.kt:107: containerColor = getBbChipContainerColor(variant, selected = false),
+C:\DEV\Mobile\Bulbulustur.Android\app\src\main\java\com\bulbulustur\android\Application\wwwroot\DesignObjects\ChipDesign.kt:108: labelColor = getBbChipContentColor(variant, selected = false),
+C:\DEV\Mobile\Bulbulustur.Android\app\src\main\java\com\bulbulustur\android\Application\wwwroot\DesignObjects\ChipDesign.kt:109: leadingIconContentColor = getBbChipContentColor(variant, selected = false),
+C:\DEV\Mobile\Bulbulustur.Android\app\src\main\java\com\bulbulustur\android\Application\wwwroot\DesignObjects\ChipDesign.kt:110: trailingIconContentColor = getBbChipContentColor(variant, selected = false),
+C:\DEV\Mobile\Bulbulustur.Android\app\src\main\java\com\bulbulustur\android\Application\wwwroot\DesignObjects\ChipDesign.kt:111: disabledContainerColor = getBbChipContainerColor(variant, selected = false).copy(alpha = BBAlpha.DisabledContainer),
+C:\DEV\Mobile\Bulbulustur.Android\app\src\main\java\com\bulbulustur\android\Application\wwwroot\DesignObjects\ChipDesign.kt:112: disabledLabelColor = getBbChipContentColor(variant, selected = false).copy(alpha = BBAlpha.DisabledLabel)
+C:\DEV\Mobile\Bulbulustur.Android\app\src\main\java\com\bulbulustur\android\Application\wwwroot\DesignObjects\ChipDesign.kt:138: containerColor = getBbChipContainerColor(variant, selected = false),
+C:\DEV\Mobile\Bulbulustur.Android\app\src\main\java\com\bulbulustur\android\Application\wwwroot\DesignObjects\ChipDesign.kt:139: labelColor = getBbChipContentColor(variant, selected = false),
+C:\DEV\Mobile\Bulbulustur.Android\app\src\main\java\com\bulbulustur\android\Application\wwwroot\DesignObjects\ChipDesign.kt:140: iconContentColor = getBbChipContentColor(variant, selected = false),
+C:\DEV\Mobile\Bulbulustur.Android\app\src\main\java\com\bulbulustur\android\Application\wwwroot\DesignObjects\ChipDesign.kt:141: disabledContainerColor = getBbChipContainerColor(variant, selected = false).copy(alpha = BBAlpha.DisabledContainer),
+C:\DEV\Mobile\Bulbulustur.Android\app\src\main\java\com\bulbulustur\android\Application\wwwroot\DesignObjects\ChipDesign.kt:142: disabledLabelColor = getBbChipContentColor(variant, selected = false).copy(alpha = BBAlpha.DisabledLabel)
+C:\DEV\Mobile\Bulbulustur.Android\app\src\main\java\com\bulbulustur\android\Application\wwwroot\DesignObjects\ChipDesign.kt:200: private fun getBbChipContainerColor(
+C:\DEV\Mobile\Bulbulustur.Android\app\src\main\java\com\bulbulustur\android\Application\wwwroot\DesignObjects\ChipDesign.kt:260: private fun getBbChipContentColor(

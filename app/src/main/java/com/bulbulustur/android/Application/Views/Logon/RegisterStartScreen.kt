@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Logon
+package com.bulbulustur.android.Application.Views.Logon
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -88,7 +88,7 @@ fun RegisterStartScreen(
         Text(
             text = "Hesap Türü",
             style = MaterialTheme.typography.labelLarge,
-            color = BBColors.TextStrong,
+            color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.SemiBold
         )
 
@@ -192,7 +192,7 @@ fun RegisterStartScreen(
         Spacer(modifier = Modifier.height(BBSpacing.Space4))
 
         LogonPublicFieldLabel(
-            text = "Åifre"
+            text = "Şifre"
         )
 
         Spacer(modifier = Modifier.height(BBSpacing.Space2))
@@ -202,7 +202,7 @@ fun RegisterStartScreen(
             onValueChange = {
                 password = it
             },
-            placeholder = "Åifreniz",
+            placeholder = "Şifreniz",
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password
@@ -241,7 +241,7 @@ fun RegisterStartScreen(
             Text(
                 text = "Zaten hesabınız var mı?",
                 style = MaterialTheme.typography.bodySmall,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             TextButton(
@@ -251,7 +251,7 @@ fun RegisterStartScreen(
                     text = "Giriş Yap",
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
-                    color = BBColors.TextStrong
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
         }
@@ -269,25 +269,25 @@ private fun RegisterAccountTypeCard(
     val borderColor = if (isSelected) {
         MaterialTheme.colorScheme.primary
     } else {
-        BBColors.Border
+        MaterialTheme.colorScheme.outlineVariant
     }
 
     val backgroundColor = if (isSelected) {
-        BBColors.PrimarySoft
+        MaterialTheme.colorScheme.primaryContainer
     } else {
-        BBColors.SurfaceMuted
+        MaterialTheme.colorScheme.surfaceVariant
     }
 
     val titleColor = if (isSelected) {
-        BBColors.TextStrong
+        MaterialTheme.colorScheme.onSurface
     } else {
-        BBColors.TextStrong
+        MaterialTheme.colorScheme.onSurface
     }
 
     val descriptionColor = if (isSelected) {
-        BBColors.TextSubtle
+        MaterialTheme.colorScheme.onSurfaceVariant
     } else {
-        BBColors.TextMuted
+        MaterialTheme.colorScheme.onSurfaceVariant
     }
 
     Surface(

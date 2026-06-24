@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Home
+package com.bulbulustur.android.Application.Views.Home
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -190,7 +190,7 @@ private fun ModeSelectionHeader() {
                             expanded = false
                         },
                         colors = MenuDefaults.itemColors(
-                            textColor = BBColors.TextStrong
+                            textColor = MaterialTheme.colorScheme.onSurface
                         )
                     )
                 }
@@ -373,7 +373,7 @@ private fun ModeSelectionLegalFooter() {
             Text(
                 text = "Kullanım Koşulları",
                 style = MaterialTheme.typography.labelSmall,
-                color = BBColors.TextSubtle,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontWeight = FontWeight.SemiBold
             )
         }
@@ -381,7 +381,7 @@ private fun ModeSelectionLegalFooter() {
         Text(
             text = "·",
             style = MaterialTheme.typography.labelSmall,
-            color = BBColors.TextMuted
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         TextButton(
@@ -394,7 +394,7 @@ private fun ModeSelectionLegalFooter() {
             Text(
                 text = "Gizlilik Politikası",
                 style = MaterialTheme.typography.labelSmall,
-                color = BBColors.TextSubtle,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontWeight = FontWeight.SemiBold
             )
         }

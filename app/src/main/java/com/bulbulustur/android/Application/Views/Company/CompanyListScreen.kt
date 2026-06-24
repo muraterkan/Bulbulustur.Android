@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Company
+package com.bulbulustur.android.Application.Views.Company
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -358,7 +358,7 @@ private fun CompanyListCard(
                 )
 
                 CompanySmallActionCard(
-                    title = "Ä°letişime geç",
+                    title = "İletişime geç",
                     icon = Icons.Outlined.Mail,
                     modifier = Modifier.weight(1f),
                     onClick = onMessageClick
@@ -441,7 +441,7 @@ private fun CompanyInfoGrid(
             )
 
             CompanyInfoBox(
-                title = "Ä°ş modeli",
+                title = "İş modeli",
                 value = company.BusinessModel,
                 modifier = Modifier.weight(1f)
             )
@@ -619,10 +619,10 @@ private fun getCompanyFilterNames(): List<String> {
         "DoĞrulanmış",
         "Üretici",
         "Toptancı",
-        "Ä°hracatçı",
-        "Ä°stanbul",
+        "İhracatçı",
+        "İstanbul",
         "Ankara",
-        "Ä°zmir"
+        "İzmir"
     )
 }
 
@@ -630,10 +630,10 @@ private fun getCompanyListItems(): List<CompanyListItem> {
     return listOf(
         CompanyListItem(
             CompanyId = 1,
-            Name = "Bulbulustur Ä°nternet Teknolojileri ve Tic. A.Å.",
+            Name = "Bulbulustur İnternet Teknolojileri ve Tic. A.Ş.",
             Description = "Yazılım, dijital dönüşüm ve ticaret altyapıları alanında çözüm saĞlayan firma.",
             Country = "Türkiye",
-            City = "Ä°stanbul",
+            City = "İstanbul",
             Rating = "4,2",
             TradeRegistryNumber = "-",
             Capability = "Tasarım kaynaklı özelleştirme, yurt dışı mühendis hizmeti",
@@ -651,7 +651,7 @@ private fun getCompanyListItems(): List<CompanyListItem> {
             City = "Kocaeli",
             Rating = "4,6",
             TradeRegistryNumber = "245981",
-            Capability = "Ã–zel üretim, baskılı ambalaj, hızlı sevkiyat",
+            Capability = "Özel üretim, baskılı ambalaj, hızlı sevkiyat",
             BusinessModel = "Üretici, Toptancı",
             ProductCount = 42,
             LogoText = "AA",

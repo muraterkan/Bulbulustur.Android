@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Account
+package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -19,6 +19,7 @@ import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Policy
 import androidx.compose.material.icons.outlined.Segment
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -52,7 +53,7 @@ fun LegalPolicyDetailScreen(
     }
 
     Scaffold(
-        containerColor = BBColors.SurfaceMuted,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
                 title = policy.title,
@@ -63,7 +64,7 @@ fun LegalPolicyDetailScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BBColors.SurfaceMuted)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding),
             contentPadding = PaddingValues(
                 start = BBSpacing.PageHorizontal,
@@ -149,7 +150,7 @@ private fun LegalPolicyDetailHeroCard(
                     Text(
                         text = policy.title,
                         style = BbTypography.titleLarge,
-                        color = BBColors.TextStrong,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold
                     )
                 }
@@ -158,7 +159,7 @@ private fun LegalPolicyDetailHeroCard(
             Text(
                 text = policy.summary,
                 style = BbTypography.bodyMedium,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.SemiBold,
                 maxLines = 1
             )
@@ -211,7 +212,7 @@ private fun LegalPolicyMetaRow(
         Box(
             modifier = Modifier
                 .background(
-                    color = BBColors.SurfaceMuted,
+                    color = MaterialTheme.colorScheme.surfaceVariant,
                     shape = BBRadius.LgShape
                 )
                 .padding(BBSpacing.Space2),
@@ -220,7 +221,7 @@ private fun LegalPolicyMetaRow(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = BBColors.TextStrong,
+                tint = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.height(BBIcon.Ui)
             )
         }
@@ -228,14 +229,14 @@ private fun LegalPolicyMetaRow(
         Text(
             text = title,
             style = BbTypography.titleSmall,
-            color = BBColors.TextStrong,
+            color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.weight(1f)
         )
 
         Text(
             text = value,
             style = BbTypography.bodyMedium,
-            color = BBColors.TextMuted
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -281,14 +282,14 @@ private fun LegalPolicyTextSection(
             Text(
                 text = number.toString(),
                 style = BbTypography.titleSmall,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
                 text = section.title,
                 style = BbTypography.titleSmall,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
         }
@@ -296,7 +297,7 @@ private fun LegalPolicyTextSection(
         Text(
             text = section.body,
             style = BbTypography.bodyMedium,
-            color = BBColors.TextSubtle
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -318,7 +319,7 @@ private fun LegalPolicyOpenWebCard(
             Box(
                 modifier = Modifier
                     .background(
-                        color = BBColors.PrimarySoft,
+                        color = MaterialTheme.colorScheme.primaryContainer,
                         shape = BBRadius.LgShape
                     )
                     .padding(BBSpacing.Space2),
@@ -327,7 +328,7 @@ private fun LegalPolicyOpenWebCard(
                 Icon(
                     imageVector = Icons.Outlined.Language,
                     contentDescription = null,
-                    tint = BBColors.TextStrong,
+                    tint = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.height(BBIcon.Ui)
                 )
             }
@@ -337,23 +338,23 @@ private fun LegalPolicyOpenWebCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Webâ€™de Aç",
+                    text = "Weby'de Aç",
                     style = BbTypography.titleSmall,
-                    color = BBColors.TextStrong,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
                 )
 
                 Text(
                     text = "Metnin güncel web sürümünü tarayıcıda inceleyin.",
                     style = BbTypography.bodySmall,
-                    color = BBColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
             Icon(
                 imageVector = Icons.Outlined.ChevronRight,
                 contentDescription = null,
-                tint = BBColors.TextMuted,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.height(BBIcon.Ui)
             )
         }
@@ -362,13 +363,15 @@ private fun LegalPolicyOpenWebCard(
 
 @Composable
 private fun LegalDetailDashedDivider() {
+    val dividerColor = MaterialTheme.colorScheme.outlineVariant
+
     Canvas(
         modifier = Modifier
             .fillMaxWidth()
             .height(BBSpacing.BorderThin)
     ) {
         drawLine(
-            color = BBColors.Border,
+            color = dividerColor,
             start = Offset(0f, 0f),
             end = Offset(size.width, 0f),
             strokeWidth = 1.dp.toPx(),
@@ -410,7 +413,7 @@ private fun getLegalPolicyDetail(
             body = "Kullanıcılar platformu kullanırken doĞru bilgi paylaşmak, hesap güvenliĞini korumak ve platform kurallarına uygun hareket etmekle yükümlüdür."
         ),
         LegalPolicyDetailSection(
-            title = "Veri ve Ä°şlem GüvenliĞi",
+            title = "Veri ve İşlem GüvenliĞi",
             body = "Bulbulustur, kullanıcı verilerinin korunması ve işlem güvenliĞinin saĞlanması için teknik ve idari önlemler alır. Detaylı içerik ilgili politika metninde açıklanır."
         ),
         LegalPolicyDetailSection(
@@ -449,9 +452,9 @@ private fun getLegalPolicyDetail(
 
         "cookie-policy" -> LegalPolicyDetail(
             key = key,
-            title = "Ã‡erez Politikası",
+            title = "Çerez Politikası",
             category = "Politikalar",
-            summary = "Ã‡erez ve benzeri teknolojilerin kullanım detayları.",
+            summary = "Çerez ve benzeri teknolojilerin kullanım detayları.",
             updatedAt = "01/30/2025",
             webUrl = "https://www.bulbulustur.com/support/condition/2/politikalar",
             sections = baseSections

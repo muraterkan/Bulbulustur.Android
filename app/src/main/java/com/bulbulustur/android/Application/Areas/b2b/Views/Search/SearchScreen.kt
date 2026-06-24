@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2b.Views.Search
+package com.bulbulustur.android.Application.Areas.b2b.Views.Search
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -104,7 +104,7 @@ fun SearchScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Ã–nerilen kategoriler",
+                    title = "Önerilen kategoriler",
                     subtitle = "Aramaya başlamadan hızlı kategori girişi"
                 )
             }
@@ -128,7 +128,7 @@ fun SearchScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Ã–ne çıkan firmalar",
+                    title = "Öne çıkan firmalar",
                     subtitle = "Dummy firma sonuçları"
                 )
             }
@@ -152,7 +152,7 @@ fun SearchScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Ã–ne Ã‡ıkan Ürünler",
+                    title = "Öne Çıkan Ürünler",
                     subtitle = "API sonrası gerçek arama sonuçları burada listelenecek"
                 )
             }
@@ -476,7 +476,7 @@ private fun getWholesaleSearchCompanyResults(): List<WholesaleSearchCompanyResul
             companyId = 1,
             name = "Anadolu Ambalaj Sanayi",
             description = "Koli, kutu ve e-ticaret ambalaj ürünleri firması.",
-            city = "Ä°stanbul",
+            city = "İstanbul",
             productCount = 42,
             icon = Icons.Outlined.Business
         ),
@@ -496,7 +496,7 @@ private fun getWholesaleSearchProductResults(): List<WholesaleSearchProductResul
         WholesaleSearchProductResult(
             productId = 1,
             name = "E-ticaret Kargo Kolisi",
-            description = "Ã‡oklu ölçü seçeneĞiyle toptan koli ürünü.",
+            description = "Çoklu ölçü seçeneĞiyle toptan koli ürünü.",
             companyName = "Anadolu Ambalaj",
             minimumOrderQuantity = 100,
             icon = Icons.Outlined.Inventory2

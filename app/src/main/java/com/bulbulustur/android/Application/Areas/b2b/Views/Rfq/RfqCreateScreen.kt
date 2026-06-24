@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2b.Views.Rfq
+package com.bulbulustur.android.Application.Areas.b2b.Views.Rfq
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -111,10 +111,10 @@ fun RfqCreateScreen(
     }
 
     Scaffold(
-        containerColor = BBColors.SurfaceMuted,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "Teklif Ä°ste",
+                title = "Teklif İste",
                 onBackClick = onBackClick
             )
         },
@@ -136,7 +136,7 @@ fun RfqCreateScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BBColors.SurfaceMuted)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding),
             contentPadding = PaddingValues(
                 start = BBSpacing.PageHorizontal,
@@ -164,7 +164,7 @@ fun RfqCreateScreen(
                             productName.value = it
                         },
                         label = "Ürün adı",
-                        placeholder = "Ã–rn. Endüstriyel vana",
+                        placeholder = "Örn. Endüstriyel vana",
                         icon = Icons.Outlined.Inventory2
                     )
 
@@ -174,7 +174,7 @@ fun RfqCreateScreen(
                             categoryName.value = it
                         },
                         label = "Kategori",
-                        placeholder = "Ã–rn. Ambalaj ve Paketleme",
+                        placeholder = "Örn. Ambalaj ve Paketleme",
                         icon = Icons.Outlined.Category
                     )
 
@@ -245,7 +245,7 @@ fun RfqCreateScreen(
                             materialName.value = it
                         },
                         label = "Malzeme",
-                        placeholder = "Ã–rn. Kraft / Metal / Plastik",
+                        placeholder = "Örn. Kraft / Metal / Plastik",
                         icon = Icons.Outlined.Verified
                     )
 
@@ -254,7 +254,7 @@ fun RfqCreateScreen(
                         onValueChange = {
                             paymentTerm.value = it
                         },
-                        label = "Ã–deme şartı",
+                        label = "Ödeme şartı",
                         placeholder = "Peşin / Vadeli / Görüşülebilir",
                         icon = Icons.Outlined.Payments
                     )
@@ -275,7 +275,7 @@ fun RfqCreateScreen(
                             shippingTarget.value = it
                         },
                         label = "Nakliye hedefi",
-                        placeholder = "Türkiye / Ä°stanbul / Ambarlı Port",
+                        placeholder = "Türkiye / İstanbul / Ambarlı Port",
                         icon = Icons.Outlined.LocalShipping
                     )
                 }
@@ -435,11 +435,11 @@ private fun RfqTextField(
             unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
             focusedContainerColor = MaterialTheme.colorScheme.surface,
             unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-            focusedIndicatorColor = BBColors.Primary,
+            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
             unfocusedIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
             focusedLabelColor = BBColors.Yellow.Yellow800,
             unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            cursorColor = BBColors.Primary
+            cursorColor = MaterialTheme.colorScheme.primary
         )
     )
 }
@@ -469,11 +469,11 @@ private fun RfqLongTextField(
             unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
             focusedContainerColor = MaterialTheme.colorScheme.surface,
             unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-            focusedIndicatorColor = BBColors.Primary,
+            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
             unfocusedIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
             focusedLabelColor = BBColors.Yellow.Yellow800,
             unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            cursorColor = BBColors.Primary
+            cursorColor = MaterialTheme.colorScheme.primary
         )
     )
 }
@@ -549,7 +549,7 @@ private fun RfqSubmitCard(
             )
 
             Text(
-                text = "API baĞlantısından sonra bu form gerçek RFQ endpointâ€™ine gönderilecek.",
+                text = "API baĞlantısından sonra bu form gerçek RFQ endpointy'ine gönderilecek.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -607,7 +607,7 @@ private fun rfqSuggestionTexts(): List<RfqSuggestionText> {
             description = "Ürünün renk, malzeme ve yüzey özellikleri için teklif almak istiyorum."
         ),
         RfqSuggestionText(
-            title = "Ã–lçü / Teknik Detay",
+            title = "Ölçü / Teknik Detay",
             description = "Ürün için teknik ölçüler, üretim toleransları ve kullanım alanı hakkında teklif almak istiyorum."
         ),
         RfqSuggestionText(
@@ -615,7 +615,7 @@ private fun rfqSuggestionTexts(): List<RfqSuggestionText> {
             description = "Ürünün ambalaj, etiket ve logo baskı seçenekleriyle birlikte fiyatlandırılmasını istiyorum."
         ),
         RfqSuggestionText(
-            title = "Teslimat / Ã–deme",
+            title = "Teslimat / Ödeme",
             description = "Teslimat süresi, ödeme şartı, nakliye hedefi ve ticari koşulların teklifte belirtilmesini istiyorum."
         )
     )

@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Preference
+package com.bulbulustur.android.Application.Views.Preference
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -101,7 +101,7 @@ fun UsagePurposeScreen(
 
             item {
                 UsagePurposeOptionCard(
-                    title = "Her Ä°kisini de Kullanıyorum",
+                    title = "Her İkisini de Kullanıyorum",
                     description = "Hem perakende alışveriş hem de toptan ticaret akışlarını görmek istiyorum.",
                     icon = Icons.Outlined.Storefront,
                     isSelected = false,
@@ -146,7 +146,7 @@ private fun UsagePurposeIntroCard() {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Bulbulusturâ€™u En Ã‡ok Hangi Amaçla Kullanıyorsunuz?",
+                    text = "Bulbulustury'u En Çok Hangi Amaçla Kullanıyorsunuz?",
                     style = BbTypography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )

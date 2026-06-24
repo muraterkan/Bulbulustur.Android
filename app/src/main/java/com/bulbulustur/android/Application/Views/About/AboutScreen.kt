@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.About
+package com.bulbulustur.android.Application.Views.About
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -310,7 +310,7 @@ private fun AboutCapabilityGrid() {
 
             AboutCapabilityCard(
                 title = "Global",
-                description = "Ã‡ok dilli ticaret omurgası.",
+                description = "Çok dilli ticaret omurgası.",
                 icon = Icons.Outlined.Public,
                 modifier = Modifier.weight(1f)
             )
@@ -407,7 +407,7 @@ private fun AboutActionArea(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
     ) {
         AboutActionCard(
-            title = "Yatırımcı Ä°lişkileri",
+            title = "Yatırımcı İlişkileri",
             description = "Kurumsal bilgi ve yatırımcı iletişim alanına geç.",
             icon = Icons.Outlined.Business,
             onClick = onInvestorClick
@@ -428,7 +428,7 @@ private fun AboutActionArea(
         )
 
         AboutActionCard(
-            title = "Ä°letişim",
+            title = "İletişim",
             description = "DoĞru ekibe hızlıca ulaş.",
             icon = Icons.Outlined.ChevronRight,
             onClick = onContactClick
@@ -481,7 +481,7 @@ private fun AboutActionCard(
             Icon(
                 imageVector = Icons.Outlined.ChevronRight,
                 contentDescription = null,
-                tint = BBColors.TextMuted
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -512,7 +512,7 @@ private fun aboutStoryItems(): List<AboutStoryItem> {
             icon = Icons.Outlined.Lightbulb
         ),
         AboutStoryItem(
-            title = "Neye Ä°nanıyoruz?",
+            title = "Neye İnanıyoruz?",
             description = "Ticaretin daha görünür, izlenebilir, erişilebilir ve dijital altyapılarla daha güçlü hale gelmesi gerektiĞine inanıyoruz.",
             icon = Icons.Outlined.AutoAwesome
         ),
@@ -532,7 +532,7 @@ private fun aboutPlatformItems(): List<AboutPlatformItem> {
             icon = Icons.Outlined.Storefront
         ),
         AboutPlatformItem(
-            title = "Tedarikçiler ve Åirketler",
+            title = "Tedarikçiler ve Şirketler",
             description = "Firma profili, ürün Vitrinleri, belgeler ve RFQ akışlarıyla görünürlük kazanır.",
             icon = Icons.Outlined.Business
         ),

@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Navigation.Routes
+package com.bulbulustur.android.Application.Navigation.Routes
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController

@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2b.Views.Product
+package com.bulbulustur.android.Application.Areas.b2b.Views.Product
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -56,7 +56,7 @@ fun SampleRequestScreen(
     }
 
     Scaffold(
-        containerColor = BBColors.SurfaceSoft,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
                 title = "Numune Talebi",
@@ -154,28 +154,28 @@ private fun SampleRequestHeader(
                 Icon(
                     imageVector = Icons.Outlined.Science,
                     contentDescription = null,
-                    tint = BBColors.Primary
+                    tint = MaterialTheme.colorScheme.primary
                 )
 
                 Text(
                     text = "Numune Talebi",
                     style = MaterialTheme.typography.labelLarge,
-                    color = BBColors.Primary,
+                    color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.SemiBold
                 )
             }
 
             Text(
-                text = "Numune Ä°steĞi Oluştur",
+                text = "Numune İsteĞi Oluştur",
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
-                color = BBColors.TextStrong
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
                 text = "Toptan alım öncesinde ürünü incelemek için tedarikçiden numune talep edin.",
                 style = MaterialTheme.typography.bodyMedium,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             BbChip(
@@ -202,14 +202,14 @@ private fun SampleProductSummaryCard(
             Text(
                 text = "Tedarikçi",
                 style = MaterialTheme.typography.labelMedium,
-                color = BBColors.Primary,
+                color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.SemiBold
             )
 
             Text(
                 text = productName,
                 style = MaterialTheme.typography.titleMedium,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
 
@@ -255,13 +255,13 @@ private fun SampleRequestHintCard() {
             Icon(
                 imageVector = Icons.Outlined.LocalShipping,
                 contentDescription = null,
-                tint = BBColors.Primary
+                tint = MaterialTheme.colorScheme.primary
             )
 
             Text(
                 text = "Numune talebinizde hedef kullanım amacını, istediĞiniz adet bilgisini ve teslimat notlarını belirtmeniz tedarikçi dönüşünü hızlandırır.",
                 style = MaterialTheme.typography.bodySmall,
-                color = BBColors.TextMuted,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.weight(1f)
             )
         }
@@ -294,15 +294,15 @@ private fun SampleRequestTextField(
         },
         singleLine = true,
         colors = TextFieldDefaults.colors(
-            focusedTextColor = BBColors.TextStrong,
-            unfocusedTextColor = BBColors.TextStrong,
-            focusedContainerColor = BBColors.Surface,
-            unfocusedContainerColor = BBColors.Surface,
-            focusedIndicatorColor = BBColors.Primary,
-            unfocusedIndicatorColor = BBColors.Border,
-            focusedLabelColor = BBColors.Primary,
-            unfocusedLabelColor = BBColors.TextMuted,
-            cursorColor = BBColors.Primary
+            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+            focusedContainerColor = MaterialTheme.colorScheme.surface,
+            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+            unfocusedIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
+            focusedLabelColor = MaterialTheme.colorScheme.primary,
+            unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            cursorColor = MaterialTheme.colorScheme.primary
         )
     )
 }
@@ -327,15 +327,15 @@ private fun SampleRequestLongTextField(
             Text(text = placeholder)
         },
         colors = TextFieldDefaults.colors(
-            focusedTextColor = BBColors.TextStrong,
-            unfocusedTextColor = BBColors.TextStrong,
-            focusedContainerColor = BBColors.Surface,
-            unfocusedContainerColor = BBColors.Surface,
-            focusedIndicatorColor = BBColors.Primary,
-            unfocusedIndicatorColor = BBColors.Border,
-            focusedLabelColor = BBColors.Primary,
-            unfocusedLabelColor = BBColors.TextMuted,
-            cursorColor = BBColors.Primary
+            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+            focusedContainerColor = MaterialTheme.colorScheme.surface,
+            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+            unfocusedIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
+            focusedLabelColor = MaterialTheme.colorScheme.primary,
+            unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            cursorColor = MaterialTheme.colorScheme.primary
         )
     )
 }
@@ -358,7 +358,7 @@ private fun SampleRequestSendCard(
             Icon(
                 imageVector = Icons.Outlined.Send,
                 contentDescription = null,
-                tint = BBColors.Primary
+                tint = MaterialTheme.colorScheme.primary
             )
 
             Column(
@@ -369,20 +369,20 @@ private fun SampleRequestSendCard(
                     text = "Gönder",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = BBColors.TextStrong
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = "Numune isteĞi API baĞlantısından sonra gerçek endpointâ€™e gönderilecek.",
+                    text = "Numune isteĞi API baĞlantısından sonra gerçek endpointy'e gönderilecek.",
                     style = MaterialTheme.typography.bodySmall,
-                    color = BBColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
             Icon(
                 imageVector = Icons.Outlined.Verified,
                 contentDescription = null,
-                tint = BBColors.Primary
+                tint = MaterialTheme.colorScheme.primary
             )
         }
     }

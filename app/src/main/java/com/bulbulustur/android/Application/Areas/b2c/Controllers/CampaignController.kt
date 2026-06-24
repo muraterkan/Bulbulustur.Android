@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2c.Controllers
+package com.bulbulustur.android.Application.Areas.b2c.Controllers
 
 import androidx.lifecycle.viewModelScope
 import com.bulbulustur.android.businesslayer.Core.Util.Execute.IExecuteService

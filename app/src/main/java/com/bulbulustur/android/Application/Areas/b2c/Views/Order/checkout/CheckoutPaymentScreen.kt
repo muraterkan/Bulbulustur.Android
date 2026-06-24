@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout
+package com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -110,8 +110,8 @@ fun CheckoutPaymentScreen(
                 item {
                     CheckoutProgressCard(
                         currentStep = "3",
-                        title = "Ã–deme",
-                        description = "Ã–deme yöntemini seç ve kart bilgilerini gir."
+                        title = "Ödeme",
+                        description = "Ödeme yöntemini seç ve kart bilgilerini gir."
                     )
                 }
 
@@ -123,7 +123,7 @@ fun CheckoutPaymentScreen(
 
                 item {
                     CheckoutPaymentSectionTitle(
-                        title = "Ã–deme yöntemi",
+                        title = "Ödeme yöntemi",
                         description = "Sipariş için kullanmak istediĞin ödeme tipini seç."
                     )
                 }
@@ -218,7 +218,7 @@ private fun CheckoutPaymentTopBar(
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = "Ã–deme",
+                text = "Ödeme",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onBackground
@@ -324,7 +324,7 @@ private fun CheckoutPaymentSummaryCard(
             Spacer(modifier = Modifier.height(8.dp))
 
             CheckoutPaymentSummaryRow(
-                title = "Ä°ndirim",
+                title = "İndirim",
                 value = summary.discountText
             )
 
@@ -340,7 +340,7 @@ private fun CheckoutPaymentSummaryCard(
             Spacer(modifier = Modifier.height(12.dp))
 
             CheckoutPaymentSummaryRow(
-                title = "Ã–denecek tutar",
+                title = "Ödenecek tutar",
                 value = summary.totalPriceText,
                 isStrong = true
             )
@@ -641,7 +641,7 @@ private fun CheckoutSecurePaymentInfoCard() {
                 Spacer(modifier = Modifier.height(5.dp))
 
                 Text(
-                    text = "Ã–deme adımında 3D Secure ve banka doĞrulama süreçleri ödeme saĞlayıcısına göre çalışır. Sipariş onayı bir sonraki adımda gösterilir.",
+                    text = "Ödeme adımında 3D Secure ve banka doĞrulama süreçleri ödeme saĞlayıcısına göre çalışır. Sipariş onayı bir sonraki adımda gösterilir.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -675,7 +675,7 @@ private fun CheckoutPaymentBottomBar(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    text = "Ã–denecek tutar",
+                    text = "Ödenecek tutar",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -704,7 +704,7 @@ private fun CheckoutPaymentBottomBar(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "Ã–zete geç",
+                    text = "Özete geç",
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onPrimary

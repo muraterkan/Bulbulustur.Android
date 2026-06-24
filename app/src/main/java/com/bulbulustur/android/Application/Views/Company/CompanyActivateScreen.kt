@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Company
+package com.bulbulustur.android.Application.Views.Company
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -63,7 +63,7 @@ fun CompanyActivateScreen(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.SectionGap)
     ) {
         BbButton(
-            text = "Åirket Bilgilerime Dön",
+            text = "Şirket Bilgilerime Dön",
             onClick = onBackClick,
             variant = BbButtonVariant.Outline
         )
@@ -77,13 +77,13 @@ fun CompanyActivateScreen(
             )
 
             Text(
-                text = "Åirketinizi B2B Indexâ€™e Dahil Edin",
+                text = "Şirketinizi B2B Indexy'e Dahil Edin",
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
-                text = "Türkiyeâ€™deki üretici, tedarikçi ve toptancı şirketlerin global alıcılara daha görünür olmasını saĞlayan B2B Vitrin alanına katılın.",
+                text = "Türkiyey'deki üretici, tedarikçi ve toptancı şirketlerin global alıcılara daha görünür olmasını saĞlayan B2B Vitrin alanına katılın.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -93,7 +93,7 @@ fun CompanyActivateScreen(
 
         CompanyActivateBenefitCard(
             title = "Global Görünürlük",
-            description = "Åirket profiliniz uluslararası alıcılar için daha Keşfedilebilir hale gelir."
+            description = "Şirket profiliniz uluslararası alıcılar için daha Keşfedilebilir hale gelir."
         )
 
         CompanyActivateBenefitCard(
@@ -103,7 +103,7 @@ fun CompanyActivateScreen(
 
         CompanyActivateBenefitCard(
             title = "Kurumsal Vitrin",
-            description = "Åirket bilgileriniz daha düzenli, güven veren ve B2B profiline uygun şekilde sunulur."
+            description = "Şirket bilgileriniz daha düzenli, güven veren ve B2B profiline uygun şekilde sunulur."
         )
 
         CompanyActivateSummaryCard(
@@ -127,8 +127,8 @@ fun CompanyActivateScreen(
                             validationMessage = null
                         )
                     },
-                    title = "Bulbulustur Kullanıcı Sözleşmesiâ€™ni okudum ve kabul ediyorum.",
-                    description = "B2B Indexâ€™e dahil olduĞunuzda şirket profiliniz ve uygun kurumsal bilgileriniz platform üzerinde görünür olabilir."
+                    title = "Bulbulustur Kullanıcı Sözleşmesiy'ni okudum ve kabul ediyorum.",
+                    description = "B2B Indexy'e dahil olduĞunuzda şirket profiliniz ve uygun kurumsal bilgileriniz platform üzerinde görünür olabilir."
                 )
 
                 Text(
@@ -146,7 +146,7 @@ fun CompanyActivateScreen(
                 }
 
                 BbButton(
-                    text = "Åirketimi B2B Indexâ€™e Dahil Et",
+                    text = "Şirketimi B2B Indexy'e Dahil Et",
                     onClick = {
                         if (formState.value.canSubmit) {
                             onCompanyActivateClick(formState.value)
@@ -184,7 +184,7 @@ private fun CompanyActivateInfoCard() {
             )
 
             Text(
-                text = "Åirketinizin ürün ve hizmetlerini global alıcılarla buluşturmak için tasarlanmış kurumsal görünürlük alanıdır. Başlangıçta ücretsiz olarak kullanabilir, ihtiyaçlarınıza göre açıklama ve planlarınızı daha sonra geliştirebilirsiniz.",
+                text = "Şirketinizin ürün ve hizmetlerini global alıcılarla buluşturmak için tasarlanmış kurumsal görünürlük alanıdır. Başlangıçta ücretsiz olarak kullanabilir, ihtiyaçlarınıza göre açıklama ve planlarınızı daha sonra geliştirebilirsiniz.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -247,12 +247,12 @@ private fun CompanyActivateSummaryCard(
             )
 
             CompanyActivateSummaryRow(
-                label = "Åirket",
+                label = "Şirket",
                 value = companyActivateSummary.companyDisplayName
             )
 
             CompanyActivateSummaryRow(
-                label = "Åirket KimliĞi",
+                label = "Şirket KimliĞi",
                 value = companyActivateSummary.companyCode
             )
 
@@ -302,7 +302,7 @@ private fun createSampleCompanyActivateSummary(): CompanyActivateSummary {
         companyCode = "FGAOlbO7EGAZ5nB",
         createdDateText = "17.10.2025",
         b2bIndexStatusText = "Kapalı",
-        companyDisplayName = "Türkiye Global Ticaret Limited Åirketi"
+        companyDisplayName = "Türkiye Global Ticaret Limited Şirketi"
     )
 }
 

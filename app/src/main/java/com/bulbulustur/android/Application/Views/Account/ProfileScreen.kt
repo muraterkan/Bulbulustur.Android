@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Account
+package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -166,7 +166,7 @@ fun ProfileScreen(
                     ProfileDashedDivider()
                     ProfileInfoRow("Cinsiyet", "Erkek", Icons.Outlined.Man, onEditClick)
                     ProfileDashedDivider()
-                    ProfileInfoRow("Ülke / Åehir", "Türkiye / Ankara", Icons.Outlined.LocationOn, onEditClick)
+                    ProfileInfoRow("Ülke / Şehir", "Türkiye / Ankara", Icons.Outlined.LocationOn, onEditClick)
                 }
             }
 
@@ -199,12 +199,12 @@ fun ProfileScreen(
             item {
                 ProfileInfoSection(
                     title = "Kurumsal BaĞlantı",
-                    description = "Åirket ve B2B görünürlük baĞlantılarınız.",
+                    description = "Şirket ve B2B görünürlük baĞlantılarınız.",
                     icon = Icons.Outlined.Business
                 ) {
                     ProfileInfoRow(
-                        title = "Åirket Bilgileri",
-                        value = "Türkiye Global Ticaret Limited Åirketi",
+                        title = "Şirket Bilgileri",
+                        value = "Türkiye Global Ticaret Limited Şirketi",
                         icon = Icons.Outlined.Business,
                         onClick = onCompanyInfoClick
                     )

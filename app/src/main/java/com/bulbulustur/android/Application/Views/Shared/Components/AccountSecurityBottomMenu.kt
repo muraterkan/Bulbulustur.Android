@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Shared.Components
+package com.bulbulustur.android.Application.Views.Shared.Components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -46,7 +46,7 @@ fun AccountSecurityBottomMenu(
             )
 
             Text(
-                text = "Åifre, e-posta, giriş hareketleri ve hesap durumu işlemlerini buradan yönetebilirsin.",
+                text = "Şifre, e-posta, giriş hareketleri ve hesap durumu işlemlerini buradan yönetebilirsin.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -59,7 +59,7 @@ fun AccountSecurityBottomMenu(
             )
 
             AccountSecurityBottomMenuRow(
-                title = "Åifre DeĞiştir",
+                title = "Şifre DeĞiştir",
                 description = "Hesabın için yeni ve güçlü bir şifre belirle.",
                 selected = selectedItem == AccountSecurityMenuItem.ChangePassword,
                 onClick = onChangePasswordClick

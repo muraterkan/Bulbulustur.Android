@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Account
+package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -62,7 +62,7 @@ fun SystemStatusScreen(
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        containerColor = BBColors.SurfaceMuted,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
                 title = "Sistem Durumu",
@@ -74,7 +74,7 @@ fun SystemStatusScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BBColors.SurfaceMuted)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding)
                 .navigationBarsPadding(),
             contentPadding = PaddingValues(
@@ -98,7 +98,7 @@ fun SystemStatusScreen(
             item {
                 SystemStatusIncidentCard(
                     title = "Aktif Olaylar",
-                    subtitle = "Åu anda kullanıcıları etkileyen olaylar.",
+                    subtitle = "Şu anda kullanıcıları etkileyen olaylar.",
                     emptyText = "Aktif olay bulunmuyor.",
                     incidents = activeIncidents
                 )
@@ -161,7 +161,7 @@ private fun SystemStatusHeroCard() {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Tüm Sistemler Ã‡alışıyor",
+                    text = "Tüm Sistemler Çalışıyor",
                     style = BbTypography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -175,7 +175,7 @@ private fun SystemStatusHeroCard() {
                 Text(
                     text = "Son kontrol: Bugün 14:32",
                     style = BbTypography.labelSmall,
-                    color = BBColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -197,7 +197,7 @@ private fun SystemStatusComponentCard(
 
             if (index != components.lastIndex) {
                 HorizontalDivider(
-                    color = BBColors.Border
+                    color = MaterialTheme.colorScheme.outlineVariant
                 )
             }
         }
@@ -244,7 +244,7 @@ private fun SystemStatusIncidentCard(
 
                 if (index != incidents.lastIndex) {
                     HorizontalDivider(
-                        color = BBColors.Border
+                        color = MaterialTheme.colorScheme.outlineVariant
                     )
                 }
             }
@@ -369,7 +369,7 @@ private fun SystemStatusIncidentRow(
             Text(
                 text = incident.dateText,
                 style = BbTypography.labelSmall,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
 
@@ -415,7 +415,7 @@ private fun SystemStatusSectionCard(
             }
 
             HorizontalDivider(
-                color = BBColors.Border
+                color = MaterialTheme.colorScheme.outlineVariant
             )
 
             Column(
@@ -492,7 +492,7 @@ private fun getDemoSystemStatusComponents(): List<SystemStatusComponentUiModel> 
             status = SystemStatusLevel.Operational
         ),
         SystemStatusComponentUiModel(
-            title = "Ã–deme Servisleri",
+            title = "Ödeme Servisleri",
             description = "Sepet, ödeme ve sipariş operasyonları.",
             icon = Icons.Outlined.Payments,
             status = SystemStatusLevel.Operational
@@ -562,7 +562,7 @@ private enum class SystemStatusLevel(
     val contentColor: Color
 ) {
     Operational(
-        label = "Ã‡alışıyor",
+        label = "Çalışıyor",
         backgroundColor = BBColors.Green.Green50,
         contentColor = BBColors.Green.Green600
     ),
@@ -587,7 +587,7 @@ private enum class SystemStatusLevel(
         contentColor = BBColors.Blue.Blue600
     ),
     Resolved(
-        label = "Ã‡özüldü",
+        label = "Çözüldü",
         backgroundColor = BBColors.Green.Green50,
         contentColor = BBColors.Green.Green600
     )

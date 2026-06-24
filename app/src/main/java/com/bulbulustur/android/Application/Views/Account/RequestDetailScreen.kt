@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Account
+package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
@@ -55,7 +55,7 @@ fun RequestDetailScreen(
     val request = getDemoRequestDetail(requestId)
 
     Scaffold(
-        containerColor = BBColors.SurfaceMuted,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
                 title = "Talep Detayı",
@@ -66,7 +66,7 @@ fun RequestDetailScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BBColors.SurfaceMuted)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding),
             contentPadding = PaddingValues(
                 start = BBSpacing.PageHorizontal,
@@ -218,7 +218,7 @@ private fun RequestDetailProductCard(
                 }
             }
 
-            HorizontalDivider(color = BBColors.Border)
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
             Row(
                 modifier = Modifier
@@ -233,7 +233,7 @@ private fun RequestDetailProductCard(
             ) {
                 RequestDetailIconBox(
                     icon = Icons.Outlined.Storefront,
-                    backgroundColor = BBColors.Surface,
+                    backgroundColor = MaterialTheme.colorScheme.surface,
                     iconColor = MaterialTheme.colorScheme.onSurface
                 )
 
@@ -356,7 +356,7 @@ private fun RequestDetailTimelineCard(
                 RequestDetailTimelineRow(step = step)
 
                 if (index != request.steps.lastIndex) {
-                    HorizontalDivider(color = BBColors.Border)
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                 }
             }
         }
@@ -378,7 +378,7 @@ private fun RequestDetailActionsCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             RequestDetailSectionTitle(
-                title = "Ä°şlemler",
+                title = "İşlemler",
                 subtitle = "Talebe baĞlı hızlı aksiyonlar"
             )
 
@@ -583,7 +583,7 @@ private fun RequestPhotoThumbnail(
         Icon(
             imageVector = Icons.Outlined.Image,
             contentDescription = null,
-            tint = BBColors.TextStrong,
+            tint = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.size(BBIcon.Feature)
         )
     }
@@ -596,7 +596,7 @@ private fun getDemoRequestDetail(
         requestId = requestId,
         requestNumber = "Talep #$requestId",
         createdDate = "10 Mayıs 2026",
-        statusText = "Ä°ncelemede",
+        statusText = "İncelemede",
         statusColor = BBColors.Orange.Orange700,
         sellerName = "Base & Quality Store",
         reason = "Ürün Defolu / Hasarlı Geldi",
@@ -620,7 +620,7 @@ private fun getDemoRequestDetail(
                 isCompleted = true
             ),
             RequestStepUiModel(
-                title = "Satıcı Ä°ncelemesi",
+                title = "Satıcı İncelemesi",
                 description = "Satıcının talebi incelemesi bekleniyor.",
                 icon = Icons.Outlined.Timeline,
                 color = BBColors.Orange.Orange600,

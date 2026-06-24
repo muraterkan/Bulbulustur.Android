@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Account
+package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -147,8 +147,8 @@ fun CompanyInfoEditScreen(
                         onValueChange = { value ->
                             mersisNoState.value = value
                         },
-                        label = "MERSÄ°S No",
-                        placeholder = "MERSÄ°S numarası",
+                        label = "MERSİS No",
+                        placeholder = "MERSİS numarası",
                         keyboardType = KeyboardType.Number
                     )
                 }
@@ -164,7 +164,7 @@ fun CompanyInfoEditScreen(
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
                 ) {
                     CompanySectionHeader(
-                        title = "Ä°letişim ve Adres",
+                        title = "İletişim ve Adres",
                         description = "Firma iletişim bilgileriniz ve resmi adresiniz."
                     )
 

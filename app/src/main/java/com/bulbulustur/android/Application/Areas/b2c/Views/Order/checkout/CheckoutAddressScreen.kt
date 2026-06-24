@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout
+package com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -526,7 +526,7 @@ private fun CheckoutInvoiceInfoCard() {
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "V1â€™de fatura adresi teslimat adresiyle aynı kabul edilir. Kurumsal fatura ve farklı fatura adresi akışı sonraki adımda genişletilebilir.",
+                text = "V1y'de fatura adresi teslimat adresiyle aynı kabul edilir. Kurumsal fatura ve farklı fatura adresi akışı sonraki adımda genişletilebilir.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -656,7 +656,7 @@ private fun getCheckoutAddressScreenData(): CheckoutAddressScreenData {
                 title = "Ev adresim",
                 fullName = "Murat Erkan",
                 phoneNumber = "+90 555 000 00 00",
-                fullAddress = "Kızılay Mah. Atatürk Bulvarı No: 12 Daire: 8 Ã‡ankaya / Ankara",
+                fullAddress = "Kızılay Mah. Atatürk Bulvarı No: 12 Daire: 8 Çankaya / Ankara",
                 isDefault = true
             ),
             CheckoutAddressItem(
@@ -664,7 +664,7 @@ private fun getCheckoutAddressScreenData(): CheckoutAddressScreenData {
                 title = "Ofis",
                 fullName = "Murat Erkan",
                 phoneNumber = "+90 555 111 11 11",
-                fullAddress = "Ä°ş Merkezi Cad. No: 24 Kat: 5 Ã‡ankaya / Ankara",
+                fullAddress = "İş Merkezi Cad. No: 24 Kat: 5 Çankaya / Ankara",
                 isDefault = false
             ),
             CheckoutAddressItem(

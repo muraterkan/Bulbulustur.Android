@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2c.Views.order
+package com.bulbulustur.android.Application.Areas.b2c.Views.order
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -71,10 +71,10 @@ fun OrderCancelRequestScreen(
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        containerColor = BBColors.SurfaceMuted,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "Ä°ptal Talebi",
+                title = "İptal Talebi",
                 subtitle = "Sipariş satırı için iptal talebi oluştur.",
                 onBackClick = onBackClick
             )
@@ -83,7 +83,7 @@ fun OrderCancelRequestScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BBColors.SurfaceMuted)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding)
                 .navigationBarsPadding(),
             contentPadding = PaddingValues(
@@ -160,13 +160,13 @@ private fun OrderCancelIntroCard() {
                 )
             ) {
                 Text(
-                    text = "Ä°ptal Talebi Oluştur",
+                    text = "İptal Talebi Oluştur",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = "Ä°ptal nedeninizi seçin ve sorunu kısaca açıklayın. Talep sonucunu sipariş detayından takip edebilirsiniz.",
+                    text = "İptal nedeninizi seçin ve sorunu kısaca açıklayın. Talep sonucunu sipariş detayından takip edebilirsiniz.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -193,7 +193,7 @@ private fun OrderCancelReasonCard(
             )
         ) {
             OrderCancelSectionTitle(
-                title = "Ä°ptal Nedeni",
+                title = "İptal Nedeni",
                 subtitle = "Bu ürünü neden iptal etmek istediĞinizi seçin."
             )
 
@@ -289,7 +289,7 @@ private fun OrderCancelDescriptionCard(
         ) {
             OrderCancelSectionTitle(
                 title = "Açıklama",
-                subtitle = "Talebin daha hızlı deĞerlendirilmesi için kısa bir açıklama yazın."
+                subtitle = "Talebin daha hızlı değerlendirilmesi için kısa bir açıklama yazın."
             )
 
             OutlinedTextField(
@@ -341,13 +341,13 @@ private fun OrderCancelWarningCard() {
                 )
             ) {
                 Text(
-                    text = "Ä°ptal Süreci",
+                    text = "İptal Süreci",
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = "Ä°ptal talebiniz sipariş durumuna göre deĞerlendirilir. Talep sonucunu sipariş detayınızdan takip edebilirsiniz.",
+                    text = "İptal talebiniz sipariş durumuna göre değerlendirilir. Talep sonucunu sipariş detayınızdan takip edebilirsiniz.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

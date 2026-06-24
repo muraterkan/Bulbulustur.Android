@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2b.Views.Product
+package com.bulbulustur.android.Application.Areas.b2b.Views.Product
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -65,10 +65,10 @@ fun CustomizationRequestScreen(
     }
 
     Scaffold(
-        containerColor = BBColors.SurfaceSoft,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Ã–zelleştirme Talebi",
+                title = "Özelleştirme Talebi",
                 onBackClick = onBackClick
             )
         }
@@ -100,7 +100,7 @@ fun CustomizationRequestScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Ã–zelleştirme Detayları",
+                    title = "Özelleştirme Detayları",
                     subtitle = "Tedarikçinin doĞru dönüş yapabilmesi için deĞişiklikleri açık yazın"
                 )
             }
@@ -127,7 +127,7 @@ fun CustomizationRequestScreen(
             item {
                 BbSectionHeader(
                     title = "Hızlı Detay Alanları",
-                    subtitle = "Ä°sterseniz özelleştirme bilgisini ayrı ayrı da yazabilirsiniz"
+                    subtitle = "İsterseniz özelleştirme bilgisini ayrı ayrı da yazabilirsiniz"
                 )
             }
 
@@ -138,7 +138,7 @@ fun CustomizationRequestScreen(
                         colorMaterial.value = it
                     },
                     label = "Renk / Malzeme",
-                    placeholder = "Ã–rn. siyah, metal, mat yüzey, titanyum",
+                    placeholder = "Örn. siyah, metal, mat yüzey, titanyum",
                     icon = Icons.Outlined.ColorLens
                 )
             }
@@ -149,8 +149,8 @@ fun CustomizationRequestScreen(
                     onValueChange = {
                         sizeTechnical.value = it
                     },
-                    label = "Ã–lçü / Teknik Detay",
-                    placeholder = "Ã–rn. 30x20 cm, kalınlık, baĞlantı detayı",
+                    label = "Ölçü / Teknik Detay",
+                    placeholder = "Örn. 30x20 cm, kalınlık, baĞlantı detayı",
                     icon = Icons.Outlined.Straighten
                 )
             }
@@ -162,7 +162,7 @@ fun CustomizationRequestScreen(
                         packageLogo.value = it
                     },
                     label = "Ambalaj / Logo",
-                    placeholder = "Ã–rn. logolu ambalaj, özel kutu, etiket baskısı",
+                    placeholder = "Örn. logolu ambalaj, özel kutu, etiket baskısı",
                     icon = Icons.Outlined.Style
                 )
             }
@@ -202,28 +202,28 @@ private fun CustomizationRequestHeader(
                 Icon(
                     imageVector = Icons.Outlined.Style,
                     contentDescription = null,
-                    tint = BBColors.Primary
+                    tint = MaterialTheme.colorScheme.primary
                 )
 
                 Text(
-                    text = "Ã–zelleştirme Talebi",
+                    text = "Özelleştirme Talebi",
                     style = MaterialTheme.typography.labelLarge,
-                    color = BBColors.Primary,
+                    color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.SemiBold
                 )
             }
 
             Text(
-                text = "Ürün Ã–zelleştirme Ä°steĞi Oluştur",
+                text = "Ürün Özelleştirme İsteĞi Oluştur",
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
-                color = BBColors.TextStrong
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
                 text = "Ürün üzerinde ölçü, renk, malzeme, ambalaj, logo veya üretim detayları için tedarikçiye özel talep gönderin.",
                 style = MaterialTheme.typography.bodyMedium,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             BbChip(
@@ -250,14 +250,14 @@ private fun CustomizationProductSummaryCard(
             Text(
                 text = "Tedarikçi",
                 style = MaterialTheme.typography.labelMedium,
-                color = BBColors.Primary,
+                color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.SemiBold
             )
 
             Text(
                 text = productName,
                 style = MaterialTheme.typography.titleMedium,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
 
@@ -279,7 +279,7 @@ private fun CustomizationProductSummaryCard(
                 )
 
                 BbChip(
-                    text = "Ã–zel Üretim Desteklenir",
+                    text = "Özel Üretim Desteklenir",
                     selected = false,
                     onClick = {}
                 )
@@ -314,15 +314,15 @@ private fun CustomizationTextField(
         },
         singleLine = true,
         colors = TextFieldDefaults.colors(
-            focusedTextColor = BBColors.TextStrong,
-            unfocusedTextColor = BBColors.TextStrong,
-            focusedContainerColor = BBColors.Surface,
-            unfocusedContainerColor = BBColors.Surface,
-            focusedIndicatorColor = BBColors.Primary,
-            unfocusedIndicatorColor = BBColors.Border,
-            focusedLabelColor = BBColors.Primary,
-            unfocusedLabelColor = BBColors.TextMuted,
-            cursorColor = BBColors.Primary
+            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+            focusedContainerColor = MaterialTheme.colorScheme.surface,
+            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+            unfocusedIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
+            focusedLabelColor = MaterialTheme.colorScheme.primary,
+            unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            cursorColor = MaterialTheme.colorScheme.primary
         )
     )
 }
@@ -347,15 +347,15 @@ private fun CustomizationLongTextField(
             Text(text = placeholder)
         },
         colors = TextFieldDefaults.colors(
-            focusedTextColor = BBColors.TextStrong,
-            unfocusedTextColor = BBColors.TextStrong,
-            focusedContainerColor = BBColors.Surface,
-            unfocusedContainerColor = BBColors.Surface,
-            focusedIndicatorColor = BBColors.Primary,
-            unfocusedIndicatorColor = BBColors.Border,
-            focusedLabelColor = BBColors.Primary,
-            unfocusedLabelColor = BBColors.TextMuted,
-            cursorColor = BBColors.Primary
+            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+            focusedContainerColor = MaterialTheme.colorScheme.surface,
+            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+            unfocusedIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
+            focusedLabelColor = MaterialTheme.colorScheme.primary,
+            unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            cursorColor = MaterialTheme.colorScheme.primary
         )
     )
 }
@@ -397,13 +397,13 @@ private fun CustomizationHintCard() {
             Icon(
                 imageVector = Icons.Outlined.LocalOffer,
                 contentDescription = null,
-                tint = BBColors.Primary
+                tint = MaterialTheme.colorScheme.primary
             )
 
             Text(
-                text = "Ã–zelleştirme talebinde ölçü, renk, malzeme, kullanım amacı ve minimum sipariş miktarını belirtmek tedarikçi dönüşünü hızlandırır.",
+                text = "Özelleştirme talebinde ölçü, renk, malzeme, kullanım amacı ve minimum sipariş miktarını belirtmek tedarikçi dönüşünü hızlandırır.",
                 style = MaterialTheme.typography.bodySmall,
-                color = BBColors.TextMuted,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.weight(1f)
             )
         }
@@ -428,7 +428,7 @@ private fun CustomizationSendCard(
             Icon(
                 imageVector = Icons.Outlined.Send,
                 contentDescription = null,
-                tint = BBColors.Primary
+                tint = MaterialTheme.colorScheme.primary
             )
 
             Column(
@@ -439,20 +439,20 @@ private fun CustomizationSendCard(
                     text = "Gönder",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = BBColors.TextStrong
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = "Ã–zelleştirme isteĞi API baĞlantısından sonra gerçek endpointâ€™e gönderilecek.",
+                    text = "Özelleştirme isteĞi API baĞlantısından sonra gerçek endpointy'e gönderilecek.",
                     style = MaterialTheme.typography.bodySmall,
-                    color = BBColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
             Icon(
                 imageVector = Icons.Outlined.Verified,
                 contentDescription = null,
-                tint = BBColors.Primary
+                tint = MaterialTheme.colorScheme.primary
             )
         }
     }
@@ -470,7 +470,7 @@ private fun customizationSuggestionTexts(): List<CustomizationSuggestionText> {
             description = "Ürün için özel renk, malzeme ve yüzey seçenekleri hakkında teklif almak istiyorum."
         ),
         CustomizationSuggestionText(
-            title = "Ã–lçü / Teknik Detay",
+            title = "Ölçü / Teknik Detay",
             description = "Ürün ölçülerinin ve teknik detayların ihtiyacıma göre özelleştirilmesini istiyorum."
         ),
         CustomizationSuggestionText(
@@ -478,7 +478,7 @@ private fun customizationSuggestionTexts(): List<CustomizationSuggestionText> {
             description = "Ürün ambalajı, logo baskısı ve etiketleme seçenekleriyle birlikte fiyat almak istiyorum."
         ),
         CustomizationSuggestionText(
-            title = "Ã–zel Üretim",
+            title = "Özel Üretim",
             description = "Bu ürünün özel üretim koşulları, minimum sipariş miktarı ve teslim süresi hakkında bilgi almak istiyorum."
         )
     )

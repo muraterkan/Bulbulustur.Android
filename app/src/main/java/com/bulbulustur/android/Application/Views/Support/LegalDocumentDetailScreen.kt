@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Support
+package com.bulbulustur.android.Application.Views.Support
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -79,7 +79,7 @@ fun LegalDocumentDetailScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Ä°çerik",
+                    title = "İçerik",
                     subtitle = "Bu metin API baĞlantısından sonra gerçek içerikle beslenecek"
                 )
             }
@@ -432,11 +432,11 @@ private fun getLegalKvkkSections(): List<LegalDocumentSection> {
             body = "KVKK kapsamında veri sorumlusu bilgileri ve iletişim kanalları gerçek metinle birlikte gösterilecek."
         ),
         LegalDocumentSection(
-            title = "Ä°şlenen veri kategorileri",
+            title = "İşlenen veri kategorileri",
             body = "Kimlik, iletişim, işlem güvenliĞi, sipariş ve müşteri işlem verileri gibi kategoriler burada listelenecek."
         ),
         LegalDocumentSection(
-            title = "Ä°şleme amaçları",
+            title = "İşleme amaçları",
             body = "Platform hizmetlerinin sunulması, güvenlik, destek, ticari süreç ve yasal yükümlülükler kapsamında veri işlenebilir."
         ),
         LegalDocumentSection(

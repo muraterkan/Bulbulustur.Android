@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Shared
+package com.bulbulustur.android.Application.Views.Shared
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope

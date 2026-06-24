@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2c.Views.order
+package com.bulbulustur.android.Application.Areas.b2c.Views.order
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -65,7 +65,7 @@ fun OrderReviewCreateScreen(
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        containerColor = BBColors.SurfaceMuted,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
                 title = "Ürün DeĞerlendirme",
@@ -77,7 +77,7 @@ fun OrderReviewCreateScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BBColors.SurfaceMuted)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding)
                 .navigationBarsPadding(),
             contentPadding = PaddingValues(
@@ -277,7 +277,7 @@ private fun OrderReviewContentCard(
                 shape = BBRadius.Input,
                 placeholder = {
                     Text(
-                        text = "AldıĞınız ürün için bir deĞerlendirme yazarak başkalarına yardımcı olabilirsiniz."
+                        text = "AldıĞınız ürün için bir değerlendirme yazarak başkalarına yardımcı olabilirsiniz."
                     )
                 },
                 leadingIcon = {

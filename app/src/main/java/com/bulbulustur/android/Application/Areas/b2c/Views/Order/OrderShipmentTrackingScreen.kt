@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2c.Views.order
+package com.bulbulustur.android.Application.Areas.b2c.Views.order
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -82,7 +82,7 @@ fun OrderShipmentTrackingScreen(
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        containerColor = BBColors.SurfaceMuted,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
                 title = "Kargom Nerede?",
@@ -94,7 +94,7 @@ fun OrderShipmentTrackingScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BBColors.SurfaceMuted)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding)
                 .navigationBarsPadding(),
             contentPadding = PaddingValues(
@@ -185,7 +185,7 @@ private fun OrderShipmentSummaryCard(
                 Text(
                     text = tracking.orderNumber,
                     style = MaterialTheme.typography.labelMedium,
-                    color = BBColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -245,7 +245,7 @@ private fun OrderShipmentTimelineCard(
 
                 if (index != tracking.steps.lastIndex) {
                     HorizontalDivider(
-                        color = BBColors.Border
+                        color = MaterialTheme.colorScheme.outlineVariant
                     )
                 }
             }

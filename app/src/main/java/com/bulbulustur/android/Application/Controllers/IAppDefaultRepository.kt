@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Controllers
+package com.bulbulustur.android.Application.Controllers
 
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 

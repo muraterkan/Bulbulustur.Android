@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Account
+package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -65,7 +65,7 @@ fun CommunicationPreferenceScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Bildirim ve Ä°zinler",
+                title = "Bildirim ve İzinler",
                 onBackClick = onBackClick
             )
         }

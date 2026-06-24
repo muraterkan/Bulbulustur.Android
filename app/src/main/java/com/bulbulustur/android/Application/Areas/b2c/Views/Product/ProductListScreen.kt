@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2c.Views.Product
+package com.bulbulustur.android.Application.Areas.b2c.Views.Product
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -62,7 +62,7 @@ fun ProductListScreen(
             "Tümü",
             "Ayakkabı",
             "Giyim",
-            "Ã‡anta",
+            "Çanta",
             "Elektronik",
             "Ev ve yaşam"
         )
@@ -70,7 +70,7 @@ fun ProductListScreen(
 
     val sortOptions = remember {
         listOf(
-            "Ã–ne çıkan",
+            "Öne çıkan",
             "En düşük fiyat",
             "En yüksek fiyat",
             "Yeni gelenler"
@@ -86,7 +86,7 @@ fun ProductListScreen(
     }
 
     var selectedSortOption by remember {
-        mutableStateOf("Ã–ne çıkan")
+        mutableStateOf("Öne çıkan")
     }
 
     var favoriteProductIds by remember {
@@ -399,13 +399,13 @@ private fun RetailProductListResultHeader(
                 },
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
-                color = BBColors.TextStrong
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
                 text = "$productCount ürün listeleniyor",
                 style = MaterialTheme.typography.bodySmall,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
 
@@ -413,7 +413,7 @@ private fun RetailProductListResultHeader(
             text = "Filtrele",
             style = MaterialTheme.typography.labelMedium,
             fontWeight = FontWeight.Bold,
-            color = BBColors.TextStrong
+            color = MaterialTheme.colorScheme.onSurface
         )
     }
 }

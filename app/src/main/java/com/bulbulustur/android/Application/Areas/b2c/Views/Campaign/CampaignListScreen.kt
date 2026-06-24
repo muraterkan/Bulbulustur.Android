@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2c.Views.Campaign
+package com.bulbulustur.android.Application.Areas.b2c.Views.Campaign
 
 
 import androidx.compose.foundation.background
@@ -479,7 +479,7 @@ enum class RetailCampaignType(
     val title: String
 ) {
     All("Tümü"),
-    Discount("Ä°ndirim"),
+    Discount("İndirim"),
     Showcase("Vitrin"),
     NewSeason("Yeni sezon"),
     Cargo("Kargo")
@@ -514,7 +514,7 @@ private fun getRetailCampaignListItems(): List<RetailCampaignListItem> {
             id = 2,
             title = "Elektronikte hızlı fırsatlar",
             description = "Telefon aksesuarı, kulaklık ve günlük teknoloji ürünlerinde avantajlı seçimler.",
-            badgeText = "Ä°ndirim",
+            badgeText = "İndirim",
             iconText = "EL",
             categoryName = "Elektronik",
             productCount = 680,
@@ -524,7 +524,7 @@ private fun getRetailCampaignListItems(): List<RetailCampaignListItem> {
         RetailCampaignListItem(
             id = 3,
             title = "Ev & Yaşam Vitrinleri",
-            description = "Mutfak, dekorasyon ve ev tekstili ürünlerinde öne çıkan MaĞazalar.",
+            description = "Mutfak, dekorasyon ve ev tekstili ürünlerinde öne çıkan Mağazalar.",
             badgeText = "Vitrin",
             iconText = "EV",
             categoryName = "Ev & Yaşam",
@@ -547,7 +547,7 @@ private fun getRetailCampaignListItems(): List<RetailCampaignListItem> {
             id = 5,
             title = "Anne & Bebek fırsatları",
             description = "Bebek bakım, oyuncak ve tekstil ürünlerinde günlük fırsat ürünleri.",
-            badgeText = "Ä°ndirim",
+            badgeText = "İndirim",
             iconText = "AB",
             categoryName = "Anne & Bebek",
             productCount = 420,

@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2b.Views.Product
+package com.bulbulustur.android.Application.Areas.b2b.Views.Product
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -71,7 +71,7 @@ fun LastPriceRequestScreen(
     }
 
     Scaffold(
-        containerColor = BBColors.SurfaceSoft,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
                 title = "Son Fiyat Talebi",
@@ -123,7 +123,7 @@ fun LastPriceRequestScreen(
                             quantity.value = it
                         },
                         label = "Miktar",
-                        placeholder = "Ã–rn. 1000",
+                        placeholder = "Örn. 1000",
                         icon = Icons.Outlined.Inventory2,
                         modifier = Modifier.weight(1f)
                     )
@@ -134,7 +134,7 @@ fun LastPriceRequestScreen(
                             targetPrice.value = it
                         },
                         label = "Hedef Fiyat",
-                        placeholder = "Ã–rn. 18 $",
+                        placeholder = "Örn. 18 $",
                         icon = Icons.Outlined.PriceCheck,
                         modifier = Modifier.weight(1f)
                     )
@@ -151,7 +151,7 @@ fun LastPriceRequestScreen(
                         onValueChange = {
                             paymentTerm.value = it
                         },
-                        label = "Ã–deme Åartı",
+                        label = "Ödeme Şartı",
                         placeholder = "Peşin / vadeli",
                         icon = Icons.Outlined.Payments,
                         modifier = Modifier.weight(1f)
@@ -163,7 +163,7 @@ fun LastPriceRequestScreen(
                             deliveryTarget.value = it
                         },
                         label = "Teslimat Hedefi",
-                        placeholder = "Ä°stanbul / depo",
+                        placeholder = "İstanbul / depo",
                         icon = Icons.Outlined.LocalShipping,
                         modifier = Modifier.weight(1f)
                     )
@@ -224,28 +224,28 @@ private fun LastPriceRequestHeader(
                 Icon(
                     imageVector = Icons.Outlined.PriceCheck,
                     contentDescription = null,
-                    tint = BBColors.Primary
+                    tint = MaterialTheme.colorScheme.primary
                 )
 
                 Text(
                     text = "Son Fiyat Talebi",
                     style = MaterialTheme.typography.labelLarge,
-                    color = BBColors.Primary,
+                    color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.SemiBold
                 )
             }
 
             Text(
-                text = "Son Fiyat Ä°steĞi Oluştur",
+                text = "Son Fiyat İsteĞi Oluştur",
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
-                color = BBColors.TextStrong
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
                 text = "Toptan alım miktarınıza göre tedarikçiden son fiyat, ödeme ve teslimat şartları için teklif isteyin.",
                 style = MaterialTheme.typography.bodyMedium,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             BbChip(
@@ -273,14 +273,14 @@ private fun LastPriceProductSummaryCard(
             Text(
                 text = "Ürün",
                 style = MaterialTheme.typography.labelMedium,
-                color = BBColors.Primary,
+                color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.SemiBold
             )
 
             Text(
                 text = productName,
                 style = MaterialTheme.typography.titleMedium,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
 
@@ -338,15 +338,15 @@ private fun LastPriceTextField(
         },
         singleLine = true,
         colors = TextFieldDefaults.colors(
-            focusedTextColor = BBColors.TextStrong,
-            unfocusedTextColor = BBColors.TextStrong,
-            focusedContainerColor = BBColors.Surface,
-            unfocusedContainerColor = BBColors.Surface,
-            focusedIndicatorColor = BBColors.Primary,
-            unfocusedIndicatorColor = BBColors.Border,
-            focusedLabelColor = BBColors.Primary,
-            unfocusedLabelColor = BBColors.TextMuted,
-            cursorColor = BBColors.Primary
+            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+            focusedContainerColor = MaterialTheme.colorScheme.surface,
+            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+            unfocusedIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
+            focusedLabelColor = MaterialTheme.colorScheme.primary,
+            unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            cursorColor = MaterialTheme.colorScheme.primary
         )
     )
 }
@@ -371,15 +371,15 @@ private fun LastPriceLongTextField(
             Text(text = placeholder)
         },
         colors = TextFieldDefaults.colors(
-            focusedTextColor = BBColors.TextStrong,
-            unfocusedTextColor = BBColors.TextStrong,
-            focusedContainerColor = BBColors.Surface,
-            unfocusedContainerColor = BBColors.Surface,
-            focusedIndicatorColor = BBColors.Primary,
-            unfocusedIndicatorColor = BBColors.Border,
-            focusedLabelColor = BBColors.Primary,
-            unfocusedLabelColor = BBColors.TextMuted,
-            cursorColor = BBColors.Primary
+            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+            focusedContainerColor = MaterialTheme.colorScheme.surface,
+            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+            unfocusedIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
+            focusedLabelColor = MaterialTheme.colorScheme.primary,
+            unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            cursorColor = MaterialTheme.colorScheme.primary
         )
     )
 }
@@ -421,13 +421,13 @@ private fun LastPriceHintCard() {
             Icon(
                 imageVector = Icons.Outlined.Schedule,
                 contentDescription = null,
-                tint = BBColors.Primary
+                tint = MaterialTheme.colorScheme.primary
             )
 
             Text(
                 text = "Net miktar, hedef fiyat, ödeme yöntemi ve teslimat beklentisi yazarsanız tedarikçi daha doĞru son fiyat verebilir.",
                 style = MaterialTheme.typography.bodySmall,
-                color = BBColors.TextMuted,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.weight(1f)
             )
         }
@@ -452,7 +452,7 @@ private fun LastPriceSendCard(
             Icon(
                 imageVector = Icons.Outlined.Send,
                 contentDescription = null,
-                tint = BBColors.Primary
+                tint = MaterialTheme.colorScheme.primary
             )
 
             Column(
@@ -463,20 +463,20 @@ private fun LastPriceSendCard(
                     text = "Gönder",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = BBColors.TextStrong
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = "Son fiyat isteĞi API baĞlantısından sonra gerçek endpointâ€™e gönderilecek.",
+                    text = "Son fiyat isteĞi API baĞlantısından sonra gerçek endpointy'e gönderilecek.",
                     style = MaterialTheme.typography.bodySmall,
-                    color = BBColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
             Icon(
                 imageVector = Icons.Outlined.Verified,
                 contentDescription = null,
-                tint = BBColors.Primary
+                tint = MaterialTheme.colorScheme.primary
             )
         }
     }
@@ -494,7 +494,7 @@ private fun lastPriceSuggestionTexts(): List<LastPriceSuggestionText> {
             description = "BelirttiĞim miktar için en iyi son fiyatı rica ederim."
         ),
         LastPriceSuggestionText(
-            title = "Ã–deme Åartı",
+            title = "Ödeme Şartı",
             description = "Peşin ve vadeli ödeme seçeneklerine göre son fiyat bilgisini paylaşabilir misiniz?"
         ),
         LastPriceSuggestionText(

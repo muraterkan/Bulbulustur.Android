@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Shared.Components
+package com.bulbulustur.android.Application.Views.Shared.Components
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
@@ -302,7 +302,7 @@ private fun BbProductCardPrice(
             text = priceText,
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
-            color = BBColors.TextStrong,
+            color = MaterialTheme.colorScheme.onSurface,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
@@ -311,7 +311,7 @@ private fun BbProductCardPrice(
             Text(
                 text = oldPriceText,
                 style = MaterialTheme.typography.labelSmall,
-                color = BBColors.TextMuted,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textDecoration = TextDecoration.LineThrough,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis

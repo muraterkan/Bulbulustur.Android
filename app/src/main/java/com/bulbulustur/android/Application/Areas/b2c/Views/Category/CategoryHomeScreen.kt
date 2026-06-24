@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2c.Views.Category
+package com.bulbulustur.android.Application.Areas.b2c.Views.Category
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -244,13 +244,13 @@ private fun RetailCategoryHomeHeroCard(
                 Icon(
                     imageVector = Icons.Outlined.Category,
                     contentDescription = null,
-                    tint = BBColors.TextStrong
+                    tint = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
                     text = "Perakende Kategori",
                     style = MaterialTheme.typography.labelLarge,
-                    color = BBColors.TextStrong,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.SemiBold
                 )
             }
@@ -258,14 +258,14 @@ private fun RetailCategoryHomeHeroCard(
             Text(
                 text = "Elektronik",
                 style = MaterialTheme.typography.headlineSmall,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
                 text = "Alt Kategorileri, ürün Vitrinlerini ve maĞaza geçişlerini bu alandan keşfet.",
                 style = MaterialTheme.typography.bodyMedium,
-                color = BBColors.TextSubtle
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Row(
@@ -283,7 +283,7 @@ private fun RetailCategoryHomeHeroCard(
                 )
 
                 BbButton(
-                    text = "MaĞazalar",
+                    text = "Mağazalar",
                     onClick = onStoreClick,
                     modifier = Modifier.weight(1f),
                     variant = BbButtonVariant.Light,
@@ -409,7 +409,7 @@ private fun RetailCategoryHomeTrustStrip() {
 
             RetailCategoryHomeTrustItem(
                 icon = Icons.Outlined.Storefront,
-                title = "MaĞazalar",
+                title = "Mağazalar",
                 modifier = Modifier.weight(1f)
             )
         }
@@ -432,7 +432,7 @@ private fun RetailCategoryHomeTrustItem(
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = BBColors.Primary
+            tint = MaterialTheme.colorScheme.primary
         )
 
         Text(
@@ -563,7 +563,7 @@ private fun RetailCategoryHomeShowcaseCard(
         color = item.backgroundColor,
         border = BorderStroke(
             width = 1.dp,
-            color = BBColors.Border
+            color = MaterialTheme.colorScheme.outlineVariant
         ),
         onClick = onClick
     ) {
@@ -582,14 +582,14 @@ private fun RetailCategoryHomeShowcaseCard(
             Text(
                 text = item.title,
                 style = MaterialTheme.typography.titleMedium,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.SemiBold
             )
 
             Text(
                 text = item.description,
                 style = MaterialTheme.typography.bodySmall,
-                color = BBColors.TextSubtle
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -674,7 +674,7 @@ private fun getRetailCategoryHomeGateways(): List<RetailCategoryHomeGatewayItem>
             target = RetailCategoryHomeGatewayTarget.Products
         ),
         RetailCategoryHomeGatewayItem(
-            title = "MaĞazalar",
+            title = "Mağazalar",
             description = "Kategori maĞazaları",
             icon = Icons.Outlined.Storefront,
             backgroundColor = BBColors.Green.Green50,
@@ -745,7 +745,7 @@ private fun getRetailCategoryHomeShowcases(): List<RetailCategoryHomeShowcaseIte
         ),
         RetailCategoryHomeShowcaseItem(
             title = "MaĞaza Keşfi",
-            description = "Bu kategoride öne çıkan MaĞazaları incele.",
+            description = "Bu kategoride öne çıkan Mağazaları incele.",
             icon = Icons.Outlined.Storefront,
             backgroundColor = BBColors.Blue.Blue50,
             iconColor = BBColors.Blue.Blue700,
@@ -761,7 +761,7 @@ private fun getRetailCategoryHomePopularSearches(): List<String> {
         "Notebook",
         "Akıllı saat",
         "Tablet",
-        "Åarj adaptörü",
+        "Şarj adaptörü",
         "Oyuncu ekipmanı",
         "Ev elektroniĞi"
     )

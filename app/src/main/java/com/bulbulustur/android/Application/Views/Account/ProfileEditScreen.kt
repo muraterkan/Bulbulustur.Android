@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Account
+package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -122,8 +122,8 @@ fun ProfileScreen(
                         onValueChange = { value ->
                             nameState.value = value
                         },
-                        label = "Ä°sim",
-                        placeholder = "Ä°sminiz"
+                        label = "İsim",
+                        placeholder = "İsminiz"
                     )
 
                     AccountTextField(
@@ -193,8 +193,8 @@ fun ProfileScreen(
                         onValueChange = { value ->
                             cityState.value = value
                         },
-                        label = "Åehir",
-                        placeholder = "Åehir seçiniz"
+                        label = "Şehir",
+                        placeholder = "Şehir seçiniz"
                     )
 
                     AccountTextField(
@@ -202,8 +202,8 @@ fun ProfileScreen(
                         onValueChange = { value ->
                             districtState.value = value
                         },
-                        label = "Ä°lçe",
-                        placeholder = "Ä°lçe seçiniz"
+                        label = "İlçe",
+                        placeholder = "İlçe seçiniz"
                     )
                 }
             }

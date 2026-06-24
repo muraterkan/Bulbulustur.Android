@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Logon
+package com.bulbulustur.android.Application.Views.Logon
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -47,8 +47,8 @@ fun ForgotPasswordScreen(
     ) {
         LogonPublicPageTitle(
             eyebrow = "Hesap Kurtarma",
-            title = "Åifremi Unuttum",
-            description = "E-posta adresinizi yazın. Åifre yenileme baĞlantısını size gönderelim."
+            title = "Şifremi Unuttum",
+            description = "E-posta adresinizi yazın. Şifre yenileme baĞlantısını size gönderelim."
         )
 
         Spacer(modifier = Modifier.height(BBSpacing.Space8))
@@ -74,7 +74,7 @@ fun ForgotPasswordScreen(
 
         BbButton(
             modifier = Modifier.fillMaxWidth(),
-            text = "Åifre Yenileme BaĞlantısı Gönder",
+            text = "Şifre Yenileme BaĞlantısı Gönder",
             onClick = {
                 onSendResetLinkClick(email)
             },
@@ -105,7 +105,7 @@ fun ForgotPasswordScreen(
             Text(
                 text = "Hesabınızı hatırladınız mı?",
                 style = MaterialTheme.typography.bodySmall,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             TextButton(
@@ -115,7 +115,7 @@ fun ForgotPasswordScreen(
                     text = "Giriş Yap",
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
-                    color = BBColors.TextStrong
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
         }
@@ -126,7 +126,7 @@ fun ForgotPasswordScreen(
 private fun ResetPasswordInfoBox() {
     androidx.compose.material3.Surface(
         modifier = Modifier.fillMaxWidth(),
-        color = BBColors.SurfaceMuted,
+        color = MaterialTheme.colorScheme.surfaceVariant,
         shape = com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius.Card
     ) {
         androidx.compose.foundation.layout.Column(
@@ -136,7 +136,7 @@ private fun ResetPasswordInfoBox() {
                 text = "Güvenlik notu",
                 style = MaterialTheme.typography.labelLarge,
                 fontWeight = FontWeight.Bold,
-                color = BBColors.TextStrong
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Spacer(modifier = Modifier.height(BBSpacing.Space1))
@@ -144,7 +144,7 @@ private fun ResetPasswordInfoBox() {
             Text(
                 text = "BaĞlantı yalnızca kısa süre geçerli olur. Hesabınızı korumak için yeni şifrenizi kimseyle paylaşmayın.",
                 style = MaterialTheme.typography.bodySmall,
-                color = BBColors.TextSubtle
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }

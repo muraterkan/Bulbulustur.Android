@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Logon
+package com.bulbulustur.android.Application.Views.Logon
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -115,7 +115,7 @@ fun FirstDoorScreen(
             Text(
                 text = "Giriş ekranına dönmek ister misiniz?",
                 style = MaterialTheme.typography.bodySmall,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             TextButton(
@@ -125,7 +125,7 @@ fun FirstDoorScreen(
                     text = "Giriş Yap",
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
-                    color = BBColors.TextStrong
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
         }
@@ -143,13 +143,13 @@ private fun FirstDoorOptionCard(
     val borderColor = if (isSelected) {
         MaterialTheme.colorScheme.primary
     } else {
-        BBColors.Border
+        MaterialTheme.colorScheme.outlineVariant
     }
 
     val backgroundColor = if (isSelected) {
-        BBColors.PrimarySoft
+        MaterialTheme.colorScheme.primaryContainer
     } else {
-        BBColors.SurfaceMuted
+        MaterialTheme.colorScheme.surfaceVariant
     }
 
     Surface(
@@ -173,7 +173,7 @@ private fun FirstDoorOptionCard(
         ) {
             Surface(
                 color = if (isSelected) {
-                    BBColors.Surface
+                    MaterialTheme.colorScheme.surface
                 } else {
                     BBColors.White
                 },
@@ -187,7 +187,7 @@ private fun FirstDoorOptionCard(
                         text = marker,
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.Black,
-                        color = BBColors.TextStrong
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 }
             }
@@ -199,7 +199,7 @@ private fun FirstDoorOptionCard(
                     text = title,
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
-                    color = BBColors.TextStrong
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Spacer(modifier = Modifier.height(BBSpacing.Space1))
@@ -207,7 +207,7 @@ private fun FirstDoorOptionCard(
                 Text(
                     text = description,
                     style = MaterialTheme.typography.bodySmall,
-                    color = BBColors.TextSubtle
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }

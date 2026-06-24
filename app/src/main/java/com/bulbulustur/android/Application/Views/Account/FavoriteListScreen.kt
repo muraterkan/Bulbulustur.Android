@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Account
+package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -64,7 +64,7 @@ fun FavoriteListScreen(
     }
 
     Scaffold(
-        containerColor = BBColors.SurfaceMuted,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
                 title = "Favorilerim",
@@ -75,7 +75,7 @@ fun FavoriteListScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BBColors.SurfaceMuted)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding)
         ) {
             FavoriteIntroCard(selectedTab = selectedTab)
@@ -134,7 +134,7 @@ private fun FavoriteIntroCard(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(BBColors.Surface)
+            .background(MaterialTheme.colorScheme.surface)
             .padding(
                 start = BBSpacing.PageHorizontal,
                 top = BBSpacing.PageTopCompact,
@@ -146,7 +146,7 @@ private fun FavoriteIntroCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(
-                    color = BBColors.Surface,
+                    color = MaterialTheme.colorScheme.surface,
                     shape = BBRadius.LgShape
                 )
                 .padding(BBSpacing.CardPaddingCompact),
@@ -159,7 +159,7 @@ private fun FavoriteIntroCard(
                         height = BBSpacing.Space14
                     )
                     .background(
-                        color = BBColors.Primary,
+                        color = MaterialTheme.colorScheme.primary,
                         shape = BBRadius.PillShape
                     )
             )
@@ -192,7 +192,7 @@ private fun FavoriteTabs(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(BBColors.Surface)
+            .background(MaterialTheme.colorScheme.surface)
     ) {
         Row(
             modifier = Modifier
@@ -215,7 +215,7 @@ private fun FavoriteTabs(
             )
         }
 
-        HorizontalDivider(color = BBColors.Border)
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
     }
 }
 
@@ -248,7 +248,7 @@ private fun FavoriteTabItem(
                 .fillMaxWidth()
                 .height(BBSpacing.Space1)
                 .background(
-                    color = if (isSelected) BBColors.TextStrong else BBColors.Transparent,
+                    color = if (isSelected) MaterialTheme.colorScheme.onSurface else BBColors.Transparent,
                     shape = BBRadius.PillShape
                 )
         )
@@ -328,7 +328,7 @@ private fun FavoriteProductCard(
                 horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
             ) {
                 BbButton(
-                    text = "Ä°ncele",
+                    text = "İncele",
                     onClick = {
                         onProductClick(favorite.productId)
                     },
@@ -338,7 +338,7 @@ private fun FavoriteProductCard(
                 )
 
                 BbButton(
-                    text = if (favorite.mode == FavoriteMode.Retail) "Sepete Ekle" else "Teklif Ä°ste",
+                    text = if (favorite.mode == FavoriteMode.Retail) "Sepete Ekle" else "Teklif İste",
                     onClick = {
                         onAddToBasketClick(favorite.productId)
                     },

@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2b.Views.Home
+package com.bulbulustur.android.Application.Areas.b2b.Views.Home
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -118,7 +118,7 @@ fun WholesaleHomeScreen(
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        containerColor = BBColors.SurfaceSoft,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             WholesaleSearchHeader(
                 searchText = searchText,
@@ -309,14 +309,14 @@ private fun WholesaleHeroCard(
                     Text(
                         text = "Toptan Ticaret Merkezi",
                         style = MaterialTheme.typography.titleMedium,
-                        color = BBColors.TextStrong,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.SemiBold
                     )
 
                     Text(
                         text = "Ürün, firma ve teklif akışını tek yerden yönet.",
                         style = MaterialTheme.typography.bodySmall,
-                        color = BBColors.TextMuted
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -329,7 +329,7 @@ private fun WholesaleHeroCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 BbButton(
-                    text = "Teklif Ä°ste",
+                    text = "Teklif İste",
                     onClick = onRfqCreateClick,
                     modifier = Modifier.weight(1f),
                     variant = BbButtonVariant.Primary,
@@ -423,7 +423,7 @@ private fun WholesaleTrustItem(
         Text(
             text = title,
             style = MaterialTheme.typography.labelLarge,
-            color = BBColors.TextStrong,
+            color = MaterialTheme.colorScheme.onSurface,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
@@ -443,14 +443,14 @@ private fun WholesaleSectionTitle(
         Text(
             text = title,
             style = MaterialTheme.typography.headlineSmall,
-            color = BBColors.TextStrong,
+            color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold
         )
 
         Text(
             text = description,
             style = MaterialTheme.typography.bodyMedium,
-            color = BBColors.TextMuted
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -478,14 +478,14 @@ private fun WholesaleSectionTitleWithAction(
             Text(
                 text = title,
                 style = MaterialTheme.typography.headlineSmall,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
                 text = description,
                 style = MaterialTheme.typography.bodyMedium,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
 
@@ -564,10 +564,10 @@ private fun WholesaleCategoryCard(
         ),
         onClick = onClick,
         shape = BBRadius.XlShape,
-        color = BBColors.Surface,
+        color = MaterialTheme.colorScheme.surface,
         border = BorderStroke(
             width = BBSpacing.BorderThin,
-            color = BBColors.Border
+            color = MaterialTheme.colorScheme.outlineVariant
         )
     ) {
         Column(
@@ -590,7 +590,7 @@ private fun WholesaleCategoryCard(
                 Text(
                     text = item.Title,
                     style = MaterialTheme.typography.titleSmall,
-                    color = BBColors.TextStrong,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.SemiBold,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -599,7 +599,7 @@ private fun WholesaleCategoryCard(
                 Text(
                     text = item.Description,
                     style = MaterialTheme.typography.bodySmall,
-                    color = BBColors.TextMuted,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -637,10 +637,10 @@ private fun WholesaleActionRow(
                     ),
                 onClick = item.OnClick,
                 shape = BBRadius.XlShape,
-                color = BBColors.Surface,
+                color = MaterialTheme.colorScheme.surface,
                 border = BorderStroke(
                     width = BBSpacing.BorderThin,
-                    color = BBColors.Border
+                    color = MaterialTheme.colorScheme.outlineVariant
                 )
             ) {
                 Row(
@@ -667,7 +667,7 @@ private fun WholesaleActionRow(
                         Text(
                             text = item.Title,
                             style = MaterialTheme.typography.titleSmall,
-                            color = BBColors.TextStrong,
+                            color = MaterialTheme.colorScheme.onSurface,
                             fontWeight = FontWeight.SemiBold,
                             maxLines = 1
                         )
@@ -675,7 +675,7 @@ private fun WholesaleActionRow(
                         Text(
                             text = item.Description,
                             style = MaterialTheme.typography.bodySmall,
-                            color = BBColors.TextMuted,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
@@ -834,12 +834,12 @@ private fun wholesaleShowcaseProducts(): List<WholesaleProductCardModel> {
         ),
         WholesaleProductCardModel(
             Id = 5,
-            Title = "Ã–zel baskılı etiket rulosu",
+            Title = "Özel baskılı etiket rulosu",
             Category = "Etiket ve baskı",
             PriceText = "â‚º31,75 / rulo",
             MoqText = "MOQ 300",
             SupplierText = "2 firma",
-            BadgeText = "Ã–zel",
+            BadgeText = "Özel",
             ImageResId = R.drawable.h3ff3b33d6a1447c898cee6e336867bach
         )
     )
@@ -862,7 +862,7 @@ private fun wholesaleActionItems(
             OnClick = onRfqListClick
         ),
         WholesaleHomeActionItem(
-            Title = "Teklif Ä°ste",
+            Title = "Teklif İste",
             Description = "Yeni teklif iste",
             Icon = Icons.Outlined.LocalOffer,
             Tint = BBColors.Orange.Orange700,
@@ -886,7 +886,7 @@ private fun wholesaleActionItems(
             OnClick = onSampleRequestClick
         ),
         WholesaleHomeActionItem(
-            Title = "Ã–zelleştirme",
+            Title = "Özelleştirme",
             Description = "Logo, renk ve üretim detayı",
             Icon = Icons.Outlined.Category,
             Tint = BBColors.Purple.Purple700,

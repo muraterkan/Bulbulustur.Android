@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Account
+package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -104,7 +104,7 @@ private fun RequestCard(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(BBColors.Surface)
+                .background(MaterialTheme.colorScheme.surface)
         ) {
             RequestCardHeader(
                 request = request
@@ -166,7 +166,7 @@ private fun RequestCard(
                         Icon(
                             imageVector = Icons.Outlined.Visibility,
                             contentDescription = null,
-                            tint = BBColors.TextStrong,
+                            tint = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.size(BBSpacing.Space5)
                         )
                     }
@@ -199,13 +199,13 @@ private fun RequestCardHeader(
             Text(
                 text = "Talep No",
                 style = BbTypography.labelSmall,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Text(
                 text = request.requestNumber,
                 style = BbTypography.titleSmall,
-                color = BBColors.TextStrong
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Row(
@@ -222,7 +222,7 @@ private fun RequestCardHeader(
                 Text(
                     text = request.createdDate,
                     style = BbTypography.bodySmall,
-                    color = BBColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -245,7 +245,7 @@ private fun RequestInfoBox(
     val backgroundColor = if (highlighted) {
         BBColors.Yellow.Yellow50
     } else {
-        BBColors.SurfaceMuted
+        MaterialTheme.colorScheme.surfaceVariant
     }
 
     Box(
@@ -274,13 +274,13 @@ private fun RequestInfoBox(
                 Text(
                     text = title,
                     style = BbTypography.labelSmall,
-                    color = BBColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
                 Text(
                     text = value,
                     style = BbTypography.bodyMedium,
-                    color = BBColors.TextStrong
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
         }
@@ -295,7 +295,7 @@ private fun RequestDescriptionBox(
         modifier = Modifier
             .fillMaxWidth()
             .background(
-                color = BBColors.SurfaceMuted,
+                color = MaterialTheme.colorScheme.surfaceVariant,
                 shape = BBRadius.LgShape
             )
             .padding(BBSpacing.CardPaddingCompact)
@@ -306,13 +306,13 @@ private fun RequestDescriptionBox(
             Text(
                 text = "Açıklama",
                 style = BbTypography.labelSmall,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Text(
                 text = description,
                 style = BbTypography.bodySmall,
-                color = BBColors.TextStrong
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
     }
@@ -326,7 +326,7 @@ private fun RequestPhotoBox(
         modifier = Modifier
             .fillMaxWidth()
             .background(
-                color = BBColors.SurfaceMuted,
+                color = MaterialTheme.colorScheme.surfaceVariant,
                 shape = BBRadius.LgShape
             )
             .padding(BBSpacing.CardPaddingCompact)
@@ -346,9 +346,9 @@ private fun RequestPhotoBox(
                 )
 
                 Text(
-                    text = "Ä°ade Edilen Ürünün FotoĞrafları",
+                    text = "İade Edilen Ürünün FotoĞrafları",
                     style = BbTypography.labelSmall,
-                    color = BBColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
@@ -366,7 +366,7 @@ private fun RequestPhotoBox(
                 Text(
                     text = "FotoĞraf bulunmuyor.",
                     style = BbTypography.bodySmall,
-                    color = BBColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -393,7 +393,7 @@ private fun RequestPhotoThumbnail(
         Text(
             text = "IMG",
             style = BbTypography.labelSmall,
-            color = BBColors.TextStrong
+            color = MaterialTheme.colorScheme.onSurface
         )
     }
 }
@@ -478,13 +478,13 @@ private fun RequestEmptyState(
             Text(
                 text = "Kayıt Bulunamadı",
                 style = BbTypography.titleMedium,
-                color = BBColors.TextStrong
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
                 text = "Henüz oluşturulmuş iade veya sipariş talebiniz bulunmuyor. Sipariş detayından yeni talep Oluşturabilirsiniz.",
                 style = BbTypography.bodySmall,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             BbButton(
@@ -531,7 +531,7 @@ private enum class RequestStatus(
         title = "Ürün Defolu/Hasarlı Geldi"
     ),
     WaitingReview(
-        title = "Ä°ncelemede"
+        title = "İncelemede"
     ),
     Approved(
         title = "Onaylandı"

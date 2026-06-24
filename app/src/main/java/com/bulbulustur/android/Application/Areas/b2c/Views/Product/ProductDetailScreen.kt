@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2c.Views.Product
+package com.bulbulustur.android.Application.Areas.b2c.Views.Product
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
@@ -174,7 +174,7 @@ fun ProductDetailScreen(
     )
 
     Scaffold(
-        containerColor = BBColors.SurfaceMuted,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             RetailSearchHeader(
                 searchText = searchText,
@@ -213,7 +213,7 @@ fun ProductDetailScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BBColors.SurfaceMuted)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
         ) {
@@ -346,7 +346,7 @@ fun ProductDetailScreen(
                 activeSheet = null
             },
             sheetState = sheetState,
-            containerColor = BBColors.Surface
+            containerColor = MaterialTheme.colorScheme.surface
         ) {
             RetailProductDetailSheetContent(
                 sheet = currentSheet,
@@ -373,7 +373,7 @@ private fun RetailProductDetailGallery(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(BBColors.Surface)
+            .background(MaterialTheme.colorScheme.surface)
     ) {
         Box(
             modifier = Modifier
@@ -492,14 +492,14 @@ private fun RetailProductTitleCard(
             Text(
                 text = product.name,
                 style = MaterialTheme.typography.titleLarge,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
                 text = product.shortDescription,
                 style = MaterialTheme.typography.bodyMedium,
-                color = BBColors.TextSubtle
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -533,7 +533,7 @@ private fun RetailProductRatingSummaryCard(
                     Icon(
                         imageVector = Icons.Outlined.Star,
                         contentDescription = null,
-                        tint = BBColors.Primary,
+                        tint = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.size(BBIcon.SizeSm)
                     )
                 }
@@ -542,21 +542,21 @@ private fun RetailProductRatingSummaryCard(
             Text(
                 text = ratingText.replace("â˜… ", ""),
                 style = MaterialTheme.typography.labelLarge,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
                 modifier = Modifier.weight(1f),
-                text = "$reviewCount deĞerlendirme",
+                text = "$reviewCount değerlendirme",
                 style = MaterialTheme.typography.bodySmall,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Icon(
                 imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
                 contentDescription = null,
-                tint = BBColors.TextMuted,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.size(BBIcon.SizeMd)
             )
         }
@@ -593,14 +593,14 @@ private fun RetailProductDetailVariantCard(
                 Text(
                     text = "Renk: ${selectedColorVariant.name}",
                     style = MaterialTheme.typography.titleSmall,
-                    color = BBColors.TextStrong,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
                 )
 
                 Text(
                     text = "Seçenekler",
                     style = MaterialTheme.typography.bodySmall,
-                    color = BBColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
                 Row(
@@ -633,14 +633,14 @@ private fun RetailProductDetailVariantCard(
                         Text(
                             text = "Beden: ${selectedSizeOption.label}",
                             style = MaterialTheme.typography.titleSmall,
-                            color = BBColors.TextStrong,
+                            color = MaterialTheme.colorScheme.onSurface,
                             fontWeight = FontWeight.Bold
                         )
 
                         Text(
                             text = "Seçenekler",
                             style = MaterialTheme.typography.bodySmall,
-                            color = BBColors.TextMuted
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
 
@@ -694,14 +694,14 @@ private fun RetailProductDetailVariantCard(
                     Text(
                         text = "Adet",
                         style = MaterialTheme.typography.titleSmall,
-                        color = BBColors.TextStrong,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold
                     )
 
                     Text(
                         text = "Sepete Eklenecek ürün adedi",
                         style = MaterialTheme.typography.bodySmall,
-                        color = BBColors.TextMuted
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
@@ -714,7 +714,7 @@ private fun RetailProductDetailVariantCard(
                     modifier = Modifier.padding(horizontal = BBSpacing.Space4),
                     text = quantity.toString(),
                     style = MaterialTheme.typography.titleMedium,
-                    color = BBColors.TextStrong,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
                 )
 
@@ -734,9 +734,9 @@ private fun RetailProductColorChoice(
     onClick: () -> Unit
 ) {
     val borderColor = if (isSelected) {
-        BBColors.TextStrong
+        MaterialTheme.colorScheme.onSurface
     } else {
-        BBColors.Border
+        MaterialTheme.colorScheme.outlineVariant
     }
 
     Surface(
@@ -748,9 +748,9 @@ private fun RetailProductColorChoice(
             },
         shape = BBRadius.XlShape,
         color = if (isSelected) {
-            BBColors.SurfaceMuted
+            MaterialTheme.colorScheme.surfaceVariant
         } else {
-            BBColors.Surface
+            MaterialTheme.colorScheme.surface
         },
         border = BorderStroke(
             width = if (isSelected) {
@@ -771,7 +771,7 @@ private fun RetailProductColorChoice(
                     .fillMaxWidth()
                     .height(58.dp)
                     .clip(BBRadius.LgShape)
-                    .background(BBColors.SurfaceMuted),
+                    .background(MaterialTheme.colorScheme.surfaceVariant),
                 contentAlignment = Alignment.Center
             ) {
                 val previewImage = colorVariant.images.firstOrNull()
@@ -787,7 +787,7 @@ private fun RetailProductColorChoice(
                     Text(
                         text = colorVariant.name.take(2),
                         style = MaterialTheme.typography.labelMedium,
-                        color = BBColors.TextMuted,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontWeight = FontWeight.Bold
                     )
                 }
@@ -803,14 +803,14 @@ private fun RetailProductColorChoice(
                     color = colorVariant.swatchColor,
                     border = BorderStroke(
                         width = 1.dp,
-                        color = BBColors.BorderStrong
+                        color = MaterialTheme.colorScheme.outlineVariant
                     )
                 ) {}
 
                 Text(
                     text = colorVariant.name,
                     style = MaterialTheme.typography.labelSmall,
-                    color = BBColors.TextStrong,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.SemiBold,
                     maxLines = 1
                 )
@@ -831,21 +831,21 @@ private fun RetailProductSizeChoice(
     val shape = BBRadius.PillShape
 
     val backgroundColor = when {
-        isSelected -> BBColors.TextStrong
-        !isEnabled -> BBColors.SurfaceMuted
-        else -> BBColors.Surface
+        isSelected -> MaterialTheme.colorScheme.onSurface
+        !isEnabled -> MaterialTheme.colorScheme.surfaceVariant
+        else -> MaterialTheme.colorScheme.surface
     }
 
     val textColor = when {
         isSelected -> BBColors.White
-        !isEnabled -> BBColors.TextMuted
-        else -> BBColors.TextStrong
+        !isEnabled -> MaterialTheme.colorScheme.onSurfaceVariant
+        else -> MaterialTheme.colorScheme.onSurface
     }
 
     val borderColor = when {
-        isSelected -> BBColors.TextStrong
-        sizeOption.state == RetailProductSizeState.Limited -> BBColors.Primary
-        else -> BBColors.Border
+        isSelected -> MaterialTheme.colorScheme.onSurface
+        sizeOption.state == RetailProductSizeState.Limited -> MaterialTheme.colorScheme.primary
+        else -> MaterialTheme.colorScheme.outlineVariant
     }
 
     val modifier = Modifier
@@ -855,7 +855,7 @@ private fun RetailProductSizeChoice(
             if (sizeOption.state == RetailProductSizeState.Limited && !isSelected) {
                 Modifier.drawBehind {
                     drawRoundRect(
-                        color = BBColors.Primary,
+                        color = borderColor,
                         cornerRadius = CornerRadius(21.dp.toPx(), 21.dp.toPx()),
                         style = Stroke(
                             width = 1.dp.toPx(),
@@ -922,10 +922,10 @@ private fun RetailProductQuantityButton(
                 onClick()
             },
         shape = BBRadius.IconBoxSoft,
-        color = BBColors.SurfaceMuted,
+        color = MaterialTheme.colorScheme.surfaceVariant,
         border = BorderStroke(
             width = 1.dp,
-            color = BBColors.Border
+            color = MaterialTheme.colorScheme.outlineVariant
         )
     ) {
         Box(
@@ -935,7 +935,7 @@ private fun RetailProductQuantityButton(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = BBColors.TextStrong,
+                tint = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.size(BBIcon.SizeSm)
             )
         }
@@ -955,10 +955,10 @@ private fun RetailProductPriceCard(
                 end = BBSpacing.PageHorizontal
             ),
         shape = BBRadius.XlShape,
-        color = BBColors.PrimarySoft,
+        color = MaterialTheme.colorScheme.primaryContainer,
         border = BorderStroke(
             width = 1.dp,
-            color = BBColors.Primary
+            color = MaterialTheme.colorScheme.primary
         )
     ) {
         Column(
@@ -972,7 +972,7 @@ private fun RetailProductPriceCard(
                 Text(
                     text = product.priceText,
                     style = MaterialTheme.typography.headlineMedium,
-                    color = BBColors.TextStrong,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.ExtraBold
                 )
 
@@ -980,7 +980,7 @@ private fun RetailProductPriceCard(
                     Text(
                         text = product.oldPriceText,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = BBColors.TextMuted,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         textDecoration = TextDecoration.LineThrough
                     )
                 }
@@ -988,10 +988,10 @@ private fun RetailProductPriceCard(
                 if (product.discountText.isNotBlank()) {
                     Surface(
                         shape = BBRadius.PillShape,
-                        color = BBColors.Surface,
+                        color = MaterialTheme.colorScheme.surface,
                         border = BorderStroke(
                             width = 1.dp,
-                            color = BBColors.Primary
+                            color = MaterialTheme.colorScheme.primary
                         )
                     ) {
                         Text(
@@ -1001,7 +1001,7 @@ private fun RetailProductPriceCard(
                             ),
                             text = product.discountText,
                             style = MaterialTheme.typography.labelSmall,
-                            color = BBColors.TextStrong,
+                            color = MaterialTheme.colorScheme.onSurface,
                             fontWeight = FontWeight.Bold
                         )
                     }
@@ -1092,10 +1092,10 @@ private fun RetailProductStockAlertCard(
             Surface(
                 modifier = Modifier.fillMaxWidth(),
                 shape = BBRadius.XlShape,
-                color = BBColors.PrimarySoft,
+                color = MaterialTheme.colorScheme.primaryContainer,
                 border = BorderStroke(
                     width = 1.dp,
-                    color = BBColors.Primary
+                    color = MaterialTheme.colorScheme.primary
                 )
             ) {
                 Row(
@@ -1109,7 +1109,7 @@ private fun RetailProductStockAlertCard(
                     Icon(
                         imageVector = Icons.Outlined.CircleNotifications,
                         contentDescription = null,
-                        tint = BBColors.TextStrong,
+                        tint = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.size(BBIcon.SizeMd)
                     )
 
@@ -1120,21 +1120,21 @@ private fun RetailProductStockAlertCard(
                         Text(
                             text = "Stokta Yok",
                             style = MaterialTheme.typography.titleSmall,
-                            color = BBColors.TextStrong,
+                            color = MaterialTheme.colorScheme.onSurface,
                             fontWeight = FontWeight.Bold
                         )
 
                         Text(
                             text = "Bu ürün tekrar stoĞa girdiĞinde haberdar olabilirsin.",
                             style = MaterialTheme.typography.bodySmall,
-                            color = BBColors.TextSubtle
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
 
                     Text(
                         text = "Stok Alarmı",
                         style = MaterialTheme.typography.labelMedium,
-                        color = BBColors.TextStrong,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold
                     )
                 }
@@ -1214,7 +1214,7 @@ private fun RetailProductTrustLinksCard(
             RetailDashedDivider()
 
             RetailProductTrustLinkRow(
-                title = "Ä°ptal ve Ä°ade Koşulları",
+                title = "İptal ve İade Koşulları",
                 icon = Icons.Outlined.VerifiedUser,
                 onClick = onReturnPolicyClick
             )
@@ -1244,7 +1244,7 @@ private fun RetailProductTrustLinkRow(
         Surface(
             modifier = Modifier.size(26.dp),
             shape = BBRadius.MdShape,
-            color = BBColors.PrimarySoft
+            color = MaterialTheme.colorScheme.primaryContainer
         ) {
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -1253,7 +1253,7 @@ private fun RetailProductTrustLinkRow(
                 Icon(
                     imageVector = icon,
                     contentDescription = null,
-                    tint = BBColors.TextStrong,
+                    tint = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.size(BBIcon.SizeSm)
                 )
             }
@@ -1263,7 +1263,7 @@ private fun RetailProductTrustLinkRow(
             modifier = Modifier.weight(1f),
             text = title,
             style = MaterialTheme.typography.labelLarge,
-            color = BBColors.TextStrong,
+            color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold,
             maxLines = 1
         )
@@ -1271,7 +1271,7 @@ private fun RetailProductTrustLinkRow(
         Icon(
             imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
             contentDescription = null,
-            tint = BBColors.TextMuted,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.size(BBIcon.SizeMd)
         )
     }
@@ -1279,7 +1279,7 @@ private fun RetailProductTrustLinkRow(
 
 @Composable
 private fun RetailDashedDivider() {
-    val dividerColor = BBColors.BorderStrong
+    val dividerColor = MaterialTheme.colorScheme.outlineVariant
 
     Box(
         modifier = Modifier
@@ -1355,10 +1355,10 @@ private fun RetailSellerProductMiniCard(
                 onClick()
             },
         shape = BBRadius.XlShape,
-        color = BBColors.Surface,
+        color = MaterialTheme.colorScheme.surface,
         border = BorderStroke(
             width = 1.dp,
-            color = BBColors.Border
+            color = MaterialTheme.colorScheme.outlineVariant
         )
     ) {
         Column(
@@ -1370,7 +1370,7 @@ private fun RetailSellerProductMiniCard(
                     .fillMaxWidth()
                     .height(BBSpacing.Space24)
                     .clip(BBRadius.LgShape)
-                    .background(BBColors.SurfaceMuted),
+                    .background(MaterialTheme.colorScheme.surfaceVariant),
                 contentAlignment = Alignment.Center
             ) {
                 if (product.drawableResId != null) {
@@ -1384,7 +1384,7 @@ private fun RetailSellerProductMiniCard(
                     Text(
                         text = product.imageLabel,
                         style = MaterialTheme.typography.titleMedium,
-                        color = BBColors.TextMuted,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontWeight = FontWeight.Bold
                     )
                 }
@@ -1393,7 +1393,7 @@ private fun RetailSellerProductMiniCard(
             Text(
                 text = product.name,
                 style = MaterialTheme.typography.bodySmall,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.SemiBold,
                 maxLines = 2
             )
@@ -1401,7 +1401,7 @@ private fun RetailSellerProductMiniCard(
             Text(
                 text = product.priceText,
                 style = MaterialTheme.typography.labelLarge,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
         }
@@ -1421,10 +1421,10 @@ private fun RetailSellerMoreProductsCard(
                 onClick()
             },
         shape = BBRadius.XlShape,
-        color = BBColors.PrimarySoft,
+        color = MaterialTheme.colorScheme.primaryContainer,
         border = BorderStroke(
             width = 1.dp,
-            color = BBColors.Primary
+            color = MaterialTheme.colorScheme.primary
         )
     ) {
         Column(
@@ -1435,7 +1435,7 @@ private fun RetailSellerMoreProductsCard(
             Icon(
                 imageVector = Icons.Outlined.Storefront,
                 contentDescription = null,
-                tint = BBColors.TextStrong,
+                tint = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.size(BBIcon.SizeLg)
             )
 
@@ -1446,14 +1446,14 @@ private fun RetailSellerMoreProductsCard(
             Text(
                 text = "DiĞer Ürünler",
                 style = MaterialTheme.typography.titleSmall,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
                 text = "MaĞazaya Git",
                 style = MaterialTheme.typography.bodySmall,
-                color = BBColors.TextSubtle
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -1497,7 +1497,7 @@ private fun RetailReviewCarousel(
                     Text(
                         text = ratingText.replace("â˜… ", ""),
                         style = MaterialTheme.typography.headlineSmall,
-                        color = BBColors.TextStrong,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.ExtraBold
                     )
 
@@ -1509,7 +1509,7 @@ private fun RetailReviewCarousel(
                             Icon(
                                 imageVector = Icons.Outlined.Star,
                                 contentDescription = null,
-                                tint = BBColors.Primary,
+                                tint = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.size(BBIcon.SizeSm)
                             )
                         }
@@ -1519,13 +1519,13 @@ private fun RetailReviewCarousel(
                         modifier = Modifier.weight(1f),
                         text = "$reviewCount Yorum",
                         style = MaterialTheme.typography.bodySmall,
-                        color = BBColors.TextMuted
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
 
                     Icon(
                         imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
                         contentDescription = null,
-                        tint = BBColors.TextMuted,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.size(BBIcon.SizeMd)
                     )
                 }
@@ -1552,10 +1552,10 @@ private fun RetailReviewCard(
     Surface(
         modifier = Modifier.width(236.dp),
         shape = BBRadius.XlShape,
-        color = BBColors.SurfaceMuted,
+        color = MaterialTheme.colorScheme.surfaceVariant,
         border = BorderStroke(
             width = 1.dp,
-            color = BBColors.Border
+            color = MaterialTheme.colorScheme.outlineVariant
         )
     ) {
         Column(
@@ -1569,7 +1569,7 @@ private fun RetailReviewCard(
                 Surface(
                     modifier = Modifier.size(34.dp),
                     shape = BBRadius.IconBoxSoft,
-                    color = BBColors.Surface
+                    color = MaterialTheme.colorScheme.surface
                 ) {
                     Box(
                         modifier = Modifier.fillMaxSize(),
@@ -1578,7 +1578,7 @@ private fun RetailReviewCard(
                         Text(
                             text = review.avatarText,
                             style = MaterialTheme.typography.labelSmall,
-                            color = BBColors.TextStrong,
+                            color = MaterialTheme.colorScheme.onSurface,
                             fontWeight = FontWeight.Bold
                         )
                     }
@@ -1590,14 +1590,14 @@ private fun RetailReviewCard(
                     Text(
                         text = review.customerName,
                         style = MaterialTheme.typography.labelLarge,
-                        color = BBColors.TextStrong,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold
                     )
 
                     Text(
                         text = review.dateText,
                         style = MaterialTheme.typography.labelSmall,
-                        color = BBColors.TextMuted
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -1610,7 +1610,7 @@ private fun RetailReviewCard(
                     Icon(
                         imageVector = Icons.Outlined.Star,
                         contentDescription = null,
-                        tint = BBColors.Primary,
+                        tint = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.size(BBIcon.Size2Xs)
                     )
                 }
@@ -1619,7 +1619,7 @@ private fun RetailReviewCard(
             Text(
                 text = review.comment,
                 style = MaterialTheme.typography.bodySmall,
-                color = BBColors.TextSubtle,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 4
             )
         }
@@ -1648,10 +1648,10 @@ private fun RetailProductDetailStoreCard(
             Surface(
                 modifier = Modifier.size(48.dp),
                 shape = BBRadius.LgShape,
-                color = BBColors.SurfaceMuted,
+                color = MaterialTheme.colorScheme.surfaceVariant,
                 border = BorderStroke(
                     width = 1.dp,
-                    color = BBColors.Border
+                    color = MaterialTheme.colorScheme.outlineVariant
                 )
             ) {
                 Box(
@@ -1661,7 +1661,7 @@ private fun RetailProductDetailStoreCard(
                     Text(
                         text = store.logoText,
                         style = MaterialTheme.typography.labelLarge,
-                        color = BBColors.TextStrong,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold
                     )
                 }
@@ -1678,7 +1678,7 @@ private fun RetailProductDetailStoreCard(
                     Text(
                         text = store.name,
                         style = MaterialTheme.typography.titleSmall,
-                        color = BBColors.TextStrong,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold
                     )
 
@@ -1693,14 +1693,14 @@ private fun RetailProductDetailStoreCard(
                 Text(
                     text = "${store.ratingText} Puan Â· ${store.productCount} Ürün",
                     style = MaterialTheme.typography.bodySmall,
-                    color = BBColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
             Icon(
                 imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
                 contentDescription = null,
-                tint = BBColors.TextMuted,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.size(BBIcon.SizeMd)
             )
         }
@@ -1757,21 +1757,21 @@ private fun RetailProductDetailActionRow(
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleSmall,
-                    color = BBColors.TextStrong,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
                 )
 
                 Text(
                     text = subtitle,
                     style = MaterialTheme.typography.bodySmall,
-                    color = BBColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
             Icon(
                 imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
                 contentDescription = null,
-                tint = BBColors.TextMuted,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.size(BBIcon.SizeMd)
             )
         }
@@ -1797,14 +1797,14 @@ private fun RetailProductDescriptionSection(
             Text(
                 text = "Ürün Açıklaması",
                 style = MaterialTheme.typography.titleMedium,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
                 text = description,
                 style = MaterialTheme.typography.bodyMedium,
-                color = BBColors.TextSubtle
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -1822,7 +1822,7 @@ private fun RetailRelatedCategoryChipsSection(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
     ) {
         RetailSectionTitle(
-            title = "Ä°lgili Kategoriler",
+            title = "İlgili Kategoriler",
             actionText = "",
             onActionClick = {}
         )
@@ -1842,7 +1842,7 @@ private fun RetailRelatedCategoryChipsSection(
                             onCategoryClick(category)
                         },
                     shape = BBRadius.PillShape,
-                    color = BBColors.Surface
+                    color = MaterialTheme.colorScheme.surface
                 ) {
                     Text(
                         modifier = Modifier.padding(
@@ -1851,7 +1851,7 @@ private fun RetailRelatedCategoryChipsSection(
                         ),
                         text = category.name,
                         style = MaterialTheme.typography.labelMedium,
-                        color = BBColors.TextStrong,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.SemiBold
                     )
                 }
@@ -1876,7 +1876,7 @@ private fun RetailSectionTitle(
             modifier = Modifier.weight(1f),
             text = title,
             style = MaterialTheme.typography.titleMedium,
-            color = BBColors.TextStrong,
+            color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold
         )
 
@@ -1891,14 +1891,14 @@ private fun RetailSectionTitle(
                 Text(
                     text = actionText,
                     style = MaterialTheme.typography.labelMedium,
-                    color = BBColors.TextStrong,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
                 )
 
                 Icon(
                     imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
                     contentDescription = null,
-                    tint = BBColors.TextStrong,
+                    tint = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.size(BBIcon.SizeSm)
                 )
             }
@@ -1913,10 +1913,10 @@ private fun RetailProductDetailPill(
 ) {
     Surface(
         shape = BBRadius.PillShape,
-        color = BBColors.SurfaceMuted,
+        color = MaterialTheme.colorScheme.surfaceVariant,
         border = BorderStroke(
             width = 1.dp,
-            color = BBColors.Border
+            color = MaterialTheme.colorScheme.outlineVariant
         )
     ) {
         Row(
@@ -1931,7 +1931,7 @@ private fun RetailProductDetailPill(
                 Icon(
                     imageVector = icon,
                     contentDescription = null,
-                    tint = BBColors.TextMuted,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.size(BBIcon.Size2Xs)
                 )
             }
@@ -1939,7 +1939,7 @@ private fun RetailProductDetailPill(
             Text(
                 text = text,
                 style = MaterialTheme.typography.labelSmall,
-                color = BBColors.TextSubtle,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontWeight = FontWeight.Medium
             )
         }
@@ -1957,7 +1957,7 @@ private fun RetailProductDetailBottomBar(
         modifier = Modifier
             .fillMaxWidth()
             .navigationBarsPadding(),
-        color = BBColors.Surface,
+        color = MaterialTheme.colorScheme.surface,
         shadowElevation = 12.dp
     ) {
         Box(
@@ -1980,9 +1980,9 @@ private fun RetailProductDetailBottomBar(
                         text = "Sepete Ekle",
                         onClick = onAddToBasketClick,
                         modifier = Modifier.weight(1f),
-                        containerColor = BBColors.PrimarySoft,
-                        contentColor = BBColors.TextStrong,
-                        borderColor = BBColors.Primary,
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onSurface,
+                        borderColor = MaterialTheme.colorScheme.primary,
                         leadingIcon = Icons.Outlined.ShoppingCart
                     )
 
@@ -1990,9 +1990,9 @@ private fun RetailProductDetailBottomBar(
                         text = "Hemen Al",
                         onClick = onBuyNowClick,
                         modifier = Modifier.weight(1f),
-                        containerColor = BBColors.Primary,
-                        contentColor = BBColors.TextStrong,
-                        borderColor = BBColors.Primary,
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onSurface,
+                        borderColor = MaterialTheme.colorScheme.primary,
                         leadingIcon = null
                     )
                 }
@@ -2138,7 +2138,7 @@ private fun RetailSheetContainer(
             Surface(
                 modifier = Modifier.size(BBIcon.BoxMd),
                 shape = BBRadius.LgShape,
-                color = BBColors.PrimarySoft
+                color = MaterialTheme.colorScheme.primaryContainer
             ) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -2147,7 +2147,7 @@ private fun RetailSheetContainer(
                     Icon(
                         imageVector = icon,
                         contentDescription = null,
-                        tint = BBColors.TextStrong,
+                        tint = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.size(BBIcon.SizeMd)
                     )
                 }
@@ -2160,14 +2160,14 @@ private fun RetailSheetContainer(
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleLarge,
-                    color = BBColors.TextStrong,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
                 )
 
                 Text(
                     text = subtitle,
                     style = MaterialTheme.typography.bodySmall,
-                    color = BBColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
@@ -2179,10 +2179,10 @@ private fun RetailSheetContainer(
                         onCloseClick()
                     },
                 shape = BBRadius.IconBoxSoft,
-                color = BBColors.SurfaceMuted,
+                color = MaterialTheme.colorScheme.surfaceVariant,
                 border = BorderStroke(
                     width = 1.dp,
-                    color = BBColors.Border
+                    color = MaterialTheme.colorScheme.outlineVariant
                 )
             ) {
                 Box(
@@ -2192,7 +2192,7 @@ private fun RetailSheetContainer(
                     Icon(
                         imageVector = Icons.Outlined.Close,
                         contentDescription = "Kapat",
-                        tint = BBColors.TextStrong,
+                        tint = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.size(BBIcon.SizeMd)
                     )
                 }
@@ -2208,20 +2208,20 @@ private fun RetailSizeGuideSheet(
     onCloseClick: () -> Unit
 ) {
     RetailSheetContainer(
-        title = "Ã–lçü Rehberi",
+        title = "Ölçü Rehberi",
         subtitle = "DoĞru beden seçimi için kısa rehber",
         icon = Icons.Outlined.Straighten,
         onCloseClick = onCloseClick
     ) {
         RetailSheetInfoBox(
-            title = "Pratik Ã–neri",
-            description = "Ã–lçüm yaparken ürünü kullanacaĞınız koşulları dikkate alın. Ayakkabı için çorap kalınlıĞı, kıyafet için kullanım rahatlıĞı önemlidir."
+            title = "Pratik Öneri",
+            description = "Ölçüm yaparken ürünü kullanacaĞınız koşulları dikkate alın. Ayakkabı için çorap kalınlıĞı, kıyafet için kullanım rahatlıĞı önemlidir."
         )
 
         RetailSizeGuideTable()
 
         RetailSheetMutedBox(
-            text = "Ã–lçü tabloları genel bilgilendirme amaçlıdır. Marka, model ve üretim kalıbına göre küçük farklılıklar olabilir."
+            text = "Ölçü tabloları genel bilgilendirme amaçlıdır. Marka, model ve üretim kalıbına göre küçük farklılıklar olabilir."
         )
 
         RetailSheetPrimaryButton(
@@ -2237,22 +2237,22 @@ private fun RetailReturnPolicySheet(
     onStoreClick: () -> Unit
 ) {
     RetailSheetContainer(
-        title = "Ä°ptal ve Ä°ade Koşulları",
+        title = "İptal ve İade Koşulları",
         subtitle = "Cayma hakkı, iade ve sipariş iptali",
         icon = Icons.Outlined.VerifiedUser,
         onCloseClick = onCloseClick
     ) {
         Text(
-            text = "Ä°ptal ve Ä°ade Süreci",
+            text = "İptal ve İade Süreci",
             style = MaterialTheme.typography.titleSmall,
-            color = BBColors.TextStrong,
+            color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold
         )
 
         Text(
-            text = "Sipariş iptali ve iade süreçleri ürün, satıcı, teslimat durumu ve ilgili mevzuat kapsamında deĞerlendirilir. Ä°ade talebinizi sipariş detayınız üzerinden başlatabilirsiniz.",
+            text = "Sipariş iptali ve iade süreçleri ürün, satıcı, teslimat durumu ve ilgili mevzuat kapsamında değerlendirilir. İade talebinizi sipariş detayınız üzerinden başlatabilirsiniz.",
             style = MaterialTheme.typography.bodyMedium,
-            color = BBColors.TextMuted
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         RetailSheetCheckRow(
@@ -2260,11 +2260,11 @@ private fun RetailReturnPolicySheet(
         )
 
         RetailSheetCheckRow(
-            text = "Ä°ade koşulları ürün türüne, kullanım durumuna ve satıcı politikalarına göre deĞişebilir."
+            text = "İade koşulları ürün türüne, kullanım durumuna ve satıcı politikalarına göre deĞişebilir."
         )
 
         RetailSheetCheckRow(
-            text = "Cayma hakkı ve iade süreci yürürlükteki tüketici mevzuatı kapsamında deĞerlendirilir."
+            text = "Cayma hakkı ve iade süreci yürürlükteki tüketici mevzuatı kapsamında değerlendirilir."
         )
 
         RetailSheetMutedBox(
@@ -2308,14 +2308,14 @@ private fun RetailLowerPriceSheet(
         Text(
             text = "Fiyat Bilgilerini Gönder",
             style = MaterialTheme.typography.titleMedium,
-            color = BBColors.TextStrong,
+            color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold
         )
 
         Text(
-            text = "Aynı ürünü başka bir platformda daha uygun fiyata gördüyseniz bize bildirin. Bilgiler kontrol edilerek deĞerlendirilecektir.",
+            text = "Aynı ürünü başka bir platformda daha uygun fiyata gördüyseniz bize bildirin. Bilgiler kontrol edilerek değerlendirilecektir.",
             style = MaterialTheme.typography.bodyMedium,
-            color = BBColors.TextMuted
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         RetailSheetTextField(
@@ -2324,7 +2324,7 @@ private fun RetailLowerPriceSheet(
                 competitorName = it
             },
             label = "Rakip Firma Adı",
-            placeholder = "Ã–rn: Amazon, Trendyol, Hepsiburada"
+            placeholder = "Örn: Amazon, Trendyol, Hepsiburada"
         )
 
         RetailSheetTextField(
@@ -2366,7 +2366,7 @@ private fun RetailReportAbuseSheet(
         "Yanıltıcı Bilgi",
         "Uygunsuz Görsel",
         "Sahte Ürün",
-        "Yasaklı Ä°çerik"
+        "Yasaklı İçerik"
     )
 
     var selectedReason by remember {
@@ -2388,9 +2388,9 @@ private fun RetailReportAbuseSheet(
         )
 
         Text(
-            text = "Åikayet Nedeni",
+            text = "Şikayet Nedeni",
             style = MaterialTheme.typography.labelLarge,
-            color = BBColors.TextStrong,
+            color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold
         )
 
@@ -2447,16 +2447,16 @@ private fun RetailReasonChip(
             },
         shape = BBRadius.PillShape,
         color = if (selected) {
-            BBColors.Primary
+            MaterialTheme.colorScheme.primary
         } else {
-            BBColors.SurfaceMuted
+            MaterialTheme.colorScheme.surfaceVariant
         },
         border = BorderStroke(
             width = 1.dp,
             color = if (selected) {
-                BBColors.Primary
+                MaterialTheme.colorScheme.primary
             } else {
-                BBColors.Border
+                MaterialTheme.colorScheme.outlineVariant
             }
         )
     ) {
@@ -2467,7 +2467,7 @@ private fun RetailReasonChip(
                 vertical = BBSpacing.Space2
             ),
             style = MaterialTheme.typography.labelMedium,
-            color = BBColors.TextStrong,
+            color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold
         )
     }
@@ -2499,15 +2499,15 @@ private fun RetailSheetTextField(
             keyboardType = keyboardType
         ),
         colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = BBColors.Primary,
-            unfocusedBorderColor = BBColors.Border,
-            focusedLabelColor = BBColors.TextStrong,
-            unfocusedLabelColor = BBColors.TextMuted,
-            focusedTextColor = BBColors.TextStrong,
-            unfocusedTextColor = BBColors.TextStrong,
-            focusedContainerColor = BBColors.Surface,
-            unfocusedContainerColor = BBColors.Surface,
-            cursorColor = BBColors.Primary
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
+            focusedLabelColor = MaterialTheme.colorScheme.onSurface,
+            unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+            focusedContainerColor = MaterialTheme.colorScheme.surface,
+            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+            cursorColor = MaterialTheme.colorScheme.primary
         )
     )
 }
@@ -2527,16 +2527,16 @@ private fun RetailReasonOption(
             },
         shape = BBRadius.LgShape,
         color = if (selected) {
-            BBColors.PrimarySoft
+            MaterialTheme.colorScheme.primaryContainer
         } else {
-            BBColors.SurfaceMuted
+            MaterialTheme.colorScheme.surfaceVariant
         },
         border = BorderStroke(
             width = 1.dp,
             color = if (selected) {
-                BBColors.Primary
+                MaterialTheme.colorScheme.primary
             } else {
-                BBColors.Border
+                MaterialTheme.colorScheme.outlineVariant
             }
         )
     ) {
@@ -2549,16 +2549,16 @@ private fun RetailReasonOption(
                 modifier = Modifier.size(18.dp),
                 shape = BBRadius.IconBoxSoft,
                 color = if (selected) {
-                    BBColors.Primary
+                    MaterialTheme.colorScheme.primary
                 } else {
-                    BBColors.Surface
+                    MaterialTheme.colorScheme.surface
                 },
                 border = BorderStroke(
                     width = 1.dp,
                     color = if (selected) {
-                        BBColors.Primary
+                        MaterialTheme.colorScheme.primary
                     } else {
-                        BBColors.BorderStrong
+                        MaterialTheme.colorScheme.outlineVariant
                     }
                 )
             ) {}
@@ -2566,7 +2566,7 @@ private fun RetailReasonOption(
             Text(
                 text = text,
                 style = MaterialTheme.typography.labelLarge,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.SemiBold
             )
         }
@@ -2578,10 +2578,10 @@ private fun RetailSizeGuideTable() {
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = BBRadius.LgShape,
-        color = BBColors.Surface,
+        color = MaterialTheme.colorScheme.surface,
         border = BorderStroke(
             width = 1.dp,
-            color = BBColors.Border
+            color = MaterialTheme.colorScheme.outlineVariant
         )
     ) {
         Column(
@@ -2589,10 +2589,10 @@ private fun RetailSizeGuideTable() {
         ) {
             RetailSizeGuideTableRow(
                 first = "Beden",
-                second = "Ã–nerilen Ã–lçü",
+                second = "Önerilen Ölçü",
                 third = "Not",
                 strong = true,
-                backgroundColor = BBColors.SurfaceMuted
+                backgroundColor = MaterialTheme.colorScheme.surfaceVariant
             )
 
             RetailSizeGuideTableRow(
@@ -2610,7 +2610,7 @@ private fun RetailSizeGuideTable() {
             RetailSizeGuideTableRow(
                 first = "Geniş Kalıp",
                 second = "Normal Beden Tercih Edilebilir",
-                third = "Müşteri Sorularını Ä°nceleyin"
+                third = "Müşteri Sorularını İnceleyin"
             )
         }
     }
@@ -2622,7 +2622,7 @@ private fun RetailSizeGuideTableRow(
     second: String,
     third: String,
     strong: Boolean = false,
-    backgroundColor: Color = BBColors.Surface
+    backgroundColor: Color = MaterialTheme.colorScheme.surface
 ) {
     Row(
         modifier = Modifier
@@ -2664,7 +2664,7 @@ private fun RetailTableCell(
         modifier = modifier,
         text = text,
         style = MaterialTheme.typography.labelSmall,
-        color = BBColors.TextStrong,
+        color = MaterialTheme.colorScheme.onSurface,
         fontWeight = if (strong) {
             FontWeight.Bold
         } else {
@@ -2681,10 +2681,10 @@ private fun RetailSheetInfoBox(
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = BBRadius.LgShape,
-        color = BBColors.PrimarySoft,
+        color = MaterialTheme.colorScheme.primaryContainer,
         border = BorderStroke(
             width = 1.dp,
-            color = BBColors.Primary.copy(alpha = BBAlpha.DisabledContainer)
+            color = MaterialTheme.colorScheme.primary.copy(alpha = BBAlpha.DisabledContainer)
         )
     ) {
         Row(
@@ -2695,7 +2695,7 @@ private fun RetailSheetInfoBox(
             Surface(
                 modifier = Modifier.size(BBIcon.BoxMd),
                 shape = BBRadius.LgShape,
-                color = BBColors.Surface
+                color = MaterialTheme.colorScheme.surface
             ) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -2704,7 +2704,7 @@ private fun RetailSheetInfoBox(
                     Icon(
                         imageVector = Icons.Outlined.Straighten,
                         contentDescription = null,
-                        tint = BBColors.TextStrong,
+                        tint = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.size(BBIcon.SizeMd)
                     )
                 }
@@ -2717,14 +2717,14 @@ private fun RetailSheetInfoBox(
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleSmall,
-                    color = BBColors.TextStrong,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
                 )
 
                 Text(
                     text = description,
                     style = MaterialTheme.typography.bodySmall,
-                    color = BBColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -2751,7 +2751,7 @@ private fun RetailSheetCheckRow(
             modifier = Modifier.weight(1f),
             text = text,
             style = MaterialTheme.typography.bodyMedium,
-            color = BBColors.TextStrong,
+            color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.SemiBold
         )
     }
@@ -2764,17 +2764,17 @@ private fun RetailSheetMutedBox(
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = BBRadius.LgShape,
-        color = BBColors.SurfaceMuted,
+        color = MaterialTheme.colorScheme.surfaceVariant,
         border = BorderStroke(
             width = 1.dp,
-            color = BBColors.Border
+            color = MaterialTheme.colorScheme.outlineVariant
         )
     ) {
         Text(
             modifier = Modifier.padding(BBSpacing.Space3),
             text = text,
             style = MaterialTheme.typography.bodySmall,
-            color = BBColors.TextMuted
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -2785,10 +2785,10 @@ private fun RetailSheetProductPill(
 ) {
     Surface(
         shape = BBRadius.PillShape,
-        color = BBColors.SurfaceMuted,
+        color = MaterialTheme.colorScheme.surfaceVariant,
         border = BorderStroke(
             width = 1.dp,
-            color = BBColors.Border
+            color = MaterialTheme.colorScheme.outlineVariant
         )
     ) {
         Row(
@@ -2802,14 +2802,14 @@ private fun RetailSheetProductPill(
             Icon(
                 imageVector = Icons.Outlined.Inventory2,
                 contentDescription = null,
-                tint = BBColors.Primary,
+                tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(BBIcon.SizeSm)
             )
 
             Text(
                 text = text,
                 style = MaterialTheme.typography.labelMedium,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
         }
@@ -2830,7 +2830,7 @@ private fun RetailSheetPrimaryButton(
                 onClick()
             },
         shape = BBRadius.XxlShape,
-        color = BBColors.Primary
+        color = MaterialTheme.colorScheme.primary
     ) {
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -2839,7 +2839,7 @@ private fun RetailSheetPrimaryButton(
             Text(
                 text = text,
                 style = MaterialTheme.typography.labelLarge,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
         }
@@ -2975,7 +2975,7 @@ private fun getRetailProductDetail(
         categoryName = "Ayakkabı",
         priceText = "â‚º899,90",
         oldPriceText = "â‚º1.099,90",
-        discountText = "%20 Ä°ndirim",
+        discountText = "%20 İndirim",
         badgeText = "%20",
         ratingText = "â˜… 4.8",
         cargoText = "Hızlı Kargo",

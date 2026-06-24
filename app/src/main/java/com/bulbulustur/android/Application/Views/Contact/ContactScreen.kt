@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Contact
+package com.bulbulustur.android.Application.Views.Contact
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -86,7 +86,7 @@ fun ContactScreen(
 
         item {
             BbSectionHeader(
-                title = "Ä°letişime geçmenin başka yolu da var",
+                title = "İletişime geçmenin başka yolu da var",
                 subtitle = "Genel iletişim ve yardım merkezi kanalları"
             )
         }
@@ -101,7 +101,7 @@ fun ContactScreen(
         item {
             BbSectionHeader(
                 title = "Sık sorulan sorular",
-                subtitle = "Ä°letişim öncesi hızlı cevaplar"
+                subtitle = "İletişim öncesi hızlı cevaplar"
             )
         }
 
@@ -136,13 +136,13 @@ private fun ContactHeader() {
                 Icon(
                     imageVector = Icons.Outlined.ContactSupport,
                     contentDescription = null,
-                    tint = BBColors.Primary
+                    tint = MaterialTheme.colorScheme.primary
                 )
 
                 Text(
                     text = "Bize Ulaşın",
                     style = MaterialTheme.typography.labelLarge,
-                    color = BBColors.Primary,
+                    color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.SemiBold
                 )
             }
@@ -203,7 +203,7 @@ private fun ContactQuickInfoCard() {
                 Icon(
                     imageVector = Icons.Outlined.SupportAgent,
                     contentDescription = null,
-                    tint = BBColors.Primary
+                    tint = MaterialTheme.colorScheme.primary
                 )
 
                 Text(
@@ -221,14 +221,14 @@ private fun ContactQuickInfoCard() {
             )
 
             ContactInfoRow(
-                title = "Ã‡alışma saatleri",
+                title = "Çalışma saatleri",
                 value = "Pazartesi - Cuma / 09:00 - 18:00",
                 icon = Icons.Outlined.Work
             )
 
             ContactInfoRow(
                 title = "Konum",
-                value = "Ä°stanbul, Türkiye",
+                value = "İstanbul, Türkiye",
                 icon = Icons.Outlined.LocationOn
             )
         }
@@ -249,7 +249,7 @@ private fun ContactInfoRow(
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = BBColors.Primary
+            tint = MaterialTheme.colorScheme.primary
         )
 
         Column(
@@ -259,7 +259,7 @@ private fun ContactInfoRow(
             Text(
                 text = title,
                 style = MaterialTheme.typography.labelMedium,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Text(
@@ -291,7 +291,7 @@ private fun ContactChannelCard(
             Icon(
                 imageVector = channel.icon,
                 contentDescription = null,
-                tint = BBColors.Primary
+                tint = MaterialTheme.colorScheme.primary
             )
 
             Column(
@@ -315,14 +315,14 @@ private fun ContactChannelCard(
                     text = channel.actionLabel,
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = BBColors.Primary
+                    color = MaterialTheme.colorScheme.primary
                 )
             }
 
             Icon(
                 imageVector = Icons.Outlined.ChevronRight,
                 contentDescription = null,
-                tint = BBColors.TextMuted
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -350,7 +350,7 @@ private fun ContactAlternativePanel(
                 Icon(
                     imageVector = Icons.Outlined.Email,
                     contentDescription = null,
-                    tint = BBColors.Primary
+                    tint = MaterialTheme.colorScheme.primary
                 )
 
                 Column(
@@ -374,7 +374,7 @@ private fun ContactAlternativePanel(
                 Icon(
                     imageVector = Icons.Outlined.ChevronRight,
                     contentDescription = null,
-                    tint = BBColors.TextMuted
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -393,7 +393,7 @@ private fun ContactAlternativePanel(
                 Icon(
                     imageVector = Icons.Outlined.HelpCenter,
                     contentDescription = null,
-                    tint = BBColors.Primary
+                    tint = MaterialTheme.colorScheme.primary
                 )
 
                 Column(
@@ -417,7 +417,7 @@ private fun ContactAlternativePanel(
                 Icon(
                     imageVector = Icons.Outlined.ChevronRight,
                     contentDescription = null,
-                    tint = BBColors.TextMuted
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -443,7 +443,7 @@ private fun ContactFaqCard(
             Icon(
                 imageVector = Icons.Outlined.QuestionAnswer,
                 contentDescription = null,
-                tint = BBColors.Primary
+                tint = MaterialTheme.colorScheme.primary
             )
 
             Column(
@@ -467,7 +467,7 @@ private fun ContactFaqCard(
             Icon(
                 imageVector = Icons.Outlined.ChevronRight,
                 contentDescription = null,
-                tint = BBColors.TextMuted
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -561,7 +561,7 @@ private fun contactChannelItems(): List<ContactChannelItem> {
             channelId = 6,
             title = "Marka ve iş birlikleri",
             description = "Marka iş birlikleri, kampanya ortaklıkları ve stratejik çalışmalar için iletişime geçin.",
-            actionLabel = "Ä°ş birliĞini başlat",
+            actionLabel = "İş birliĞini başlat",
             target = ContactChannelTarget.Partnership,
             icon = Icons.Outlined.Handshake
         )

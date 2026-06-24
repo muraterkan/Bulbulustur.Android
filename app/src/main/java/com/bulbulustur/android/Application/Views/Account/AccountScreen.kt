@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Account
+package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
@@ -42,6 +42,7 @@ import androidx.compose.material.icons.outlined.SupportAgent
 import androidx.compose.material.icons.outlined.Tune
 import androidx.compose.material.icons.outlined.Wallet
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -112,7 +113,7 @@ fun AccountScreen(
             profileSubtitle = "Profili Görüntüle veya Düzenle",
             initials = "ME",
             profileId = "ID: 54108878",
-            city = "Ä°stanbul",
+            city = "İstanbul",
             orderCount = "0",
             favoriteCount = "0",
             quotationCount = "2"
@@ -121,14 +122,14 @@ fun AccountScreen(
 
     val pageBackground = Brush.verticalGradient(
         colors = listOf(
-            BBColors.PrimarySoft.copy(alpha = 0.62f),
-            BBColors.SurfaceMuted,
-            BBColors.SurfaceMuted
+            MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.62f),
+            MaterialTheme.colorScheme.surfaceVariant,
+            MaterialTheme.colorScheme.surfaceVariant
         )
     )
 
     Scaffold(
-        containerColor = BBColors.SurfaceMuted,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         bottomBar = {
             RetailBottomNavigation(
                 selectedItem = RetailBottomNavigationItem.Account,
@@ -188,7 +189,7 @@ fun AccountScreen(
 
             item {
                 AccountMenuSection(
-                    title = "Hesap Ä°şlemleri"
+                    title = "Hesap İşlemleri"
                 ) {
                     AccountMenuRow(
                         title = "Siparişlerim",
@@ -209,7 +210,7 @@ fun AccountScreen(
                     AccountDashedDivider()
 
                     AccountMenuRow(
-                        title = "Fiyat Teklifi Ä°stekleri",
+                        title = "Fiyat Teklifi İstekleri",
                         description = "Toptan teklif ve RFQ süreçlerini takip et.",
                         icon = Icons.Outlined.RequestQuote,
                         onClick = onQuotationRequestsClick
@@ -240,7 +241,7 @@ fun AccountScreen(
                     title = "Ticari Profil"
                 ) {
                     AccountMenuRow(
-                        title = "Åirket Bilgileri",
+                        title = "Şirket Bilgileri",
                         description = "Firma ve ticari hesap bilgilerini yönet.",
                         icon = Icons.Outlined.Business,
                         onClick = onCompanyInfoClick
@@ -249,7 +250,7 @@ fun AccountScreen(
                     AccountDashedDivider()
 
                     AccountMenuRow(
-                        title = "Takip EttiĞim MaĞazalar",
+                        title = "Takip EttiĞim Mağazalar",
                         description = "Takip ettiĞin maĞaza ve firmaları görüntüle.",
                         icon = Icons.Outlined.Storefront,
                         onClick = onFollowedStoresClick
@@ -281,7 +282,7 @@ fun AccountScreen(
 
                     AccountMenuRow(
                         title = "DeĞerlendirmelerim",
-                        description = "Yorum ve ürün deĞerlendirmelerini görüntüle.",
+                        description = "Yorum ve ürün değerlendirmelerini görüntüle.",
                         icon = Icons.Outlined.Reviews,
                         onClick = onReviewsClick
                     )
@@ -299,7 +300,7 @@ fun AccountScreen(
 
                     AccountMenuRow(
                         title = "Taleplerim",
-                        description = "Ä°ade, destek ve işlem taleplerini takip et.",
+                        description = "İade, destek ve işlem taleplerini takip et.",
                         icon = Icons.Outlined.HelpOutline,
                         onClick = onRequestsClick
                     )
@@ -401,7 +402,7 @@ private fun AccountProfileHero(
                 Text(
                     text = data.userName,
                     style = BbTypography.headlineSmall,
-                    color = BBColors.TextStrong,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center
                 )
@@ -416,14 +417,14 @@ private fun AccountProfileHero(
                     Text(
                         text = data.profileSubtitle,
                         style = BbTypography.bodyMedium,
-                        color = BBColors.TextMuted,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         textAlign = TextAlign.Center
                     )
 
                     Icon(
                         imageVector = Icons.Outlined.ChevronRight,
                         contentDescription = null,
-                        tint = BBColors.TextMuted,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.size(BBIcon.SizeSm)
                     )
                 }
@@ -457,7 +458,7 @@ private fun AccountAvatar(
         modifier = Modifier
             .size(BBLayout.AccountAvatarSize)
             .background(
-                color = BBColors.Primary,
+                color = MaterialTheme.colorScheme.primary,
                 shape = BBRadius.IconBoxSoft
             )
             .padding(BBSpacing.Space1)
@@ -480,7 +481,7 @@ private fun AccountAvatar(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(
-                        color = BBColors.PrimarySoft,
+                        color = MaterialTheme.colorScheme.primaryContainer,
                         shape = BBRadius.IconBoxSoft
                     ),
                 contentAlignment = Alignment.Center
@@ -488,7 +489,7 @@ private fun AccountAvatar(
                 Text(
                     text = initials,
                     style = BbTypography.titleLarge,
-                    color = BBColors.TextStrong,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -503,10 +504,10 @@ private fun AccountProfileChip(
 ) {
     Surface(
         shape = BBRadius.PillShape,
-        color = BBColors.Surface.copy(alpha = 0.76f),
+        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.76f),
         border = BorderStroke(
             width = 1.dp,
-            color = BBColors.Border
+            color = MaterialTheme.colorScheme.outlineVariant
         )
     ) {
         Row(
@@ -520,14 +521,14 @@ private fun AccountProfileChip(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = BBColors.TextMuted,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.size(BBIcon.SizeSm)
             )
 
             Text(
                 text = text,
                 style = BbTypography.labelSmall,
-                color = BBColors.TextMuted,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontWeight = FontWeight.SemiBold
             )
         }
@@ -550,7 +551,7 @@ private fun AccountTopIconButton(
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = BBColors.TextStrong,
+            tint = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.size(30.dp)
         )
     }
@@ -622,14 +623,14 @@ private fun AccountProfileStat(
         Text(
             text = value,
             style = BbTypography.titleLarge,
-            color = BBColors.TextStrong,
+            color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold
         )
 
         Text(
             text = label,
             style = BbTypography.bodySmall,
-            color = BBColors.TextMuted
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -640,7 +641,7 @@ private fun AccountVerticalDivider() {
         modifier = Modifier
             .width(BBSpacing.BorderThin)
             .height(BBSpacing.Space9)
-            .background(BBColors.Border)
+            .background(MaterialTheme.colorScheme.outlineVariant)
     )
 }
 
@@ -656,7 +657,7 @@ private fun AccountPrimaryActions(
         AccountPrimaryActionCard(
             modifier = Modifier.weight(1f),
             title = "Toptan Teklif Al",
-            description = "Ã–zel fiyat iste.",
+            description = "Özel fiyat iste.",
             icon = Icons.Outlined.RequestQuote,
             accent = AccountActionAccent.Red,
             onClick = onQuotationRequestsClick
@@ -664,7 +665,7 @@ private fun AccountPrimaryActions(
 
         AccountPrimaryActionCard(
             modifier = Modifier.weight(1f),
-            title = "Åirketini Kaydet",
+            title = "Şirketini Kaydet",
             description = "Ticari profilini güçlendir.",
             icon = Icons.Outlined.Business,
             accent = AccountActionAccent.Green,
@@ -745,7 +746,7 @@ private fun AccountPrimaryActionCard(
                     modifier = Modifier
                         .size(BBIcon.BoxSm)
                         .background(
-                            color = BBColors.Surface.copy(alpha = 0.80f),
+                            color = MaterialTheme.colorScheme.surface.copy(alpha = 0.80f),
                             shape = BBRadius.LgShape
                         ),
                     contentAlignment = Alignment.Center
@@ -753,7 +754,7 @@ private fun AccountPrimaryActionCard(
                     Icon(
                         imageVector = Icons.Outlined.ChevronRight,
                         contentDescription = null,
-                        tint = BBColors.TextMuted,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.size(BBIcon.SizeSm)
                     )
                 }
@@ -765,14 +766,14 @@ private fun AccountPrimaryActionCard(
                 Text(
                     text = title,
                     style = BbTypography.titleMedium,
-                    color = BBColors.TextStrong,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
                 )
 
                 Text(
                     text = description,
                     style = BbTypography.bodySmall,
-                    color = BBColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -787,7 +788,7 @@ private fun AccountUsagePurposeDarkCard(
         modifier = Modifier
             .fillMaxWidth()
             .background(
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 shape = BBRadius.XlShape
             )
             .clickable {
@@ -803,7 +804,7 @@ private fun AccountUsagePurposeDarkCard(
                 modifier = Modifier
                     .size(BBIcon.BoxLg)
                     .background(
-                        color = BBColors.Primary.copy(alpha = 0.72f),
+                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.72f),
                         shape = BBRadius.LgShape
                     ),
                 contentAlignment = Alignment.Center
@@ -811,7 +812,7 @@ private fun AccountUsagePurposeDarkCard(
                 Icon(
                     imageVector = Icons.Outlined.Tune,
                     contentDescription = null,
-                    tint = BBColors.TextStrong,
+                    tint = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.size(BBIcon.Section)
                 )
             }
@@ -821,16 +822,16 @@ private fun AccountUsagePurposeDarkCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Bulbulusturâ€™u Hangi Amaçla Kullanıyorsun?",
+                    text = "Bulbulustury'u Hangi Amaçla Kullanıyorsun?",
                     style = BbTypography.titleMedium,
-                    color = BBColors.Surface,
+                    color = MaterialTheme.colorScheme.surface,
                     fontWeight = FontWeight.Bold
                 )
 
                 Text(
                     text = "Toptan, perakende veya her ikisi için deneyimini kişiselleştirelim.",
                     style = BbTypography.bodySmall,
-                    color = BBColors.Surface.copy(alpha = BBAlpha.Muted)
+                    color = MaterialTheme.colorScheme.surface.copy(alpha = BBAlpha.Muted)
                 )
             }
 
@@ -838,7 +839,7 @@ private fun AccountUsagePurposeDarkCard(
                 modifier = Modifier
                     .size(BBIcon.BoxSm)
                     .background(
-                        color = BBColors.Surface.copy(alpha = 0.10f),
+                        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.10f),
                         shape = BBRadius.LgShape
                     ),
                 contentAlignment = Alignment.Center
@@ -846,7 +847,7 @@ private fun AccountUsagePurposeDarkCard(
                 Icon(
                     imageVector = Icons.Outlined.ChevronRight,
                     contentDescription = null,
-                    tint = BBColors.Surface,
+                    tint = MaterialTheme.colorScheme.surface,
                     modifier = Modifier.size(BBIcon.SizeSm)
                 )
             }
@@ -865,7 +866,7 @@ private fun AccountMenuSection(
         Text(
             text = title,
             style = BbTypography.titleSmall,
-            color = BBColors.TextStrong,
+            color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(horizontal = BBSpacing.Space1)
         )
@@ -878,7 +879,7 @@ private fun AccountMenuSection(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(BBColors.Surface)
+                    .background(MaterialTheme.colorScheme.surface)
             ) {
                 content()
             }
@@ -912,7 +913,7 @@ private fun AccountMenuRow(
             modifier = Modifier
                 .size(BBIcon.BoxMd)
                 .background(
-                    color = BBColors.SurfaceMuted,
+                    color = MaterialTheme.colorScheme.surfaceVariant,
                     shape = BBRadius.LgShape
                 ),
             contentAlignment = Alignment.Center
@@ -920,7 +921,7 @@ private fun AccountMenuRow(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = BBColors.TextStrong,
+                tint = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.size(BBIcon.Ui)
             )
         }
@@ -932,14 +933,14 @@ private fun AccountMenuRow(
             Text(
                 text = title,
                 style = BbTypography.titleSmall,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.SemiBold
             )
 
             Text(
                 text = description,
                 style = BbTypography.bodySmall,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
 
@@ -956,7 +957,7 @@ private fun AccountSupportAndSettingsGroup(
         title = "Destek ve Ayarlar"
     ) {
         AccountMenuRow(
-            title = "Yardıma mı Ä°htiyacın Var?",
+            title = "Yardıma mı İhtiyacın Var?",
             description = "Destek merkezi, sipariş, iade ve hesap yardımına ulaş.",
             icon = Icons.Outlined.SupportAgent,
             onClick = onSupportClick
@@ -979,7 +980,7 @@ private fun AccountChevron() {
         modifier = Modifier
             .size(BBIcon.BoxSm)
             .background(
-                color = BBColors.SurfaceMuted,
+                color = MaterialTheme.colorScheme.surfaceVariant,
                 shape = BBRadius.LgShape
             ),
         contentAlignment = Alignment.Center
@@ -987,7 +988,7 @@ private fun AccountChevron() {
         Icon(
             imageVector = Icons.Outlined.ChevronRight,
             contentDescription = null,
-            tint = BBColors.TextMuted,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.size(BBIcon.SizeSm)
         )
     }
@@ -995,6 +996,8 @@ private fun AccountChevron() {
 
 @Composable
 private fun AccountDashedDivider() {
+    val dividerColor = MaterialTheme.colorScheme.outlineVariant
+
     Canvas(
         modifier = Modifier
             .fillMaxWidth()
@@ -1005,7 +1008,7 @@ private fun AccountDashedDivider() {
             .height(BBSpacing.BorderThin)
     ) {
         drawLine(
-            color = BBColors.Border,
+            color = dividerColor,
             start = Offset(0f, 0f),
             end = Offset(size.width, 0f),
             strokeWidth = 1.dp.toPx(),

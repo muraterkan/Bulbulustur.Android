@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Report
+package com.bulbulustur.android.Application.Views.Report
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -235,7 +235,7 @@ private fun ReportSafetyInfoCard() {
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             Text(
-                text = "Bildiriminiz Ä°ncelenir",
+                text = "Bildiriminiz İncelenir",
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -301,8 +301,8 @@ private fun ReportReasonSection(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
     ) {
         BbSectionHeader(
-            title = "Åikayet Nedenini Seç",
-            subtitle = "Bildirimini daha hızlı deĞerlendirebilmemiz için uygun nedeni seç."
+            title = "Şikayet Nedenini Seç",
+            subtitle = "Bildirimini daha hızlı değerlendirebilmemiz için uygun nedeni seç."
         )
 
         FlowRow(
@@ -401,7 +401,7 @@ private fun ReportPrivacyNoticeCard() {
             }
 
             Text(
-                text = "Kişisel bilgi, ödeme bilgisi veya üçüncü kişilere ait özel bilgiler paylaşmayın. Bildirimin kalite ve güvenlik kontrolleri kapsamında deĞerlendirilebilir.",
+                text = "Kişisel bilgi, ödeme bilgisi veya üçüncü kişilere ait özel bilgiler paylaşmayın. Bildirimin kalite ve güvenlik kontrolleri kapsamında değerlendirilebilir.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.weight(1f)
@@ -512,7 +512,7 @@ private fun getReportReasonItems(): List<ReportReasonItem> {
         ),
         ReportReasonItem(
             id = 3,
-            title = "Sahte Ürün Åüphesi"
+            title = "Sahte Ürün Şüphesi"
         ),
         ReportReasonItem(
             id = 4,

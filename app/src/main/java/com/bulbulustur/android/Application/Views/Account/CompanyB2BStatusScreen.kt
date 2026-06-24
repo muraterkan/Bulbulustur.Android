@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Account
+package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -100,8 +100,8 @@ fun CompanyB2BStatusScreen(
                     icon = Icons.Outlined.WorkspacePremium
                 ) {
                     CompanyB2BStatusInfoRow(
-                        title = "Åirket Adı",
-                        value = "Bulbulustur Ä°nternet Teknolojileri ve Tic. A.Å.",
+                        title = "Şirket Adı",
+                        value = "Bulbulustur İnternet Teknolojileri ve Tic. A.Ş.",
                         icon = Icons.Outlined.Business
                     )
 
@@ -173,7 +173,7 @@ private fun CompanyB2BStatusIntroCard() {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Åirketiniz Toptan Ticaret GörünürlüĞünde",
+                    text = "Şirketiniz Toptan Ticaret GörünürlüĞünde",
                     style = BbTypography.titleLarge,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -228,7 +228,7 @@ private fun CompanyB2BActiveSummaryCard() {
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                 ) {
                     Text(
-                        text = "Bulbulustur Ä°nternet Teknolojileri ve Tic. A.Å.",
+                        text = "Bulbulustur İnternet Teknolojileri ve Tic. A.Ş.",
                         style = BbTypography.titleMedium,
                         color = MaterialTheme.colorScheme.inverseOnSurface
                     )
@@ -546,7 +546,7 @@ private fun CompanyB2BManagementPanelCard(
                 )
 
                 Text(
-                    text = "Åirket profilinizi, ürünlerinizi ve toptan satış operasyonlarınızı yönetmek için panel tarafına geçin.",
+                    text = "Şirket profilinizi, ürünlerinizi ve toptan satış operasyonlarınızı yönetmek için panel tarafına geçin.",
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.78f)
                 )

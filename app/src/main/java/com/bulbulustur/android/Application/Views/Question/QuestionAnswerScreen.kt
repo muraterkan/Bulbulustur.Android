@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Question
+package com.bulbulustur.android.Application.Views.Question
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background

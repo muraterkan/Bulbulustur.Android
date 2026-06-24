@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Account
+package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -48,7 +48,7 @@ fun SubscriptionDetailScreen(
     val subscription = getDemoSubscriptionDetail(subscriptionId)
 
     Scaffold(
-        containerColor = BBColors.SurfaceMuted,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
                 title = "Abonelik Detayı",
@@ -59,7 +59,7 @@ fun SubscriptionDetailScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BBColors.SurfaceMuted)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding),
             contentPadding = PaddingValues(
                 start = BBSpacing.PageHorizontal,
@@ -80,14 +80,14 @@ fun SubscriptionDetailScreen(
                 ) {
                     SubscriptionDetailInfoBox(
                         modifier = Modifier.weight(1f),
-                        title = "BAÅLANGIÃ‡",
+                        title = "BAŞLANGIÇ",
                         value = subscription.startDate,
                         iconColor = BBColors.Blue.Blue600
                     )
 
                     SubscriptionDetailInfoBox(
                         modifier = Modifier.weight(1f),
-                        title = "BÄ°TÄ°Å",
+                        title = "BİTİŞ",
                         value = subscription.endDate,
                         iconColor = BBColors.Orange.Orange600
                     )
@@ -158,7 +158,7 @@ private fun SubscriptionHeroCard(
                 Icon(
                     imageVector = Icons.Outlined.Verified,
                     contentDescription = null,
-                    tint = BBColors.Primary,
+                    tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(BBIcon.Action)
                 )
             }
@@ -170,7 +170,7 @@ private fun SubscriptionHeroCard(
                 Text(
                     text = subscription.statusText.uppercase(),
                     style = MaterialTheme.typography.labelSmall,
-                    color = BBColors.Primary
+                    color = MaterialTheme.colorScheme.primary
                 )
 
                 Text(
@@ -199,7 +199,7 @@ private fun SubscriptionDetailInfoBox(
     Row(
         modifier = modifier
             .background(
-                color = BBColors.Surface,
+                color = MaterialTheme.colorScheme.surface,
                 shape = BBRadius.LgShape
             )
             .padding(BBSpacing.CardPaddingCompact),
@@ -302,7 +302,7 @@ private fun SubscriptionPlanInfoCard(
                 )
             }
 
-            HorizontalDivider(color = BBColors.Border)
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
             SubscriptionPlanRow("Abonelik Tipi", subscription.subscriptionType)
             SubscriptionPlanRow("Plan Tipi", subscription.planType)
@@ -344,7 +344,7 @@ private fun SubscriptionPlanRow(
         )
     }
 
-    HorizontalDivider(color = BBColors.Border)
+    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 }
 
 @Composable

@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Logon
+package com.bulbulustur.android.Application.Views.Logon
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -98,7 +98,7 @@ fun LoginScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             LogonPublicFieldLabel(
-                text = "Åifre"
+                text = "Şifre"
             )
 
             Spacer(modifier = Modifier.weight(1f))
@@ -107,10 +107,10 @@ fun LoginScreen(
                 onClick = onForgotPasswordClick
             ) {
                 Text(
-                    text = "Åifremi Unuttum",
+                    text = "Şifremi Unuttum",
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.SemiBold,
-                    color = BBColors.TextSubtle
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -120,7 +120,7 @@ fun LoginScreen(
             onValueChange = {
                 password = it
             },
-            placeholder = "Åifreniz",
+            placeholder = "Şifreniz",
             trailingContent = {
                 IconButton(
                     onClick = {
@@ -135,7 +135,7 @@ fun LoginScreen(
                         },
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.SemiBold,
-                        color = BBColors.TextSubtle
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             },
@@ -171,7 +171,7 @@ fun LoginScreen(
             Text(
                 text = "Hesabınız yok mu?",
                 style = MaterialTheme.typography.bodySmall,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             TextButton(
@@ -181,7 +181,7 @@ fun LoginScreen(
                     text = "Kayıt Ol",
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
-                    color = BBColors.TextStrong
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
         }

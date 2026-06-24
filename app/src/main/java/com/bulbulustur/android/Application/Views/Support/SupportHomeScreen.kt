@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Support
+package com.bulbulustur.android.Application.Views.Support
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -414,7 +414,7 @@ data class SupportArticleItem(
 private fun getSupportQuickSearchTerms(): List<String> {
     return listOf(
         "Sipariş",
-        "Ã–deme",
+        "Ödeme",
         "Entegrasyon",
         "Hesap Yönetimi",
         "Tedarik",
@@ -499,14 +499,14 @@ private fun getSupportPopularArticleItems(): List<SupportArticleItem> {
         ),
         SupportArticleItem(
             articleId = 3,
-            title = "Fiyat ve Teslimat Åartlarının Görünmesi",
+            title = "Fiyat ve Teslimat Şartlarının Görünmesi",
             description = "Toptan teklif ve teslimat bilgilerinin yönetimi.",
             categoryName = "Ticaret Merkezi",
             icon = Icons.Outlined.Business
         ),
         SupportArticleItem(
             articleId = 4,
-            title = "Åifre Yönetimi",
+            title = "Şifre Yönetimi",
             description = "Hesap güvenliĞi ve şifre deĞiştirme adımları.",
             categoryName = "Hesap Merkezi",
             icon = Icons.Outlined.Security

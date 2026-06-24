@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Account
+package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -45,7 +45,7 @@ fun SubscriptionListScreen(
     val subscriptions = getDemoSubscriptions()
 
     Scaffold(
-        containerColor = BBColors.SurfaceMuted,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
                 title = "Aboneliklerim",
@@ -56,7 +56,7 @@ fun SubscriptionListScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BBColors.SurfaceMuted)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding),
             contentPadding = PaddingValues(
                 start = BBSpacing.PageHorizontal,
@@ -158,7 +158,7 @@ private fun SubscriptionCard(
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                 ) {
                     Text(
-                        text = "ABONELÄ°K PLANI",
+                        text = "ABONELİK PLANI",
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -186,14 +186,14 @@ private fun SubscriptionCard(
             ) {
                 SubscriptionInfoBox(
                     modifier = Modifier.weight(1f),
-                    title = "BAÅLANGIÃ‡",
+                    title = "BAŞLANGIÇ",
                     value = subscription.startDate,
                     iconColor = BBColors.Blue.Blue600
                 )
 
                 SubscriptionInfoBox(
                     modifier = Modifier.weight(1f),
-                    title = "BÄ°TÄ°Å",
+                    title = "BİTİŞ",
                     value = subscription.endDate,
                     iconColor = BBColors.Orange.Orange600
                 )
@@ -247,7 +247,7 @@ private fun SubscriptionPriceBox(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
         ) {
             Text(
-                text = "PLAN ÜCRETÄ°",
+                text = "PLAN ÜCRETİ",
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

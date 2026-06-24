@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Account
+package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -45,7 +45,7 @@ fun FollowedStoreListScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Takip Edilen MaĞazalar",
+                title = "Takip Edilen Mağazalar",
                 onBackClick = onBackClick
             )
         }
@@ -138,7 +138,7 @@ private fun FollowedStoreCard(
                 )
 
                 BbButton(
-                    text = "Takipten Ã‡ıkar",
+                    text = "Takipten Çıkar",
                     onClick = {
                         onUnfollowStoreClick(store.followedStoreId)
                     },
@@ -270,7 +270,7 @@ private fun getDemoFollowedStores(): List<FollowedStoreUiModel> {
             storeId = 502,
             storeName = "Ortobella Comfort",
             description = "Takip ettiĞiniz maĞaza",
-            logoText = "CÄ°TRÄ°X",
+            logoText = "CİTRİX",
             logoBackgroundColor = BBColors.Green.Green700,
             logoTextColor = BBColors.White
         ),
@@ -279,7 +279,7 @@ private fun getDemoFollowedStores(): List<FollowedStoreUiModel> {
             storeId = 503,
             storeName = "Ortobella Comfort",
             description = "Takip ettiĞiniz maĞaza",
-            logoText = "CÄ°TRÄ°X",
+            logoText = "CİTRİX",
             logoBackgroundColor = BBColors.Green.Green700,
             logoTextColor = BBColors.White
         )

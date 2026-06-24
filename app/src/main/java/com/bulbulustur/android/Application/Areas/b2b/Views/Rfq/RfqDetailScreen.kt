@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2b.Views.Rfq
+package com.bulbulustur.android.Application.Areas.b2b.Views.Rfq
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -58,7 +58,7 @@ fun RfqDetailScreen(
     )
 
     Scaffold(
-        containerColor = BBColors.SurfaceMuted,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
                 title = "RFQ Detayı",
@@ -69,7 +69,7 @@ fun RfqDetailScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BBColors.SurfaceMuted)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding),
             contentPadding = PaddingValues(
                 start = BBSpacing.PageHorizontal,
@@ -182,7 +182,7 @@ private fun RfqDetailSummaryCard(
             }
 
             BbButton(
-                text = "Yeni Teklif Ä°ste",
+                text = "Yeni Teklif İste",
                 onClick = onCreateRfqClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Light,
@@ -260,14 +260,14 @@ private fun RfqDetailDescriptionCard(
                 value = rfq.productName
             )
 
-            HorizontalDivider(color = BBColors.Border)
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
             RfqInfoRow(
                 title = "Kategori",
                 value = rfq.categoryName
             )
 
-            HorizontalDivider(color = BBColors.Border)
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
             Column(
                 modifier = Modifier.fillMaxWidth(),
@@ -309,18 +309,18 @@ private fun RfqDetailTradeCard(
             )
 
             RfqInfoRow(
-                title = "Ticaret Åartı",
+                title = "Ticaret Şartı",
                 value = rfq.tradeTermName
             )
 
-            HorizontalDivider(color = BBColors.Border)
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
             RfqInfoRow(
-                title = "Ã–deme Åartı",
+                title = "Ödeme Şartı",
                 value = rfq.paymentTermName
             )
 
-            HorizontalDivider(color = BBColors.Border)
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
             RfqInfoRow(
                 title = "Malzeme",
@@ -354,14 +354,14 @@ private fun RfqDetailDeliveryCard(
                 value = rfq.purchaseQuantityText
             )
 
-            HorizontalDivider(color = BBColors.Border)
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
             RfqInfoRow(
                 title = "Hedef Birim Fiyat",
                 value = rfq.unitPriceText
             )
 
-            HorizontalDivider(color = BBColors.Border)
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
             RfqInfoRow(
                 title = "Nakliye Hedefi",
@@ -712,7 +712,7 @@ private fun getDemoRfqDetail(
         tradeTermName = "FOB",
         paymentTermName = "Vadeli / Görüşülebilir",
         materialTypeName = "Karton / Kraft",
-        shippingTarget = "Türkiye / Ä°stanbul / Ambarlı Port",
+        shippingTarget = "Türkiye / İstanbul / Ambarlı Port",
         offers = listOf(
             RfqOfferUiModel(
                 sendedOfferId = 501,

@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Account
+package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -220,7 +220,7 @@ private fun getDemoNotifications(): List<NotificationItem> {
             isUnread = false
         ),
         NotificationItem(
-            title = "Güvenlik Ã–nerisi",
+            title = "Güvenlik Önerisi",
             description = "Telefon doĞrulamasını tamamlayarak hesabınızı daha güvenli hale getirebilirsiniz.",
             timeText = "Bu hafta",
             icon = Icons.Outlined.Security,

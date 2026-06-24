@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2c.Views.Product
+package com.bulbulustur.android.Application.Areas.b2c.Views.Product
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -70,7 +70,7 @@ fun ProductQuestionScreen(
     }
 
     Scaffold(
-        containerColor = BBColors.SurfaceMuted,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
                 title = "Soru & Cevap",
@@ -86,7 +86,7 @@ fun ProductQuestionScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BBColors.SurfaceMuted)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding)
                 .navigationBarsPadding(),
             contentPadding = PaddingValues(
@@ -157,10 +157,10 @@ private fun ProductQuestionProductSummary(
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = BBRadius.XxlShape,
-        color = BBColors.PrimarySoft,
+        color = MaterialTheme.colorScheme.primaryContainer,
         border = BorderStroke(
             width = 1.dp,
-            color = BBColors.Primary.copy(alpha = 0.35f)
+            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.35f)
         )
     ) {
         Row(
@@ -174,14 +174,14 @@ private fun ProductQuestionProductSummary(
                 modifier = Modifier
                     .size(BBSpacing.Space18)
                     .clip(BBRadius.XlShape)
-                    .background(BBColors.Primary),
+                    .background(MaterialTheme.colorScheme.primary),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = product.imageText,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = BBColors.TextStrong
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
 
@@ -193,20 +193,20 @@ private fun ProductQuestionProductSummary(
                     text = product.name,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = BBColors.TextStrong
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
                     text = product.storeName,
                     style = MaterialTheme.typography.bodySmall,
-                    color = BBColors.TextSubtle
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
                 Text(
                     text = product.variantText,
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = BBColors.TextStrong
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
         }
@@ -233,14 +233,14 @@ private fun ProductQuestionAskCard(
                 modifier = Modifier
                     .size(BBSpacing.Space12)
                     .clip(BBRadius.LgShape)
-                    .background(BBColors.PrimarySoft),
+                    .background(MaterialTheme.colorScheme.primaryContainer),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = "?",
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
-                    color = BBColors.TextStrong
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
 
@@ -252,20 +252,20 @@ private fun ProductQuestionAskCard(
                     text = "Satıcıya soru sor",
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
-                    color = BBColors.TextStrong
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
                     text = "${product.storeName} maĞazasına ürün hakkında soru gönderebilirsin.",
                     style = MaterialTheme.typography.bodySmall,
-                    color = BBColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
             Text(
                 text = "â€º",
                 style = MaterialTheme.typography.headlineSmall,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -319,13 +319,13 @@ private fun ProductQuestionStatCard(
                 text = title,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color = BBColors.Primary
+                color = MaterialTheme.colorScheme.primary
             )
 
             Text(
                 text = subtitle,
                 style = MaterialTheme.typography.labelSmall,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -390,14 +390,14 @@ private fun ProductQuestionCard(
                     modifier = Modifier
                         .size(42.dp)
                         .clip(BBRadius.IconBoxSoft)
-                        .background(BBColors.SurfaceMuted),
+                        .background(MaterialTheme.colorScheme.surfaceVariant),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = question.customerInitials,
                         style = MaterialTheme.typography.labelLarge,
                         fontWeight = FontWeight.Bold,
-                        color = BBColors.TextStrong
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 }
 
@@ -408,13 +408,13 @@ private fun ProductQuestionCard(
                         text = question.customerName,
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.Bold,
-                        color = BBColors.TextStrong
+                        color = MaterialTheme.colorScheme.onSurface
                     )
 
                     Text(
                         text = question.dateText,
                         style = MaterialTheme.typography.labelSmall,
-                        color = BBColors.TextMuted
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
@@ -428,7 +428,7 @@ private fun ProductQuestionCard(
                 text = question.question,
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.SemiBold,
-                color = BBColors.TextStrong
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             if (question.answer.isNotBlank()) {
@@ -475,10 +475,10 @@ private fun ProductQuestionAnswerBox(
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = BBRadius.LgShape,
-        color = BBColors.SurfaceMuted,
+        color = MaterialTheme.colorScheme.surfaceVariant,
         border = BorderStroke(
             width = 1.dp,
-            color = BBColors.Border
+            color = MaterialTheme.colorScheme.outlineVariant
         )
     ) {
         Column(
@@ -489,19 +489,19 @@ private fun ProductQuestionAnswerBox(
                 text = "$storeName yanıtladı",
                 style = MaterialTheme.typography.labelMedium,
                 fontWeight = FontWeight.Bold,
-                color = BBColors.TextStrong
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
                 text = answer,
                 style = MaterialTheme.typography.bodySmall,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Text(
                 text = answerDateText,
                 style = MaterialTheme.typography.labelSmall,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -515,13 +515,13 @@ private fun ProductQuestionStatusBadge(
     val containerColor = if (isAnswered) {
         BBColors.Green.Green50
     } else {
-        BBColors.SurfaceMuted
+        MaterialTheme.colorScheme.surfaceVariant
     }
 
     val contentColor = if (isAnswered) {
         BBColors.Green.Green700
     } else {
-        BBColors.TextMuted
+        MaterialTheme.colorScheme.onSurfaceVariant
     }
 
     Surface(
@@ -529,7 +529,7 @@ private fun ProductQuestionStatusBadge(
         color = containerColor,
         border = BorderStroke(
             width = 1.dp,
-            color = BBColors.Border
+            color = MaterialTheme.colorScheme.outlineVariant
         )
     ) {
         Text(
@@ -551,10 +551,10 @@ private fun ProductQuestionMetaBadge(
 ) {
     Surface(
         shape = BBRadius.PillShape,
-        color = BBColors.SurfaceMuted,
+        color = MaterialTheme.colorScheme.surfaceVariant,
         border = BorderStroke(
             width = 1.dp,
-            color = BBColors.Border
+            color = MaterialTheme.colorScheme.outlineVariant
         )
     ) {
         Text(
@@ -564,7 +564,7 @@ private fun ProductQuestionMetaBadge(
                 vertical = BBSpacing.Space1
             ),
             style = MaterialTheme.typography.labelSmall,
-            color = BBColors.TextMuted
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -582,13 +582,13 @@ private fun ProductQuestionSectionTitle(
             text = title,
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
-            color = BBColors.TextStrong
+            color = MaterialTheme.colorScheme.onSurface
         )
 
         Text(
             text = description,
             style = MaterialTheme.typography.bodySmall,
-            color = BBColors.TextMuted
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -705,13 +705,13 @@ private fun getRetailProductQuestionScreenData(
                 customerName = "Ece D.",
                 customerInitials = "ED",
                 dateText = "2 hafta önce",
-                question = "Ä°ade sürecinde kutunun zarar görmemiş olması gerekiyor mu?",
+                question = "İade sürecinde kutunun zarar görmemiş olması gerekiyor mu?",
                 answer = "Merhaba, ürünün kullanılmamış olması ve orijinal kutusuyla gönderilmesi yeterlidir.",
                 answerDateText = "2 hafta önce yanıtlandı",
                 storeName = "Ortobella Store",
                 statusText = "Cevaplı",
                 variantText = "",
-                topicText = "Ä°ade",
+                topicText = "İade",
                 helpfulCount = 6,
                 filterTags = listOf("Cevaplı")
             )

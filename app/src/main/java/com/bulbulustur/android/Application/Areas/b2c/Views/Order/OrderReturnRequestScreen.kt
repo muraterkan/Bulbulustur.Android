@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2c.Views.order
+package com.bulbulustur.android.Application.Areas.b2c.Views.order
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -71,10 +71,10 @@ fun OrderReturnRequestScreen(
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        containerColor = BBColors.SurfaceMuted,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "Ä°ade Talebi",
+                title = "İade Talebi",
                 subtitle = "Teslim edilen ürün için iade talebi oluştur.",
                 onBackClick = onBackClick
             )
@@ -83,7 +83,7 @@ fun OrderReturnRequestScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BBColors.SurfaceMuted)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding)
                 .navigationBarsPadding(),
             contentPadding = PaddingValues(
@@ -160,13 +160,13 @@ private fun OrderReturnIntroCard() {
                 )
             ) {
                 Text(
-                    text = "Ä°ade Talebi Oluştur",
+                    text = "İade Talebi Oluştur",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = "Ä°ade nedeninizi seçin. Talep gönderildikten sonra ilgili sipariş satırı üzerinden takip edilebilir.",
+                    text = "İade nedeninizi seçin. Talep gönderildikten sonra ilgili sipariş satırı üzerinden takip edilebilir.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -193,7 +193,7 @@ private fun OrderReturnReasonCard(
             )
         ) {
             OrderReturnSectionTitle(
-                title = "Ä°ade Nedeni",
+                title = "İade Nedeni",
                 subtitle = "Bu ürünü neden iade etmek istediĞinizi seçin."
             )
 
@@ -289,7 +289,7 @@ private fun OrderReturnDescriptionCard(
         ) {
             OrderReturnSectionTitle(
                 title = "Açıklama",
-                subtitle = "Ä°sterseniz iade talebinizle ilgili ek bilgi yazabilirsiniz."
+                subtitle = "İsterseniz iade talebinizle ilgili ek bilgi yazabilirsiniz."
             )
 
             OutlinedTextField(

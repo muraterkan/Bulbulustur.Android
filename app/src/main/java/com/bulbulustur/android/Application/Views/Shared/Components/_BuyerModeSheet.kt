@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Shared.Components
+package com.bulbulustur.android.Application.Views.Shared.Components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -52,7 +52,7 @@ fun BuyerModeSheet(
     ModalBottomSheet(
         sheetState = sheetState,
         onDismissRequest = onDismissRequest,
-        containerColor = BBColors.Surface,
+        containerColor = MaterialTheme.colorScheme.surface,
         shape = RoundedCornerShape(
             topStart = BBRadius.xxl,
             topEnd = BBRadius.xxl
@@ -72,25 +72,25 @@ fun BuyerModeSheet(
             Text(
                 text = "Alışveriş Alanları",
                 style = MaterialTheme.typography.headlineSmall,
-                color = BBColors.TextStrong
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
                 text = "Perakende Alışveriş ve toptan ticaret arasında geçiş yapabilirsin.",
                 style = MaterialTheme.typography.bodySmall,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             BuyerModeOptionCard(
                 title = "Perakende Alışveriş",
                 description = "Kampanyalar, ürünler ve sepet",
                 selected = currentMode == EBuyerMode.Retail,
-                iconContainerColor = BBColors.PrimarySoft,
+                iconContainerColor = MaterialTheme.colorScheme.primaryContainer,
                 icon = {
                     Icon(
                         imageVector = Icons.Outlined.LocalMall,
                         contentDescription = null,
-                        tint = BBColors.TextStrong,
+                        tint = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.size(BBIcon.SizeLg)
                     )
                 },
@@ -114,13 +114,13 @@ fun BuyerModeSheet(
             )
 
             HorizontalDivider(
-                color = BBColors.Border
+                color = MaterialTheme.colorScheme.outlineVariant
             )
 
             Text(
                 text = "Hızlı toptan aksiyon",
                 style = MaterialTheme.typography.titleSmall,
-                color = BBColors.TextStrong
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             BuyerRfqShortcutCard(
@@ -175,13 +175,13 @@ private fun BuyerModeOptionCard(
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleSmall,
-                    color = BBColors.TextStrong
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
                     text = description,
                     style = MaterialTheme.typography.bodySmall,
-                    color = BBColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
@@ -234,7 +234,7 @@ private fun BuyerRfqShortcutCard(
                 Icon(
                     imageVector = Icons.Outlined.RequestQuote,
                     contentDescription = null,
-                    tint = BBColors.Primary,
+                    tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(BBIcon.SizeLg)
                 )
             }
@@ -246,20 +246,20 @@ private fun BuyerRfqShortcutCard(
                 Text(
                     text = "RFQ Talebi Gönder",
                     style = MaterialTheme.typography.titleSmall,
-                    color = BBColors.TextStrong
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
                     text = "Toptan alım için tedarikçilerden son fiyat iste",
                     style = MaterialTheme.typography.bodySmall,
-                    color = BBColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
             Icon(
                 imageVector = Icons.Outlined.KeyboardArrowRight,
                 contentDescription = null,
-                tint = BBColors.TextMuted,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.size(BBIcon.SizeLg)
             )
         }

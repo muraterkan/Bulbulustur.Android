@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Account
+package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -158,7 +158,7 @@ fun DeactivateAccountScreen(
                         message.isNotBlank()
                     }?.let { message ->
                         DeactivateMessageBox(
-                            title = "Ä°şlem Tamamlanamadı",
+                            title = "İşlem Tamamlanamadı",
                             message = message,
                             type = DeactivateMessageType.Error
                         )
@@ -168,7 +168,7 @@ fun DeactivateAccountScreen(
                         message.isNotBlank()
                     }?.let { message ->
                         DeactivateMessageBox(
-                            title = "Ä°şlem Alındı",
+                            title = "İşlem Alındı",
                             message = message,
                             type = DeactivateMessageType.Success
                         )
@@ -206,7 +206,7 @@ private fun DeactivateWarningCard() {
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             Text(
-                text = "Bu Ä°şlem Dikkat Gerektirir",
+                text = "Bu İşlem Dikkat Gerektirir",
                 style = MaterialTheme.typography.titleSmall,
                 color = BBColors.Red.Red700
             )

@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Account
+package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -69,11 +69,11 @@ fun AddressFormScreen(
     }
 
     val cityState = remember {
-        mutableStateOf(if (isEditMode) "Ä°stanbul" else "")
+        mutableStateOf(if (isEditMode) "İstanbul" else "")
     }
 
     val districtState = remember {
-        mutableStateOf(if (isEditMode) "Åişli" else "")
+        mutableStateOf(if (isEditMode) "Şişli" else "")
     }
 
     val addressTextState = remember {
@@ -206,8 +206,8 @@ fun AddressFormScreen(
                     onValueChange = { value ->
                         cityState.value = value
                     },
-                    label = "Åehir",
-                    placeholder = "Åehir seçiniz"
+                    label = "Şehir",
+                    placeholder = "Şehir seçiniz"
                 )
 
                 BbAddressTextField(
@@ -215,8 +215,8 @@ fun AddressFormScreen(
                     onValueChange = { value ->
                         districtState.value = value
                     },
-                    label = "Ä°lçe",
-                    placeholder = "Ä°lçe seçiniz"
+                    label = "İlçe",
+                    placeholder = "İlçe seçiniz"
                 )
             }
 
@@ -343,13 +343,13 @@ private fun SectionHeaderBox(
             Text(
                 text = title,
                 style = BbTypography.titleSmall,
-                color = BBColors.TextStrong
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
                 text = description,
                 style = BbTypography.bodySmall,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -388,24 +388,24 @@ private fun BbAddressTextField(
         ),
         textStyle = BbTypography.bodyMedium,
         colors = TextFieldDefaults.colors(
-            focusedContainerColor = BBColors.Surface,
-            unfocusedContainerColor = BBColors.Surface,
-            disabledContainerColor = BBColors.SurfaceMuted,
-            focusedIndicatorColor = BBColors.Primary,
-            unfocusedIndicatorColor = BBColors.Border,
-            disabledIndicatorColor = BBColors.Border,
+            focusedContainerColor = MaterialTheme.colorScheme.surface,
+            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+            disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+            unfocusedIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
+            disabledIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
             errorIndicatorColor = BBColors.Red.Red500,
-            focusedLabelColor = BBColors.Primary,
-            unfocusedLabelColor = BBColors.TextMuted,
-            disabledLabelColor = BBColors.TextMuted,
+            focusedLabelColor = MaterialTheme.colorScheme.primary,
+            unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
             errorLabelColor = BBColors.Red.Red600,
-            focusedTextColor = BBColors.TextStrong,
-            unfocusedTextColor = BBColors.TextStrong,
-            disabledTextColor = BBColors.TextMuted,
-            focusedPlaceholderColor = BBColors.TextMuted,
-            unfocusedPlaceholderColor = BBColors.TextMuted,
-            disabledPlaceholderColor = BBColors.TextMuted,
-            cursorColor = BBColors.Primary
+            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+            disabledTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            focusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            cursorColor = MaterialTheme.colorScheme.primary
         )
     )
 }
@@ -439,24 +439,24 @@ private fun BbAddressTextArea(
         shape = BBRadius.Input,
         textStyle = BbTypography.bodyMedium,
         colors = TextFieldDefaults.colors(
-            focusedContainerColor = BBColors.Surface,
-            unfocusedContainerColor = BBColors.Surface,
-            disabledContainerColor = BBColors.SurfaceMuted,
-            focusedIndicatorColor = BBColors.Primary,
-            unfocusedIndicatorColor = BBColors.Border,
-            disabledIndicatorColor = BBColors.Border,
+            focusedContainerColor = MaterialTheme.colorScheme.surface,
+            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+            disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+            unfocusedIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
+            disabledIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
             errorIndicatorColor = BBColors.Red.Red500,
-            focusedLabelColor = BBColors.Primary,
-            unfocusedLabelColor = BBColors.TextMuted,
-            disabledLabelColor = BBColors.TextMuted,
+            focusedLabelColor = MaterialTheme.colorScheme.primary,
+            unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
             errorLabelColor = BBColors.Red.Red600,
-            focusedTextColor = BBColors.TextStrong,
-            unfocusedTextColor = BBColors.TextStrong,
-            disabledTextColor = BBColors.TextMuted,
-            focusedPlaceholderColor = BBColors.TextMuted,
-            unfocusedPlaceholderColor = BBColors.TextMuted,
-            disabledPlaceholderColor = BBColors.TextMuted,
-            cursorColor = BBColors.Primary
+            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+            disabledTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            focusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            cursorColor = MaterialTheme.colorScheme.primary
         )
     )
 }
@@ -470,7 +470,7 @@ private fun DefaultAddressBox(
         modifier = Modifier
             .fillMaxWidth()
             .background(
-                color = BBColors.SurfaceMuted,
+                color = MaterialTheme.colorScheme.surfaceVariant,
                 shape = BBRadius.LgShape
             )
             .padding(BBSpacing.CardPaddingCompact)
@@ -486,9 +486,9 @@ private fun DefaultAddressBox(
                     onCheckedChange(value)
                 },
                 colors = CheckboxDefaults.colors(
-                    checkedColor = BBColors.Primary,
-                    uncheckedColor = BBColors.BorderStrong,
-                    checkmarkColor = BBColors.TextStrong
+                    checkedColor = MaterialTheme.colorScheme.primary,
+                    uncheckedColor = MaterialTheme.colorScheme.outlineVariant,
+                    checkmarkColor = MaterialTheme.colorScheme.onSurface
                 )
             )
 
@@ -499,13 +499,13 @@ private fun DefaultAddressBox(
                 Text(
                     text = "Varsayılan Adresim Olarak Kaydet",
                     style = BbTypography.labelLarge,
-                    color = BBColors.TextStrong
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
                     text = "Siparişlerde bu adres öncelikli olarak kullanılabilir.",
                     style = BbTypography.bodySmall,
-                    color = BBColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -555,7 +555,7 @@ private fun AddressFormInfoBox(
             Text(
                 text = "Bu bilgiler sipariş teslimatı ve fatura süreçlerinde kullanılacaktır.",
                 style = BbTypography.bodySmall,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }

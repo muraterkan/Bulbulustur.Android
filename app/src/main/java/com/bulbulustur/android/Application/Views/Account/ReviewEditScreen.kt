@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Account
+package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -54,7 +54,7 @@ fun ReviewEditScreen(
     }
 
     Scaffold(
-        containerColor = BBColors.SurfaceMuted,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
                 title = "DeĞerlendirmeyi Düzenle",
@@ -65,7 +65,7 @@ fun ReviewEditScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BBColors.SurfaceMuted)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding),
             contentPadding = PaddingValues(
                 start = BBSpacing.PageHorizontal,
@@ -119,7 +119,7 @@ private fun ReviewEditProductCard() {
                 Icon(
                     imageVector = Icons.Outlined.Storefront,
                     contentDescription = null,
-                    tint = BBColors.TextMuted,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.size(BBIcon.Inline)
                 )
 
@@ -137,7 +137,7 @@ private fun ReviewEditProductCard() {
             )
 
             Text(
-                text = "Bu deĞerlendirme ürün detayında ve sipariş deneyimi alanlarında görünebilir.",
+                text = "Bu değerlendirme ürün detayında ve sipariş deneyimi alanlarında görünebilir.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -182,7 +182,7 @@ private fun ReviewEditRatingCard(
                             tint = if (starValue <= rating) {
                                 BBColors.Yellow.Yellow800
                             } else {
-                                BBColors.BorderStrong
+                                MaterialTheme.colorScheme.outlineVariant
                             },
                             modifier = Modifier.size(BBIcon.TopBarIcon)
                         )

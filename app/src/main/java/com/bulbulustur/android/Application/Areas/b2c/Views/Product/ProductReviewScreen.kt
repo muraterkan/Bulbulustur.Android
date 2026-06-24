@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2c.Views.Product
+package com.bulbulustur.android.Application.Areas.b2c.Views.Product
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -67,7 +67,7 @@ fun ProductReviewScreen(
     }
 
     Scaffold(
-        containerColor = BBColors.SurfaceMuted,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
                 title = "Ürün Yorumları",
@@ -78,7 +78,7 @@ fun ProductReviewScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BBColors.SurfaceMuted)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding)
                 .navigationBarsPadding(),
             contentPadding = PaddingValues(
@@ -140,10 +140,10 @@ private fun ProductReviewProductSummary(
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = BBRadius.XxlShape,
-        color = BBColors.PrimarySoft,
+        color = MaterialTheme.colorScheme.primaryContainer,
         border = BorderStroke(
             width = 1.dp,
-            color = BBColors.Primary.copy(alpha = 0.35f)
+            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.35f)
         )
     ) {
         Row(
@@ -157,14 +157,14 @@ private fun ProductReviewProductSummary(
                 modifier = Modifier
                     .size(BBSpacing.Space18)
                     .clip(BBRadius.XlShape)
-                    .background(BBColors.Primary),
+                    .background(MaterialTheme.colorScheme.primary),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = product.imageText,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = BBColors.TextStrong
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
 
@@ -176,20 +176,20 @@ private fun ProductReviewProductSummary(
                     text = product.name,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = BBColors.TextStrong
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
                     text = product.storeName,
                     style = MaterialTheme.typography.bodySmall,
-                    color = BBColors.TextSubtle
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
                 Text(
                     text = product.variantText,
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = BBColors.TextStrong
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
         }
@@ -219,13 +219,13 @@ private fun ProductReviewScoreSummary(
                         text = summary.averageScoreText,
                         style = MaterialTheme.typography.headlineLarge,
                         fontWeight = FontWeight.Bold,
-                        color = BBColors.Primary
+                        color = MaterialTheme.colorScheme.primary
                     )
 
                     Text(
                         text = summary.starText,
                         style = MaterialTheme.typography.titleMedium,
-                        color = BBColors.Primary
+                        color = MaterialTheme.colorScheme.primary
                     )
                 }
 
@@ -236,13 +236,13 @@ private fun ProductReviewScoreSummary(
                         text = "${summary.reviewCount} yorum",
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.Bold,
-                        color = BBColors.TextStrong
+                        color = MaterialTheme.colorScheme.onSurface
                     )
 
                     Text(
                         text = "${summary.verifiedBuyerCount} doĞrulanmış alışveriş",
                         style = MaterialTheme.typography.bodySmall,
-                        color = BBColors.TextMuted
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -268,10 +268,10 @@ private fun ProductReviewSummaryPill(
 ) {
     Surface(
         shape = BBRadius.PillShape,
-        color = BBColors.SurfaceMuted,
+        color = MaterialTheme.colorScheme.surfaceVariant,
         border = BorderStroke(
             width = 1.dp,
-            color = BBColors.Border
+            color = MaterialTheme.colorScheme.outlineVariant
         )
     ) {
         Text(
@@ -281,7 +281,7 @@ private fun ProductReviewSummaryPill(
                 vertical = BBSpacing.Space2
             ),
             style = MaterialTheme.typography.labelSmall,
-            color = BBColors.TextMuted
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -345,14 +345,14 @@ private fun ProductReviewCard(
                     modifier = Modifier
                         .size(46.dp)
                         .clip(BBRadius.IconBoxSoft)
-                        .background(BBColors.SurfaceMuted),
+                        .background(MaterialTheme.colorScheme.surfaceVariant),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = review.customerInitials,
                         style = MaterialTheme.typography.labelLarge,
                         fontWeight = FontWeight.Bold,
-                        color = BBColors.TextStrong
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 }
 
@@ -363,13 +363,13 @@ private fun ProductReviewCard(
                         text = review.customerName,
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.Bold,
-                        color = BBColors.TextStrong
+                        color = MaterialTheme.colorScheme.onSurface
                     )
 
                     Text(
                         text = review.dateText,
                         style = MaterialTheme.typography.labelSmall,
-                        color = BBColors.TextMuted
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
@@ -377,14 +377,14 @@ private fun ProductReviewCard(
                     text = review.ratingText,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = BBColors.Primary
+                    color = MaterialTheme.colorScheme.primary
                 )
             }
 
             Text(
                 text = review.comment,
                 style = MaterialTheme.typography.bodyMedium,
-                color = BBColors.TextStrong
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             FlowRow(
@@ -420,10 +420,10 @@ private fun ProductReviewBadge(
 ) {
     Surface(
         shape = BBRadius.PillShape,
-        color = BBColors.SurfaceMuted,
+        color = MaterialTheme.colorScheme.surfaceVariant,
         border = BorderStroke(
             width = 1.dp,
-            color = BBColors.Border
+            color = MaterialTheme.colorScheme.outlineVariant
         )
     ) {
         Text(
@@ -433,7 +433,7 @@ private fun ProductReviewBadge(
                 vertical = BBSpacing.Space1
             ),
             style = MaterialTheme.typography.labelSmall,
-            color = BBColors.TextMuted
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -451,13 +451,13 @@ private fun ProductReviewSectionTitle(
             text = title,
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
-            color = BBColors.TextStrong
+            color = MaterialTheme.colorScheme.onSurface
         )
 
         Text(
             text = description,
             style = MaterialTheme.typography.bodySmall,
-            color = BBColors.TextMuted
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }

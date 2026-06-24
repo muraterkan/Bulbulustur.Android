@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2c.Views.Product
+package com.bulbulustur.android.Application.Areas.b2c.Views.Product
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -72,7 +72,7 @@ fun OtherSellerListScreen(
     }
 
     Scaffold(
-        containerColor = BBColors.SurfaceMuted,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
                 title = "DiĞer Satıcılar",
@@ -88,7 +88,7 @@ fun OtherSellerListScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BBColors.SurfaceMuted)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding)
                 .navigationBarsPadding(),
             contentPadding = PaddingValues(
@@ -118,7 +118,7 @@ fun OtherSellerListScreen(
             item {
                 OtherSellerSectionTitle(
                     title = "Satıcı seçenekleri",
-                    description = "Aynı ürünü satan MaĞazaları fiyat, kargo ve puana göre karşılaştır."
+                    description = "Aynı ürünü satan Mağazaları fiyat, kargo ve puana göre karşılaştır."
                 )
             }
 
@@ -147,10 +147,10 @@ private fun OtherSellerProductSummary(
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = BBRadius.XxlShape,
-        color = BBColors.PrimarySoft,
+        color = MaterialTheme.colorScheme.primaryContainer,
         border = BorderStroke(
             width = 1.dp,
-            color = BBColors.Primary.copy(alpha = 0.35f)
+            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.35f)
         )
     ) {
         Row(
@@ -164,14 +164,14 @@ private fun OtherSellerProductSummary(
                 modifier = Modifier
                     .size(BBSpacing.Space18)
                     .clip(BBRadius.XlShape)
-                    .background(BBColors.Primary),
+                    .background(MaterialTheme.colorScheme.primary),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = product.imageText,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = BBColors.TextStrong
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
 
@@ -183,20 +183,20 @@ private fun OtherSellerProductSummary(
                     text = product.name,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = BBColors.TextStrong
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
                     text = product.variantText,
                     style = MaterialTheme.typography.bodySmall,
-                    color = BBColors.TextSubtle
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
                 Text(
                     text = "${product.sellerCount} satıcı listeleniyor",
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = BBColors.TextStrong
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
         }
@@ -267,14 +267,14 @@ private fun OtherSellerCard(
                     modifier = Modifier
                         .size(BBSpacing.Space13)
                         .clip(BBRadius.LgShape)
-                        .background(BBColors.SurfaceMuted),
+                        .background(MaterialTheme.colorScheme.surfaceVariant),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = seller.logoText,
                         style = MaterialTheme.typography.labelLarge,
                         fontWeight = FontWeight.Bold,
-                        color = BBColors.TextStrong
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 }
 
@@ -290,7 +290,7 @@ private fun OtherSellerCard(
                             text = seller.storeName,
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
-                            color = BBColors.TextStrong
+                            color = MaterialTheme.colorScheme.onSurface
                         )
 
                         if (seller.isVerified) {
@@ -301,14 +301,14 @@ private fun OtherSellerCard(
                     Text(
                         text = "${seller.ratingText} puan Â· ${seller.cargoText}",
                         style = MaterialTheme.typography.bodySmall,
-                        color = BBColors.TextMuted
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
                 Text(
                     text = "â€º",
                     style = MaterialTheme.typography.headlineSmall,
-                    color = BBColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
@@ -325,13 +325,13 @@ private fun OtherSellerCard(
                         text = seller.priceText,
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
-                        color = BBColors.Primary
+                        color = MaterialTheme.colorScheme.primary
                     )
 
                     Text(
                         text = seller.stockText,
                         style = MaterialTheme.typography.labelSmall,
-                        color = BBColors.TextMuted
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
@@ -356,10 +356,10 @@ private fun OtherSellerCard(
 private fun OtherSellerVerifiedBadge() {
     Surface(
         shape = BBRadius.PillShape,
-        color = BBColors.PrimarySoft,
+        color = MaterialTheme.colorScheme.primaryContainer,
         border = BorderStroke(
             width = 1.dp,
-            color = BBColors.Primary.copy(alpha = 0.35f)
+            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.35f)
         )
     ) {
         Text(
@@ -370,7 +370,7 @@ private fun OtherSellerVerifiedBadge() {
             ),
             style = MaterialTheme.typography.labelSmall,
             fontWeight = FontWeight.Bold,
-            color = BBColors.TextStrong
+            color = MaterialTheme.colorScheme.onSurface
         )
     }
 }
@@ -381,10 +381,10 @@ private fun OtherSellerInfoBadge(
 ) {
     Surface(
         shape = BBRadius.PillShape,
-        color = BBColors.SurfaceMuted,
+        color = MaterialTheme.colorScheme.surfaceVariant,
         border = BorderStroke(
             width = 1.dp,
-            color = BBColors.Border
+            color = MaterialTheme.colorScheme.outlineVariant
         )
     ) {
         Text(
@@ -394,7 +394,7 @@ private fun OtherSellerInfoBadge(
                 vertical = BBSpacing.Space1
             ),
             style = MaterialTheme.typography.labelSmall,
-            color = BBColors.TextMuted
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -412,13 +412,13 @@ private fun OtherSellerSectionTitle(
             text = title,
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
-            color = BBColors.TextStrong
+            color = MaterialTheme.colorScheme.onSurface
         )
 
         Text(
             text = description,
             style = MaterialTheme.typography.bodySmall,
-            color = BBColors.TextMuted
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }

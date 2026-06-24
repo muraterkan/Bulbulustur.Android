@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Account
+package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -126,7 +126,7 @@ fun AccountSecurityScreen(
                     AccountSecurityDashedDivider()
 
                     AccountSecurityRow(
-                        title = "Åifre",
+                        title = "Şifre",
                         value = "Hesabınıza giriş yapmak için kullanılır",
                         icon = Icons.Outlined.Key,
                         onClick = onPasswordChangeClick

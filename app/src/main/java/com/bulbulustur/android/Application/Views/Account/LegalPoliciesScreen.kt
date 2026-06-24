@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Account
+package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -29,6 +29,7 @@ import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material.icons.outlined.SupportAgent
 import androidx.compose.material.icons.outlined.VerifiedUser
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -61,7 +62,7 @@ fun LegalPoliciesScreen(
     }
 
     Scaffold(
-        containerColor = BBColors.SurfaceMuted,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
                 title = "Yasal Metinler ve Politikalar",
@@ -72,7 +73,7 @@ fun LegalPoliciesScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BBColors.SurfaceMuted)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding),
             contentPadding = PaddingValues(
                 start = BBSpacing.PageHorizontal,
@@ -150,14 +151,14 @@ private fun LegalNoticeCard() {
                 Text(
                     text = "Bulbulustur Yasal Merkezi",
                     style = BbTypography.titleMedium,
-                    color = BBColors.TextStrong,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
                 )
 
                 Text(
-                    text = "Åeffaf platform kuralları, kullanıcı hakları ve yasal süreçler tek merkezde toplanır.",
+                    text = "Şeffaf platform kuralları, kullanıcı hakları ve yasal süreçler tek merkezde toplanır.",
                     style = BbTypography.bodySmall,
-                    color = BBColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -177,7 +178,7 @@ private fun LegalPolicySection(
         padding = BbCardPadding.None
     ) {
         Column(
-            modifier = Modifier.background(BBColors.Surface)
+            modifier = Modifier.background(MaterialTheme.colorScheme.surface)
         ) {
             Row(
                 modifier = Modifier
@@ -190,7 +191,7 @@ private fun LegalPolicySection(
                     modifier = Modifier
                         .size(BBIcon.BoxMd)
                         .background(
-                            color = BBColors.PrimarySoft,
+                            color = MaterialTheme.colorScheme.primaryContainer,
                             shape = BBRadius.LgShape
                         ),
                     contentAlignment = Alignment.Center
@@ -198,7 +199,7 @@ private fun LegalPolicySection(
                     Icon(
                         imageVector = icon,
                         contentDescription = null,
-                        tint = BBColors.TextStrong,
+                        tint = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.size(BBIcon.Ui)
                     )
                 }
@@ -209,14 +210,14 @@ private fun LegalPolicySection(
                     Text(
                         text = title,
                         style = BbTypography.titleSmall,
-                        color = BBColors.TextStrong,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold
                     )
 
                     Text(
                         text = description,
                         style = BbTypography.labelSmall,
-                        color = BBColors.TextMuted
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -249,7 +250,7 @@ private fun LegalPolicyRow(
             modifier = Modifier
                 .size(BBIcon.BoxMd)
                 .background(
-                    color = BBColors.SurfaceMuted,
+                    color = MaterialTheme.colorScheme.surfaceVariant,
                     shape = BBRadius.PillShape
                 ),
             contentAlignment = Alignment.Center
@@ -257,7 +258,7 @@ private fun LegalPolicyRow(
             Icon(
                 imageVector = item.icon,
                 contentDescription = null,
-                tint = BBColors.TextStrong,
+                tint = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.size(BBIcon.Ui)
             )
         }
@@ -269,14 +270,14 @@ private fun LegalPolicyRow(
             Text(
                 text = item.title,
                 style = BbTypography.titleSmall,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
                 text = item.description,
                 style = BbTypography.bodySmall,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
 
@@ -284,7 +285,7 @@ private fun LegalPolicyRow(
             modifier = Modifier
                 .size(BBIcon.BoxSm)
                 .background(
-                    color = BBColors.SurfaceMuted,
+                    color = MaterialTheme.colorScheme.surfaceVariant,
                     shape = BBRadius.PillShape
                 ),
             contentAlignment = Alignment.Center
@@ -292,7 +293,7 @@ private fun LegalPolicyRow(
             Icon(
                 imageVector = Icons.Outlined.ChevronRight,
                 contentDescription = null,
-                tint = BBColors.TextMuted,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.size(BBIcon.SizeSm)
             )
         }
@@ -301,6 +302,8 @@ private fun LegalPolicyRow(
 
 @Composable
 private fun LegalDashedDivider() {
+    val dividerColor = MaterialTheme.colorScheme.outlineVariant
+
     Canvas(
         modifier = Modifier
             .fillMaxWidth()
@@ -314,7 +317,7 @@ private fun LegalDashedDivider() {
             )
     ) {
         drawLine(
-            color = BBColors.Border,
+            color = dividerColor,
             start = Offset(0f, 0f),
             end = Offset(size.width, 0f),
             strokeWidth = 1.dp.toPx(),
@@ -357,8 +360,8 @@ private fun getLegalPolicyGroups(): List<LegalPolicyGroup> {
                 ),
                 LegalPolicyItem(
                     key = "cookie-policy",
-                    title = "Ã‡erez Politikası",
-                    description = "Ã‡erez ve benzeri teknolojilerin kullanım detayları.",
+                    title = "Çerez Politikası",
+                    description = "Çerez ve benzeri teknolojilerin kullanım detayları.",
                     icon = Icons.Outlined.Cookie
                 ),
                 LegalPolicyItem(
@@ -370,12 +373,12 @@ private fun getLegalPolicyGroups(): List<LegalPolicyGroup> {
                 LegalPolicyItem(
                     key = "review-policy",
                     title = "DeĞerlendirme Politikası",
-                    description = "Ürün yorumları ve deĞerlendirme süreçleri.",
+                    description = "Ürün yorumları ve değerlendirme süreçleri.",
                     icon = Icons.Outlined.VerifiedUser
                 ),
                 LegalPolicyItem(
                     key = "content-policy",
-                    title = "Ä°çerik Yayınlama Politikası",
+                    title = "İçerik Yayınlama Politikası",
                     description = "Platformda yayınlanan içerikler için temel kurallar.",
                     icon = Icons.Outlined.Article
                 )
@@ -419,14 +422,14 @@ private fun getLegalPolicyGroups(): List<LegalPolicyGroup> {
                 ),
                 LegalPolicyItem(
                     key = "complaint-dispute",
-                    title = "Åikayet ve Uyuşmazlık Süreci",
+                    title = "Şikayet ve Uyuşmazlık Süreci",
                     description = "Sipariş veya platform işlemlerindeki uyuşmazlık akışı.",
                     icon = Icons.Outlined.ReportProblem
                 ),
                 LegalPolicyItem(
                     key = "secure-payment",
-                    title = "Güvenli Ã–deme Süreci",
-                    description = "Ã–deme, koruma ve işlem güvenliĞi hakkında bilgiler.",
+                    title = "Güvenli Ödeme Süreci",
+                    description = "Ödeme, koruma ve işlem güvenliĞi hakkında bilgiler.",
                     icon = Icons.Outlined.Security
                 )
             )

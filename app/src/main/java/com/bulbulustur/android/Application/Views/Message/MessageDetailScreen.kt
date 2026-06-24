@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Message
+package com.bulbulustur.android.Application.Views.Message
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -59,7 +59,7 @@ fun MessageDetailScreen(
     }
 
     Scaffold(
-        containerColor = BBColors.SurfaceMuted,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
                 title = "Mesaj Detayı",
@@ -70,7 +70,7 @@ fun MessageDetailScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BBColors.SurfaceMuted)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding),
             contentPadding = PaddingValues(
                 start = BBSpacing.PageHorizontal,
@@ -229,7 +229,7 @@ private fun MessageCompanyCard(
                 Text(
                     text = "Son mesaj: ${conversation.lastMessageDate}",
                     style = MaterialTheme.typography.labelSmall,
-                    color = BBColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -279,7 +279,7 @@ private fun MessageBubbleCard(
             Text(
                 text = message.sentAt,
                 style = MaterialTheme.typography.labelSmall,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
 
@@ -287,7 +287,7 @@ private fun MessageBubbleCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(
-                    color = if (message.isMine) BBColors.Yellow.Yellow50 else BBColors.Surface,
+                    color = if (message.isMine) BBColors.Yellow.Yellow50 else MaterialTheme.colorScheme.surface,
                     shape = BBRadius.LgShape
                 )
                 .padding(BBSpacing.CardPadding)
@@ -513,10 +513,10 @@ private fun getMessageConversation(
             MessageConversationItem(
                 conversationItemId = 2,
                 senderName = "Bulbulustur",
-                body = "Merhaba, 10.000 adet için Ä°stanbul teslim fiyat ve termin süresini paylaşabilir misiniz?",
+                body = "Merhaba, 10.000 adet için İstanbul teslim fiyat ve termin süresini paylaşabilir misiniz?",
                 sentAt = "10.05.2026 13:37",
                 isMine = true,
-                attachments = listOf("RFQ Ã–zeti", "Teknik Not")
+                attachments = listOf("RFQ Özeti", "Teknik Not")
             )
         )
     )

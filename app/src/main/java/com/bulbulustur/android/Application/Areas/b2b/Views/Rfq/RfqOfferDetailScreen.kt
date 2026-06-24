@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2b.Views.Rfq
+package com.bulbulustur.android.Application.Areas.b2b.Views.Rfq
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -52,7 +52,7 @@ fun RfqOfferDetailScreen(
     )
 
     Scaffold(
-        containerColor = BBColors.SurfaceMuted,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
                 title = "Teklif Detayı",
@@ -63,7 +63,7 @@ fun RfqOfferDetailScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BBColors.SurfaceMuted)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding),
             contentPadding = PaddingValues(
                 start = BBSpacing.PageHorizontal,
@@ -325,7 +325,7 @@ private fun getDemoRfqOfferDetail(
         sendedOfferId = sendedOfferId,
         sellerName = "Anadolu Endüstriyel Tedarik",
         insertedDate = "14 Mayıs 2026",
-        offerDetail = "BelirttiĞiniz ambalaj ürünleri için 10.000 adet üretim kapasitemiz bulunmaktadır. Teslim süresi yaklaşık 12 iş günüdür. Ã–deme ve sevkiyat koşulları görüşmeye açıktır."
+        offerDetail = "BelirttiĞiniz ambalaj ürünleri için 10.000 adet üretim kapasitemiz bulunmaktadır. Teslim süresi yaklaşık 12 iş günüdür. Ödeme ve sevkiyat koşulları görüşmeye açıktır."
     )
 }
 

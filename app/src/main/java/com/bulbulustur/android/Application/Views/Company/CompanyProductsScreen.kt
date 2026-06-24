@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Company
+package com.bulbulustur.android.Application.Views.Company
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -110,7 +110,7 @@ fun CompanyProductsScreen(
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        containerColor = BBColors.SurfaceSoft,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
                 title = "Firma ürünleri",
@@ -275,7 +275,7 @@ private fun CompanyProductsHero(
                             Icon(
                                 imageVector = Icons.Outlined.Verified,
                                 contentDescription = "DoĞrulanmış firma",
-                                tint = BBColors.Primary,
+                                tint = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.size(
                                     BBIcon.SizeSm
                                 )
@@ -286,14 +286,14 @@ private fun CompanyProductsHero(
                     Text(
                         text = "${company.Name} ürünleri",
                         style = MaterialTheme.typography.headlineSmall,
-                        color = BBColors.TextStrong,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold
                     )
 
                     Text(
                         text = company.Description,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = BBColors.TextMuted,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 3,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -333,7 +333,7 @@ private fun CompanyProductsHero(
                 )
 
                 BbButton(
-                    text = "Ä°letişim",
+                    text = "İletişim",
                     onClick = onCompanyContactClick,
                     modifier = Modifier.weight(1f),
                     variant = BbButtonVariant.Secondary,
@@ -353,10 +353,10 @@ private fun CompanyProductsLogo(
             BBIcon.BoxXl
         ),
         shape = BBRadius.XlShape,
-        color = BBColors.Surface,
+        color = MaterialTheme.colorScheme.surface,
         border = BorderStroke(
             width = BBSpacing.BorderThin,
-            color = BBColors.Border
+            color = MaterialTheme.colorScheme.outlineVariant
         )
     ) {
         Column(
@@ -367,7 +367,7 @@ private fun CompanyProductsLogo(
             Icon(
                 imageVector = Icons.Outlined.Business,
                 contentDescription = null,
-                tint = BBColors.Primary,
+                tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(
                     BBIcon.SizeLg
                 )
@@ -376,7 +376,7 @@ private fun CompanyProductsLogo(
             Text(
                 text = logoText,
                 style = MaterialTheme.typography.labelLarge,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
         }
@@ -409,21 +409,21 @@ private fun CompanyProductsFilterHeader(
                 Text(
                     text = "Ürün Listesi",
                     style = MaterialTheme.typography.titleLarge,
-                    color = BBColors.TextStrong,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
                 )
 
                 Text(
                     text = "$productCount ürün listeleniyor",
                     style = MaterialTheme.typography.bodySmall,
-                    color = BBColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
             Text(
                 text = "Filtrele",
                 style = MaterialTheme.typography.labelLarge,
-                color = BBColors.Primary,
+                color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.Bold
             )
         }
@@ -554,7 +554,7 @@ private fun getCompanyProducts(
             ),
             CompanyWholesaleProduct(
                 Id = 5,
-                Title = "Ã–zel baskılı promosyon çanta",
+                Title = "Özel baskılı promosyon çanta",
                 Category = "Promosyon ürünleri",
                 PriceText = "Teklif iste",
                 MoqText = "MOQ 300",

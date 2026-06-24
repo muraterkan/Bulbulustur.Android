@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2c.Views.order
+package com.bulbulustur.android.Application.Areas.b2c.Views.order
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -81,7 +81,7 @@ fun OrderDetailScreen(
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        containerColor = BBColors.SurfaceMuted,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
                 title = "Sipariş Detayları",
@@ -93,7 +93,7 @@ fun OrderDetailScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BBColors.SurfaceMuted)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding)
                 .navigationBarsPadding(),
             contentPadding = PaddingValues(
@@ -170,7 +170,7 @@ private fun OrderSupportBottomSheet(
 ) {
     ModalBottomSheet(
         onDismissRequest = onDismiss,
-        containerColor = BBColors.Surface
+        containerColor = MaterialTheme.colorScheme.surface
     ) {
         Column(
             modifier = Modifier
@@ -219,7 +219,7 @@ private fun OrderSupportBottomSheet(
 
             OrderSupportActionRow(
                 icon = Icons.Outlined.RequestQuote,
-                title = "Ä°ptal ve Ä°ade Koşulları",
+                title = "İptal ve İade Koşulları",
                 subtitle = "Siparişe ait iptal/iade süreci hakkında bilgi",
                 onClick = onDismiss
             )
@@ -261,7 +261,7 @@ private fun OrderSupportActionRow(
         ) {
             OrderDetailIconBox(
                 icon = icon,
-                backgroundColor = BBColors.Surface,
+                backgroundColor = MaterialTheme.colorScheme.surface,
                 iconColor = MaterialTheme.colorScheme.onSurface
             )
 
@@ -402,7 +402,7 @@ private fun OrderDetailStatusCard(
 
                 if (index != order.steps.lastIndex) {
                     HorizontalDivider(
-                        color = BBColors.Border
+                        color = MaterialTheme.colorScheme.outlineVariant
                     )
                 }
             }
@@ -534,7 +534,7 @@ private fun OrderDetailStoreGroupCard(
 
                     if (index != storeGroup.products.lastIndex) {
                         HorizontalDivider(
-                            color = BBColors.Border
+                            color = MaterialTheme.colorScheme.outlineVariant
                         )
                     }
                 }
@@ -574,7 +574,7 @@ private fun OrderDetailCargoCard(
             ) {
                 OrderDetailIconBox(
                     icon = Icons.Outlined.LocalShipping,
-                    backgroundColor = BBColors.Surface,
+                    backgroundColor = MaterialTheme.colorScheme.surface,
                     iconColor = BBColors.Blue.Blue600
                 )
 
@@ -745,7 +745,7 @@ private fun OrderDetailProductActions(
             when (action) {
                 OrderDetailLineAction.Cancel -> {
                     BbButton(
-                        text = "Ä°ptal Et",
+                        text = "İptal Et",
                         onClick = {
                             onCancelRequestClick(
                                 product.orderStoreLineId,
@@ -760,7 +760,7 @@ private fun OrderDetailProductActions(
 
                 OrderDetailLineAction.Return -> {
                     BbButton(
-                        text = "Ä°ade Talebi",
+                        text = "İade Talebi",
                         onClick = {
                             onReturnRequestClick(
                                 product.orderStoreLineId,
@@ -874,7 +874,7 @@ private fun OrderDetailDeliveryCard(
             )
 
             HorizontalDivider(
-                color = BBColors.Border
+                color = MaterialTheme.colorScheme.outlineVariant
             )
 
             Text(
@@ -902,7 +902,7 @@ private fun OrderDetailPaymentCard(
             )
         ) {
             OrderDetailSectionTitle(
-                title = "Ã–deme Ã–zeti",
+                title = "Ödeme Özeti",
                 subtitle = "Siparişe ait tutar daĞılımı"
             )
 
@@ -917,7 +917,7 @@ private fun OrderDetailPaymentCard(
             )
 
             HorizontalDivider(
-                color = BBColors.Border
+                color = MaterialTheme.colorScheme.outlineVariant
             )
 
             OrderDetailAmountRow(
@@ -946,7 +946,7 @@ private fun OrderDetailActionsCard(
             )
         ) {
             OrderDetailSectionTitle(
-                title = "Sipariş Ä°şlemleri",
+                title = "Sipariş İşlemleri",
                 subtitle = "Sözleşme ve destek Aksiyonları"
             )
 
@@ -969,7 +969,7 @@ private fun OrderDetailActionsCard(
             )
 
             BbButton(
-                text = "Sipariş Ä°çin Destek Al",
+                text = "Sipariş İçin Destek Al",
                 onClick = onSupportClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Primary,
@@ -1233,7 +1233,7 @@ private fun OrderDetailLineStatusBadge(
         }
 
         OrderDetailLineStatus.Other -> {
-            BBColors.TextMuted
+            MaterialTheme.colorScheme.onSurfaceVariant
         }
     }
 
@@ -1342,14 +1342,14 @@ private fun getDemoOrderDetail(
         orderKey = "ORD-F4QO-AFPR-J5EX",
         orderNumber = "Sipariş #1000000",
         orderDate = "9 Mayıs 2026",
-        statusText = "Ä°şlemde",
+        statusText = "İşlemde",
         statusColor = BBColors.Orange.Orange600,
         productCountText = "3 ürün",
         productTotalText = "2.400,75 â‚º",
         cargoText = "50,00 â‚º",
         totalText = "2.450,75 â‚º",
         estimatedDelivery = "12 Mayıs 2026",
-        addressText = "Murat Erkan Â· Ä°stanbul / Türkiye Â· Teslimat adresi API baĞlandıĞında gerçek kullanıcı adresinden beslenecek.",
+        addressText = "Murat Erkan Â· İstanbul / Türkiye Â· Teslimat adresi API baĞlandıĞında gerçek kullanıcı adresinden beslenecek.",
         storeGroups = listOf(
             OrderDetailStoreGroupUiModel(
                 storeKey = "STORE-ORTOBELLA",
@@ -1361,7 +1361,7 @@ private fun getDemoOrderDetail(
                         orderStoreLineId = 10001L,
                         productId = 501L,
                         memberKey = "MEMBER-SECURE-501",
-                        name = "Minimal Sırt Ã‡antası",
+                        name = "Minimal Sırt Çantası",
                         quantity = 1,
                         unitPriceText = "850,25 â‚º",
                         totalText = "850,25 â‚º",
@@ -1402,14 +1402,14 @@ private fun getDemoOrderDetail(
                 isCompleted = true
             ),
             OrderDetailStepUiModel(
-                title = "Ã–deme Onaylandı",
-                description = "Ã–deme işlemi tamamlandı.",
+                title = "Ödeme Onaylandı",
+                description = "Ödeme işlemi tamamlandı.",
                 icon = Icons.Outlined.Payments,
                 color = BBColors.Green.Green600,
                 isCompleted = true
             ),
             OrderDetailStepUiModel(
-                title = "Sipariş Ä°şlemde",
+                title = "Sipariş İşlemde",
                 description = "Satıcı ve kargo süreçleri ürün satırlarına göre güncelleniyor.",
                 icon = Icons.Outlined.LocalShipping,
                 color = BBColors.Orange.Orange600,

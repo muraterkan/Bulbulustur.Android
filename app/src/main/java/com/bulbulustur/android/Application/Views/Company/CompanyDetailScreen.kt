@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Company
+package com.bulbulustur.android.Application.Views.Company
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -80,7 +80,7 @@ fun CompanyDetailScreen(
     }
 
     Scaffold(
-        containerColor = BBColors.SurfaceSoft,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
                 title = "Firma Profili",
@@ -224,10 +224,10 @@ private fun CompanyDetailHero(
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = BBRadius.XlShape,
-        color = BBColors.TextStrong,
+        color = MaterialTheme.colorScheme.onSurface,
         border = BorderStroke(
             width = BBSpacing.None,
-            color = BBColors.TextStrong
+            color = MaterialTheme.colorScheme.onSurface
         )
     ) {
         Box(
@@ -236,7 +236,7 @@ private fun CompanyDetailHero(
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(
-                            BBColors.TextStrong,
+                            MaterialTheme.colorScheme.onSurface,
                             BBColors.Black
                         )
                     )
@@ -265,7 +265,7 @@ private fun CompanyDetailHero(
                             Text(
                                 text = "Firma Profili",
                                 style = MaterialTheme.typography.labelLarge,
-                                color = BBColors.Primary,
+                                color = MaterialTheme.colorScheme.primary,
                                 fontWeight = FontWeight.SemiBold
                             )
 
@@ -273,7 +273,7 @@ private fun CompanyDetailHero(
                                 Icon(
                                     imageVector = Icons.Outlined.Verified,
                                     contentDescription = null,
-                                    tint = BBColors.Primary
+                                    tint = MaterialTheme.colorScheme.primary
                                 )
                             }
                         }
@@ -313,10 +313,10 @@ private fun CompanyDetailHero(
 private fun CompanyLogoBox() {
     Surface(
         shape = BBRadius.XlShape,
-        color = BBColors.Surface,
+        color = MaterialTheme.colorScheme.surface,
         border = BorderStroke(
             width = BBSpacing.None,
-            color = BBColors.Border
+            color = MaterialTheme.colorScheme.outlineVariant
         )
     ) {
         Image(
@@ -356,7 +356,7 @@ private fun CompanyDetailMainActions(
             )
 
             CompanyActionCard(
-                title = "Ä°letişime Geç",
+                title = "İletişime Geç",
                 description = "Yetkili kişiye ulaş",
                 icon = Icons.Outlined.Mail,
                 modifier = Modifier.weight(1f),
@@ -367,7 +367,7 @@ private fun CompanyDetailMainActions(
         }
 
         BbButton(
-            text = "Ä°letişime Geç",
+            text = "İletişime Geç",
             onClick = {
                 onContactClick(company.companyId)
             },
@@ -428,7 +428,7 @@ private fun CompanyDetailTabs(
             )
 
             CompanyTabChip(
-                text = "Ä°letişim",
+                text = "İletişim",
                 icon = Icons.Outlined.Email,
                 selected = false,
                 onClick = {
@@ -450,10 +450,10 @@ private fun CompanyTabChip(
         modifier = Modifier.clip(BBRadius.PillShape),
         onClick = onClick,
         shape = BBRadius.PillShape,
-        color = if (selected) BBColors.Blue.Blue50 else BBColors.Surface,
+        color = if (selected) BBColors.Blue.Blue50 else MaterialTheme.colorScheme.surface,
         border = BorderStroke(
             width = BBSpacing.None,
-            color = if (selected) BBColors.Blue.Blue200 else BBColors.Border
+            color = if (selected) BBColors.Blue.Blue200 else MaterialTheme.colorScheme.outlineVariant
         )
     ) {
         Row(
@@ -467,14 +467,14 @@ private fun CompanyTabChip(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = if (selected) BBColors.Blue.Blue700 else BBColors.TextStrong,
+                tint = if (selected) BBColors.Blue.Blue700 else MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.height(BBIcon.SizeSm)
             )
 
             Text(
                 text = text,
                 style = MaterialTheme.typography.labelMedium,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
         }
@@ -502,20 +502,20 @@ private fun CompanyActionCard(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = BBColors.Primary
+                tint = MaterialTheme.colorScheme.primary
             )
 
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.SemiBold,
-                color = BBColors.TextStrong
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
                 text = description,
                 style = MaterialTheme.typography.bodySmall,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -544,7 +544,7 @@ private fun CompanyGalleryPreview(
             Text(
                 text = "Firma Vitrini API sonrası gerçek görsellerle yatay galeri olarak beslenecek.",
                 style = MaterialTheme.typography.bodySmall,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             CompanyTagRow(
@@ -568,29 +568,29 @@ private fun CompanyAboutCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             Text(
-                text = "Åirket Hakkında",
+                text = "Şirket Hakkında",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color = BBColors.TextStrong
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
                 text = company.about,
                 style = MaterialTheme.typography.bodyMedium,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Text(
                 text = "Neden Biz",
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.SemiBold,
-                color = BBColors.TextStrong
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
                 text = company.whyUs,
                 style = MaterialTheme.typography.bodyMedium,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -617,7 +617,7 @@ private fun CompanyInfoGrid(
             )
 
             CompanyInfoCard(
-                title = "Ã‡alışan",
+                title = "Çalışan",
                 value = company.employeeCount,
                 icon = Icons.Outlined.Business,
                 modifier = Modifier.weight(1f)
@@ -629,7 +629,7 @@ private fun CompanyInfoGrid(
             horizontalArrangement = Arrangement.spacedBy(BBSpacing.CardGapCompact)
         ) {
             CompanyInfoCard(
-                title = "Ä°hracat Pazarı",
+                title = "İhracat Pazarı",
                 value = company.exportMarkets,
                 icon = Icons.Outlined.Language,
                 modifier = Modifier.weight(1f)
@@ -676,20 +676,20 @@ private fun CompanyInfoCard(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = BBColors.Primary
+                tint = MaterialTheme.colorScheme.primary
             )
 
             Text(
                 text = title,
                 style = MaterialTheme.typography.labelMedium,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Text(
                 text = value,
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.SemiBold,
-                color = BBColors.TextStrong
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
     }
@@ -714,7 +714,7 @@ private fun CompanyProductGroupCard(
             Icon(
                 imageVector = productGroup.icon,
                 contentDescription = null,
-                tint = BBColors.Primary
+                tint = MaterialTheme.colorScheme.primary
             )
 
             Column(
@@ -725,26 +725,26 @@ private fun CompanyProductGroupCard(
                     text = productGroup.name,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = BBColors.TextStrong
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
                     text = productGroup.description,
                     style = MaterialTheme.typography.bodySmall,
-                    color = BBColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
                 Text(
                     text = "${productGroup.productCount} ürün",
                     style = MaterialTheme.typography.labelMedium,
-                    color = BBColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
             Icon(
                 imageVector = Icons.Outlined.ChevronRight,
                 contentDescription = null,
-                tint = BBColors.TextMuted
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -769,7 +769,7 @@ private fun CompanyCertificateCard(
             Icon(
                 imageVector = Icons.Outlined.RequestQuote,
                 contentDescription = null,
-                tint = BBColors.Primary
+                tint = MaterialTheme.colorScheme.primary
             )
 
             Column(
@@ -780,20 +780,20 @@ private fun CompanyCertificateCard(
                     text = certificate.name,
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.SemiBold,
-                    color = BBColors.TextStrong
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
                     text = certificate.description,
                     style = MaterialTheme.typography.bodySmall,
-                    color = BBColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
             Icon(
                 imageVector = Icons.Outlined.ChevronRight,
                 contentDescription = null,
-                tint = BBColors.TextMuted
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -820,9 +820,9 @@ private fun CompanyTrustPanel(
             )
 
             Text(
-                text = "Firma profili, ürünleri ve belgeleri üzerinden firmayı daha yakından deĞerlendirin.",
+                text = "Firma profili, ürünleri ve belgeleri üzerinden firmayı daha yakından değerlendirin.",
                 style = MaterialTheme.typography.bodySmall,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             CompanyTagRow(
@@ -836,14 +836,14 @@ private fun CompanyTrustPanel(
                 Icon(
                     imageVector = Icons.Outlined.Email,
                     contentDescription = null,
-                    tint = BBColors.Primary
+                    tint = MaterialTheme.colorScheme.primary
                 )
 
                 Text(
-                    text = "Ä°letişime Geç",
+                    text = "İletişime Geç",
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.SemiBold,
-                    color = BBColors.TextStrong
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
         }
@@ -862,14 +862,14 @@ private fun CompanyIconTitleRow(
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = BBColors.Primary
+            tint = MaterialTheme.colorScheme.primary
         )
 
         Text(
             text = title,
             style = MaterialTheme.typography.titleSmall,
             fontWeight = FontWeight.SemiBold,
-            color = BBColors.TextStrong
+            color = MaterialTheme.colorScheme.onSurface
         )
     }
 }
@@ -966,18 +966,18 @@ data class CompanyCertificate(
 private fun getCompanyDetail(companyId: Int): CompanyDetail {
     return CompanyDetail(
         companyId = companyId,
-        name = "Bulbulustur Ä°nternet Teknolojileri ve Tic. A.Å.",
+        name = "Bulbulustur İnternet Teknolojileri ve Tic. A.Ş.",
         shortDescription = "Yazılım, dijital dönüşüm ve ticaret altyapıları alanında çözüm saĞlayan firma.",
         about = "Firma; üretim, tedarik, satış ve e-ticaret operasyonlarını dijital altyapılarla güçlendiren çözümler geliştirir. Mobil uygulamada bu alan ileride gerçek firma açıklaması, yetenekler ve ticari profil bilgileriyle beslenecek.",
         whyUs = "Firma profili, ürünleri, belgeleri ve iletişim bilgileri tek ekranda sunularak alıcının daha hızlı karar vermesine yardımcı olur.",
         country = "Türkiye",
-        city = "Ä°stanbul",
+        city = "İstanbul",
         businessModel = "Perakendeci, Toptancı",
         productCount = 12,
         foundationYear = "2025",
         employeeCount = "1-5 kişi",
         exportMarkets = "Southern Africa, South America",
-        addressSummary = "Ä°çerenköy / Ä°stanbul",
+        addressSummary = "İçerenköy / İstanbul",
         website = "www.bulbulustur.com",
         galleryImageCount = 11,
         isVerified = true,
@@ -1034,12 +1034,12 @@ private fun getCompanyCertificates(): List<CompanyCertificate> {
         CompanyCertificate(
             certificateId = 2,
             name = "ISO 14001",
-            description = "Ã‡evre yönetim sistemi sertifikası."
+            description = "Çevre yönetim sistemi sertifikası."
         ),
         CompanyCertificate(
             certificateId = 3,
             name = "ISO 45001",
-            description = "Ä°ş saĞlıĞı ve güvenliĞi yönetim sistemi sertifikası."
+            description = "İş saĞlıĞı ve güvenliĞi yönetim sistemi sertifikası."
         )
     )
 }

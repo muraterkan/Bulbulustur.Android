@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2c.Views.Store
+package com.bulbulustur.android.Application.Areas.b2c.Views.Store
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -151,7 +151,7 @@ fun SearchScreen(
                     item {
                         SearchSectionTitle(
                             title = "Kategori sonuçları",
-                            description = "Ä°lgili kategori ve alt kategori önerileri."
+                            description = "İlgili kategori ve alt kategori önerileri."
                         )
                     }
 
@@ -358,7 +358,7 @@ private fun PopularSearchSection(
     ) {
         SearchSectionTitle(
             title = "Popüler Aramalar",
-            description = "Åu an en çok bakılan Aramalar."
+            description = "Şu an en çok bakılan Aramalar."
         )
 
         Spacer(modifier = Modifier.height(8.dp))

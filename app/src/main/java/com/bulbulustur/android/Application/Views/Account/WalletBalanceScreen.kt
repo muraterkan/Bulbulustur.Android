@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Account
+package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -44,7 +44,7 @@ fun WalletBalanceScreen(
     onBankAccountsClick: () -> Unit = {}
 ) {
     Scaffold(
-        containerColor = BBColors.SurfaceMuted,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
                 title = "Cüzdan ve Bakiye",
@@ -55,7 +55,7 @@ fun WalletBalanceScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BBColors.SurfaceMuted)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding),
             contentPadding = PaddingValues(
                 start = BBSpacing.PageHorizontal,
@@ -82,7 +82,7 @@ fun WalletBalanceScreen(
 
                     WalletInfoBox(
                         modifier = Modifier.weight(1f),
-                        title = "Ä°ADE",
+                        title = "İADE",
                         value = "0,00 TL"
                     )
                 }
@@ -130,9 +130,9 @@ private fun WalletHeroCard() {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "KULLANILABÄ°LÄ°R BAKÄ°YE",
+                    text = "KULLANILABİLİR BAKİYE",
                     style = MaterialTheme.typography.labelSmall,
-                    color = BBColors.Primary
+                    color = MaterialTheme.colorScheme.primary
                 )
 
                 Text(
@@ -142,7 +142,7 @@ private fun WalletHeroCard() {
                 )
 
                 Text(
-                    text = "Ä°ade bakiyesi, bekleyen ödeme hareketleri ve finansal işlemler burada görüntülenir.",
+                    text = "İade bakiyesi, bekleyen ödeme hareketleri ve finansal işlemler burada görüntülenir.",
                     style = MaterialTheme.typography.bodySmall,
                     color = BBColors.White.copy(alpha = 0.78f)
                 )
@@ -284,7 +284,7 @@ private fun WalletBankAccountCard(
                     )
 
                     Text(
-                        text = "Ä°ade ve geri ödeme süreçlerinde kullanılacak IBAN bilgilerinizi yönetin.",
+                        text = "İade ve geri ödeme süreçlerinde kullanılacak IBAN bilgilerinizi yönetin.",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -326,7 +326,7 @@ private fun WalletIconBox(
         Icon(
             imageVector = Icons.Outlined.Wallet,
             contentDescription = null,
-            tint = if (soft) BBColors.Primary else BBColors.Yellow.Yellow800,
+            tint = if (soft) MaterialTheme.colorScheme.primary else BBColors.Yellow.Yellow800,
             modifier = Modifier.size(BBIcon.Action)
         )
     }
@@ -338,7 +338,7 @@ private fun WalletSmallIconBox() {
         modifier = Modifier
             .size(BBIcon.BoxMd)
             .background(
-                color = BBColors.SurfaceMuted,
+                color = MaterialTheme.colorScheme.surfaceVariant,
                 shape = BBRadius.LgShape
             ),
         contentAlignment = Alignment.Center

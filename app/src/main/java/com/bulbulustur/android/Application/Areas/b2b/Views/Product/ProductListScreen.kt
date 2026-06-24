@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2b.Views.Product
+package com.bulbulustur.android.Application.Areas.b2b.Views.Product
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -72,7 +72,7 @@ fun ProductListScreen(
 
     val sortFilters = remember {
         listOf(
-            "Ã–ne çıkan",
+            "Öne çıkan",
             "Min. sipariş",
             "Yeni tedarik",
             "Hızlı teklif"
@@ -92,7 +92,7 @@ fun ProductListScreen(
     }
 
     var selectedSort by remember {
-        mutableStateOf("Ã–ne çıkan")
+        mutableStateOf("Öne çıkan")
     }
 
     val filteredProducts = remember(

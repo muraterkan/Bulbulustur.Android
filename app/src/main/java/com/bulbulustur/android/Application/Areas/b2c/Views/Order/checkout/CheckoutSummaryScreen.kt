@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout
+package com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -94,7 +94,7 @@ fun CheckoutSummaryScreen(
                     CheckoutProgressCard(
                         currentStep = "4",
                         title = "Sipariş özeti",
-                        description = "Ã–deme öncesi bilgilerini son kez kontrol et."
+                        description = "Ödeme öncesi bilgilerini son kez kontrol et."
                     )
                 }
 
@@ -344,7 +344,7 @@ private fun CheckoutSummaryPaymentCard(
     onEditPaymentClick: () -> Unit
 ) {
     CheckoutSummaryInfoCard(
-        title = "Ã–deme yöntemi",
+        title = "Ödeme yöntemi",
         actionText = "DeĞiştir",
         onActionClick = onEditPaymentClick
     ) {
@@ -501,7 +501,7 @@ private fun CheckoutSummaryTotalCard(
             )
 
             CheckoutSummaryTotalRow(
-                title = "Ä°ndirim",
+                title = "İndirim",
                 value = total.discountText
             )
 
@@ -510,7 +510,7 @@ private fun CheckoutSummaryTotalCard(
             )
 
             CheckoutSummaryTotalRow(
-                title = "Ã–denecek tutar",
+                title = "Ödenecek tutar",
                 value = total.totalPriceText,
                 isStrong = true
             )
@@ -595,7 +595,7 @@ private fun CheckoutSummaryAgreementCard(
             BbCheckboxRow(
                 checked = preliminaryInformationApproved,
                 onCheckedChange = onPreliminaryInformationChange,
-                title = "Ã–n bilgilendirme formunu okudum ve onaylıyorum."
+                title = "Ön bilgilendirme formunu okudum ve onaylıyorum."
             )
         }
     }
@@ -732,7 +732,7 @@ private fun getCheckoutSummaryScreenData(): CheckoutSummaryScreenData {
         address = CheckoutSummaryAddress(
             title = "Ev adresim",
             fullName = "Murat Erkan",
-            fullAddress = "Kızılay Mah. Atatürk Bulvarı No: 12 Daire: 8 Ã‡ankaya / Ankara"
+            fullAddress = "Kızılay Mah. Atatürk Bulvarı No: 12 Daire: 8 Çankaya / Ankara"
         ),
         cargo = CheckoutSummaryCargo(
             companySummaryText = "2 maĞaza için kargo seçildi",

@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2c.Views.Product
+package com.bulbulustur.android.Application.Areas.b2c.Views.Product
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -68,7 +68,7 @@ fun RetailMenuScreen(
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = BBColors.SurfaceMuted
+        color = MaterialTheme.colorScheme.surfaceVariant
     ) {
         Column(
             modifier = Modifier.fillMaxSize()
@@ -198,7 +198,7 @@ private fun RetailMenuHero() {
         Text(
             text = "Alışveriş dünyasına kategori kapısından gir",
             style = MaterialTheme.typography.headlineSmall,
-            color = BBColors.TextStrong,
+            color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold
         )
 
@@ -209,7 +209,7 @@ private fun RetailMenuHero() {
         Text(
             text = "Ana kategorileri keşfet, kategori ana sayfasında alt kırılımlar, ürün Vitrinleri ve kampanyalara ulaş.",
             style = MaterialTheme.typography.bodySmall,
-            color = BBColors.TextMuted
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -232,7 +232,7 @@ private fun RetailMenuQuickActions(
                 Icon(
                     imageVector = Icons.Rounded.LocalOffer,
                     contentDescription = null,
-                    tint = BBColors.TextStrong,
+                    tint = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.size(18.dp)
                 )
             },
@@ -240,12 +240,12 @@ private fun RetailMenuQuickActions(
         )
 
         RetailMenuQuickActionCard(
-            title = "MaĞazalar",
+            title = "Mağazalar",
             icon = {
                 Icon(
                     imageVector = Icons.Rounded.Storefront,
                     contentDescription = null,
-                    tint = BBColors.TextStrong,
+                    tint = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.size(18.dp)
                 )
             },
@@ -258,7 +258,7 @@ private fun RetailMenuQuickActions(
                 Icon(
                     imageVector = Icons.Rounded.Search,
                     contentDescription = null,
-                    tint = BBColors.TextStrong,
+                    tint = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.size(18.dp)
                 )
             },
@@ -283,7 +283,7 @@ private fun RetailMenuQuickActionCard(
         shape = BBRadius.PillShape,
         border = BorderStroke(
             width = 1.dp,
-            color = BBColors.Border
+            color = MaterialTheme.colorScheme.outlineVariant
         )
     ) {
         Row(
@@ -299,7 +299,7 @@ private fun RetailMenuQuickActionCard(
             Text(
                 text = title,
                 style = MaterialTheme.typography.labelMedium,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.SemiBold
             )
         }
@@ -316,7 +316,7 @@ private fun RetailMenuSectionTitle() {
         Text(
             text = "Ana Kategoriler",
             style = MaterialTheme.typography.titleLarge,
-            color = BBColors.TextStrong,
+            color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold
         )
 
@@ -327,7 +327,7 @@ private fun RetailMenuSectionTitle() {
         Text(
             text = "Alt Kategoriler kategori ana sayfasında listelenecek.",
             style = MaterialTheme.typography.bodySmall,
-            color = BBColors.TextMuted
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -349,7 +349,7 @@ private fun RetailMenuCategoryCard(
         color = BBColors.White,
         border = BorderStroke(
             width = 1.dp,
-            color = BBColors.Border
+            color = MaterialTheme.colorScheme.outlineVariant
         )
     ) {
         Column(
@@ -363,13 +363,13 @@ private fun RetailMenuCategoryCard(
                 modifier = Modifier
                     .size(BBSpacing.Space11)
                     .clip(BBRadius.IconBoxSoft)
-                    .background(BBColors.PrimarySoft),
+                    .background(MaterialTheme.colorScheme.primaryContainer),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Category,
                     contentDescription = null,
-                    tint = BBColors.TextStrong,
+                    tint = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.size(22.dp)
                 )
             }
@@ -380,7 +380,7 @@ private fun RetailMenuCategoryCard(
                 Text(
                     text = category.title,
                     style = MaterialTheme.typography.labelLarge,
-                    color = BBColors.TextStrong,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,
                     maxLines = 2
@@ -393,7 +393,7 @@ private fun RetailMenuCategoryCard(
                 Text(
                     text = "Kategoriye gir",
                     style = MaterialTheme.typography.labelSmall,
-                    color = BBColors.TextMuted,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center
                 )
             }
@@ -401,7 +401,7 @@ private fun RetailMenuCategoryCard(
             Icon(
                 imageVector = Icons.AutoMirrored.Rounded.ArrowForward,
                 contentDescription = null,
-                tint = BBColors.TextSubtle,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.size(18.dp)
             )
         }
@@ -413,7 +413,7 @@ private fun RetailMenuBadge(
     text: String
 ) {
     Surface(
-        color = BBColors.PrimarySoft,
+        color = MaterialTheme.colorScheme.primaryContainer,
         shape = BBRadius.PillShape
     ) {
         Text(
@@ -423,7 +423,7 @@ private fun RetailMenuBadge(
             ),
             text = text,
             style = MaterialTheme.typography.labelSmall,
-            color = BBColors.TextStrong,
+            color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold
         )
     }
@@ -451,7 +451,7 @@ private fun retailMenuCategories(): List<RetailMenuCategory> {
         RetailMenuCategory(12, "Endüstriyel Malzemeler"),
         RetailMenuCategory(13, "Makine ve Ekipman"),
         RetailMenuCategory(14, "Mobil Elektronik"),
-        RetailMenuCategory(15, "Anne, Ã‡ocuk ve Oyuncaklar"),
+        RetailMenuCategory(15, "Anne, Çocuk ve Oyuncaklar"),
         RetailMenuCategory(16, "Baskı ve Paketleme"),
         RetailMenuCategory(17, "Akıllı Yaşam ElektroniĞi"),
         RetailMenuCategory(18, "Spor ve Dış Mekan")

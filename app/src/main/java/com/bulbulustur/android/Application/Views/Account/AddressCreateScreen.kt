@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Account
+package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -301,8 +301,8 @@ private fun AddressCreateLocationFields(
                     )
                 )
             },
-            label = "Åehir",
-            placeholder = "Åehir seçiniz",
+            label = "Şehir",
+            placeholder = "Şehir seçiniz",
             options = addressCityOptions()
         )
 
@@ -316,8 +316,8 @@ private fun AddressCreateLocationFields(
                     )
                 )
             },
-            label = "Ä°lçe",
-            placeholder = "Ä°lçe seçiniz",
+            label = "İlçe",
+            placeholder = "İlçe seçiniz",
             options = addressDistrictOptions()
         )
     }
@@ -426,11 +426,11 @@ private fun getAddressCreateValidationMessage(
     }
 
     if (formState.cityName.isBlank()) {
-        return "Åehir seçilmelidir."
+        return "Şehir seçilmelidir."
     }
 
     if (formState.districtName.isBlank()) {
-        return "Ä°lçe seçilmelidir."
+        return "İlçe seçilmelidir."
     }
 
     if (formState.addressLine.isBlank()) {
@@ -449,16 +449,16 @@ private fun addressCountryOptions(): List<BbSelectOption> {
         BbSelectOption("Türkiye", "Türkiye"),
         BbSelectOption("Almanya", "Almanya"),
         BbSelectOption("Amerika Birleşik Devletleri", "Amerika Birleşik Devletleri"),
-        BbSelectOption("Ã‡in", "Ã‡in"),
+        BbSelectOption("Çin", "Çin"),
         BbSelectOption("Birleşik Krallık", "Birleşik Krallık")
     )
 }
 
 private fun addressCityOptions(): List<BbSelectOption> {
     return listOf(
-        BbSelectOption("Ä°stanbul", "Ä°stanbul"),
+        BbSelectOption("İstanbul", "İstanbul"),
         BbSelectOption("Ankara", "Ankara"),
-        BbSelectOption("Ä°zmir", "Ä°zmir"),
+        BbSelectOption("İzmir", "İzmir"),
         BbSelectOption("Bursa", "Bursa"),
         BbSelectOption("Kayseri", "Kayseri"),
         BbSelectOption("Konya", "Konya")
@@ -467,10 +467,10 @@ private fun addressCityOptions(): List<BbSelectOption> {
 
 private fun addressDistrictOptions(): List<BbSelectOption> {
     return listOf(
-        BbSelectOption("Åişli", "Åişli"),
+        BbSelectOption("Şişli", "Şişli"),
         BbSelectOption("Kadıköy", "Kadıköy"),
         BbSelectOption("Üsküdar", "Üsküdar"),
-        BbSelectOption("Ã‡ankaya", "Ã‡ankaya"),
+        BbSelectOption("Çankaya", "Çankaya"),
         BbSelectOption("Nilüfer", "Nilüfer"),
         BbSelectOption("Melikgazi", "Melikgazi")
     )

@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2c.Views.order
+package com.bulbulustur.android.Application.Areas.b2c.Views.order
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -57,7 +57,7 @@ fun OrderContractScreen(
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        containerColor = BBColors.SurfaceMuted,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
                 title = "Sözleşme",
@@ -69,7 +69,7 @@ fun OrderContractScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BBColors.SurfaceMuted)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding)
                 .navigationBarsPadding(),
             contentPadding = PaddingValues(
@@ -98,7 +98,7 @@ fun OrderContractScreen(
                 ) {
                     OrderContractInfoBox(
                         modifier = Modifier.weight(1f),
-                        title = "SÄ°PARÄ°Å",
+                        title = "SİPARİŞ",
                         value = contract.orderCode,
                         icon = Icons.Outlined.Numbers,
                         iconColor = BBColors.Yellow.Yellow800
@@ -106,7 +106,7 @@ fun OrderContractScreen(
 
                     OrderContractInfoBox(
                         modifier = Modifier.weight(1f),
-                        title = "TARÄ°H",
+                        title = "TARİH",
                         value = contract.createdDate,
                         icon = Icons.Outlined.CalendarMonth,
                         iconColor = BBColors.Blue.Blue600
@@ -236,7 +236,7 @@ private fun OrderContractPartiesCard(
             )
 
             HorizontalDivider(
-                color = BBColors.Border
+                color = MaterialTheme.colorScheme.outlineVariant
             )
 
             OrderContractPartyRow(
@@ -264,7 +264,7 @@ private fun OrderContractLegalTextCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(
-                        BBColors.SurfaceMuted
+                        MaterialTheme.colorScheme.surfaceVariant
                     )
                     .padding(
                         BBSpacing.CardPadding
@@ -274,13 +274,13 @@ private fun OrderContractLegalTextCard(
                 )
             ) {
                 Text(
-                    text = "HUKUKÄ° METÄ°N",
+                    text = "HUKUKİ METİN",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
                 Text(
-                    text = "Sözleşme Ä°çeriĞi",
+                    text = "Sözleşme İçeriĞi",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -290,7 +290,7 @@ private fun OrderContractLegalTextCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(
-                        BBColors.Surface
+                        MaterialTheme.colorScheme.surface
                     )
                     .padding(
                         BBSpacing.CardPadding
@@ -330,7 +330,7 @@ private fun OrderContractBottomActionCard(
             )
         ) {
             OrderContractSectionTitle(
-                title = "Belge Ä°şlemleri",
+                title = "Belge İşlemleri",
                 subtitle = "Sözleşmeyi görüntüleyebilir veya yazdırabilirsiniz."
             )
 
@@ -427,8 +427,8 @@ private fun OrderContractPartyRow(
     ) {
         OrderContractIconBox(
             icon = Icons.Outlined.RequestQuote,
-            backgroundColor = BBColors.SurfaceMuted,
-            iconColor = BBColors.TextStrong
+            backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+            iconColor = MaterialTheme.colorScheme.onSurface
         )
 
         Column(
@@ -525,7 +525,7 @@ private fun OrderContractNoticeBox(
         Text(
             text = text,
             style = MaterialTheme.typography.bodySmall,
-            color = BBColors.TextSubtle
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -548,7 +548,7 @@ private fun OrderContractDateBox(
         Text(
             text = dateText,
             style = MaterialTheme.typography.titleSmall,
-            color = BBColors.TextStrong
+            color = MaterialTheme.colorScheme.onSurface
         )
     }
 }
@@ -591,7 +591,7 @@ private fun getDemoOrderContract(
         createdDate = createdDate,
         contractDate = contractDate,
         buyerName = "Murat Erkan",
-        buyerAddress = "Ä°stanbul / Türkiye Â· Alıcı adresi API baĞlandıĞında gerçek sipariş adresinden beslenecek.",
+        buyerAddress = "İstanbul / Türkiye Â· Alıcı adresi API baĞlandıĞında gerçek sipariş adresinden beslenecek.",
         sellerName = "Ortobella",
         sellerAddress = "Satıcı firma ve maĞaza bilgileri API baĞlandıĞında gerçek sipariş satıcısından beslenecek.",
         sections = listOf(
@@ -608,11 +608,11 @@ private fun getDemoOrderContract(
                 body = "Teslimat, alıcının sipariş sırasında belirttiĞi adrese yapılır. Kargo süreci satıcı ve taşıyıcı firma operasyonuna göre güncellenir."
             ),
             OrderContractSectionUiModel(
-                title = "4 - Cayma, Ä°ade ve Ä°ptal",
+                title = "4 - Cayma, İade ve İptal",
                 body = "Alıcı, ilgili mevzuat ve platform kuralları çerçevesinde iptal, iade ve cayma haklarını kullanabilir. Ürün niteliĞine göre istisnai durumlar oluşabilir."
             ),
             OrderContractSectionUiModel(
-                title = "5 - Uyuşmazlıkların Ã‡özümü",
+                title = "5 - Uyuşmazlıkların Çözümü",
                 body = "Taraflar arasında uyuşmazlık oluşması halinde ilgili mevzuat kapsamında yetkili kurumlara başvurulabilir."
             )
         )

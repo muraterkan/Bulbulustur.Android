@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Shared.Components
+package com.bulbulustur.android.Application.Views.Shared.Components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.size

@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Settings
+package com.bulbulustur.android.Application.Views.Settings
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -102,13 +102,13 @@ private fun SettingsHeader() {
                 Icon(
                     imageVector = Icons.Outlined.Settings,
                     contentDescription = null,
-                    tint = BBColors.Primary
+                    tint = MaterialTheme.colorScheme.primary
                 )
 
                 Text(
                     text = "Ayarlar",
                     style = MaterialTheme.typography.labelLarge,
-                    color = BBColors.Primary,
+                    color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.SemiBold
                 )
             }
@@ -175,7 +175,7 @@ private fun SettingsOptionCard(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = BBColors.Primary
+                tint = MaterialTheme.colorScheme.primary
             )
 
             Column(
@@ -199,14 +199,14 @@ private fun SettingsOptionCard(
                     text = currentValue,
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = BBColors.Primary
+                    color = MaterialTheme.colorScheme.primary
                 )
             }
 
             Icon(
                 imageVector = Icons.Outlined.ChevronRight,
                 contentDescription = null,
-                tint = BBColors.TextMuted
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -227,7 +227,7 @@ private fun SettingsInfoCard() {
             Icon(
                 imageVector = Icons.Outlined.DarkMode,
                 contentDescription = null,
-                tint = BBColors.Primary
+                tint = MaterialTheme.colorScheme.primary
             )
 
             Column(
@@ -251,7 +251,7 @@ private fun SettingsInfoCard() {
             Icon(
                 imageVector = Icons.Outlined.Translate,
                 contentDescription = null,
-                tint = BBColors.TextMuted
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }

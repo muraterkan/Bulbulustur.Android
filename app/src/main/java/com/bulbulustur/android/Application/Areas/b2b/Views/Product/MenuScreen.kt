@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2b.Views.Product
+package com.bulbulustur.android.Application.Areas.b2b.Views.Product
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -68,7 +68,7 @@ fun WholesaleMenuScreen(
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = BBColors.SurfaceMuted
+        color = MaterialTheme.colorScheme.surfaceVariant
     ) {
         Column(
             modifier = Modifier.fillMaxSize()
@@ -198,7 +198,7 @@ private fun WholesaleMenuHero() {
         Text(
             text = "Sektörleri, tedarikçileri ve toptan ürün gruplarını keşfet",
             style = MaterialTheme.typography.headlineSmall,
-            color = BBColors.TextStrong,
+            color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold
         )
 
@@ -209,7 +209,7 @@ private fun WholesaleMenuHero() {
         Text(
             text = "Ana kategoriye gir, kategori ana sayfasında alt kırılımlar, tedarikçiler, ürün Vitrinleri ve teklif akışlarıyla devam et.",
             style = MaterialTheme.typography.bodySmall,
-            color = BBColors.TextMuted
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -232,7 +232,7 @@ private fun WholesaleMenuQuickActions(
                 Icon(
                     imageVector = Icons.Rounded.Factory,
                     contentDescription = null,
-                    tint = BBColors.TextStrong,
+                    tint = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.size(18.dp)
                 )
             },
@@ -240,12 +240,12 @@ private fun WholesaleMenuQuickActions(
         )
 
         WholesaleMenuQuickActionCard(
-            title = "Teklif Ä°ste",
+            title = "Teklif İste",
             icon = {
                 Icon(
                     imageVector = Icons.Rounded.Description,
                     contentDescription = null,
-                    tint = BBColors.TextStrong,
+                    tint = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.size(18.dp)
                 )
             },
@@ -258,7 +258,7 @@ private fun WholesaleMenuQuickActions(
                 Icon(
                     imageVector = Icons.Rounded.Search,
                     contentDescription = null,
-                    tint = BBColors.TextStrong,
+                    tint = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.size(18.dp)
                 )
             },
@@ -283,7 +283,7 @@ private fun WholesaleMenuQuickActionCard(
         shape = BBRadius.PillShape,
         border = BorderStroke(
             width = 1.dp,
-            color = BBColors.Border
+            color = MaterialTheme.colorScheme.outlineVariant
         )
     ) {
         Row(
@@ -299,7 +299,7 @@ private fun WholesaleMenuQuickActionCard(
             Text(
                 text = title,
                 style = MaterialTheme.typography.labelMedium,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.SemiBold
             )
         }
@@ -316,7 +316,7 @@ private fun WholesaleMenuSectionTitle() {
         Text(
             text = "Ana Kategoriler",
             style = MaterialTheme.typography.titleLarge,
-            color = BBColors.TextStrong,
+            color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold
         )
 
@@ -327,7 +327,7 @@ private fun WholesaleMenuSectionTitle() {
         Text(
             text = "Alt Kategoriler kategori ana sayfasında listelenecek.",
             style = MaterialTheme.typography.bodySmall,
-            color = BBColors.TextMuted
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -349,7 +349,7 @@ private fun WholesaleMenuCategoryCard(
         color = BBColors.White,
         border = BorderStroke(
             width = 1.dp,
-            color = BBColors.Border
+            color = MaterialTheme.colorScheme.outlineVariant
         )
     ) {
         Column(
@@ -380,7 +380,7 @@ private fun WholesaleMenuCategoryCard(
                 Text(
                     text = category.title,
                     style = MaterialTheme.typography.labelLarge,
-                    color = BBColors.TextStrong,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,
                     maxLines = 2
@@ -393,7 +393,7 @@ private fun WholesaleMenuCategoryCard(
                 Text(
                     text = "Sektöre gir",
                     style = MaterialTheme.typography.labelSmall,
-                    color = BBColors.TextMuted,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center
                 )
             }
@@ -401,7 +401,7 @@ private fun WholesaleMenuCategoryCard(
             Icon(
                 imageVector = Icons.AutoMirrored.Rounded.ArrowForward,
                 contentDescription = null,
-                tint = BBColors.TextSubtle,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.size(18.dp)
             )
         }
@@ -413,7 +413,7 @@ private fun WholesaleMenuBadge(
     text: String
 ) {
     Surface(
-        color = BBColors.PrimarySoft,
+        color = MaterialTheme.colorScheme.primaryContainer,
         shape = BBRadius.PillShape
     ) {
         Text(
@@ -423,7 +423,7 @@ private fun WholesaleMenuBadge(
             ),
             text = text,
             style = MaterialTheme.typography.labelSmall,
-            color = BBColors.TextStrong,
+            color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold
         )
     }
@@ -451,7 +451,7 @@ private fun wholesaleMenuCategories(): List<WholesaleMenuCategory> {
         WholesaleMenuCategory(12, "Endüstriyel Malzemeler"),
         WholesaleMenuCategory(13, "Makine ve Ekipman"),
         WholesaleMenuCategory(14, "Mobil Elektronik"),
-        WholesaleMenuCategory(15, "Anne, Ã‡ocuk ve Oyuncaklar"),
+        WholesaleMenuCategory(15, "Anne, Çocuk ve Oyuncaklar"),
         WholesaleMenuCategory(16, "Baskı ve Paketleme"),
         WholesaleMenuCategory(17, "Akıllı Yaşam ElektroniĞi"),
         WholesaleMenuCategory(18, "Spor ve Dış Mekan")

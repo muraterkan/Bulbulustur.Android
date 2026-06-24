@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2c.Views.Store
+package com.bulbulustur.android.Application.Areas.b2c.Views.Store
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -55,7 +55,7 @@ fun StoreOnboardingInfoScreen(
     val uriHandler = LocalUriHandler.current
 
     Scaffold(
-        containerColor = BBColors.SurfaceMuted,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
                 title = "Satıcı Başvurusu",
@@ -66,7 +66,7 @@ fun StoreOnboardingInfoScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BBColors.SurfaceMuted)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding)
                 .navigationBarsPadding(),
             contentPadding = PaddingValues(
@@ -88,7 +88,7 @@ fun StoreOnboardingInfoScreen(
             item {
                 SellerOnboardingStepCard(
                     icon = Icons.Outlined.Business,
-                    title = "Åirket bilgileri",
+                    title = "Şirket bilgileri",
                     description = "MaĞaza başvurusu için şirket ve iletişim bilgileri web panelinde tamamlanır."
                 )
             }
@@ -97,7 +97,7 @@ fun StoreOnboardingInfoScreen(
                 SellerOnboardingStepCard(
                     icon = Icons.Outlined.RequestQuote,
                     title = "Belgeler ve onay",
-                    description = "Gerekli belgeler, başvuru deĞerlendirmesi ve satıcı onayı web üzerinden yürütülür."
+                    description = "Gerekli belgeler, başvuru değerlendirmesi ve satıcı onayı web üzerinden yürütülür."
                 )
             }
 
@@ -111,7 +111,7 @@ fun StoreOnboardingInfoScreen(
 
             item {
                 SellerOnboardingPrimaryButton(
-                    text = "Webâ€™de Devam Et",
+                    text = "Weby'de Devam Et",
                     icon = Icons.AutoMirrored.Outlined.OpenInNew,
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
@@ -139,7 +139,7 @@ private fun SellerOnboardingHeroCard(
             Surface(
                 modifier = Modifier.size(BBIcon.Box2Xl),
                 shape = BBRadius.XlShape,
-                color = BBColors.Primary
+                color = MaterialTheme.colorScheme.primary
             ) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -148,27 +148,27 @@ private fun SellerOnboardingHeroCard(
                     Icon(
                         imageVector = Icons.Outlined.Storefront,
                         contentDescription = null,
-                        tint = BBColors.TextStrong,
+                        tint = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.size(BBIcon.Size2Xl)
                     )
                 }
             }
 
             Text(
-                text = "Bulbulusturâ€™da Satıcı Olun",
+                text = "Bulbulustury'da Satıcı Olun",
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
-                color = BBColors.TextStrong
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
                 text = "MaĞaza açma başvurusu, şirket bilgileri ve ürün yönetimi web paneli üzerinden tamamlanır. Mobil uygulama alıcı deneyimi için tasarlanmıştır.",
                 style = MaterialTheme.typography.bodyMedium,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             SellerOnboardingPrimaryButton(
-                text = "Webâ€™de Devam Et",
+                text = "Weby'de Devam Et",
                 icon = Icons.AutoMirrored.Outlined.OpenInNew,
                 modifier = Modifier.fillMaxWidth(),
                 onClick = onContinueWebClick
@@ -196,7 +196,7 @@ private fun SellerOnboardingStepCard(
             Surface(
                 modifier = Modifier.size(BBIcon.BoxMd),
                 shape = BBRadius.LgShape,
-                color = BBColors.PrimarySoft
+                color = MaterialTheme.colorScheme.primaryContainer
             ) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -205,7 +205,7 @@ private fun SellerOnboardingStepCard(
                     Icon(
                         imageVector = icon,
                         contentDescription = null,
-                        tint = BBColors.TextStrong,
+                        tint = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.size(BBIcon.SizeMd)
                     )
                 }
@@ -222,7 +222,7 @@ private fun SellerOnboardingStepCard(
                     Icon(
                         imageVector = Icons.Outlined.CheckCircle,
                         contentDescription = null,
-                        tint = BBColors.Primary,
+                        tint = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.size(BBIcon.SizeSm)
                     )
 
@@ -230,14 +230,14 @@ private fun SellerOnboardingStepCard(
                         text = title,
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.Bold,
-                        color = BBColors.TextStrong
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 }
 
                 Text(
                     text = description,
                     style = MaterialTheme.typography.bodySmall,
-                    color = BBColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -257,10 +257,10 @@ private fun SellerOnboardingPrimaryButton(
             .clip(BBRadius.PillShape)
             .clickable { onClick() },
         shape = BBRadius.PillShape,
-        color = BBColors.Primary,
+        color = MaterialTheme.colorScheme.primary,
         border = BorderStroke(
             width = BBSpacing.Divider,
-            color = BBColors.Primary
+            color = MaterialTheme.colorScheme.primary
         )
     ) {
         Row(
@@ -271,7 +271,7 @@ private fun SellerOnboardingPrimaryButton(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = BBColors.TextStrong,
+                tint = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.size(BBIcon.SizeMd)
             )
 
@@ -281,7 +281,7 @@ private fun SellerOnboardingPrimaryButton(
                 text = text,
                 style = MaterialTheme.typography.labelLarge,
                 fontWeight = FontWeight.Bold,
-                color = BBColors.TextStrong
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
     }

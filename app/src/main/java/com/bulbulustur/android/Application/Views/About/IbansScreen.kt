@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Views.Bank
+package com.bulbulustur.android.Views.Bank
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -76,7 +76,7 @@ fun BankAccountListScreen(
             item {
                 BbSectionHeader(
                     title = "Bulbulustur Banka Hesapları",
-                    subtitle = "Ã–deme yapmadan önce açıklama alanına sipariş numaranızı yazmayı unutmayın."
+                    subtitle = "Ödeme yapmadan önce açıklama alanına sipariş numaranızı yazmayı unutmayın."
                 )
             }
 
@@ -126,7 +126,7 @@ private fun BankAccountIntroCard() {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Ã–demenizi Güvenle Tamamlayın",
+                    text = "Ödemenizi Güvenle Tamamlayın",
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
@@ -272,7 +272,7 @@ private fun BankAccountCard(
             }
 
             Text(
-                text = "Ã–deme açıklamasına sipariş numaranızı yazmanız önerilir.",
+                text = "Ödeme açıklamasına sipariş numaranızı yazmanız önerilir.",
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -346,14 +346,14 @@ private fun BankAccountInfoCard() {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Ã–deme Kontrolü",
+                    text = "Ödeme Kontrolü",
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = "Ã–demeniz banka hesabına ulaştıktan sonra siparişinizin ödeme durumu kontrol edilerek güncellenir.",
+                    text = "Ödemeniz banka hesabına ulaştıktan sonra siparişinizin ödeme durumu kontrol edilerek güncellenir.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -376,56 +376,56 @@ private fun bankAccountItems(): List<BankAccountItem> {
         BankAccountItem(
             bankAccountId = 1,
             bankName = "Ziraat Bankası",
-            branchName = "Kartal Åubesi",
-            accountOwner = "BULBULUSTUR Ä°NTERNET TEKNOLOJÄ°LERÄ° VE TÄ°CARET ANONÄ°M ÅÄ°RKETÄ°",
+            branchName = "Kartal Şubesi",
+            accountOwner = "BULBULUSTUR İNTERNET TEKNOLOJİLERİ VE TİCARET ANONİM ŞİRKETİ",
             iban = "TR12 0000 0000 0000 0000 0000 01",
             icon = Icons.Outlined.AccountBalance
         ),
         BankAccountItem(
             bankAccountId = 2,
             bankName = "Garanti Bankası",
-            branchName = "Kartal Åubesi",
-            accountOwner = "BULBULUSTUR Ä°NTERNET TEKNOLOJÄ°LERÄ° VE TÄ°CARET ANONÄ°M ÅÄ°RKETÄ°",
+            branchName = "Kartal Şubesi",
+            accountOwner = "BULBULUSTUR İNTERNET TEKNOLOJİLERİ VE TİCARET ANONİM ŞİRKETİ",
             iban = "TR12 0000 0000 0000 0000 0000 02",
             icon = Icons.Outlined.AccountBalance
         ),
         BankAccountItem(
             bankAccountId = 3,
             bankName = "Kuveyt Türk",
-            branchName = "Kartal Åubesi",
-            accountOwner = "BULBULUSTUR Ä°NTERNET TEKNOLOJÄ°LERÄ° VE TÄ°CARET ANONÄ°M ÅÄ°RKETÄ°",
+            branchName = "Kartal Şubesi",
+            accountOwner = "BULBULUSTUR İNTERNET TEKNOLOJİLERİ VE TİCARET ANONİM ŞİRKETİ",
             iban = "TR12 0000 0000 0000 0000 0000 03",
             icon = Icons.Outlined.AccountBalance
         ),
         BankAccountItem(
             bankAccountId = 4,
             bankName = "Yapı Kredi Bankası",
-            branchName = "Kartal Åubesi",
-            accountOwner = "BULBULUSTUR Ä°NTERNET TEKNOLOJÄ°LERÄ° VE TÄ°CARET ANONÄ°M ÅÄ°RKETÄ°",
+            branchName = "Kartal Şubesi",
+            accountOwner = "BULBULUSTUR İNTERNET TEKNOLOJİLERİ VE TİCARET ANONİM ŞİRKETİ",
             iban = "TR12 0000 0000 0000 0000 0000 04",
             icon = Icons.Outlined.AccountBalance
         ),
         BankAccountItem(
             bankAccountId = 5,
-            bankName = "Ä°ş Bankası",
-            branchName = "Kartal Åubesi",
-            accountOwner = "BULBULUSTUR Ä°NTERNET TEKNOLOJÄ°LERÄ° VE TÄ°CARET ANONÄ°M ÅÄ°RKETÄ°",
+            bankName = "İş Bankası",
+            branchName = "Kartal Şubesi",
+            accountOwner = "BULBULUSTUR İNTERNET TEKNOLOJİLERİ VE TİCARET ANONİM ŞİRKETİ",
             iban = "TR12 0000 0000 0000 0000 0000 05",
             icon = Icons.Outlined.AccountBalance
         ),
         BankAccountItem(
             bankAccountId = 6,
             bankName = "Halk Bankası",
-            branchName = "Kartal Åubesi",
-            accountOwner = "BULBULUSTUR Ä°NTERNET TEKNOLOJÄ°LERÄ° VE TÄ°CARET ANONÄ°M ÅÄ°RKETÄ°",
+            branchName = "Kartal Şubesi",
+            accountOwner = "BULBULUSTUR İNTERNET TEKNOLOJİLERİ VE TİCARET ANONİM ŞİRKETİ",
             iban = "TR12 0000 0000 0000 0000 0000 06",
             icon = Icons.Outlined.AccountBalance
         ),
         BankAccountItem(
             bankAccountId = 7,
             bankName = "Akbank",
-            branchName = "Kartal Åubesi",
-            accountOwner = "BULBULUSTUR Ä°NTERNET TEKNOLOJÄ°LERÄ° VE TÄ°CARET ANONÄ°M ÅÄ°RKETÄ°",
+            branchName = "Kartal Şubesi",
+            accountOwner = "BULBULUSTUR İNTERNET TEKNOLOJİLERİ VE TİCARET ANONİM ŞİRKETİ",
             iban = "TR12 0000 0000 0000 0000 0000 07",
             icon = Icons.Outlined.AccountBalance
         )

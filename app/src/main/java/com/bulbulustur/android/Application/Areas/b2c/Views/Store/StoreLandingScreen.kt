@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2c.Views.Store
+package com.bulbulustur.android.Application.Areas.b2c.Views.Store
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -106,7 +106,7 @@ fun SellerLandingScreen(
             item {
                 SellerLandingSectionTitle(
                     title = selectedTab,
-                    description = "Bulbulusturâ€™da satışa başlamak isteyen MaĞazalar için kısa bilgiler."
+                    description = "Bulbulustury'da satışa başlamak isteyen Mağazalar için kısa bilgiler."
                 )
             }
 
@@ -157,7 +157,7 @@ private fun SellerLandingTopBar(
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = "Bulbulusturâ€™da satış yap",
+                text = "Bulbulustury'da satış yap",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onBackground
@@ -193,7 +193,7 @@ private fun SellerLandingHero(
                 .padding(18.dp)
         ) {
             Text(
-                text = "Ürünlerini Bulbulusturâ€™da Vitrine çıkar",
+                text = "Ürünlerini Bulbulustury'da Vitrine çıkar",
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onPrimaryContainer
@@ -202,7 +202,7 @@ private fun SellerLandingHero(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Perakende ve toptan satış kanallarına tek ekosistemden ulaşmak isteyen MaĞazalar için başlangıç alanı.",
+                text = "Perakende ve toptan satış kanallarına tek ekosistemden ulaşmak isteyen Mağazalar için başlangıç alanı.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onPrimaryContainer
             )
@@ -601,9 +601,9 @@ private fun getRetailSellerLandingScreenData(): RetailSellerLandingScreenData {
             RetailSellerInfoItem(
                 id = 5,
                 groupName = "Başvuru",
-                title = "Åirket doĞrulama",
+                title = "Şirket doĞrulama",
                 description = "Satıcı güvenliĞi için şirket ve yetkili bilgileri doĞrulama sürecine alınır.",
-                iconText = "ÅD"
+                iconText = "ŞD"
             ),
             RetailSellerInfoItem(
                 id = 6,

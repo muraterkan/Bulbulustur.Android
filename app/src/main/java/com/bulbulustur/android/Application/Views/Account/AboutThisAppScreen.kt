@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Account
+package com.bulbulustur.android.Application.Views.Account
 
 import android.content.pm.PackageManager
 import androidx.compose.foundation.BorderStroke
@@ -33,6 +33,7 @@ import androidx.compose.material.icons.outlined.StarRate
 import androidx.compose.material.icons.outlined.SupportAgent
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -102,7 +103,7 @@ fun AboutThisAppScreen(
     )
 
     Scaffold(
-        containerColor = BBColors.SurfaceMuted,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
                 title = "Uygulama Hakkında",
@@ -113,7 +114,7 @@ fun AboutThisAppScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BBColors.SurfaceMuted)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding),
             contentPadding = PaddingValues(
                 start = BBSpacing.PageHorizontal,
@@ -158,7 +159,7 @@ fun AboutThisAppScreen(
 
                     AboutMenuRow(
                         icon = Icons.Outlined.Cached,
-                        title = "Ã–nbelleĞi Temizle",
+                        title = "ÖnbelleĞi Temizle",
                         value = null,
                         showArrow = true,
                         enabled = true,
@@ -189,7 +190,7 @@ fun AboutThisAppScreen(
                     activeSheet = null
                 },
                 sheetState = bottomSheetState,
-                containerColor = BBColors.Surface,
+                containerColor = MaterialTheme.colorScheme.surface,
                 shape = BBRadius.XxlShape
             ) {
                 when (sheetType) {
@@ -269,13 +270,13 @@ private fun AboutAppHero(
             Text(
                 text = "Toptan ve Perakende Ticaret Platformu",
                 style = BbTypography.bodyMedium,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Text(
                 text = "Sürüm $versionLabel",
                 style = BbTypography.titleSmall,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
         }
@@ -297,10 +298,10 @@ private fun AboutLogoShowcase(
         Surface(
             modifier = Modifier.size(102.dp),
             shape = BBRadius.XxlShape,
-            color = BBColors.Surface,
+            color = MaterialTheme.colorScheme.surface,
             border = BorderStroke(
                 width = 1.dp,
-                color = BBColors.Border
+                color = MaterialTheme.colorScheme.outlineVariant
             )
         ) {
             Box(
@@ -331,7 +332,7 @@ private fun AboutMenuGroup(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(BBColors.Surface)
+                .background(MaterialTheme.colorScheme.surface)
         ) {
             content()
         }
@@ -367,7 +368,7 @@ private fun AboutMenuRow(
             modifier = Modifier
                 .size(BBIcon.BoxMd)
                 .background(
-                    color = BBColors.SurfaceMuted,
+                    color = MaterialTheme.colorScheme.surfaceVariant,
                     shape = BBRadius.LgShape
                 ),
             contentAlignment = Alignment.Center
@@ -375,7 +376,7 @@ private fun AboutMenuRow(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = BBColors.TextStrong,
+                tint = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.size(BBIcon.Ui)
             )
         }
@@ -387,14 +388,14 @@ private fun AboutMenuRow(
             Text(
                 text = title,
                 style = BbTypography.titleSmall,
-                color = BBColors.TextStrong
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             if (!value.isNullOrBlank()) {
                 Text(
                     text = value,
                     style = BbTypography.labelSmall,
-                    color = BBColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -403,7 +404,7 @@ private fun AboutMenuRow(
             Icon(
                 imageVector = Icons.Outlined.ChevronRight,
                 contentDescription = null,
-                tint = BBColors.TextMuted,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.size(BBIcon.Ui)
             )
         }
@@ -452,7 +453,7 @@ private fun AboutBrandLinksSheet(
 
             AboutSheetLinkRow(
                 icon = Icons.Outlined.SupportAgent,
-                title = "Yardım ve Ä°letişim",
+                title = "Yardım ve İletişim",
                 onClick = onContactUsClick
             )
 
@@ -484,7 +485,7 @@ private fun AboutClearCacheSheet(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
     ) {
         AboutBottomSheetTopBar(
-            title = "Ã–nbelleĞi Temizle",
+            title = "Önbelleği Temizle",
             onCloseClick = onDismissClick
         )
 
@@ -493,7 +494,7 @@ private fun AboutClearCacheSheet(
             style = BbTypography.bodyMedium.copy(
                 lineHeight = 20.sp
             ),
-            color = BBColors.TextSubtle
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         Row(
@@ -501,20 +502,20 @@ private fun AboutClearCacheSheet(
             horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
         ) {
             AboutSheetButton(
-                text = "Ä°ptal",
+                text = "İptal",
                 modifier = Modifier.weight(1f),
-                containerColor = BBColors.SurfaceMuted,
-                contentColor = BBColors.TextStrong,
-                borderColor = BBColors.Border,
+                containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                contentColor = MaterialTheme.colorScheme.onSurface,
+                borderColor = MaterialTheme.colorScheme.outlineVariant,
                 onClick = onDismissClick
             )
 
             AboutSheetButton(
                 text = "Temizle",
                 modifier = Modifier.weight(1f),
-                containerColor = BBColors.Primary,
-                contentColor = BBColors.TextStrong,
-                borderColor = BBColors.Primary,
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onSurface,
+                borderColor = MaterialTheme.colorScheme.primary,
                 onClick = onConfirmClick
             )
         }
@@ -546,7 +547,7 @@ private fun AboutRateAppSheet(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
     ) {
         AboutBottomSheetTopBar(
-            title = "Bizi DeĞerlendir",
+            title = "Bizi Değerlendir",
             onCloseClick = onDismissClick
         )
 
@@ -558,7 +559,7 @@ private fun AboutRateAppSheet(
                 style = BbTypography.titleLarge.copy(
                     lineHeight = 28.sp
                 ),
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
 
@@ -567,17 +568,17 @@ private fun AboutRateAppSheet(
                 style = BbTypography.bodyMedium.copy(
                     lineHeight = 20.sp
                 ),
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
 
         Surface(
             modifier = Modifier.fillMaxWidth(),
             shape = BBRadius.XlShape,
-            color = BBColors.PrimarySoft,
+            color = MaterialTheme.colorScheme.primaryContainer,
             border = BorderStroke(
                 width = 1.dp,
-                color = BBColors.Primary.copy(alpha = BBAlpha.Muted)
+                color = MaterialTheme.colorScheme.primary.copy(alpha = BBAlpha.Muted)
             )
         ) {
             Column(
@@ -602,7 +603,7 @@ private fun AboutRateAppSheet(
                                 Icons.Outlined.StarBorder
                             },
                             contentDescription = "$starIndex yıldız",
-                            tint = BBColors.Primary,
+                            tint = MaterialTheme.colorScheme.primary,
                             modifier = Modifier
                                 .size(38.dp)
                                 .clickable {
@@ -616,12 +617,12 @@ private fun AboutRateAppSheet(
                     text = when {
                         selectedRating == 0 -> "Bir puan seçerek devam edebilirsin."
                         selectedRating <= 3 -> "Neyi daha iyi yapabileceĞimizi yazabilirsin."
-                        else -> "Teşekkürler. Ä°stersen Google Playâ€™de de deĞerlendirebilirsin."
+                        else -> "Teşekkürler. İstersen Google Play'de değerlendirebilirsin."
                     },
                     style = BbTypography.bodySmall.copy(
                         lineHeight = 18.sp
                     ),
-                    color = BBColors.TextSubtle
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -642,30 +643,30 @@ private fun AboutRateAppSheet(
             AboutSheetButton(
                 text = "Geri Bildirim Gönder",
                 modifier = Modifier.fillMaxWidth(),
-                containerColor = BBColors.Primary,
-                contentColor = BBColors.TextStrong,
-                borderColor = BBColors.Primary,
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onSurface,
+                borderColor = MaterialTheme.colorScheme.primary,
                 onClick = onDismissClick
             )
         }
 
         if (selectedRating >= 4) {
             AboutSheetButton(
-                text = "Google Playâ€™de DeĞerlendir",
+                text = "Google Playy'de DeĞerlendir",
                 modifier = Modifier.fillMaxWidth(),
-                containerColor = BBColors.Primary,
-                contentColor = BBColors.TextStrong,
-                borderColor = BBColors.Primary,
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onSurface,
+                borderColor = MaterialTheme.colorScheme.primary,
                 onClick = onRateAppClick
             )
         }
 
         AboutSheetButton(
-            text = "Åimdi DeĞil",
+            text = "Şimdi Değil",
             modifier = Modifier.fillMaxWidth(),
-            containerColor = BBColors.TextStrong,
-            contentColor = Color.White,
-            borderColor = BBColors.TextStrong,
+            containerColor = MaterialTheme.colorScheme.onSurface,
+            contentColor = MaterialTheme.colorScheme.inverseOnSurface,
+            borderColor = MaterialTheme.colorScheme.onSurface,
             onClick = onDismissClick
         )
     }
@@ -682,7 +683,7 @@ private fun AboutBottomSheetHeader(
         Text(
             text = title,
             style = BbTypography.titleLarge,
-            color = BBColors.TextStrong,
+            color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold
         )
 
@@ -691,7 +692,7 @@ private fun AboutBottomSheetHeader(
             style = BbTypography.bodyMedium.copy(
                 lineHeight = 20.sp
             ),
-            color = BBColors.TextMuted
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -708,7 +709,7 @@ private fun AboutBottomSheetTopBar(
         Text(
             text = title,
             style = BbTypography.titleLarge,
-            color = BBColors.TextStrong,
+            color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.weight(1f)
         )
@@ -717,7 +718,7 @@ private fun AboutBottomSheetTopBar(
             modifier = Modifier
                 .size(BBIcon.BoxMd)
                 .clip(BBRadius.IconBoxSoft)
-                .background(BBColors.SurfaceMuted)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .clickable {
                     onCloseClick()
                 },
@@ -726,7 +727,7 @@ private fun AboutBottomSheetTopBar(
             Icon(
                 imageVector = Icons.Outlined.Close,
                 contentDescription = "Kapat",
-                tint = BBColors.TextMuted,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.size(BBIcon.Ui)
             )
         }
@@ -753,7 +754,7 @@ private fun AboutSheetLinkRow(
             modifier = Modifier
                 .size(BBIcon.BoxMd)
                 .background(
-                    color = BBColors.SurfaceMuted,
+                    color = MaterialTheme.colorScheme.surfaceVariant,
                     shape = BBRadius.LgShape
                 ),
             contentAlignment = Alignment.Center
@@ -761,7 +762,7 @@ private fun AboutSheetLinkRow(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = BBColors.TextStrong,
+                tint = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.size(BBIcon.Ui)
             )
         }
@@ -769,14 +770,14 @@ private fun AboutSheetLinkRow(
         Text(
             text = title,
             style = BbTypography.titleSmall,
-            color = BBColors.TextStrong,
+            color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.weight(1f)
         )
 
         Icon(
             imageVector = Icons.Outlined.ChevronRight,
             contentDescription = null,
-            tint = BBColors.TextMuted,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.size(BBIcon.Ui)
         )
     }
@@ -821,6 +822,8 @@ private fun AboutSheetButton(
 
 @Composable
 private fun AboutDashedDivider() {
+    val dividerColor = MaterialTheme.colorScheme.outlineVariant
+
     Canvas(
         modifier = Modifier
             .fillMaxWidth()
@@ -831,7 +834,7 @@ private fun AboutDashedDivider() {
             .height(BBSpacing.BorderThin)
     ) {
         drawLine(
-            color = BBColors.Border,
+            color = dividerColor,
             start = Offset(0f, 0f),
             end = Offset(size.width, 0f),
             strokeWidth = 1.dp.toPx(),

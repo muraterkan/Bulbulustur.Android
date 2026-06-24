@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2c.Views.Store
+package com.bulbulustur.android.Application.Areas.b2c.Views.Store
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -89,7 +89,7 @@ fun StoreDetailScreen(
     }
 
     Scaffold(
-        containerColor = BBColors.SurfaceMuted,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
                 title = "MaĞaza Detayı",
@@ -109,7 +109,7 @@ fun StoreDetailScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BBColors.SurfaceMuted)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding)
                 .navigationBarsPadding(),
             contentPadding = PaddingValues(
@@ -197,16 +197,16 @@ private fun StoreFollowButton(
             },
         shape = BBRadius.PillShape,
         color = if (isFollowing) {
-            BBColors.SurfaceMuted
+            MaterialTheme.colorScheme.surfaceVariant
         } else {
-            BBColors.Primary
+            MaterialTheme.colorScheme.primary
         },
         border = BorderStroke(
             width = 1.dp,
             color = if (isFollowing) {
-                BBColors.Border
+                MaterialTheme.colorScheme.outlineVariant
             } else {
-                BBColors.Primary
+                MaterialTheme.colorScheme.primary
             }
         )
     ) {
@@ -221,7 +221,7 @@ private fun StoreFollowButton(
             Icon(
                 imageVector = Icons.Outlined.Star,
                 contentDescription = null,
-                tint = BBColors.TextStrong,
+                tint = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.size(BBIcon.SizeSm)
             )
 
@@ -232,7 +232,7 @@ private fun StoreFollowButton(
                     "Takip Et"
                 },
                 style = MaterialTheme.typography.labelMedium,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
         }
@@ -246,10 +246,10 @@ private fun StoreDetailHero(
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = BBRadius.XxlShape,
-        color = BBColors.PrimarySoft,
+        color = MaterialTheme.colorScheme.primaryContainer,
         border = BorderStroke(
             width = 1.dp,
-            color = BBColors.Primary.copy(alpha = 0.35f)
+            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.35f)
         )
     ) {
         Column(
@@ -266,7 +266,7 @@ private fun StoreDetailHero(
                 Surface(
                     modifier = Modifier.size(72.dp),
                     shape = BBRadius.XlShape,
-                    color = BBColors.Primary
+                    color = MaterialTheme.colorScheme.primary
                 ) {
                     Box(
                         modifier = Modifier.fillMaxSize(),
@@ -276,7 +276,7 @@ private fun StoreDetailHero(
                             text = store.logoText,
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold,
-                            color = BBColors.TextStrong
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 }
@@ -293,7 +293,7 @@ private fun StoreDetailHero(
                             text = store.name,
                             style = MaterialTheme.typography.headlineSmall,
                             fontWeight = FontWeight.Bold,
-                            color = BBColors.TextStrong,
+                            color = MaterialTheme.colorScheme.onSurface,
                             maxLines = 1
                         )
 
@@ -305,7 +305,7 @@ private fun StoreDetailHero(
                     Text(
                         text = store.shortDescription,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = BBColors.TextStrong
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 }
             }
@@ -313,7 +313,7 @@ private fun StoreDetailHero(
             Text(
                 text = store.description,
                 style = MaterialTheme.typography.bodyMedium,
-                color = BBColors.TextStrong
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
     }
@@ -323,10 +323,10 @@ private fun StoreDetailHero(
 private fun StoreVerifiedBadge() {
     Surface(
         shape = BBRadius.PillShape,
-        color = BBColors.Surface.copy(alpha = 0.78f),
+        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.78f),
         border = BorderStroke(
             width = 1.dp,
-            color = BBColors.Primary.copy(alpha = 0.35f)
+            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.35f)
         )
     ) {
         Row(
@@ -340,7 +340,7 @@ private fun StoreVerifiedBadge() {
             Icon(
                 imageVector = Icons.Outlined.Verified,
                 contentDescription = null,
-                tint = BBColors.Primary,
+                tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(BBIcon.Size2Xs)
             )
 
@@ -348,7 +348,7 @@ private fun StoreVerifiedBadge() {
                 text = "DoĞrulanmış",
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.Bold,
-                color = BBColors.TextStrong
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
     }
@@ -402,13 +402,13 @@ private fun StoreInfoStatCard(
                 text = title,
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
-                color = BBColors.Primary
+                color = MaterialTheme.colorScheme.primary
             )
 
             Text(
                 text = subtitle,
                 style = MaterialTheme.typography.labelSmall,
-                color = BBColors.TextMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -431,7 +431,7 @@ private fun StoreTrustInfoCard(
             Surface(
                 modifier = Modifier.size(BBIcon.BoxMd),
                 shape = BBRadius.LgShape,
-                color = BBColors.Primary
+                color = MaterialTheme.colorScheme.primary
             ) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -440,7 +440,7 @@ private fun StoreTrustInfoCard(
                     Icon(
                         imageVector = Icons.Outlined.Verified,
                         contentDescription = null,
-                        tint = BBColors.TextStrong,
+                        tint = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.size(BBIcon.SizeMd)
                     )
                 }
@@ -451,16 +451,16 @@ private fun StoreTrustInfoCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Satıcı Åirket Bilgileri",
+                    text = "Satıcı Şirket Bilgileri",
                     style = MaterialTheme.typography.titleSmall,
-                    color = BBColors.TextStrong,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
                 )
 
                 Text(
                     text = "${store.name} maĞazası, Bulbulustur store kayıtları üzerinden doĞrulanmış maĞaza Vitrini olarak listelenir.",
                     style = MaterialTheme.typography.bodySmall,
-                    color = BBColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -485,10 +485,10 @@ private fun StoreOtherStoresCard(
             Surface(
                 modifier = Modifier.size(BBIcon.BoxMd),
                 shape = BBRadius.LgShape,
-                color = BBColors.PrimarySoft,
+                color = MaterialTheme.colorScheme.primaryContainer,
                 border = BorderStroke(
                     width = 1.dp,
-                    color = BBColors.Primary.copy(alpha = 0.35f)
+                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.35f)
                 )
             ) {
                 Box(
@@ -498,7 +498,7 @@ private fun StoreOtherStoresCard(
                     Icon(
                         imageVector = Icons.Outlined.Storefront,
                         contentDescription = null,
-                        tint = BBColors.TextStrong,
+                        tint = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.size(BBIcon.SizeMd)
                     )
                 }
@@ -509,23 +509,23 @@ private fun StoreOtherStoresCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "DiĞer MaĞazalar",
+                    text = "DiĞer Mağazalar",
                     style = MaterialTheme.typography.titleSmall,
-                    color = BBColors.TextStrong,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
                 )
 
                 Text(
-                    text = "Bulbulusturâ€™daki diĞer perakende maĞazalarını Keşfedin.",
+                    text = "Bulbulustury'daki diĞer perakende maĞazalarını Keşfedin.",
                     style = MaterialTheme.typography.bodySmall,
-                    color = BBColors.TextMuted
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
             Icon(
                 imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
                 contentDescription = null,
-                tint = BBColors.TextMuted,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.size(BBIcon.SizeMd)
             )
         }
@@ -580,16 +580,16 @@ private fun StoreCategoryChip(
             },
         shape = BBRadius.PillShape,
         color = if (selected) {
-            BBColors.Primary
+            MaterialTheme.colorScheme.primary
         } else {
-            BBColors.Surface
+            MaterialTheme.colorScheme.surface
         },
         border = BorderStroke(
             width = 1.dp,
             color = if (selected) {
-                BBColors.Primary
+                MaterialTheme.colorScheme.primary
             } else {
-                BBColors.Border
+                MaterialTheme.colorScheme.outlineVariant
             }
         )
     ) {
@@ -600,7 +600,7 @@ private fun StoreCategoryChip(
                 vertical = BBSpacing.Space2
             ),
             style = MaterialTheme.typography.labelMedium,
-            color = BBColors.TextStrong,
+            color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold
         )
     }
@@ -631,10 +631,10 @@ private fun StoreProductCard(
                 Surface(
                     modifier = Modifier.size(82.dp),
                     shape = BBRadius.XlShape,
-                    color = BBColors.SurfaceMuted,
+                    color = MaterialTheme.colorScheme.surfaceVariant,
                     border = BorderStroke(
                         width = 1.dp,
-                        color = BBColors.Border
+                        color = MaterialTheme.colorScheme.outlineVariant
                     )
                 ) {
                     Box(
@@ -645,7 +645,7 @@ private fun StoreProductCard(
                             text = product.imageText,
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
-                            color = BBColors.TextMuted
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
@@ -657,7 +657,7 @@ private fun StoreProductCard(
                     Text(
                         text = product.categoryName,
                         style = MaterialTheme.typography.labelSmall,
-                        color = BBColors.TextMuted,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontWeight = FontWeight.SemiBold
                     )
 
@@ -665,7 +665,7 @@ private fun StoreProductCard(
                         text = product.name,
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.Bold,
-                        color = BBColors.TextStrong
+                        color = MaterialTheme.colorScheme.onSurface
                     )
 
                     Row(
@@ -676,7 +676,7 @@ private fun StoreProductCard(
                             text = product.priceText,
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold,
-                            color = BBColors.TextStrong
+                            color = MaterialTheme.colorScheme.onSurface
                         )
 
                         if (product.badgeText.isNotBlank()) {
@@ -690,7 +690,7 @@ private fun StoreProductCard(
                 Icon(
                     imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
                     contentDescription = null,
-                    tint = BBColors.TextMuted,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.size(BBIcon.SizeMd)
                 )
             }
@@ -724,10 +724,10 @@ private fun StoreProductBadge(
 ) {
     Surface(
         shape = BBRadius.PillShape,
-        color = BBColors.PrimarySoft,
+        color = MaterialTheme.colorScheme.primaryContainer,
         border = BorderStroke(
             width = 1.dp,
-            color = BBColors.Primary
+            color = MaterialTheme.colorScheme.primary
         )
     ) {
         Text(
@@ -737,7 +737,7 @@ private fun StoreProductBadge(
                 vertical = BBSpacing.Space1
             ),
             style = MaterialTheme.typography.labelSmall,
-            color = BBColors.TextStrong,
+            color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold
         )
     }
@@ -758,10 +758,10 @@ private fun StoreSmallActionButton(
                 onClick()
             },
         shape = BBRadius.PillShape,
-        color = BBColors.SurfaceMuted,
+        color = MaterialTheme.colorScheme.surfaceVariant,
         border = BorderStroke(
             width = 1.dp,
-            color = BBColors.Border
+            color = MaterialTheme.colorScheme.outlineVariant
         )
     ) {
         Row(
@@ -775,7 +775,7 @@ private fun StoreSmallActionButton(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = BBColors.TextStrong,
+                tint = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.size(BBIcon.SizeSm)
             )
 
@@ -784,7 +784,7 @@ private fun StoreSmallActionButton(
             Text(
                 text = text,
                 style = MaterialTheme.typography.labelMedium,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
         }
@@ -804,13 +804,13 @@ private fun StoreDetailSectionTitle(
             text = title,
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
-            color = BBColors.TextStrong
+            color = MaterialTheme.colorScheme.onSurface
         )
 
         Text(
             text = description,
             style = MaterialTheme.typography.bodySmall,
-            color = BBColors.TextMuted
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -857,7 +857,7 @@ private fun getRetailStoreDetail(
             "Tümü",
             "Ayakkabı",
             "Kadın Giyim",
-            "Ã‡anta",
+            "Çanta",
             "Aksesuar"
         ),
         products = listOf(
@@ -879,8 +879,8 @@ private fun getRetailStoreDetail(
             ),
             RetailStoreProductItem(
                 id = 3,
-                name = "Günlük Kullanım Omuz Ã‡antası",
-                categoryName = "Ã‡anta",
+                name = "Günlük Kullanım Omuz Çantası",
+                categoryName = "Çanta",
                 priceText = "â‚º649,90",
                 badgeText = "",
                 imageText = "P3"

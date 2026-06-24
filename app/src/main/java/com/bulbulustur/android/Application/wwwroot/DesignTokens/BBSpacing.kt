@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Bulbulustur Android Native Buyer App
  * Design System / Spacing Tokens
  *

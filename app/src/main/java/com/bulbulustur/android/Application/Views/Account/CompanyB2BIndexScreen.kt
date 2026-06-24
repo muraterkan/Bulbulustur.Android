@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Account
+package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -113,7 +113,7 @@ fun CompanyB2BIndexScreen(
                 ) {
                     CompanyB2BIndexBenefitRow(
                         title = "Global Görünürlük",
-                        description = "Åirket profiliniz uluslararası alıcılar için daha Keşfedilebilir hale gelir.",
+                        description = "Şirket profiliniz uluslararası alıcılar için daha Keşfedilebilir hale gelir.",
                         icon = Icons.Outlined.Public
                     )
 
@@ -129,7 +129,7 @@ fun CompanyB2BIndexScreen(
 
                     CompanyB2BIndexBenefitRow(
                         title = "Kurumsal Vitrin",
-                        description = "Åirket bilgileriniz daha düzenli ve güven veren bir B2B profilinde sunulur.",
+                        description = "Şirket bilgileriniz daha düzenli ve güven veren bir B2B profilinde sunulur.",
                         icon = Icons.Outlined.Storefront
                     )
                 }
@@ -146,7 +146,7 @@ fun CompanyB2BIndexScreen(
 
             item {
                 BbButton(
-                    text = "Åirketimi B2B Indexâ€™e Dahil Et",
+                    text = "Şirketimi B2B Indexy'e Dahil Et",
                     onClick = {
                         if (agreementAcceptedState.value) {
                             onActivateClick()
@@ -199,13 +199,13 @@ private fun CompanyB2BIndexIntroCard() {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Åirketinizi Global Alıcılara Açın",
+                    text = "Şirketinizi Global Alıcılara Açın",
                     style = BbTypography.titleLarge,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = "Toptan alıcıların firmanızı keşfetmesi, teklif süreçlerinize ulaşması ve kurumsal profilinizi görmesi için şirketinizi B2B Indexâ€™e dahil edin.",
+                    text = "Toptan alıcıların firmanızı keşfetmesi, teklif süreçlerinize ulaşması ve kurumsal profilinizi görmesi için şirketinizi B2B Indexy'e dahil edin.",
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -251,13 +251,13 @@ private fun CompanyB2BIndexSummaryCard() {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Türkiye Global Ticaret Limited Åirketi",
+                    text = "Türkiye Global Ticaret Limited Şirketi",
                     style = BbTypography.titleMedium,
                     color = MaterialTheme.colorScheme.inverseOnSurface
                 )
 
                 Text(
-                    text = "Limited Åirket Â· Ä°stanbul / Türkiye",
+                    text = "Limited Şirket Â· İstanbul / Türkiye",
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.inverseOnSurface.copy(alpha = BBAlpha.Muted)
                 )
@@ -334,7 +334,7 @@ private fun CompanyB2BIndexStatsGrid() {
                 modifier = Modifier.weight(1f),
                 icon = Icons.Outlined.LocationOn,
                 label = "Lokasyon",
-                value = "Ä°stanbul"
+                value = "İstanbul"
             )
         }
 
@@ -558,13 +558,13 @@ private fun CompanyB2BIndexAgreementCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Bulbulustur Kullanıcı Sözleşmesiâ€™ni okudum ve kabul ediyorum.",
+                    text = "Bulbulustur Kullanıcı Sözleşmesiy'ni okudum ve kabul ediyorum.",
                     style = BbTypography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = "B2B Indexâ€™e dahil olduĞunuzda şirket profiliniz ve uygun kurumsal bilgileriniz platform üzerinde görünür olabilir.",
+                    text = "B2B Indexy'e dahil olduĞunuzda şirket profiliniz ve uygun kurumsal bilgileriniz platform üzerinde görünür olabilir.",
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

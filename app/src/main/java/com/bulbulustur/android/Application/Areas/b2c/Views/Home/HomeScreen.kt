@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2c.Views.Home
+package com.bulbulustur.android.Application.Areas.b2c.Views.Home
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -170,7 +170,7 @@ fun RetailHomeScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Ã–ne Ã‡ıkan Ürünler",
+                    title = "Öne Çıkan Ürünler",
                     subtitle = "Demo akış, API sonrası gerçek Vitrinlerden beslenecek."
                 )
             }
@@ -227,13 +227,13 @@ private fun RetailHomeHeroCard(
                 Icon(
                     imageVector = Icons.Outlined.Storefront,
                     contentDescription = null,
-                    tint = BBColors.TextStrong
+                    tint = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
                     text = "Perakende Alışveriş",
                     style = MaterialTheme.typography.labelLarge,
-                    color = BBColors.TextStrong,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.SemiBold
                 )
             }
@@ -241,14 +241,14 @@ private fun RetailHomeHeroCard(
             Text(
                 text = "Ürünleri, maĞazaları ve Kategori Vitrinlerini Keşfet.",
                 style = MaterialTheme.typography.headlineSmall,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
                 text = "Bulbulustur Perakende; hızlı keşif, güvenli alışveriş ve temiz kategori geçişleri için tasarlandı.",
                 style = MaterialTheme.typography.bodyMedium,
-                color = BBColors.TextSubtle
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Row(
@@ -378,7 +378,7 @@ private fun RetailHomeTrustStrip() {
 
             RetailHomeTrustItem(
                 icon = Icons.Outlined.Storefront,
-                title = "MaĞazalar",
+                title = "Mağazalar",
                 modifier = Modifier.weight(1f)
             )
         }
@@ -399,7 +399,7 @@ private fun RetailHomeTrustItem(
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = BBColors.Primary
+            tint = MaterialTheme.colorScheme.primary
         )
 
         Text(
@@ -473,7 +473,7 @@ private fun RetailHomeShowcaseCard(
         color = item.backgroundColor,
         border = BorderStroke(
             width = 1.dp,
-            color = BBColors.Border
+            color = MaterialTheme.colorScheme.outlineVariant
         ),
         onClick = onClick
     ) {
@@ -490,14 +490,14 @@ private fun RetailHomeShowcaseCard(
             Text(
                 text = item.title,
                 style = MaterialTheme.typography.titleMedium,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.SemiBold
             )
 
             Text(
                 text = item.description,
                 style = MaterialTheme.typography.bodySmall,
-                color = BBColors.TextSubtle
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -565,7 +565,7 @@ private fun RetailHomeProductMiniCard(
             Text(
                 text = item.price,
                 style = MaterialTheme.typography.titleSmall,
-                color = BBColors.TextStrong,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
         }
@@ -613,7 +613,7 @@ private fun RetailHomeStoreCard(
                     .width(42.dp)
                     .height(42.dp)
                     .background(
-                        color = BBColors.PrimarySoft,
+                        color = MaterialTheme.colorScheme.primaryContainer,
                         shape = BBRadius.LgShape
                     ),
                 contentAlignment = Alignment.Center
@@ -621,7 +621,7 @@ private fun RetailHomeStoreCard(
                 Icon(
                     imageVector = Icons.Outlined.Storefront,
                     contentDescription = null,
-                    tint = BBColors.TextStrong
+                    tint = MaterialTheme.colorScheme.onSurface
                 )
             }
 
@@ -711,7 +711,7 @@ private fun getRetailHomeGateways(): List<RetailHomeGatewayItem> {
             target = RetailHomeGatewayTarget.Products
         ),
         RetailHomeGatewayItem(
-            title = "MaĞazalar",
+            title = "Mağazalar",
             description = "Satıcı ve marka Vitrinleri",
             icon = Icons.Outlined.Storefront,
             backgroundColor = BBColors.Green.Green50,
@@ -762,7 +762,7 @@ private fun getRetailHomeShowcases(): List<RetailHomeShowcaseItem> {
         ),
         RetailHomeShowcaseItem(
             title = "MaĞaza Keşfi",
-            description = "Ã–ne çıkan maĞaza ve koleksiyonlara göz at.",
+            description = "Öne çıkan maĞaza ve koleksiyonlara göz at.",
             icon = Icons.Outlined.Storefront,
             backgroundColor = BBColors.Blue.Blue50,
             iconColor = BBColors.Blue.Blue700,

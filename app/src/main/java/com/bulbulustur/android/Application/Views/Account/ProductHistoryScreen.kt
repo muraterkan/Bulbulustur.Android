@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Account
+package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -215,7 +215,7 @@ private fun ProductHistoryIntroCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             Text(
-                text = "Daha Ã–nce BaktıĞınız Ürünler Burada",
+                text = "Daha Önce BaktıĞınız Ürünler Burada",
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -232,7 +232,7 @@ private fun ProductHistoryIntroCard(
                 horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
             ) {
                 BbButton(
-                    text = "Ürünleri Ä°ncele",
+                    text = "Ürünleri İncele",
                     onClick = onGoProductsClick,
                     modifier = Modifier.weight(1f),
                     variant = BbButtonVariant.Primary,
@@ -484,7 +484,7 @@ private fun ProductHistoryEmptyState(
                 )
 
                 BbButton(
-                    text = "Ürünleri Ä°ncele",
+                    text = "Ürünleri İncele",
                     onClick = onGoProductsClick,
                     variant = BbButtonVariant.Primary,
                     size = BbButtonSize.Medium
@@ -559,7 +559,7 @@ private fun getProductHistoryItems(): List<ProductHistoryItem> {
             productName = "Ortobella Confort Kadın Hakiki Deri Ayakkabı",
             description = "Daha önce görüntülediĞin ürün. Ürünü tekrar inceleyebilirsin.",
             categoryName = "Ayakkabı",
-            viewedDateText = "Daha Ã–nce Baktın",
+            viewedDateText = "Daha Önce Baktın",
             historyTypeText = "Geçmiş",
             imageText = "P1",
             filterTags = listOf("B2C Geçmişi", "Ayakkabı", "Bugün")
@@ -581,7 +581,7 @@ private fun getProductHistoryItems(): List<ProductHistoryItem> {
             productName = "Oversize Pamuklu Basic Tişört",
             description = "Daha önce görüntülediĞin ürün. Ürünü tekrar inceleyebilirsin.",
             categoryName = "Giyim",
-            viewedDateText = "3 Gün Ã–nce Baktın",
+            viewedDateText = "3 Gün Önce Baktın",
             historyTypeText = "Geçmiş",
             imageText = "P3",
             filterTags = listOf("B2C Geçmişi", "Giyim", "Bu Hafta")
@@ -589,9 +589,9 @@ private fun getProductHistoryItems(): List<ProductHistoryItem> {
         ProductHistoryItem(
             id = 4,
             productId = 4,
-            productName = "Günlük Kullanım Omuz Ã‡antası",
+            productName = "Günlük Kullanım Omuz Çantası",
             description = "Daha önce görüntülediĞin ürün. Ürünü tekrar inceleyebilirsin.",
-            categoryName = "Ã‡anta",
+            categoryName = "Çanta",
             viewedDateText = "Bu Hafta Baktın",
             historyTypeText = "Geçmiş",
             imageText = "P4",

@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application
+package com.bulbulustur.android.Application
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme

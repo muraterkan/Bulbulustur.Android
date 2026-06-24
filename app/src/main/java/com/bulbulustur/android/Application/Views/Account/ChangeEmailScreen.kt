@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Account
+package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -143,7 +143,7 @@ fun ChangeEmailScreen(
                         message.isNotBlank()
                     }?.let { message ->
                         EmailMessageBox(
-                            title = "Ä°şlem Tamamlanamadı",
+                            title = "İşlem Tamamlanamadı",
                             message = message,
                             type = EmailMessageType.Error
                         )

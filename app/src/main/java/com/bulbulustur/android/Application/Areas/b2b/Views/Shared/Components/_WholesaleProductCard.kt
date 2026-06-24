@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components
+package com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
@@ -93,7 +93,7 @@ fun WholesaleProductCard(
                 Text(
                     text = product.Category,
                     style = MaterialTheme.typography.labelMedium,
-                    color = BBColors.TextMuted,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -101,7 +101,7 @@ fun WholesaleProductCard(
                 Text(
                     text = product.Title,
                     style = MaterialTheme.typography.titleSmall,
-                    color = BBColors.TextStrong,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.SemiBold,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
@@ -110,7 +110,7 @@ fun WholesaleProductCard(
                 Text(
                     text = product.PriceText,
                     style = MaterialTheme.typography.titleMedium,
-                    color = BBColors.TextStrong,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -135,7 +135,7 @@ fun WholesaleProductCard(
                 }
 
                 BbButton(
-                    text = "Teklif Ä°ste",
+                    text = "Teklif İste",
                     onClick = onRfqClick,
                     modifier = Modifier.fillMaxWidth(),
                     variant = BbButtonVariant.Primary,
@@ -152,7 +152,7 @@ fun WholesaleProductCard(
                 )
 
                 BbButton(
-                    text = "Ürünü Ä°ncele",
+                    text = "Ürünü İncele",
                     onClick = onClick,
                     modifier = Modifier.fillMaxWidth(),
                     variant = BbButtonVariant.Outline,
@@ -302,7 +302,7 @@ private fun WholesaleProductMetaPill(
         color = BBColors.Gray.Gray50,
         border = BorderStroke(
             width = BBSpacing.BorderThin,
-            color = BBColors.Border
+            color = MaterialTheme.colorScheme.outlineVariant
         )
     ) {
         Text(
@@ -312,7 +312,7 @@ private fun WholesaleProductMetaPill(
                 vertical = BBSpacing.Space1
             ),
             style = MaterialTheme.typography.labelSmall,
-            color = BBColors.TextMuted,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )

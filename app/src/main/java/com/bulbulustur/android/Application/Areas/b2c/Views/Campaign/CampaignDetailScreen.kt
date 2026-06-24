@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2c.Views.Campaign
+package com.bulbulustur.android.Application.Areas.b2c.Views.Campaign
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -559,8 +559,8 @@ private fun CampaignStoreSection(
         )
     ) {
         BbSectionHeader(
-            title = "Katılan MaĞazalar",
-            subtitle = "Bu kampanyada öne çıkan MaĞazalar."
+            title = "Katılan Mağazalar",
+            subtitle = "Bu kampanyada öne çıkan Mağazalar."
         )
 
         LazyRow(
@@ -890,8 +890,8 @@ private fun getRetailCampaignDetail(
             ),
             RetailCampaignCategoryItem(
                 id = 3,
-                name = "Ã‡anta",
-                iconText = "Ã‡A",
+                name = "Çanta",
+                iconText = "ÇA",
                 productCount = 180
             )
         ),
@@ -916,7 +916,7 @@ private fun getRetailCampaignDetail(
             )
         ),
         conditions = listOf(
-            "Kampanya seçili ürünlerde ve kampanyaya katılan MaĞazalarda geçerlidir.",
+            "Kampanya seçili ürünlerde ve kampanyaya katılan Mağazalarda geçerlidir.",
             "Stok durumuna göre ürün görünürlüĞü ve fiyatlar deĞişebilir.",
             "Kargo avantajı maĞaza ve ürün koşullarına göre farklılık gösterebilir.",
             "Sepet ve ödeme adımlarında nihai fiyat tekrar gösterilir."
@@ -924,9 +924,9 @@ private fun getRetailCampaignDetail(
         productFilters = listOf(
             "Tümü",
             "Yeni sezon",
-            "Ä°ndirimli",
+            "İndirimli",
             "Ücretsiz kargo",
-            "Ã‡ok satan"
+            "Çok satan"
         ),
         products = listOf(
             RetailCampaignProductItem(
@@ -938,8 +938,8 @@ private fun getRetailCampaignDetail(
                 imageText = "P1",
                 filterTags = listOf(
                     "Yeni sezon",
-                    "Ä°ndirimli",
-                    "Ã‡ok satan"
+                    "İndirimli",
+                    "Çok satan"
                 )
             ),
             RetailCampaignProductItem(
@@ -951,7 +951,7 @@ private fun getRetailCampaignDetail(
                 imageText = "P2",
                 filterTags = listOf(
                     "Yeni sezon",
-                    "Ä°ndirimli"
+                    "İndirimli"
                 )
             ),
             RetailCampaignProductItem(
@@ -963,7 +963,7 @@ private fun getRetailCampaignDetail(
                 imageText = "P3",
                 filterTags = listOf(
                     "Ücretsiz kargo",
-                    "Ä°ndirimli"
+                    "İndirimli"
                 )
             ),
             RetailCampaignProductItem(
@@ -974,7 +974,7 @@ private fun getRetailCampaignDetail(
                 discountText = "%18",
                 imageText = "P4",
                 filterTags = listOf(
-                    "Ã‡ok satan",
+                    "Çok satan",
                     "Ücretsiz kargo"
                 )
             )

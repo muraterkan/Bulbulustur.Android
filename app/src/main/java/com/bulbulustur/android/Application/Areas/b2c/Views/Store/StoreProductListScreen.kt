@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2c.Views.Store
+package com.bulbulustur.android.Application.Areas.b2c.Views.Store
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -63,7 +63,7 @@ fun StoreProductListScreen(
     }
 
     var selectedSort by remember {
-        mutableStateOf("Ã–ne çıkan")
+        mutableStateOf("Öne çıkan")
     }
 
     val filteredProducts = remember(selectedCategory, selectedSort, screenData.products) {
@@ -610,11 +610,11 @@ private fun getRetailStoreProductListScreenData(storeId: Int): RetailStoreProduc
             "Tümü",
             "Ayakkabı",
             "Kadın Giyim",
-            "Ã‡anta",
+            "Çanta",
             "Aksesuar"
         ),
         sortOptions = listOf(
-            "Ã–ne çıkan",
+            "Öne çıkan",
             "En düşük fiyat",
             "En yüksek fiyat",
             "Yeni Gelenler"
@@ -646,7 +646,7 @@ private fun getRetailStoreProductListScreenData(storeId: Int): RetailStoreProduc
                 id = 3,
                 name = "Günlük kullanım omuz çantası",
                 shortDescription = "Minimal tasarım, günlük kullanım bölmeleri.",
-                categoryName = "Ã‡anta",
+                categoryName = "Çanta",
                 priceText = "â‚º649,90",
                 priceValue = 649.90,
                 discountText = "%15",

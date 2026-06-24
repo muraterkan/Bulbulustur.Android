@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout
+package com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -418,7 +418,7 @@ private fun OrderSuccessTotalCard(
             Spacer(modifier = Modifier.height(8.dp))
 
             OrderSuccessTotalRow(
-                title = "Ä°ndirim",
+                title = "İndirim",
                 value = total.discountText
             )
 
@@ -434,7 +434,7 @@ private fun OrderSuccessTotalCard(
             Spacer(modifier = Modifier.height(12.dp))
 
             OrderSuccessTotalRow(
-                title = "Ã–denen tutar",
+                title = "Ödenen tutar",
                 value = total.paidPriceText,
                 isStrong = true
             )
@@ -514,7 +514,7 @@ private fun OrderSuccessInfoCard() {
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "MaĞazalar siparişini hazırlamaya başladıĞında kargo bilgileri sipariş detayına düşer. Bildirimler ve e-posta ile süreç hakkında bilgi alırsın.",
+                text = "Mağazalar siparişini hazırlamaya başladıĞında kargo bilgileri sipariş detayına düşer. Bildirimler ve e-posta ile süreç hakkında bilgi alırsın.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

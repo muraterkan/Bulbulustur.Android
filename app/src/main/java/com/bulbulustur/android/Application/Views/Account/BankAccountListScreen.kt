@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Account
+package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -298,7 +298,7 @@ private fun BankAccountWarningBox() {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Geri Ã–deme Ä°çin DoĞru IBAN Bilgisi Kullanılır.",
+                    text = "Geri Ödeme İçin DoĞru IBAN Bilgisi Kullanılır.",
                     style = MaterialTheme.typography.labelLarge,
                     color = BBColors.Orange.Orange700
                 )
@@ -375,7 +375,7 @@ private fun getDemoBankAccounts(): List<BankAccountUiModel> {
     return listOf(
         BankAccountUiModel(
             bankAccountId = 1,
-            bankName = "Türkiye Ä°ş Bankası",
+            bankName = "Türkiye İş Bankası",
             accountOwner = "Murat Erkan",
             iban = "TR20 0001 0023 1798 0076 4950 01"
         ),

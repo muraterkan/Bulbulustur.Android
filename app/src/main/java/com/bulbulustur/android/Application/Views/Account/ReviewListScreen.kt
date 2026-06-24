@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Account
+package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.getValue
@@ -66,7 +66,7 @@ fun ReviewListScreen(
     val reviews = getDemoReviews(selectedTab)
 
     Scaffold(
-        containerColor = BBColors.SurfaceMuted,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
                 title = "DeĞerlendirmelerim",
@@ -77,7 +77,7 @@ fun ReviewListScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BBColors.SurfaceMuted)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding),
             contentPadding = PaddingValues(
                 start = BBSpacing.PageHorizontal,
@@ -138,7 +138,7 @@ private fun ReviewIntroCard() {
             )
 
             Text(
-                text = "Ürün, maĞaza ve firma deĞerlendirmelerinizi burada görüntüleyebilir, gerektiĞinde düzenleyebilir veya silebilirsiniz.",
+                text = "Ürün, maĞaza ve firma değerlendirmelerinizi burada görüntüleyebilir, gerektiĞinde düzenleyebilir veya silebilirsiniz.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -202,7 +202,7 @@ private fun ReviewTabItem(
     Box(
         modifier = modifier
             .background(
-                color = if (selected) BBColors.Surface else MaterialTheme.colorScheme.surfaceVariant,
+                color = if (selected) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.surfaceVariant,
                 shape = BBRadius.LgShape
             )
             .clickable {
@@ -418,7 +418,7 @@ private fun ReviewRatingRow(
             Icon(
                 imageVector = Icons.Outlined.Star,
                 contentDescription = null,
-                tint = if (index < rating) BBColors.Yellow.Yellow800 else BBColors.BorderStrong,
+                tint = if (index < rating) BBColors.Yellow.Yellow800 else MaterialTheme.colorScheme.outlineVariant,
                 modifier = Modifier.size(BBIcon.Inline)
             )
         }
@@ -529,7 +529,7 @@ private fun getDemoProductReviews(): List<ReviewUiModel> {
             targetId = 101,
             type = AccountReviewTab.Product,
             title = "Ortobella Comfort Genç Garson Bot 8028",
-            badgeText = "ÜRÜN DEÄERLENDÄ°RMESÄ°",
+            badgeText = "ÜRÜN DEÄERLENDİRMESİ",
             comment = "Makineyi 7 gündür kullanıyorum. Bu süre içinde hem deneyim kazandım hem de internetten okuduĞum birçok bilgiyle karşılaştırdım. Ürünü almayı düşünenler için detaylı bir deneyim paylaşmak istedim.",
             rating = 5,
             dateText = "22 Eylül 2025 00:31 tarihinde eklendi",
@@ -547,7 +547,7 @@ private fun getDemoStoreReviews(): List<ReviewUiModel> {
             targetId = 501,
             type = AccountReviewTab.Store,
             title = "Ortobella Comfort",
-            badgeText = "MAÄAZA DEÄERLENDÄ°RMESÄ°",
+            badgeText = "MAÄAZA DEÄERLENDİRMESİ",
             comment = "MaĞaza iletişimi hızlıydı. Sipariş süreci ve kargo bilgilendirmesi anlaşılır şekilde ilerledi.",
             rating = 5,
             dateText = "12 Ekim 2025 14:20 tarihinde eklendi",
@@ -565,7 +565,7 @@ private fun getDemoCompanyReviews(): List<ReviewUiModel> {
             targetId = 701,
             type = AccountReviewTab.Company,
             title = "Citrix Tedarik",
-            badgeText = "FÄ°RMA DEÄERLENDÄ°RMESÄ°",
+            badgeText = "FİRMA DEÄERLENDİRMESİ",
             comment = "Firma bilgileri netti, ürün açıklamaları yeterliydi. Toptan iletişim tarafında hızlı dönüş aldım.",
             rating = 5,
             dateText = "10 Ekim 2025 09:12 tarihinde eklendi",
@@ -583,17 +583,17 @@ private enum class AccountReviewTab(
 ) {
     Product(
         title = "Ürün",
-        emptyText = "ürün deĞerlendirmesi",
+        emptyText = "ürün değerlendirmesi",
         icon = Icons.Outlined.Comment
     ),
     Store(
         title = "MaĞaza",
-        emptyText = "maĞaza deĞerlendirmesi",
+        emptyText = "maĞaza değerlendirmesi",
         icon = Icons.Outlined.Storefront
     ),
     Company(
         title = "Firma",
-        emptyText = "firma deĞerlendirmesi",
+        emptyText = "firma değerlendirmesi",
         icon = Icons.Outlined.Domain
     )
 }

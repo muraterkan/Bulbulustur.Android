@@ -207,7 +207,7 @@ private fun CampaignListHero() {
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "Seçili maĞazalar, kategori Vitrinleri ve indirimli ürün akışları burada toplanır.",
+                text = "Seçili mağazalar, kategori Vitrinleri ve indirimli ürün akışları burada toplanır.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onPrimaryContainer
             )
@@ -535,7 +535,7 @@ private fun getRetailCampaignListItems(): List<RetailCampaignListItem> {
         RetailCampaignListItem(
             id = 4,
             title = "Ücretsiz kargo seçkisi",
-            description = "Seçili maĞazalarda kargo avantajı sunan ürünleri tek akışta keşfet.",
+            description = "Seçili mağazalarda kargo avantajı sunan ürünleri tek akışta keşfet.",
             badgeText = "Kargo",
             iconText = "KG",
             categoryName = "Karışık",

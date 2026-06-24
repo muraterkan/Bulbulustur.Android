@@ -1000,7 +1000,7 @@ private fun BasketCouponSheet(
 
             BasketCouponOption(
                 title = "KARGO50",
-                description = "Seçili maĞazalarda kargo indirimi",
+                description = "Seçili mağazalarda kargo indirimi",
                 onClick = onApplyCouponClick
             )
         }

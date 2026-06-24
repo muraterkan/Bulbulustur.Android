@@ -516,7 +516,7 @@ private fun StoreOtherStoresCard(
                 )
 
                 Text(
-                    text = "Bulbulustury'daki diĞer perakende maĞazalarını Keşfedin.",
+                    text = "Bulbulustury'daki diĞer perakende mağazalarını Keşfedin.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

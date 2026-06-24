@@ -1,25 +1,74 @@
-/*package com.bulbulustur.android.businesslayer.Core.Repository import com.bulbulustur.android.businesslayer.Core.Util.Result
+package com.bulbulustur.android.businesslayer.Core.Repository
 
+import com.bulbulustur.android.businesslayer.Core.DTO.ResourceDTO
+import com.bulbulustur.android.businesslayer.Core.Enums.EApplicationLanguage
+import com.bulbulustur.android.businesslayer.Core.Interface.ILocalizationRepository
 import com.bulbulustur.android.businesslayer.Core.Network.ApiClient
+import com.bulbulustur.android.businesslayer.Core.Util.ErrorType
+import com.bulbulustur.android.businesslayer.Core.Util.Result
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
-class LocalizationRepository {
+class LocalizationRepository : ILocalizationRepository {
 
-    suspend fun getResourceValue(
-        languageId: Int,
-        key: String
-    ): String {
+    override suspend fun GetResourcesAsync(
+        language: EApplicationLanguage,
+        count: Int
+    ): Result<List<ResourceDTO>> {
         return try {
-            val response = ApiClient.localizationApiService.getResourcesAsync(
-                languageId = languageId,
-                count = 10000
+            val safeCount = count.coerceIn(
+                minimumValue = 1,
+                maximumValue = 10000
             )
 
-            response.data
-                ?.firstOrNull { it.key == key }
-                ?.value
-                ?: "..."
-        } catch (_: Exception) {
-            "..."
+            val query = BuildQuery(
+                languageId = language.Id,
+                count = safeCount
+            )
+
+            ApiClient.GetAsync<List<ResourceDTO>>(
+                baseUrl = ResourceApiBaseUrl,
+                method = GetResourcesMethod,
+                query = query
+            )
+        } catch (exception: Exception) {
+            Result(
+                Success = false,
+                Message = "Localization kaynakları alınamadı.",
+                ErrorType = ErrorType.Exception,
+                Exception = exception.message,
+                Data = emptyList()
+            )
         }
     }
-}*/
+
+    private fun BuildQuery(
+        languageId: Int,
+        count: Int
+    ): String {
+        return listOf(
+            "languageId" to languageId.toString(),
+            "count" to count.toString()
+        ).joinToString("&") { (key, value) ->
+            "${Encode(key)}=${Encode(value)}"
+        }
+    }
+
+    private fun Encode(
+        value: String
+    ): String {
+        return URLEncoder.encode(
+            value,
+            StandardCharsets.UTF_8.toString()
+        )
+    }
+
+    private companion object {
+
+        const val ResourceApiBaseUrl =
+            "http://37.60.239.76:30215/api/Resource"
+
+        const val GetResourcesMethod =
+            "GetResourcesAsync"
+    }
+}

@@ -239,7 +239,7 @@ private fun StoreListHeroCard(
             )
 
             Text(
-                text = "DoĞrulanmış satıcıları, favori maĞazaları ve maĞaza vitrinlerindeki ürünleri tek yerden inceleyin.",
+                text = "DoĞrulanmış satıcıları, favori mağazaları ve maĞaza vitrinlerindeki ürünleri tek yerden inceleyin.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -264,7 +264,7 @@ private fun StoreListHeroCard(
                 StoreListHeroMiniCard(
                     modifier = Modifier.weight(1f),
                     title = "Favori Mağazalar",
-                    subtitle = "BeĞendiĞiniz maĞazaları takip edin.",
+                    subtitle = "BeĞendiĞiniz mağazaları takip edin.",
                     icon = Icons.Outlined.FavoriteBorder
                 )
             }

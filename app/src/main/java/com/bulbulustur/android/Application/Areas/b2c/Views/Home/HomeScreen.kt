@@ -239,7 +239,7 @@ private fun RetailHomeHeroCard(
             }
 
             Text(
-                text = "Ürünleri, maĞazaları ve Kategori Vitrinlerini Keşfet.",
+                text = "Ürünleri, mağazaları ve Kategori Vitrinlerini Keşfet.",
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold

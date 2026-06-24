@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -16,6 +17,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.bulbulustur.android.Application.Datastore.UserPreferenceDataStore
+import com.bulbulustur.android.Application.Localization.BBLocalizationProvider
+import com.bulbulustur.android.Application.Localization.LocalizationManager
 import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
 import com.bulbulustur.android.Application.Navigation.Graph.accountGraph
 import com.bulbulustur.android.Application.Navigation.Graph.companyGraph
@@ -28,10 +31,11 @@ import com.bulbulustur.android.Application.Navigation.Graph.wholesaleGraph
 import com.bulbulustur.android.Application.Navigation.Routes.SplashRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.logonGraph
 import com.bulbulustur.android.Application.Session.UserSessionManager
+import com.bulbulustur.android.Application.Session.UserSessionState
 import com.bulbulustur.android.Application.Views.Shared.Components.BuyerModeSheet
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
 import com.bulbulustur.android.businesslayer.Core.Enums.EBuyerMode
-import com.bulbulustur.android.Application.Session.UserSessionState
+import com.bulbulustur.android.businesslayer.Core.Repository.LocalizationRepository
 
 @Composable
 fun BulbulusturApp() {
@@ -54,20 +58,53 @@ fun BulbulusturApp() {
         )
     }
 
+    val localizationRepository = remember {
+        LocalizationRepository()
+    }
+
+    val localizationManager = remember(
+        localizationRepository,
+        coroutineScope
+    ) {
+        LocalizationManager(
+            localizationRepository = localizationRepository,
+            coroutineScope = coroutineScope
+        )
+    }
+
     val sessionState by userSessionManager.State.collectAsState()
+    val localizationState by localizationManager.State.collectAsState()
+
+    LaunchedEffect(
+        sessionState.IsInitialized,
+        sessionState.Language
+    ) {
+        if (sessionState.IsInitialized) {
+            localizationManager.Load(
+                language = sessionState.Language
+            )
+        }
+    }
 
     BbTheme(
         themeMode = sessionState.ThemeMode
     ) {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
+        BBLocalizationProvider(
+            state = localizationState
         ) {
-            if (sessionState.IsInitialized) {
-                BulbulusturApplicationContent(
-                    sessionState = sessionState,
-                    userSessionManager = userSessionManager
-                )
+            Surface(
+                modifier = Modifier.fillMaxSize(),
+                color = MaterialTheme.colorScheme.background
+            ) {
+                if (
+                    sessionState.IsInitialized &&
+                    localizationState.IsInitialized
+                ) {
+                    BulbulusturApplicationContent(
+                        sessionState = sessionState,
+                        userSessionManager = userSessionManager
+                    )
+                }
             }
         }
     }
@@ -84,8 +121,11 @@ private fun BulbulusturApplicationContent(
         mutableStateOf(false)
     }
 
-    val currentBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = currentBackStackEntry?.destination?.route
+    val currentBackStackEntry by
+    navController.currentBackStackEntryAsState()
+
+    val currentRoute =
+        currentBackStackEntry?.destination?.route
 
     val currentBuyerMode = when {
         currentRoute?.startsWith("wholesale/") == true -> {
@@ -121,6 +161,7 @@ private fun BulbulusturApplicationContent(
         companyGraph(appNavigator)
         orderGraph(appNavigator)
         accountGraph(appNavigator)
+
         settingsGraph(
             navigator = appNavigator,
             sessionState = sessionState,

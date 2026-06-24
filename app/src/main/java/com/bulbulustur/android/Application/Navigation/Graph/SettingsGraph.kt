@@ -7,6 +7,8 @@ import androidx.navigation.navArgument
 import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
 import com.bulbulustur.android.Application.Navigation.Routes.AccountRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.SettingsRoutes
+import com.bulbulustur.android.Application.Session.UserSessionManager
+import com.bulbulustur.android.Application.Session.UserSessionState
 import com.bulbulustur.android.Application.Views.Account.AboutThisAppScreen
 import com.bulbulustur.android.Application.Views.Account.AccountSettingsScreen
 import com.bulbulustur.android.Application.Views.Account.AppearanceSettingsScreen
@@ -17,8 +19,6 @@ import com.bulbulustur.android.Application.Views.Account.LegalPoliciesScreen
 import com.bulbulustur.android.Application.Views.Account.LegalPolicyDetailScreen
 import com.bulbulustur.android.Application.Views.Account.RegionSettingsScreen
 import com.bulbulustur.android.Application.Views.Account.SystemStatusScreen
-import com.bulbulustur.android.Application.Session.UserSessionManager
-import com.bulbulustur.android.Application.Session.UserSessionState
 
 fun NavGraphBuilder.settingsGraph(
     navigator: BulbulusturNavigator,
@@ -91,6 +91,8 @@ fun NavGraphBuilder.settingsGraph(
 
     composable(SettingsRoutes.Language) {
         LanguageSettingsScreen(
+            selectedLanguage = sessionState.Language,
+            onLanguageSelected = userSessionManager::SetLanguage,
             onBackClick = {
                 navigator.back()
             }

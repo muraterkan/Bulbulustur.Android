@@ -229,7 +229,7 @@ fun ProductListScreen(
             ) {
                 BbSectionHeader(
                     title = "Perakende Ürünler",
-                    subtitle = "Kategorilerden, maĞazalardan ve kampanyalardan ürün keşfet."
+                    subtitle = "Kategorilerden, mağazalardan ve kampanyalardan ürün keşfet."
                 )
             }
 

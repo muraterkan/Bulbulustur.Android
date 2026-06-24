@@ -135,7 +135,7 @@ private fun MessageSubjectCard(
             ) {
                 MessageIconBox(
                     icon = Icons.Outlined.RequestQuote,
-                    backgroundColor = BBColors.Yellow.Yellow100,
+                    backgroundColor = MaterialTheme.colorScheme.primaryContainer,
                     iconColor = BBColors.Yellow.Yellow800
                 )
 
@@ -287,7 +287,7 @@ private fun MessageBubbleCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(
-                    color = if (message.isMine) BBColors.Yellow.Yellow50 else MaterialTheme.colorScheme.surface,
+                    color = if (message.isMine) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface,
                     shape = BBRadius.LgShape
                 )
                 .padding(BBSpacing.CardPadding)

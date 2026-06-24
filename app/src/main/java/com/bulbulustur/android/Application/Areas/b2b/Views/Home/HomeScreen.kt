@@ -84,9 +84,7 @@ fun WholesaleHomeScreen(
     onMessageClick: () -> Unit = {},
     onAccountClick: () -> Unit = {}
 ) {
-    val categories = remember {
-        wholesaleCategoryItems()
-    }
+    val categories = wholesaleCategoryItems()
 
     val showcaseProducts = remember {
         wholesaleShowcaseProducts()
@@ -100,21 +98,13 @@ fun WholesaleHomeScreen(
         mutableStateOf<Set<Int>>(emptySet())
     }
 
-    val actionItems = remember(
-        onRfqListClick,
-        onRfqCreateClick,
-        onLastPriceRequestClick,
-        onSampleRequestClick,
-        onCustomizationRequestClick
-    ) {
-        wholesaleActionItems(
-            onRfqListClick = onRfqListClick,
-            onRfqCreateClick = onRfqCreateClick,
-            onLastPriceRequestClick = onLastPriceRequestClick,
-            onSampleRequestClick = onSampleRequestClick,
-            onCustomizationRequestClick = onCustomizationRequestClick
-        )
-    }
+    val actionItems = wholesaleActionItems(
+        onRfqListClick = onRfqListClick,
+        onRfqCreateClick = onRfqCreateClick,
+        onLastPriceRequestClick = onLastPriceRequestClick,
+        onSampleRequestClick = onSampleRequestClick,
+        onCustomizationRequestClick = onCustomizationRequestClick
+    )
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -743,49 +733,50 @@ private data class WholesaleHomeActionItem(
     val OnClick: () -> Unit
 )
 
+@Composable
 private fun wholesaleCategoryItems(): List<WholesaleCategoryHomeItem> {
     return listOf(
         WholesaleCategoryHomeItem(
             Title = "Elektronik",
             Description = "Cihaz ve bileşenler",
             Icon = Icons.Outlined.Inventory2,
-            Tint = BBColors.Blue.Blue700,
-            BackgroundColor = BBColors.Blue.Blue50
+            Tint = MaterialTheme.colorScheme.onSurface,
+            BackgroundColor = MaterialTheme.colorScheme.surfaceVariant
         ),
         WholesaleCategoryHomeItem(
             Title = "Ambalaj",
             Description = "Kutu, etiket ve paketleme",
             Icon = Icons.Outlined.Category,
-            Tint = BBColors.Yellow.Yellow800,
-            BackgroundColor = BBColors.Yellow.Yellow100
+            Tint = MaterialTheme.colorScheme.onPrimaryContainer,
+            BackgroundColor = MaterialTheme.colorScheme.primaryContainer
         ),
         WholesaleCategoryHomeItem(
             Title = "Tekstil",
             Description = "Kumaş, giyim ve aksesuar",
             Icon = Icons.Outlined.Storefront,
-            Tint = BBColors.Green.Green700,
-            BackgroundColor = BBColors.Green.Green50
+            Tint = MaterialTheme.colorScheme.onSecondaryContainer,
+            BackgroundColor = MaterialTheme.colorScheme.secondaryContainer
         ),
         WholesaleCategoryHomeItem(
             Title = "Makine",
             Description = "Üretim ve sanayi ekipmanı",
             Icon = Icons.Outlined.Business,
-            Tint = BBColors.Navy.Navy700,
-            BackgroundColor = BBColors.Navy.Navy50
+            Tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            BackgroundColor = MaterialTheme.colorScheme.surfaceVariant
         ),
         WholesaleCategoryHomeItem(
             Title = "Gıda",
             Description = "Toptan gıda ürünleri",
             Icon = Icons.Outlined.LocalShipping,
-            Tint = BBColors.Orange.Orange700,
-            BackgroundColor = BBColors.Orange.Orange50
+            Tint = MaterialTheme.colorScheme.onTertiaryContainer,
+            BackgroundColor = MaterialTheme.colorScheme.tertiaryContainer
         ),
         WholesaleCategoryHomeItem(
             Title = "Kimya",
             Description = "Endüstriyel hammaddeler",
             Icon = Icons.Outlined.LocalOffer,
-            Tint = BBColors.Purple.Purple700,
-            BackgroundColor = BBColors.Purple.Purple50
+            Tint = MaterialTheme.colorScheme.onTertiaryContainer,
+            BackgroundColor = MaterialTheme.colorScheme.tertiaryContainer
         )
     )
 }

@@ -46,6 +46,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.4")
+    implementation("androidx.datastore:datastore-preferences:1.1.7")
     implementation(libs.androidx.activity.compose)
 
     implementation("io.coil-kt.coil3:coil-compose:3.3.0")
@@ -71,4 +72,6 @@ dependencies {
 
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+
+
 }

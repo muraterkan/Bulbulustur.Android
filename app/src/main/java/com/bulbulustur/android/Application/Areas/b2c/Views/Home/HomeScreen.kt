@@ -211,12 +211,12 @@ private fun RetailHomeHeroCard(
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = BBRadius.XlShape,
-        color = BBColors.Yellow.Yellow100
+        color = MaterialTheme.colorScheme.primaryContainer
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(BBColors.Yellow.Yellow100)
+                .background(MaterialTheme.colorScheme.primaryContainer)
                 .padding(BBSpacing.Space5),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
@@ -282,11 +282,13 @@ private fun RetailHomeQuickGatewayRow(
     onStoreClick: () -> Unit,
     onFavoriteClick: () -> Unit
 ) {
+    val gateways = getRetailHomeGateways()
+
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
     ) {
         items(
-            items = getRetailHomeGateways(),
+            items = gateways,
             key = { item ->
                 item.title
             }
@@ -432,18 +434,19 @@ private fun RetailHomeCategoryChipRow(
         }
     }
 }
-
 @Composable
 private fun RetailHomeShowcaseRow(
     onProductListClick: () -> Unit,
     onStoreClick: () -> Unit,
     onFavoriteClick: () -> Unit
 ) {
+    val showcases = getRetailHomeShowcases()
+
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
     ) {
         items(
-            items = getRetailHomeShowcases(),
+            items = showcases,
             key = { item ->
                 item.title
             }
@@ -461,7 +464,6 @@ private fun RetailHomeShowcaseRow(
         }
     }
 }
-
 @Composable
 private fun RetailHomeShowcaseCard(
     item: RetailHomeShowcaseItem,
@@ -692,38 +694,39 @@ private data class RetailHomeStoreItem(
     val description: String
 )
 
+@Composable
 private fun getRetailHomeGateways(): List<RetailHomeGatewayItem> {
     return listOf(
         RetailHomeGatewayItem(
             title = "Kategoriler",
             description = "Ana kategori kapısından başla",
             icon = Icons.Outlined.Category,
-            backgroundColor = BBColors.Yellow.Yellow50,
-            iconColor = BBColors.Navy.Navy900,
+            backgroundColor = MaterialTheme.colorScheme.primaryContainer,
+            iconColor = MaterialTheme.colorScheme.onPrimaryContainer,
             target = RetailHomeGatewayTarget.Menu
         ),
         RetailHomeGatewayItem(
             title = "Ürünler",
             description = "Perakende ürün akışına gir",
             icon = Icons.Outlined.ShoppingBasket,
-            backgroundColor = BBColors.Blue.Blue50,
-            iconColor = BBColors.Blue.Blue700,
+            backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+            iconColor = MaterialTheme.colorScheme.onSurfaceVariant,
             target = RetailHomeGatewayTarget.Products
         ),
         RetailHomeGatewayItem(
             title = "Mağazalar",
-            description = "Satıcı ve marka Vitrinleri",
+            description = "Satıcı ve marka vitrinleri",
             icon = Icons.Outlined.Storefront,
-            backgroundColor = BBColors.Green.Green50,
-            iconColor = BBColors.Green.Green700,
+            backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
+            iconColor = MaterialTheme.colorScheme.onSecondaryContainer,
             target = RetailHomeGatewayTarget.Stores
         ),
         RetailHomeGatewayItem(
             title = "Favoriler",
-            description = "BeĞendiĞin alanlara dön",
+            description = "Beğendiğin alanlara dön",
             icon = Icons.Outlined.FavoriteBorder,
-            backgroundColor = BBColors.Pink.Pink50,
-            iconColor = BBColors.Pink.Pink700,
+            backgroundColor = MaterialTheme.colorScheme.tertiaryContainer,
+            iconColor = MaterialTheme.colorScheme.onTertiaryContainer,
             target = RetailHomeGatewayTarget.Favorites
         )
     )
@@ -742,38 +745,39 @@ private fun getRetailHomeCategoryNames(): List<String> {
     )
 }
 
+@Composable
 private fun getRetailHomeShowcases(): List<RetailHomeShowcaseItem> {
     return listOf(
         RetailHomeShowcaseItem(
             title = "Yeni Gelenler",
-            description = "Bugün eklenen perakende Ürünleri keşfet.",
+            description = "Bugün eklenen perakende ürünleri keşfet.",
             icon = Icons.Outlined.NewReleases,
-            backgroundColor = BBColors.Yellow.Yellow50,
-            iconColor = BBColors.Navy.Navy900,
+            backgroundColor = MaterialTheme.colorScheme.primaryContainer,
+            iconColor = MaterialTheme.colorScheme.onPrimaryContainer,
             target = RetailHomeShowcaseTarget.Products
         ),
         RetailHomeShowcaseItem(
             title = "Kampanya Vitrinleri",
             description = "Seçili fırsatlar ve dönemsel ürün akışları.",
             icon = Icons.Outlined.LocalOffer,
-            backgroundColor = BBColors.Green.Green50,
-            iconColor = BBColors.Green.Green700,
+            backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
+            iconColor = MaterialTheme.colorScheme.onSecondaryContainer,
             target = RetailHomeShowcaseTarget.Products
         ),
         RetailHomeShowcaseItem(
-            title = "MaĞaza Keşfi",
-            description = "Öne çıkan maĞaza ve koleksiyonlara göz at.",
+            title = "Mağaza Keşfi",
+            description = "Öne çıkan mağaza ve koleksiyonlara göz at.",
             icon = Icons.Outlined.Storefront,
-            backgroundColor = BBColors.Blue.Blue50,
-            iconColor = BBColors.Blue.Blue700,
+            backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+            iconColor = MaterialTheme.colorScheme.onSurfaceVariant,
             target = RetailHomeShowcaseTarget.Stores
         ),
         RetailHomeShowcaseItem(
             title = "Favori Akışı",
-            description = "BeĞendiĞin ürün ve maĞazalara hızlı dönüş.",
+            description = "Beğendiğin ürün ve mağazalara hızlı dönüş.",
             icon = Icons.Outlined.FavoriteBorder,
-            backgroundColor = BBColors.Pink.Pink50,
-            iconColor = BBColors.Pink.Pink700,
+            backgroundColor = MaterialTheme.colorScheme.tertiaryContainer,
+            iconColor = MaterialTheme.colorScheme.onTertiaryContainer,
             target = RetailHomeShowcaseTarget.Favorites
         )
     )

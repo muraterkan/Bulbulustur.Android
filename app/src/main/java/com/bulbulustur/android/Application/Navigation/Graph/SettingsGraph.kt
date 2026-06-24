@@ -17,9 +17,13 @@ import com.bulbulustur.android.Application.Views.Account.LegalPoliciesScreen
 import com.bulbulustur.android.Application.Views.Account.LegalPolicyDetailScreen
 import com.bulbulustur.android.Application.Views.Account.RegionSettingsScreen
 import com.bulbulustur.android.Application.Views.Account.SystemStatusScreen
+import com.bulbulustur.android.Application.Session.UserSessionManager
+import com.bulbulustur.android.Application.Session.UserSessionState
 
 fun NavGraphBuilder.settingsGraph(
-    navigator: BulbulusturNavigator
+    navigator: BulbulusturNavigator,
+    sessionState: UserSessionState,
+    userSessionManager: UserSessionManager
 ) {
 
     composable(SettingsRoutes.Home) {
@@ -95,6 +99,8 @@ fun NavGraphBuilder.settingsGraph(
 
     composable(SettingsRoutes.Appearance) {
         AppearanceSettingsScreen(
+            selectedTheme = sessionState.ThemeMode,
+            onThemeSelected = userSessionManager::SetThemeMode,
             onBackClick = {
                 navigator.back()
             }

@@ -27,12 +27,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.bulbulustur.android.businesslayer.Core.Enums.EBuyerMode
-import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BbTypography
+import com.bulbulustur.android.businesslayer.Core.Enums.EBuyerMode
 
 enum class BuyerBottomNavigationItem {
     Home,
@@ -62,7 +61,9 @@ fun BuyerBottomNavigation(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(BBSpacing.BorderThin)
-                    .background(MaterialTheme.colorScheme.outlineVariant)
+                    .background(
+                        color = MaterialTheme.colorScheme.outlineVariant
+                    )
             )
 
             Row(
@@ -71,8 +72,8 @@ fun BuyerBottomNavigation(
                     .height(BBSpacing.Space24)
                     .padding(
                         start = BBSpacing.Space2,
-                        end = BBSpacing.Space2,
                         top = BBSpacing.Space3,
+                        end = BBSpacing.Space2,
                         bottom = BBSpacing.Space4
                     ),
                 horizontalArrangement = Arrangement.SpaceEvenly,
@@ -85,11 +86,15 @@ fun BuyerBottomNavigation(
                         Icon(
                             imageVector = Icons.Outlined.Home,
                             contentDescription = null,
-                            modifier = Modifier.size(BBIcon.BottomNavigationIcon)
+                            modifier = Modifier.size(
+                                BBIcon.BottomNavigationIcon
+                            )
                         )
                     },
                     onClick = {
-                        onItemClick(BuyerBottomNavigationItem.Home)
+                        onItemClick(
+                            BuyerBottomNavigationItem.Home
+                        )
                     }
                 )
 
@@ -100,17 +105,23 @@ fun BuyerBottomNavigation(
                         Icon(
                             imageVector = Icons.Outlined.Category,
                             contentDescription = null,
-                            modifier = Modifier.size(BBIcon.BottomNavigationIcon)
+                            modifier = Modifier.size(
+                                BBIcon.BottomNavigationIcon
+                            )
                         )
                     },
                     onClick = {
-                        onItemClick(BuyerBottomNavigationItem.Menu)
+                        onItemClick(
+                            BuyerBottomNavigationItem.Menu
+                        )
                     }
                 )
 
                 BuyerBottomNavigationCenterAction(
                     onClick = {
-                        onItemClick(BuyerBottomNavigationItem.Switch)
+                        onItemClick(
+                            BuyerBottomNavigationItem.Switch
+                        )
                     }
                 )
 
@@ -121,11 +132,15 @@ fun BuyerBottomNavigation(
                         Icon(
                             imageVector = Icons.Outlined.LocalOffer,
                             contentDescription = null,
-                            modifier = Modifier.size(BBIcon.BottomNavigationIcon)
+                            modifier = Modifier.size(
+                                BBIcon.BottomNavigationIcon
+                            )
                         )
                     },
                     onClick = {
-                        onItemClick(BuyerBottomNavigationItem.Basket)
+                        onItemClick(
+                            BuyerBottomNavigationItem.Basket
+                        )
                     }
                 )
 
@@ -136,11 +151,15 @@ fun BuyerBottomNavigation(
                         Icon(
                             imageVector = Icons.Outlined.AccountCircle,
                             contentDescription = null,
-                            modifier = Modifier.size(BBIcon.BottomNavigationIcon)
+                            modifier = Modifier.size(
+                                BBIcon.BottomNavigationIcon
+                            )
                         )
                     },
                     onClick = {
-                        onItemClick(BuyerBottomNavigationItem.Account)
+                        onItemClick(
+                            BuyerBottomNavigationItem.Account
+                        )
                     }
                 )
             }
@@ -155,7 +174,11 @@ private fun BuyerBottomNavigationItemView(
     icon: @Composable () -> Unit,
     onClick: () -> Unit
 ) {
-    val contentColor = BBColors.Black
+    val contentColor = if (selected) {
+        MaterialTheme.colorScheme.primary
+    } else {
+        MaterialTheme.colorScheme.onSurfaceVariant
+    }
 
     Column(
         modifier = Modifier
@@ -167,7 +190,9 @@ private fun BuyerBottomNavigationItemView(
                 vertical = BBSpacing.Space1
             ),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+        verticalArrangement = Arrangement.spacedBy(
+            BBSpacing.Space1
+        )
     ) {
         Box(
             modifier = if (selected) {
@@ -207,6 +232,8 @@ private fun BuyerBottomNavigationItemView(
 private fun BuyerBottomNavigationCenterAction(
     onClick: () -> Unit
 ) {
+    val contentColor = MaterialTheme.colorScheme.onPrimary
+
     Column(
         modifier = Modifier
             .clickable {
@@ -217,16 +244,20 @@ private fun BuyerBottomNavigationCenterAction(
                 vertical = BBSpacing.Space1
             ),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+        verticalArrangement = Arrangement.spacedBy(
+            BBSpacing.Space1
+        )
     ) {
         Surface(
-            modifier = Modifier.size(BBIcon.BoxXl),
+            modifier = Modifier.size(
+                BBIcon.BoxXl
+            ),
             shape = BBRadius.XlShape,
             color = MaterialTheme.colorScheme.primary,
-            contentColor = BBColors.Black,
+            contentColor = contentColor,
             border = BorderStroke(
                 width = BBSpacing.Space1,
-                color = BBColors.Yellow.Yellow600
+                color = MaterialTheme.colorScheme.primary
             ),
             shadowElevation = BBSpacing.Space8
         ) {
@@ -236,8 +267,10 @@ private fun BuyerBottomNavigationCenterAction(
                 Icon(
                     imageVector = Icons.Filled.Cached,
                     contentDescription = null,
-                    tint = BBColors.Black,
-                    modifier = Modifier.size(BBIcon.SizeXl)
+                    tint = contentColor,
+                    modifier = Modifier.size(
+                        BBIcon.SizeXl
+                    )
                 )
             }
         }
@@ -245,8 +278,7 @@ private fun BuyerBottomNavigationCenterAction(
         Text(
             text = "Geçiş",
             style = BbTypography.labelSmall,
-            color = BBColors.Black
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
-

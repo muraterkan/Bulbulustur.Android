@@ -63,7 +63,7 @@ fun ModeSelectionScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(BBColors.Yellow.Yellow50)
+            .background(MaterialTheme.colorScheme.primaryContainer)
             .statusBarsPadding()
             .navigationBarsPadding()
             .padding(
@@ -136,7 +136,7 @@ private fun ModeSelectionHeader() {
                     .defaultMinSize(minHeight = BBIcon.BoxLg)
                     .clickable { expanded = true },
                 shape = BBRadius.XlShape,
-                color = BBColors.Yellow.Yellow500,
+                color = MaterialTheme.colorScheme.primaryContainer,
                 border = BorderStroke(
                     width = BBSpacing.Divider,
                     color = BBColors.Yellow.Yellow400
@@ -236,11 +236,11 @@ private fun ModeSelectionContent(
                 description = "Ürünleri keşfet, favorilerine ekle ve güvenle sepetine taşı.",
                 icon = Icons.Outlined.LocalMall,
                 containerColor = BBColors.Ink.Ink900,
-                iconContainerColor = BBColors.Yellow.Yellow500,
+                iconContainerColor = MaterialTheme.colorScheme.primaryContainer,
                 iconColor = BBColors.Ink.Ink900,
                 titleColor = BBColors.White,
                 descriptionColor = BBColors.Gray.Gray300,
-                arrowColor = BBColors.Yellow.Yellow500,
+                arrowColor = MaterialTheme.colorScheme.primaryContainer,
                 borderColor = BBColors.Ink.Ink100,
                 onClick = onRetailClick
             )
@@ -250,11 +250,11 @@ private fun ModeSelectionContent(
                 description = "Tedarikçileri, toplu ürünleri ve teklif süreçlerini keşfet.",
                 icon = Icons.Outlined.Business,
                 containerColor = BBColors.Ink.Ink900,
-                iconContainerColor = BBColors.Yellow.Yellow500,
+                iconContainerColor = MaterialTheme.colorScheme.primaryContainer,
                 iconColor = BBColors.Ink.Ink900,
                 titleColor = BBColors.White,
                 descriptionColor = BBColors.Gray.Gray300,
-                arrowColor = BBColors.Yellow.Yellow500,
+                arrowColor = MaterialTheme.colorScheme.primaryContainer,
                 borderColor = BBColors.Ink.Ink100,
                 onClick = onWholesaleClick
             )
@@ -263,8 +263,8 @@ private fun ModeSelectionContent(
                 title = "RFQ Talebi Gönder",
                 description = "Toptan alım için tedarikçilerden son fiyat iste.",
                 icon = Icons.Outlined.RequestQuote,
-                containerColor = BBColors.Yellow.Yellow50,
-                iconContainerColor = BBColors.Yellow.Yellow500,
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                iconContainerColor = MaterialTheme.colorScheme.primaryContainer,
                 iconColor = BBColors.Ink.Ink900,
                 titleColor = BBColors.Ink.Ink900,
                 descriptionColor = BBColors.Gray.Gray700,

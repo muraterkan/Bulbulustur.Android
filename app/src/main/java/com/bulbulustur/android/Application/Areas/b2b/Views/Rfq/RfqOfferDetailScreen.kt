@@ -302,7 +302,7 @@ private fun RfqOfferIconBox(
         modifier = Modifier
             .size(BBIcon.BoxMd)
             .background(
-                color = BBColors.Yellow.Yellow100,
+                color = MaterialTheme.colorScheme.primaryContainer,
                 shape = BBRadius.LgShape
             ),
         contentAlignment = Alignment.Center

@@ -1,7 +1,6 @@
-package com.bulbulustur.android.Application.Views.Account
+﻿package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,58 +13,46 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AutoMode
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.LightMode
-import androidx.compose.material.icons.outlined.NightsStay
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
-import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
+import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBAlpha
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BbTypography
-import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBAlpha
+import com.bulbulustur.android.businesslayer.Core.Enums.EThemeMode
 
 @Composable
 fun AppearanceSettingsScreen(
+    selectedTheme: EThemeMode,
+    onThemeSelected: (EThemeMode) -> Unit,
     onBackClick: () -> Unit = {}
 ) {
-    val selectedThemeState = remember {
-        mutableStateOf("light")
-    }
-
-    val themes = listOf(
-        AppearanceThemeOption(
-            code = "light",
-            title = "Açık Tema",
-            description = "Aydınlık ve temiz görünüm.",
-            icon = Icons.Outlined.LightMode
-        ),
-        AppearanceThemeOption(
-            code = "dark",
-            title = "Koyu Tema",
-            description = "Daha kontrastlı gece görünümü.",
-            icon = Icons.Outlined.DarkMode
-        )
-    )
+    val themes = appearanceThemeOptions()
 
     val pageBackground = Brush.verticalGradient(
         colors = listOf(
-            MaterialTheme.colorScheme.primaryContainer.copy(alpha = BBAlpha.DisabledContainer),
-            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.85f),
+            MaterialTheme.colorScheme.primaryContainer.copy(
+                alpha = BBAlpha.DisabledContainer
+            ),
+            MaterialTheme.colorScheme.surfaceVariant.copy(
+                alpha = 0.85f
+            ),
             MaterialTheme.colorScheme.surfaceVariant
         )
     )
@@ -90,7 +77,9 @@ fun AppearanceSettingsScreen(
                 end = BBSpacing.PageHorizontal,
                 bottom = BBSpacing.PageBottom
             ),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.CardGap
+            )
         ) {
             item {
                 AppearanceIntroCard()
@@ -98,13 +87,15 @@ fun AppearanceSettingsScreen(
 
             items(
                 items = themes,
-                key = { theme -> theme.code }
+                key = { theme ->
+                    theme.ThemeMode.name
+                }
             ) { theme ->
                 AppearanceThemeRow(
                     option = theme,
-                    isSelected = selectedThemeState.value == theme.code,
+                    isSelected = selectedTheme == theme.ThemeMode,
                     onClick = {
-                        selectedThemeState.value = theme.code
+                        onThemeSelected(theme.ThemeMode)
                     }
                 )
             }
@@ -120,7 +111,7 @@ private fun AppearanceIntroCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Bulbulustur uygulamasında kullanmak istediĞiniz görünüm modunu seçin.",
+            text = "Bulbulustur uygulamasında kullanmak istediğiniz görünüm modunu seçin.",
             style = BbTypography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -140,7 +131,9 @@ private fun AppearanceThemeRow(
         onClick = onClick
     ) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+            horizontalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space3
+            ),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
@@ -153,7 +146,7 @@ private fun AppearanceThemeRow(
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    imageVector = option.icon,
+                    imageVector = option.Icon,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onPrimaryContainer,
                     modifier = Modifier.size(BBIcon.Section)
@@ -162,16 +155,18 @@ private fun AppearanceThemeRow(
 
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+                verticalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space1
+                )
             ) {
                 Text(
-                    text = option.title,
+                    text = option.Title,
                     style = BbTypography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = option.description,
+                    text = option.Description,
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -190,10 +185,31 @@ private fun AppearanceThemeRow(
 }
 
 private data class AppearanceThemeOption(
-    val code: String,
-    val title: String,
-    val description: String,
-    val icon: ImageVector
+    val ThemeMode: EThemeMode,
+    val Title: String,
+    val Description: String,
+    val Icon: ImageVector
 )
 
-
+private fun appearanceThemeOptions(): List<AppearanceThemeOption> {
+    return listOf(
+        AppearanceThemeOption(
+            ThemeMode = EThemeMode.System,
+            Title = "Sistem Varsayılanı",
+            Description = "Uygulama cihazınızın açık veya koyu tema ayarını takip eder.",
+            Icon = Icons.Outlined.AutoMode
+        ),
+        AppearanceThemeOption(
+            ThemeMode = EThemeMode.Light,
+            Title = "Açık Tema",
+            Description = "Uygulama her zaman açık tema ile görüntülenir.",
+            Icon = Icons.Outlined.LightMode
+        ),
+        AppearanceThemeOption(
+            ThemeMode = EThemeMode.Dark,
+            Title = "Koyu Tema",
+            Description = "Uygulama her zaman koyu tema ile görüntülenir.",
+            Icon = Icons.Outlined.DarkMode
+        )
+    )
+}

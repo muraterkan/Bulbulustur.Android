@@ -332,7 +332,7 @@ private fun SectionHeaderBox(
         modifier = Modifier
             .fillMaxWidth()
             .background(
-                color = BBColors.Yellow.Yellow50,
+                color = MaterialTheme.colorScheme.primaryContainer,
                 shape = BBRadius.LgShape
             )
             .padding(BBSpacing.CardPaddingCompact)
@@ -519,7 +519,7 @@ private fun AddressFormInfoBox(
     val backgroundColor = if (validation.canSubmit) {
         BBColors.Green.Green50
     } else {
-        BBColors.Yellow.Yellow50
+        MaterialTheme.colorScheme.primaryContainer
     }
 
     val titleColor = if (validation.canSubmit) {

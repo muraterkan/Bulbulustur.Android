@@ -256,7 +256,7 @@ private fun PhoneIconBox(
         modifier = Modifier
             .size(BBSpacing.Space10)
             .background(
-                color = BBColors.Yellow.Yellow100,
+                color = MaterialTheme.colorScheme.primaryContainer,
                 shape = BBRadius.LgShape
             ),
         contentAlignment = Alignment.Center

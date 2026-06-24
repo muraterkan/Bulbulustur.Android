@@ -47,8 +47,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleBottomNavigation
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleBottomNavigationItem
-import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleSearchHeaderLeadingAction
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleSearchHeader
+import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleSearchHeaderLeadingAction
+import com.bulbulustur.android.Application.Views.Shared.Components.BbSectionHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
@@ -56,8 +57,6 @@ import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbChip
-import com.bulbulustur.android.Application.Views.Shared.Components.BbSectionHeader
-import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
@@ -84,6 +83,8 @@ fun WholesaleCategoryHomeScreen(
     var searchText by remember {
         mutableStateOf("")
     }
+
+    val subCategories = getWholesaleSubCategories()
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -160,7 +161,7 @@ fun WholesaleCategoryHomeScreen(
             }
 
             items(
-                items = getWholesaleSubCategories(),
+                items = subCategories,
                 key = { item ->
                     item.title
                 }
@@ -217,12 +218,12 @@ private fun WholesaleCategoryHeroCard(
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = BBRadius.XlShape,
-        color = BBColors.Navy.Navy900
+        color = MaterialTheme.colorScheme.inverseSurface
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(BBColors.Navy.Navy900)
+                .background(MaterialTheme.colorScheme.inverseSurface)
                 .padding(BBSpacing.Space5),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
@@ -233,13 +234,13 @@ private fun WholesaleCategoryHeroCard(
                 Icon(
                     imageVector = Icons.Outlined.Factory,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary
+                    tint = MaterialTheme.colorScheme.inversePrimary
                 )
 
                 Text(
                     text = "Toptan Kategori",
                     style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.primary,
+                    color = MaterialTheme.colorScheme.inversePrimary,
                     fontWeight = FontWeight.SemiBold
                 )
             }
@@ -247,14 +248,14 @@ private fun WholesaleCategoryHeroCard(
             Text(
                 text = "Elektronik Parçalar",
                 style = MaterialTheme.typography.headlineSmall,
-                color = BBColors.White,
+                color = MaterialTheme.colorScheme.inverseOnSurface,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
-                text = "Alt sektörleri incele, doĞrulanmış tedarikçilere ulaş ve seçili kategori için teklif akışını başlat.",
+                text = "Alt sektörleri incele, doğrulanmış tedarikçilere ulaş ve seçili kategori için teklif akışını başlat.",
                 style = MaterialTheme.typography.bodyMedium,
-                color = BBColors.Gray.Gray200
+                color = MaterialTheme.colorScheme.inverseOnSurface.copy(alpha = 0.78f)
             )
 
             Row(
@@ -297,11 +298,13 @@ private fun WholesaleCategoryQuickActionRow(
     onSampleRequestClick: () -> Unit,
     onCustomizationRequestClick: () -> Unit
 ) {
+    val quickActions = getWholesaleQuickActions()
+
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
     ) {
         items(
-            items = getWholesaleQuickActions(),
+            items = quickActions,
             key = { item ->
                 item.title
             }
@@ -435,11 +438,13 @@ private fun WholesaleCategoryShowcaseRow(
     onCompanyListClick: () -> Unit,
     onRfqClick: () -> Unit
 ) {
+    val showcases = getWholesaleCategoryShowcases()
+
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
     ) {
         items(
-            items = getWholesaleCategoryShowcases(),
+            items = showcases,
             key = { item ->
                 item.title
             }
@@ -468,7 +473,7 @@ private fun WholesaleCategoryShowcaseCard(
         shape = BBRadius.XlShape,
         color = item.backgroundColor,
         border = BorderStroke(
-            width = 1.dp,
+            width = BBSpacing.BorderThin,
             color = MaterialTheme.colorScheme.outlineVariant
         ),
         onClick = onClick
@@ -503,11 +508,13 @@ private fun WholesaleCategoryShowcaseCard(
 private fun WholesalePopularSearchChipRow(
     onProductListClick: () -> Unit
 ) {
+    val popularSearches = getWholesalePopularSearches()
+
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
     ) {
         items(
-            items = getWholesalePopularSearches(),
+            items = popularSearches,
             key = { item ->
                 item
             }
@@ -564,108 +571,111 @@ private enum class WholesaleCategoryShowcaseTarget {
     Rfq
 }
 
+@Composable
 private fun getWholesaleQuickActions(): List<WholesaleCategoryQuickActionItem> {
     return listOf(
         WholesaleCategoryQuickActionItem(
             title = "Tedarikçiler",
             description = "Bu sektördeki firmalar",
             icon = Icons.Outlined.Business,
-            backgroundColor = BBColors.Yellow.Yellow50,
-            iconColor = BBColors.Navy.Navy900,
+            backgroundColor = MaterialTheme.colorScheme.primaryContainer,
+            iconColor = MaterialTheme.colorScheme.onPrimaryContainer,
             target = WholesaleCategoryQuickActionTarget.Companies
         ),
         WholesaleCategoryQuickActionItem(
             title = "Teklif İste",
             description = "İhtiyacını firmalara ilet",
             icon = Icons.Outlined.RequestQuote,
-            backgroundColor = BBColors.Blue.Blue50,
-            iconColor = BBColors.Blue.Blue700,
+            backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+            iconColor = MaterialTheme.colorScheme.onSurfaceVariant,
             target = WholesaleCategoryQuickActionTarget.Rfq
         ),
         WholesaleCategoryQuickActionItem(
             title = "Son Fiyat",
             description = "Güncel toptan fiyat al",
             icon = Icons.Outlined.Search,
-            backgroundColor = BBColors.Green.Green50,
-            iconColor = BBColors.Green.Green700,
+            backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
+            iconColor = MaterialTheme.colorScheme.onSecondaryContainer,
             target = WholesaleCategoryQuickActionTarget.LastPrice
         ),
         WholesaleCategoryQuickActionItem(
             title = "Numune",
             description = "Sipariş öncesi örnek",
             icon = Icons.Outlined.LocalShipping,
-            backgroundColor = BBColors.Purple.Purple50,
-            iconColor = BBColors.Purple.Purple700,
+            backgroundColor = MaterialTheme.colorScheme.tertiaryContainer,
+            iconColor = MaterialTheme.colorScheme.onTertiaryContainer,
             target = WholesaleCategoryQuickActionTarget.Sample
         ),
         WholesaleCategoryQuickActionItem(
             title = "Özelleştir",
             description = "Özel üretim talebi oluştur",
             icon = Icons.Outlined.Tune,
-            backgroundColor = BBColors.Orange.Orange50,
-            iconColor = BBColors.Orange.Orange700,
+            backgroundColor = MaterialTheme.colorScheme.tertiaryContainer,
+            iconColor = MaterialTheme.colorScheme.onTertiaryContainer,
             target = WholesaleCategoryQuickActionTarget.Customization
         )
     )
 }
 
+@Composable
 private fun getWholesaleSubCategories(): List<WholesaleCategoryHomeSubCategoryItem> {
     return listOf(
         WholesaleCategoryHomeSubCategoryItem(
             title = "Transistörler, Diyotlar ve Tüpler",
             description = "Toptan elektronik bileşen tedariki",
             icon = Icons.Outlined.Category,
-            backgroundColor = BBColors.Yellow.Yellow50,
-            iconColor = BBColors.Navy.Navy900
+            backgroundColor = MaterialTheme.colorScheme.primaryContainer,
+            iconColor = MaterialTheme.colorScheme.onPrimaryContainer
         ),
         WholesaleCategoryHomeSubCategoryItem(
             title = "Piller ve Güç Kaynakları",
             description = "Pil, batarya ve güç çözümleri",
             icon = Icons.Outlined.Category,
-            backgroundColor = BBColors.Blue.Blue50,
-            iconColor = BBColors.Blue.Blue700
+            backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+            iconColor = MaterialTheme.colorScheme.onSurfaceVariant
         ),
         WholesaleCategoryHomeSubCategoryItem(
             title = "Aktif Bileşenler",
             description = "Endüstriyel elektronik parçalar",
             icon = Icons.Outlined.Category,
-            backgroundColor = BBColors.Green.Green50,
-            iconColor = BBColors.Green.Green700
+            backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
+            iconColor = MaterialTheme.colorScheme.onSecondaryContainer
         ),
         WholesaleCategoryHomeSubCategoryItem(
             title = "Entegre Devreler",
             description = "Çip, modül ve devre ürünleri",
             icon = Icons.Outlined.Category,
-            backgroundColor = BBColors.Purple.Purple50,
-            iconColor = BBColors.Purple.Purple700
+            backgroundColor = MaterialTheme.colorScheme.tertiaryContainer,
+            iconColor = MaterialTheme.colorScheme.onTertiaryContainer
         )
     )
 }
 
+@Composable
 private fun getWholesaleCategoryShowcases(): List<WholesaleCategoryShowcaseItem> {
     return listOf(
         WholesaleCategoryShowcaseItem(
             title = "Toptan Ürünler",
             description = "Bu kategori içindeki ürün gruplarına geç.",
             icon = Icons.Outlined.ShoppingBasket,
-            backgroundColor = BBColors.Yellow.Yellow50,
-            iconColor = BBColors.Navy.Navy900,
+            backgroundColor = MaterialTheme.colorScheme.primaryContainer,
+            iconColor = MaterialTheme.colorScheme.onPrimaryContainer,
             target = WholesaleCategoryShowcaseTarget.Products
         ),
         WholesaleCategoryShowcaseItem(
-            title = "DoĞrulanmış Tedarikçiler",
+            title = "Doğrulanmış Tedarikçiler",
             description = "Bu kategoride satış yapan firmalara ulaş.",
             icon = Icons.Outlined.Verified,
-            backgroundColor = BBColors.Blue.Blue50,
-            iconColor = BBColors.Blue.Blue700,
+            backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+            iconColor = MaterialTheme.colorScheme.onSurfaceVariant,
             target = WholesaleCategoryShowcaseTarget.Companies
         ),
         WholesaleCategoryShowcaseItem(
             title = "Teklif Topla",
             description = "Kategori bazlı RFQ talebi oluştur.",
             icon = Icons.Outlined.RequestQuote,
-            backgroundColor = BBColors.Green.Green50,
-            iconColor = BBColors.Green.Green700,
+            backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
+            iconColor = MaterialTheme.colorScheme.onSecondaryContainer,
             target = WholesaleCategoryShowcaseTarget.Rfq
         )
     )
@@ -674,7 +684,7 @@ private fun getWholesaleCategoryShowcases(): List<WholesaleCategoryShowcaseItem>
 private fun getWholesalePopularSearches(): List<String> {
     return listOf(
         "LED sürücü",
-        "Güç kaynaĞı",
+        "Güç kaynağı",
         "Sensör",
         "Konnektör",
         "PCB",
@@ -691,4 +701,3 @@ private fun WholesaleCategoryHomeScreenPreview() {
         WholesaleCategoryHomeScreen()
     }
 }
-

@@ -136,7 +136,7 @@ private fun OrderListOverviewCard(
             ) {
                 OrderIconBox(
                     icon = Icons.Outlined.ReceiptLong,
-                    backgroundColor = BBColors.Yellow.Yellow100,
+                    backgroundColor = MaterialTheme.colorScheme.primaryContainer,
                     iconColor = BBColors.Yellow.Yellow800
                 )
 
@@ -216,7 +216,7 @@ private fun OrderCard(
             ) {
                 OrderIconBox(
                     icon = Icons.Outlined.CalendarMonth,
-                    backgroundColor = BBColors.Yellow.Yellow100,
+                    backgroundColor = MaterialTheme.colorScheme.primaryContainer,
                     iconColor = BBColors.Yellow.Yellow800
                 )
 
@@ -537,7 +537,7 @@ private fun OrderEmptyState() {
         ) {
             OrderIconBox(
                 icon = Icons.Outlined.ReceiptLong,
-                backgroundColor = BBColors.Yellow.Yellow100,
+                backgroundColor = MaterialTheme.colorScheme.primaryContainer,
                 iconColor = BBColors.Yellow.Yellow800
             )
 

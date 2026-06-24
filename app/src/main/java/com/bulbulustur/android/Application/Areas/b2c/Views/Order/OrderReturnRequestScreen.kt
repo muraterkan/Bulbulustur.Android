@@ -149,7 +149,7 @@ private fun OrderReturnIntroCard() {
         ) {
             OrderReturnIconBox(
                 icon = Icons.Outlined.AssignmentReturn,
-                backgroundColor = BBColors.Yellow.Yellow100,
+                backgroundColor = MaterialTheme.colorScheme.primaryContainer,
                 iconColor = BBColors.Yellow.Yellow800
             )
 
@@ -228,7 +228,7 @@ private fun OrderReturnReasonRow(
         modifier = Modifier.fillMaxWidth(),
         shape = BBRadius.LgShape,
         color = if (selected) {
-            BBColors.Yellow.Yellow50
+            MaterialTheme.colorScheme.primaryContainer
         } else {
             MaterialTheme.colorScheme.surfaceVariant
         }

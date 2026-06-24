@@ -149,7 +149,7 @@ private fun OrderCancelIntroCard() {
         ) {
             OrderCancelIconBox(
                 icon = Icons.Outlined.ReceiptLong,
-                backgroundColor = BBColors.Yellow.Yellow100,
+                backgroundColor = MaterialTheme.colorScheme.primaryContainer,
                 iconColor = BBColors.Yellow.Yellow800
             )
 
@@ -228,7 +228,7 @@ private fun OrderCancelReasonRow(
         modifier = Modifier.fillMaxWidth(),
         shape = BBRadius.LgShape,
         color = if (selected) {
-            BBColors.Yellow.Yellow50
+            MaterialTheme.colorScheme.primaryContainer
         } else {
             MaterialTheme.colorScheme.surfaceVariant
         }

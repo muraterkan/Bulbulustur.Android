@@ -144,7 +144,7 @@ private fun AccountPageKicker(
     Box(
         modifier = Modifier
             .background(
-                color = BBColors.Yellow.Yellow100,
+                color = MaterialTheme.colorScheme.primaryContainer,
                 shape = BBRadius.Chip
             )
             .padding(

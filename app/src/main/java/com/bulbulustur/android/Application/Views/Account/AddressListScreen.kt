@@ -189,7 +189,7 @@ private fun AddressCardHeader(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(BBColors.Yellow.Yellow50)
+            .background(MaterialTheme.colorScheme.primaryContainer)
             .padding(BBSpacing.CardPadding),
         horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
         verticalAlignment = Alignment.CenterVertically
@@ -323,7 +323,7 @@ private fun AddressIconBox() {
         modifier = Modifier
             .size(BBIcon.BoxLg)
             .background(
-                color = BBColors.Yellow.Yellow100,
+                color = MaterialTheme.colorScheme.primaryContainer,
                 shape = BBRadius.LgShape
             ),
         contentAlignment = Alignment.Center

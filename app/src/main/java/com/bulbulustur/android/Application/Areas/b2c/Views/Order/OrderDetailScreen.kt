@@ -320,7 +320,7 @@ private fun OrderDetailSummaryCard(
             ) {
                 OrderDetailIconBox(
                     icon = Icons.Outlined.ReceiptLong,
-                    backgroundColor = BBColors.Yellow.Yellow100,
+                    backgroundColor = MaterialTheme.colorScheme.primaryContainer,
                     iconColor = BBColors.Yellow.Yellow800
                 )
 

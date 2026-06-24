@@ -248,7 +248,7 @@ private fun SubscriptionDetailPriceCard(
             SubscriptionDetailIconBox(
                 icon = Icons.Outlined.CreditCard,
                 iconColor = BBColors.Yellow.Yellow800,
-                backgroundColor = BBColors.Yellow.Yellow100
+                backgroundColor = MaterialTheme.colorScheme.primaryContainer
             )
 
             Column(

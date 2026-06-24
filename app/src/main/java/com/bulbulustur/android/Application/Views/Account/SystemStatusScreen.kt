@@ -25,9 +25,7 @@ import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.OpenInNew
 import androidx.compose.material.icons.outlined.Payments
 import androidx.compose.material.icons.outlined.Schedule
-import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material.icons.outlined.Storage
-import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -45,7 +43,6 @@ import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
-import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
@@ -152,8 +149,8 @@ private fun SystemStatusHeroCard() {
         ) {
             SystemStatusIconBox(
                 icon = Icons.Outlined.CloudDone,
-                backgroundColor = BBColors.Green.Green50,
-                iconColor = BBColors.Green.Green600
+                backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
+                iconColor = MaterialTheme.colorScheme.onSecondaryContainer
             )
 
             Column(
@@ -225,8 +222,8 @@ private fun SystemStatusIncidentCard(
             ) {
                 SystemStatusIconBox(
                     icon = Icons.Outlined.CheckCircle,
-                    backgroundColor = BBColors.Green.Green50,
-                    iconColor = BBColors.Green.Green600
+                    backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
+                    iconColor = MaterialTheme.colorScheme.onSecondaryContainer
                 )
 
                 Text(
@@ -267,8 +264,8 @@ private fun SystemStatusMaintenanceCard() {
         ) {
             SystemStatusIconBox(
                 icon = Icons.Outlined.Schedule,
-                backgroundColor = BBColors.Blue.Blue50,
-                iconColor = BBColors.Blue.Blue600
+                backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+                iconColor = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Column(
@@ -282,7 +279,7 @@ private fun SystemStatusMaintenanceCard() {
                 )
 
                 Text(
-                    text = "Yaklaşan bakım olduĞunda burada gösterilecek.",
+                    text = "Yaklaşan bakım olduğunda burada gösterilecek.",
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -295,6 +292,9 @@ private fun SystemStatusMaintenanceCard() {
 private fun SystemStatusComponentRow(
     component: SystemStatusComponentUiModel
 ) {
+    val statusBackgroundColor = component.status.backgroundColor()
+    val statusContentColor = component.status.contentColor()
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -304,8 +304,8 @@ private fun SystemStatusComponentRow(
     ) {
         SystemStatusIconBox(
             icon = component.icon,
-            backgroundColor = component.status.backgroundColor,
-            iconColor = component.status.contentColor
+            backgroundColor = statusBackgroundColor,
+            iconColor = statusContentColor
         )
 
         Column(
@@ -327,8 +327,8 @@ private fun SystemStatusComponentRow(
 
         SystemStatusBadge(
             text = component.status.label,
-            backgroundColor = component.status.backgroundColor,
-            contentColor = component.status.contentColor
+            backgroundColor = statusBackgroundColor,
+            contentColor = statusContentColor
         )
     }
 }
@@ -337,6 +337,9 @@ private fun SystemStatusComponentRow(
 private fun SystemStatusIncidentRow(
     incident: SystemStatusIncidentUiModel
 ) {
+    val statusBackgroundColor = incident.status.backgroundColor()
+    val statusContentColor = incident.status.contentColor()
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -346,8 +349,8 @@ private fun SystemStatusIncidentRow(
     ) {
         SystemStatusIconBox(
             icon = incident.icon,
-            backgroundColor = incident.status.backgroundColor,
-            iconColor = incident.status.contentColor
+            backgroundColor = statusBackgroundColor,
+            iconColor = statusContentColor
         )
 
         Column(
@@ -375,8 +378,8 @@ private fun SystemStatusIncidentRow(
 
         SystemStatusBadge(
             text = incident.status.label,
-            backgroundColor = incident.status.backgroundColor,
-            contentColor = incident.status.contentColor
+            backgroundColor = statusBackgroundColor,
+            contentColor = statusContentColor
         )
     }
 }
@@ -525,7 +528,7 @@ private fun getDemoActiveIncidents(): List<SystemStatusIncidentUiModel> {
 private fun getDemoRecentIncidents(): List<SystemStatusIncidentUiModel> {
     return listOf(
         SystemStatusIncidentUiModel(
-            title = "Bildirim kuyruĞu gecikmesi",
+            title = "Bildirim kuyruğu gecikmesi",
             description = "Kısa süreli e-posta gecikmesi izlendi ve kapatıldı.",
             dateText = "22 Haziran 2026",
             icon = Icons.Outlined.History,
@@ -533,7 +536,7 @@ private fun getDemoRecentIncidents(): List<SystemStatusIncidentUiModel> {
         ),
         SystemStatusIncidentUiModel(
             title = "Web arayüz yavaşlaması",
-            description = "Bölgesel aĞ gecikmesi sonrası servis normal duruma döndü.",
+            description = "Bölgesel ağ gecikmesi sonrası servis normal duruma döndü.",
             dateText = "18 Haziran 2026",
             icon = Icons.Outlined.Info,
             status = SystemStatusLevel.Resolved
@@ -557,38 +560,70 @@ private data class SystemStatusIncidentUiModel(
 )
 
 private enum class SystemStatusLevel(
-    val label: String,
-    val backgroundColor: Color,
-    val contentColor: Color
+    val label: String
 ) {
     Operational(
-        label = "Çalışıyor",
-        backgroundColor = BBColors.Green.Green50,
-        contentColor = BBColors.Green.Green600
+        label = "Çalışıyor"
     ),
     Degraded(
-        label = "Yavaş",
-        backgroundColor = BBColors.Yellow.Yellow50,
-        contentColor = BBColors.Yellow.Yellow800
+        label = "Yavaş"
     ),
     PartialOutage(
-        label = "Kısmi Kesinti",
-        backgroundColor = BBColors.Orange.Orange50,
-        contentColor = BBColors.Orange.Orange600
+        label = "Kısmi Kesinti"
     ),
     MajorOutage(
-        label = "Kesinti",
-        backgroundColor = BBColors.Red.Red50,
-        contentColor = BBColors.Red.Red500
+        label = "Kesinti"
     ),
     Maintenance(
-        label = "Bakım",
-        backgroundColor = BBColors.Blue.Blue50,
-        contentColor = BBColors.Blue.Blue600
+        label = "Bakım"
     ),
     Resolved(
-        label = "Çözüldü",
-        backgroundColor = BBColors.Green.Green50,
-        contentColor = BBColors.Green.Green600
+        label = "Çözüldü"
     )
+}
+
+@Composable
+private fun SystemStatusLevel.backgroundColor(): Color {
+    return when (this) {
+        SystemStatusLevel.Operational ->
+            MaterialTheme.colorScheme.secondaryContainer
+
+        SystemStatusLevel.Degraded ->
+            MaterialTheme.colorScheme.primaryContainer
+
+        SystemStatusLevel.PartialOutage ->
+            MaterialTheme.colorScheme.tertiaryContainer
+
+        SystemStatusLevel.MajorOutage ->
+            MaterialTheme.colorScheme.errorContainer
+
+        SystemStatusLevel.Maintenance ->
+            MaterialTheme.colorScheme.surfaceVariant
+
+        SystemStatusLevel.Resolved ->
+            MaterialTheme.colorScheme.secondaryContainer
+    }
+}
+
+@Composable
+private fun SystemStatusLevel.contentColor(): Color {
+    return when (this) {
+        SystemStatusLevel.Operational ->
+            MaterialTheme.colorScheme.onSecondaryContainer
+
+        SystemStatusLevel.Degraded ->
+            MaterialTheme.colorScheme.onPrimaryContainer
+
+        SystemStatusLevel.PartialOutage ->
+            MaterialTheme.colorScheme.onTertiaryContainer
+
+        SystemStatusLevel.MajorOutage ->
+            MaterialTheme.colorScheme.onErrorContainer
+
+        SystemStatusLevel.Maintenance ->
+            MaterialTheme.colorScheme.onSurfaceVariant
+
+        SystemStatusLevel.Resolved ->
+            MaterialTheme.colorScheme.onSecondaryContainer
+    }
 }

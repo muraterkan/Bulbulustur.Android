@@ -260,7 +260,7 @@ private fun WalletBankAccountCard(
                     modifier = Modifier
                         .size(BBIcon.BoxMd)
                         .background(
-                            color = BBColors.Yellow.Yellow100,
+                            color = MaterialTheme.colorScheme.primaryContainer,
                             shape = BBRadius.LgShape
                         ),
                     contentAlignment = Alignment.Center
@@ -318,7 +318,7 @@ private fun WalletIconBox(
         modifier = Modifier
             .size(BBIcon.BoxMd)
             .background(
-                color = if (soft) BBColors.White.copy(alpha = BBAlpha.Overlay) else BBColors.Yellow.Yellow100,
+                color = if (soft) BBColors.White.copy(alpha = BBAlpha.Overlay) else MaterialTheme.colorScheme.primaryContainer,
                 shape = BBRadius.LgShape
             ),
         contentAlignment = Alignment.Center

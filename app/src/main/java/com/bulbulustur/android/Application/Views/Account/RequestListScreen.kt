@@ -183,7 +183,7 @@ private fun RequestCardHeader(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(BBColors.Yellow.Yellow50)
+            .background(MaterialTheme.colorScheme.primaryContainer)
             .padding(BBSpacing.CardPadding),
         horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
         verticalAlignment = Alignment.CenterVertically
@@ -243,7 +243,7 @@ private fun RequestInfoBox(
     highlighted: Boolean = false
 ) {
     val backgroundColor = if (highlighted) {
-        BBColors.Yellow.Yellow50
+        MaterialTheme.colorScheme.primaryContainer
     } else {
         MaterialTheme.colorScheme.surfaceVariant
     }
@@ -443,7 +443,7 @@ private fun RequestIconBox(
         modifier = Modifier
             .size(BBSpacing.Space12)
             .background(
-                color = BBColors.Yellow.Yellow100,
+                color = MaterialTheme.colorScheme.primaryContainer,
                 shape = BBRadius.LgShape
             ),
         contentAlignment = Alignment.Center

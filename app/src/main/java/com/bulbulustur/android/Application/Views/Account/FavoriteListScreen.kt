@@ -491,7 +491,7 @@ private fun FavoriteIconBox() {
         modifier = Modifier
             .size(BBSpacing.Space12)
             .background(
-                color = BBColors.Yellow.Yellow100,
+                color = MaterialTheme.colorScheme.primaryContainer,
                 shape = BBRadius.LgShape
             )
             .padding(BBSpacing.Space2),

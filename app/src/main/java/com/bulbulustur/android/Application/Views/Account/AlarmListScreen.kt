@@ -210,7 +210,7 @@ private fun AlarmIconBox() {
         modifier = Modifier
             .size(BBSpacing.Space12)
             .background(
-                color = BBColors.Yellow.Yellow100,
+                color = MaterialTheme.colorScheme.primaryContainer,
                 shape = BBRadius.LgShape
             ),
         contentAlignment = Alignment.Center

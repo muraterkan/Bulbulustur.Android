@@ -146,7 +146,7 @@ private fun RfqCreateActionCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             RfqIconBox(
-                backgroundColor = BBColors.Yellow.Yellow100,
+                backgroundColor = MaterialTheme.colorScheme.primaryContainer,
                 iconColor = BBColors.Yellow.Yellow800
             )
 
@@ -203,7 +203,7 @@ private fun RfqRequestCard(
                 verticalAlignment = Alignment.Top
             ) {
                 RfqIconBox(
-                    backgroundColor = BBColors.Yellow.Yellow50,
+                    backgroundColor = MaterialTheme.colorScheme.primaryContainer,
                     iconColor = BBColors.Yellow.Yellow800
                 )
 
@@ -400,7 +400,7 @@ private fun RfqEmptyState(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             RfqIconBox(
-                backgroundColor = BBColors.Yellow.Yellow100,
+                backgroundColor = MaterialTheme.colorScheme.primaryContainer,
                 iconColor = BBColors.Yellow.Yellow800
             )
 

@@ -68,9 +68,9 @@ fun CategoryDetailScreen(
     onCampaignClick: (RetailCategoryCampaignItem) -> Unit = {},
     onSearchClick: (String) -> Unit = {}
 ) {
-    val category = remember(categoryId) {
-        getRetailCategoryDetail(categoryId)
-    }
+    val category = getRetailCategoryDetail(
+        categoryId = categoryId
+    )
 
     var searchText by remember {
         mutableStateOf("")
@@ -602,11 +602,14 @@ data class RetailCategoryProductItem(
     val imageText: String
 )
 
-private fun getRetailCategoryDetail(categoryId: Int): RetailCategoryDetail {
+@Composable
+private fun getRetailCategoryDetail(
+    categoryId: Int
+): RetailCategoryDetail {
     return RetailCategoryDetail(
         id = categoryId,
         name = "Moda",
-        description = "Giyim, ayakkabı, çanta ve aksesuar ürünlerinde seçili maĞazaları ve fırsatları Keşfedin.",
+        description = "Giyim, ayakkabı, çanta ve aksesuar ürünlerinde seçili mağazaları ve fırsatları keşfedin.",
         iconText = "MO",
         productCount = 18420,
         storeCount = 624,
@@ -624,17 +627,17 @@ private fun getRetailCategoryDetail(categoryId: Int): RetailCategoryDetail {
                 description = "Yeni gelen ürünlerde seçili fırsatlar.",
                 badge = "Yeni sezon",
                 icon = Icons.Outlined.LocalOffer,
-                backgroundColor = BBColors.Yellow.Yellow50,
-                iconColor = BBColors.Yellow.Yellow800
+                backgroundColor = MaterialTheme.colorScheme.primaryContainer,
+                iconColor = MaterialTheme.colorScheme.onPrimaryContainer
             ),
             RetailCategoryCampaignItem(
                 id = 2,
                 title = "Haftanın Vitrinleri",
-                description = "Popüler maĞazalardan hızlı keşif.",
+                description = "Popüler mağazalardan hızlı keşif.",
                 badge = "Vitrin",
                 icon = Icons.Outlined.Storefront,
-                backgroundColor = BBColors.Green.Green50,
-                iconColor = BBColors.Green.Green600
+                backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
+                iconColor = MaterialTheme.colorScheme.onSecondaryContainer
             ),
             RetailCategoryCampaignItem(
                 id = 3,
@@ -642,8 +645,8 @@ private fun getRetailCategoryDetail(categoryId: Int): RetailCategoryDetail {
                 description = "Fiyat/performans ürünleri bir arada.",
                 badge = "Fırsat",
                 icon = Icons.Outlined.Search,
-                backgroundColor = BBColors.Blue.Blue50,
-                iconColor = BBColors.Blue.Blue600
+                backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+                iconColor = MaterialTheme.colorScheme.onSurfaceVariant
             )
         ),
         quickFilters = listOf(
@@ -659,21 +662,21 @@ private fun getRetailCategoryDetail(categoryId: Int): RetailCategoryDetail {
                 id = 1,
                 name = "Kadın klasik sneaker ayakkabı",
                 storeName = "Ortobella",
-                priceText = "â‚º899,90",
+                priceText = "₺899,90",
                 imageText = "P1"
             ),
             RetailCategoryProductItem(
                 id = 2,
                 name = "Oversize pamuklu basic tişört",
                 storeName = "Moda Nova",
-                priceText = "â‚º349,90",
+                priceText = "₺349,90",
                 imageText = "P2"
             ),
             RetailCategoryProductItem(
                 id = 3,
                 name = "Günlük kullanım omuz çantası",
                 storeName = "Urban Touch",
-                priceText = "â‚º649,90",
+                priceText = "₺649,90",
                 imageText = "P3"
             )
         )

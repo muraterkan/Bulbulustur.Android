@@ -160,7 +160,7 @@ private fun OrderShipmentSummaryCard(
         ) {
             OrderShipmentIconBox(
                 icon = Icons.Outlined.LocalShipping,
-                backgroundColor = BBColors.Yellow.Yellow100,
+                backgroundColor = MaterialTheme.colorScheme.primaryContainer,
                 iconColor = BBColors.Yellow.Yellow800
             )
 

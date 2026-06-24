@@ -274,7 +274,7 @@ private fun BasketHeaderCard(
         ) {
             BasketIconBox(
                 icon = Icons.Outlined.ShoppingBasket,
-                backgroundColor = BBColors.Yellow.Yellow100,
+                backgroundColor = MaterialTheme.colorScheme.primaryContainer,
                 iconColor = BBColors.Yellow.Yellow800
             )
 
@@ -321,7 +321,7 @@ private fun BasketCouponCard(
         ) {
             BasketIconBox(
                 icon = Icons.Outlined.ConfirmationNumber,
-                backgroundColor = BBColors.Yellow.Yellow100,
+                backgroundColor = MaterialTheme.colorScheme.primaryContainer,
                 iconColor = BBColors.Yellow.Yellow800
             )
 
@@ -827,7 +827,7 @@ private fun BasketEmptyCard() {
         ) {
             BasketIconBox(
                 icon = Icons.Outlined.ShoppingBasket,
-                backgroundColor = BBColors.Yellow.Yellow100,
+                backgroundColor = MaterialTheme.colorScheme.primaryContainer,
                 iconColor = BBColors.Yellow.Yellow800
             )
 
@@ -1027,7 +1027,7 @@ private fun BasketCouponOption(
     ) {
         BasketIconBox(
             icon = Icons.Outlined.ConfirmationNumber,
-            backgroundColor = BBColors.Yellow.Yellow100,
+            backgroundColor = MaterialTheme.colorScheme.primaryContainer,
             iconColor = BBColors.Yellow.Yellow800
         )
 

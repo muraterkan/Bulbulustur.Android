@@ -103,7 +103,7 @@ private fun SubscriptionIntroCard() {
         ) {
             SubscriptionIconBox(
                 iconColor = BBColors.Yellow.Yellow800,
-                backgroundColor = BBColors.Yellow.Yellow100
+                backgroundColor = MaterialTheme.colorScheme.primaryContainer
             )
 
             Column(
@@ -150,7 +150,7 @@ private fun SubscriptionCard(
             ) {
                 SubscriptionIconBox(
                     iconColor = BBColors.Yellow.Yellow800,
-                    backgroundColor = BBColors.Yellow.Yellow100
+                    backgroundColor = MaterialTheme.colorScheme.primaryContainer
                 )
 
                 Column(
@@ -228,7 +228,7 @@ private fun SubscriptionPriceBox(
         modifier = Modifier
             .fillMaxWidth()
             .background(
-                color = BBColors.Yellow.Yellow50,
+                color = MaterialTheme.colorScheme.primaryContainer,
                 shape = BBRadius.LgShape
             )
             .padding(BBSpacing.CardPaddingCompact),
@@ -367,7 +367,7 @@ private fun SubscriptionEmptyState() {
         ) {
             SubscriptionIconBox(
                 iconColor = BBColors.Yellow.Yellow800,
-                backgroundColor = BBColors.Yellow.Yellow100
+                backgroundColor = MaterialTheme.colorScheme.primaryContainer
             )
 
             Text(

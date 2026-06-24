@@ -162,7 +162,7 @@ private fun BankAccountWarningBox() {
         modifier = Modifier
             .fillMaxWidth()
             .background(
-                color = BBColors.Yellow.Yellow50,
+                color = MaterialTheme.colorScheme.primaryContainer,
                 shape = BBRadius.LgShape
             )
             .padding(BBSpacing.CardPaddingCompact),

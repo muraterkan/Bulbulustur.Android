@@ -5,10 +5,10 @@
  * This file maps the static Bulbulustur color palette into MaterialTheme.colorScheme.
  *
  * Rules:
- * - BbColors is the static palette layer derived from Bulbulustur Web Main CSS.
- * - BbTheme maps BbColors into Material3 color schemes for Light, Navy and Dark modes.
- * - Feature screens should use MaterialTheme.colorScheme instead of direct BbColors for theme-aware colors.
- * - Direct BbColors usage is valid here because this file defines the theme mapping.
+ * - BBColors is the static palette layer derived from Bulbulustur Web Main CSS.
+ * - BbTheme maps BBColors into Material3 color schemes for System, Light and Dark modes.
+ * - Feature screens should use MaterialTheme.colorScheme instead of direct BBColors for theme-aware colors.
+ * - Direct BBColors usage is valid here because this file defines the theme mapping.
  */
 
 package com.bulbulustur.android.Application.wwwroot.Theme
@@ -16,6 +16,7 @@ package com.bulbulustur.android.Application.wwwroot.Theme
 import android.app.Activity
 import android.content.Context
 import android.os.Build
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -28,9 +29,9 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
-import com.bulbulustur.android.businesslayer.Core.Enums.EThemeMode
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BbTypography
+import com.bulbulustur.android.businesslayer.Core.Enums.EThemeMode
 
 private val BbLightColorScheme = lightColorScheme(
     primary = BBColors.Yellow.Yellow500,
@@ -72,51 +73,6 @@ private val BbLightColorScheme = lightColorScheme(
     inverseSurface = BBColors.Coal.Coal500,
     inverseOnSurface = BBColors.White,
     inversePrimary = BBColors.Yellow.Yellow400,
-
-    surfaceTint = BBColors.Yellow.Yellow500,
-    scrim = BBColors.Black
-)
-
-private val BbNavyColorScheme = darkColorScheme(
-    primary = BBColors.Yellow.Yellow500,
-    onPrimary = BBColors.Ink.Ink900,
-
-    secondary = BBColors.Ink.Ink300,
-    onSecondary = BBColors.Gray.Gray50,
-
-    tertiary = BBColors.Purple.Purple400,
-    onTertiary = BBColors.Ink.Ink900,
-
-    background = BBColors.Ink.Ink500,
-    onBackground = BBColors.Gray.Gray50,
-
-    surface = BBColors.Ink.Ink400,
-    onSurface = BBColors.Gray.Gray50,
-
-    surfaceVariant = BBColors.Ink.Ink300,
-    onSurfaceVariant = BBColors.Gray.Gray300,
-
-    outline = BBColors.Ink.Ink100,
-    outlineVariant = BBColors.Ink.Ink200,
-
-    error = BBColors.Red.Red400,
-    onError = BBColors.Ink.Ink900,
-
-    primaryContainer = BBColors.Yellow.Yellow700,
-    onPrimaryContainer = BBColors.Ink.Ink900,
-
-    secondaryContainer = BBColors.Ink.Ink200,
-    onSecondaryContainer = BBColors.Gray.Gray50,
-
-    tertiaryContainer = BBColors.Purple.Purple800,
-    onTertiaryContainer = BBColors.Purple.Purple100,
-
-    errorContainer = BBColors.Red.Red800,
-    onErrorContainer = BBColors.Red.Red100,
-
-    inverseSurface = BBColors.Gray.Gray50,
-    inverseOnSurface = BBColors.Ink.Ink700,
-    inversePrimary = BBColors.Yellow.Yellow600,
 
     surfaceTint = BBColors.Yellow.Yellow500,
     scrim = BBColors.Black
@@ -169,21 +125,34 @@ private val BbDarkColorScheme = darkColorScheme(
 
 @Composable
 fun BbTheme(
-    themeMode: EThemeMode = EThemeMode.Light,
+    themeMode: EThemeMode = EThemeMode.System,
     useDynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val context = LocalContext.current
 
+    val resolvedThemeMode = when (themeMode) {
+        EThemeMode.System -> {
+            if (isSystemInDarkTheme()) {
+                EThemeMode.Dark
+            } else {
+                EThemeMode.Light
+            }
+        }
+
+        EThemeMode.Light -> EThemeMode.Light
+        EThemeMode.Dark -> EThemeMode.Dark
+    }
+
     val colorScheme = getBbColorScheme(
-        themeMode = themeMode,
+        themeMode = resolvedThemeMode,
         useDynamicColor = useDynamicColor,
         context = context
     )
 
     ApplyBbSystemBars(
         colorScheme = colorScheme,
-        themeMode = themeMode
+        themeMode = resolvedThemeMode
     )
 
     MaterialTheme(
@@ -200,13 +169,17 @@ private fun getBbColorScheme(
 ): ColorScheme {
     if (useDynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         return when (themeMode) {
+            EThemeMode.System,
             EThemeMode.Light -> dynamicLightColorScheme(context)
+
             EThemeMode.Dark -> dynamicDarkColorScheme(context)
         }
     }
 
     return when (themeMode) {
+        EThemeMode.System,
         EThemeMode.Light -> BbLightColorScheme
+
         EThemeMode.Dark -> BbDarkColorScheme
     }
 }
@@ -235,4 +208,3 @@ private fun ApplyBbSystemBars(
         insetsController.isAppearanceLightNavigationBars = themeMode == EThemeMode.Light
     }
 }
-

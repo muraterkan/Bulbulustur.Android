@@ -160,7 +160,7 @@ private fun OrderContractSummaryCard(
             ) {
                 OrderContractIconBox(
                     icon = Icons.Outlined.ReceiptLong,
-                    backgroundColor = BBColors.Yellow.Yellow100,
+                    backgroundColor = MaterialTheme.colorScheme.primaryContainer,
                     iconColor = BBColors.Yellow.Yellow800
                 )
 
@@ -515,7 +515,7 @@ private fun OrderContractNoticeBox(
         modifier = Modifier
             .fillMaxWidth()
             .background(
-                color = BBColors.Yellow.Yellow50,
+                color = MaterialTheme.colorScheme.primaryContainer,
                 shape = BBRadius.LgShape
             )
             .padding(
@@ -538,7 +538,7 @@ private fun OrderContractDateBox(
         modifier = Modifier
             .fillMaxWidth()
             .background(
-                color = BBColors.Yellow.Yellow50,
+                color = MaterialTheme.colorScheme.primaryContainer,
                 shape = BBRadius.LgShape
             )
             .padding(

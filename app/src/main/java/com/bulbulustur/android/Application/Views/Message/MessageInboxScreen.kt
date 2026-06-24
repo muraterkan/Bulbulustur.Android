@@ -347,7 +347,7 @@ private fun MessageAvatarBox(
 ) {
     val backgroundColor = when {
         message.isUnread -> BBColors.Blue.Blue50
-        message.isCompany -> BBColors.Yellow.Yellow100
+        message.isCompany -> MaterialTheme.colorScheme.primaryContainer
         else -> MaterialTheme.colorScheme.surfaceVariant
     }
 

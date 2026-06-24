@@ -148,7 +148,7 @@ private fun RfqDetailSummaryCard(
             ) {
                 RfqDetailIconBox(
                     icon = Icons.Outlined.RequestQuote,
-                    backgroundColor = BBColors.Yellow.Yellow100,
+                    backgroundColor = MaterialTheme.colorScheme.primaryContainer,
                     iconColor = BBColors.Yellow.Yellow800
                 )
 
@@ -387,7 +387,7 @@ private fun RfqOffersSectionHeader(
         ) {
             RfqDetailIconBox(
                 icon = Icons.Outlined.LocalOffer,
-                backgroundColor = BBColors.Yellow.Yellow100,
+                backgroundColor = MaterialTheme.colorScheme.primaryContainer,
                 iconColor = BBColors.Yellow.Yellow800
             )
 
@@ -436,7 +436,7 @@ private fun RfqOfferCard(
             ) {
                 RfqDetailIconBox(
                     icon = Icons.Outlined.Handshake,
-                    backgroundColor = BBColors.Yellow.Yellow100,
+                    backgroundColor = MaterialTheme.colorScheme.primaryContainer,
                     iconColor = BBColors.Yellow.Yellow800
                 )
 
@@ -531,7 +531,7 @@ private fun RfqOffersEmptyCard() {
         ) {
             RfqDetailIconBox(
                 icon = Icons.Outlined.LocalOffer,
-                backgroundColor = BBColors.Yellow.Yellow100,
+                backgroundColor = MaterialTheme.colorScheme.primaryContainer,
                 iconColor = BBColors.Yellow.Yellow800
             )
 

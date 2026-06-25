@@ -18,9 +18,6 @@ import retrofit2.http.Url
 
 object ApiClient {
 
-    private const val DEFAULT_BASE_URL =
-        "http://37.60.239.76:30215/"
-
     @PublishedApi
     internal const val JSON_MEDIA_TYPE =
         "application/json; charset=utf-8"
@@ -37,7 +34,7 @@ object ApiClient {
 
     private val retrofit: Retrofit =
         Retrofit.Builder()
-            .baseUrl(DEFAULT_BASE_URL)
+            .baseUrl(ApiRoutes.DEFAULT_BASE_URL)
             .build()
 
     @PublishedApi
@@ -84,7 +81,9 @@ object ApiClient {
             )
 
         val json =
-            gson.toJson(data)
+            gson.toJson(
+                data
+            )
 
         val mediaType =
             MediaType.parse(
@@ -141,9 +140,7 @@ object ApiClient {
         val cleanMethod =
             method.trimStart('/')
 
-        return if (
-            query.isNullOrBlank()
-        ) {
+        return if (query.isNullOrBlank()) {
             "$cleanBaseUrl/$cleanMethod"
         } else {
             "$cleanBaseUrl/$cleanMethod?$query"
@@ -182,15 +179,14 @@ object ApiClient {
         }
 
         return try {
-            val type =
-                object :
-                    TypeToken<Result<T>>() {
+            val resultType =
+                object : TypeToken<Result<T>>() {
                 }.type
 
             val parsedResult =
                 gson.fromJson<Result<T>>(
                     json,
-                    type
+                    resultType
                 )
 
             if (response.isSuccessful) {
@@ -204,24 +200,19 @@ object ApiClient {
                         }
                 )
             }
-        } catch (
-            exception: JsonSyntaxException
-        ) {
+        } catch (exception: JsonSyntaxException) {
             Result(
                 Success = false,
-                Message = if (
-                    response.isSuccessful
-                ) {
-                    "Sunucu yanıtı çözümlenemedi."
-                } else {
-                    "HTTP hata: ${response.code()} ${response.message()}"
-                },
+                Message =
+                    if (response.isSuccessful) {
+                        "Sunucu yanıtı çözümlenemedi."
+                    } else {
+                        "HTTP hata: ${response.code()} ${response.message()}"
+                    },
                 Exception =
                     exception.message
             )
-        } catch (
-            exception: Exception
-        ) {
+        } catch (exception: Exception) {
             Result(
                 Success = false,
                 Message =
@@ -237,17 +228,21 @@ interface GenericApi {
 
     @GET
     suspend fun GetAsync(
-        @Url url: String
+        @Url
+        url: String
     ): Response<ResponseBody>
 
     @POST
     suspend fun PostAsync(
-        @Url url: String,
-        @Body body: RequestBody
+        @Url
+        url: String,
+        @Body
+        body: RequestBody
     ): Response<ResponseBody>
 
     @DELETE
     suspend fun DeleteAsync(
-        @Url url: String
+        @Url
+        url: String
     ): Response<ResponseBody>
 }

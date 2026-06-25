@@ -98,7 +98,7 @@ fun BankAccountCreateScreen(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        text = "IBAN bilgisini boşluk bırakmadan ya da boşluklu olarak girebilirsin. Sistem doĞrulama kurallarını çalıştırmaya devam eder.",
+                        text = "IBAN bilgisini boşluk bırakmadan ya da boşluklu olarak girebilirsin. Sistem doğrulama kurallarını çalıştırmaya devam eder.",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

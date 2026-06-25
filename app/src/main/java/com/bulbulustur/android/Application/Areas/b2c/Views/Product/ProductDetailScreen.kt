@@ -1684,7 +1684,7 @@ private fun RetailProductDetailStoreCard(
 
                     if (store.isVerified) {
                         RetailProductDetailPill(
-                            text = "DoĞrulanmış",
+                            text = "Doğrulanmış",
                             icon = Icons.Outlined.Verified
                         )
                     }

@@ -136,7 +136,7 @@ fun AccountSecurityScreen(
 
                     AccountSecurityRow(
                         title = "Telefonlarım",
-                        value = "SMS doĞrulama ve güvenlik işlemleri",
+                        value = "SMS doğrulama ve güvenlik işlemleri",
                         icon = Icons.Outlined.PhoneIphone,
                         onClick = onPhonesClick
                     )
@@ -169,7 +169,7 @@ private fun AccountSecurityIntroCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Profil, giriş ve doĞrulama bilgilerinizi güvenle yönetin.",
+            text = "Profil, giriş ve doğrulama bilgilerinizi güvenle yönetin.",
             style = BbTypography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -218,7 +218,7 @@ private fun AccountSecurityStrengthCard() {
                     )
 
                     Text(
-                        text = "Telefon doĞrulaması tamamlandıĞında güvenlik seviyeniz artar.",
+                        text = "Telefon doğrulaması tamamlandıĞında güvenlik seviyeniz artar.",
                         style = BbTypography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

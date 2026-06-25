@@ -1,18 +1,12 @@
 package com.bulbulustur.android.Application.Views.Logon
 
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -23,208 +17,203 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.layout.width
+import com.bulbulustur.android.Application.Views.Shared.LogonPublicFieldLabel
 import com.bulbulustur.android.Application.Views.Shared.LogonPublicPageTitle
+import com.bulbulustur.android.Application.Views.Shared.LogonPublicRegisterLegalFooter
 import com.bulbulustur.android.Application.Views.Shared.LogonPublicScaffold
+import com.bulbulustur.android.Application.Views.Shared.LogonPublicTextField
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
-import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
-import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
 
 @Composable
 fun FirstDoorScreen(
-    onContinueClick: (selectedDoor: FirstDoorType) -> Unit = {},
+    isLoading: Boolean = false,
+    errorMessage: String? = null,
+    onContinueClick: (email: String) -> Unit = {},
+    onInputChanged: () -> Unit = {},
     onBackToLogonClick: () -> Unit = {},
     onLanguageClick: () -> Unit = {}
 ) {
-    var selectedDoor by remember {
-        mutableStateOf(FirstDoorType.IndividualBuyer)
+    var email by remember {
+        mutableStateOf("")
     }
 
     LogonPublicScaffold(
         onLanguageSelected = {
             onLanguageClick()
+        },
+        footer = {
+            LogonPublicRegisterLegalFooter()
         }
     ) {
         LogonPublicPageTitle(
-            eyebrow = "Üyelik Kapısı",
-            title = "Nasıl Devam Edelim?",
-            description = "Bulbulustur hesabınızı doĞru akışla oluşturalım. Seçiminize göre sonraki adımı hazırlayacaĞız."
+            eyebrow = "Yeni Üyelik",
+            title = "E-posta Adresinizi Girin",
+            description = "Kayıt işlemini başlatmak için e-posta adresinize bir doğrulama bağlantısı göndereceğiz."
         )
 
-        Spacer(modifier = Modifier.height(BBSpacing.Space8))
+        Spacer(
+            modifier =
+                Modifier.height(
+                    BBSpacing.Space8
+                )
+        )
 
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
-        ) {
-            FirstDoorOptionCard(
-                marker = "B",
-                title = "Bireysel Alıcıyım",
-                description = "Perakende Alışveriş yapmak ve siparişlerinizi takip etmek için devam edin.",
-                isSelected = selectedDoor == FirstDoorType.IndividualBuyer,
-                onClick = {
-                    selectedDoor = FirstDoorType.IndividualBuyer
-                }
+        LogonPublicFieldLabel(
+            text = "E-posta"
+        )
+
+        Spacer(
+            modifier =
+                Modifier.width(
+                    BBSpacing.Space2
+                )
+        )
+
+        LogonPublicTextField(
+            value = email,
+            onValueChange = {
+                email = it
+                onInputChanged()
+            },
+            placeholder = "E-posta adresiniz",
+            keyboardOptions =
+                KeyboardOptions(
+                    keyboardType =
+                        KeyboardType.Email
+                )
+        )
+
+        if (!errorMessage.isNullOrBlank()) {
+            Spacer(
+                modifier =
+                    Modifier.height(
+                        BBSpacing.Space3
+                    )
             )
 
-            FirstDoorOptionCard(
-                marker = "F",
-                title = "Firma Adına Alıcıyım",
-                description = "Toptan talepler, teklif toplama ve firma alışverişleri için devam edin.",
-                isSelected = selectedDoor == FirstDoorType.CompanyBuyer,
-                onClick = {
-                    selectedDoor = FirstDoorType.CompanyBuyer
-                }
-            )
-
-            FirstDoorOptionCard(
-                marker = "G",
-                title = "Zaten Hesabım Var",
-                description = "Yeni kayıt oluşturmak yerine mevcut hesabınızla giriş yapın.",
-                isSelected = selectedDoor == FirstDoorType.ExistingAccount,
-                onClick = {
-                    selectedDoor = FirstDoorType.ExistingAccount
-                }
+            Text(
+                text = errorMessage,
+                style =
+                    MaterialTheme.typography.bodySmall,
+                color =
+                    MaterialTheme.colorScheme.error
             )
         }
 
-        Spacer(modifier = Modifier.height(BBSpacing.Space7))
-
-        BbButton(
-            modifier = Modifier.fillMaxWidth(),
-            text = "Devam Et",
-            onClick = {
-                onContinueClick(selectedDoor)
-            },
-            variant = BbButtonVariant.Primary,
-            size = BbButtonSize.Large
+        Spacer(
+            modifier =
+                Modifier.height(
+                    BBSpacing.Space7
+                )
         )
 
-        Spacer(modifier = Modifier.height(BBSpacing.Space5))
+        BbButton(
+            modifier =
+                Modifier.fillMaxWidth(),
+            text =
+                if (isLoading) {
+                    "Gönderiliyor"
+                } else {
+                    "Doğrulama Bağlantısı Gönder"
+                },
+            onClick = {
+                if (!isLoading) {
+                    onContinueClick(
+                        email
+                    )
+                }
+            },
+            variant =
+                BbButtonVariant.Primary,
+            size =
+                BbButtonSize.Large
+        )
+
+        if (isLoading) {
+            Spacer(
+                modifier =
+                    Modifier.height(
+                        BBSpacing.Space4
+                    )
+            )
+
+            Row(
+                modifier =
+                    Modifier.fillMaxWidth(),
+                verticalAlignment =
+                    Alignment.CenterVertically
+            ) {
+                CircularProgressIndicator()
+
+                Spacer(
+                    modifier =
+                        Modifier.width(
+                            BBSpacing.Space2
+                        )
+                )
+
+                Text(
+                    text = "Doğrulama e-postası hazırlanıyor.",
+                    style =
+                        MaterialTheme.typography.bodySmall,
+                    color =
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+
+        Spacer(
+            modifier =
+                Modifier.height(
+                    BBSpacing.Space5
+                )
+        )
 
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
+            modifier =
+                Modifier.fillMaxWidth(),
+            verticalAlignment =
+                Alignment.CenterVertically
         ) {
             Text(
-                text = "Giriş ekranına dönmek ister misiniz?",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                text = "Zaten hesabınız var mı?",
+                style =
+                    MaterialTheme.typography.bodySmall,
+                color =
+                    MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             TextButton(
-                onClick = onBackToLogonClick
+                onClick =
+                    onBackToLogonClick
             ) {
                 Text(
                     text = "Giriş Yap",
-                    style = MaterialTheme.typography.labelLarge,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
+                    style =
+                        MaterialTheme.typography.labelLarge,
+                    fontWeight =
+                        FontWeight.Bold,
+                    color =
+                        MaterialTheme.colorScheme.onSurface
                 )
             }
         }
     }
 }
 
-@Composable
-private fun FirstDoorOptionCard(
-    marker: String,
-    title: String,
-    description: String,
-    isSelected: Boolean,
-    onClick: () -> Unit
-) {
-    val borderColor = if (isSelected) {
-        MaterialTheme.colorScheme.primary
-    } else {
-        MaterialTheme.colorScheme.outlineVariant
-    }
-
-    val backgroundColor = if (isSelected) {
-        MaterialTheme.colorScheme.primaryContainer
-    } else {
-        MaterialTheme.colorScheme.surfaceVariant
-    }
-
-    Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-            .border(
-                width = 1.dp,
-                color = borderColor,
-                shape = BBRadius.Card
-            )
-            .clickable {
-                onClick()
-            },
-        color = backgroundColor,
-        shape = BBRadius.Card
-    ) {
-        Row(
-            modifier = Modifier.padding(BBSpacing.CardPadding),
-            verticalAlignment = Alignment.Top,
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
-        ) {
-            Surface(
-                color = if (isSelected) {
-                    MaterialTheme.colorScheme.surface
-                } else {
-                    BBColors.White
-                },
-                shape = BBRadius.PillShape
-            ) {
-                Box(
-                    modifier = Modifier.size(BBSpacing.Space10),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = marker,
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Black,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                }
-            }
-
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-
-                Spacer(modifier = Modifier.height(BBSpacing.Space1))
-
-                Text(
-                    text = description,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-        }
-    }
-}
-
-enum class FirstDoorType {
-    IndividualBuyer,
-    CompanyBuyer,
-    ExistingAccount
-}
-
-@Preview(showBackground = true)
+@Preview(
+    showBackground = true
+)
 @Composable
 private fun FirstDoorScreenPreview() {
     BbTheme {
         FirstDoorScreen()
     }
 }
-

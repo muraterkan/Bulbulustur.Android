@@ -172,15 +172,15 @@ fun ProfileScreen(
 
             item {
                 ProfileInfoSection(
-                    title = "DoĞrulama",
-                    description = "Güvenlik ve hesap doĞrulama bilgileri.",
+                    title = "Doğrulama",
+                    description = "Güvenlik ve hesap doğrulama bilgileri.",
                     icon = Icons.Outlined.Security
                 ) {
                     ProfileInfoRow("E-Posta", "muraterkan500@gmail.com", Icons.Outlined.Email, onEmailClick)
                     ProfileDashedDivider()
-                    ProfileInfoRow("Telefonlarım", "1 telefon kayıtlı Â· doĞrulama bekliyor", Icons.Outlined.PhoneIphone, onPhonesClick)
+                    ProfileInfoRow("Telefonlarım", "1 telefon kayıtlı Â· doğrulama bekliyor", Icons.Outlined.PhoneIphone, onPhonesClick)
                     ProfileDashedDivider()
-                    ProfileInfoRow("E-Posta DoĞrulama", "DoĞrulanmış", Icons.Outlined.Verified, onEmailClick)
+                    ProfileInfoRow("E-Posta Doğrulama", "Doğrulanmış", Icons.Outlined.Verified, onEmailClick)
                 }
             }
 
@@ -381,7 +381,7 @@ private fun ProfileCompletionCard(
                     )
 
                     Text(
-                        text = "Telefon doĞrulaması ve profil fotoĞrafı ile hesabınızı güçlendirebilirsiniz.",
+                        text = "Telefon doğrulaması ve profil fotoĞrafı ile hesabınızı güçlendirebilirsiniz.",
                         style = BbTypography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

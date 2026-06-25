@@ -519,12 +519,12 @@ private fun getCompanyHome(
         companyId = companyId,
         name = "Ortobella Comfort",
         logoText = "OC",
-        description = "Çanta, tekstil ve promosyon ürünleri alanında çalışan doĞrulanmış tedarikçi.",
+        description = "Çanta, tekstil ve promosyon ürünleri alanında çalışan doğrulanmış tedarikçi.",
         isVerified = true,
         chips = listOf(
             "Türkiye",
             "Samsun",
-            "DoĞrulanmış",
+            "Doğrulanmış",
             "Toptancı",
             "120+ Ürün"
         )

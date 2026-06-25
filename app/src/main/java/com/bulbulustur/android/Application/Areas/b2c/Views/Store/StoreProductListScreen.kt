@@ -285,7 +285,7 @@ private fun StoreProductVerifiedBadge() {
             )
     ) {
         Text(
-            text = "DoĞrulanmış",
+            text = "Doğrulanmış",
             style = MaterialTheme.typography.labelSmall,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.primary

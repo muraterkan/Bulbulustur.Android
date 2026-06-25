@@ -370,7 +370,7 @@ private fun WholesaleTrustRail() {
             WholesaleTrustItem(
                 modifier = Modifier.weight(1f),
                 icon = Icons.Outlined.Verified,
-                title = "DoĞrulanmış"
+                title = "Doğrulanmış"
             )
 
             WholesaleTrustItem(

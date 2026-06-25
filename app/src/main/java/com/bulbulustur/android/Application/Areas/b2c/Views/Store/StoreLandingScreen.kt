@@ -601,8 +601,8 @@ private fun getRetailSellerLandingScreenData(): RetailSellerLandingScreenData {
             RetailSellerInfoItem(
                 id = 5,
                 groupName = "Başvuru",
-                title = "Şirket doĞrulama",
-                description = "Satıcı güvenliĞi için şirket ve yetkili bilgileri doĞrulama sürecine alınır.",
+                title = "Şirket doğrulama",
+                description = "Satıcı güvenliĞi için şirket ve yetkili bilgileri doğrulama sürecine alınır.",
                 iconText = "ŞD"
             ),
             RetailSellerInfoItem(

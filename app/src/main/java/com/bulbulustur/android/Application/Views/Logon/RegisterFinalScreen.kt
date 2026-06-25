@@ -85,7 +85,7 @@ fun RegisterFinalScreen(
 
             BbButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = "DoĞrulama E-postasını Tekrar Gönder",
+                text = "Doğrulama E-postasını Tekrar Gönder",
                 onClick = onResendVerificationClick,
                 variant = BbButtonVariant.Outline,
                 size = BbButtonSize.Large
@@ -146,7 +146,7 @@ private fun RegisterFinalEmailBox(
             horizontalAlignment = Alignment.Start
         ) {
             Text(
-                text = "DoĞrulama adresi",
+                text = "Doğrulama adresi",
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -181,13 +181,13 @@ private fun RegisterFinalStepList(
         RegisterFinalStepItem(
             number = "2",
             title = when (finalState) {
-                RegisterFinalState.Completed -> "E-posta doĞrulandı"
-                RegisterFinalState.WaitingEmailVerification -> "E-posta doĞrulaması bekleniyor"
+                RegisterFinalState.Completed -> "E-posta doğrulandı"
+                RegisterFinalState.WaitingEmailVerification -> "E-posta doğrulaması bekleniyor"
                 RegisterFinalState.WaitingApproval -> "Firma kontrolü bekleniyor"
             },
             description = when (finalState) {
                 RegisterFinalState.Completed -> "Hesabınız giriş için hazır."
-                RegisterFinalState.WaitingEmailVerification -> "Size gönderilen baĞlantıya tıklayarak hesabınızı doĞrulayın."
+                RegisterFinalState.WaitingEmailVerification -> "Size gönderilen baĞlantıya tıklayarak hesabınızı doğrulayın."
                 RegisterFinalState.WaitingApproval -> "Kurumsal hesap bilgileriniz kontrol edildikten sonra aktifleşir."
             },
             isCompleted = finalState == RegisterFinalState.Completed
@@ -303,9 +303,9 @@ enum class RegisterFinalState(
     ),
 
     WaitingEmailVerification(
-        badgeText = "DoĞrulama Bekleniyor",
+        badgeText = "Doğrulama Bekleniyor",
         title = "E-postanızı Kontrol Edin",
-        description = "Hesabınızı aktifleştirmek için e-posta adresinize gönderilen doĞrulama baĞlantısını kullanın."
+        description = "Hesabınızı aktifleştirmek için e-posta adresinize gönderilen doğrulama baĞlantısını kullanın."
     ),
 
     WaitingApproval(

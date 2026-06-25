@@ -3,6 +3,7 @@ package com.bulbulustur.android.businesslayer.Core.Repository
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.IMemberRepository
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.MemberInsertModel
+import com.bulbulustur.android.businesslayer.Core.Model.MemberRegisterModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdateModel
 import com.bulbulustur.android.businesslayer.Core.Network.ApiClient
 import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
@@ -46,6 +47,22 @@ class MemberRepository(
             baseUrl = ApiRoutes.RESOURCE_BASE_URL,
             method = "InsertAsync",
             data = model
+        )
+    }
+
+    override suspend fun InsertAsync(
+        languageId: Int,
+        model: MemberRegisterModel
+    ): Result<MemberInsertModel> {
+        val registerModel =
+            model.copy(
+                LanguageId = languageId
+            )
+
+        return apiClient.PostAsync(
+            baseUrl = ApiRoutes.AUTHENTICATION_BASE_URL,
+            method = "member-insert",
+            data = registerModel
         )
     }
 

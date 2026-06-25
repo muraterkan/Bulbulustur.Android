@@ -339,7 +339,7 @@ fun CompanyEditScreen(
                     padding = BbCardPadding.Medium
                 ) {
                     Text(
-                        text = "Şirket bilgilerin kurumsal profil, fatura ve platform doĞrulama süreçlerinde kullanılabilir.",
+                        text = "Şirket bilgilerin kurumsal profil, fatura ve platform doğrulama süreçlerinde kullanılabilir.",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

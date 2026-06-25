@@ -741,7 +741,7 @@ private fun getCheckoutSummaryScreenData(): CheckoutSummaryScreenData {
         ),
         payment = CheckoutSummaryPayment(
             methodTitle = "Yeni kart ile ödeme",
-            description = "3D Secure doĞrulama ödeme saĞlayıcısı üzerinden tamamlanır."
+            description = "3D Secure doğrulama ödeme saĞlayıcısı üzerinden tamamlanır."
         ),
         products = listOf(
             CheckoutSummaryProductItem(

@@ -495,7 +495,7 @@ private fun getMessageConversation(
         messageId = messageId,
         subject = "450W paneller için fiyat teklifi",
         companyName = "Anadolu Ambalaj Sanayi",
-        companyDescription = "Toptan ürün, numune ve RFQ görüşmeleri için doĞrulanmış firma.",
+        companyDescription = "Toptan ürün, numune ve RFQ görüşmeleri için doğrulanmış firma.",
         commerceModeName = "Toptan",
         messageTypeName = "Gelen Kutusu",
         statusName = "Okundu",

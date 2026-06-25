@@ -184,7 +184,7 @@ private fun ChangeEmailIntroCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Hesabınıza baĞlı e-posta adresini güncelleyin. Yeni e-posta için doĞrulama süreci gerekebilir.",
+            text = "Hesabınıza baĞlı e-posta adresini güncelleyin. Yeni e-posta için doğrulama süreci gerekebilir.",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -275,13 +275,13 @@ private fun ChangeEmailInfoBox() {
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
         ) {
             Text(
-                text = "DoĞrulama Gerekebilir",
+                text = "Doğrulama Gerekebilir",
                 style = MaterialTheme.typography.labelLarge,
                 color = BBColors.Blue.Blue700
             )
 
             Text(
-                text = "E-posta deĞişikliĞinden sonra hesabınızın güvenliĞi için yeni adresin doĞrulanması istenebilir.",
+                text = "E-posta deĞişikliĞinden sonra hesabınızın güvenliĞi için yeni adresin doğrulanması istenebilir.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

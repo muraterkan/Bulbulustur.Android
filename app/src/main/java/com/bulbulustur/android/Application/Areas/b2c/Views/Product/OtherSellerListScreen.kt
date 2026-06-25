@@ -363,7 +363,7 @@ private fun OtherSellerVerifiedBadge() {
         )
     ) {
         Text(
-            text = "DoĞrulanmış",
+            text = "Doğrulanmış",
             modifier = Modifier.padding(
                 horizontal = BBSpacing.Space2,
                 vertical = BBSpacing.Space1
@@ -465,7 +465,7 @@ private fun getRetailOtherSellerScreenData(
             "Tümü",
             "En düşük fiyat",
             "Hızlı kargo",
-            "DoĞrulanmış",
+            "Doğrulanmış",
             "Yüksek puan"
         ),
         sellers = listOf(
@@ -479,7 +479,7 @@ private fun getRetailOtherSellerScreenData(
                 stockText = "Stokta var",
                 badgeText = "En uygun fiyat",
                 isVerified = true,
-                filterTags = listOf("En düşük fiyat", "Hızlı kargo", "DoĞrulanmış", "Yüksek puan")
+                filterTags = listOf("En düşük fiyat", "Hızlı kargo", "Doğrulanmış", "Yüksek puan")
             ),
             RetailOtherSellerItem(
                 id = 2,
@@ -491,7 +491,7 @@ private fun getRetailOtherSellerScreenData(
                 stockText = "Stokta var",
                 badgeText = "",
                 isVerified = true,
-                filterTags = listOf("DoĞrulanmış", "Yüksek puan")
+                filterTags = listOf("Doğrulanmış", "Yüksek puan")
             ),
             RetailOtherSellerItem(
                 id = 3,
@@ -527,7 +527,7 @@ private fun getRetailOtherSellerScreenData(
                 stockText = "Stokta var",
                 badgeText = "Kargo avantajı",
                 isVerified = true,
-                filterTags = listOf("Hızlı kargo", "DoĞrulanmış")
+                filterTags = listOf("Hızlı kargo", "Doğrulanmış")
             )
         )
     )

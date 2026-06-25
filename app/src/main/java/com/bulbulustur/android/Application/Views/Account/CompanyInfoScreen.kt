@@ -221,7 +221,7 @@ private fun CompanyHeroCard() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 CompanyHeroBadge(
-                    text = "DoĞrulanmış Firma",
+                    text = "Doğrulanmış Firma",
                     icon = Icons.Outlined.Verified
                 )
 

@@ -286,7 +286,7 @@ private fun CompanyListCard(
                         if (company.IsVerified) {
                             Icon(
                                 imageVector = Icons.Outlined.Verified,
-                                contentDescription = "DoĞrulanmış firma",
+                                contentDescription = "Doğrulanmış firma",
                                 tint = MaterialTheme.colorScheme.primary
                             )
                         }
@@ -616,7 +616,7 @@ data class CompanyListItem(
 private fun getCompanyFilterNames(): List<String> {
     return listOf(
         "Tüm firmalar",
-        "DoĞrulanmış",
+        "Doğrulanmış",
         "Üretici",
         "Toptancı",
         "İhracatçı",

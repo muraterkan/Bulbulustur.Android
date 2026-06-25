@@ -45,7 +45,7 @@ fun PhoneVerifyScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Telefon DoĞrulama",
+                title = "Telefon Doğrulama",
                 onBackClick = onBackClick
             )
         }
@@ -83,7 +83,7 @@ fun PhoneVerifyScreen(
                         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                     ) {
                         Text(
-                            text = "DoĞrulama Kodu",
+                            text = "Doğrulama Kodu",
                             style = MaterialTheme.typography.titleSmall,
                             color = MaterialTheme.colorScheme.onSurface
                         )
@@ -123,7 +123,7 @@ fun PhoneVerifyScreen(
                     )
 
                     BbButton(
-                        text = "Telefonu DoĞrula",
+                        text = "Telefonu Doğrula",
                         onClick = {
                             onVerifyClick(verificationCodeState.value)
                         },
@@ -155,7 +155,7 @@ private fun PhoneVerifyIntroCard(
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Telefon numaranıza gönderilen doĞrulama kodunu girerek $phone numarasını hesabınıza doĞrulanmış olarak baĞlayabilirsiniz.",
+            text = "Telefon numaranıza gönderilen doğrulama kodunu girerek $phone numarasını hesabınıza doğrulanmış olarak baĞlayabilirsiniz.",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

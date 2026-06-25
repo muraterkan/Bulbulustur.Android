@@ -2,10 +2,12 @@ package com.bulbulustur.android.Application.Controllers
 
 import androidx.lifecycle.viewModelScope
 import com.bulbulustur.android.Application.Session.UserSessionManager
-import com.bulbulustur.android.businesslayer.Core.Model.RevokeTokenRequest
 import com.bulbulustur.android.businesslayer.Core.Interface.IAuthenticationRepository
+import com.bulbulustur.android.businesslayer.Core.Interface.IMemberTempRepository
 import com.bulbulustur.android.businesslayer.Core.Model.AuthResponse
 import com.bulbulustur.android.businesslayer.Core.Model.MemberAuthModel
+import com.bulbulustur.android.businesslayer.Core.Model.MemberTempFistdoorModel
+import com.bulbulustur.android.businesslayer.Core.Model.RevokeTokenRequest
 import com.bulbulustur.android.businesslayer.Core.Util.Execute.IExecuteService
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,13 +22,20 @@ data class LogonControllerState(
     val LastResult: Result<*>? = null,
     val ErrorMessage: String? = null,
     val IsLoginSuccessful: Boolean = false,
-    val IsLogoutCompleted: Boolean = false
+    val IsLogoutCompleted: Boolean = false,
+    val IsFirstDoorSuccessful: Boolean = false,
+    val FirstDoorEmail: String = ""
 ) {
 
     val IsLoggingOut: Boolean
         get() =
             IsLoading &&
                     CurrentAction == "LogoutPost"
+
+    val IsSendingFirstDoorEmail: Boolean
+        get() =
+            IsLoading &&
+                    CurrentAction == "FirstDoorPost"
 }
 
 sealed interface LogonControllerEvent {
@@ -45,6 +54,7 @@ sealed interface LogonControllerEvent {
 class LogonController(
     private val executeService: IExecuteService,
     private val authenticationRepository: IAuthenticationRepository,
+    private val memberTempRepository: IMemberTempRepository,
     private val userSessionManager: UserSessionManager
 ) : BaseController() {
 
@@ -56,12 +66,6 @@ class LogonController(
     val State: StateFlow<LogonControllerState> =
         _state.asStateFlow()
 
-    /*
-     * Android tarafında Login ekranı yerel olarak oluşturulur.
-     * Webdeki GET Login action karşılığına ihtiyaç yoktur.
-     *
-     * İsim paralelliğini korumak için metot bırakılmıştır.
-     */
     fun Login() {
         _state.update { currentState ->
             currentState.copy(
@@ -72,9 +76,6 @@ class LogonController(
         }
     }
 
-    /*
-     * Gerçek Authentication API login işlemi.
-     */
     fun LoginPost(
         email: String,
         password: String,
@@ -96,9 +97,6 @@ class LogonController(
         )
     }
 
-    /*
-     * Model üzerinden gerçek Authentication API login işlemi.
-     */
     fun LoginPost(
         model: MemberAuthModel,
         languageId: Int
@@ -173,28 +171,14 @@ class LogonController(
             )
         }
 
-        /*
-         * Sunucu logout isteğinde kullanılacağı için
-         * refresh token silinmeden önce okunur.
-         */
         val refreshToken =
             userSessionManager.GetRefreshToken()
 
-        /*
-         * Kullanıcı oturumu cihazda hemen kapatılır.
-         * Sunucu cevabı beklenmez.
-         */
         val localTokensCleared =
             userSessionManager.ClearAuthentication()
 
-        /*
-         * Navigation doğrudan çağıran composable tarafından yapılır.
-         */
         onCompleted()
 
-        /*
-         * Sunucudaki refresh token arka planda iptal edilir.
-         */
         viewModelScope.launch {
             var logoutResponse: Result<Boolean>? =
                 null
@@ -248,10 +232,106 @@ class LogonController(
         }
     }
 
-    /*
-     * Kayıt başlangıç ekranı yerel Compose ekranıdır.
-     * API işlemi RegisterStartPost içinde bağlanacaktır.
-     */
+    fun FirstDoor() {
+        _state.update { currentState ->
+            currentState.copy(
+                CurrentAction = "FirstDoor",
+                LastResult = null,
+                ErrorMessage = null,
+                IsFirstDoorSuccessful = false
+            )
+        }
+    }
+
+    fun FirstDoorPost(
+        email: String,
+        languageId: Int
+    ) {
+        if (_state.value.IsLoading) {
+            return
+        }
+
+        val normalizedEmail =
+            email.trim()
+
+        val validationMessage =
+            ValidateEmail(
+                email = normalizedEmail
+            )
+
+        if (validationMessage != null) {
+            _state.update { currentState ->
+                currentState.copy(
+                    IsLoading = false,
+                    CurrentAction = "FirstDoorPost",
+                    LastResult = null,
+                    ErrorMessage = validationMessage,
+                    IsFirstDoorSuccessful = false
+                )
+            }
+
+            return
+        }
+
+        val model =
+            MemberTempFistdoorModel(
+                Email = normalizedEmail
+            )
+
+        viewModelScope.launch {
+            SetLoading(
+                currentAction = "FirstDoorPost"
+            )
+
+            val response =
+                executeService.PostAsync(
+                    operationType =
+                        "App.Logon.FirstDoorPost"
+                ) {
+                    memberTempRepository.FirstDoorAsync(
+                        languageId = languageId,
+                        model = model
+                    )
+                }
+
+            if (!response.Success) {
+                _state.update { currentState ->
+                    currentState.copy(
+                        IsLoading = false,
+                        CurrentAction = "FirstDoorPost",
+                        LastResult = response,
+                        ErrorMessage =
+                            response.Message.ifBlank {
+                                "Doğrulama e-postası gönderilemedi."
+                            },
+                        IsFirstDoorSuccessful = false
+                    )
+                }
+
+                return@launch
+            }
+
+            _state.update { currentState ->
+                currentState.copy(
+                    IsLoading = false,
+                    CurrentAction = "FirstDoorPost",
+                    LastResult = response,
+                    ErrorMessage = null,
+                    IsFirstDoorSuccessful = true,
+                    FirstDoorEmail = normalizedEmail
+                )
+            }
+        }
+    }
+
+    fun ConsumeFirstDoorSuccess() {
+        _state.update { currentState ->
+            currentState.copy(
+                IsFirstDoorSuccessful = false
+            )
+        }
+    }
+
     fun RegisterStart() {
         _state.update { currentState ->
             currentState.copy(
@@ -261,22 +341,6 @@ class LogonController(
         }
     }
 
-    /*
-     * Sonraki aşamada AuthenticationRepository içindeki
-     * first-door endpointine bağlanacaktır.
-     */
-    fun RegisterStartPost(
-        body: Any? = null
-    ) {
-        SetPendingOperation(
-            currentAction = "RegisterStartPost"
-        )
-    }
-
-    /*
-     * Kayıt final ekranı yerel Compose ekranıdır.
-     * API işlemi RegisterFinalPost içinde bağlanacaktır.
-     */
     fun RegisterFinal() {
         _state.update { currentState ->
             currentState.copy(
@@ -286,10 +350,6 @@ class LogonController(
         }
     }
 
-    /*
-     * Sonraki aşamada member-insert endpointine
-     * gerçek MemberRegisterModel ile bağlanacaktır.
-     */
     fun RegisterFinalPost(
         body: Any? = null
     ) {
@@ -298,9 +358,6 @@ class LogonController(
         )
     }
 
-    /*
-     * Şifremi unuttum ekranı yerel Compose ekranıdır.
-     */
     fun ForgotPassword() {
         _state.update { currentState ->
             currentState.copy(
@@ -310,10 +367,6 @@ class LogonController(
         }
     }
 
-    /*
-     * Sonraki aşamada forgot endpointine
-     * gerçek MemberForgotModel ile bağlanacaktır.
-     */
     fun ForgotPasswordPost(
         body: Any? = null
     ) {
@@ -322,25 +375,10 @@ class LogonController(
         )
     }
 
-    /*
-     * Süresi dolmuş işlem ekranı yerel Compose ekranıdır.
-     */
     fun Expired() {
         _state.update { currentState ->
             currentState.copy(
                 CurrentAction = "Expired",
-                ErrorMessage = null
-            )
-        }
-    }
-
-    /*
-     * Kayıt kapısı ekranı yerel Compose ekranıdır.
-     */
-    fun FirstDoor() {
-        _state.update { currentState ->
-            currentState.copy(
-                CurrentAction = "FirstDoor",
                 ErrorMessage = null
             )
         }
@@ -426,7 +464,8 @@ class LogonController(
                 LastResult = null,
                 ErrorMessage = null,
                 IsLoginSuccessful = false,
-                IsLogoutCompleted = false
+                IsLogoutCompleted = false,
+                IsFirstDoorSuccessful = false
             )
         }
     }
@@ -451,6 +490,25 @@ class LogonController(
         email: String,
         password: String
     ): String? {
+        val emailValidation =
+            ValidateEmail(
+                email = email
+            )
+
+        if (emailValidation != null) {
+            return emailValidation
+        }
+
+        if (password.isBlank()) {
+            return "Şifrenizi girin."
+        }
+
+        return null
+    }
+
+    private fun ValidateEmail(
+        email: String
+    ): String? {
         if (email.isBlank()) {
             return "E-posta adresinizi girin."
         }
@@ -465,10 +523,6 @@ class LogonController(
             !emailParts[1].contains(".")
         ) {
             return "Geçerli bir e-posta adresi girin."
-        }
-
-        if (password.isBlank()) {
-            return "Şifrenizi girin."
         }
 
         return null

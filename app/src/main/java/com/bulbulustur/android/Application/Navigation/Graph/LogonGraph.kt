@@ -12,7 +12,7 @@ import com.bulbulustur.android.Application.Navigation.Routes.RetailRoutes
 import com.bulbulustur.android.Application.Session.UserSessionState
 import com.bulbulustur.android.Application.Views.Logon.ExpiredScreen
 import com.bulbulustur.android.Application.Views.Logon.FirstDoorScreen
-import com.bulbulustur.android.Application.Views.Logon.FirstDoorType
+import com.bulbulustur.android.Application.Views.Logon.RegisterFinalState
 import com.bulbulustur.android.Application.Views.Logon.ForgotPasswordScreen
 import com.bulbulustur.android.Application.Views.Logon.LoginScreen
 import com.bulbulustur.android.Application.Views.Logon.RegisterFinalScreen
@@ -120,28 +120,51 @@ fun NavGraphBuilder.logonGraph(
     composable(
         route = LogonRoutes.FirstDoor
     ) {
-        FirstDoorScreen(
-            onContinueClick = { selectedDoor ->
-                when (selectedDoor) {
-                    FirstDoorType.IndividualBuyer,
-                    FirstDoorType.CompanyBuyer -> {
-                        navController.navigate(
-                            LogonRoutes.RegisterStart
-                        )
-                    }
+        val logonState by
+        logonController.State.collectAsState()
 
-                    FirstDoorType.ExistingAccount -> {
-                        navController.popBackStack(
-                            route = LogonRoutes.Logon,
-                            inclusive = false
-                        )
-                    }
-                }
+        val languageId =
+            when (sessionState.Language) {
+                EApplicationLanguage.Turkish -> 1
+                EApplicationLanguage.English -> 2
+            }
+
+        LaunchedEffect(
+            logonState.IsFirstDoorSuccessful
+        ) {
+            if (!logonState.IsFirstDoorSuccessful) {
+                return@LaunchedEffect
+            }
+
+            logonController.ConsumeFirstDoorSuccess()
+
+            navController.navigate(
+                LogonRoutes.RegisterFinal
+            ) {
+                launchSingleTop = true
+            }
+        }
+
+        FirstDoorScreen(
+            isLoading =
+                logonState.IsSendingFirstDoorEmail,
+            errorMessage =
+                logonState.ErrorMessage,
+            onContinueClick = { email ->
+                logonController.FirstDoorPost(
+                    email = email,
+                    languageId = languageId
+                )
+            },
+            onInputChanged = {
+                logonController.ClearError()
             },
             onBackToLogonClick = {
                 navController.popBackStack(
-                    route = LogonRoutes.Logon,
-                    inclusive = false
+                    route =
+                        LogonRoutes.Logon,
+                    inclusive =
+                        false
                 )
             },
             onLanguageClick = {
@@ -172,14 +195,38 @@ fun NavGraphBuilder.logonGraph(
     composable(
         route = LogonRoutes.RegisterFinal
     ) {
+        val logonState by
+        logonController.State.collectAsState()
+
         RegisterFinalScreen(
+            email =
+                logonState.FirstDoorEmail,
+            finalState =
+                RegisterFinalState.WaitingEmailVerification,
             onGoToLogonClick = {
                 navController.popBackStack(
-                    route = LogonRoutes.Logon,
-                    inclusive = false
+                    route =
+                        LogonRoutes.Logon,
+                    inclusive =
+                        false
                 )
             },
             onResendVerificationClick = {
+                val email =
+                    logonState.FirstDoorEmail
+
+                if (email.isNotBlank()) {
+                    val languageId =
+                        when (sessionState.Language) {
+                            EApplicationLanguage.Turkish -> 1
+                            EApplicationLanguage.English -> 2
+                        }
+
+                    logonController.FirstDoorPost(
+                        email = email,
+                        languageId = languageId
+                    )
+                }
             },
             onLanguageClick = {
             }

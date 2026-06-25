@@ -641,7 +641,7 @@ private fun CheckoutSecurePaymentInfoCard() {
                 Spacer(modifier = Modifier.height(5.dp))
 
                 Text(
-                    text = "Ödeme adımında 3D Secure ve banka doĞrulama süreçleri ödeme saĞlayıcısına göre çalışır. Sipariş onayı bir sonraki adımda gösterilir.",
+                    text = "Ödeme adımında 3D Secure ve banka doğrulama süreçleri ödeme saĞlayıcısına göre çalışır. Sipariş onayı bir sonraki adımda gösterilir.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

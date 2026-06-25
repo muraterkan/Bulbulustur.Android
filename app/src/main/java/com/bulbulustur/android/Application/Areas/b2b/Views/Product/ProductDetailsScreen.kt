@@ -415,7 +415,7 @@ private fun WholesaleProductTitleCard(
                 )
 
                 WholesaleMiniPill(
-                    text = "DoĞrulanmış Firma",
+                    text = "Doğrulanmış Firma",
                     icon = Icons.Outlined.Verified,
                     containerColor = BBColors.Green.Green50,
                     contentColor = BBColors.Green.Green700
@@ -851,7 +851,7 @@ private fun WholesaleSecureTradeCard() {
             ) {
                 WholesaleTrustMetric("Güvenli Teklif", Icons.Outlined.RequestQuote, Modifier.weight(1f))
                 WholesaleTrustMetric("Numune DesteĞi", Icons.Outlined.Inventory2, Modifier.weight(1f))
-                WholesaleTrustMetric("Firma DoĞrulama", Icons.Outlined.Verified, Modifier.weight(1f))
+                WholesaleTrustMetric("Firma Doğrulama", Icons.Outlined.Verified, Modifier.weight(1f))
             }
         }
     }
@@ -2116,7 +2116,7 @@ private fun getWholesaleProductDetail(
             id = 1,
             name = "Ortobella Comfort",
             logoText = "OC",
-            description = "Ã‡anta, tekstil ve promosyon ürünleri alanında çalışan doĞrulanmış firma.",
+            description = "Ã‡anta, tekstil ve promosyon ürünleri alanında çalışan doğrulanmış firma.",
             ratingText = "4.8",
             productCountText = "120+ Ürün",
             country = "Türkiye",

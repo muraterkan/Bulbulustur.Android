@@ -141,7 +141,7 @@ private fun PhoneCard(
             ) {
                 if (!phone.verified) {
                     BbButton(
-                        text = "DoĞrula",
+                        text = "Doğrula",
                         onClick = {
                             onVerifyPhoneClick(phone.memberPhoneId)
                         },
@@ -190,7 +190,7 @@ private fun PhoneEmptyState(
             )
 
             Text(
-                text = "Telefon ekleyerek doĞrulama ve güvenlik süreçlerini daha saĞlam hale getirebilirsiniz.",
+                text = "Telefon ekleyerek doğrulama ve güvenlik süreçlerini daha saĞlam hale getirebilirsiniz.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -224,9 +224,9 @@ private fun PhoneStatusBadge(
     }
 
     val text = if (verified) {
-        "DoĞrulandı"
+        "Doğrulandı"
     } else {
-        "DoĞrulanmadı"
+        "Doğrulanmadı"
     }
 
     Box(

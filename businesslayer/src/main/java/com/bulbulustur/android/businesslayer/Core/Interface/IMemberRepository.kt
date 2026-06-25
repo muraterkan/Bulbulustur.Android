@@ -2,6 +2,7 @@ package com.bulbulustur.android.businesslayer.Core.Interface
 
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberDTO
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.MemberInsertModel
+import com.bulbulustur.android.businesslayer.Core.Model.MemberRegisterModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdateModel
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 import retrofit2.http.Body
@@ -32,6 +33,11 @@ interface IMemberRepository {
         @Body
         model: MemberInsertModel
     ): Result<Unit>
+
+    suspend fun InsertAsync(
+        languageId: Int,
+        model: MemberRegisterModel
+    ): Result<MemberInsertModel>
 
     @POST("api/Member/UpdateAsync")
     suspend fun UpdateAsync(

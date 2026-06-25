@@ -274,7 +274,7 @@ private fun CompanyProductsHero(
                         if (company.IsVerified) {
                             Icon(
                                 imageVector = Icons.Outlined.Verified,
-                                contentDescription = "DoĞrulanmış firma",
+                                contentDescription = "Doğrulanmış firma",
                                 tint = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.size(
                                     BBIcon.SizeSm
@@ -488,7 +488,7 @@ private fun getCompanyProducts(
         Chips = listOf(
             "Türkiye",
             "Samsun",
-            "DoĞrulanmış",
+            "Doğrulanmış",
             "120+ ürün",
             "Hızlı teklif"
         ),

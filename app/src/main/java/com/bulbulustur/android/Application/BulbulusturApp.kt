@@ -40,6 +40,7 @@ import com.bulbulustur.android.businesslayer.Core.Repository.AuthenticationRepos
 import com.bulbulustur.android.businesslayer.Core.Repository.LocalizationRepository
 import com.bulbulustur.android.businesslayer.Core.Security.SecureTokenStore
 import com.bulbulustur.android.businesslayer.Core.Util.Execute.ExecuteService
+import com.bulbulustur.android.businesslayer.Core.Repository.MemberTempRepository
 
 @Composable
 fun BulbulusturApp() {
@@ -179,10 +180,16 @@ private fun BulbulusturApplicationContent(
             AuthenticationRepository()
         }
 
+    val memberTempRepository =
+        remember {
+            MemberTempRepository()
+        }
+
     val logonController =
         remember(
             executeService,
             authenticationRepository,
+            memberTempRepository,
             userSessionManager
         ) {
             LogonController(
@@ -190,6 +197,8 @@ private fun BulbulusturApplicationContent(
                     executeService,
                 authenticationRepository =
                     authenticationRepository,
+                memberTempRepository =
+                    memberTempRepository,
                 userSessionManager =
                     userSessionManager
             )

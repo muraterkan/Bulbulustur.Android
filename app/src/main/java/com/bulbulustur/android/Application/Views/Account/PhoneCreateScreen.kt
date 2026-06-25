@@ -141,7 +141,7 @@ private fun PhoneCreateIntroCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Hesabınıza yeni bir cep telefonu numarası ekleyin. Numara doĞrulama adımından sonra hesabınıza baĞlanır.",
+            text = "Hesabınıza yeni bir cep telefonu numarası ekleyin. Numara doğrulama adımından sonra hesabınıza baĞlanır.",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

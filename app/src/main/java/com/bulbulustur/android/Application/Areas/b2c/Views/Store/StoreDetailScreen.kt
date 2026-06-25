@@ -345,7 +345,7 @@ private fun StoreVerifiedBadge() {
             )
 
             Text(
-                text = "DoĞrulanmış",
+                text = "Doğrulanmış",
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -458,7 +458,7 @@ private fun StoreTrustInfoCard(
                 )
 
                 Text(
-                    text = "${store.name} maĞazası, Bulbulustur store kayıtları üzerinden doĞrulanmış maĞaza Vitrini olarak listelenir.",
+                    text = "${store.name} maĞazası, Bulbulustur store kayıtları üzerinden doğrulanmış maĞaza Vitrini olarak listelenir.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -848,7 +848,7 @@ private fun getRetailStoreDetail(
         name = "Ortobella Store",
         logoText = "OS",
         shortDescription = "Ayakkabı ve günlük moda ürünleri",
-        description = "Ortobella Store, seçili ayakkabı ve günlük kullanım Ürünlerini perakende alışveriş akışında sunan doĞrulanmış maĞaza Vitrinidir.",
+        description = "Ortobella Store, seçili ayakkabı ve günlük kullanım Ürünlerini perakende alışveriş akışında sunan doğrulanmış maĞaza Vitrinidir.",
         productCount = 248,
         ratingText = "4.8",
         cargoText = "Hızlı",

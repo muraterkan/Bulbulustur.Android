@@ -183,7 +183,7 @@ fun CompanyDetailScreen(
             item {
                 BbSectionHeader(
                     title = "Belgeler ve Sertifikalar",
-                    subtitle = "Firma güveni için doĞrulama bilgileri"
+                    subtitle = "Firma güveni için doğrulama bilgileri"
                 )
             }
 
@@ -300,7 +300,7 @@ private fun CompanyDetailHero(
                         add(company.businessModel)
 
                         if (company.isVerified) {
-                            add("DoĞrulanmış")
+                            add("Doğrulanmış")
                         }
                     }
                 )

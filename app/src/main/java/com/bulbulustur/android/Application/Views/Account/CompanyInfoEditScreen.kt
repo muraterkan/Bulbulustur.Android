@@ -331,7 +331,7 @@ private fun CompanyInfoNote() {
             )
 
             Text(
-                text = "Bu bilgiler teklif, fatura ve kurumsal işlem süreçlerinde kullanılabilir. Gerçek API baĞlandıĞında doĞrulama kuralları ayrıca uygulanacaktır.",
+                text = "Bu bilgiler teklif, fatura ve kurumsal işlem süreçlerinde kullanılabilir. Gerçek API baĞlandıĞında doğrulama kuralları ayrıca uygulanacaktır.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

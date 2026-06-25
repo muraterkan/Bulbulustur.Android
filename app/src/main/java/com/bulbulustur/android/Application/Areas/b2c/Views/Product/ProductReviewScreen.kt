@@ -240,7 +240,7 @@ private fun ProductReviewScoreSummary(
                     )
 
                     Text(
-                        text = "${summary.verifiedBuyerCount} doĞrulanmış alışveriş",
+                        text = "${summary.verifiedBuyerCount} doğrulanmış alışveriş",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -394,7 +394,7 @@ private fun ProductReviewCard(
             ) {
                 if (review.isVerifiedBuyer) {
                     ProductReviewBadge(
-                        text = "DoĞrulanmış alışveriş"
+                        text = "Doğrulanmış alışveriş"
                     )
                 }
 
@@ -520,7 +520,7 @@ private fun getRetailProductReviewScreenData(
         ),
         filters = listOf(
             "Tümü",
-            "DoĞrulanmış",
+            "Doğrulanmış",
             "FotoĞraflı",
             "Yüksek puan",
             "Beden yorumu",
@@ -537,7 +537,7 @@ private fun getRetailProductReviewScreenData(
                 variantText = "38 numara",
                 helpfulCount = 14,
                 isVerifiedBuyer = true,
-                filterTags = listOf("DoĞrulanmış", "Yüksek puan", "Beden yorumu", "Kargo yorumu")
+                filterTags = listOf("Doğrulanmış", "Yüksek puan", "Beden yorumu", "Kargo yorumu")
             ),
             RetailProductReviewItem(
                 id = 2,
@@ -549,7 +549,7 @@ private fun getRetailProductReviewScreenData(
                 variantText = "37 numara",
                 helpfulCount = 8,
                 isVerifiedBuyer = true,
-                filterTags = listOf("DoĞrulanmış", "Beden yorumu")
+                filterTags = listOf("Doğrulanmış", "Beden yorumu")
             ),
             RetailProductReviewItem(
                 id = 3,
@@ -561,7 +561,7 @@ private fun getRetailProductReviewScreenData(
                 variantText = "Beyaz",
                 helpfulCount = 21,
                 isVerifiedBuyer = true,
-                filterTags = listOf("DoĞrulanmış", "FotoĞraflı", "Yüksek puan", "Kargo yorumu")
+                filterTags = listOf("Doğrulanmış", "FotoĞraflı", "Yüksek puan", "Kargo yorumu")
             ),
             RetailProductReviewItem(
                 id = 4,
@@ -573,7 +573,7 @@ private fun getRetailProductReviewScreenData(
                 variantText = "39 numara",
                 helpfulCount = 5,
                 isVerifiedBuyer = true,
-                filterTags = listOf("DoĞrulanmış", "Beden yorumu")
+                filterTags = listOf("Doğrulanmış", "Beden yorumu")
             )
         )
     )

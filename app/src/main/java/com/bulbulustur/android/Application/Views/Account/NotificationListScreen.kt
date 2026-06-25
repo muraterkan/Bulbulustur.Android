@@ -221,7 +221,7 @@ private fun getDemoNotifications(): List<NotificationItem> {
         ),
         NotificationItem(
             title = "Güvenlik Önerisi",
-            description = "Telefon doĞrulamasını tamamlayarak hesabınızı daha güvenli hale getirebilirsiniz.",
+            description = "Telefon doğrulamasını tamamlayarak hesabınızı daha güvenli hale getirebilirsiniz.",
             timeText = "Bu hafta",
             icon = Icons.Outlined.Security,
             isUnread = false

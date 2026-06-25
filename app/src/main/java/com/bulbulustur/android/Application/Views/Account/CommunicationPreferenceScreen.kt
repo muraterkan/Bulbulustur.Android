@@ -172,7 +172,7 @@ private fun CommunicationPreferenceCard(
 
             CommunicationPreferenceRow(
                 title = "SMS Bildirimleri",
-                description = "Kısa bilgilendirme ve doĞrulama mesajları SMS ile gönderilebilir.",
+                description = "Kısa bilgilendirme ve doğrulama mesajları SMS ile gönderilebilir.",
                 checked = smsAllowed,
                 onCheckedChange = onSmsAllowedChange
             )

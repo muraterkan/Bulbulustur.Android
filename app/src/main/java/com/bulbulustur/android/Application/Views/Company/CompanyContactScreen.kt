@@ -207,7 +207,7 @@ private fun CompanyContactHero(
                         if (company.isVerified) {
                             Icon(
                                 imageVector = Icons.Outlined.Verified,
-                                contentDescription = "DoĞrulanmış firma",
+                                contentDescription = "Doğrulanmış firma",
                                 tint = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.size(
                                     BBIcon.SizeSm
@@ -710,7 +710,7 @@ private fun getCompanyContact(
         chips = listOf(
             "Türkiye",
             "Samsun",
-            "DoĞrulanmış",
+            "Doğrulanmış",
             "Tedarikçi",
             "Hızlı yanıt"
         )

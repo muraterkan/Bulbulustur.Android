@@ -239,7 +239,7 @@ private fun StoreListHeroCard(
             )
 
             Text(
-                text = "DoĞrulanmış satıcıları, favori mağazaları ve maĞaza vitrinlerindeki ürünleri tek yerden inceleyin.",
+                text = "Doğrulanmış satıcıları, favori mağazaları ve maĞaza vitrinlerindeki ürünleri tek yerden inceleyin.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -257,7 +257,7 @@ private fun StoreListHeroCard(
                 StoreListHeroMiniCard(
                     modifier = Modifier.weight(1f),
                     title = "Güvenilir Satıcılar",
-                    subtitle = "DoĞrulanmış maĞaza vitrinlerini inceleyin.",
+                    subtitle = "Doğrulanmış maĞaza vitrinlerini inceleyin.",
                     icon = Icons.Outlined.Verified
                 )
 
@@ -520,7 +520,7 @@ private fun StoreListCard(
                         )
 
                         if (store.isVerified) {
-                            StoreListMiniBadge(text = "DoĞrulanmış")
+                            StoreListMiniBadge(text = "Doğrulanmış")
                         }
                     }
 

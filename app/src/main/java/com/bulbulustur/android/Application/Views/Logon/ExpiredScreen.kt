@@ -291,12 +291,12 @@ enum class ExpiredType(
     val secondReason: String
 ) {
     EmailVerification(
-        badgeText = "DoĞrulama Süresi Doldu",
+        badgeText = "Doğrulama Süresi Doldu",
         title = "E-posta BaĞlantısı Geçersiz",
-        description = "E-posta doĞrulama baĞlantınızın süresi dolmuş olabilir.",
-        primaryButtonText = "DoĞrulama E-postasını Yeniden Gönder",
-        firstReason = "E-posta doĞrulama baĞlantıları güvenlik için sınırlı süre geçerlidir.",
-        secondReason = "Yeni doĞrulama e-postası göndererek hesabınızı aktifleştirebilirsiniz."
+        description = "E-posta doğrulama baĞlantınızın süresi dolmuş olabilir.",
+        primaryButtonText = "Doğrulama E-postasını Yeniden Gönder",
+        firstReason = "E-posta doğrulama baĞlantıları güvenlik için sınırlı süre geçerlidir.",
+        secondReason = "Yeni doğrulama e-postası göndererek hesabınızı aktifleştirebilirsiniz."
     ),
 
     PasswordReset(

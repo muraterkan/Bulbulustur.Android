@@ -49,6 +49,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.remember
+import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -75,6 +76,7 @@ import com.bulbulustur.android.R
 
 @Composable
 fun AccountScreen(
+    isLogoutLoading: Boolean = false,
     onSecurityClick: () -> Unit = {},
     onProfileClick: () -> Unit = {},
     onAddressClick: () -> Unit = {},
@@ -324,6 +326,13 @@ fun AccountScreen(
                 AccountSupportAndSettingsGroup(
                     onSupportClick = onSupportClick,
                     onSettingsClick = onSettingsClick
+                )
+            }
+
+            item {
+                AccountLogoutSection(
+                    onLogoutClick = onLogoutClick,
+                    isLogoutLoading = isLogoutLoading
                 )
             }
 
@@ -877,12 +886,37 @@ private fun AccountMenuRow(
     title: String,
     description: String,
     icon: ImageVector,
+    enabled: Boolean = true,
+    isDanger: Boolean = false,
     onClick: () -> Unit
 ) {
+    val iconContainerColor =
+        if (isDanger) {
+            MaterialTheme.colorScheme.errorContainer
+        } else {
+            MaterialTheme.colorScheme.surfaceVariant
+        }
+
+    val iconColor =
+        if (isDanger) {
+            MaterialTheme.colorScheme.error
+        } else {
+            MaterialTheme.colorScheme.onSurface
+        }
+
+    val titleColor =
+        if (isDanger) {
+            MaterialTheme.colorScheme.error
+        } else {
+            MaterialTheme.colorScheme.onSurface
+        }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable {
+            .clickable(
+                enabled = enabled
+            ) {
                 onClick()
             }
             .padding(
@@ -898,7 +932,7 @@ private fun AccountMenuRow(
             modifier = Modifier
                 .size(BBIcon.BoxMd)
                 .background(
-                    color = MaterialTheme.colorScheme.surfaceVariant,
+                    color = iconContainerColor,
                     shape = BBRadius.LgShape
                 ),
             contentAlignment = Alignment.Center
@@ -906,7 +940,7 @@ private fun AccountMenuRow(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurface,
+                tint = iconColor,
                 modifier = Modifier.size(BBIcon.Ui)
             )
         }
@@ -918,7 +952,7 @@ private fun AccountMenuRow(
             Text(
                 text = title,
                 style = BbTypography.titleSmall,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = titleColor,
                 fontWeight = FontWeight.SemiBold
             )
 
@@ -955,6 +989,35 @@ private fun AccountSupportAndSettingsGroup(
             description = "Dil, görünüm, bildirim ve uygulama tercihleri.",
             icon = Icons.Outlined.Settings,
             onClick = onSettingsClick
+        )
+    }
+}
+
+@Composable
+private fun AccountLogoutSection(
+    onLogoutClick: () -> Unit,
+    isLogoutLoading: Boolean
+) {
+    AccountMenuSection(
+        title = "Oturum"
+    ) {
+        AccountMenuRow(
+            title =
+                if (isLogoutLoading) {
+                    "Çıkış Yapılıyor"
+                } else {
+                    "Çıkış Yap"
+                },
+            description =
+                if (isLogoutLoading) {
+                    "Oturumunuz güvenli şekilde kapatılıyor."
+                } else {
+                    "Bu cihazdaki Bulbulustur oturumunu kapat."
+                },
+            icon = Icons.Outlined.Logout,
+            enabled = !isLogoutLoading,
+            isDanger = true,
+            onClick = onLogoutClick
         )
     }
 }

@@ -1,0 +1,1032 @@
+===== ApiClient.kt =====
+
+===== SecureTokenStore.kt =====
+package com.bulbulustur.android.businesslayer.Core.Security
+
+import android.content.Context
+import android.security.keystore.KeyGenParameterSpec
+import android.security.keystore.KeyProperties
+import android.util.Base64
+import com.google.gson.Gson
+import java.nio.charset.StandardCharsets
+import java.security.KeyStore
+import javax.crypto.Cipher
+import javax.crypto.KeyGenerator
+import javax.crypto.SecretKey
+import javax.crypto.spec.GCMParameterSpec
+
+class SecureTokenStore(
+    context: Context
+) {
+
+    private val applicationContext: Context =
+        context.applicationContext
+
+    private val preferences =
+        applicationContext.getSharedPreferences(
+            PreferenceFileName,
+            Context.MODE_PRIVATE
+        )
+
+    private val gson = Gson()
+
+    @Synchronized
+    fun SaveTokens(
+        accessToken: String,
+        refreshToken: String,
+        expiration: String
+    ): Boolean {
+        require(accessToken.isNotBlank()) {
+            "AccessToken boş olamaz."
+        }
+
+        require(refreshToken.isNotBlank()) {
+            "RefreshToken boş olamaz."
+        }
+
+        require(expiration.isNotBlank()) {
+            "Expiration boş olamaz."
+        }
+
+        val tokenModel = SecureTokenModel(
+            AccessToken = accessToken,
+            RefreshToken = refreshToken,
+            Expiration = expiration
+        )
+
+        return try {
+            val json = gson.toJson(tokenModel)
+            val encryptedPayload = Encrypt(json)
+
+            preferences
+                .edit()
+                .putString(
+                    EncryptedTokenPayloadKey,
+                    encryptedPayload
+                )
+                .commit()
+        } catch (_: Exception) {
+            false
+        }
+    }
+
+    @Synchronized
+    fun ReadTokens(): SecureTokenModel? {
+        val encryptedPayload = preferences.getString(
+            EncryptedTokenPayloadKey,
+            null
+        ) ?: return null
+
+        return try {
+            val json = Decrypt(encryptedPayload)
+
+            val tokenModel = gson.fromJson(
+                json,
+                SecureTokenModel::class.java
+            )
+
+            if (!tokenModel.HasTokens) {
+                Clear()
+                null
+            } else {
+                tokenModel
+            }
+        } catch (_: Exception) {
+            Clear()
+            null
+        }
+    }
+
+    @Synchronized
+    fun Clear(): Boolean {
+        return preferences
+            .edit()
+            .remove(EncryptedTokenPayloadKey)
+            .commit()
+    }
+
+    fun HasStoredTokens(): Boolean {
+        return preferences.contains(
+            EncryptedTokenPayloadKey
+        )
+    }
+
+    private fun Encrypt(
+        plainText: String
+    ): String {
+        val cipher = Cipher.getInstance(
+            CipherTransformation
+        )
+
+        cipher.init(
+            Cipher.ENCRYPT_MODE,
+            GetOrCreateSecretKey()
+        )
+
+        val plainBytes = plainText.toByteArray(
+            StandardCharsets.UTF_8
+        )
+
+        val cipherBytes = cipher.doFinal(plainBytes)
+        val iv = cipher.iv
+
+        val encodedIv = Base64.encodeToString(
+            iv,
+            Base64.NO_WRAP
+        )
+
+        val encodedCipherText = Base64.encodeToString(
+            cipherBytes,
+            Base64.NO_WRAP
+        )
+
+        return "$encodedIv$PayloadSeparator$encodedCipherText"
+    }
+
+    private fun Decrypt(
+        encryptedPayload: String
+    ): String {
+        val payloadParts = encryptedPayload.split(
+            PayloadSeparator,
+            limit = 2
+        )
+
+        require(payloadParts.size == 2) {
+            "Şifreli token payload formatı geçersiz."
+        }
+
+        val iv = Base64.decode(
+            payloadParts[0],
+            Base64.NO_WRAP
+        )
+
+        val cipherText = Base64.decode(
+            payloadParts[1],
+            Base64.NO_WRAP
+        )
+
+        val cipher = Cipher.getInstance(
+            CipherTransformation
+        )
+
+        val parameterSpec = GCMParameterSpec(
+            GcmTagLength,
+            iv
+        )
+
+        cipher.init(
+            Cipher.DECRYPT_MODE,
+            GetOrCreateSecretKey(),
+            parameterSpec
+        )
+
+        val plainBytes = cipher.doFinal(cipherText)
+
+        return String(
+            plainBytes,
+            StandardCharsets.UTF_8
+        )
+    }
+
+    private fun GetOrCreateSecretKey(): SecretKey {
+        val keyStore = KeyStore.getInstance(
+            AndroidKeyStoreProvider
+        )
+
+        keyStore.load(null)
+
+        val existingKey = keyStore.getKey(
+            KeyAlias,
+            null
+        )
+
+        if (existingKey is SecretKey) {
+            return existingKey
+        }
+
+        val keyGenerator = KeyGenerator.getInstance(
+            KeyProperties.KEY_ALGORITHM_AES,
+            AndroidKeyStoreProvider
+        )
+
+        val keySpecification = KeyGenParameterSpec.Builder(
+            KeyAlias,
+            KeyProperties.PURPOSE_ENCRYPT or
+                    KeyProperties.PURPOSE_DECRYPT
+        )
+            .setBlockModes(
+                KeyProperties.BLOCK_MODE_GCM
+            )
+            .setEncryptionPaddings(
+                KeyProperties.ENCRYPTION_PADDING_NONE
+            )
+            .setKeySize(AesKeySize)
+            .setRandomizedEncryptionRequired(true)
+            .build()
+
+        keyGenerator.init(keySpecification)
+
+        return keyGenerator.generateKey()
+    }
+
+    private companion object {
+
+        const val PreferenceFileName =
+            "bulbulustur_secure_auth"
+
+        const val EncryptedTokenPayloadKey =
+            "encrypted_token_payload"
+
+        const val AndroidKeyStoreProvider =
+            "AndroidKeyStore"
+
+        const val KeyAlias =
+            "bulbulustur_auth_token_key"
+
+        const val CipherTransformation =
+            "AES/GCM/NoPadding"
+
+        const val PayloadSeparator =
+            ":"
+
+        const val AesKeySize =
+            256
+
+        const val GcmTagLength =
+            128
+    }
+}
+===== UserSessionManager.kt =====
+package com.bulbulustur.android.Application.Session
+
+import com.bulbulustur.android.Application.Datastore.UserPreferenceDataStore
+import com.bulbulustur.android.businesslayer.Core.Enums.EApplicationLanguage
+import com.bulbulustur.android.businesslayer.Core.Enums.EThemeMode
+import com.bulbulustur.android.businesslayer.Core.Model.AuthResponse
+import com.bulbulustur.android.businesslayer.Core.Security.SecureTokenStore
+import com.bulbulustur.android.businesslayer.Core.Security.TokenExpirationParser
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+
+class UserSessionManager(
+    private val userPreferenceDataStore: UserPreferenceDataStore,
+    private val secureTokenStore: SecureTokenStore,
+    private val coroutineScope: CoroutineScope
+) {
+
+    private val _state =
+        MutableStateFlow(
+            UserSessionState()
+        )
+
+    val State: StateFlow<UserSessionState> =
+        _state.asStateFlow()
+
+    init {
+        ObservePreferences()
+        RestoreAuthentication()
+    }
+
+    fun SetThemeMode(
+        themeMode: EThemeMode
+    ) {
+        coroutineScope.launch {
+            userPreferenceDataStore.SetThemeMode(
+                themeMode = themeMode
+            )
+        }
+    }
+
+    fun SetLanguage(
+        language: EApplicationLanguage
+    ) {
+        coroutineScope.launch {
+            userPreferenceDataStore.SetLanguage(
+                language = language
+            )
+        }
+    }
+
+    fun RestoreAuthentication() {
+        coroutineScope.launch {
+            _state.update { currentState ->
+                currentState.copy(
+                    AuthenticationState =
+                        EAuthenticationState.Initializing
+                )
+            }
+
+            val storedTokens =
+                secureTokenStore.ReadTokens()
+
+            if (
+                storedTokens == null ||
+                !storedTokens.HasTokens
+            ) {
+                SetAnonymous()
+                return@launch
+            }
+
+            val isValid =
+                TokenExpirationParser.IsValid(
+                    value = storedTokens.Expiration
+                )
+
+            if (!isValid) {
+                secureTokenStore.Clear()
+                SetAnonymous()
+                return@launch
+            }
+
+            _state.update { currentState ->
+                currentState.copy(
+                    AuthenticationState =
+                        EAuthenticationState.Authenticated
+                )
+            }
+        }
+    }
+
+    fun SetAuthenticated(
+        authResponse: AuthResponse
+    ): Boolean {
+        val saved =
+            secureTokenStore.SaveTokens(
+                accessToken = authResponse.Token,
+                refreshToken = authResponse.RefreshToken,
+                expiration = authResponse.Expiration
+            )
+
+        if (!saved) {
+            SetAnonymous()
+            return false
+        }
+
+        _state.update { currentState ->
+            currentState.copy(
+                AuthenticationState =
+                    EAuthenticationState.Authenticated
+            )
+        }
+
+        return true
+    }
+
+    fun SetAnonymous() {
+        _state.update { currentState ->
+            currentState.copy(
+                AuthenticationState =
+                    EAuthenticationState.Anonymous
+            )
+        }
+    }
+
+    fun ClearAuthentication() {
+        secureTokenStore.Clear()
+        SetAnonymous()
+    }
+
+    fun Reset() {
+        coroutineScope.launch {
+            userPreferenceDataStore.Reset()
+            secureTokenStore.Clear()
+
+            _state.value =
+                UserSessionState(
+                    AuthenticationState =
+                        EAuthenticationState.Anonymous
+                )
+        }
+    }
+
+    private fun ObservePreferences() {
+        coroutineScope.launch {
+            userPreferenceDataStore.SessionState.collect {
+                    preferenceState ->
+
+                _state.update { currentState ->
+                    currentState.copy(
+                        IsInitialized =
+                            preferenceState.IsInitialized,
+                        ThemeMode =
+                            preferenceState.ThemeMode,
+                        Language =
+                            preferenceState.Language
+                    )
+                }
+            }
+        }
+    }
+}
+===== AccountController.kt =====
+package com.bulbulustur.android.Application.Controllers
+
+import androidx.lifecycle.viewModelScope
+import com.bulbulustur.android.businesslayer.Core.Util.Execute.IExecuteService
+import com.bulbulustur.android.businesslayer.Core.Util.Result
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+
+data class AccountControllerState(
+    val IsLoading: Boolean = false,
+    val CurrentAction: String? = null,
+    val LastResult: Result<Any?>? = null,
+    val ErrorMessage: String? = null
+)
+
+sealed interface AccountControllerEvent {
+    data object Refresh : AccountControllerEvent
+    data class Load(val parameters: Map<String, Any?> = emptyMap()) : AccountControllerEvent
+    data class Submit(val body: Any? = null) : AccountControllerEvent
+}
+
+class AccountController(
+    private val executeService: IExecuteService,
+    private val defaultRepository: IAppDefaultRepository
+) : BaseController() {
+
+    private val _state = MutableStateFlow(AccountControllerState())
+    val State: StateFlow<AccountControllerState> = _state.asStateFlow()
+
+
+    fun Index(parameters: Map<String, Any?> = emptyMap()) {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    IsLoading = true,
+                    ErrorMessage = null,
+                    CurrentAction = "Index"
+                )
+            }
+
+            val response = executeService.GetAsync(
+                cacheKey = "App.Account.Index." + parameters.toString()
+            ) {
+                defaultRepository.GetAsync(
+                    actionName = "Index",
+                    parameters = parameters
+                )
+            }
+
+            _state.update {
+                it.copy(
+                    IsLoading = false,
+                    LastResult = response
+                )
+            }
+        }
+    }
+    fun Security(parameters: Map<String, Any?> = emptyMap()) {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    IsLoading = true,
+                    ErrorMessage = null,
+                    CurrentAction = "Security"
+                )
+            }
+
+            val response = executeService.GetAsync(
+                cacheKey = "App.Account.Security." + parameters.toString()
+            ) {
+                defaultRepository.GetAsync(
+                    actionName = "Security",
+                    parameters = parameters
+                )
+            }
+
+            _state.update {
+                it.copy(
+                    IsLoading = false,
+                    LastResult = response
+                )
+            }
+        }
+    }
+    fun AddressList(parameters: Map<String, Any?> = emptyMap()) {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    IsLoading = true,
+                    ErrorMessage = null,
+                    CurrentAction = "AddressList"
+                )
+            }
+
+            val response = executeService.GetAsync(
+                cacheKey = "App.Account.AddressList." + parameters.toString()
+            ) {
+                defaultRepository.GetAsync(
+                    actionName = "AddressList",
+                    parameters = parameters
+                )
+            }
+
+            _state.update {
+                it.copy(
+                    IsLoading = false,
+                    LastResult = response
+                )
+            }
+        }
+    }
+    fun AddressForm(parameters: Map<String, Any?> = emptyMap()) {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    IsLoading = true,
+                    ErrorMessage = null,
+                    CurrentAction = "AddressForm"
+                )
+            }
+
+            val response = executeService.GetAsync(
+                cacheKey = "App.Account.AddressForm." + parameters.toString()
+            ) {
+                defaultRepository.GetAsync(
+                    actionName = "AddressForm",
+                    parameters = parameters
+                )
+            }
+
+            _state.update {
+                it.copy(
+                    IsLoading = false,
+                    LastResult = response
+                )
+            }
+        }
+    }
+    fun CommunicationPreference(parameters: Map<String, Any?> = emptyMap()) {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    IsLoading = true,
+                    ErrorMessage = null,
+                    CurrentAction = "CommunicationPreference"
+                )
+            }
+
+            val response = executeService.GetAsync(
+                cacheKey = "App.Account.CommunicationPreference." + parameters.toString()
+            ) {
+                defaultRepository.GetAsync(
+                    actionName = "CommunicationPreference",
+                    parameters = parameters
+                )
+            }
+
+            _state.update {
+                it.copy(
+                    IsLoading = false,
+                    LastResult = response
+                )
+            }
+        }
+    }
+    fun ProductHistory(parameters: Map<String, Any?> = emptyMap()) {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    IsLoading = true,
+                    ErrorMessage = null,
+                    CurrentAction = "ProductHistory"
+                )
+            }
+
+            val response = executeService.GetAsync(
+                cacheKey = "App.Account.ProductHistory." + parameters.toString()
+            ) {
+                defaultRepository.GetAsync(
+                    actionName = "ProductHistory",
+                    parameters = parameters
+                )
+            }
+
+            _state.update {
+                it.copy(
+                    IsLoading = false,
+                    LastResult = response
+                )
+            }
+        }
+    }
+    fun RequestList(parameters: Map<String, Any?> = emptyMap()) {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    IsLoading = true,
+                    ErrorMessage = null,
+                    CurrentAction = "RequestList"
+                )
+            }
+
+            val response = executeService.GetAsync(
+                cacheKey = "App.Account.RequestList." + parameters.toString()
+            ) {
+                defaultRepository.GetAsync(
+                    actionName = "RequestList",
+                    parameters = parameters
+                )
+            }
+
+            _state.update {
+                it.copy(
+                    IsLoading = false,
+                    LastResult = response
+                )
+            }
+        }
+    }
+    fun RequestDetail(parameters: Map<String, Any?> = emptyMap()) {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    IsLoading = true,
+                    ErrorMessage = null,
+                    CurrentAction = "RequestDetail"
+                )
+            }
+
+            val response = executeService.GetAsync(
+                cacheKey = "App.Account.RequestDetail." + parameters.toString()
+            ) {
+                defaultRepository.GetAsync(
+                    actionName = "RequestDetail",
+                    parameters = parameters
+                )
+            }
+
+            _state.update {
+                it.copy(
+                    IsLoading = false,
+                    LastResult = response
+                )
+            }
+        }
+    }
+    fun ReviewList(parameters: Map<String, Any?> = emptyMap()) {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    IsLoading = true,
+                    ErrorMessage = null,
+                    CurrentAction = "ReviewList"
+                )
+            }
+
+            val response = executeService.GetAsync(
+                cacheKey = "App.Account.ReviewList." + parameters.toString()
+            ) {
+                defaultRepository.GetAsync(
+                    actionName = "ReviewList",
+                    parameters = parameters
+                )
+            }
+
+            _state.update {
+                it.copy(
+                    IsLoading = false,
+                    LastResult = response
+                )
+            }
+        }
+    }
+}
+
+
+===== AccountGraph.kt =====
+package com.bulbulustur.android.Application.Navigation.Graph
+
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
+import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
+import com.bulbulustur.android.Application.Navigation.Routes.AccountRoutes
+import com.bulbulustur.android.Application.Navigation.Routes.BankAccountRoutes
+import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
+import com.bulbulustur.android.Application.Navigation.Routes.OrderRoutes
+import com.bulbulustur.android.Application.Navigation.Routes.RetailRoutes
+import com.bulbulustur.android.Application.Navigation.Routes.SettingsRoutes
+import com.bulbulustur.android.Application.Navigation.Routes.StoreRoutes
+import com.bulbulustur.android.Application.Views.Account.AccountScreen
+import com.bulbulustur.android.Application.Views.Account.AccountSecurityScreen
+import com.bulbulustur.android.Application.Views.Account.AddressFormScreen
+import com.bulbulustur.android.Application.Views.Account.AddressListScreen
+import com.bulbulustur.android.Application.Views.Account.CouponListScreen
+import com.bulbulustur.android.Application.Views.Account.RequestDetailScreen
+import com.bulbulustur.android.Application.Views.Account.RequestListScreen
+import com.bulbulustur.android.Application.Views.Account.ReviewListScreen
+import com.bulbulustur.android.Application.Views.Account.BankAccountCreateScreen
+import com.bulbulustur.android.Application.Views.Account.BankAccountEditScreen
+import com.bulbulustur.android.Application.Views.Account.BankAccountListScreen
+import com.bulbulustur.android.Application.Views.Account.CompanyB2BIndexScreen
+import com.bulbulustur.android.Application.Views.Account.CompanyB2BStatusScreen
+import com.bulbulustur.android.Application.Views.Account.CompanyInfoEditScreen
+import com.bulbulustur.android.Application.Views.Account.CompanyInfoScreen
+import com.bulbulustur.android.Application.Views.Account.FavoriteListScreen
+import com.bulbulustur.android.Application.Views.Account.FollowedStoreListScreen
+import com.bulbulustur.android.Application.Views.Account.NotificationListScreen
+import com.bulbulustur.android.Application.Views.Account.PhoneCreateScreen
+import com.bulbulustur.android.Application.Views.Account.PhoneListScreen
+import com.bulbulustur.android.Application.Views.Account.PhoneVerifyScreen
+import com.bulbulustur.android.Application.Views.Preference.UsagePurposeScreen
+import com.bulbulustur.android.Application.Views.Account.ProfileScreen
+import com.bulbulustur.android.Application.Views.Question.QuestionAnswerScreen
+import com.bulbulustur.android.Application.Views.Account.ReviewEditScreen
+import com.bulbulustur.android.Application.Views.Account.ChangeEmailScreen
+import com.bulbulustur.android.Application.Views.Account.ChangePasswordScreen
+import com.bulbulustur.android.Application.Views.Account.LoginActivitiesScreen
+import com.bulbulustur.android.Application.Views.Account.SubscriptionDetailScreen
+import com.bulbulustur.android.Application.Views.Account.SubscriptionListScreen
+import com.bulbulustur.android.Application.Views.Account.WalletBalanceScreen
+import androidx.compose.runtime.LaunchedEffect
+import com.bulbulustur.android.Application.Navigation.Routes.LogonRoutes
+import com.bulbulustur.android.Application.Session.UserSessionState
+
+fun NavGraphBuilder.accountGraph(
+    navigator: BulbulusturNavigator,
+    sessionState: UserSessionState
+) {
+    composable(
+        route = AccountRoutes.AccountHome
+    ) {
+        if (!sessionState.IsAuthenticated) {
+            LaunchedEffect(Unit) {
+                navigator.navController.navigate(
+                    LogonRoutes.Logon
+                ) {
+                    launchSingleTop = true
+                }
+            }
+
+            return@composable
+        }
+
+        AccountScreen(
+            onSecurityClick = { navigator.navController.navigate(AccountRoutes.Security) },
+            onProfileClick = { navigator.navController.navigate(AccountRoutes.ProfileInfo) },
+            onAddressClick = { navigator.navController.navigate(AccountRoutes.AddressList) },
+            onNotificationClick = { navigator.navController.navigate(AccountRoutes.Notifications) },
+            onCompanyInfoClick = { navigator.navController.navigate(AccountRoutes.CompanyInfo) },
+            onFollowedStoresClick = { navigator.navController.navigate(AccountRoutes.FollowedStores) },
+            onQuotationRequestsClick = { navigator.navigateToWholesaleOffers() },
+            onOrdersClick = { navigator.navController.navigate(OrderRoutes.List) },
+            onFavoritesClick = { navigator.navigateToFavorites() },
+            onReviewsClick = { navigator.navController.navigate(AccountRoutes.Reviews) },
+            onCouponsClick = { navigator.navController.navigate(AccountRoutes.Coupons) },
+            onRequestsClick = { navigator.navController.navigate(AccountRoutes.Requests) },
+            onSubscriptionsClick = { navigator.navController.navigate(AccountRoutes.Subscriptions) },
+            onWalletBalanceClick = { navigator.navController.navigate(AccountRoutes.WalletBalance) },
+            onBankAccountsClick = { navigator.navController.navigate(BankAccountRoutes.List) },
+            onSettingsClick = { navigator.navController.navigate(SettingsRoutes.Home) },
+            onMessagesClick = { navigator.navigateToInbox() },
+            onSupportClick = {},
+            onLogoutClick = {},
+            onQuestionsClick = { navigator.navController.navigate(AccountRoutes.QuestionAnswers) },
+            onUsagePurposeClick = { navigator.navController.navigate(AccountRoutes.UsagePurpose) },
+            onHomeClick = { navigator.navigateToRetailHome() },
+            onMenuClick = { navigator.navigateToRetailCategories() },
+            onModeSwitchClick = { navigator.openModeSheet() },
+            onBasketClick = { navigator.navigateToRetailBasket() }
+        )
+    }
+
+    composable(AccountRoutes.Security) {
+        AccountSecurityScreen(
+            onBackClick = { navigator.back() },
+            onProfileInfoClick = { navigator.navController.navigate(AccountRoutes.ProfileInfo) },
+            onEmailChangeClick = { navigator.navController.navigate(AccountRoutes.EmailChange) },
+            onPasswordChangeClick = { navigator.navController.navigate(AccountRoutes.PasswordChange) },
+            onPhonesClick = { navigator.navController.navigate(AccountRoutes.PhoneList) },
+            onLoginActivitiesClick = { navigator.navController.navigate(AccountRoutes.LoginActivities) }
+        )
+    }
+
+    composable(AccountRoutes.EmailChange) {
+        ChangeEmailScreen(onBackClick = { navigator.back() })
+    }
+
+    composable(AccountRoutes.PasswordChange) {
+        ChangePasswordScreen(onBackClick = { navigator.back() })
+    }
+
+    composable(AccountRoutes.LoginActivities) {
+        LoginActivitiesScreen(onBackClick = { navigator.back() })
+    }
+
+    composable(AccountRoutes.ProfileInfo) {
+        ProfileScreen(
+            onBackClick = { navigator.back() },
+            onEditClick = { navigator.navController.navigate(AccountRoutes.ProfileEdit) },
+            onPhonesClick = { navigator.navController.navigate(AccountRoutes.PhoneList) },
+            onEmailClick = { navigator.navController.navigate(AccountRoutes.EmailChange) },
+            onUsagePurposeClick = { navigator.navController.navigate(AccountRoutes.UsagePurpose) },
+            onCompanyInfoClick = { navigator.navController.navigate(AccountRoutes.CompanyInfo) },
+            onB2BStatusClick = { navigator.navController.navigate(AccountRoutes.CompanyB2BStatus) }
+        )
+    }
+
+    composable(AccountRoutes.ProfileEdit) {
+        ProfileScreen(onBackClick = { navigator.back() })
+    }
+
+    composable(AccountRoutes.PhoneList) {
+        PhoneListScreen(
+            onBackClick = { navigator.back() },
+            onCreatePhoneClick = { navigator.navController.navigate(AccountRoutes.PhoneCreate) },
+            onVerifyPhoneClick = { navigator.navController.navigate(AccountRoutes.PhoneVerify) }
+        )
+    }
+
+    composable(AccountRoutes.PhoneCreate) {
+        PhoneCreateScreen(onBackClick = { navigator.back() })
+    }
+
+    composable(AccountRoutes.PhoneVerify) {
+        PhoneVerifyScreen(onBackClick = { navigator.back() })
+    }
+
+    composable(AccountRoutes.AddressList) {
+        AddressListScreen(
+            onBackClick = { navigator.back() },
+            onCreateAddressClick = { navigator.navController.navigate(AccountRoutes.AddressCreate) },
+            onEditAddressClick = { addressId ->
+                navigator.navController.navigate(AccountRoutes.editAddress(addressId))
+            }
+        )
+    }
+
+    composable(AccountRoutes.AddressCreate) {
+        AddressFormScreen(
+            addressId = null,
+            onBackClick = { navigator.back() }
+        )
+    }
+
+    composable(
+        route = AccountRoutes.AddressEdit,
+        arguments = listOf(
+            navArgument("addressId") {
+                type = NavType.IntType
+            }
+        )
+    ) { backStackEntry ->
+        val addressId = backStackEntry.arguments?.getInt("addressId") ?: 0
+
+        AddressFormScreen(
+            addressId = addressId,
+            onBackClick = { navigator.back() }
+        )
+    }
+
+    composable(AccountRoutes.Notifications) {
+        NotificationListScreen(onBackClick = { navigator.back() })
+    }
+
+    composable(AccountRoutes.CompanyInfo) {
+        CompanyInfoScreen(
+            onBackClick = { navigator.back() },
+            onEditClick = { navigator.navController.navigate(AccountRoutes.CompanyInfoEdit) },
+            onB2BIndexClick = { navigator.navController.navigate(AccountRoutes.CompanyB2BIndex) },
+            onB2CStoreClick = {}
+        )
+    }
+
+    composable(AccountRoutes.CompanyInfoEdit) {
+        CompanyInfoEditScreen(onBackClick = { navigator.back() })
+    }
+
+    composable(AccountRoutes.CompanyB2BIndex) {
+        CompanyB2BIndexScreen(
+            onBackClick = { navigator.back() },
+            onActivateClick = { navigator.navController.navigate(AccountRoutes.CompanyB2BStatus) }
+        )
+    }
+
+    composable(AccountRoutes.CompanyB2BStatus) {
+        CompanyB2BStatusScreen(
+            onBackClick = { navigator.back() },
+            onB2BManagementPanelClick = {}
+        )
+    }
+
+    composable(AccountRoutes.UsagePurpose) {
+        UsagePurposeScreen(
+            onBackClick = { navigator.back() },
+            onRetailClick = { navigator.back() },
+            onWholesaleClick = { navigator.back() },
+            onBothClick = { navigator.back() }
+        )
+    }
+
+    composable(AccountRoutes.QuestionAnswers) {
+        QuestionAnswerScreen(onBackClick = { navigator.back() })
+    }
+
+    composable(AccountRoutes.FollowedStores) {
+        FollowedStoreListScreen(onBackClick = { navigator.back() })
+    }
+
+    composable(AccountRoutes.Favorites) {
+        FavoriteListScreen(onBackClick = { navigator.back() })
+    }
+
+    composable(AccountRoutes.Reviews) {
+        ReviewListScreen(
+            onBackClick = { navigator.back() },
+            onProductClick = { navigator.navController.navigate(RetailRoutes.ProductDetail) },
+            onEditReviewClick = { navigator.navController.navigate(AccountRoutes.ReviewEdit) },
+            onDeleteReviewClick = {}
+        )
+    }
+
+    composable(AccountRoutes.ReviewEdit) {
+        ReviewEditScreen(
+            onBackClick = { navigator.back() },
+            onSaveClick = { navigator.back() },
+            onDeleteClick = { navigator.back() }
+        )
+    }
+
+    composable(AccountRoutes.Coupons) {
+        CouponListScreen(onBackClick = { navigator.back() })
+    }
+
+    composable(AccountRoutes.Requests) {
+        RequestListScreen(
+            onBackClick = { navigator.back() },
+            onRequestDetailClick = { navigator.navController.navigate(OrderRoutes.detail(1)) },
+            onOrderListClick = { navigator.navController.navigate(OrderRoutes.List) }
+        )
+    }
+
+    composable(AccountRoutes.RequestDetail) {
+        RequestDetailScreen(
+            onBackClick = { navigator.back() },
+            onOrderClick = { navigator.navController.navigate(AccountRoutes.OrderDetail) },
+            onStoreClick = { navigator.navController.navigate(StoreRoutes.StoreDetail) }
+        )
+    }
+
+    composable(AccountRoutes.Subscriptions) {
+        SubscriptionListScreen(
+            onBackClick = { navigator.back() },
+            onSubscriptionDetailClick = {
+                navigator.navController.navigate(AccountRoutes.SubscriptionDetail)
+            }
+        )
+    }
+
+    composable(AccountRoutes.SubscriptionDetail) {
+        SubscriptionDetailScreen(onBackClick = { navigator.back() })
+    }
+
+    composable(AccountRoutes.WalletBalance) {
+        WalletBalanceScreen(
+            onBackClick = { navigator.back() },
+            onBankAccountsClick = { navigator.navController.navigate(BankAccountRoutes.List) }
+        )
+    }
+
+    composable(BankAccountRoutes.List) {
+        BankAccountListScreen(
+            onBackClick = { navigator.back() },
+            onCreateBankAccountClick = { navigator.navController.navigate(BankAccountRoutes.Create) },
+            onEditBankAccountClick = { bankAccountId ->
+                navigator.navController.navigate(BankAccountRoutes.edit(bankAccountId))
+            },
+            onDeleteBankAccountClick = {},
+            onCopyIbanClick = {}
+        )
+    }
+
+    composable(BankAccountRoutes.Create) {
+        BankAccountCreateScreen(onBackClick = { navigator.back() })
+    }
+
+    composable(
+        route = BankAccountRoutes.Edit,
+        arguments = listOf(
+            navArgument("bankAccountId") {
+                type = NavType.IntType
+            }
+        )
+    ) { backStackEntry ->
+        val bankAccountId = backStackEntry.arguments?.getInt("bankAccountId") ?: 0
+
+        BankAccountEditScreen(
+            bankAccountId = bankAccountId,
+            onBackClick = { navigator.back() }
+        )
+    }
+}
+
+

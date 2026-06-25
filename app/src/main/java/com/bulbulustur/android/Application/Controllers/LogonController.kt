@@ -2,6 +2,7 @@ package com.bulbulustur.android.Application.Controllers
 
 import androidx.lifecycle.viewModelScope
 import com.bulbulustur.android.Application.Session.UserSessionManager
+import com.bulbulustur.android.businesslayer.Core.Model.RevokeTokenRequest
 import com.bulbulustur.android.businesslayer.Core.Interface.IAuthenticationRepository
 import com.bulbulustur.android.businesslayer.Core.Model.AuthResponse
 import com.bulbulustur.android.businesslayer.Core.Model.MemberAuthModel
@@ -18,8 +19,15 @@ data class LogonControllerState(
     val CurrentAction: String? = null,
     val LastResult: Result<*>? = null,
     val ErrorMessage: String? = null,
-    val IsLoginSuccessful: Boolean = false
-)
+    val IsLoginSuccessful: Boolean = false,
+    val IsLogoutCompleted: Boolean = false
+) {
+
+    val IsLoggingOut: Boolean
+        get() =
+            IsLoading &&
+                    CurrentAction == "LogoutPost"
+}
 
 sealed interface LogonControllerEvent {
 
@@ -142,6 +150,100 @@ class LogonController(
 
             HandleLoginResponse(
                 response = response
+            )
+        }
+    }
+
+    fun LogoutPost(
+        languageId: Int,
+        onCompleted: () -> Unit
+    ) {
+        if (_state.value.IsLoading) {
+            return
+        }
+
+        _state.update { currentState ->
+            currentState.copy(
+                IsLoading = true,
+                CurrentAction = "LogoutPost",
+                LastResult = null,
+                ErrorMessage = null,
+                IsLoginSuccessful = false,
+                IsLogoutCompleted = false
+            )
+        }
+
+        /*
+         * Sunucu logout isteğinde kullanılacağı için
+         * refresh token silinmeden önce okunur.
+         */
+        val refreshToken =
+            userSessionManager.GetRefreshToken()
+
+        /*
+         * Kullanıcı oturumu cihazda hemen kapatılır.
+         * Sunucu cevabı beklenmez.
+         */
+        val localTokensCleared =
+            userSessionManager.ClearAuthentication()
+
+        /*
+         * Navigation doğrudan çağıran composable tarafından yapılır.
+         */
+        onCompleted()
+
+        /*
+         * Sunucudaki refresh token arka planda iptal edilir.
+         */
+        viewModelScope.launch {
+            var logoutResponse: Result<Boolean>? =
+                null
+
+            try {
+                if (!refreshToken.isNullOrBlank()) {
+                    val model =
+                        RevokeTokenRequest(
+                            RefreshToken =
+                                refreshToken
+                        )
+
+                    logoutResponse =
+                        executeService.PostAsync(
+                            operationType =
+                                "App.Logon.LogoutPost"
+                        ) {
+                            authenticationRepository.LogoutAsync(
+                                languageId =
+                                    languageId,
+                                model =
+                                    model
+                            )
+                        }
+                }
+            } finally {
+                _state.update { currentState ->
+                    currentState.copy(
+                        IsLoading = false,
+                        CurrentAction = "LogoutPost",
+                        LastResult = logoutResponse,
+                        ErrorMessage =
+                            if (localTokensCleared) {
+                                null
+                            } else {
+                                "Oturum bilgileri cihazdan tamamen temizlenemedi."
+                            },
+                        IsLoginSuccessful = false,
+                        IsLogoutCompleted = false
+                    )
+                }
+            }
+        }
+    }
+
+    fun ConsumeLogoutCompleted() {
+        _state.update { currentState ->
+            currentState.copy(
+                IsLogoutCompleted = false
             )
         }
     }
@@ -323,7 +425,8 @@ class LogonController(
                 CurrentAction = currentAction,
                 LastResult = null,
                 ErrorMessage = null,
-                IsLoginSuccessful = false
+                IsLoginSuccessful = false,
+                IsLogoutCompleted = false
             )
         }
     }
@@ -338,7 +441,8 @@ class LogonController(
                 LastResult = null,
                 ErrorMessage =
                     "$currentAction işlemi henüz Authentication API'ye bağlanmadı.",
-                IsLoginSuccessful = false
+                IsLoginSuccessful = false,
+                IsLogoutCompleted = false
             )
         }
     }

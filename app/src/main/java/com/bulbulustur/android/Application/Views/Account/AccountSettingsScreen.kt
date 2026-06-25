@@ -17,15 +17,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ChevronRight
-import androidx.compose.material.icons.outlined.RequestQuote
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Lock
-import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Payments
 import androidx.compose.material.icons.outlined.Public
+import androidx.compose.material.icons.outlined.RequestQuote
 import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material.icons.outlined.SupportAgent
 import androidx.compose.material.icons.outlined.Visibility
@@ -65,8 +64,7 @@ fun AccountSettingsScreen(
     onCurrencyClick: () -> Unit = {},
     onCommunicationPreferenceClick: () -> Unit = {},
     onAboutThisAppClick: () -> Unit = {},
-    onLegalPoliciesClick: () -> Unit = {},
-    onSignOutClick: () -> Unit = {}
+    onLegalPoliciesClick: () -> Unit = {}
 ) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
@@ -89,7 +87,9 @@ fun AccountSettingsScreen(
                 end = BBSpacing.PageHorizontal,
                 bottom = BBSpacing.PageBottom
             ),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.CardGap
+            )
         ) {
             item {
                 SettingsProtectionBlock(
@@ -180,25 +180,6 @@ fun AccountSettingsScreen(
                     )
                 }
             }
-
-            item {
-                SettingsSectionTitle(
-                    title = "Oturum",
-                    subtitle = "Hesabından güvenli şekilde çıkış yap."
-                )
-            }
-
-            item {
-                SettingsMenuGroup {
-                    SettingsMenuRow(
-                        title = "Çıkış Yap",
-                        value = null,
-                        icon = Icons.Outlined.Logout,
-                        danger = true,
-                        onClick = onSignOutClick
-                    )
-                }
-            }
         }
     }
 }
@@ -211,10 +192,14 @@ private fun SettingsProtectionBlock(
     onHelpCenterClick: () -> Unit
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
+        verticalArrangement = Arrangement.spacedBy(
+            BBSpacing.Space4
+        )
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space1
+            )
         ) {
             Text(
                 text = "Hesabın Güvende",
@@ -231,15 +216,19 @@ private fun SettingsProtectionBlock(
         }
 
         Column(
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space3
+            )
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+                horizontalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space3
+                )
             ) {
                 SettingsQuickCard(
                     modifier = Modifier.weight(1f),
-                    title = "Hesap GüvenliĞi",
+                    title = "Hesap Güvenliği",
                     icon = Icons.Outlined.Security,
                     onClick = onAccountSecurityClick
                 )
@@ -254,7 +243,9 @@ private fun SettingsProtectionBlock(
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+                horizontalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space3
+                )
             ) {
                 SettingsQuickCard(
                     modifier = Modifier.weight(1f),
@@ -282,21 +273,27 @@ private fun SettingsQuickCard(
     onClick: () -> Unit
 ) {
     BbCard(
-        modifier = modifier.height(BBIcon.Box5Xl),
+        modifier = modifier.height(
+            BBIcon.Box5Xl
+        ),
         variant = BbCardVariant.Outlined,
         padding = BbCardPadding.Medium,
         onClick = onClick
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space3
+            ),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Box(
                 modifier = Modifier
                     .size(BBIcon.BoxLg)
                     .background(
-                        color = BBColors.Success.copy(alpha = 0.10f),
+                        color = BBColors.Success.copy(
+                            alpha = 0.10f
+                        ),
                         shape = BBRadius.LgShape
                     ),
                 contentAlignment = Alignment.Center
@@ -305,7 +302,9 @@ private fun SettingsQuickCard(
                     imageVector = icon,
                     contentDescription = null,
                     tint = BBColors.Success,
-                    modifier = Modifier.size(BBIcon.Ui)
+                    modifier = Modifier.size(
+                        BBIcon.Ui
+                    )
                 )
             }
 
@@ -327,7 +326,9 @@ private fun SettingsSectionTitle(
     subtitle: String
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+        verticalArrangement = Arrangement.spacedBy(
+            BBSpacing.Space1
+        )
     ) {
         Text(
             text = title,
@@ -342,6 +343,7 @@ private fun SettingsSectionTitle(
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
+
 }
 
 @Composable
@@ -356,7 +358,9 @@ private fun SettingsMenuGroup(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.surface)
+                .background(
+                    MaterialTheme.colorScheme.surface
+                )
         ) {
             content()
         }
@@ -368,7 +372,6 @@ private fun SettingsMenuRow(
     title: String,
     value: String?,
     icon: ImageVector,
-    danger: Boolean = false,
     onClick: () -> Unit
 ) {
     Surface(
@@ -379,19 +382,19 @@ private fun SettingsMenuRow(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(BBSpacing.CardPadding),
+                .padding(
+                    BBSpacing.CardPadding
+                ),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+            horizontalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space3
+            )
         ) {
             Box(
                 modifier = Modifier
                     .size(BBIcon.BoxMd)
                     .background(
-                        color = if (danger) {
-                            BBColors.Red.Red50
-                        } else {
-                            MaterialTheme.colorScheme.surfaceVariant
-                        },
+                        color = MaterialTheme.colorScheme.surfaceVariant,
                         shape = BBRadius.LgShape
                     ),
                 contentAlignment = Alignment.Center
@@ -399,23 +402,17 @@ private fun SettingsMenuRow(
                 Icon(
                     imageVector = icon,
                     contentDescription = null,
-                    tint = if (danger) {
-                        BBColors.Red.Red600
-                    } else {
-                        MaterialTheme.colorScheme.onSurface
-                    },
-                    modifier = Modifier.size(BBIcon.Ui)
+                    tint = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.size(
+                        BBIcon.Ui
+                    )
                 )
             }
 
             Text(
                 text = title,
                 style = BbTypography.titleSmall,
-                color = if (danger) {
-                    BBColors.Red.Red700
-                } else {
-                    MaterialTheme.colorScheme.onSurface
-                },
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.weight(1f)
             )
@@ -432,7 +429,9 @@ private fun SettingsMenuRow(
                 imageVector = Icons.Outlined.ChevronRight,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(BBIcon.Ui)
+                modifier = Modifier.size(
+                    BBIcon.Ui
+                )
             )
         }
     }
@@ -440,7 +439,8 @@ private fun SettingsMenuRow(
 
 @Composable
 private fun SettingsDashedDivider() {
-    val dividerColor = MaterialTheme.colorScheme.outlineVariant
+    val dividerColor =
+        MaterialTheme.colorScheme.outlineVariant
 
     Canvas(
         modifier = Modifier
@@ -449,17 +449,29 @@ private fun SettingsDashedDivider() {
                 start = BBSpacing.Space16,
                 end = BBSpacing.Space4
             )
-            .height(BBSpacing.BorderThin)
+            .height(
+                BBSpacing.BorderThin
+            )
     ) {
         drawLine(
             color = dividerColor,
-            start = Offset(0f, 0f),
-            end = Offset(size.width, 0f),
+            start = Offset(
+                0f,
+                0f
+            ),
+            end = Offset(
+                size.width,
+                0f
+            ),
             strokeWidth = BBSpacing.BorderThin.toPx(),
             pathEffect = PathEffect.dashPathEffect(
-                intervals = floatArrayOf(10f, 8f),
+                intervals = floatArrayOf(
+                    10f,
+                    8f
+                ),
                 phase = 0f
             )
         )
     }
+
 }

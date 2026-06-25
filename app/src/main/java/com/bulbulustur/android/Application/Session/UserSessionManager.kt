@@ -97,9 +97,12 @@ class UserSessionManager(
     ): Boolean {
         val saved =
             secureTokenStore.SaveTokens(
-                accessToken = authResponse.Token,
-                refreshToken = authResponse.RefreshToken,
-                expiration = authResponse.Expiration
+                accessToken =
+                    authResponse.Token,
+                refreshToken =
+                    authResponse.RefreshToken,
+                expiration =
+                    authResponse.Expiration
             )
 
         if (!saved) {
@@ -117,6 +120,15 @@ class UserSessionManager(
         return true
     }
 
+    fun GetRefreshToken(): String? {
+        return secureTokenStore
+            .ReadTokens()
+            ?.RefreshToken
+            ?.takeIf { refreshToken ->
+                refreshToken.isNotBlank()
+            }
+    }
+
     fun SetAnonymous() {
         _state.update { currentState ->
             currentState.copy(
@@ -126,9 +138,13 @@ class UserSessionManager(
         }
     }
 
-    fun ClearAuthentication() {
-        secureTokenStore.Clear()
+    fun ClearAuthentication(): Boolean {
+        val cleared =
+            secureTokenStore.Clear()
+
         SetAnonymous()
+
+        return cleared
     }
 
     fun Reset() {

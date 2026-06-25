@@ -16,12 +16,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.bulbulustur.android.Application.Controllers.LogonController
 import com.bulbulustur.android.Application.Datastore.UserPreferenceDataStore
 import com.bulbulustur.android.Application.Localization.BBLocalizationProvider
 import com.bulbulustur.android.Application.Localization.LocalizationManager
 import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
 import com.bulbulustur.android.Application.Navigation.Graph.accountGraph
 import com.bulbulustur.android.Application.Navigation.Graph.companyGraph
+import com.bulbulustur.android.Application.Navigation.Graph.logonGraph
 import com.bulbulustur.android.Application.Navigation.Graph.messageGraph
 import com.bulbulustur.android.Application.Navigation.Graph.orderGraph
 import com.bulbulustur.android.Application.Navigation.Graph.retailGraph
@@ -29,81 +31,111 @@ import com.bulbulustur.android.Application.Navigation.Graph.settingsGraph
 import com.bulbulustur.android.Application.Navigation.Graph.splashGraph
 import com.bulbulustur.android.Application.Navigation.Graph.wholesaleGraph
 import com.bulbulustur.android.Application.Navigation.Routes.SplashRoutes
-import com.bulbulustur.android.Application.Navigation.Routes.logonGraph
 import com.bulbulustur.android.Application.Session.UserSessionManager
 import com.bulbulustur.android.Application.Session.UserSessionState
 import com.bulbulustur.android.Application.Views.Shared.Components.BuyerModeSheet
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
 import com.bulbulustur.android.businesslayer.Core.Enums.EBuyerMode
+import com.bulbulustur.android.businesslayer.Core.Repository.AuthenticationRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.LocalizationRepository
 import com.bulbulustur.android.businesslayer.Core.Security.SecureTokenStore
+import com.bulbulustur.android.businesslayer.Core.Util.Execute.ExecuteService
 
 @Composable
 fun BulbulusturApp() {
-    val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
+    val context =
+        LocalContext.current
 
-    val userPreferenceDataStore = remember(context) {
-        UserPreferenceDataStore(
-            context = context.applicationContext
-        )
-    }
+    val coroutineScope =
+        rememberCoroutineScope()
 
-    val secureTokenStore = remember(context) {
-        SecureTokenStore(
-            context = context.applicationContext
-        )
-    }
+    val userPreferenceDataStore =
+        remember(
+            context
+        ) {
+            UserPreferenceDataStore(
+                context =
+                    context.applicationContext
+            )
+        }
 
-    val userSessionManager = remember(
-        userPreferenceDataStore,
-        secureTokenStore,
-        coroutineScope
-    ) {
-        UserSessionManager(
-            userPreferenceDataStore = userPreferenceDataStore,
-            secureTokenStore = secureTokenStore,
-            coroutineScope = coroutineScope
-        )
-    }
+    val secureTokenStore =
+        remember(
+            context
+        ) {
+            SecureTokenStore(
+                context =
+                    context.applicationContext
+            )
+        }
 
-    val localizationRepository = remember {
-        LocalizationRepository()
-    }
+    val userSessionManager =
+        remember(
+            userPreferenceDataStore,
+            secureTokenStore,
+            coroutineScope
+        ) {
+            UserSessionManager(
+                userPreferenceDataStore =
+                    userPreferenceDataStore,
+                secureTokenStore =
+                    secureTokenStore,
+                coroutineScope =
+                    coroutineScope
+            )
+        }
 
-    val localizationManager = remember(
-        localizationRepository,
-        coroutineScope
-    ) {
-        LocalizationManager(
-            localizationRepository = localizationRepository,
-            coroutineScope = coroutineScope
-        )
-    }
+    val localizationRepository =
+        remember {
+            LocalizationRepository()
+        }
 
-    val sessionState by userSessionManager.State.collectAsState()
-    val localizationState by localizationManager.State.collectAsState()
+    val localizationManager =
+        remember(
+            localizationRepository,
+            coroutineScope
+        ) {
+            LocalizationManager(
+                localizationRepository =
+                    localizationRepository,
+                coroutineScope =
+                    coroutineScope
+            )
+        }
+
+    val sessionState by
+    userSessionManager.State.collectAsState()
+
+    val localizationState by
+    localizationManager.State.collectAsState()
 
     LaunchedEffect(
         sessionState.IsInitialized,
         sessionState.Language
     ) {
-        if (sessionState.IsInitialized) {
+        if (
+            sessionState.IsInitialized
+        ) {
             localizationManager.Load(
-                language = sessionState.Language
+                language =
+                    sessionState.Language
             )
         }
     }
 
     BbTheme(
-        themeMode = sessionState.ThemeMode
+        themeMode =
+            sessionState.ThemeMode
     ) {
         BBLocalizationProvider(
-            state = localizationState
+            state =
+                localizationState
         ) {
             Surface(
-                modifier = Modifier.fillMaxSize(),
-                color = MaterialTheme.colorScheme.background
+                modifier =
+                    Modifier.fillMaxSize(),
+                color =
+                    MaterialTheme.colorScheme.background
             ) {
                 if (
                     sessionState.IsInitialized &&
@@ -111,8 +143,10 @@ fun BulbulusturApp() {
                     !sessionState.IsAuthenticationInitializing
                 ) {
                     BulbulusturApplicationContent(
-                        sessionState = sessionState,
-                        userSessionManager = userSessionManager
+                        sessionState =
+                            sessionState,
+                        userSessionManager =
+                            userSessionManager
                     )
                 }
             }
@@ -125,81 +159,168 @@ private fun BulbulusturApplicationContent(
     sessionState: UserSessionState,
     userSessionManager: UserSessionManager
 ) {
-    val navController = rememberNavController()
+    val navController =
+        rememberNavController()
 
-    var showBuyerModeSheet by remember {
-        mutableStateOf(false)
+    var showBuyerModeSheet by
+    remember {
+        mutableStateOf(
+            false
+        )
     }
+
+    val executeService =
+        remember {
+            ExecuteService()
+        }
+
+    val authenticationRepository =
+        remember {
+            AuthenticationRepository()
+        }
+
+    val logonController =
+        remember(
+            executeService,
+            authenticationRepository,
+            userSessionManager
+        ) {
+            LogonController(
+                executeService =
+                    executeService,
+                authenticationRepository =
+                    authenticationRepository,
+                userSessionManager =
+                    userSessionManager
+            )
+        }
 
     val currentBackStackEntry by
     navController.currentBackStackEntryAsState()
 
     val currentRoute =
-        currentBackStackEntry?.destination?.route
+        currentBackStackEntry
+            ?.destination
+            ?.route
 
-    val currentBuyerMode = when {
-        currentRoute?.startsWith("wholesale/") == true -> {
-            EBuyerMode.Wholesale
-        }
+    val currentBuyerMode =
+        when {
+            currentRoute
+                ?.startsWith(
+                    "wholesale/"
+                ) == true -> {
 
-        else -> {
-            EBuyerMode.Retail
-        }
-    }
-
-    val appNavigator = remember(navController) {
-        BulbulusturNavigator(
-            navController = navController,
-            openBuyerModeSheet = {
-                showBuyerModeSheet = true
-            },
-            closeBuyerModeSheet = {
-                showBuyerModeSheet = false
+                EBuyerMode.Wholesale
             }
-        )
-    }
+
+            else -> {
+                EBuyerMode.Retail
+            }
+        }
+
+    val appNavigator =
+        remember(
+            navController
+        ) {
+            BulbulusturNavigator(
+                navController =
+                    navController,
+                openBuyerModeSheet = {
+                    showBuyerModeSheet =
+                        true
+                },
+                closeBuyerModeSheet = {
+                    showBuyerModeSheet =
+                        false
+                }
+            )
+        }
 
     NavHost(
-        navController = navController,
-        startDestination = SplashRoutes.ModeSelection
+        navController =
+            navController,
+        startDestination =
+            SplashRoutes.ModeSelection
     ) {
-        splashGraph(appNavigator)
-        logonGraph(
-            navController = navController,
-            sessionState = sessionState,
-            userSessionManager = userSessionManager
+        splashGraph(
+            navigator =
+                appNavigator
         )
-        messageGraph(appNavigator)
-        retailGraph(appNavigator)
-        wholesaleGraph(appNavigator)
-        companyGraph(appNavigator)
-        orderGraph(appNavigator)
+
+        logonGraph(
+            navController =
+                navController,
+            sessionState =
+                sessionState,
+            logonController =
+                logonController
+        )
+
+        messageGraph(
+            navigator =
+                appNavigator
+        )
+
+        retailGraph(
+            navigator =
+                appNavigator
+        )
+
+        wholesaleGraph(
+            navigator =
+                appNavigator
+        )
+
+        companyGraph(
+            navigator =
+                appNavigator
+        )
+
+        orderGraph(
+            navigator =
+                appNavigator
+        )
+
         accountGraph(
-            navigator = appNavigator,
-            sessionState = sessionState
+            navigator =
+                appNavigator,
+            sessionState =
+                sessionState,
+            logonController =
+                logonController
         )
 
         settingsGraph(
-            navigator = appNavigator,
-            sessionState = sessionState,
-            userSessionManager = userSessionManager
+            navigator =
+                appNavigator,
+            sessionState =
+                sessionState,
+            userSessionManager =
+                userSessionManager
         )
     }
 
-    if (showBuyerModeSheet) {
+    if (
+        showBuyerModeSheet
+    ) {
         BuyerModeSheet(
-            currentMode = currentBuyerMode,
+            currentMode =
+                currentBuyerMode,
             onDismissRequest = {
-                showBuyerModeSheet = false
+                showBuyerModeSheet =
+                    false
             },
             onRetailClick = {
-                appNavigator.navigateToRetailHome()
+                appNavigator
+                    .navigateToRetailHome()
             },
             onWholesaleClick = {
-                appNavigator.navigateToWholesaleHome()
+                appNavigator
+                    .navigateToWholesaleHome()
             },
             onRfqClick = {
-                appNavigator.navigateToWholesaleRfqCreate()
+                appNavigator
+                    .navigateToWholesaleRfqCreate()
             }
         )
     }

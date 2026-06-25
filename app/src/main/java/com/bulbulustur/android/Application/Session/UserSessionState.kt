@@ -6,5 +6,20 @@ import com.bulbulustur.android.businesslayer.Core.Enums.EThemeMode
 data class UserSessionState(
     val IsInitialized: Boolean = false,
     val ThemeMode: EThemeMode = EThemeMode.System,
-    val Language: EApplicationLanguage = EApplicationLanguage.Turkish
-)
+    val Language: EApplicationLanguage = EApplicationLanguage.Turkish,
+    val AuthenticationState: EAuthenticationState =
+        EAuthenticationState.Initializing
+) {
+
+    val IsAuthenticated: Boolean
+        get() = AuthenticationState ==
+                EAuthenticationState.Authenticated
+
+    val IsAnonymous: Boolean
+        get() = AuthenticationState ==
+                EAuthenticationState.Anonymous
+
+    val IsAuthenticationInitializing: Boolean
+        get() = AuthenticationState ==
+                EAuthenticationState.Initializing
+}

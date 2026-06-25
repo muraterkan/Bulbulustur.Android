@@ -3,23 +3,34 @@ package com.bulbulustur.android.Application.Session
 import com.bulbulustur.android.Application.Datastore.UserPreferenceDataStore
 import com.bulbulustur.android.businesslayer.Core.Enums.EApplicationLanguage
 import com.bulbulustur.android.businesslayer.Core.Enums.EThemeMode
+import com.bulbulustur.android.businesslayer.Core.Model.AuthResponse
+import com.bulbulustur.android.businesslayer.Core.Security.SecureTokenStore
+import com.bulbulustur.android.businesslayer.Core.Security.TokenExpirationParser
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class UserSessionManager(
     private val userPreferenceDataStore: UserPreferenceDataStore,
+    private val secureTokenStore: SecureTokenStore,
     private val coroutineScope: CoroutineScope
 ) {
 
-    val State: StateFlow<UserSessionState> =
-        userPreferenceDataStore.SessionState.stateIn(
-            scope = coroutineScope,
-            started = SharingStarted.Eagerly,
-            initialValue = UserSessionState()
+    private val _state =
+        MutableStateFlow(
+            UserSessionState()
         )
+
+    val State: StateFlow<UserSessionState> =
+        _state.asStateFlow()
+
+    init {
+        ObservePreferences()
+        RestoreAuthentication()
+    }
 
     fun SetThemeMode(
         themeMode: EThemeMode
@@ -41,9 +52,114 @@ class UserSessionManager(
         }
     }
 
+    fun RestoreAuthentication() {
+        coroutineScope.launch {
+            _state.update { currentState ->
+                currentState.copy(
+                    AuthenticationState =
+                        EAuthenticationState.Initializing
+                )
+            }
+
+            val storedTokens =
+                secureTokenStore.ReadTokens()
+
+            if (
+                storedTokens == null ||
+                !storedTokens.HasTokens
+            ) {
+                SetAnonymous()
+                return@launch
+            }
+
+            val isValid =
+                TokenExpirationParser.IsValid(
+                    value = storedTokens.Expiration
+                )
+
+            if (!isValid) {
+                secureTokenStore.Clear()
+                SetAnonymous()
+                return@launch
+            }
+
+            _state.update { currentState ->
+                currentState.copy(
+                    AuthenticationState =
+                        EAuthenticationState.Authenticated
+                )
+            }
+        }
+    }
+
+    fun SetAuthenticated(
+        authResponse: AuthResponse
+    ): Boolean {
+        val saved =
+            secureTokenStore.SaveTokens(
+                accessToken = authResponse.Token,
+                refreshToken = authResponse.RefreshToken,
+                expiration = authResponse.Expiration
+            )
+
+        if (!saved) {
+            SetAnonymous()
+            return false
+        }
+
+        _state.update { currentState ->
+            currentState.copy(
+                AuthenticationState =
+                    EAuthenticationState.Authenticated
+            )
+        }
+
+        return true
+    }
+
+    fun SetAnonymous() {
+        _state.update { currentState ->
+            currentState.copy(
+                AuthenticationState =
+                    EAuthenticationState.Anonymous
+            )
+        }
+    }
+
+    fun ClearAuthentication() {
+        secureTokenStore.Clear()
+        SetAnonymous()
+    }
+
     fun Reset() {
         coroutineScope.launch {
             userPreferenceDataStore.Reset()
+            secureTokenStore.Clear()
+
+            _state.value =
+                UserSessionState(
+                    AuthenticationState =
+                        EAuthenticationState.Anonymous
+                )
+        }
+    }
+
+    private fun ObservePreferences() {
+        coroutineScope.launch {
+            userPreferenceDataStore.SessionState.collect {
+                    preferenceState ->
+
+                _state.update { currentState ->
+                    currentState.copy(
+                        IsInitialized =
+                            preferenceState.IsInitialized,
+                        ThemeMode =
+                            preferenceState.ThemeMode,
+                        Language =
+                            preferenceState.Language
+                    )
+                }
+            }
         }
     }
 }

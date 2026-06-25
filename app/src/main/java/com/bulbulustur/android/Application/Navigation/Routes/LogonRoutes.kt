@@ -1,8 +1,15 @@
 package com.bulbulustur.android.Application.Navigation.Routes
 
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import com.bulbulustur.android.Application.Controllers.LogonController
+import com.bulbulustur.android.Application.Session.UserSessionManager
+import com.bulbulustur.android.Application.Session.UserSessionState
 import com.bulbulustur.android.Application.Views.Logon.ExpiredScreen
 import com.bulbulustur.android.Application.Views.Logon.FirstDoorScreen
 import com.bulbulustur.android.Application.Views.Logon.FirstDoorType
@@ -10,6 +17,9 @@ import com.bulbulustur.android.Application.Views.Logon.ForgotPasswordScreen
 import com.bulbulustur.android.Application.Views.Logon.LoginScreen
 import com.bulbulustur.android.Application.Views.Logon.RegisterFinalScreen
 import com.bulbulustur.android.Application.Views.Logon.RegisterStartScreen
+import com.bulbulustur.android.businesslayer.Core.Enums.EApplicationLanguage
+import com.bulbulustur.android.businesslayer.Core.Repository.AuthenticationRepository
+import com.bulbulustur.android.businesslayer.Core.Util.Execute.ExecuteService
 
 object LogonRoutes {
 
@@ -22,39 +32,114 @@ object LogonRoutes {
 }
 
 fun NavGraphBuilder.logonGraph(
-    navController: NavHostController
+    navController: NavHostController,
+    sessionState: UserSessionState,
+    userSessionManager: UserSessionManager
 ) {
+
     composable(
         route = LogonRoutes.Logon
     ) {
+        val executeService = remember {
+            ExecuteService()
+        }
+
+        val authenticationRepository = remember {
+            AuthenticationRepository()
+        }
+
+        val logonController = remember(
+            executeService,
+            authenticationRepository,
+            userSessionManager
+        ) {
+            LogonController(
+                executeService = executeService,
+                authenticationRepository =
+                    authenticationRepository,
+                userSessionManager =
+                    userSessionManager
+            )
+        }
+
+        val logonState by
+        logonController.State.collectAsState()
+
+        val languageId =
+            when (sessionState.Language) {
+                EApplicationLanguage.Turkish -> 1
+                EApplicationLanguage.English -> 2
+            }
+
+        LaunchedEffect(
+            logonState.IsLoginSuccessful
+        ) {
+            if (!logonState.IsLoginSuccessful) {
+                return@LaunchedEffect
+            }
+
+            logonController.ConsumeLoginSuccess()
+
+            val returnedToPreviousScreen =
+                navController.popBackStack()
+
+            if (!returnedToPreviousScreen) {
+                navController.navigate(
+                    RetailRoutes.Home
+                ) {
+                    popUpTo(
+                        LogonRoutes.Logon
+                    ) {
+                        inclusive = true
+                    }
+
+                    launchSingleTop = true
+                }
+            }
+        }
+
         LoginScreen(
-            onLogonClick = { email, password ->
-                /*
-                 * API bağlandığında:
-                 * - email/password Login endpoint'e gönderilecek
-                 * - token alınırsa app ana akışına geçilecek
-                 * - hata varsa ekranda gösterilecek
-                 */
+            isLoading =
+                logonState.IsLoading,
+            errorMessage =
+                logonState.ErrorMessage,
+            onLogonClick = {
+                    email,
+                    password ->
+
+                logonController.LoginPost(
+                    email = email,
+                    password = password,
+                    languageId = languageId
+                )
+            },
+            onInputChanged = {
+                logonController.ClearError()
             },
             onForgotPasswordClick = {
-                navController.navigate(LogonRoutes.ForgotPassword)
+                navController.navigate(
+                    LogonRoutes.ForgotPassword
+                )
             },
             onRegisterClick = {
-                navController.navigate(LogonRoutes.FirstDoor)
+                navController.navigate(
+                    LogonRoutes.FirstDoor
+                )
             },
             onGoogleClick = {
                 /*
-                 * ExternalLogin() mobil karşılığı burada başlatılacak.
+                 * OAuth sonraki geliştirme.
                  */
             },
             onFacebookClick = {
                 /*
-                 * ExternalLogin() mobil karşılığı burada başlatılacak.
+                 * OAuth sonraki geliştirme.
                  */
             },
             onLanguageClick = {
                 /*
-                 * Dil seçimi hazır route'a bağlanacak.
+                 * Public dil seçimi daha sonra
+                 * mevcut localization akışına bağlanacak.
                  */
             }
         )
@@ -66,9 +151,8 @@ fun NavGraphBuilder.logonGraph(
         ForgotPasswordScreen(
             onSendResetLinkClick = { email ->
                 /*
-                 * API bağlandığında:
-                 * - forgotpassword endpoint'e email gönderilecek
-                 * - başarılıysa bilgi mesajı gösterilecek
+                 * ForgotPasswordPost gerçek model ve endpoint ile
+                 * bağlandığında controller çağrısı buraya gelecek.
                  */
             },
             onBackToLogonClick = {
@@ -78,9 +162,6 @@ fun NavGraphBuilder.logonGraph(
                 )
             },
             onLanguageClick = {
-                /*
-                 * Dil seçimi hazır route'a bağlanacak.
-                 */
             }
         )
     }
@@ -92,11 +173,15 @@ fun NavGraphBuilder.logonGraph(
             onContinueClick = { selectedDoor ->
                 when (selectedDoor) {
                     FirstDoorType.IndividualBuyer -> {
-                        navController.navigate(LogonRoutes.RegisterStart)
+                        navController.navigate(
+                            LogonRoutes.RegisterStart
+                        )
                     }
 
                     FirstDoorType.CompanyBuyer -> {
-                        navController.navigate(LogonRoutes.RegisterStart)
+                        navController.navigate(
+                            LogonRoutes.RegisterStart
+                        )
                     }
 
                     FirstDoorType.ExistingAccount -> {
@@ -114,9 +199,6 @@ fun NavGraphBuilder.logonGraph(
                 )
             },
             onLanguageClick = {
-                /*
-                 * Dil seçimi hazır route'a bağlanacak.
-                 */
             }
         )
     }
@@ -127,11 +209,13 @@ fun NavGraphBuilder.logonGraph(
         RegisterStartScreen(
             onContinueClick = { registerStartForm ->
                 /*
-                 * API bağlandığında:
-                 * - registerStartForm kayıt endpoint'e gönderilecek
-                 * - başarılıysa final ekranına gidilecek
+                 * First-door ve activation akışı gerçek
+                 * AuthenticationRepository metotlarına bağlanacak.
                  */
-                navController.navigate(LogonRoutes.RegisterFinal)
+
+                navController.navigate(
+                    LogonRoutes.RegisterFinal
+                )
             },
             onBackToLogonClick = {
                 navController.popBackStack(
@@ -140,9 +224,6 @@ fun NavGraphBuilder.logonGraph(
                 )
             },
             onLanguageClick = {
-                /*
-                 * Dil seçimi hazır route'a bağlanacak.
-                 */
             }
         )
     }
@@ -159,14 +240,10 @@ fun NavGraphBuilder.logonGraph(
             },
             onResendVerificationClick = {
                 /*
-                 * API bağlandığında:
-                 * - doğrulama e-postası tekrar gönderilecek
+                 * First-door endpointine bağlanacak.
                  */
             },
             onLanguageClick = {
-                /*
-                 * Dil seçimi hazır route'a bağlanacak.
-                 */
             }
         )
     }
@@ -177,11 +254,8 @@ fun NavGraphBuilder.logonGraph(
         ExpiredScreen(
             onSendAgainClick = {
                 /*
-                 * expiredType'a göre:
-                 * - doğrulama e-postası
-                 * - şifre yenileme bağlantısı
-                 * - kayıt akışı
-                 * yeniden başlatılacak.
+                 * İşlem tipine göre verification veya
+                 * password reset akışı yeniden başlatılacak.
                  */
             },
             onGoToLogonClick = {
@@ -191,11 +265,7 @@ fun NavGraphBuilder.logonGraph(
                 )
             },
             onLanguageClick = {
-                /*
-                 * Dil seçimi hazır route'a bağlanacak.
-                 */
             }
         )
     }
 }
-

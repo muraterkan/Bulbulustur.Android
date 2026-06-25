@@ -1,6 +1,7 @@
 package com.bulbulustur.android.businesslayer.Core.Network
 
 object ApiRoutes {
+    const val AUTHENTICATION_BASE_URL = "http://37.60.239.76:30135/api/Auth"
     const val RESOURCE_BASE_URL = "http://37.60.239.76:30215/api/Resource/"
     const val US_BASE_URL = "http://37.60.239.76:30200/api/"
     const val US_MEDIA_ASSET_BASE_URL = "http://37.60.239.76:30200/api/UsMediaAsset/"

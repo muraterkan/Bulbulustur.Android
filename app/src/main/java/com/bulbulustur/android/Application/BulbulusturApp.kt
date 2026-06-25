@@ -36,6 +36,7 @@ import com.bulbulustur.android.Application.Views.Shared.Components.BuyerModeShee
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
 import com.bulbulustur.android.businesslayer.Core.Enums.EBuyerMode
 import com.bulbulustur.android.businesslayer.Core.Repository.LocalizationRepository
+import com.bulbulustur.android.businesslayer.Core.Security.SecureTokenStore
 
 @Composable
 fun BulbulusturApp() {
@@ -48,12 +49,20 @@ fun BulbulusturApp() {
         )
     }
 
+    val secureTokenStore = remember(context) {
+        SecureTokenStore(
+            context = context.applicationContext
+        )
+    }
+
     val userSessionManager = remember(
         userPreferenceDataStore,
+        secureTokenStore,
         coroutineScope
     ) {
         UserSessionManager(
             userPreferenceDataStore = userPreferenceDataStore,
+            secureTokenStore = secureTokenStore,
             coroutineScope = coroutineScope
         )
     }
@@ -98,7 +107,8 @@ fun BulbulusturApp() {
             ) {
                 if (
                     sessionState.IsInitialized &&
-                    localizationState.IsInitialized
+                    localizationState.IsInitialized &&
+                    !sessionState.IsAuthenticationInitializing
                 ) {
                     BulbulusturApplicationContent(
                         sessionState = sessionState,
@@ -154,13 +164,20 @@ private fun BulbulusturApplicationContent(
         startDestination = SplashRoutes.ModeSelection
     ) {
         splashGraph(appNavigator)
-        logonGraph(navController)
+        logonGraph(
+            navController = navController,
+            sessionState = sessionState,
+            userSessionManager = userSessionManager
+        )
         messageGraph(appNavigator)
         retailGraph(appNavigator)
         wholesaleGraph(appNavigator)
         companyGraph(appNavigator)
         orderGraph(appNavigator)
-        accountGraph(appNavigator)
+        accountGraph(
+            navigator = appNavigator,
+            sessionState = sessionState
+        )
 
         settingsGraph(
             navigator = appNavigator,

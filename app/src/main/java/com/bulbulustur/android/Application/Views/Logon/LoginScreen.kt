@@ -20,8 +20,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -31,24 +33,32 @@ import com.bulbulustur.android.Application.Views.Shared.LogonPublicFieldLabel
 import com.bulbulustur.android.Application.Views.Shared.LogonPublicPageTitle
 import com.bulbulustur.android.Application.Views.Shared.LogonPublicScaffold
 import com.bulbulustur.android.Application.Views.Shared.LogonPublicTextField
-import com.bulbulustur.android.R
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
-import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
+import com.bulbulustur.android.R
 
 @Composable
 fun LoginScreen(
-    onLogonClick: (email: String, password: String) -> Unit = { _, _ -> },
+    isLoading: Boolean = false,
+    errorMessage: String? = null,
+    onLogonClick: (
+        email: String,
+        password: String
+    ) -> Unit = { _, _ -> },
+    onInputChanged: () -> Unit = {},
     onForgotPasswordClick: () -> Unit = {},
     onRegisterClick: () -> Unit = {},
     onGoogleClick: () -> Unit = {},
     onFacebookClick: () -> Unit = {},
     onLanguageClick: () -> Unit = {}
 ) {
+    val focusManager =
+        LocalFocusManager.current
+
     var email by remember {
         mutableStateOf("")
     }
@@ -61,147 +71,257 @@ fun LoginScreen(
         mutableStateOf(false)
     }
 
+    fun SubmitLogin() {
+        if (isLoading) {
+            return
+        }
+
+        focusManager.clearFocus()
+
+        onLogonClick(
+            email,
+            password
+        )
+    }
+
     LogonPublicScaffold(
         onLanguageSelected = {
-            onLanguageClick()
+            if (!isLoading) {
+                onLanguageClick()
+            }
         }
     ) {
         LogonPublicPageTitle(
             eyebrow = "Bulbulustur Hesabı",
             title = "Giriş Yap",
-            description = "Hesabınıza giriş yapın, alışveriş ve toptan talep akışlarınıza devam edin."
+            description =
+                "Hesabınıza giriş yapın, alışveriş ve toptan talep akışlarınıza devam edin."
         )
 
-        Spacer(modifier = Modifier.height(BBSpacing.Space8))
+        Spacer(
+            modifier = Modifier.height(
+                BBSpacing.Space8
+            )
+        )
 
         LogonPublicFieldLabel(
             text = "E-posta"
         )
 
-        Spacer(modifier = Modifier.height(BBSpacing.Space2))
-
-        LogonPublicTextField(
-            value = email,
-            onValueChange = {
-                email = it
-            },
-            placeholder = "E-posta adresiniz",
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Email
+        Spacer(
+            modifier = Modifier.height(
+                BBSpacing.Space2
             )
         )
 
-        Spacer(modifier = Modifier.height(BBSpacing.Space5))
+        LogonPublicTextField(
+            value = email,
+            onValueChange = { value ->
+                email = value
+                onInputChanged()
+            },
+            placeholder = "E-posta adresiniz",
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Email,
+                imeAction = ImeAction.Next
+            )
+        )
+
+        Spacer(
+            modifier = Modifier.height(
+                BBSpacing.Space5
+            )
+        )
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment =
+                Alignment.CenterVertically
         ) {
             LogonPublicFieldLabel(
                 text = "Şifre"
             )
 
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(
+                modifier = Modifier.weight(1f)
+            )
 
             TextButton(
-                onClick = onForgotPasswordClick
+                onClick = {
+                    if (!isLoading) {
+                        onForgotPasswordClick()
+                    }
+                }
             ) {
                 Text(
                     text = "Şifremi Unuttum",
-                    style = MaterialTheme.typography.labelLarge,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    style =
+                        MaterialTheme.typography.labelLarge,
+                    fontWeight =
+                        FontWeight.SemiBold,
+                    color =
+                        MaterialTheme.colorScheme
+                            .onSurfaceVariant
                 )
             }
         }
 
         LogonPublicTextField(
             value = password,
-            onValueChange = {
-                password = it
+            onValueChange = { value ->
+                password = value
+                onInputChanged()
             },
             placeholder = "Şifreniz",
             trailingContent = {
                 IconButton(
                     onClick = {
-                        isPasswordVisible = !isPasswordVisible
+                        isPasswordVisible =
+                            !isPasswordVisible
                     }
                 ) {
                     Text(
-                        text = if (isPasswordVisible) {
+                        text = if (
+                            isPasswordVisible
+                        ) {
                             "Gizle"
                         } else {
                             "Göster"
                         },
-                        style = MaterialTheme.typography.labelSmall,
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        style =
+                            MaterialTheme.typography
+                                .labelSmall,
+                        fontWeight =
+                            FontWeight.SemiBold,
+                        color =
+                            MaterialTheme.colorScheme
+                                .onSurfaceVariant
                     )
                 }
             },
-            visualTransformation = if (isPasswordVisible) {
-                VisualTransformation.None
-            } else {
-                PasswordVisualTransformation()
-            },
+            visualTransformation =
+                if (isPasswordVisible) {
+                    VisualTransformation.None
+                } else {
+                    PasswordVisualTransformation()
+                },
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password
+                keyboardType =
+                    KeyboardType.Password,
+                imeAction =
+                    ImeAction.Done
             )
         )
 
-        Spacer(modifier = Modifier.height(BBSpacing.Space7))
+        if (!errorMessage.isNullOrBlank()) {
+            Spacer(
+                modifier = Modifier.height(
+                    BBSpacing.Space3
+                )
+            )
+
+            Text(
+                text = errorMessage,
+                style =
+                    MaterialTheme.typography.bodySmall,
+                fontWeight =
+                    FontWeight.Medium,
+                color =
+                    MaterialTheme.colorScheme.error
+            )
+        }
+
+        Spacer(
+            modifier = Modifier.height(
+                BBSpacing.Space7
+            )
+        )
 
         BbButton(
             modifier = Modifier.fillMaxWidth(),
-            text = "Giriş Yap",
+            text = if (isLoading) {
+                "Giriş Yapılıyor..."
+            } else {
+                "Giriş Yap"
+            },
             onClick = {
-                onLogonClick(email, password)
+                SubmitLogin()
             },
             variant = BbButtonVariant.Primary,
             size = BbButtonSize.Large
         )
 
-        Spacer(modifier = Modifier.height(BBSpacing.Space5))
+        Spacer(
+            modifier = Modifier.height(
+                BBSpacing.Space5
+            )
+        )
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
+            horizontalArrangement =
+                Arrangement.Center,
+            verticalAlignment =
+                Alignment.CenterVertically
         ) {
             Text(
                 text = "Hesabınız yok mu?",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                style =
+                    MaterialTheme.typography.bodySmall,
+                color =
+                    MaterialTheme.colorScheme
+                        .onSurfaceVariant
             )
 
             TextButton(
-                onClick = onRegisterClick
+                onClick = {
+                    if (!isLoading) {
+                        onRegisterClick()
+                    }
+                }
             ) {
                 Text(
                     text = "Kayıt Ol",
-                    style = MaterialTheme.typography.labelLarge,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
+                    style =
+                        MaterialTheme.typography
+                            .labelLarge,
+                    fontWeight =
+                        FontWeight.Bold,
+                    color =
+                        MaterialTheme.colorScheme
+                            .onSurface
                 )
             }
         }
 
-        Spacer(modifier = Modifier.height(BBSpacing.Space2))
+        Spacer(
+            modifier = Modifier.height(
+                BBSpacing.Space2
+            )
+        )
 
         LogonDividerWithText(
             text = "veya"
         )
 
-        Spacer(modifier = Modifier.height(BBSpacing.Space5))
+        Spacer(
+            modifier = Modifier.height(
+                BBSpacing.Space5
+            )
+        )
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+            horizontalArrangement =
+                Arrangement.spacedBy(
+                    BBSpacing.Space3
+                )
         ) {
             SocialLoginButton(
                 modifier = Modifier.weight(1f),
                 label = "Google",
                 iconResId = R.drawable.ic_google,
+                isLoading = isLoading,
                 onClick = onGoogleClick
             )
 
@@ -209,6 +329,7 @@ fun LoginScreen(
                 modifier = Modifier.weight(1f),
                 label = "Facebook",
                 iconResId = R.drawable.ic_facebook,
+                isLoading = isLoading,
                 onClick = onFacebookClick
             )
         }
@@ -219,20 +340,31 @@ fun LoginScreen(
 private fun SocialLoginButton(
     label: String,
     iconResId: Int,
+    isLoading: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     BbButton(
-        modifier = modifier.defaultMinSize(minHeight = BBSpacing.Space14),
+        modifier = modifier.defaultMinSize(
+            minHeight = BBSpacing.Space14
+        ),
         text = label,
-        onClick = onClick,
+        onClick = {
+            if (!isLoading) {
+                onClick()
+            }
+        },
         variant = BbButtonVariant.Outline,
         size = BbButtonSize.Large,
         leadingIcon = {
             Image(
-                painter = painterResource(id = iconResId),
+                painter = painterResource(
+                    id = iconResId
+                ),
                 contentDescription = null,
-                modifier = Modifier.size(BBIcon.SizeLg)
+                modifier = Modifier.size(
+                    BBIcon.SizeLg
+                )
             )
         }
     )
@@ -242,7 +374,9 @@ private fun SocialLoginButton(
 @Composable
 private fun LoginScreenPreview() {
     BbTheme {
-        LoginScreen()
+        LoginScreen(
+            errorMessage =
+                "E-posta adresi veya şifre hatalı."
+        )
     }
 }
-

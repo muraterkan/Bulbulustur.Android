@@ -42,11 +42,29 @@ import com.bulbulustur.android.Application.Views.Account.LoginActivitiesScreen
 import com.bulbulustur.android.Application.Views.Account.SubscriptionDetailScreen
 import com.bulbulustur.android.Application.Views.Account.SubscriptionListScreen
 import com.bulbulustur.android.Application.Views.Account.WalletBalanceScreen
+import androidx.compose.runtime.LaunchedEffect
+import com.bulbulustur.android.Application.Navigation.Routes.LogonRoutes
+import com.bulbulustur.android.Application.Session.UserSessionState
 
 fun NavGraphBuilder.accountGraph(
-    navigator: BulbulusturNavigator
+    navigator: BulbulusturNavigator,
+    sessionState: UserSessionState
 ) {
-    composable(AccountRoutes.AccountHome) {
+    composable(
+        route = AccountRoutes.AccountHome
+    ) {
+        if (!sessionState.IsAuthenticated) {
+            LaunchedEffect(Unit) {
+                navigator.navController.navigate(
+                    LogonRoutes.Logon
+                ) {
+                    launchSingleTop = true
+                }
+            }
+
+            return@composable
+        }
+
         AccountScreen(
             onSecurityClick = { navigator.navController.navigate(AccountRoutes.Security) },
             onProfileClick = { navigator.navController.navigate(AccountRoutes.ProfileInfo) },

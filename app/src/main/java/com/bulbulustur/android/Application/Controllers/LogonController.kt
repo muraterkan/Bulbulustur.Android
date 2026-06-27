@@ -1,5 +1,6 @@
 package com.bulbulustur.android.Application.Controllers
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.bulbulustur.android.Application.Session.UserSessionManager
 import com.bulbulustur.android.businesslayer.Core.DTO.AddressCityDTO
@@ -10,6 +11,7 @@ import com.bulbulustur.android.businesslayer.Core.Interface.IAddressCountryRepos
 import com.bulbulustur.android.businesslayer.Core.Interface.IAuthenticationRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IMemberTempRepository
 import com.bulbulustur.android.businesslayer.Core.Model.AuthResponse
+import com.bulbulustur.android.businesslayer.Core.Model.GoogleLoginRequest
 import com.bulbulustur.android.businesslayer.Core.Model.MemberAuthModel
 import com.bulbulustur.android.businesslayer.Core.Model.MemberForgotModel
 import com.bulbulustur.android.businesslayer.Core.Model.MemberSetPasswordModel
@@ -78,6 +80,11 @@ data class LogonControllerState(
         get() =
             IsLoading &&
                     CurrentAction == "SetNewPasswordPost"
+
+    val IsGoogleLoginLoading: Boolean
+        get() =
+            IsLoading &&
+                    CurrentAction == "GoogleLoginPost"
 }
 
 sealed interface LogonControllerEvent {
@@ -211,6 +218,93 @@ class LogonController(
             HandleLoginResponse(
                 response =
                     response
+            )
+        }
+    }
+
+    fun GoogleLoginPost(
+        idToken: String,
+        languageId: Int
+    ) {
+        if (_state.value.IsLoading) {
+            return
+        }
+
+        val normalizedIdToken =
+            idToken.trim()
+
+        if (normalizedIdToken.isBlank()) {
+            _state.update { currentState ->
+                currentState.copy(
+                    IsLoading =
+                        false,
+                    CurrentAction =
+                        "GoogleLoginPost",
+                    LastResult =
+                        null,
+                    ErrorMessage =
+                        "Google kimlik doğrulama bilgisi alınamadı.",
+                    IsLoginSuccessful =
+                        false
+                )
+            }
+
+            return
+        }
+
+        val model =
+            GoogleLoginRequest(
+                IdToken =
+                    normalizedIdToken,
+                LanguageId =
+                    languageId,
+                DeviceType =
+                    "Android",
+                Platform =
+                    "Android",
+                Browser =
+                    "Mobile App",
+                IPAddress =
+                    ""
+            )
+
+        viewModelScope.launch {
+            SetLoading(
+                currentAction =
+                    "GoogleLoginPost"
+            )
+
+            val response =
+                executeService.PostAsync(
+                    operationType =
+                        "App.Logon.GoogleLoginPost"
+                ) {
+                    authenticationRepository.GoogleLoginAsync(
+                        model =
+                            model
+                    )
+                }
+
+            HandleLoginResponse(
+                response =
+                    response
+            )
+        }
+    }
+
+    fun SetGoogleLoginError(
+        message: String
+    ) {
+        _state.update { currentState ->
+            currentState.copy(
+                IsLoading = false,
+                CurrentAction = "GoogleLoginPost",
+                LastResult = null,
+                ErrorMessage =
+                    message.ifBlank {
+                        "Google ile giriş başlatılamadı."
+                    },
+                IsLoginSuccessful = false
             )
         }
     }
@@ -1193,6 +1287,25 @@ class LogonController(
     ) {
         val authResponse =
             response.Data
+
+
+
+        Log.d(
+            "LogonController",
+            """
+        HandleLoginResponse:
+        Success=${response.Success}
+        Message=${response.Message}
+        HasData=${authResponse != null}
+        HasToken=${!authResponse?.Token.isNullOrBlank()}
+        HasRefreshToken=${!authResponse?.RefreshToken.isNullOrBlank()}
+        Expiration=${authResponse?.Expiration}
+        """.trimIndent()
+        )
+
+
+
+
 
         if (
             !response.Success ||

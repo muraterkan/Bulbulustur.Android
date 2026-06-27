@@ -26,6 +26,15 @@ import com.bulbulustur.android.Application.Views.Logon.RegisterFinalScreen
 import com.bulbulustur.android.Application.Views.Logon.RegisterFinalState
 import com.bulbulustur.android.Application.Views.Logon.RegisterStartScreen
 import com.bulbulustur.android.businesslayer.Core.Enums.EApplicationLanguage
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
+import com.bulbulustur.android.Application.Authentication.GoogleCredentialResult
+import com.bulbulustur.android.Application.Authentication.GoogleCredentialService
+import com.bulbulustur.android.R
+import kotlinx.coroutines.launch
 
 fun NavGraphBuilder.logonGraph(
     navController: NavHostController,
@@ -39,44 +48,75 @@ fun NavGraphBuilder.logonGraph(
         val logonState by
         logonController.State.collectAsState()
 
+        val context =
+            LocalContext.current
+
+        val coroutineScope =
+            rememberCoroutineScope()
+
+        val googleCredentialService =
+            remember(
+                context
+            ) {
+                GoogleCredentialService(
+                    context =
+                        context
+                )
+            }
+
+        var isGoogleCredentialLoading by
+        remember {
+            mutableStateOf(
+                false
+            )
+        }
+
+        val googleWebClientId =
+            context.getString(
+                R.string.google_web_client_id
+            )
+
         val languageId =
-            when (sessionState.Language) {
-                EApplicationLanguage.Turkish -> 1
-                EApplicationLanguage.English -> 2
+            when (
+                sessionState.Language
+            ) {
+                EApplicationLanguage.Turkish ->
+                    1
+
+                EApplicationLanguage.English ->
+                    2
             }
 
         LaunchedEffect(
             logonState.IsLoginSuccessful
         ) {
-            if (!logonState.IsLoginSuccessful) {
+            if (
+                !logonState.IsLoginSuccessful
+            ) {
                 return@LaunchedEffect
             }
 
             logonController.ConsumeLoginSuccess()
 
-            val returnedToPreviousScreen =
-                navController.popBackStack()
-
-            if (!returnedToPreviousScreen) {
-                navController.navigate(
-                    RetailRoutes.Home
+            navController.navigate(
+                RetailRoutes.Home
+            ) {
+                popUpTo(
+                    LogonRoutes.Logon
                 ) {
-                    popUpTo(
-                        LogonRoutes.Logon
-                    ) {
-                        inclusive =
-                            true
-                    }
-
-                    launchSingleTop =
+                    inclusive =
                         true
                 }
+
+                launchSingleTop =
+                    true
             }
         }
 
         LoginScreen(
             isLoading =
-                logonState.IsLoading,
+                logonState.IsLoading ||
+                        isGoogleCredentialLoading,
             errorMessage =
                 logonState.ErrorMessage,
             onLogonClick = {
@@ -106,6 +146,53 @@ fun NavGraphBuilder.logonGraph(
                 )
             },
             onGoogleClick = {
+                if (
+                    !isGoogleCredentialLoading &&
+                    !logonState.IsLoading
+                ) {
+                    logonController.ClearError()
+
+                    isGoogleCredentialLoading =
+                        true
+
+                    coroutineScope.launch {
+                        try {
+                            val credentialResult =
+                                googleCredentialService.SignIn(
+                                    serverClientId =
+                                        googleWebClientId
+                                )
+
+                            when (
+                                credentialResult
+                            ) {
+                                is GoogleCredentialResult.Success -> {
+                                    logonController.GoogleLoginPost(
+                                        idToken =
+                                            credentialResult.IdToken,
+                                        languageId =
+                                            languageId
+                                    )
+                                }
+
+                                is GoogleCredentialResult.Failure -> {
+                                    logonController.SetGoogleLoginError(
+                                        message =
+                                            credentialResult.Message
+                                    )
+                                }
+
+                                GoogleCredentialResult.Cancelled -> {
+                                    // Kullanıcı Google hesap
+                                    // seçimini iptal etti.
+                                }
+                            }
+                        } finally {
+                            isGoogleCredentialLoading =
+                                false
+                        }
+                    }
+                }
             },
             onFacebookClick = {
             },

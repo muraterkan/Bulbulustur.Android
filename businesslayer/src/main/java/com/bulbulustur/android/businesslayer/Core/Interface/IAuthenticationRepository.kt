@@ -2,6 +2,7 @@ package com.bulbulustur.android.businesslayer.Core.Interface
 
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberDTO
 import com.bulbulustur.android.businesslayer.Core.Model.AuthResponse
+import com.bulbulustur.android.businesslayer.Core.Model.GoogleLoginRequest
 import com.bulbulustur.android.businesslayer.Core.Model.MemberAuthModel
 import com.bulbulustur.android.businesslayer.Core.Model.MemberForgotModel
 import com.bulbulustur.android.businesslayer.Core.Model.MemberSetPasswordModel
@@ -14,6 +15,10 @@ interface IAuthenticationRepository {
     suspend fun LoginAsync(
         languageId: Int,
         model: MemberAuthModel
+    ): Result<AuthResponse>
+
+    suspend fun GoogleLoginAsync(
+        model: GoogleLoginRequest
     ): Result<AuthResponse>
 
     suspend fun RefreshTokenAsync(

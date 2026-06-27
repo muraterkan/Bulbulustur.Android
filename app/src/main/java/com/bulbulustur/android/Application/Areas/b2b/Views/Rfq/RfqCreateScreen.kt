@@ -292,7 +292,7 @@ fun RfqCreateScreen(
                             description.value = it
                         },
                         label = "Ürün açıklaması",
-                        placeholder = "AradıĞınız ürünü ve beklentilerinizi detaylandırın."
+                        placeholder = "Aradığınız ürünü ve beklentilerinizi detaylandırın."
                     )
                 }
             }
@@ -344,14 +344,14 @@ private fun RfqCreateIntroCard(
                 )
 
                 Text(
-                    text = "DoĞru talebi yaz, daha kaliteli teklif al.",
+                    text = "Doğru talebi yaz, daha kaliteli teklif al.",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
                     text = buildString {
-                        append("Ürün, miktar, ticari şart ve teslimat hedefini netleştirerek tedarikçilerden daha saĞlıklı dönüş alın.")
+                        append("Ürün, miktar, ticari şart ve teslimat hedefini netleştirerek tedarikçilerden daha sağlıklı dönüş alın.")
                         if (productId != null) {
                             append(" Bu talep ürün üzerinden başlatıldı.")
                         }

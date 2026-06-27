@@ -29,6 +29,10 @@ import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHe
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.NotificationsActive
+import androidx.compose.material3.Icon
+import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 
 @Composable
 fun AlarmListScreen(
@@ -177,7 +181,7 @@ private fun AlarmEmptyState() {
             )
 
             Text(
-                text = "Ürün detay sayfalarından alarm oluşturarak takip etmek istediĞiniz ürünleri buradan yönetebilirsiniz.",
+                text = "Ürün detay sayfalarından alarm oluşturarak takip etmek istediğiniz ürünleri buradan yönetebilirsiniz.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -215,10 +219,11 @@ private fun AlarmIconBox() {
             ),
         contentAlignment = Alignment.Center
     ) {
-        Text(
-            text = "â°",
-            style = MaterialTheme.typography.headlineSmall,
-            color = BBColors.Yellow.Yellow800
+        Icon(
+            imageVector = Icons.Outlined.NotificationsActive,
+            contentDescription = "Alarm",
+            tint = MaterialTheme.colorScheme.onPrimaryContainer,
+            modifier = Modifier.size(BBIcon.SizeMd)
         )
     }
 }

@@ -379,7 +379,7 @@ private fun WholesaleProductDetailImageCounter(
                 horizontal = BBSpacing.Space3,
                 vertical = BBSpacing.Space1
             ),
-            text = "FotoĞraflar $currentPage/$totalPage",
+            text = "Fotoğraflar $currentPage/$totalPage",
             style = MaterialTheme.typography.labelSmall,
             color = BBColors.White,
             fontWeight = FontWeight.SemiBold
@@ -467,7 +467,7 @@ private fun WholesaleProductTitleCard(
                 )
 
                 Text(
-                    text = "MaĞaza Puanı",
+                    text = "Mağaza Puanı",
                     style = MaterialTheme.typography.bodySmall,
                     color = BBColors.TextMuted
                 )
@@ -850,7 +850,7 @@ private fun WholesaleSecureTradeCard() {
                 horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
             ) {
                 WholesaleTrustMetric("Güvenli Teklif", Icons.Outlined.RequestQuote, Modifier.weight(1f))
-                WholesaleTrustMetric("Numune DesteĞi", Icons.Outlined.Inventory2, Modifier.weight(1f))
+                WholesaleTrustMetric("Numune Desteği", Icons.Outlined.Inventory2, Modifier.weight(1f))
                 WholesaleTrustMetric("Firma Doğrulama", Icons.Outlined.Verified, Modifier.weight(1f))
             }
         }
@@ -2040,7 +2040,7 @@ private fun getWholesaleProductDetail(
         modelNo = "BKJ-90",
         soldCountText = "120+",
         packagingDescription = "Paket ve sevkiyat ölçüleri sipariş adetlerine göre firma tarafından teklif sürecinde netleştirilir.",
-        deliveryDescription = "Üretim miktarına, özelleştirme durumuna ve teslimat lokasyonuna göre tahmini termin süresi deĞişebilir. Kargo ücreti ve teslimat tarihi firma ile kararlaştırılır.",
+        deliveryDescription = "Üretim miktarına, özelleştirme durumuna ve teslimat lokasyonuna göre tahmini termin süresi değişebilir. Kargo ücreti ve teslimat tarihi firma ile kararlaştırılır.",
         images = listOf(
             WholesaleProductImage("Ürün 1", BBColors.Surface, BBColors.TextMuted, R.drawable.h3ff3b33d6a1447c898cee6e336867bach),
             WholesaleProductImage("Ürün 2", BBColors.Surface, BBColors.TextMuted, R.drawable.h3ff3b33d6a1447c898cee6e336867bachvar1),
@@ -2071,10 +2071,10 @@ private fun getWholesaleProductDetail(
             WholesaleProductProperty("Marka Adı", "Private Label"),
             WholesaleProductProperty("Menşei", "Türkiye"),
             WholesaleProductProperty("GTIP Kodu", "4202.92.91.00"),
-            WholesaleProductProperty("Birim AĞırlık", "0,42 Kg"),
+            WholesaleProductProperty("Birim Ağırlık", "0,42 Kg"),
             WholesaleProductProperty("Birim Ölçü", "31 × 14 × 42 Cm"),
             WholesaleProductProperty("Tedarik Süresi", "15-25 Gün"),
-            WholesaleProductProperty("Ödeme Åartı", "Teklif Sürecinde Netleşir")
+            WholesaleProductProperty("Ödeme Şartı", "Teklif Sürecinde Netleşir")
         ),
         deliverySteps = listOf(
             WholesaleDeliveryStep("100+", "15 Gün"),
@@ -2092,7 +2092,7 @@ private fun getWholesaleProductDetail(
             ),
             WholesaleCustomizationOption(
                 title = "OEM / ODM Üretim",
-                description = "Renk, ölçü, malzeme ve üretim standardı firma onayına baĞlı olarak özelleştirilebilir."
+                description = "Renk, ölçü, malzeme ve üretim standardı firma onayına bağlı olarak özelleştirilebilir."
             )
         ),
         relatedCategories = listOf(
@@ -2124,9 +2124,9 @@ private fun getWholesaleProductDetail(
             metrics = listOf(
                 WholesaleCompanyMetricItem("Zamanında Teslim", "96%"),
                 WholesaleCompanyMetricItem("Çevrim İçi Gelir", "₺10M+"),
-                WholesaleCompanyMetricItem("Yanıt Süresi", "â‰¤8s"),
+                WholesaleCompanyMetricItem("Yanıt Süresi", "≤8s"),
                 WholesaleCompanyMetricItem("Kuruluş Yılı", "2015"),
-                WholesaleCompanyMetricItem("Tesis Alanı", "22.100mÂ²"),
+                WholesaleCompanyMetricItem("Tesis Alanı", "22.100m²"),
                 WholesaleCompanyMetricItem("Ürün Sayısı", "120+")
             )
         )

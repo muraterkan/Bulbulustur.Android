@@ -180,7 +180,7 @@ private fun SubscriptionHeroCard(
                 )
 
                 Text(
-                    text = "Abonelik dönemi ve plan ücretiniz aşaĞıdaki bilgilerle kayıtlıdır.",
+                    text = "Abonelik dönemi ve plan ücretiniz aşağıdaki bilgilerle kayıtlıdır.",
                     style = MaterialTheme.typography.bodySmall,
                     color = BBColors.White.copy(alpha = 0.78f)
                 )
@@ -296,7 +296,7 @@ private fun SubscriptionPlanInfoCard(
                 )
 
                 Text(
-                    text = "AboneliĞinize ait temel plan, dönem ve ücret bilgileri.",
+                    text = "Aboneliğinize ait temel plan, dönem ve ücret bilgileri.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

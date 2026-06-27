@@ -127,8 +127,8 @@ private fun FavoriteIntroCard(
     }
 
     val description = when (selectedTab) {
-        FavoriteTab.Retail -> "Perakende Alışveriş için favoriye eklediĞiniz ürünleri burada görebilir, daha sonra incelemek veya sepete Eklemek için hızlıca geri dönebilirsiniz."
-        FavoriteTab.Wholesale -> "Toptan alışveriş için favoriye eklediĞiniz ürünleri burada görebilir, teklif ve tedarik süreçlerine hızlıca dönebilirsiniz."
+        FavoriteTab.Retail -> "Perakende Alışveriş için favoriye eklediğiniz ürünleri burada görebilir, daha sonra incelemek veya sepete Eklemek için hızlıca geri dönebilirsiniz."
+        FavoriteTab.Wholesale -> "Toptan alışveriş için favoriye eklediğiniz ürünleri burada görebilir, teklif ve tedarik süreçlerine hızlıca dönebilirsiniz."
     }
 
     Box(
@@ -540,7 +540,7 @@ private fun getDemoWholesaleFavoriteProducts(): List<FavoriteProductUiModel> {
             storeName = "Ortobella",
             priceText = "Teklif ile",
             metaTitle = "TOPTAN",
-            metaValue = "MOQ 100 adet Â· Teklif istenebilir",
+            metaValue = "MOQ 100 adet . Teklif istenebilir",
             mode = FavoriteMode.Wholesale
         ),
         FavoriteProductUiModel(

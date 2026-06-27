@@ -124,7 +124,7 @@ fun CheckoutPaymentScreen(
                 item {
                     CheckoutPaymentSectionTitle(
                         title = "Ödeme yöntemi",
-                        description = "Sipariş için kullanmak istediĞin ödeme tipini seç."
+                        description = "Sipariş için kullanmak istediğin ödeme tipini seç."
                     )
                 }
 
@@ -206,7 +206,7 @@ private fun CheckoutPaymentTopBar(
             contentColor = MaterialTheme.colorScheme.onSurfaceVariant
         ) {
             Text(
-                text = "â€¹",
+                text = "‹",
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -558,7 +558,7 @@ private fun CheckoutNewCardForm(
                     Spacer(modifier = Modifier.height(3.dp))
 
                     Text(
-                        text = "Kart saklama altyapısı aktif olduĞunda kullanılacak.",
+                        text = "Kart saklama altyapısı aktif olduğunda kullanılacak.",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -619,7 +619,7 @@ private fun CheckoutSecurePaymentInfoCard() {
                 contentColor = MaterialTheme.colorScheme.onSecondaryContainer
             ) {
                 Text(
-                    text = "âœ“",
+                    text = "✓",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSecondaryContainer
@@ -641,7 +641,7 @@ private fun CheckoutSecurePaymentInfoCard() {
                 Spacer(modifier = Modifier.height(5.dp))
 
                 Text(
-                    text = "Ödeme adımında 3D Secure ve banka doğrulama süreçleri ödeme saĞlayıcısına göre çalışır. Sipariş onayı bir sonraki adımda gösterilir.",
+                    text = "Ödeme adımında 3D Secure ve banka doğrulama süreçleri ödeme sağlayıcısına göre çalışır. Sipariş onayı bir sonraki adımda gösterilir.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

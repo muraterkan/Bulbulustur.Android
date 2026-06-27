@@ -113,7 +113,7 @@ fun AccountSecurityScreen(
             item {
                 AccountSecuritySection(
                     title = "Giriş ve Güvenlik",
-                    description = "E-posta, şifre ve giriş güvenliĞi ayarları.",
+                    description = "E-posta, şifre ve giriş güvenliği ayarları.",
                     icon = Icons.Outlined.Security
                 ) {
                     AccountSecurityRow(
@@ -212,13 +212,13 @@ private fun AccountSecurityStrengthCard() {
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                 ) {
                     Text(
-                        text = "Hesap GüvenliĞi",
+                        text = "Hesap Güvenliği",
                         style = BbTypography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurface
                     )
 
                     Text(
-                        text = "Telefon doğrulaması tamamlandıĞında güvenlik seviyeniz artar.",
+                        text = "Telefon doğrulaması tamamlandığında güvenlik seviyeniz artar.",
                         style = BbTypography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

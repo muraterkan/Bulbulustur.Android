@@ -155,7 +155,7 @@ private fun PhoneVerifyIntroCard(
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Telefon numaranıza gönderilen doğrulama kodunu girerek $phone numarasını hesabınıza doğrulanmış olarak baĞlayabilirsiniz.",
+            text = "Telefon numaranıza gönderilen doğrulama kodunu girerek $phone numarasını hesabınıza doğrulanmış olarak bağlayabilirsiniz.",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

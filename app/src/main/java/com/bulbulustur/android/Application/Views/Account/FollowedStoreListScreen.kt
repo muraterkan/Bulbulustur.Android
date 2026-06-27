@@ -128,7 +128,7 @@ private fun FollowedStoreCard(
                 Spacer(modifier = Modifier.height(BBSpacing.Space1))
 
                 BbButton(
-                    text = "MaĞaza Profilini Görüntüle",
+                    text = "Mağaza Profilini Görüntüle",
                     onClick = {
                         onStoreClick(store.storeId)
                     },
@@ -226,7 +226,7 @@ private fun FollowedStoreEmptyState() {
             )
 
             Text(
-                text = "Henüz takip ettiĞiniz maĞaza bulunmuyor. MaĞaza profillerini takip ederek burada hızlı erişim listesi oluşturabilirsiniz.",
+                text = "Henüz takip ettiğiniz mağaza bulunmuyor. Mağaza profillerini takip ederek burada hızlı erişim listesi oluşturabilirsiniz.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -260,7 +260,7 @@ private fun getDemoFollowedStores(): List<FollowedStoreUiModel> {
             followedStoreId = 1,
             storeId = 501,
             storeName = "Base & Quality Store",
-            description = "Takip ettiĞiniz maĞaza",
+            description = "Takip ettiğiniz mağaza",
             logoText = "B&Q",
             logoBackgroundColor = BBColors.Orange.Orange300,
             logoTextColor = BBColors.White
@@ -269,7 +269,7 @@ private fun getDemoFollowedStores(): List<FollowedStoreUiModel> {
             followedStoreId = 2,
             storeId = 502,
             storeName = "Ortobella Comfort",
-            description = "Takip ettiĞiniz maĞaza",
+            description = "Takip ettiğiniz mağaza",
             logoText = "CİTRİX",
             logoBackgroundColor = BBColors.Green.Green700,
             logoTextColor = BBColors.White
@@ -278,7 +278,7 @@ private fun getDemoFollowedStores(): List<FollowedStoreUiModel> {
             followedStoreId = 3,
             storeId = 503,
             storeName = "Ortobella Comfort",
-            description = "Takip ettiĞiniz maĞaza",
+            description = "Takip ettiğiniz mağaza",
             logoText = "CİTRİX",
             logoBackgroundColor = BBColors.Green.Green700,
             logoTextColor = BBColors.White

@@ -256,14 +256,14 @@ private fun ProductQuestionAskCard(
                 )
 
                 Text(
-                    text = "${product.storeName} maĞazasına ürün hakkında soru gönderebilirsin.",
+                    text = "${product.storeName} mağazasına ürün hakkında soru gönderebilirsin.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
             Text(
-                text = "â€º",
+                text = "›",
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -638,7 +638,7 @@ private fun getRetailProductQuestionScreenData(
             id = productId,
             name = "Kadın klasik sneaker ayakkabı",
             storeName = "Ortobella Store",
-            variantText = "Beyaz Â· 38 numara",
+            variantText = "Beyaz . 38 numara",
             imageText = "P1"
         ),
         summary = RetailProductQuestionSummary(
@@ -661,7 +661,7 @@ private fun getRetailProductQuestionScreenData(
                 customerInitials = "AK",
                 dateText = "2 gün önce",
                 question = "Kalıbı dar mı? Normalde 38 giyiyorum, 38 olur mu?",
-                answer = "Merhaba, ürün standart kalıptır. AyaĞınız taraklı deĞilse kendi numaranızı tercih edebilirsiniz.",
+                answer = "Merhaba, ürün standart kalıptır. Ayağınız taraklı değilse kendi numaranızı tercih edebilirsiniz.",
                 answerDateText = "1 gün önce yanıtlandı",
                 storeName = "Ortobella Store",
                 statusText = "Cevaplı",

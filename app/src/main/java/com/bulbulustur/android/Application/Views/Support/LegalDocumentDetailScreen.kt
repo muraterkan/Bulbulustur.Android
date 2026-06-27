@@ -411,7 +411,7 @@ private fun getLegalPrivacySections(): List<LegalDocumentSection> {
             body = "Bu bölümde Bulbulustur üzerinde kullanılan kişisel veriler, işlem süreçleri ve kullanıcı sorumlulukları hakkında özet bilgi yer alacak."
         ),
         LegalDocumentSection(
-            title = "TopladıĞımız kişisel veriler",
+            title = "Topladığımız kişisel veriler",
             body = "Hesap, iletişim, sipariş, ödeme, teslimat ve platform kullanımına ilişkin veriler gerçek içerik API bağlantısından sonra gösterilecek."
         ),
         LegalDocumentSection(
@@ -433,7 +433,7 @@ private fun getLegalKvkkSections(): List<LegalDocumentSection> {
         ),
         LegalDocumentSection(
             title = "İşlenen veri kategorileri",
-            body = "Kimlik, iletişim, işlem güvenliĞi, sipariş ve müşteri işlem verileri gibi kategoriler burada listelenecek."
+            body = "Kimlik, iletişim, işlem güvenliği, sipariş ve müşteri işlem verileri gibi kategoriler burada listelenecek."
         ),
         LegalDocumentSection(
             title = "İşleme amaçları",
@@ -453,7 +453,7 @@ private fun getLegalTermsSections(): List<LegalDocumentSection> {
             body = "Kullanıcıların Bulbulustur uygulamasını kullanırken uyması gereken temel kurallar burada yer alacak."
         ),
         LegalDocumentSection(
-            title = "Üyelik ve hesap güvenliĞi",
+            title = "Üyelik ve hesap güvenliği",
             body = "Hesap bilgilerinin korunması, yetkisiz kullanım ve kullanıcı sorumlulukları bu bölümde açıklanacak."
         ),
         LegalDocumentSection(
@@ -461,7 +461,7 @@ private fun getLegalTermsSections(): List<LegalDocumentSection> {
             body = "Alıcı, satıcı, firma ve platform arasındaki temel işlem prensipleri burada gösterilecek."
         ),
         LegalDocumentSection(
-            title = "DeĞişiklikler",
+            title = "Değişiklikler",
             body = "Kullanım koşullarında yapılabilecek güncellemeler ve kullanıcı bilgilendirme süreçleri açıklanacak."
         )
     )

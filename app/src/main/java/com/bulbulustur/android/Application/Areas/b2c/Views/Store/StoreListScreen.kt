@@ -229,7 +229,7 @@ private fun StoreListHeroCard(
         Column(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
-            StoreListStatusPill(text = "MaĞaza Rehberi")
+            StoreListStatusPill(text = "Mağaza Rehberi")
 
             Text(
                 text = "Bulbulustur Mağazalarını Keşfet",
@@ -239,7 +239,7 @@ private fun StoreListHeroCard(
             )
 
             Text(
-                text = "Doğrulanmış satıcıları, favori mağazaları ve maĞaza vitrinlerindeki ürünleri tek yerden inceleyin.",
+                text = "Doğrulanmış satıcıları, favori mağazaları ve mağaza vitrinlerindeki ürünleri tek yerden inceleyin.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -257,14 +257,14 @@ private fun StoreListHeroCard(
                 StoreListHeroMiniCard(
                     modifier = Modifier.weight(1f),
                     title = "Güvenilir Satıcılar",
-                    subtitle = "Doğrulanmış maĞaza vitrinlerini inceleyin.",
+                    subtitle = "Doğrulanmış mağaza vitrinlerini inceleyin.",
                     icon = Icons.Outlined.Verified
                 )
 
                 StoreListHeroMiniCard(
                     modifier = Modifier.weight(1f),
                     title = "Favori Mağazalar",
-                    subtitle = "BeĞendiĞiniz mağazaları takip edin.",
+                    subtitle = "Beğendiğiniz mağazaları takip edin.",
                     icon = Icons.Outlined.FavoriteBorder
                 )
             }
@@ -362,7 +362,7 @@ private fun StoreListSearchCard(
             },
             placeholder = {
                 Text(
-                    text = "MaĞaza, kategori veya ürün ara",
+                    text = "Mağaza, kategori veya ürün ara",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -445,7 +445,7 @@ private fun StoreListResultHeader(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
     ) {
         Text(
-            text = "MaĞaza Listesi",
+            text = "Mağaza Listesi",
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onSurface
@@ -453,9 +453,9 @@ private fun StoreListResultHeader(
 
         Text(
             text = if (selectedFilter == "Tümü") {
-                "$storeCount maĞaza listeleniyor"
+                "$storeCount mağaza listeleniyor"
             } else {
-                "$selectedFilter filtresinde $storeCount maĞaza"
+                "$selectedFilter filtresinde $storeCount mağaza"
             },
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -550,7 +550,7 @@ private fun StoreListCard(
             }
 
             StoreListPrimaryButton(
-                text = "MaĞazayı İncele",
+                text = "Mağazayı İncele",
                 icon = Icons.Outlined.Storefront,
                 modifier = Modifier.fillMaxWidth(),
                 onClick = onClick
@@ -587,7 +587,7 @@ private fun StoreListEmptyState(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "âˆ…",
+                        text = "∅",
                         style = MaterialTheme.typography.headlineMedium,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.primary
@@ -595,17 +595,17 @@ private fun StoreListEmptyState(
                 }
             }
 
-            StoreListStatusPill(text = "MaĞaza Bulunamadı")
+            StoreListStatusPill(text = "Mağaza Bulunamadı")
 
             Text(
-                text = "Listelenecek MaĞaza Bulunmuyor",
+                text = "Listelenecek Mağaza Bulunmuyor",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
-                text = "Bu filtrede maĞaza bulunamadı. Satıcı olmak istiyorsanız başvuru süreci web panelinde tamamlanır.",
+                text = "Bu filtrede mağaza bulunamadı. Satıcı olmak istiyorsanız başvuru süreci web panelinde tamamlanır.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -665,7 +665,7 @@ private fun StoreListSellerInfoBanner(
                 )
 
                 Text(
-                    text = "Başvuru ve maĞaza yönetimi web paneli üzerinden tamamlanır.",
+                    text = "Başvuru ve mağaza yönetimi web paneli üzerinden tamamlanır.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -856,11 +856,11 @@ private fun getStoreListItems(): List<StoreListItem> {
         StoreListItem(
             id = 1,
             name = "Ortobella Comfort",
-            description = "Ayakkabı ve günlük konfor ürünleri maĞazası.",
+            description = "Ayakkabı ve günlük konfor ürünleri mağazası.",
             logoText = "OC",
             categoryName = "Ayakkabı",
             productCount = 48,
-            ratingText = "â˜… 4.8",
+            ratingText = "★ 4.8",
             isVerified = true
         ),
         StoreListItem(
@@ -870,7 +870,7 @@ private fun getStoreListItems(): List<StoreListItem> {
             logoText = "MN",
             categoryName = "Giyim",
             productCount = 124,
-            ratingText = "â˜… 4.6",
+            ratingText = "★ 4.6",
             isVerified = true
         ),
         StoreListItem(
@@ -880,7 +880,7 @@ private fun getStoreListItems(): List<StoreListItem> {
             logoText = "UT",
             categoryName = "Aksesuar",
             productCount = 72,
-            ratingText = "â˜… 4.5",
+            ratingText = "★ 4.5",
             isVerified = false
         ),
         StoreListItem(
@@ -890,7 +890,7 @@ private fun getStoreListItems(): List<StoreListItem> {
             logoText = "CL",
             categoryName = "Ev & Yaşam",
             productCount = 96,
-            ratingText = "â˜… 4.7",
+            ratingText = "★ 4.7",
             isVerified = true
         )
     )

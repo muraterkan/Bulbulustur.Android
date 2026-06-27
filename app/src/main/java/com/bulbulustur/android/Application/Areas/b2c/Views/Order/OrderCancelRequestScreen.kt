@@ -54,10 +54,10 @@ fun OrderCancelRequestScreen(
     val reasons = remember {
         listOf(
             "Yanlış ürün sipariş verdim",
-            "Teslimat süresi bana uygun deĞil",
+            "Teslimat süresi bana uygun değil",
             "Adres veya sipariş bilgisi hatalı",
             "Üründen vazgeçtim",
-            "DiĞer"
+            "Diğer"
         )
     }
 
@@ -194,7 +194,7 @@ private fun OrderCancelReasonCard(
         ) {
             OrderCancelSectionTitle(
                 title = "İptal Nedeni",
-                subtitle = "Bu ürünü neden iptal etmek istediĞinizi seçin."
+                subtitle = "Bu ürünü neden iptal etmek istediğinizi seçin."
             )
 
             Column(

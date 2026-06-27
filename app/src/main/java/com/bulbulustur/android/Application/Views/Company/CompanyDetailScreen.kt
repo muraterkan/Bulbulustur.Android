@@ -967,7 +967,7 @@ private fun getCompanyDetail(companyId: Int): CompanyDetail {
     return CompanyDetail(
         companyId = companyId,
         name = "Bulbulustur İnternet Teknolojileri ve Tic. A.Ş.",
-        shortDescription = "Yazılım, dijital dönüşüm ve ticaret altyapıları alanında çözüm saĞlayan firma.",
+        shortDescription = "Yazılım, dijital dönüşüm ve ticaret altyapıları alanında çözüm sağlayan firma.",
         about = "Firma; üretim, tedarik, satış ve e-ticaret operasyonlarını dijital altyapılarla güçlendiren çözümler geliştirir. Mobil uygulamada bu alan ileride gerçek firma açıklaması, yetenekler ve ticari profil bilgileriyle beslenecek.",
         whyUs = "Firma profili, ürünleri, belgeleri ve iletişim bilgileri tek ekranda sunularak alıcının daha hızlı karar vermesine yardımcı olur.",
         country = "Türkiye",
@@ -1039,7 +1039,7 @@ private fun getCompanyCertificates(): List<CompanyCertificate> {
         CompanyCertificate(
             certificateId = 3,
             name = "ISO 45001",
-            description = "İş saĞlıĞı ve güvenliĞi yönetim sistemi sertifikası."
+            description = "İş sağlığı ve güvenliği yönetim sistemi sertifikası."
         )
     )
 }

@@ -548,7 +548,7 @@ private fun CompanyListBottomCallout(
                 )
             ) {
                 Text(
-                    text = "AradıĞınız firmayı bulamadınız mı?",
+                    text = "Aradığınız firmayı bulamadınız mı?",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
@@ -631,7 +631,7 @@ private fun getCompanyListItems(): List<CompanyListItem> {
         CompanyListItem(
             CompanyId = 1,
             Name = "Bulbulustur İnternet Teknolojileri ve Tic. A.Ş.",
-            Description = "Yazılım, dijital dönüşüm ve ticaret altyapıları alanında çözüm saĞlayan firma.",
+            Description = "Yazılım, dijital dönüşüm ve ticaret altyapıları alanında çözüm sağlayan firma.",
             Country = "Türkiye",
             City = "İstanbul",
             Rating = "4,2",
@@ -661,7 +661,7 @@ private fun getCompanyListItems(): List<CompanyListItem> {
         CompanyListItem(
             CompanyId = 3,
             Name = "Marmara Endüstriyel Tedarik",
-            Description = "Sanayi, depo, bakım ve üretim hattı sarf malzemeleri saĞlar.",
+            Description = "Sanayi, depo, bakım ve üretim hattı sarf malzemeleri sağlar.",
             Country = "Türkiye",
             City = "Bursa",
             Rating = "4,1",

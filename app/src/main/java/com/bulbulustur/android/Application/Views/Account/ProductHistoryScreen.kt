@@ -215,7 +215,7 @@ private fun ProductHistoryIntroCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             Text(
-                text = "Daha Önce BaktıĞınız Ürünler Burada",
+                text = "Daha Önce Baktığınız Ürünler Burada",
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -557,7 +557,7 @@ private fun getProductHistoryItems(): List<ProductHistoryItem> {
             id = 1,
             productId = 1,
             productName = "Ortobella Confort Kadın Hakiki Deri Ayakkabı",
-            description = "Daha önce görüntülediĞin ürün. Ürünü tekrar inceleyebilirsin.",
+            description = "Daha önce görüntülediğin ürün. Ürünü tekrar inceleyebilirsin.",
             categoryName = "Ayakkabı",
             viewedDateText = "Daha Önce Baktın",
             historyTypeText = "Geçmiş",
@@ -568,7 +568,7 @@ private fun getProductHistoryItems(): List<ProductHistoryItem> {
             id = 2,
             productId = 2,
             productName = "Ortobella Comfort Hakiki Deri Topuk Dikeni Terlik M13",
-            description = "Daha önce görüntülediĞin ürün. Ürünü tekrar inceleyebilirsin.",
+            description = "Daha önce görüntülediğin ürün. Ürünü tekrar inceleyebilirsin.",
             categoryName = "Ayakkabı",
             viewedDateText = "Dün Baktın",
             historyTypeText = "Geçmiş",
@@ -579,7 +579,7 @@ private fun getProductHistoryItems(): List<ProductHistoryItem> {
             id = 3,
             productId = 3,
             productName = "Oversize Pamuklu Basic Tişört",
-            description = "Daha önce görüntülediĞin ürün. Ürünü tekrar inceleyebilirsin.",
+            description = "Daha önce görüntülediğin ürün. Ürünü tekrar inceleyebilirsin.",
             categoryName = "Giyim",
             viewedDateText = "3 Gün Önce Baktın",
             historyTypeText = "Geçmiş",
@@ -590,7 +590,7 @@ private fun getProductHistoryItems(): List<ProductHistoryItem> {
             id = 4,
             productId = 4,
             productName = "Günlük Kullanım Omuz Çantası",
-            description = "Daha önce görüntülediĞin ürün. Ürünü tekrar inceleyebilirsin.",
+            description = "Daha önce görüntülediğin ürün. Ürünü tekrar inceleyebilirsin.",
             categoryName = "Çanta",
             viewedDateText = "Bu Hafta Baktın",
             historyTypeText = "Geçmiş",

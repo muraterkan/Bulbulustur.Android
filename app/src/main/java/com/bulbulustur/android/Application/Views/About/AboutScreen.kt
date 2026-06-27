@@ -194,7 +194,7 @@ private fun AboutEcosystemCard() {
                 )
 
                 AboutTrustRow(
-                    title = "Tedarikçi ve MaĞaza AĞı",
+                    title = "Tedarikçi ve Mağaza Ağı",
                     icon = Icons.Outlined.Storefront
                 )
 
@@ -291,7 +291,7 @@ private fun AboutCapabilityGrid() {
 
             AboutCapabilityCard(
                 title = "Perakende",
-                description = "MaĞaza, ürün ve sipariş deneyimi.",
+                description = "Mağaza, ürün ve sipariş deneyimi.",
                 icon = Icons.Outlined.Storefront,
                 modifier = Modifier.weight(1f)
             )
@@ -429,7 +429,7 @@ private fun AboutActionArea(
 
         AboutActionCard(
             title = "İletişim",
-            description = "DoĞru ekibe hızlıca ulaş.",
+            description = "Doğru ekibe hızlıca ulaş.",
             icon = Icons.Outlined.ChevronRight,
             onClick = onContactClick
         )
@@ -503,17 +503,17 @@ private fun aboutStoryItems(): List<AboutStoryItem> {
     return listOf(
         AboutStoryItem(
             title = "Bizim Hikayemiz",
-            description = "Bulbulustur, üretici, tedarikçi, maĞaza ve alıcıları aynı dijital omurgada buluşturmak için geliştirilen bir ticaret altyapısıdır.",
+            description = "Bulbulustur, üretici, tedarikçi, mağaza ve alıcıları aynı dijital omurgada buluşturmak için geliştirilen bir ticaret altyapısıdır.",
             icon = Icons.Outlined.HistoryEdu
         ),
         AboutStoryItem(
             title = "Neler Yapıyoruz?",
-            description = "Toptan tedarik, perakende satış, RFQ, maĞaza, marka, ödeme, kargo ve dijital site altyapılarını tek ekosistemde birleştiriyoruz.",
+            description = "Toptan tedarik, perakende satış, RFQ, mağaza, marka, ödeme, kargo ve dijital site altyapılarını tek ekosistemde birleştiriyoruz.",
             icon = Icons.Outlined.Lightbulb
         ),
         AboutStoryItem(
             title = "Neye İnanıyoruz?",
-            description = "Ticaretin daha görünür, izlenebilir, erişilebilir ve dijital altyapılarla daha güçlü hale gelmesi gerektiĞine inanıyoruz.",
+            description = "Ticaretin daha görünür, izlenebilir, erişilebilir ve dijital altyapılarla daha güçlü hale gelmesi gerektiğine inanıyoruz.",
             icon = Icons.Outlined.AutoAwesome
         ),
         AboutStoryItem(

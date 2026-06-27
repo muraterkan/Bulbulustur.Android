@@ -548,7 +548,7 @@ private fun OrderEmptyState() {
             )
 
             Text(
-                text = "Geçmiş veya devam eden siparişleriniz oluştuĞunda burada listelenir.",
+                text = "Geçmiş veya devam eden siparişleriniz oluştuğunda burada listelenir.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

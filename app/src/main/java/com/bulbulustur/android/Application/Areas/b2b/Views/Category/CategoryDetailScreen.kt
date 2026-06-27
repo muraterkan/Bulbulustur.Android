@@ -514,7 +514,7 @@ private fun getWholesaleSubCategories(): List<WholesaleSubCategoryItem> {
         WholesaleSubCategoryItem(
             categoryId = 102,
             name = "Poşet ve Çanta",
-            description = "MaĞaza, kargo ve üretim süreçleri için poşet çözümleri.",
+            description = "Mağaza, kargo ve üretim süreçleri için poşet çözümleri.",
             productCount = 28,
             icon = Icons.Outlined.Business
         ),
@@ -528,7 +528,7 @@ private fun getWholesaleSubCategories(): List<WholesaleSubCategoryItem> {
         WholesaleSubCategoryItem(
             categoryId = 104,
             name = "Streç ve Koruyucu Ambalaj",
-            description = "Paletleme, sarma ve taşıma güvenliĞi için ürünler.",
+            description = "Paletleme, sarma ve taşıma güvenliği için ürünler.",
             productCount = 43,
             icon = Icons.Outlined.Factory
         )

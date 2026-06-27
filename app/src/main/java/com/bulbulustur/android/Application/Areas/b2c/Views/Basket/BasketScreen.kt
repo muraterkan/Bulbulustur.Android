@@ -291,7 +291,7 @@ private fun BasketHeaderCard(
 
                 Text(
                     text = if (lineCount > 0) {
-                        "$storeCount maĞazadan gönderim yapılacak"
+                        "$storeCount mağazadan gönderim yapılacak"
                     } else {
                         "Ürün Keşfine dönüp sepetini doldurabilirsin."
                     },
@@ -390,7 +390,7 @@ private fun BasketFavoriteShortcutCard(
                 )
 
                 Text(
-                    text = "Daha önce beĞendiĞin ürünleri hızlıca sepete aktar.",
+                    text = "Daha önce beğendiğin ürünleri hızlıca sepete aktar.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -1223,12 +1223,12 @@ private fun getBasketLineItems(): List<BasketLineItem> {
             storeName = "Ortobella Store",
             storeLogoText = "OS",
             productName = "Kadın klasik sneaker ayakkabı",
-            variantText = "Beyaz Â· 38 numara",
+            variantText = "Beyaz . 38 numara",
             priceText = "₺899,90",
             priceValue = 899.90,
             discountValue = 80.0,
             quantity = 1,
-            cargoText = "Yurtiçi Kargo Â· 1-3 iş günü",
+            cargoText = "Yurtiçi Kargo . 1-3 iş günü",
             cargoPriceValue = 49.90,
             imageText = "P1"
         ),
@@ -1239,12 +1239,12 @@ private fun getBasketLineItems(): List<BasketLineItem> {
             storeName = "Ortobella Store",
             storeLogoText = "OS",
             productName = "Rahat taban günlük ayakkabı",
-            variantText = "Siyah Â· 39 numara",
+            variantText = "Siyah . 39 numara",
             priceText = "₺749,90",
             priceValue = 749.90,
             discountValue = 40.0,
             quantity = 1,
-            cargoText = "Yurtiçi Kargo Â· 1-3 iş günü",
+            cargoText = "Yurtiçi Kargo . 1-3 iş günü",
             cargoPriceValue = 49.90,
             imageText = "P2"
         ),
@@ -1255,12 +1255,12 @@ private fun getBasketLineItems(): List<BasketLineItem> {
             storeName = "Moda Nova",
             storeLogoText = "MN",
             productName = "Oversize pamuklu basic tişört",
-            variantText = "Lacivert Â· M beden",
+            variantText = "Lacivert . M beden",
             priceText = "₺349,90",
             priceValue = 349.90,
             discountValue = 0.0,
             quantity = 2,
-            cargoText = "Yurtiçi Kargo Â· 2-4 iş günü",
+            cargoText = "Yurtiçi Kargo . 2-4 iş günü",
             cargoPriceValue = 39.90,
             imageText = "P3"
         )

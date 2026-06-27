@@ -165,7 +165,7 @@ private fun BankAccountCreateIntroCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Para aktarımı ve ödeme sürecinde kullanılacak banka hesabını güvenli şekilde kaydet. GirdiĞin IBAN numarası vadeli bir hesaba ait olmamalıdır.",
+            text = "Para aktarımı ve ödeme sürecinde kullanılacak banka hesabını güvenli şekilde kaydet. Girdiğin IBAN numarası vadeli bir hesaba ait olmamalıdır.",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -232,7 +232,7 @@ private fun BankAccountFinancialInfoCard() {
             )
 
             Text(
-                text = "Banka hesabı bilgileri ödeme ve aktarım süreçlerinde kullanılacaĞı için doĞru girilmelidir.",
+                text = "Banka hesabı bilgileri ödeme ve aktarım süreçlerinde kullanılacağı için doğru girilmelidir.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -262,10 +262,10 @@ private fun getIbanLengthMessage(
     }
 
     if (formState.hasExpectedLength) {
-        return "IBAN uzunluĞu uygun görünüyor."
+        return "IBAN uzunluğu uygun görünüyor."
     }
 
-    return "IBAN uzunluĞu kontrol edilmeli. Türkiye IBAN numarası 26 karakter olmalıdır."
+    return "IBAN uzunluğu kontrol edilmeli. Türkiye IBAN numarası 26 karakter olmalıdır."
 }
 
 private fun getBankAccountCreateValidationMessage(

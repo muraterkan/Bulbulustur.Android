@@ -108,7 +108,7 @@ fun DeactivateAccountScreen(
                 ) {
                     DeactivateSectionHeader(
                         title = "Devre Dışı Bırakma Nedeni",
-                        description = "Hesabınızı neden devre dışı bırakmak istediĞinizi kısaca yazın."
+                        description = "Hesabınızı neden devre dışı bırakmak istediğinizi kısaca yazın."
                     )
 
                     OutlinedTextField(

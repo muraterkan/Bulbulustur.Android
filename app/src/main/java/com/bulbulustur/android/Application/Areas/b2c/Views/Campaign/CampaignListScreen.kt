@@ -153,7 +153,7 @@ private fun CampaignListTopBar(
             contentColor = MaterialTheme.colorScheme.onSurfaceVariant
         ) {
             Text(
-                text = "â€¹",
+                text = "‹",
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -419,7 +419,7 @@ private fun CampaignListCard(
                 }
 
                 Text(
-                    text = "â€º",
+                    text = "›",
                     style = MaterialTheme.typography.headlineSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -502,7 +502,7 @@ private fun getRetailCampaignListItems(): List<RetailCampaignListItem> {
         RetailCampaignListItem(
             id = 1,
             title = "Sezonun öne çıkanları",
-            description = "Moda kategorisinde yeni sezon ürünleri ve seçili maĞaza Vitrinleri.",
+            description = "Moda kategorisinde yeni sezon ürünleri ve seçili mağaza Vitrinleri.",
             badgeText = "Yeni sezon",
             iconText = "MO",
             categoryName = "Moda",

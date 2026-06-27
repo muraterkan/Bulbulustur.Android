@@ -130,7 +130,7 @@ private fun RfqOfferSummaryCard(
                 )
 
                 Text(
-                    text = "RFQ No: ${offer.buyerRequestId} Â· Teklif No: ${offer.sendedOfferId}",
+                    text = "RFQ No: ${offer.buyerRequestId} . Teklif No: ${offer.sendedOfferId}",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -166,7 +166,7 @@ private fun RfqOfferInfoCard(
 
             RfqOfferInfoRow(
                 icon = Icons.Outlined.RequestQuote,
-                title = "BaĞlı RFQ",
+                title = "Bağlı RFQ",
                 value = "RFQ-${offer.buyerRequestId}"
             )
         }
@@ -325,7 +325,7 @@ private fun getDemoRfqOfferDetail(
         sendedOfferId = sendedOfferId,
         sellerName = "Anadolu Endüstriyel Tedarik",
         insertedDate = "14 Mayıs 2026",
-        offerDetail = "BelirttiĞiniz ambalaj ürünleri için 10.000 adet üretim kapasitemiz bulunmaktadır. Teslim süresi yaklaşık 12 iş günüdür. Ödeme ve sevkiyat koşulları görüşmeye açıktır."
+        offerDetail = "Belirttiğiniz ambalaj ürünleri için 10.000 adet üretim kapasitemiz bulunmaktadır. Teslim süresi yaklaşık 12 iş günüdür. Ödeme ve sevkiyat koşulları görüşmeye açıktır."
     )
 }
 

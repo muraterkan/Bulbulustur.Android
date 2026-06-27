@@ -214,7 +214,7 @@ private fun WalletTransactionCard() {
                     )
 
                     Text(
-                        text = "Bakiye, iade ve ödeme hareketleriniz oluştuĞunda burada listelenir.",
+                        text = "Bakiye, iade ve ödeme hareketleriniz oluştuğunda burada listelenir.",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -278,7 +278,7 @@ private fun WalletBankAccountCard(
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                 ) {
                     Text(
-                        text = "BaĞlı Banka Hesapları",
+                        text = "Bağlı Banka Hesapları",
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )

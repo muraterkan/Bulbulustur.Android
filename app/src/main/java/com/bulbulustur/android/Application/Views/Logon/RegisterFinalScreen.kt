@@ -311,7 +311,7 @@ enum class RegisterFinalState(
     WaitingApproval(
         badgeText = "Kontrol Bekleniyor",
         title = "Kurumsal Hesap İnceleniyor",
-        description = "Firma hesabınız kontrol sürecine alındı. OnaylandıĞında giriş yapabilirsiniz."
+        description = "Firma hesabınız kontrol sürecine alındı. Onaylandığında giriş yapabilirsiniz."
     )
 }
 

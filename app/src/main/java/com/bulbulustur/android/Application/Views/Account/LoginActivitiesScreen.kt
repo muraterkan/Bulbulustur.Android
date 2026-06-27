@@ -160,7 +160,7 @@ private fun LoginActivitiesEmptyState() {
             )
 
             Text(
-                text = "Hesabınıza ait giriş hareketleri oluştuĞunda burada listelenir.",
+                text = "Hesabınıza ait giriş hareketleri oluştuğunda burada listelenir.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

@@ -248,14 +248,14 @@ private fun RequestDetailProductCard(
                     )
 
                     Text(
-                        text = "Satıcı maĞaza bilgileri",
+                        text = "Satıcı mağaza bilgileri",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
                 BbButton(
-                    text = "MaĞaza",
+                    text = "Mağaza",
                     onClick = onStoreClick,
                     variant = BbButtonVariant.Light,
                     size = BbButtonSize.Small
@@ -318,8 +318,8 @@ private fun RequestDetailPhotosCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
             RequestDetailSectionTitle(
-                title = "FotoĞraflar",
-                subtitle = "Talep sırasında eklenen ürün fotoĞrafları"
+                title = "Fotoğraflar",
+                subtitle = "Talep sırasında eklenen ürün fotoğrafları"
             )
 
             Row(
@@ -379,7 +379,7 @@ private fun RequestDetailActionsCard(
         ) {
             RequestDetailSectionTitle(
                 title = "İşlemler",
-                subtitle = "Talebe baĞlı hızlı aksiyonlar"
+                subtitle = "Talebe bağlı hızlı aksiyonlar"
             )
 
             BbButton(
@@ -399,7 +399,7 @@ private fun RequestDetailActionsCard(
             )
 
             BbButton(
-                text = "MaĞazaya Git",
+                text = "Mağazaya Git",
                 onClick = onStoreClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Light,
@@ -602,7 +602,7 @@ private fun getDemoRequestDetail(
         reason = "Ürün Defolu / Hasarlı Geldi",
         productName = "Ortobella Comfort Genç Garson Bot 8028",
         productPriceText = "1.250 Amerikan Doları",
-        description = "Ürünün saĞ tarafında dikiş hatası mevcut, deĞişim veya iade talep ediyorum.",
+        description = "Ürünün sağ tarafında dikiş hatası mevcut, değişim veya iade talep ediyorum.",
         photoCount = 3,
         steps = listOf(
             RequestStepUiModel(
@@ -613,8 +613,8 @@ private fun getDemoRequestDetail(
                 isCompleted = true
             ),
             RequestStepUiModel(
-                title = "FotoĞraflar Eklendi",
-                description = "Talebe ait ürün fotoĞrafları kaydedildi.",
+                title = "Fotoğraflar Eklendi",
+                description = "Talebe ait ürün fotoğrafları kaydedildi.",
                 icon = Icons.Outlined.Image,
                 color = BBColors.Green.Green600,
                 isCompleted = true

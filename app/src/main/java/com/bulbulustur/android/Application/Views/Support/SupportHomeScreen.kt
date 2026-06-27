@@ -83,8 +83,8 @@ fun SupportHomeScreen(
 
             item {
                 BbSectionHeader(
-                    title = "DoĞru Alandan Başlayın",
-                    subtitle = "KullandıĞınız alana göre yardım kategorisini seçin"
+                    title = "Doğru Alandan Başlayın",
+                    subtitle = "Kullandığınız alana göre yardım kategorisini seçin"
                 )
             }
 
@@ -105,7 +105,7 @@ fun SupportHomeScreen(
             item {
                 BbSectionHeader(
                     title = "Video Rehberler",
-                    subtitle = "Sık kullanılan işlemleri hızlıca öĞrenin"
+                    subtitle = "Sık kullanılan işlemleri hızlıca öğrenin"
                 )
             }
 
@@ -238,7 +238,7 @@ private fun SupportCategoryCard(
                 )
 
                 Text(
-                    text = "${category.articleCount} yardım başlıĞı",
+                    text = "${category.articleCount} yardım başlığı",
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -434,7 +434,7 @@ private fun getSupportCategoryItems(): List<SupportCategoryItem> {
         SupportCategoryItem(
             categoryId = 2,
             title = "Perakende",
-            description = "Perakende satış, maĞaza yönetimi ve sipariş destekleri.",
+            description = "Perakende satış, mağaza yönetimi ve sipariş destekleri.",
             articleCount = 22,
             icon = Icons.Outlined.Storefront
         ),
@@ -507,7 +507,7 @@ private fun getSupportPopularArticleItems(): List<SupportArticleItem> {
         SupportArticleItem(
             articleId = 4,
             title = "Şifre Yönetimi",
-            description = "Hesap güvenliĞi ve şifre deĞiştirme adımları.",
+            description = "Hesap güvenliği ve şifre değiştirme adımları.",
             categoryName = "Hesap Merkezi",
             icon = Icons.Outlined.Security
         )

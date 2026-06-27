@@ -411,7 +411,7 @@ private fun CampaignSummaryCards(
         CampaignSummaryCard(
             modifier = Modifier.weight(1f),
             title = campaign.storeCount.toString(),
-            subtitle = "maĞaza"
+            subtitle = "mağaza"
         )
 
         CampaignSummaryCard(
@@ -475,7 +475,7 @@ private fun CampaignCategorySection(
     ) {
         BbSectionHeader(
             title = "Kapsamdaki Kategoriler",
-            subtitle = "Kampanyanın geçerli olduĞu alışveriş alanları."
+            subtitle = "Kampanyanın geçerli olduğu alışveriş alanları."
         )
 
         LazyRow(
@@ -866,7 +866,7 @@ private fun getRetailCampaignDetail(
     return RetailCampaignDetail(
         id = campaignId,
         title = "Sezonun öne çıkanları",
-        description = "Moda kategorisinde yeni sezon ürünleri, seçili maĞaza vitrinleri ve avantajlı fiyatlarla hazırlanmış perakende kampanyası.",
+        description = "Moda kategorisinde yeni sezon ürünleri, seçili mağaza vitrinleri ve avantajlı fiyatlarla hazırlanmış perakende kampanyası.",
         badgeText = "Yeni sezon kampanyası",
         iconText = "MO",
         discountText = "%35'e varan",
@@ -917,8 +917,8 @@ private fun getRetailCampaignDetail(
         ),
         conditions = listOf(
             "Kampanya seçili ürünlerde ve kampanyaya katılan Mağazalarda geçerlidir.",
-            "Stok durumuna göre ürün görünürlüĞü ve fiyatlar deĞişebilir.",
-            "Kargo avantajı maĞaza ve ürün koşullarına göre farklılık gösterebilir.",
+            "Stok durumuna göre ürün görünürlüğü ve fiyatlar değişebilir.",
+            "Kargo avantajı mağaza ve ürün koşullarına göre farklılık gösterebilir.",
             "Sepet ve ödeme adımlarında nihai fiyat tekrar gösterilir."
         ),
         productFilters = listOf(

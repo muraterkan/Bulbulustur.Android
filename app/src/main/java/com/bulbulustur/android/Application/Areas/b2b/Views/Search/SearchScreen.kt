@@ -205,7 +205,7 @@ private fun WholesaleSearchHeader() {
             )
 
             Text(
-                text = "Toptan akışında arama sadece ürün deĞil; firma, kategori ve teklif ihtiyacına da kapı açar.",
+                text = "Toptan akışında arama sadece ürün değil; firma, kategori ve teklif ihtiyacına da kapı açar.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -250,7 +250,7 @@ private fun WholesaleSearchModeCards(
         }
 
         BbButton(
-            text = "AradıĞını bulamadın mı? Teklif talebi oluştur",
+            text = "Aradığını bulamadın mı? Teklif talebi oluştur",
             onClick = {
                 onRfqCreateClick(searchText)
             },
@@ -496,14 +496,14 @@ private fun getWholesaleSearchProductResults(): List<WholesaleSearchProductResul
         WholesaleSearchProductResult(
             productId = 1,
             name = "E-ticaret Kargo Kolisi",
-            description = "Çoklu ölçü seçeneĞiyle toptan koli ürünü.",
+            description = "Çoklu ölçü seçeneğiyle toptan koli ürünü.",
             companyName = "Anadolu Ambalaj",
             minimumOrderQuantity = 100,
             icon = Icons.Outlined.Inventory2
         ),
         WholesaleSearchProductResult(
             productId = 2,
-            name = "Baskılı MaĞaza Poşeti",
+            name = "Baskılı Mağaza Poşeti",
             description = "Logo baskılı, farklı ebat seçenekli poşet grubu.",
             companyName = "Marmara Tedarik",
             minimumOrderQuantity = 500,

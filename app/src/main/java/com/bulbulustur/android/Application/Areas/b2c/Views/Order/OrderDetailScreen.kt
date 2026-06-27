@@ -191,13 +191,13 @@ private fun OrderSupportBottomSheet(
                 )
             ) {
                 Text(
-                    text = "Sipariş DesteĞi",
+                    text = "Sipariş Desteği",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = "$orderNumber için destek almak istediĞiniz konuyu seçin.",
+                    text = "$orderNumber için destek almak istediğiniz konuyu seçin.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -591,7 +591,7 @@ private fun OrderDetailCargoCard(
                     )
 
                     Text(
-                        text = "${storeGroup.cargoCompany} Â· ${storeGroup.cargoTrackingNumber}",
+                        text = "${storeGroup.cargoCompany} . ${storeGroup.cargoTrackingNumber}",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -676,7 +676,7 @@ private fun OrderDetailProductRow(
                 )
 
                 Text(
-                    text = "${product.quantity} adet Â· ${product.unitPriceText}",
+                    text = "${product.quantity} adet . ${product.unitPriceText}",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -795,7 +795,7 @@ private fun OrderDetailProductActions(
 
                 OrderDetailLineAction.Review -> {
                     BbButton(
-                        text = "DeĞerlendir",
+                        text = "Değerlendir",
                         onClick = {
                             onReviewCreateClick(
                                 product.orderStoreLineId,
@@ -903,7 +903,7 @@ private fun OrderDetailPaymentCard(
         ) {
             OrderDetailSectionTitle(
                 title = "Ödeme Özeti",
-                subtitle = "Siparişe ait tutar daĞılımı"
+                subtitle = "Siparişe ait tutar dağılımı"
             )
 
             OrderDetailAmountRow(
@@ -1349,7 +1349,7 @@ private fun getDemoOrderDetail(
         cargoText = "50,00 ₺",
         totalText = "2.450,75 ₺",
         estimatedDelivery = "12 Mayıs 2026",
-        addressText = "Murat Erkan Â· İstanbul / Türkiye Â· Teslimat adresi API bağlandıĞında gerçek kullanıcı adresinden beslenecek.",
+        addressText = "Murat Erkan . İstanbul / Türkiye . Teslimat adresi API bağlandığında gerçek kullanıcı adresinden beslenecek.",
         storeGroups = listOf(
             OrderDetailStoreGroupUiModel(
                 storeKey = "STORE-ORTOBELLA",

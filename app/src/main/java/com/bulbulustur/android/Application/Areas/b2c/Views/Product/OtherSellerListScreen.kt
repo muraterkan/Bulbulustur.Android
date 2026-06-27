@@ -75,7 +75,7 @@ fun OtherSellerListScreen(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "DiĞer Satıcılar",
+                title = "Diğer Satıcılar",
                 onBackClick = onBackClick,
                 /*actionIcon = Icons.Outlined.Tune,
                 actionContentDescription = "Filtreler",
@@ -216,7 +216,7 @@ private fun OtherSellerFilterSection(
     ) {
         OtherSellerSectionTitle(
             title = "Hızlı filtre",
-            description = "Satıcıları alışveriş önceliĞine göre daralt."
+            description = "Satıcıları alışveriş önceliğine göre daralt."
         )
 
         FlowRow(
@@ -299,14 +299,14 @@ private fun OtherSellerCard(
                     }
 
                     Text(
-                        text = "${seller.ratingText} puan Â· ${seller.cargoText}",
+                        text = "${seller.ratingText} puan . ${seller.cargoText}",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
                 Text(
-                    text = "â€º",
+                    text = "›",
                     style = MaterialTheme.typography.headlineSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -457,7 +457,7 @@ private fun getRetailOtherSellerScreenData(
         product = RetailOtherSellerProductSummary(
             id = productId,
             name = "Kadın klasik sneaker ayakkabı",
-            variantText = "Beyaz Â· 38 numara",
+            variantText = "Beyaz . 38 numara",
             imageText = "P1",
             sellerCount = 5
         ),

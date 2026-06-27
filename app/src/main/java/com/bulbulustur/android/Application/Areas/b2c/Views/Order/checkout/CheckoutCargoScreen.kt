@@ -105,7 +105,7 @@ fun CheckoutCargoScreen(
                     CheckoutProgressCard(
                         currentStep = "2",
                         title = "Kargo seçimi",
-                        description = "MaĞaza bazlı kargo seçeneklerini belirle."
+                        description = "Mağaza bazlı kargo seçeneklerini belirle."
                     )
                 }
 
@@ -118,7 +118,7 @@ fun CheckoutCargoScreen(
                 item {
                     CheckoutCargoSectionTitle(
                         title = "Kargo paketleri",
-                        description = "Her maĞaza kendi kargo seçeneĞiyle ayrı paketlenebilir."
+                        description = "Her mağaza kendi kargo seçeneğiyle ayrı paketlenebilir."
                     )
                 }
 
@@ -164,7 +164,7 @@ private fun CheckoutCargoTopBar(
             contentColor = MaterialTheme.colorScheme.onSurfaceVariant
         ) {
             Text(
-                text = "â€¹",
+                text = "‹",
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -373,7 +373,7 @@ private fun CheckoutStoreCargoHeader(
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
-                text = "${cargoGroup.productCount} ürün Â· ${cargoGroup.packageCount} paket",
+                text = "${cargoGroup.productCount} ürün . ${cargoGroup.packageCount} paket",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -482,7 +482,7 @@ private fun CheckoutCargoInfoCard() {
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "Siparişin birden fazla maĞazadan oluşuyorsa ürünler ayrı paketler halinde gönderilebilir. Teslimat süreleri maĞaza ve kargo firmasına göre deĞişebilir.",
+                text = "Siparişin birden fazla mağazadan oluşuyorsa ürünler ayrı paketler halinde gönderilebilir. Teslimat süreleri mağaza ve kargo firmasına göre değişebilir.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -635,7 +635,7 @@ private fun getCheckoutCargoScreenData(): CheckoutCargoScreenData {
                         deliveryEstimateText = "Tahmini teslimat: 3-5 iş günü",
                         priceText = "Ücretsiz",
                         priceValue = 0.0,
-                        note = "MaĞaza kampanyası"
+                        note = "Mağaza kampanyası"
                     )
                 )
             ),

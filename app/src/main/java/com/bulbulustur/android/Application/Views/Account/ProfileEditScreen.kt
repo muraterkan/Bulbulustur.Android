@@ -114,7 +114,7 @@ fun ProfileScreen(
                 ) {
                     AccountFormSectionHeader(
                         title = "Kişisel Bilgiler",
-                        description = "Ad, soyad, meslek ve doĞum tarihi bilgilerinizi güncelleyin."
+                        description = "Ad, soyad, meslek ve doğum tarihi bilgilerinizi güncelleyin."
                     )
 
                     AccountTextField(
@@ -150,7 +150,7 @@ fun ProfileScreen(
                             professionState.value = value
                         },
                         label = "Meslek",
-                        placeholder = "MesleĞiniz"
+                        placeholder = "Mesleğiniz"
                     )
 
                     AccountTextField(
@@ -158,7 +158,7 @@ fun ProfileScreen(
                         onValueChange = { value ->
                             birthDateState.value = value
                         },
-                        label = "DoĞum Günü",
+                        label = "Doğum Günü",
                         placeholder = "gg.aa.yyyy",
                         keyboardType = KeyboardType.Number
                     )

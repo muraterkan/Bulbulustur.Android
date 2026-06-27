@@ -57,7 +57,7 @@ fun OrderReturnRequestScreen(
             "Yanlış ürün gönderildi",
             "Ürün hasarlı veya kusurlu geldi",
             "Eksik ürün veya parça var",
-            "DiĞer"
+            "Diğer"
         )
     }
 
@@ -194,7 +194,7 @@ private fun OrderReturnReasonCard(
         ) {
             OrderReturnSectionTitle(
                 title = "İade Nedeni",
-                subtitle = "Bu ürünü neden iade etmek istediĞinizi seçin."
+                subtitle = "Bu ürünü neden iade etmek istediğinizi seçin."
             )
 
             Column(
@@ -300,7 +300,7 @@ private fun OrderReturnDescriptionCard(
                 shape = BBRadius.Input,
                 placeholder = {
                     Text(
-                        text = "Üründe yaşadıĞınız sorunu kısaca açıklayın."
+                        text = "Üründe yaşadığınız sorunu kısaca açıklayın."
                     )
                 },
                 leadingIcon = {

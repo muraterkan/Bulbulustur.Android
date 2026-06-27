@@ -298,7 +298,7 @@ private fun BankAccountWarningBox() {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Geri Ödeme İçin DoĞru IBAN Bilgisi Kullanılır.",
+                    text = "Geri Ödeme İçin Doğru IBAN Bilgisi Kullanılır.",
                     style = MaterialTheme.typography.labelLarge,
                     color = BBColors.Orange.Orange700
                 )

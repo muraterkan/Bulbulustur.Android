@@ -79,7 +79,7 @@ fun OrderSuccessScreen(
                 item {
                     OrderSuccessSectionTitle(
                         title = "Sipariş paketleri",
-                        description = "MaĞaza bazlı gönderim bilgileri."
+                        description = "Mağaza bazlı gönderim bilgileri."
                     )
                 }
 
@@ -136,7 +136,7 @@ private fun OrderSuccessHero(
                 contentColor = MaterialTheme.colorScheme.onPrimary
             ) {
                 Text(
-                    text = "âœ“",
+                    text = "✓",
                     style = MaterialTheme.typography.headlineLarge,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onPrimary
@@ -279,7 +279,7 @@ private fun OrderSuccessShipmentCard(
                     Spacer(modifier = Modifier.height(4.dp))
 
                     Text(
-                        text = "${shipmentGroup.productCount} ürün Â· ${shipmentGroup.cargoCompanyName}",
+                        text = "${shipmentGroup.productCount} ürün . ${shipmentGroup.cargoCompanyName}",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -349,7 +349,7 @@ private fun OrderSuccessProductLine(
             Spacer(modifier = Modifier.height(2.dp))
 
             Text(
-                text = "${product.variantText} Â· x${product.quantity}",
+                text = "${product.variantText} . x${product.quantity}",
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -514,7 +514,7 @@ private fun OrderSuccessInfoCard() {
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "Mağazalar siparişini hazırlamaya başladıĞında kargo bilgileri sipariş detayına düşer. Bildirimler ve e-posta ile süreç hakkında bilgi alırsın.",
+                text = "Mağazalar siparişini hazırlamaya başladığında kargo bilgileri sipariş detayına düşer. Bildirimler ve e-posta ile süreç hakkında bilgi alırsın.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -706,7 +706,7 @@ private fun getOrderSuccessScreenData(orderId: Int): OrderSuccessScreenData {
                     OrderSuccessProductItem(
                         id = 1,
                         name = "Kadın klasik sneaker ayakkabı",
-                        variantText = "Beyaz Â· 38",
+                        variantText = "Beyaz . 38",
                         quantity = 1,
                         priceText = "₺899,90",
                         imageText = "P1"
@@ -714,7 +714,7 @@ private fun getOrderSuccessScreenData(orderId: Int): OrderSuccessScreenData {
                     OrderSuccessProductItem(
                         id = 2,
                         name = "Rahat taban günlük ayakkabı",
-                        variantText = "Siyah Â· 39",
+                        variantText = "Siyah . 39",
                         quantity = 1,
                         priceText = "₺749,90",
                         imageText = "P2"
@@ -733,7 +733,7 @@ private fun getOrderSuccessScreenData(orderId: Int): OrderSuccessScreenData {
                     OrderSuccessProductItem(
                         id = 3,
                         name = "Oversize pamuklu basic tişört",
-                        variantText = "Lacivert Â· M",
+                        variantText = "Lacivert . M",
                         quantity = 2,
                         priceText = "₺699,80",
                         imageText = "P3"

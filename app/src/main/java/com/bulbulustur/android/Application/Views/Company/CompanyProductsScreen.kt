@@ -483,7 +483,7 @@ private fun getCompanyProducts(
         CompanyId = companyId,
         Name = "Ortobella Comfort",
         LogoText = "OC",
-        Description = "Firmanın toptan satışa sunduĞu ürünleri kategori bazında inceleyin, fiyat aralıklarını karşılaştırın ve ürün detaylarından tedarik sürecine geçin.",
+        Description = "Firmanın toptan satışa sunduğu ürünleri kategori bazında inceleyin, fiyat aralıklarını karşılaştırın ve ürün detaylarından tedarik sürecine geçin.",
         IsVerified = true,
         Chips = listOf(
             "Türkiye",

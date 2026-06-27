@@ -107,7 +107,7 @@ fun CompanyB2BIndexScreen(
 
             item {
                 CompanyB2BIndexSection(
-                    title = "B2B Index Ne SaĞlar?",
+                    title = "B2B Index Ne Sağlar?",
                     description = "Firmanızın toptan ticaret akışlarında daha görünür olmasına yardımcı olur.",
                     icon = Icons.Outlined.WorkspacePremium
                 ) {
@@ -257,7 +257,7 @@ private fun CompanyB2BIndexSummaryCard() {
                 )
 
                 Text(
-                    text = "Limited Şirket Â· İstanbul / Türkiye",
+                    text = "Limited Şirket . İstanbul / Türkiye",
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.inverseOnSurface.copy(alpha = BBAlpha.Muted)
                 )
@@ -326,7 +326,7 @@ private fun CompanyB2BIndexStatsGrid() {
             CompanyB2BIndexStatCard(
                 modifier = Modifier.weight(1f),
                 icon = Icons.Outlined.Storefront,
-                label = "Firma KimliĞi",
+                label = "Firma Kimliği",
                 value = "2-FGA0IBO7EGAZ5nB"
             )
 
@@ -564,7 +564,7 @@ private fun CompanyB2BIndexAgreementCard(
                 )
 
                 Text(
-                    text = "B2B Indexy'e dahil olduĞunuzda şirket profiliniz ve uygun kurumsal bilgileriniz platform üzerinde görünür olabilir.",
+                    text = "B2B Indexy'e dahil olduğunuzda şirket profiliniz ve uygun kurumsal bilgileriniz platform üzerinde görünür olabilir.",
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

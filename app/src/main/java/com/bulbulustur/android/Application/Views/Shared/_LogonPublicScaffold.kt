@@ -407,7 +407,7 @@ fun LogonPublicRegisterLegalFooter(
     val uriHandler = LocalUriHandler.current
 
     val text = buildAnnotatedString {
-        append("Hesap oluşturduĞunuzda, Bulbulustur'un ")
+        append("Hesap oluşturduğunuzda, Bulbulustur'un ")
 
         pushStringAnnotation(
             tag = "terms",

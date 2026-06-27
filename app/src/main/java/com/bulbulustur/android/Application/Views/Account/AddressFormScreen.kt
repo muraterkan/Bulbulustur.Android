@@ -222,7 +222,7 @@ fun AddressFormScreen(
 
             AddressFormSectionCard(
                 title = "Adres Detayı",
-                description = "Açık adresinizi ve bu adres için kullanacaĞınız başlıĞı yazın."
+                description = "Açık adresinizi ve bu adres için kullanacağınız başlığı yazın."
             ) {
                 BbAddressTextArea(
                     value = addressTextState.value,
@@ -291,7 +291,7 @@ private fun AddressFormIntroCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Siparişlerinizde kullanmak üzere teslimat adresi oluşturun. Teslimatın doĞru ilerlemesi için adres bilgilerini eksiksiz girin.",
+            text = "Siparişlerinizde kullanmak üzere teslimat adresi oluşturun. Teslimatın doğru ilerlemesi için adres bilgilerini eksiksiz girin.",
             style = BbTypography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

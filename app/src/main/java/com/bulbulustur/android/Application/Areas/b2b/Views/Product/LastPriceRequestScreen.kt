@@ -176,7 +176,7 @@ fun LastPriceRequestScreen(
                     onValueChange = {
                         detail.value = it
                     },
-                    label = "DiĞer Detaylar",
+                    label = "Diğer Detaylar",
                     placeholder = "Bilmemiz gereken başka bir şey var mı? Miktar, hedef fiyat, ödeme ve teslimat beklentinizi yazın."
                 )
             }
@@ -236,7 +236,7 @@ private fun LastPriceRequestHeader(
             }
 
             Text(
-                text = "Son Fiyat İsteĞi Oluştur",
+                text = "Son Fiyat İsteği Oluştur",
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -425,7 +425,7 @@ private fun LastPriceHintCard() {
             )
 
             Text(
-                text = "Net miktar, hedef fiyat, ödeme yöntemi ve teslimat beklentisi yazarsanız tedarikçi daha doĞru son fiyat verebilir.",
+                text = "Net miktar, hedef fiyat, ödeme yöntemi ve teslimat beklentisi yazarsanız tedarikçi daha doğru son fiyat verebilir.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.weight(1f)
@@ -467,7 +467,7 @@ private fun LastPriceSendCard(
                 )
 
                 Text(
-                    text = "Son fiyat isteĞi API bağlantısından sonra gerçek endpointy'e gönderilecek.",
+                    text = "Son fiyat isteği API bağlantısından sonra gerçek endpointy'e gönderilecek.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -491,7 +491,7 @@ private fun lastPriceSuggestionTexts(): List<LastPriceSuggestionText> {
     return listOf(
         LastPriceSuggestionText(
             title = "Toplu Alım",
-            description = "BelirttiĞim miktar için en iyi son fiyatı rica ederim."
+            description = "Belirttiğim miktar için en iyi son fiyatı rica ederim."
         ),
         LastPriceSuggestionText(
             title = "Ödeme Şartı",

@@ -143,7 +143,7 @@ fun StoreProductListScreen(
 
             item {
                 StoreProductListSectionTitle(
-                    title = "MaĞaza ürünleri",
+                    title = "Mağaza ürünleri",
                     description = "${filteredProducts.size} ürün listeleniyor."
                 )
             }
@@ -177,7 +177,7 @@ private fun StoreProductListTopBar(
             contentColor = MaterialTheme.colorScheme.onSurfaceVariant
         ) {
             Text(
-                text = "â€¹",
+                text = "‹",
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -189,14 +189,14 @@ private fun StoreProductListTopBar(
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = "MaĞaza ürünleri",
+                text = "Mağaza ürünleri",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onBackground
             )
 
             Text(
-                text = "MaĞaza Vitrininin tüm ürün akışı.",
+                text = "Mağaza Vitrininin tüm ürün akışı.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -264,7 +264,7 @@ private fun StoreProductListStoreSummary(
                 Spacer(modifier = Modifier.height(5.dp))
 
                 Text(
-                    text = "${store.productCount} ürün Â· ${store.ratingText} puan Â· ${store.cargoText}",
+                    text = "${store.productCount} ürün . ${store.ratingText} puan . ${store.cargoText}",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
@@ -306,7 +306,7 @@ private fun StoreProductSearchBox(
             .fillMaxWidth()
             .clip(RoundedCornerShape(18.dp)),
         placeholder = {
-            Text(text = "Bu maĞazada ürün ara")
+            Text(text = "Bu mağazada ürün ara")
         },
         singleLine = true,
         shape = RoundedCornerShape(18.dp),
@@ -342,7 +342,7 @@ private fun StoreProductCategoryFilterSection(
     ) {
         StoreProductListSectionTitle(
             title = "Kategori Filtresi",
-            description = "MaĞaza ürünlerini kategoriye göre daralt."
+            description = "Mağaza ürünlerini kategoriye göre daralt."
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -379,7 +379,7 @@ private fun StoreProductSortFilterSection(
     ) {
         StoreProductListSectionTitle(
             title = "Sıralama",
-            description = "Ürün akışını alışveriş önceliĞine göre düzenle."
+            description = "Ürün akışını alışveriş önceliğine göre düzenle."
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -511,7 +511,7 @@ private fun StoreProductListCard(
             }
 
             Text(
-                text = "â€º",
+                text = "›",
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

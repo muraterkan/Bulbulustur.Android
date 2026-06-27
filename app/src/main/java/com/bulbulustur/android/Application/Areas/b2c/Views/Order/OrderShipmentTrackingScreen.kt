@@ -49,7 +49,7 @@ fun OrderShipmentTrackingScreen(
         orderNumber = "Sipariş #1000001",
         cargoCompany = "Yurtiçi Kargo",
         trackingNumber = "YK-2026-00012345",
-        currentStatus = "DaĞıtım şubesinde",
+        currentStatus = "Dağıtım şubesinde",
         estimatedDelivery = "Bugün teslim edilebilir",
         steps = listOf(
             OrderShipmentStepUiModel(
@@ -68,13 +68,13 @@ fun OrderShipmentTrackingScreen(
                 completed = true
             ),
             OrderShipmentStepUiModel(
-                title = "DaĞıtım şubesinde",
+                title = "Dağıtım şubesinde",
                 description = "Gönderi teslimat şubesine ulaştı.",
                 completed = true
             ),
             OrderShipmentStepUiModel(
                 title = "Teslimat bekleniyor",
-                description = "Kurye daĞıtım süreci başladıĞında durum güncellenir.",
+                description = "Kurye dağıtım süreci başladığında durum güncellenir.",
                 completed = false
             )
         )

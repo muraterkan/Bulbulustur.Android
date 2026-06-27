@@ -187,7 +187,7 @@ private fun CheckoutSummaryTopBar(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "â€¹",
+                text = "‹",
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -275,7 +275,7 @@ private fun CheckoutSummaryAddressCard(
 ) {
     CheckoutSummaryInfoCard(
         title = "Teslimat adresi",
-        actionText = "DeĞiştir",
+        actionText = "Değiştir",
         onActionClick = onEditAddressClick
     ) {
         Text(
@@ -310,7 +310,7 @@ private fun CheckoutSummaryCargoCard(
 ) {
     CheckoutSummaryInfoCard(
         title = "Kargo bilgisi",
-        actionText = "DeĞiştir",
+        actionText = "Değiştir",
         onActionClick = onEditCargoClick
     ) {
         Text(
@@ -345,7 +345,7 @@ private fun CheckoutSummaryPaymentCard(
 ) {
     CheckoutSummaryInfoCard(
         title = "Ödeme yöntemi",
-        actionText = "DeĞiştir",
+        actionText = "Değiştir",
         onActionClick = onEditPaymentClick
     ) {
         Text(
@@ -452,7 +452,7 @@ private fun CheckoutSummaryProductCard(
                 Spacer(modifier = Modifier.height(BBSpacing.Space1))
 
                 Text(
-                    text = "${product.storeName} Â· ${product.variantText}",
+                    text = "${product.storeName} . ${product.variantText}",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -735,20 +735,20 @@ private fun getCheckoutSummaryScreenData(): CheckoutSummaryScreenData {
             fullAddress = "Kızılay Mah. Atatürk Bulvarı No: 12 Daire: 8 Çankaya / Ankara"
         ),
         cargo = CheckoutSummaryCargo(
-            companySummaryText = "2 maĞaza için kargo seçildi",
+            companySummaryText = "2 mağaza için kargo seçildi",
             deliveryEstimateText = "Tahmini teslimat: 1-4 iş günü",
             packageSummaryText = "2 ayrı paket gönderimi"
         ),
         payment = CheckoutSummaryPayment(
             methodTitle = "Yeni kart ile ödeme",
-            description = "3D Secure doğrulama ödeme saĞlayıcısı üzerinden tamamlanır."
+            description = "3D Secure doğrulama ödeme sağlayıcısı üzerinden tamamlanır."
         ),
         products = listOf(
             CheckoutSummaryProductItem(
                 id = 1,
                 name = "Kadın klasik sneaker ayakkabı",
                 storeName = "Ortobella Store",
-                variantText = "Beyaz Â· 38",
+                variantText = "Beyaz . 38",
                 priceText = "₺899,90",
                 quantity = 1,
                 imageText = "P1"
@@ -757,7 +757,7 @@ private fun getCheckoutSummaryScreenData(): CheckoutSummaryScreenData {
                 id = 2,
                 name = "Rahat taban günlük ayakkabı",
                 storeName = "Ortobella Store",
-                variantText = "Siyah Â· 39",
+                variantText = "Siyah . 39",
                 priceText = "₺749,90",
                 quantity = 1,
                 imageText = "P2"
@@ -766,7 +766,7 @@ private fun getCheckoutSummaryScreenData(): CheckoutSummaryScreenData {
                 id = 3,
                 name = "Oversize pamuklu basic tişört",
                 storeName = "Moda Nova",
-                variantText = "Lacivert Â· M",
+                variantText = "Lacivert . M",
                 priceText = "₺349,90",
                 quantity = 2,
                 imageText = "P3"

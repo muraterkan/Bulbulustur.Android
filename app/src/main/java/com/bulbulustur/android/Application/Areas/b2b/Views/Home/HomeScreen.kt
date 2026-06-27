@@ -862,7 +862,7 @@ private fun wholesaleActionItems(
         ),
         WholesaleHomeActionItem(
             Title = "Son fiyat",
-            Description = "Fiyat pazarlıĞı başlat",
+            Description = "Fiyat pazarlığı başlat",
             Icon = Icons.Outlined.LocalOffer,
             Tint = BBColors.Red.Red700,
             BackgroundColor = BBColors.Red.Red50,

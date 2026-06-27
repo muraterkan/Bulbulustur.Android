@@ -133,7 +133,7 @@ private fun BankAccountIntroCard() {
                 )
 
                 Text(
-                    text = "Havale veya EFT ile ödeme yapmak için aşaĞıdaki Bulbulustur banka hesaplarını kullanabilirsiniz.",
+                    text = "Havale veya EFT ile ödeme yapmak için aşağıdaki Bulbulustur banka hesaplarını kullanabilirsiniz.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

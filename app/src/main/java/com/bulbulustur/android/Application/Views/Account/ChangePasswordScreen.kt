@@ -93,7 +93,7 @@ fun ChangePasswordScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Şifre DeĞiştir",
+                title = "Şifre Değiştir",
                 onBackClick = onBackClick
             )
         }
@@ -330,7 +330,7 @@ private fun PasswordRuleRow(
     ) {
         Text(
             text = if (valid) {
-                "âœ“"
+                "✓"
             } else {
                 "•"
             },

@@ -69,8 +69,8 @@ fun ProfilePhotoSheet(
                 ) {
                     ProfilePhotoSheetActionRow(
                         icon = Icons.Outlined.CameraAlt,
-                        title = "FotoĞraf Çek",
-                        subtitle = "Kamerayı açarak yeni profil fotoĞrafı çek.",
+                        title = "Fotoğraf Çek",
+                        subtitle = "Kamerayı açarak yeni profil fotoğrafı çek.",
                         onClick = onTakePhotoClick
                     )
 
@@ -81,7 +81,7 @@ fun ProfilePhotoSheet(
                     ProfilePhotoSheetActionRow(
                         icon = Icons.Outlined.PhotoLibrary,
                         title = "Albümden Seç",
-                        subtitle = "Cihaz galerinizden profil fotoĞrafı seç.",
+                        subtitle = "Cihaz galerinizden profil fotoğrafı seç.",
                         onClick = onSelectFromGalleryClick
                     )
 
@@ -92,8 +92,8 @@ fun ProfilePhotoSheet(
 
                         ProfilePhotoSheetActionRow(
                             icon = Icons.Outlined.DeleteOutline,
-                            title = "FotoĞrafı Kaldır",
-                            subtitle = "Mevcut profil fotoĞrafını kaldır.",
+                            title = "Fotoğrafı Kaldır",
+                            subtitle = "Mevcut profil fotoğrafını kaldır.",
                             danger = true,
                             onClick = onRemovePhotoClick
                         )
@@ -130,13 +130,13 @@ private fun ProfilePhotoSheetHeader() {
         )
     ) {
         Text(
-            text = "Profil FotoĞrafı",
+            text = "Profil Fotoğrafı",
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface
         )
 
         Text(
-            text = "Hesabınızda görünecek tek aktif profil fotoĞrafını buradan yönetebilirsiniz.",
+            text = "Hesabınızda görünecek tek aktif profil fotoğrafını buradan yönetebilirsiniz.",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

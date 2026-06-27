@@ -223,7 +223,7 @@ private fun CategoryDetailHero(
                 horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
             ) {
                 CategoryStatPill("${category.productCount}", "ürün")
-                CategoryStatPill("${category.storeCount}", "maĞaza")
+                CategoryStatPill("${category.storeCount}", "mağaza")
                 CategoryStatPill("${category.campaignCount}", "kampanya")
             }
         }
@@ -271,7 +271,7 @@ private fun CategorySubCategorySection(
     ) {
         RetailSectionTitle(
             title = "Alt Kategoriler",
-            description = "DoĞrudan ürün akışına inmek için hızlı seçim."
+            description = "Doğrudan ürün akışına inmek için hızlı seçim."
         )
 
         Spacer(modifier = Modifier.height(BBSpacing.Space3))
@@ -347,7 +347,7 @@ private fun CategoryCampaignSection(
     ) {
         RetailSectionTitle(
             title = "Kategori Vitrinleri",
-            description = "Ürün, maĞaza ve kampanya akışlarına hızlı geç."
+            description = "Ürün, mağaza ve kampanya akışlarına hızlı geç."
         )
 
         Spacer(modifier = Modifier.height(BBSpacing.Space3))
@@ -530,7 +530,7 @@ private fun CategoryProductRow(
             }
 
             Text(
-                text = "â€º",
+                text = "›",
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

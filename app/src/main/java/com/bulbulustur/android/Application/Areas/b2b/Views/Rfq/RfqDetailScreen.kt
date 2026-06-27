@@ -169,7 +169,7 @@ private fun RfqDetailSummaryCard(
                     )
 
                     Text(
-                        text = "Fiyat teklifi isteĞinizin ürün, miktar, ödeme, teslimat ve teklif detaylarını inceleyin.",
+                        text = "Fiyat teklifi isteğinizin ürün, miktar, ödeme, teslimat ve teklif detaylarını inceleyin.",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -542,7 +542,7 @@ private fun RfqOffersEmptyCard() {
             )
 
             Text(
-                text = "Bu fiyat teklifi isteĞi için henüz gönderilmiş teklif bulunmuyor.",
+                text = "Bu fiyat teklifi isteği için henüz gönderilmiş teklif bulunmuyor.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

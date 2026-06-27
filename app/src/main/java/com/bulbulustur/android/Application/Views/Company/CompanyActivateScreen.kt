@@ -83,7 +83,7 @@ fun CompanyActivateScreen(
             )
 
             Text(
-                text = "Türkiyey'deki üretici, tedarikçi ve toptancı şirketlerin global alıcılara daha görünür olmasını saĞlayan B2B Vitrin alanına katılın.",
+                text = "Türkiyey'deki üretici, tedarikçi ve toptancı şirketlerin global alıcılara daha görünür olmasını sağlayan B2B Vitrin alanına katılın.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -128,7 +128,7 @@ fun CompanyActivateScreen(
                         )
                     },
                     title = "Bulbulustur Kullanıcı Sözleşmesiy'ni okudum ve kabul ediyorum.",
-                    description = "B2B Indexy'e dahil olduĞunuzda şirket profiliniz ve uygun kurumsal bilgileriniz platform üzerinde görünür olabilir."
+                    description = "B2B Indexy'e dahil olduğunuzda şirket profiliniz ve uygun kurumsal bilgileriniz platform üzerinde görünür olabilir."
                 )
 
                 Text(
@@ -252,7 +252,7 @@ private fun CompanyActivateSummaryCard(
             )
 
             CompanyActivateSummaryRow(
-                label = "Şirket KimliĞi",
+                label = "Şirket Kimliği",
                 value = companyActivateSummary.companyCode
             )
 

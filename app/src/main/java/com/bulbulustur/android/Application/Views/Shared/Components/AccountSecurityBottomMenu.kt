@@ -40,7 +40,7 @@ fun AccountSecurityBottomMenu(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
             Text(
-                text = "Hesap GüvenliĞi",
+                text = "Hesap Güvenliği",
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -59,15 +59,15 @@ fun AccountSecurityBottomMenu(
             )
 
             AccountSecurityBottomMenuRow(
-                title = "Şifre DeĞiştir",
+                title = "Şifre Değiştir",
                 description = "Hesabın için yeni ve güçlü bir şifre belirle.",
                 selected = selectedItem == AccountSecurityMenuItem.ChangePassword,
                 onClick = onChangePasswordClick
             )
 
             AccountSecurityBottomMenuRow(
-                title = "E-Posta DeĞiştir",
-                description = "Hesabına baĞlı e-posta adresini güncelle.",
+                title = "E-Posta Değiştir",
+                description = "Hesabına bağlı e-posta adresini güncelle.",
                 selected = selectedItem == AccountSecurityMenuItem.ChangeEmail,
                 onClick = onChangeEmailClick
             )

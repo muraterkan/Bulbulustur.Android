@@ -103,7 +103,7 @@ fun CompanyHomeScreen(
             item {
                 CompanyHomeSectionCard(
                     title = "Ortobella Comfort Ürün Vitrinleri",
-                    subtitle = "Firmanın öne çıkardıĞı özel ürün gruplarını ve toptan alıma uygun koleksiyonlarını Keşfedin.",
+                    subtitle = "Firmanın öne çıkardığı özel ürün gruplarını ve toptan alıma uygun koleksiyonlarını Keşfedin.",
                     items = listOf(
                         "Yeni Ürünler",
                         "Popüler Ürünler",
@@ -117,7 +117,7 @@ fun CompanyHomeScreen(
             item {
                 CompanyHomeSectionCard(
                     title = "Şirket Vitrini",
-                    subtitle = "Firmanın öne çıkardıĞı ürün gruplarını, özel koleksiyonlarını ve ticari Vitrinlerini inceleyin.",
+                    subtitle = "Firmanın öne çıkardığı ürün gruplarını, özel koleksiyonlarını ve ticari Vitrinlerini inceleyin.",
                     items = listOf(
                         "Öne Çıkan Ürün Koleksiyonları",
                         "Kurumsal Tedarikçi Profili",
@@ -167,7 +167,7 @@ private fun CompanyHomeHero(
                         horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                     ) {
                         BbChip(
-                            text = "Tedarikçi MaĞazası",
+                            text = "Tedarikçi Mağazası",
                             selected = false,
                             onClick = {}
                         )

@@ -64,7 +64,7 @@ fun ChangeEmailScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "E-Posta DeĞiştir",
+                title = "E-Posta Değiştir",
                 onBackClick = onBackClick
             )
         }
@@ -184,7 +184,7 @@ private fun ChangeEmailIntroCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Hesabınıza baĞlı e-posta adresini güncelleyin. Yeni e-posta için doğrulama süreci gerekebilir.",
+            text = "Hesabınıza bağlı e-posta adresini güncelleyin. Yeni e-posta için doğrulama süreci gerekebilir.",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -281,7 +281,7 @@ private fun ChangeEmailInfoBox() {
             )
 
             Text(
-                text = "E-posta deĞişikliĞinden sonra hesabınızın güvenliĞi için yeni adresin doğrulanması istenebilir.",
+                text = "E-posta değişikliğinden sonra hesabınızın güvenliği için yeni adresin doğrulanması istenebilir.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

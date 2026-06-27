@@ -190,7 +190,7 @@ private fun PhoneEmptyState(
             )
 
             Text(
-                text = "Telefon ekleyerek doğrulama ve güvenlik süreçlerini daha saĞlam hale getirebilirsiniz.",
+                text = "Telefon ekleyerek doğrulama ve güvenlik süreçlerini daha sağlam hale getirebilirsiniz.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

@@ -181,7 +181,7 @@ private fun CurrencyRow(
         ) {
             CurrencyFlag(
                 flagFileName = item.flagFileName,
-                contentDescription = "${item.name} bayraĞı"
+                contentDescription = "${item.name} bayrağı"
             )
 
             Column(

@@ -507,12 +507,12 @@ private fun getRetailProductReviewScreenData(
             id = productId,
             name = "Kadın klasik sneaker ayakkabı",
             storeName = "Ortobella Store",
-            variantText = "Beyaz Â· 38 numara",
+            variantText = "Beyaz . 38 numara",
             imageText = "P1"
         ),
         summary = RetailProductReviewSummary(
             averageScoreText = "4.8",
-            starText = "â˜…â˜…â˜…â˜…â˜…",
+            starText = "★★★★★",
             reviewCount = 126,
             verifiedBuyerCount = 98,
             qualityScoreText = "4.7",
@@ -521,7 +521,7 @@ private fun getRetailProductReviewScreenData(
         filters = listOf(
             "Tümü",
             "Doğrulanmış",
-            "FotoĞraflı",
+            "Fotoğraflı",
             "Yüksek puan",
             "Beden yorumu",
             "Kargo yorumu"
@@ -557,11 +557,11 @@ private fun getRetailProductReviewScreenData(
                 customerInitials = "SA",
                 dateText = "2 hafta önce",
                 ratingText = "5.0",
-                comment = "Rengi fotoĞraftaki gibi. Paketleme temizdi, satıcı hızlı gönderdi.",
+                comment = "Rengi fotoğraftaki gibi. Paketleme temizdi, satıcı hızlı gönderdi.",
                 variantText = "Beyaz",
                 helpfulCount = 21,
                 isVerifiedBuyer = true,
-                filterTags = listOf("Doğrulanmış", "FotoĞraflı", "Yüksek puan", "Kargo yorumu")
+                filterTags = listOf("Doğrulanmış", "Fotoğraflı", "Yüksek puan", "Kargo yorumu")
             ),
             RetailProductReviewItem(
                 id = 4,
@@ -569,7 +569,7 @@ private fun getRetailProductReviewScreenData(
                 customerInitials = "ED",
                 dateText = "3 hafta önce",
                 ratingText = "4.0",
-                comment = "Ürün güzel ama kalıp dar. DeĞişim süreci sorunsuz ilerledi.",
+                comment = "Ürün güzel ama kalıp dar. Değişim süreci sorunsuz ilerledi.",
                 variantText = "39 numara",
                 helpfulCount = 5,
                 isVerifiedBuyer = true,

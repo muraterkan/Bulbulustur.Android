@@ -355,7 +355,7 @@ private fun CouponEmptyState() {
             )
 
             Text(
-                text = "Hesabınıza tanımlı kupon oluştuĞunda burada listelenecek.",
+                text = "Hesabınıza tanımlı kupon oluştuğunda burada listelenecek.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

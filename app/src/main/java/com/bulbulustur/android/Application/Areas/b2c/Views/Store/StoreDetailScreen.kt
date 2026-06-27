@@ -92,7 +92,7 @@ fun StoreDetailScreen(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "MaĞaza Detayı",
+                title = "Mağaza Detayı",
                 onBackClick = onBackClick,
                 actionContent = {
                     StoreFollowButton(
@@ -158,7 +158,7 @@ fun StoreDetailScreen(
             item {
                 StoreDetailSectionTitle(
                     title = "${store.name} Ürünleri",
-                    description = "MaĞazanın ürünlerini inceleyin, Favorilerinize ekleyin ve alışverişe devam edin."
+                    description = "Mağazanın ürünlerini inceleyin, Favorilerinize ekleyin ve alışverişe devam edin."
                 )
             }
 
@@ -458,7 +458,7 @@ private fun StoreTrustInfoCard(
                 )
 
                 Text(
-                    text = "${store.name} maĞazası, Bulbulustur store kayıtları üzerinden doğrulanmış maĞaza Vitrini olarak listelenir.",
+                    text = "${store.name} mağazası, Bulbulustur store kayıtları üzerinden doğrulanmış mağaza Vitrini olarak listelenir.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -509,14 +509,14 @@ private fun StoreOtherStoresCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "DiĞer Mağazalar",
+                    text = "Diğer Mağazalar",
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
                 )
 
                 Text(
-                    text = "Bulbulustury'daki diĞer perakende mağazalarını Keşfedin.",
+                    text = "Bulbulustury'daki diğer perakende mağazalarını Keşfedin.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -545,7 +545,7 @@ private fun StoreCategoryFilterSection(
     ) {
         StoreDetailSectionTitle(
             title = "Ürün Kategorileri",
-            description = "MaĞaza kategorilerine göre ürünleri Keşfedin."
+            description = "Mağaza kategorilerine göre ürünleri Keşfedin."
         )
 
         FlowRow(
@@ -848,7 +848,7 @@ private fun getRetailStoreDetail(
         name = "Ortobella Store",
         logoText = "OS",
         shortDescription = "Ayakkabı ve günlük moda ürünleri",
-        description = "Ortobella Store, seçili ayakkabı ve günlük kullanım Ürünlerini perakende alışveriş akışında sunan doğrulanmış maĞaza Vitrinidir.",
+        description = "Ortobella Store, seçili ayakkabı ve günlük kullanım Ürünlerini perakende alışveriş akışında sunan doğrulanmış mağaza Vitrinidir.",
         productCount = 248,
         ratingText = "4.8",
         cargoText = "Hızlı",

@@ -92,7 +92,7 @@ fun SampleRequestScreen(
             item {
                 BbSectionHeader(
                     title = "Numune Detayları",
-                    subtitle = "Kaç adet numune istediĞinizi ve özel notlarınızı yazın"
+                    subtitle = "Kaç adet numune istediğinizi ve özel notlarınızı yazın"
                 )
             }
 
@@ -114,7 +114,7 @@ fun SampleRequestScreen(
                     onValueChange = {
                         detail.value = it
                     },
-                    label = "DiĞer Detaylar",
+                    label = "Diğer Detaylar",
                     placeholder = "Bilmemiz gereken başka bir şey var mı? Tüm detayları buraya yazın."
                 )
             }
@@ -166,7 +166,7 @@ private fun SampleRequestHeader(
             }
 
             Text(
-                text = "Numune İsteĞi Oluştur",
+                text = "Numune İsteği Oluştur",
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -259,7 +259,7 @@ private fun SampleRequestHintCard() {
             )
 
             Text(
-                text = "Numune talebinizde hedef kullanım amacını, istediĞiniz adet bilgisini ve teslimat notlarını belirtmeniz tedarikçi dönüşünü hızlandırır.",
+                text = "Numune talebinizde hedef kullanım amacını, istediğiniz adet bilgisini ve teslimat notlarını belirtmeniz tedarikçi dönüşünü hızlandırır.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.weight(1f)
@@ -373,7 +373,7 @@ private fun SampleRequestSendCard(
                 )
 
                 Text(
-                    text = "Numune isteĞi API bağlantısından sonra gerçek endpointy'e gönderilecek.",
+                    text = "Numune isteği API bağlantısından sonra gerçek endpointy'e gönderilecek.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

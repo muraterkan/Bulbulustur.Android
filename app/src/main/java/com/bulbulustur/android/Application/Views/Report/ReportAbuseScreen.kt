@@ -158,7 +158,7 @@ private fun ReportAbuseIntroCard(
             )
 
             Text(
-                text = "Listelenen ${targetType.displayName.lowercase()} isminin, açıklamasının veya içeriĞinin Bulbulustur kurallarını ihlal ettiĞini düşünüyorsanız bize bildirebilirsiniz.",
+                text = "Listelenen ${targetType.displayName.lowercase()} isminin, açıklamasının veya içeriğinin Bulbulustur kurallarını ihlal ettiğini düşünüyorsanız bize bildirebilirsiniz.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -276,7 +276,7 @@ private fun ReportSafetyBullet(
         verticalAlignment = Alignment.Top
     ) {
         Text(
-            text = "âœ“",
+            text = "✓",
             style = MaterialTheme.typography.bodySmall,
             fontWeight = FontWeight.Bold,
             color = BBColors.Green.Green700
@@ -470,7 +470,7 @@ enum class ReportTargetType(
         shortCode = "Ü"
     ),
     Store(
-        displayName = "MaĞaza",
+        displayName = "Mağaza",
         shortCode = "M"
     ),
     Review(
@@ -524,7 +524,7 @@ private fun getReportReasonItems(): List<ReportReasonItem> {
         ),
         ReportReasonItem(
             id = 6,
-            title = "DiĞer"
+            title = "Diğer"
         )
     )
 }

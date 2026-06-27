@@ -438,7 +438,7 @@ private data class RetailMenuCategory(
 private fun retailMenuCategories(): List<RetailMenuCategory> {
     return listOf(
         RetailMenuCategory(1, "Otomobil Parça ve Aksesuarları"),
-        RetailMenuCategory(2, "Tüketici ElektroniĞi"),
+        RetailMenuCategory(2, "Tüketici Elektroniği"),
         RetailMenuCategory(3, "Elektronik Parçalar"),
         RetailMenuCategory(4, "Moda Aksesuarları ve Ayakkabılar"),
         RetailMenuCategory(5, "Moda Giyim ve Kumaşlar"),
@@ -446,14 +446,14 @@ private fun retailMenuCategories(): List<RetailMenuCategory> {
         RetailMenuCategory(7, "Mobilya ve Ev Dekorasyonu"),
         RetailMenuCategory(8, "Hediyeler ve Primer"),
         RetailMenuCategory(9, "Donanım"),
-        RetailMenuCategory(10, "SaĞlık ve Kişisel Bakım"),
+        RetailMenuCategory(10, "Sağlık ve Kişisel Bakım"),
         RetailMenuCategory(11, "Ev Aletleri"),
         RetailMenuCategory(12, "Endüstriyel Malzemeler"),
         RetailMenuCategory(13, "Makine ve Ekipman"),
         RetailMenuCategory(14, "Mobil Elektronik"),
         RetailMenuCategory(15, "Anne, Çocuk ve Oyuncaklar"),
         RetailMenuCategory(16, "Baskı ve Paketleme"),
-        RetailMenuCategory(17, "Akıllı Yaşam ElektroniĞi"),
+        RetailMenuCategory(17, "Akıllı Yaşam Elektroniği"),
         RetailMenuCategory(18, "Spor ve Dış Mekan")
     )
 }

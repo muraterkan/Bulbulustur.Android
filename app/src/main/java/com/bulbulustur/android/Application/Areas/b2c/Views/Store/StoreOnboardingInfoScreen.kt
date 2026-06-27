@@ -89,7 +89,7 @@ fun StoreOnboardingInfoScreen(
                 SellerOnboardingStepCard(
                     icon = Icons.Outlined.Business,
                     title = "Şirket bilgileri",
-                    description = "MaĞaza başvurusu için şirket ve iletişim bilgileri web panelinde tamamlanır."
+                    description = "Mağaza başvurusu için şirket ve iletişim bilgileri web panelinde tamamlanır."
                 )
             }
 
@@ -104,8 +104,8 @@ fun StoreOnboardingInfoScreen(
             item {
                 SellerOnboardingStepCard(
                     icon = Icons.Outlined.Inventory2,
-                    title = "Ürün ve maĞaza yönetimi",
-                    description = "Ürün yükleme, maĞaza vitrini ve sipariş yönetimi satıcı panelinden yapılır."
+                    title = "Ürün ve mağaza yönetimi",
+                    description = "Ürün yükleme, mağaza vitrini ve sipariş yönetimi satıcı panelinden yapılır."
                 )
             }
 
@@ -162,7 +162,7 @@ private fun SellerOnboardingHeroCard(
             )
 
             Text(
-                text = "MaĞaza açma başvurusu, şirket bilgileri ve ürün yönetimi web paneli üzerinden tamamlanır. Mobil uygulama alıcı deneyimi için tasarlanmıştır.",
+                text = "Mağaza açma başvurusu, şirket bilgileri ve ürün yönetimi web paneli üzerinden tamamlanır. Mobil uygulama alıcı deneyimi için tasarlanmıştır.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

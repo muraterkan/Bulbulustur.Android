@@ -52,14 +52,14 @@ fun SettingsScreen(
         item {
             BbSectionHeader(
                 title = "Uygulama Ayarları",
-                subtitle = "Bu alan yalnızca uygulamanın görünüm ve dil tercihlerini deĞiştirir"
+                subtitle = "Bu alan yalnızca uygulamanın görünüm ve dil tercihlerini değiştirir"
             )
         }
 
         item {
             SettingsOptionCard(
                 title = "Görünüm",
-                description = "Tema Tercihini DeĞiştir",
+                description = "Tema Tercihini Değiştir",
                 currentValue = currentThemeName,
                 icon = Icons.Outlined.Palette,
                 onClick = onThemeClick
@@ -69,7 +69,7 @@ fun SettingsScreen(
         item {
             SettingsOptionCard(
                 title = "Dil",
-                description = "Uygulama Dilini DeĞiştir",
+                description = "Uygulama Dilini Değiştir",
                 currentValue = currentLanguageName,
                 icon = Icons.Outlined.Language,
                 onClick = onLanguageClick
@@ -121,7 +121,7 @@ private fun SettingsHeader() {
             )
 
             Text(
-                text = "Tema ve dil tercihlerinizi buradan deĞiştirin.",
+                text = "Tema ve dil tercihlerinizi buradan değiştirin.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

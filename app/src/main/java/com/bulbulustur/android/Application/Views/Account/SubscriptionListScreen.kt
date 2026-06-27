@@ -117,7 +117,7 @@ private fun SubscriptionIntroCard() {
                 )
 
                 Text(
-                    text = "Hesabınıza baĞlı aktif veya geçmiş abonelikleri, dönem aralıklarını ve plan ücretlerini buradan takip edebilirsiniz.",
+                    text = "Hesabınıza bağlı aktif veya geçmiş abonelikleri, dönem aralıklarını ve plan ücretlerini buradan takip edebilirsiniz.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -371,13 +371,13 @@ private fun SubscriptionEmptyState() {
             )
 
             Text(
-                text = "Aktif aboneliĞiniz yok",
+                text = "Aktif aboneliğiniz yok",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
-                text = "Abonelik veya paket bilgileriniz oluştuĞunda burada görüntülenir.",
+                text = "Abonelik veya paket bilgileriniz oluştuğunda burada görüntülenir.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

@@ -346,7 +346,7 @@ private fun RequestPhotoBox(
                 )
 
                 Text(
-                    text = "İade Edilen Ürünün FotoĞrafları",
+                    text = "İade Edilen Ürünün Fotoğrafları",
                     style = BbTypography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -364,7 +364,7 @@ private fun RequestPhotoBox(
                 }
             } else {
                 Text(
-                    text = "FotoĞraf bulunmuyor.",
+                    text = "Fotoğraf bulunmuyor.",
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -506,7 +506,7 @@ private fun getDemoRequests(): List<RequestUiModel> {
             sellerName = "Base & Quality Store",
             reason = "Ürün Defolu/Hasarlı Geldi",
             productName = "Ortobella Comfort Genç Garson Bot 8028",
-            description = "Ürünün saĞ tarafında dikiş hatası mevcut, deĞişim veya iade talep ediyorum.",
+            description = "Ürünün sağ tarafında dikiş hatası mevcut, değişim veya iade talep ediyorum.",
             photoCount = 1,
             status = RequestStatus.DamagedProduct
         ),
@@ -517,7 +517,7 @@ private fun getDemoRequests(): List<RequestUiModel> {
             sellerName = "Ortobella Comfort",
             reason = "Yanlış Ürün Gönderildi",
             productName = "Ortobella Comfort Hakiki Deri Terlik M13",
-            description = "Sipariş ettiĞim varyanttan farklı bir ürün teslim edildi. DeĞişim sürecini başlatmak istiyorum.",
+            description = "Sipariş ettiğim varyanttan farklı bir ürün teslim edildi. Değişim sürecini başlatmak istiyorum.",
             photoCount = 2,
             status = RequestStatus.WaitingReview
         )

@@ -183,8 +183,8 @@ fun RetailHomeScreen(
 
             item {
                 BbSectionHeader(
-                    title = "MaĞaza Keşfi",
-                    subtitle = "Seçilmiş maĞaza ve marka alanları."
+                    title = "Mağaza Keşfi",
+                    subtitle = "Seçilmiş mağaza ve marka alanları."
                 )
             }
 

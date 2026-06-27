@@ -172,7 +172,7 @@ private fun RegionIntroCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Seçiminiz ürün görünürlüĞü, teslimat seçenekleri, ödeme deneyimi ve yerel içeriklerde kullanılacaktır.",
+            text = "Seçiminiz ürün görünürlüğü, teslimat seçenekleri, ödeme deneyimi ve yerel içeriklerde kullanılacaktır.",
             style = BbTypography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -195,7 +195,7 @@ private fun SelectedRegionCard(
         ) {
             RegionFlag(
                 flagFileName = selectedRegion.flagFileName,
-                contentDescription = "${selectedRegion.countryName} bayraĞı",
+                contentDescription = "${selectedRegion.countryName} bayrağı",
                 highlighted = true
             )
 
@@ -247,7 +247,7 @@ private fun RegionRow(
         ) {
             RegionFlag(
                 flagFileName = item.flagFileName,
-                contentDescription = "${item.countryName} bayraĞı"
+                contentDescription = "${item.countryName} bayrağı"
             )
 
             Column(

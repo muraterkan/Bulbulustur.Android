@@ -159,7 +159,7 @@ fun AboutThisAppScreen(
 
                     AboutMenuRow(
                         icon = Icons.Outlined.Cached,
-                        title = "ÖnbelleĞi Temizle",
+                        title = "Önbelleği Temizle",
                         value = null,
                         showArrow = true,
                         enabled = true,
@@ -172,7 +172,7 @@ fun AboutThisAppScreen(
 
                     AboutMenuRow(
                         icon = Icons.Outlined.StarRate,
-                        title = "Bizi DeĞerlendir",
+                        title = "Bizi Değerlendir",
                         value = null,
                         showArrow = true,
                         enabled = true,
@@ -616,7 +616,7 @@ private fun AboutRateAppSheet(
                 Text(
                     text = when {
                         selectedRating == 0 -> "Bir puan seçerek devam edebilirsin."
-                        selectedRating <= 3 -> "Neyi daha iyi yapabileceĞimizi yazabilirsin."
+                        selectedRating <= 3 -> "Neyi daha iyi yapabileceğimizi yazabilirsin."
                         else -> "Teşekkürler. İstersen Google Play'de değerlendirebilirsin."
                     },
                     style = BbTypography.bodySmall.copy(
@@ -652,7 +652,7 @@ private fun AboutRateAppSheet(
 
         if (selectedRating >= 4) {
             AboutSheetButton(
-                text = "Google Playy'de DeĞerlendir",
+                text = "Google Playy'de Değerlendir",
                 modifier = Modifier.fillMaxWidth(),
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onSurface,

@@ -186,8 +186,8 @@ fun SearchScreen(
                 RetailSearchType.Store -> {
                     item {
                         SearchSectionTitle(
-                            title = "MaĞaza sonuçları",
-                            description = "Ürün satan maĞaza ve Vitrinler."
+                            title = "Mağaza sonuçları",
+                            description = "Ürün satan mağaza ve Vitrinler."
                         )
                     }
 
@@ -222,7 +222,7 @@ private fun SearchTopBar(
             contentColor = MaterialTheme.colorScheme.onSurfaceVariant
         ) {
             Text(
-                text = "â€¹",
+                text = "‹",
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -241,7 +241,7 @@ private fun SearchTopBar(
             )
 
             Text(
-                text = "Ürün, kategori, marka veya maĞaza bul.",
+                text = "Ürün, kategori, marka veya mağaza bul.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -480,7 +480,7 @@ private fun SearchCategoryCard(
     SearchSimpleCard(
         iconText = category.iconText,
         title = category.name,
-        description = "${category.productCount} ürün Â· ${category.subCategoryCount} alt kategori",
+        description = "${category.productCount} ürün . ${category.subCategoryCount} alt kategori",
         onClick = onClick
     )
 }
@@ -493,7 +493,7 @@ private fun SearchBrandCard(
     SearchSimpleCard(
         iconText = brand.logoText,
         title = brand.name,
-        description = "${brand.productCount} ürün Â· ${brand.storeCount} maĞaza",
+        description = "${brand.productCount} ürün . ${brand.storeCount} mağaza",
         onClick = onClick
     )
 }
@@ -506,7 +506,7 @@ private fun SearchStoreCard(
     SearchSimpleCard(
         iconText = store.logoText,
         title = store.name,
-        description = "${store.productCount} ürün Â· ${store.ratingText} puan",
+        description = "${store.productCount} ürün . ${store.ratingText} puan",
         onClick = onClick
     )
 }
@@ -600,7 +600,7 @@ private fun SearchImagePlaceholder(
 @Composable
 private fun SearchArrow() {
     Text(
-        text = "â€º",
+        text = "›",
         style = MaterialTheme.typography.headlineSmall,
         color = MaterialTheme.colorScheme.onSurfaceVariant
     )
@@ -612,7 +612,7 @@ enum class RetailSearchType(
     Product("Ürün"),
     Category("Kategori"),
     Brand("Marka"),
-    Store("MaĞaza")
+    Store("Mağaza")
 }
 
 data class RetailSearchScreenData(

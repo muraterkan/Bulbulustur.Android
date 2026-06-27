@@ -355,7 +355,7 @@ private fun getLegalPolicyGroups(): List<LegalPolicyGroup> {
                 LegalPolicyItem(
                     key = "privacy-policy",
                     title = "Gizlilik Politikası",
-                    description = "Kişisel verilerin nasıl işlendiĞini ve korunduĞunu inceleyin.",
+                    description = "Kişisel verilerin nasıl işlendiğini ve korunduğunu inceleyin.",
                     icon = Icons.Outlined.PrivacyTip
                 ),
                 LegalPolicyItem(
@@ -372,7 +372,7 @@ private fun getLegalPolicyGroups(): List<LegalPolicyGroup> {
                 ),
                 LegalPolicyItem(
                     key = "review-policy",
-                    title = "DeĞerlendirme Politikası",
+                    title = "Değerlendirme Politikası",
                     description = "Ürün yorumları ve değerlendirme süreçleri.",
                     icon = Icons.Outlined.VerifiedUser
                 ),
@@ -429,7 +429,7 @@ private fun getLegalPolicyGroups(): List<LegalPolicyGroup> {
                 LegalPolicyItem(
                     key = "secure-payment",
                     title = "Güvenli Ödeme Süreci",
-                    description = "Ödeme, koruma ve işlem güvenliĞi hakkında bilgiler.",
+                    description = "Ödeme, koruma ve işlem güvenliği hakkında bilgiler.",
                     icon = Icons.Outlined.Security
                 )
             )

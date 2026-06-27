@@ -224,7 +224,7 @@ private fun CompanyContactHero(
                     )
 
                     Text(
-                        text = "Firma yetkilisine mesaj gönderin; ürün, teklif, numune veya özel üretim talepleriniz için doĞrudan bağlantı kurun.",
+                        text = "Firma yetkilisine mesaj gönderin; ürün, teklif, numune veya özel üretim talepleriniz için doğrudan bağlantı kurun.",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -593,7 +593,7 @@ private fun CompanyMessageCard(
                     )
 
                     Text(
-                        text = "$companyName firmasına teklif, ürün bilgisi, numune veya iş birliĞi mesajı bırakabilirsiniz.",
+                        text = "$companyName firmasına teklif, ürün bilgisi, numune veya iş birliği mesajı bırakabilirsiniz.",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

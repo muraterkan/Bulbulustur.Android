@@ -145,7 +145,7 @@ private fun SellerLandingTopBar(
             contentColor = MaterialTheme.colorScheme.onSurfaceVariant
         ) {
             Text(
-                text = "â€¹",
+                text = "‹",
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -164,7 +164,7 @@ private fun SellerLandingTopBar(
             )
 
             Text(
-                text = "MaĞaza açma ve satış başlangıç rehberi.",
+                text = "Mağaza açma ve satış başlangıç rehberi.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -214,7 +214,7 @@ private fun SellerLandingHero(
             ) {
                 SellerLandingHeroPill(
                     title = summary.storeCountText,
-                    subtitle = "maĞaza"
+                    subtitle = "mağaza"
                 )
 
                 SellerLandingHeroPill(
@@ -244,7 +244,7 @@ private fun SellerLandingHero(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "MaĞaza başvurusu başlat",
+                    text = "Mağaza başvurusu başlat",
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onPrimary
@@ -439,7 +439,7 @@ private fun SellerLandingInfoCard(
             }
 
             Text(
-                text = "â€º",
+                text = "›",
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -478,7 +478,7 @@ private fun SellerLandingBottomCta(
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "MaĞaza bilgilerini, şirket bilgilerini ve ürün satış tercihlerini tamamlayarak başvuru sürecine geçebilirsin.",
+                text = "Mağaza bilgilerini, şirket bilgilerini ve ürün satış tercihlerini tamamlayarak başvuru sürecine geçebilirsin.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -581,34 +581,34 @@ private fun getRetailSellerLandingScreenData(): RetailSellerLandingScreenData {
                 id = 2,
                 groupName = "Avantajlar",
                 title = "Kategori bazlı görünürlük",
-                description = "Ürünlerin kategori, maĞaza ve kampanya akışlarında Keşfedilebilir hale gelir.",
+                description = "Ürünlerin kategori, mağaza ve kampanya akışlarında Keşfedilebilir hale gelir.",
                 iconText = "KG"
             ),
             RetailSellerInfoItem(
                 id = 3,
                 groupName = "Avantajlar",
-                title = "Güven veren maĞaza profili",
-                description = "MaĞaza Vitrini, puanlama, ürün listeleri ve sipariş akışıyla profesyonel görünüm sağlanır.",
+                title = "Güven veren mağaza profili",
+                description = "Mağaza Vitrini, puanlama, ürün listeleri ve sipariş akışıyla profesyonel görünüm sağlanır.",
                 iconText = "GP"
             ),
             RetailSellerInfoItem(
                 id = 4,
                 groupName = "Başvuru",
-                title = "MaĞaza bilgileri",
-                description = "MaĞaza adı, iletişim bilgileri ve temel ticari bilgiler başvuru sırasında alınır.",
+                title = "Mağaza bilgileri",
+                description = "Mağaza adı, iletişim bilgileri ve temel ticari bilgiler başvuru sırasında alınır.",
                 iconText = "MB"
             ),
             RetailSellerInfoItem(
                 id = 5,
                 groupName = "Başvuru",
                 title = "Şirket doğrulama",
-                description = "Satıcı güvenliĞi için şirket ve yetkili bilgileri doğrulama sürecine alınır.",
+                description = "Satıcı güvenliği için şirket ve yetkili bilgileri doğrulama sürecine alınır.",
                 iconText = "ŞD"
             ),
             RetailSellerInfoItem(
                 id = 6,
                 groupName = "Başvuru",
-                title = "Ürün hazırlıĞı",
+                title = "Ürün hazırlığı",
                 description = "Ürünlerin kategori, fiyat, stok ve görsel bilgileri satışa hazır hale getirilir.",
                 iconText = "ÜH"
             ),
@@ -623,14 +623,14 @@ private fun getRetailSellerLandingScreenData(): RetailSellerLandingScreenData {
                 id = 8,
                 groupName = "Satış kanalları",
                 title = "Toptan satış",
-                description = "Toptan ürün, tedarikçi görünürlüĞü ve RFQ akışlarıyla işletmelere erişim sağlanır.",
+                description = "Toptan ürün, tedarikçi görünürlüğü ve RFQ akışlarıyla işletmelere erişim sağlanır.",
                 iconText = "TS"
             ),
             RetailSellerInfoItem(
                 id = 9,
                 groupName = "Satış kanalları",
                 title = "Kampanya ve Vitrinler",
-                description = "Seçili ürünleri ve maĞaza fırsatlarını kampanya alanlarında öne çıkarabilirsin.",
+                description = "Seçili ürünleri ve mağaza fırsatlarını kampanya alanlarında öne çıkarabilirsin.",
                 iconText = "KV"
             )
         )

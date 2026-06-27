@@ -49,7 +49,7 @@ fun ReviewEditScreen(
     var rating by remember { mutableIntStateOf(5) }
     var comment by remember {
         mutableStateOf(
-            "Makineyi 7 gündür kullanıyorum. Bu süre içinde hem deneyim kazandım hem de internetten okuduĞum birçok bilgiyle karşılaştırdım. Ürünü almayı düşünenler için detaylı bir deneyim paylaşmak istedim."
+            "Makineyi 7 gündür kullanıyorum. Bu süre içinde hem deneyim kazandım hem de internetten okuduğum birçok bilgiyle karşılaştırdım. Ürünü almayı düşünenler için detaylı bir deneyim paylaşmak istedim."
         )
     }
 
@@ -57,7 +57,7 @@ fun ReviewEditScreen(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "DeĞerlendirmeyi Düzenle",
+                title = "Değerlendirmeyi Düzenle",
                 onBackClick = onBackClick
             )
         }
@@ -213,7 +213,7 @@ private fun ReviewEditCommentCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             Text(
-                text = "DeĞerlendirme Metni",
+                text = "Değerlendirme Metni",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -226,7 +226,7 @@ private fun ReviewEditCommentCard(
                 shape = BBRadius.Input,
                 textStyle = MaterialTheme.typography.bodySmall,
                 label = {
-                    Text(text = "DeĞerlendirmeniz")
+                    Text(text = "Değerlendirmeniz")
                 }
             )
         }
@@ -248,7 +248,7 @@ private fun ReviewEditActionCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             BbButton(
-                text = "DeĞerlendirmeyi Kaydet",
+                text = "Değerlendirmeyi Kaydet",
                 onClick = onSaveClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Primary,
@@ -264,7 +264,7 @@ private fun ReviewEditActionCard(
             )
 
             BbButton(
-                text = "DeĞerlendirmeyi Sil",
+                text = "Değerlendirmeyi Sil",
                 onClick = onDeleteClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Danger,

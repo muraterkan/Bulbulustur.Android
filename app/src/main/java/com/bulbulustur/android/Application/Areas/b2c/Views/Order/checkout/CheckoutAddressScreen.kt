@@ -87,7 +87,7 @@ fun CheckoutAddressScreen(
                     CheckoutProgressCard(
                         currentStep = "1",
                         title = "Teslimat adresi",
-                        description = "Siparişin gönderileceĞi adresi seç."
+                        description = "Siparişin gönderileceği adresi seç."
                     )
                 }
 
@@ -155,7 +155,7 @@ private fun CheckoutAddressTopBar(
             contentColor = MaterialTheme.colorScheme.onSurfaceVariant
         ) {
             Text(
-                text = "â€¹",
+                text = "‹",
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -264,7 +264,7 @@ private fun CheckoutAddressSummaryCard(
         CheckoutAddressSummaryMiniCard(
             modifier = Modifier.weight(1f),
             title = summary.storeCountText,
-            subtitle = "maĞaza"
+            subtitle = "mağaza"
         )
     }
 }
@@ -493,7 +493,7 @@ private fun CheckoutAddAddressCard(
             }
 
             Text(
-                text = "â€º",
+                text = "›",
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

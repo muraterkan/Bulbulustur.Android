@@ -280,7 +280,7 @@ private fun OrderContractLegalTextCard(
                 )
 
                 Text(
-                    text = "Sözleşme İçeriĞi",
+                    text = "Sözleşme İçeriği",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -591,9 +591,9 @@ private fun getDemoOrderContract(
         createdDate = createdDate,
         contractDate = contractDate,
         buyerName = "Murat Erkan",
-        buyerAddress = "İstanbul / Türkiye Â· Alıcı adresi API bağlandıĞında gerçek sipariş adresinden beslenecek.",
+        buyerAddress = "İstanbul / Türkiye . Alıcı adresi API bağlandığında gerçek sipariş adresinden beslenecek.",
         sellerName = "Ortobella",
-        sellerAddress = "Satıcı firma ve maĞaza bilgileri API bağlandıĞında gerçek sipariş satıcısından beslenecek.",
+        sellerAddress = "Satıcı firma ve mağaza bilgileri API bağlandığında gerçek sipariş satıcısından beslenecek.",
         sections = listOf(
             OrderContractSectionUiModel(
                 title = "1 - Sözleşmenin Tarafları ve Konusu",
@@ -605,11 +605,11 @@ private fun getDemoOrderContract(
             ),
             OrderContractSectionUiModel(
                 title = "3 - Teslimat Koşulları",
-                body = "Teslimat, alıcının sipariş sırasında belirttiĞi adrese yapılır. Kargo süreci satıcı ve taşıyıcı firma operasyonuna göre güncellenir."
+                body = "Teslimat, alıcının sipariş sırasında belirttiği adrese yapılır. Kargo süreci satıcı ve taşıyıcı firma operasyonuna göre güncellenir."
             ),
             OrderContractSectionUiModel(
                 title = "4 - Cayma, İade ve İptal",
-                body = "Alıcı, ilgili mevzuat ve platform kuralları çerçevesinde iptal, iade ve cayma haklarını kullanabilir. Ürün niteliĞine göre istisnai durumlar oluşabilir."
+                body = "Alıcı, ilgili mevzuat ve platform kuralları çerçevesinde iptal, iade ve cayma haklarını kullanabilir. Ürün niteliğine göre istisnai durumlar oluşabilir."
             ),
             OrderContractSectionUiModel(
                 title = "5 - Uyuşmazlıkların Çözümü",

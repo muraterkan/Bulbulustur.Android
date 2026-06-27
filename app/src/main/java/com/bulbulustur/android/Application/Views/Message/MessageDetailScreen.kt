@@ -505,7 +505,7 @@ private fun getMessageConversation(
             MessageConversationItem(
                 conversationItemId = 1,
                 senderName = "Anadolu Ambalaj Sanayi",
-                body = "RFQ talebinize istinaden numune ve fiyat bilgilerini paylaşmak isteriz. Miktar ve teslimat hedefinizi netleştirirseniz daha doĞru fiyat sunabiliriz.",
+                body = "RFQ talebinize istinaden numune ve fiyat bilgilerini paylaşmak isteriz. Miktar ve teslimat hedefinizi netleştirirseniz daha doğru fiyat sunabiliriz.",
                 sentAt = "10.05.2026 12:47",
                 isMine = false,
                 attachments = emptyList()

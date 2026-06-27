@@ -101,7 +101,7 @@ fun CustomizationRequestScreen(
             item {
                 BbSectionHeader(
                     title = "Özelleştirme Detayları",
-                    subtitle = "Tedarikçinin doĞru dönüş yapabilmesi için deĞişiklikleri açık yazın"
+                    subtitle = "Tedarikçinin doğru dönüş yapabilmesi için değişiklikleri açık yazın"
                 )
             }
 
@@ -111,8 +111,8 @@ fun CustomizationRequestScreen(
                     onValueChange = {
                         detail.value = it
                     },
-                    label = "DiĞer Detaylar",
-                    placeholder = "Talep ettiĞiniz ürün özelleştirmesi hakkında daha fazla detay verin."
+                    label = "Diğer Detaylar",
+                    placeholder = "Talep ettiğiniz ürün özelleştirmesi hakkında daha fazla detay verin."
                 )
             }
 
@@ -214,7 +214,7 @@ private fun CustomizationRequestHeader(
             }
 
             Text(
-                text = "Ürün Özelleştirme İsteĞi Oluştur",
+                text = "Ürün Özelleştirme İsteği Oluştur",
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -443,7 +443,7 @@ private fun CustomizationSendCard(
                 )
 
                 Text(
-                    text = "Özelleştirme isteĞi API bağlantısından sonra gerçek endpointy'e gönderilecek.",
+                    text = "Özelleştirme isteği API bağlantısından sonra gerçek endpointy'e gönderilecek.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

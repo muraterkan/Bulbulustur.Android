@@ -168,7 +168,7 @@ private fun AddressCreateIntroCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Siparişlerinde kullanmak üzere yeni bir teslimat adresi oluştur. Teslimatın doĞru ilerlemesi için adres bilgilerini eksiksiz gir.",
+            text = "Siparişlerinde kullanmak üzere yeni bir teslimat adresi oluştur. Teslimatın doğru ilerlemesi için adres bilgilerini eksiksiz gir.",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -368,7 +368,7 @@ private fun AddressCreateDetailFields(
                     )
                 )
             },
-            label = "Adres BaşlıĞı",
+            label = "Adres Başlığı",
             placeholder = "Ev adresim, iş adresim gibi"
         )
 
@@ -438,7 +438,7 @@ private fun getAddressCreateValidationMessage(
     }
 
     if (formState.addressTitle.isBlank()) {
-        return "Adres başlıĞı gereklidir."
+        return "Adres başlığı gereklidir."
     }
 
     return "Adres bilgilerini kontrol etmelisin."

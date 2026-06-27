@@ -96,7 +96,7 @@ fun CompanyInfoScreen(
 
             item {
                 CompanyInfoSection(
-                    title = "Şirket KimliĞi",
+                    title = "Şirket Kimliği",
                     description = "Ünvan, şirket tipi ve kurumsal profil bilgileri.",
                     icon = Icons.Outlined.Badge
                 ) {
@@ -459,7 +459,7 @@ private fun CompanyActionSection(
 ) {
     CompanyInfoSection(
         title = "Kurumsal İşlemler",
-        description = "Şirket profilini ticaret akışlarına baĞla.",
+        description = "Şirket profilini ticaret akışlarına bağla.",
         icon = Icons.Outlined.Business
     ) {
         CompanyActionRow(
@@ -472,8 +472,8 @@ private fun CompanyActionSection(
         CompanyDashedDivider()
 
         CompanyActionRow(
-            title = "B2C MaĞazamı Yönet",
-            description = "Perakende maĞaza görünürlüĞünü ve satış akışını yönet.",
+            title = "B2C Mağazamı Yönet",
+            description = "Perakende mağaza görünürlüğünü ve satış akışını yönet.",
             icon = Icons.Outlined.HomeWork,
             onClick = onB2CStoreClick
         )

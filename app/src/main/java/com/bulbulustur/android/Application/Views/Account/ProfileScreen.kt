@@ -178,7 +178,7 @@ fun ProfileScreen(
                 ) {
                     ProfileInfoRow("E-Posta", "muraterkan500@gmail.com", Icons.Outlined.Email, onEmailClick)
                     ProfileDashedDivider()
-                    ProfileInfoRow("Telefonlarım", "1 telefon kayıtlı Â· doğrulama bekliyor", Icons.Outlined.PhoneIphone, onPhonesClick)
+                    ProfileInfoRow("Telefonlarım", "1 telefon kayıtlı . doğrulama bekliyor", Icons.Outlined.PhoneIphone, onPhonesClick)
                     ProfileDashedDivider()
                     ProfileInfoRow("E-Posta Doğrulama", "Doğrulanmış", Icons.Outlined.Verified, onEmailClick)
                 }
@@ -264,7 +264,7 @@ private fun ProfileHeroCard(
                 )
 
                 Text(
-                    text = "ME-10000 Â· muraterkan500@gmail.com",
+                    text = "ME-10000 . muraterkan500@gmail.com",
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.inverseOnSurface.copy(alpha = BBAlpha.Muted)
                 )
@@ -300,7 +300,7 @@ private fun ProfileAvatarBox(
                 if (hasProfilePhoto) {
                     Icon(
                         imageVector = Icons.Outlined.PermIdentity,
-                        contentDescription = "Profil fotoĞrafı",
+                        contentDescription = "Profil fotoğrafı",
                         tint = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier.size(BBIcon.Size3Xl)
                     )
@@ -322,7 +322,7 @@ private fun ProfileAvatarBox(
                     y = BBSpacing.Space1
                 ),
             icon = Icons.Outlined.CameraAlt,
-            contentDescription = "Profil fotoĞrafı deĞiştir",
+            contentDescription = "Profil fotoğrafı değiştir",
             size = BbIconBoxSize.Small,
             backgroundColor = MaterialTheme.colorScheme.surface,
             iconColor = MaterialTheme.colorScheme.onSurface,
@@ -381,7 +381,7 @@ private fun ProfileCompletionCard(
                     )
 
                     Text(
-                        text = "Telefon doğrulaması ve profil fotoĞrafı ile hesabınızı güçlendirebilirsiniz.",
+                        text = "Telefon doğrulaması ve profil fotoğrafı ile hesabınızı güçlendirebilirsiniz.",
                         style = BbTypography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

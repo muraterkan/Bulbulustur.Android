@@ -96,7 +96,7 @@ fun CompanyB2BStatusScreen(
             item {
                 CompanyB2BStatusSection(
                     title = "B2B Listeleme Bilgileri",
-                    description = "Bu bilgiler şirketinizin Bulbulustur toptan satış tarafındaki görünürlüĞünü gösterir.",
+                    description = "Bu bilgiler şirketinizin Bulbulustur toptan satış tarafındaki görünürlüğünü gösterir.",
                     icon = Icons.Outlined.WorkspacePremium
                 ) {
                     CompanyB2BStatusInfoRow(
@@ -124,7 +124,7 @@ fun CompanyB2BStatusScreen(
                     CompanyStatusDashedDivider()
 
                     CompanyB2BStatusInfoRow(
-                        title = "Firma KimliĞi",
+                        title = "Firma Kimliği",
                         value = "FGA0IBO7EGAZ5nB",
                         icon = Icons.Outlined.Language
                     )
@@ -173,7 +173,7 @@ private fun CompanyB2BStatusIntroCard() {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Şirketiniz Toptan Ticaret GörünürlüĞünde",
+                    text = "Şirketiniz Toptan Ticaret Görünürlüğünde",
                     style = BbTypography.titleLarge,
                     color = MaterialTheme.colorScheme.onSurface
                 )

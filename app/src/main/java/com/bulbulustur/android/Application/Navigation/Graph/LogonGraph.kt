@@ -3,6 +3,7 @@ package com.bulbulustur.android.Application.Navigation.Graph
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
+import com.bulbulustur.android.Application.Views.Logon.SetNewPasswordScreen
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -117,8 +118,38 @@ fun NavGraphBuilder.logonGraph(
         route =
             LogonRoutes.ForgotPassword
     ) {
+        val logonState by
+        logonController.State.collectAsState()
+
+        val languageId =
+            when (sessionState.Language) {
+                EApplicationLanguage.Turkish -> 1
+                EApplicationLanguage.English -> 2
+            }
+
+        LaunchedEffect(
+            Unit
+        ) {
+            logonController.ForgotPassword()
+        }
+
         ForgotPasswordScreen(
-            onSendResetLinkClick = {
+            isLoading =
+                logonState.IsSendingForgotPasswordLink,
+            errorMessage =
+                logonState.ErrorMessage,
+            successMessage =
+                logonState.ForgotPasswordMessage,
+            onSendResetLinkClick = { email ->
+                logonController.ForgotPasswordPost(
+                    email =
+                        email,
+                    languageId =
+                        languageId
+                )
+            },
+            onInputChanged = {
+                logonController.ClearForgotPasswordFeedback()
             },
             onBackToLogonClick = {
                 navController.popBackStack(
@@ -127,6 +158,127 @@ fun NavGraphBuilder.logonGraph(
                     inclusive =
                         false
                 )
+            },
+            onLanguageClick = {
+            }
+        )
+    }
+
+    composable(
+        route =
+            LogonRoutes.SetNewPassword,
+        arguments =
+            listOf(
+                navArgument(
+                    LogonRoutes.SetNewPasswordArgument
+                ) {
+                    type =
+                        NavType.StringType
+                }
+            )
+    ) { backStackEntry ->
+        val logonState by
+        logonController.State.collectAsState()
+
+        val languageId =
+            when (sessionState.Language) {
+                EApplicationLanguage.Turkish -> 1
+                EApplicationLanguage.English -> 2
+            }
+
+        val activationCode =
+            backStackEntry.arguments
+                ?.getString(
+                    LogonRoutes.SetNewPasswordArgument
+                )
+                ?.trim()
+                .orEmpty()
+
+        LaunchedEffect(
+            activationCode
+        ) {
+            if (activationCode.isBlank()) {
+                navController.navigate(
+                    LogonRoutes.Expired
+                ) {
+                    popUpTo(
+                        LogonRoutes.SetNewPassword
+                    ) {
+                        inclusive =
+                            true
+                    }
+
+                    launchSingleTop =
+                        true
+                }
+
+                return@LaunchedEffect
+            }
+
+            logonController.SetNewPassword()
+        }
+
+        LaunchedEffect(
+            logonState.IsSetNewPasswordSuccessful
+        ) {
+            if (!logonState.IsSetNewPasswordSuccessful) {
+                return@LaunchedEffect
+            }
+
+            logonController.ConsumeSetNewPasswordSuccess()
+
+            navController.navigate(
+                LogonRoutes.Logon
+            ) {
+                popUpTo(
+                    LogonRoutes.SetNewPassword
+                ) {
+                    inclusive =
+                        true
+                }
+
+                launchSingleTop =
+                    true
+            }
+        }
+
+        SetNewPasswordScreen(
+            isLoading =
+                logonState.IsUpdatingPassword,
+            errorMessage =
+                logonState.ErrorMessage,
+            onUpdatePasswordClick = {
+                    newPassword,
+                    reNewPassword ->
+
+                logonController.SetNewPasswordPost(
+                    activationCode =
+                        activationCode,
+                    newPassword =
+                        newPassword,
+                    reNewPassword =
+                        reNewPassword,
+                    languageId =
+                        languageId
+                )
+            },
+            onInputChanged = {
+                logonController.ClearSetNewPasswordFeedback()
+            },
+            onBackToLogonClick = {
+                navController.navigate(
+                    LogonRoutes.Logon
+                ) {
+                    popUpTo(
+                        LogonRoutes.SetNewPassword
+                    ) {
+                        inclusive =
+                            true
+                    }
+
+                    launchSingleTop =
+                        true
+                }
             },
             onLanguageClick = {
             }

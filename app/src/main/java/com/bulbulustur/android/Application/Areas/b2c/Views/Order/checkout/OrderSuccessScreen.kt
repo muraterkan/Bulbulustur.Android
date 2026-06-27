@@ -708,7 +708,7 @@ private fun getOrderSuccessScreenData(orderId: Int): OrderSuccessScreenData {
                         name = "Kadın klasik sneaker ayakkabı",
                         variantText = "Beyaz Â· 38",
                         quantity = 1,
-                        priceText = "â‚º899,90",
+                        priceText = "₺899,90",
                         imageText = "P1"
                     ),
                     OrderSuccessProductItem(
@@ -716,7 +716,7 @@ private fun getOrderSuccessScreenData(orderId: Int): OrderSuccessScreenData {
                         name = "Rahat taban günlük ayakkabı",
                         variantText = "Siyah Â· 39",
                         quantity = 1,
-                        priceText = "â‚º749,90",
+                        priceText = "₺749,90",
                         imageText = "P2"
                     )
                 )
@@ -735,17 +735,17 @@ private fun getOrderSuccessScreenData(orderId: Int): OrderSuccessScreenData {
                         name = "Oversize pamuklu basic tişört",
                         variantText = "Lacivert Â· M",
                         quantity = 2,
-                        priceText = "â‚º699,80",
+                        priceText = "₺699,80",
                         imageText = "P3"
                     )
                 )
             )
         ),
         total = OrderSuccessTotal(
-            productTotalText = "â‚º2.759,80",
-            cargoTotalText = "â‚º89,80",
-            discountText = "-â‚º120,00",
-            paidPriceText = "â‚º2.729,60"
+            productTotalText = "₺2.759,80",
+            cargoTotalText = "₺89,80",
+            discountText = "-₺120,00",
+            paidPriceText = "₺2.729,60"
         )
     )
 }

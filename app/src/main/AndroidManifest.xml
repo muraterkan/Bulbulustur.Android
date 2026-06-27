@@ -37,6 +37,11 @@
                     android:scheme="https"
                     android:host="www.bulbulustur.com"
                     android:pathPrefix="/logon/register" />
+
+                <data
+                    android:scheme="https"
+                    android:host="www.bulbulustur.com"
+                    android:pathPrefix="/logon/setnewpassword" />
             </intent-filter>
 
         </activity>

@@ -292,18 +292,19 @@ private fun BulbulusturApplicationContent(
                 )
             }.getOrNull()
 
-        val isRegisterAppLink =
+        val isSupportedAppLink =
             uri?.scheme.equals(
                 "https",
-                ignoreCase = true
+                ignoreCase =
+                    true
             ) &&
                     uri?.host.equals(
                         "www.bulbulustur.com",
-                        ignoreCase = true
-                    ) &&
-                    uri?.path == "/logon/register"
+                        ignoreCase =
+                            true
+                    )
 
-        if (!isRegisterAppLink) {
+        if (!isSupportedAppLink) {
             onAppLinkConsumed()
 
             return@LaunchedEffect
@@ -330,14 +331,39 @@ private fun BulbulusturApplicationContent(
             return@LaunchedEffect
         }
 
-        navController.navigate(
-            LogonRoutes.CreateRegisterActivationRoute(
-                activationCode =
-                    activationCode
-            )
+        when (
+            uri?.path
+                ?.lowercase()
         ) {
-            launchSingleTop =
-                true
+            "/logon/register" -> {
+                navController.navigate(
+                    LogonRoutes.CreateRegisterActivationRoute(
+                        activationCode =
+                            activationCode
+                    )
+                ) {
+                    launchSingleTop =
+                        true
+                }
+            }
+
+            "/logon/setnewpassword" -> {
+                navController.navigate(
+                    LogonRoutes.CreateSetNewPasswordRoute(
+                        activationCode =
+                            activationCode
+                    )
+                ) {
+                    launchSingleTop =
+                        true
+                }
+            }
+
+            else -> {
+                onAppLinkConsumed()
+
+                return@LaunchedEffect
+            }
         }
 
         onAppLinkConsumed()

@@ -390,7 +390,7 @@ private fun getDemoSubscriptions(): List<SubscriptionUiModel> {
         SubscriptionUiModel(
             subscriptionId = 1,
             title = "B2B e-marketplace / Free",
-            priceText = "0 â‚º",
+            priceText = "0 ₺",
             startDate = "25.09.2025",
             endDate = "25.09.2026",
             statusText = "Aktif Plan",

@@ -368,7 +368,7 @@ private fun getDemoCoupons(): List<CouponUiModel> {
         CouponUiModel(
             couponId = 1,
             code = "WELCOME2026",
-            amountText = "150,00 â‚º",
+            amountText = "150,00 ₺",
             expireDate = "1.01.0001 00:00:00",
             usageText = "-",
             status = CouponStatus.Active
@@ -376,7 +376,7 @@ private fun getDemoCoupons(): List<CouponUiModel> {
         CouponUiModel(
             couponId = 2,
             code = "BULBUL25",
-            amountText = "250,00 â‚º",
+            amountText = "250,00 ₺",
             expireDate = "1.01.0001 00:00:00",
             usageText = "-",
             status = CouponStatus.Used

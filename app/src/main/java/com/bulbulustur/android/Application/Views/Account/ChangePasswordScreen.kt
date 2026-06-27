@@ -332,7 +332,7 @@ private fun PasswordRuleRow(
             text = if (valid) {
                 "âœ“"
             } else {
-                "â€¢"
+                "•"
             },
             style = MaterialTheme.typography.labelLarge,
             color = if (valid) {

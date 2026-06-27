@@ -2955,7 +2955,7 @@ private fun getRetailProductDetail(
         RetailSellerProductItem(
             id = index,
             name = "Ortobella Günlük Sneaker Modeli $index",
-            priceText = "â‚º${799 + index * 20},90",
+            priceText = "₺${799 + index * 20},90",
             imageLabel = "P$index",
             drawableResId = if (index <= 4) {
                 R.drawable.h3ff3b33d6a1447c898cee6e336867bach
@@ -2973,8 +2973,8 @@ private fun getRetailProductDetail(
         shortDescription = "Günlük kullanım için rahat tabanlı, sade ve modern sneaker modeli.",
         description = "Hafif tabanı, yumuşak iç yüzeyi ve günlük kombinlere uyum saĞlayan sade tasarımıyla şehir içi kullanım için hazırlanmıştır. Ürün kalıbı standarttır. Taraklı ayaklarda yarım numara büyük tercih edilebilir.",
         categoryName = "Ayakkabı",
-        priceText = "â‚º899,90",
-        oldPriceText = "â‚º1.099,90",
+        priceText = "₺899,90",
+        oldPriceText = "₺1.099,90",
         discountText = "%20 İndirim",
         badgeText = "%20",
         ratingText = "â˜… 4.8",

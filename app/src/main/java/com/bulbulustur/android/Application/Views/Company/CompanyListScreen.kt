@@ -299,7 +299,7 @@ private fun CompanyListCard(
                     )
 
                     Text(
-                        text = "${company.Country} â€¢ ${company.City}",
+                        text = "${company.Country} • ${company.City}",
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

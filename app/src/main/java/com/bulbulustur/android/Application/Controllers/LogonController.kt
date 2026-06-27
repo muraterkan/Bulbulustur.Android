@@ -11,6 +11,8 @@ import com.bulbulustur.android.businesslayer.Core.Interface.IAuthenticationRepos
 import com.bulbulustur.android.businesslayer.Core.Interface.IMemberTempRepository
 import com.bulbulustur.android.businesslayer.Core.Model.AuthResponse
 import com.bulbulustur.android.businesslayer.Core.Model.MemberAuthModel
+import com.bulbulustur.android.businesslayer.Core.Model.MemberForgotModel
+import com.bulbulustur.android.businesslayer.Core.Model.MemberSetPasswordModel
 import com.bulbulustur.android.businesslayer.Core.Model.MemberTempFistdoorModel
 import com.bulbulustur.android.businesslayer.Core.Model.RevokeTokenRequest
 import com.bulbulustur.android.businesslayer.Core.Util.Execute.IExecuteService
@@ -26,10 +28,20 @@ data class LogonControllerState(
     val CurrentAction: String? = null,
     val LastResult: Result<*>? = null,
     val ErrorMessage: String? = null,
+
     val IsLoginSuccessful: Boolean = false,
     val IsLogoutCompleted: Boolean = false,
+
     val IsFirstDoorSuccessful: Boolean = false,
     val FirstDoorEmail: String = "",
+
+    val IsForgotPasswordSuccessful: Boolean = false,
+    val ForgotPasswordEmail: String = "",
+    val ForgotPasswordMessage: String? = null,
+
+    val IsSetNewPasswordSuccessful: Boolean = false,
+    val SetNewPasswordMessage: String? = null,
+
     val IsMemberTempLoading: Boolean = false,
     val IsMemberTempLoaded: Boolean = false,
     val MemberTemp: MemberTempDTO? = null,
@@ -56,6 +68,16 @@ data class LogonControllerState(
         get() =
             IsLoading &&
                     CurrentAction == "FirstDoorPost"
+
+    val IsSendingForgotPasswordLink: Boolean
+        get() =
+            IsLoading &&
+                    CurrentAction == "ForgotPasswordPost"
+
+    val IsUpdatingPassword: Boolean
+        get() =
+            IsLoading &&
+                    CurrentAction == "SetNewPasswordPost"
 }
 
 sealed interface LogonControllerEvent {
@@ -823,21 +845,281 @@ class LogonController(
     fun ForgotPassword() {
         _state.update { currentState ->
             currentState.copy(
+                IsLoading =
+                    false,
                 CurrentAction =
                     "ForgotPassword",
+                LastResult =
+                    null,
                 ErrorMessage =
+                    null,
+                IsForgotPasswordSuccessful =
+                    false,
+                ForgotPasswordEmail =
+                    "",
+                ForgotPasswordMessage =
                     null
             )
         }
     }
 
     fun ForgotPasswordPost(
-        body: Any? = null
+        email: String,
+        languageId: Int
     ) {
-        SetPendingOperation(
-            currentAction =
-                "ForgotPasswordPost"
-        )
+        if (_state.value.IsLoading) {
+            return
+        }
+
+        val normalizedEmail =
+            email.trim()
+
+        val validationMessage =
+            ValidateEmail(
+                email =
+                    normalizedEmail
+            )
+
+        if (validationMessage != null) {
+            _state.update { currentState ->
+                currentState.copy(
+                    IsLoading =
+                        false,
+                    CurrentAction =
+                        "ForgotPasswordPost",
+                    LastResult =
+                        null,
+                    ErrorMessage =
+                        validationMessage,
+                    IsForgotPasswordSuccessful =
+                        false,
+                    ForgotPasswordMessage =
+                        null
+                )
+            }
+
+            return
+        }
+
+        val model =
+            MemberForgotModel(
+                Email =
+                    normalizedEmail
+            )
+
+        viewModelScope.launch {
+            SetLoading(
+                currentAction =
+                    "ForgotPasswordPost"
+            )
+
+            val response =
+                executeService.PostAsync(
+                    operationType =
+                        "App.Logon.ForgotPasswordPost"
+                ) {
+                    authenticationRepository.SendLinkForForgotAsync(
+                        languageId =
+                            languageId,
+                        model =
+                            model
+                    )
+                }
+
+            if (!response.Success) {
+                _state.update { currentState ->
+                    currentState.copy(
+                        IsLoading =
+                            false,
+                        CurrentAction =
+                            "ForgotPasswordPost",
+                        LastResult =
+                            response,
+                        ErrorMessage =
+                            response.Message.ifBlank {
+                                "Şifre yenileme bağlantısı gönderilemedi."
+                            },
+                        IsForgotPasswordSuccessful =
+                            false,
+                        ForgotPasswordEmail =
+                            normalizedEmail,
+                        ForgotPasswordMessage =
+                            null
+                    )
+                }
+
+                return@launch
+            }
+
+            _state.update { currentState ->
+                currentState.copy(
+                    IsLoading =
+                        false,
+                    CurrentAction =
+                        "ForgotPasswordPost",
+                    LastResult =
+                        response,
+                    ErrorMessage =
+                        null,
+                    IsForgotPasswordSuccessful =
+                        true,
+                    ForgotPasswordEmail =
+                        normalizedEmail,
+                    ForgotPasswordMessage =
+                        response.Message.ifBlank {
+                            "Şifre yenileme bağlantısı e-posta adresinize gönderildi."
+                        }
+                )
+            }
+        }
+    }
+
+    fun SetNewPassword() {
+        _state.update { currentState ->
+            currentState.copy(
+                IsLoading =
+                    false,
+                CurrentAction =
+                    "SetNewPassword",
+                LastResult =
+                    null,
+                ErrorMessage =
+                    null,
+                IsSetNewPasswordSuccessful =
+                    false,
+                SetNewPasswordMessage =
+                    null
+            )
+        }
+    }
+
+    fun SetNewPasswordPost(
+        activationCode: String,
+        newPassword: String,
+        reNewPassword: String,
+        languageId: Int
+    ) {
+        if (_state.value.IsLoading) {
+            return
+        }
+
+        val normalizedActivationCode =
+            activationCode.trim()
+
+        val validationMessage =
+            ValidateSetNewPassword(
+                activationCode =
+                    normalizedActivationCode,
+                newPassword =
+                    newPassword,
+                reNewPassword =
+                    reNewPassword
+            )
+
+        if (validationMessage != null) {
+            _state.update { currentState ->
+                currentState.copy(
+                    IsLoading =
+                        false,
+                    CurrentAction =
+                        "SetNewPasswordPost",
+                    LastResult =
+                        null,
+                    ErrorMessage =
+                        validationMessage,
+                    IsSetNewPasswordSuccessful =
+                        false,
+                    SetNewPasswordMessage =
+                        null
+                )
+            }
+
+            return
+        }
+
+        val model =
+            MemberSetPasswordModel(
+                NewPassword =
+                    newPassword,
+                ReNewPassword =
+                    reNewPassword,
+                ActivationCode =
+                    normalizedActivationCode,
+                DeviceType =
+                    "Android",
+                IPAddress =
+                    "",
+                Browser =
+                    "",
+                Platform =
+                    "Android",
+                Location =
+                    "",
+                LanguageId =
+                    languageId
+            )
+
+        viewModelScope.launch {
+            SetLoading(
+                currentAction =
+                    "SetNewPasswordPost"
+            )
+
+            val response =
+                executeService.PostAsync(
+                    operationType =
+                        "App.Logon.SetNewPasswordPost"
+                ) {
+                    authenticationRepository.UpdatePasswordAsync(
+                        languageId =
+                            languageId,
+                        model =
+                            model
+                    )
+                }
+
+            if (!response.Success) {
+                _state.update { currentState ->
+                    currentState.copy(
+                        IsLoading =
+                            false,
+                        CurrentAction =
+                            "SetNewPasswordPost",
+                        LastResult =
+                            response,
+                        ErrorMessage =
+                            response.Message.ifBlank {
+                                "Şifreniz güncellenemedi."
+                            },
+                        IsSetNewPasswordSuccessful =
+                            false,
+                        SetNewPasswordMessage =
+                            null
+                    )
+                }
+
+                return@launch
+            }
+
+            _state.update { currentState ->
+                currentState.copy(
+                    IsLoading =
+                        false,
+                    CurrentAction =
+                        "SetNewPasswordPost",
+                    LastResult =
+                        response,
+                    ErrorMessage =
+                        null,
+                    IsSetNewPasswordSuccessful =
+                        true,
+                    SetNewPasswordMessage =
+                        response.Message.ifBlank {
+                            "Şifreniz başarıyla güncellendi."
+                        }
+                )
+            }
+        }
     }
 
     fun Expired() {
@@ -855,6 +1137,43 @@ class LogonController(
         _state.update { currentState ->
             currentState.copy(
                 ErrorMessage =
+                    null
+            )
+        }
+    }
+
+    fun ClearForgotPasswordFeedback() {
+        _state.update { currentState ->
+            currentState.copy(
+                ErrorMessage =
+                    null,
+                IsForgotPasswordSuccessful =
+                    false,
+                ForgotPasswordMessage =
+                    null
+            )
+        }
+    }
+
+    fun ClearSetNewPasswordFeedback() {
+        _state.update { currentState ->
+            currentState.copy(
+                ErrorMessage =
+                    null,
+                IsSetNewPasswordSuccessful =
+                    false,
+                SetNewPasswordMessage =
+                    null
+            )
+        }
+    }
+
+    fun ConsumeSetNewPasswordSuccess() {
+        _state.update { currentState ->
+            currentState.copy(
+                IsSetNewPasswordSuccessful =
+                    false,
+                SetNewPasswordMessage =
                     null
             )
         }
@@ -952,7 +1271,15 @@ class LogonController(
                 IsLogoutCompleted =
                     false,
                 IsFirstDoorSuccessful =
-                    false
+                    false,
+                IsForgotPasswordSuccessful =
+                    false,
+                ForgotPasswordMessage =
+                    null,
+                IsSetNewPasswordSuccessful =
+                    false,
+                SetNewPasswordMessage =
+                    null
             )
         }
     }
@@ -1006,6 +1333,10 @@ class LogonController(
             return "E-posta adresinizi girin."
         }
 
+        if (email.contains(" ")) {
+            return "Geçerli bir e-posta adresi girin."
+        }
+
         val emailParts =
             email.split("@")
 
@@ -1016,6 +1347,44 @@ class LogonController(
             !emailParts[1].contains(".")
         ) {
             return "Geçerli bir e-posta adresi girin."
+        }
+
+        return null
+    }
+
+    private fun ValidateSetNewPassword(
+        activationCode: String,
+        newPassword: String,
+        reNewPassword: String
+    ): String? {
+        if (activationCode.isBlank()) {
+            return "Şifre yenileme bağlantısı geçersiz veya süresi dolmuş."
+        }
+
+        if (newPassword.isBlank()) {
+            return "Yeni şifrenizi girin."
+        }
+
+        if (
+            newPassword.length < 8 ||
+            newPassword.length > 16
+        ) {
+            return "Şifre 8 ile 16 karakter arasında olmalıdır."
+        }
+
+        if (reNewPassword.isBlank()) {
+            return "Yeni şifrenizi tekrar girin."
+        }
+
+        if (
+            reNewPassword.length < 8 ||
+            reNewPassword.length > 16
+        ) {
+            return "Şifre 8 ile 16 karakter arasında olmalıdır."
+        }
+
+        if (newPassword != reNewPassword) {
+            return "Şifreler birbiriyle eşleşmiyor."
         }
 
         return null

@@ -1345,9 +1345,9 @@ private fun getDemoOrderDetail(
         statusText = "İşlemde",
         statusColor = BBColors.Orange.Orange600,
         productCountText = "3 ürün",
-        productTotalText = "2.400,75 â‚º",
-        cargoText = "50,00 â‚º",
-        totalText = "2.450,75 â‚º",
+        productTotalText = "2.400,75 ₺",
+        cargoText = "50,00 ₺",
+        totalText = "2.450,75 ₺",
         estimatedDelivery = "12 Mayıs 2026",
         addressText = "Murat Erkan Â· İstanbul / Türkiye Â· Teslimat adresi API bağlandıĞında gerçek kullanıcı adresinden beslenecek.",
         storeGroups = listOf(
@@ -1363,8 +1363,8 @@ private fun getDemoOrderDetail(
                         memberKey = "MEMBER-SECURE-501",
                         name = "Minimal Sırt Çantası",
                         quantity = 1,
-                        unitPriceText = "850,25 â‚º",
-                        totalText = "850,25 â‚º",
+                        unitPriceText = "850,25 ₺",
+                        totalText = "850,25 ₺",
                         statusText = "Sipariş Alındı",
                         status = OrderDetailLineStatus.Received
                     ),
@@ -1374,8 +1374,8 @@ private fun getDemoOrderDetail(
                         memberKey = "MEMBER-SECURE-502",
                         name = "Kadın Sneaker Günlük Ayakkabı",
                         quantity = 1,
-                        unitPriceText = "1.200,25 â‚º",
-                        totalText = "1.200,25 â‚º",
+                        unitPriceText = "1.200,25 ₺",
+                        totalText = "1.200,25 ₺",
                         statusText = "Kargoya Verildi",
                         status = OrderDetailLineStatus.Shipped
                     ),
@@ -1385,8 +1385,8 @@ private fun getDemoOrderDetail(
                         memberKey = "MEMBER-SECURE-503",
                         name = "Pamuklu Basic Tişört",
                         quantity = 1,
-                        unitPriceText = "350,25 â‚º",
-                        totalText = "350,25 â‚º",
+                        unitPriceText = "350,25 ₺",
+                        totalText = "350,25 ₺",
                         statusText = "Teslim Edildi",
                         status = OrderDetailLineStatus.Delivered
                     )

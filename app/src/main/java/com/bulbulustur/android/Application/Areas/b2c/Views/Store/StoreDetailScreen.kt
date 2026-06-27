@@ -865,7 +865,7 @@ private fun getRetailStoreDetail(
                 id = 1,
                 name = "Kadın Klasik Sneaker Ayakkabı",
                 categoryName = "Ayakkabı",
-                priceText = "â‚º899,90",
+                priceText = "₺899,90",
                 badgeText = "%20",
                 imageText = "P1"
             ),
@@ -873,7 +873,7 @@ private fun getRetailStoreDetail(
                 id = 2,
                 name = "Rahat Taban Günlük Ayakkabı",
                 categoryName = "Ayakkabı",
-                priceText = "â‚º749,90",
+                priceText = "₺749,90",
                 badgeText = "Yeni",
                 imageText = "P2"
             ),
@@ -881,7 +881,7 @@ private fun getRetailStoreDetail(
                 id = 3,
                 name = "Günlük Kullanım Omuz Çantası",
                 categoryName = "Çanta",
-                priceText = "â‚º649,90",
+                priceText = "₺649,90",
                 badgeText = "",
                 imageText = "P3"
             ),
@@ -889,7 +889,7 @@ private fun getRetailStoreDetail(
                 id = 4,
                 name = "Basic Pamuklu Kadın Tişört",
                 categoryName = "Kadın Giyim",
-                priceText = "â‚º329,90",
+                priceText = "₺329,90",
                 badgeText = "%15",
                 imageText = "P4"
             ),
@@ -897,7 +897,7 @@ private fun getRetailStoreDetail(
                 id = 5,
                 name = "Yeni Sezon Kadın Spor Ayakkabı",
                 categoryName = "Ayakkabı",
-                priceText = "â‚º1.099,90",
+                priceText = "₺1.099,90",
                 badgeText = "Yeni",
                 imageText = "P5"
             )

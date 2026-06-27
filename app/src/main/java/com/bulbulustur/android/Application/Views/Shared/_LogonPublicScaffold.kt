@@ -391,7 +391,7 @@ fun LogonPublicDefaultFooter(
 ) {
     Text(
         modifier = modifier.fillMaxWidth(),
-        text = "Â© 2026 Bulbulustur - Tüm hakları saklıdır",
+        text = "© 2026 Bulbulustur - Tüm hakları saklıdır",
         style = MaterialTheme.typography.bodySmall,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         textAlign = TextAlign.Center

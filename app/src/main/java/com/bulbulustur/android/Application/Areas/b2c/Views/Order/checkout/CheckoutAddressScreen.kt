@@ -647,7 +647,7 @@ private fun getCheckoutAddressScreenData(): CheckoutAddressScreenData {
     return CheckoutAddressScreenData(
         summary = CheckoutAddressOrderSummary(
             productCount = 4,
-            totalPriceText = "â‚º2.849,60",
+            totalPriceText = "₺2.849,60",
             storeCountText = "2"
         ),
         addresses = listOf(

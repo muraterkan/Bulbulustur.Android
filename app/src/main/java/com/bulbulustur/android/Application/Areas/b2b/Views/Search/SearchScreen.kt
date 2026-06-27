@@ -142,7 +142,7 @@ fun SearchScreen(
                 WholesaleSearchResultCard(
                     title = company.name,
                     description = company.description,
-                    meta = "${company.productCount} ürün â€¢ ${company.city}",
+                    meta = "${company.productCount} ürün • ${company.city}",
                     icon = company.icon,
                     onClick = {
                         onCompanyClick(company.companyId)
@@ -166,7 +166,7 @@ fun SearchScreen(
                 WholesaleSearchResultCard(
                     title = product.name,
                     description = product.description,
-                    meta = "Min. ${product.minimumOrderQuantity} adet â€¢ ${product.companyName}",
+                    meta = "Min. ${product.minimumOrderQuantity} adet • ${product.companyName}",
                     icon = product.icon,
                     onClick = {
                         onProductClick(product.productId)

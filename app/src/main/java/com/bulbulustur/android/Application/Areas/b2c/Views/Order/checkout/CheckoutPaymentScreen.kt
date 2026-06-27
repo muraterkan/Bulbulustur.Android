@@ -777,10 +777,10 @@ enum class CheckoutPaymentType {
 private fun getCheckoutPaymentScreenData(): CheckoutPaymentScreenData {
     return CheckoutPaymentScreenData(
         summary = CheckoutPaymentSummary(
-            productTotalText = "â‚º2.759,80",
-            cargoTotalText = "â‚º89,80",
-            discountText = "-â‚º120,00",
-            totalPriceText = "â‚º2.729,60"
+            productTotalText = "₺2.759,80",
+            cargoTotalText = "₺89,80",
+            discountText = "-₺120,00",
+            totalPriceText = "₺2.729,60"
         ),
         paymentMethods = listOf(
             CheckoutPaymentMethodItem(

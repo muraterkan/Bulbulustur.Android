@@ -565,7 +565,7 @@ private fun getDemoOrders(): List<OrderListUiModel> {
             statusText = "Hazırlanıyor",
             productTitle = "Kadın Sneaker Günlük Ayakkabı",
             productCountText = "2 ürün",
-            totalText = "1.250,50 â‚º",
+            totalText = "1.250,50 ₺",
             storeName = "Ortobella",
             statusColor = BBColors.Orange.Orange600,
             isActive = true
@@ -577,7 +577,7 @@ private fun getDemoOrders(): List<OrderListUiModel> {
             statusText = "Teslim Edildi",
             productTitle = "Pamuklu Basic Tişört",
             productCountText = "2 ürün",
-            totalText = "3.450,00 â‚º",
+            totalText = "3.450,00 ₺",
             storeName = "ModaLine",
             statusColor = BBColors.Green.Green600,
             isActive = false
@@ -589,7 +589,7 @@ private fun getDemoOrders(): List<OrderListUiModel> {
             statusText = "Hazırlanıyor",
             productTitle = "Minimal Sırt Çantası",
             productCountText = "1 ürün",
-            totalText = "850,25 â‚º",
+            totalText = "850,25 ₺",
             storeName = "UrbanBag",
             statusColor = BBColors.Orange.Orange600,
             isActive = true
@@ -601,7 +601,7 @@ private fun getDemoOrders(): List<OrderListUiModel> {
             statusText = "Ödeme Alındı",
             productTitle = "Ofis Aksesuar Seti",
             productCountText = "5 ürün",
-            totalText = "15.600,00 â‚º",
+            totalText = "15.600,00 ₺",
             storeName = "OfficePlus",
             statusColor = BBColors.Blue.Blue600,
             isActive = true
@@ -613,7 +613,7 @@ private fun getDemoOrders(): List<OrderListUiModel> {
             statusText = "Teslim Edildi",
             productTitle = "Seramik Kupa",
             productCountText = "1 ürün",
-            totalText = "210,00 â‚º",
+            totalText = "210,00 ₺",
             storeName = "HomeCraft",
             statusColor = BBColors.Green.Green600,
             isActive = false

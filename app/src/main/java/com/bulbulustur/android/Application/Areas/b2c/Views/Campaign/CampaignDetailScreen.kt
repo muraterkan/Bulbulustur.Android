@@ -671,7 +671,7 @@ private fun CampaignConditionSection(
                     )
                 ) {
                     Text(
-                        text = "â€¢",
+                        text = "•",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.primary
                     )
@@ -933,7 +933,7 @@ private fun getRetailCampaignDetail(
                 id = 1,
                 name = "Kadın klasik sneaker ayakkabı",
                 storeName = "Ortobella",
-                discountedPriceText = "â‚º899,90",
+                discountedPriceText = "₺899,90",
                 discountText = "%20",
                 imageText = "P1",
                 filterTags = listOf(
@@ -946,7 +946,7 @@ private fun getRetailCampaignDetail(
                 id = 2,
                 name = "Oversize pamuklu basic tişört",
                 storeName = "Moda Nova",
-                discountedPriceText = "â‚º349,90",
+                discountedPriceText = "₺349,90",
                 discountText = "%15",
                 imageText = "P2",
                 filterTags = listOf(
@@ -958,7 +958,7 @@ private fun getRetailCampaignDetail(
                 id = 3,
                 name = "Günlük kullanım omuz çantası",
                 storeName = "Urban Touch",
-                discountedPriceText = "â‚º649,90",
+                discountedPriceText = "₺649,90",
                 discountText = "%25",
                 imageText = "P3",
                 filterTags = listOf(
@@ -970,7 +970,7 @@ private fun getRetailCampaignDetail(
                 id = 4,
                 name = "Rahat taban günlük ayakkabı",
                 storeName = "Ortobella",
-                discountedPriceText = "â‚º749,90",
+                discountedPriceText = "₺749,90",
                 discountText = "%18",
                 imageText = "P4",
                 filterTags = listOf(

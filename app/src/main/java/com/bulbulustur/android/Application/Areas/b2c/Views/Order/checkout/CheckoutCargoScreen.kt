@@ -72,7 +72,7 @@ fun CheckoutCargoScreen(
         if (totalCargoPrice == 0.0) {
             "Ücretsiz"
         } else {
-            "â‚º${String.format("%.2f", totalCargoPrice).replace(".", ",")}"
+            "₺${String.format("%.2f", totalCargoPrice).replace(".", ",")}"
         }
     }
 
@@ -625,7 +625,7 @@ private fun getCheckoutCargoScreenData(): CheckoutCargoScreenData {
                         id = 1,
                         companyName = "Yurtiçi Kargo",
                         deliveryEstimateText = "Tahmini teslimat: 1-3 iş günü",
-                        priceText = "â‚º49,90",
+                        priceText = "₺49,90",
                         priceValue = 49.90,
                         note = "Hızlı gönderim"
                     ),
@@ -650,7 +650,7 @@ private fun getCheckoutCargoScreenData(): CheckoutCargoScreenData {
                         id = 3,
                         companyName = "Yurtiçi Kargo",
                         deliveryEstimateText = "Tahmini teslimat: 2-4 iş günü",
-                        priceText = "â‚º39,90",
+                        priceText = "₺39,90",
                         priceValue = 39.90,
                         note = ""
                     ),
@@ -658,7 +658,7 @@ private fun getCheckoutCargoScreenData(): CheckoutCargoScreenData {
                         id = 4,
                         companyName = "Ekonomik Kargo",
                         deliveryEstimateText = "Tahmini teslimat: 4-6 iş günü",
-                        priceText = "â‚º19,90",
+                        priceText = "₺19,90",
                         priceValue = 19.90,
                         note = "Ekonomik seçenek"
                     )

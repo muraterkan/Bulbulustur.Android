@@ -513,7 +513,7 @@ private fun getDemoRetailFavoriteProducts(): List<FavoriteProductUiModel> {
             productId = 101,
             productName = "Ortobella Comfort Hakiki Deri Topuk Dikeni Terlik M13",
             storeName = "Ortobella",
-            priceText = "â‚º849,90",
+            priceText = "₺849,90",
             metaTitle = "PERAKENDE",
             metaValue = "Sepete Eklenebilir ürün",
             mode = FavoriteMode.Retail
@@ -523,7 +523,7 @@ private fun getDemoRetailFavoriteProducts(): List<FavoriteProductUiModel> {
             productId = 102,
             productName = "Kadın Siyah Kışlık Bot",
             storeName = "PetPlace",
-            priceText = "â‚º1.249,00",
+            priceText = "₺1.249,00",
             metaTitle = "PERAKENDE",
             metaValue = "Stokta mevcut",
             mode = FavoriteMode.Retail

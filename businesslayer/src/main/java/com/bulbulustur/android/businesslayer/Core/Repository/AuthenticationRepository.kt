@@ -1,8 +1,11 @@
 package com.bulbulustur.android.businesslayer.Core.Repository
 
+import com.bulbulustur.android.businesslayer.Core.DTO.MemberDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.IAuthenticationRepository
 import com.bulbulustur.android.businesslayer.Core.Model.AuthResponse
 import com.bulbulustur.android.businesslayer.Core.Model.MemberAuthModel
+import com.bulbulustur.android.businesslayer.Core.Model.MemberForgotModel
+import com.bulbulustur.android.businesslayer.Core.Model.MemberSetPasswordModel
 import com.bulbulustur.android.businesslayer.Core.Model.RefreshTokenRequest
 import com.bulbulustur.android.businesslayer.Core.Model.RevokeTokenRequest
 import com.bulbulustur.android.businesslayer.Core.Network.ApiClient
@@ -43,6 +46,37 @@ class AuthenticationRepository(
             baseUrl = ApiRoutes.AUTHENTICATION_BASE_URL,
             method = "logout?languageId=$languageId",
             data = model
+        )
+    }
+
+    override suspend fun SendLinkForForgotAsync(
+        languageId: Int,
+        model: MemberForgotModel
+    ): Result<MemberDTO> {
+        return apiClient.PostAsync(
+            baseUrl = ApiRoutes.AUTHENTICATION_BASE_URL,
+            method = "forgot?languageId=$languageId",
+            data = model
+        )
+    }
+
+    override suspend fun UpdatePasswordAsync(
+        languageId: Int,
+        model: MemberSetPasswordModel
+    ): Result<MemberDTO> {
+        val requestModel =
+            model.copy(
+                LanguageId =
+                    languageId
+            )
+
+        return apiClient.PostAsync(
+            baseUrl =
+                ApiRoutes.AUTHENTICATION_BASE_URL,
+            method =
+                "update-password",
+            data =
+                requestModel
         )
     }
 }

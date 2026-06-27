@@ -787,25 +787,25 @@ private fun getRetailHomeProducts(): List<RetailHomeProductItem> {
     return listOf(
         RetailHomeProductItem(
             title = "Akıllı ev ürünü",
-            price = "â‚º749,90",
+            price = "₺749,90",
             backgroundColor = BBColors.Blue.Blue50,
             iconColor = BBColors.Blue.Blue700
         ),
         RetailHomeProductItem(
             title = "Mutfak yardımcısı",
-            price = "â‚º399,90",
+            price = "₺399,90",
             backgroundColor = BBColors.Green.Green50,
             iconColor = BBColors.Green.Green700
         ),
         RetailHomeProductItem(
             title = "Yeni sezon çanta",
-            price = "â‚º1.249,90",
+            price = "₺1.249,90",
             backgroundColor = BBColors.Pink.Pink50,
             iconColor = BBColors.Pink.Pink700
         ),
         RetailHomeProductItem(
             title = "Spor aksesuarı",
-            price = "â‚º219,90",
+            price = "₺219,90",
             backgroundColor = BBColors.Purple.Purple50,
             iconColor = BBColors.Purple.Purple700
         )

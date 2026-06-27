@@ -29,6 +29,22 @@ object LogonRoutes {
         }"
     }
 
+    const val SetNewPasswordArgument =
+        "activationCode"
+
+    const val SetNewPassword =
+        "logon/set-new-password/{$SetNewPasswordArgument}"
+
+    fun CreateSetNewPasswordRoute(
+        activationCode: String
+    ): String {
+        return "logon/set-new-password/${
+            Uri.encode(
+                activationCode
+            )
+        }"
+    }
+
     const val FirstDoor =
         "logon/first-door"
 

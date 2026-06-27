@@ -1193,22 +1193,22 @@ private fun getFavoriteSuggestions(): List<BasketFavoriteSuggestion> {
     return listOf(
         BasketFavoriteSuggestion(
             name = "Ortobella deri terlik",
-            priceText = "â‚º849,90",
+            priceText = "₺849,90",
             imageText = "F1"
         ),
         BasketFavoriteSuggestion(
             name = "Pamuklu basic tişört",
-            priceText = "â‚º349,90",
+            priceText = "₺349,90",
             imageText = "F2"
         ),
         BasketFavoriteSuggestion(
             name = "Kışlık bot koleksiyonu",
-            priceText = "â‚º1.249,00",
+            priceText = "₺1.249,00",
             imageText = "F3"
         ),
         BasketFavoriteSuggestion(
             name = "Rahat taban günlük ayakkabı",
-            priceText = "â‚º749,90",
+            priceText = "₺749,90",
             imageText = "F4"
         )
     )
@@ -1224,7 +1224,7 @@ private fun getBasketLineItems(): List<BasketLineItem> {
             storeLogoText = "OS",
             productName = "Kadın klasik sneaker ayakkabı",
             variantText = "Beyaz Â· 38 numara",
-            priceText = "â‚º899,90",
+            priceText = "₺899,90",
             priceValue = 899.90,
             discountValue = 80.0,
             quantity = 1,
@@ -1240,7 +1240,7 @@ private fun getBasketLineItems(): List<BasketLineItem> {
             storeLogoText = "OS",
             productName = "Rahat taban günlük ayakkabı",
             variantText = "Siyah Â· 39 numara",
-            priceText = "â‚º749,90",
+            priceText = "₺749,90",
             priceValue = 749.90,
             discountValue = 40.0,
             quantity = 1,
@@ -1256,7 +1256,7 @@ private fun getBasketLineItems(): List<BasketLineItem> {
             storeLogoText = "MN",
             productName = "Oversize pamuklu basic tişört",
             variantText = "Lacivert Â· M beden",
-            priceText = "â‚º349,90",
+            priceText = "₺349,90",
             priceValue = 349.90,
             discountValue = 0.0,
             quantity = 2,
@@ -1268,7 +1268,7 @@ private fun getBasketLineItems(): List<BasketLineItem> {
 }
 
 private fun formatPrice(value: Double): String {
-    return "â‚º${String.format("%.2f", value).replace(".", ",")}"
+    return "₺${String.format("%.2f", value).replace(".", ",")}"
 }
 
 @Preview(showBackground = true)

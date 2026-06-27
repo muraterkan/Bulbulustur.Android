@@ -217,7 +217,7 @@ fun WholesaleProductDetailScreen(
             )
 
             WholesaleHorizontalProductSection(
-                title = "Bu Firmanın Ã‡ok Satanları",
+                title = "Bu Firmanın Çok Satanları",
                 products = product.companyBestSellerProducts,
                 onHeaderClick = onCompanyBestSellerProductsClick,
                 onProductClick = onCompanyBestSellerProductClick
@@ -422,7 +422,7 @@ private fun WholesaleProductTitleCard(
                 )
 
                 WholesaleMiniPill(
-                    text = "Ã–zelleştirilebilir",
+                    text = "Özelleştirilebilir",
                     icon = Icons.Outlined.Tune,
                     containerColor = BBColors.Blue.Blue50,
                     contentColor = BBColors.Blue.Blue700
@@ -447,7 +447,7 @@ private fun WholesaleProductTitleCard(
                 )
 
                 Text(
-                    text = "â€¢",
+                    text = "•",
                     style = MaterialTheme.typography.bodySmall,
                     color = BBColors.TextMuted
                 )
@@ -506,7 +506,7 @@ private fun WholesaleTradeSummaryCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
             WholesaleSectionLabel(
-                text = "Ticari Teklif Ã–zeti",
+                text = "Ticari Teklif Özeti",
                 icon = Icons.Outlined.RequestQuote
             )
 
@@ -640,7 +640,7 @@ private fun WholesaleFeatureGridCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
             WholesaleSectionLabel(
-                text = "Ã–ne Ã‡ıkan Ã–zellikler",
+                text = "Öne Çıkan Özellikler",
                 icon = Icons.Outlined.Inventory2
             )
 
@@ -717,7 +717,7 @@ private fun WholesaleCustomizationOptionsCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             WholesaleCardHeaderInline(
-                title = "Ã–zelleştirme Seçenekleri",
+                title = "Özelleştirme Seçenekleri",
                 icon = Icons.Outlined.Tune,
                 onClick = onCustomizationRequestClick
             )
@@ -734,7 +734,7 @@ private fun WholesaleCustomizationOptionsCard(
             }
 
             WholesaleInlineAction(
-                text = "Ã–zelleştirme Talebi Oluştur",
+                text = "Özelleştirme Talebi Oluştur",
                 icon = Icons.Outlined.Tune,
                 onClick = onCustomizationRequestClick
             )
@@ -1259,7 +1259,7 @@ private fun WholesaleRelatedCategoryChipsSection(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             Text(
-                text = "Ä°lgili Kategoriler",
+                text = "İlgili Kategoriler",
                 style = MaterialTheme.typography.titleMedium,
                 color = BBColors.TextStrong,
                 fontWeight = FontWeight.Bold
@@ -1834,7 +1834,7 @@ private fun WholesaleProductDetailBottomBar(
             )
 
             WholesaleBottomActionButton(
-                text = "Ã–zelleştir",
+                text = "Özelleştir",
                 onClick = onCustomizationRequestClick,
                 modifier = Modifier.weight(1.05f),
                 containerColor = BBColors.SurfaceMuted,
@@ -2027,12 +2027,12 @@ private fun getWholesaleProductDetail(
 ): WholesaleProductDetail {
     return WholesaleProductDetail(
         id = productId,
-        name = "BSCI Sertifikalı Ã–zelleştirilebilir Ã‡ocuk Sırt Ã‡antası",
+        name = "BSCI Sertifikalı Özelleştirilebilir Çocuk Sırt Çantası",
         searchPlaceholder = "Toptan Ürün, Kategori Veya Firma Ara",
         shortDescription = "Okul, promosyon ve kurumsal alımlar için logo, renk ve ambalaj özelleştirme destekli toptan ürün.",
         longDescription = "Farklı renk, baskı ve paketleme seçenekleriyle toptan siparişe uygun çocuk sırt çantasıdır. Ürün; okul, anaokulu, promosyon ve kurumsal kampanya ihtiyaçları için planlanabilir. Minimum sipariş, üretim süresi, ambalaj, logo baskısı ve teslimat koşulları teklif sürecinde netleştirilir.",
         badgeText = "Toptan Kategori",
-        priceLabel = "Teklif Ä°le",
+        priceLabel = "Teklif İle",
         minimumOrderLabel = "499 Adet",
         deliveryTimeLabel = "15-25 Gün",
         deliveryCountryLabel = "TR",
@@ -2048,21 +2048,21 @@ private fun getWholesaleProductDetail(
             WholesaleProductImage("Ürün 4", BBColors.Surface, BBColors.TextMuted, R.drawable.h3ff3b33d6a1447c898cee6e336867bachvar3)
         ),
         priceBreaks = listOf(
-            WholesalePriceBreak("100-499 Adet", "Teklif Ä°le"),
+            WholesalePriceBreak("100-499 Adet", "Teklif İle"),
             WholesalePriceBreak("500-999 Adet", "Son Fiyat"),
-            WholesalePriceBreak("1000+ Adet", "Ã–zel Teklif")
+            WholesalePriceBreak("1000+ Adet", "Özel Teklif")
         ),
         tradeBenefits = listOf(
             WholesaleTradeBenefit("Kurumsal Alım", Icons.Outlined.Business),
             WholesaleTradeBenefit("Numune Mevcut", Icons.Outlined.Inventory2),
             WholesaleTradeBenefit("Güvenli Ticaret", Icons.Outlined.Security),
-            WholesaleTradeBenefit("Ã–zelleştirilebilir", Icons.Outlined.Tune)
+            WholesaleTradeBenefit("Özelleştirilebilir", Icons.Outlined.Tune)
         ),
         highlightFeatures = listOf(
             WholesaleHighlightFeature("Kullanım Alanı", "Okul, Promosyon"),
             WholesaleHighlightFeature("Malzeme", "Polyester"),
             WholesaleHighlightFeature("Baskı", "Logo / Grafik"),
-            WholesaleHighlightFeature("Paketleme", "Ã–zel Ambalaj"),
+            WholesaleHighlightFeature("Paketleme", "Özel Ambalaj"),
             WholesaleHighlightFeature("Üretim Tipi", "OEM / ODM"),
             WholesaleHighlightFeature("Menşei", "Türkiye")
         ),
@@ -2072,9 +2072,9 @@ private fun getWholesaleProductDetail(
             WholesaleProductProperty("Menşei", "Türkiye"),
             WholesaleProductProperty("GTIP Kodu", "4202.92.91.00"),
             WholesaleProductProperty("Birim AĞırlık", "0,42 Kg"),
-            WholesaleProductProperty("Birim Ã–lçü", "31 Ã— 14 Ã— 42 Cm"),
+            WholesaleProductProperty("Birim Ölçü", "31 × 14 × 42 Cm"),
             WholesaleProductProperty("Tedarik Süresi", "15-25 Gün"),
-            WholesaleProductProperty("Ã–deme Åartı", "Teklif Sürecinde Netleşir")
+            WholesaleProductProperty("Ödeme Åartı", "Teklif Sürecinde Netleşir")
         ),
         deliverySteps = listOf(
             WholesaleDeliveryStep("100+", "15 Gün"),
@@ -2087,7 +2087,7 @@ private fun getWholesaleProductDetail(
                 description = "Ürün üzerine marka logosu, okul amblemi veya kampanya görseli uygulanabilir."
             ),
             WholesaleCustomizationOption(
-                title = "Ã–zel Ambalaj",
+                title = "Özel Ambalaj",
                 description = "Kutu, poşet, etiket ve sevkiyat paketleme seçenekleri siparişe göre planlanabilir."
             ),
             WholesaleCustomizationOption(
@@ -2096,34 +2096,34 @@ private fun getWholesaleProductDetail(
             )
         ),
         relatedCategories = listOf(
-            WholesaleRelatedCategoryChip(1, "Ã‡ocuk Ã‡antası"),
-            WholesaleRelatedCategoryChip(2, "Okul Ã‡antası"),
+            WholesaleRelatedCategoryChip(1, "Çocuk Çantası"),
+            WholesaleRelatedCategoryChip(2, "Okul Çantası"),
             WholesaleRelatedCategoryChip(3, "Promosyon Ürünleri"),
             WholesaleRelatedCategoryChip(4, "Tekstil Aksesuarları"),
             WholesaleRelatedCategoryChip(5, "Kurumsal Alım")
         ),
         companySimilarProducts = listOf(
             WholesaleMiniProduct(1, "Benzer Ürün 1", "1.129-1.753 TL", "200 Adet MOQ", "Düşük Fiyat", BBColors.Surface, BBColors.TextMuted, R.drawable.h3ff3b33d6a1447c898cee6e336867bach),
-            WholesaleMiniProduct(2, "Benzer Ürün 2", "2.258-3.315 TL", "100 Adet MOQ", "Ã–zel Üretim", BBColors.Surface, BBColors.TextMuted, R.drawable.h3ff3b33d6a1447c898cee6e336867bachvar1),
+            WholesaleMiniProduct(2, "Benzer Ürün 2", "2.258-3.315 TL", "100 Adet MOQ", "Özel Üretim", BBColors.Surface, BBColors.TextMuted, R.drawable.h3ff3b33d6a1447c898cee6e336867bachvar1),
             WholesaleMiniProduct(3, "Benzer Ürün 3", "2.690-3.483 TL", "50 Adet MOQ", "Hızlı Teklif", BBColors.Surface, BBColors.TextMuted, R.drawable.h3ff3b33d6a1447c898cee6e336867bachvar2)
         ),
         companyBestSellerProducts = listOf(
-            WholesaleMiniProduct(4, "Ã‡ok Satan Ürün 1", "1.561-2.066 TL", "10+ Görüntülenme", "Popüler", BBColors.Surface, BBColors.TextMuted, R.drawable.h3ff3b33d6a1447c898cee6e336867bachvar3),
-            WholesaleMiniProduct(5, "Ã‡ok Satan Ürün 2", "2.618-3.685 TL", "1 Satıldı", "Yeni", BBColors.Surface, BBColors.TextMuted, R.drawable.h3ff3b33d6a1447c898cee6e336867bach),
-            WholesaleMiniProduct(6, "Ã‡ok Satan Ürün 3", "2.883-3.747 TL", "20+ Görüntülenme", "Düşük Fiyat", BBColors.Surface, BBColors.TextMuted, R.drawable.h3ff3b33d6a1447c898cee6e336867bachvar1)
+            WholesaleMiniProduct(4, "Çok Satan Ürün 1", "1.561-2.066 TL", "10+ Görüntülenme", "Popüler", BBColors.Surface, BBColors.TextMuted, R.drawable.h3ff3b33d6a1447c898cee6e336867bachvar3),
+            WholesaleMiniProduct(5, "Çok Satan Ürün 2", "2.618-3.685 TL", "1 Satıldı", "Yeni", BBColors.Surface, BBColors.TextMuted, R.drawable.h3ff3b33d6a1447c898cee6e336867bach),
+            WholesaleMiniProduct(6, "Çok Satan Ürün 3", "2.883-3.747 TL", "20+ Görüntülenme", "Düşük Fiyat", BBColors.Surface, BBColors.TextMuted, R.drawable.h3ff3b33d6a1447c898cee6e336867bachvar1)
         ),
         company = WholesaleProductDetailCompany(
             id = 1,
             name = "Ortobella Comfort",
             logoText = "OC",
-            description = "Ã‡anta, tekstil ve promosyon ürünleri alanında çalışan doğrulanmış firma.",
+            description = "Çanta, tekstil ve promosyon ürünleri alanında çalışan doğrulanmış firma.",
             ratingText = "4.8",
             productCountText = "120+ Ürün",
             country = "Türkiye",
             isVerified = true,
             metrics = listOf(
                 WholesaleCompanyMetricItem("Zamanında Teslim", "96%"),
-                WholesaleCompanyMetricItem("Ã‡evrim Ä°çi Gelir", "â‚º10M+"),
+                WholesaleCompanyMetricItem("Çevrim İçi Gelir", "₺10M+"),
                 WholesaleCompanyMetricItem("Yanıt Süresi", "â‰¤8s"),
                 WholesaleCompanyMetricItem("Kuruluş Yılı", "2015"),
                 WholesaleCompanyMetricItem("Tesis Alanı", "22.100mÂ²"),

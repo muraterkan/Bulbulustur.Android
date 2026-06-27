@@ -422,7 +422,7 @@ private fun ProductHistoryImageBox(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "Ã—",
+                text = "×",
                 style = MaterialTheme.typography.labelLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurfaceVariant

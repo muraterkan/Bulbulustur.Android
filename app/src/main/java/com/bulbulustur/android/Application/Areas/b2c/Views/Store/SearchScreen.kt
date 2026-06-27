@@ -675,21 +675,21 @@ private fun getRetailSearchScreenData(): RetailSearchScreenData {
                 id = 1,
                 name = "Kadın klasik sneaker ayakkabı",
                 storeName = "Ortobella",
-                priceText = "â‚º899,90",
+                priceText = "₺899,90",
                 imageText = "P1"
             ),
             RetailSearchProductItem(
                 id = 2,
                 name = "Kablosuz bluetooth kulaklık",
                 storeName = "Tekno Sepet",
-                priceText = "â‚º649,90",
+                priceText = "₺649,90",
                 imageText = "P2"
             ),
             RetailSearchProductItem(
                 id = 3,
                 name = "Pamuklu oversize basic tişört",
                 storeName = "Moda Nova",
-                priceText = "â‚º349,90",
+                priceText = "₺349,90",
                 imageText = "P3"
             )
         ),

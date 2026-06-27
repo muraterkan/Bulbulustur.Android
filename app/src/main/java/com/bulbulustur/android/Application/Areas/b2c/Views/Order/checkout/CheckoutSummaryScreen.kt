@@ -749,7 +749,7 @@ private fun getCheckoutSummaryScreenData(): CheckoutSummaryScreenData {
                 name = "Kadın klasik sneaker ayakkabı",
                 storeName = "Ortobella Store",
                 variantText = "Beyaz Â· 38",
-                priceText = "â‚º899,90",
+                priceText = "₺899,90",
                 quantity = 1,
                 imageText = "P1"
             ),
@@ -758,7 +758,7 @@ private fun getCheckoutSummaryScreenData(): CheckoutSummaryScreenData {
                 name = "Rahat taban günlük ayakkabı",
                 storeName = "Ortobella Store",
                 variantText = "Siyah Â· 39",
-                priceText = "â‚º749,90",
+                priceText = "₺749,90",
                 quantity = 1,
                 imageText = "P2"
             ),
@@ -767,16 +767,16 @@ private fun getCheckoutSummaryScreenData(): CheckoutSummaryScreenData {
                 name = "Oversize pamuklu basic tişört",
                 storeName = "Moda Nova",
                 variantText = "Lacivert Â· M",
-                priceText = "â‚º349,90",
+                priceText = "₺349,90",
                 quantity = 2,
                 imageText = "P3"
             )
         ),
         total = CheckoutSummaryTotal(
-            productTotalText = "â‚º2.759,80",
-            cargoTotalText = "â‚º89,80",
-            discountText = "-â‚º120,00",
-            totalPriceText = "â‚º2.729,60"
+            productTotalText = "₺2.759,80",
+            cargoTotalText = "₺89,80",
+            discountText = "-₺120,00",
+            totalPriceText = "₺2.729,60"
         )
     )
 }

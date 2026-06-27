@@ -448,7 +448,7 @@ private fun getSupportCategoryItems(): List<SupportCategoryItem> {
         SupportCategoryItem(
             categoryId = 4,
             title = "Entegrasyon",
-            description = "API, kargo, ödeme ve dış sistem baĞlantıları.",
+            description = "API, kargo, ödeme ve dış sistem bağlantıları.",
             articleCount = 15,
             icon = Icons.Outlined.IntegrationInstructions
         )

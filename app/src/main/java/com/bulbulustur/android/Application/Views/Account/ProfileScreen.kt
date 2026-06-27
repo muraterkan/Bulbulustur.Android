@@ -198,8 +198,8 @@ fun ProfileScreen(
 
             item {
                 ProfileInfoSection(
-                    title = "Kurumsal BaĞlantı",
-                    description = "Şirket ve B2B görünürlük baĞlantılarınız.",
+                    title = "Kurumsal Bağlantı",
+                    description = "Şirket ve B2B görünürlük bağlantılarınız.",
                     icon = Icons.Outlined.Business
                 ) {
                     ProfileInfoRow(

@@ -1,23 +1,28 @@
 package com.bulbulustur.android.Application.wwwroot.DesignObjects
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.material3.DropdownMenu
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ArrowDropDown
+import androidx.compose.material.icons.outlined.ArrowDropUp
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 
@@ -26,6 +31,7 @@ data class BbSelectOption(
     val text: String
 )
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BbSelectInput(
     selectedValue: String,
@@ -42,67 +48,119 @@ fun BbSelectInput(
         mutableStateOf(false)
     }
 
-    val selectedText = options
-        .firstOrNull { option -> option.value == selectedValue }
-        ?.text
-        .orEmpty()
+    val selectedText =
+        options
+            .firstOrNull { option ->
+                option.value == selectedValue
+            }
+            ?.text
+            .orEmpty()
 
     Column(
-        modifier = modifier.fillMaxWidth()
+        modifier =
+            modifier.fillMaxWidth()
     ) {
-        Box(
-            modifier = Modifier.fillMaxWidth()
+        ExposedDropdownMenuBox(
+            expanded =
+                isExpanded,
+            onExpandedChange = {
+                if (enabled) {
+                    isExpanded =
+                        !isExpanded
+                }
+            },
+            modifier =
+                Modifier.fillMaxWidth()
         ) {
             OutlinedTextField(
-                value = selectedText,
-                onValueChange = {},
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .defaultMinSize(minHeight = BBSpacing.Space14)
-                    .clickable(enabled = enabled) {
-                        isExpanded = true
-                    },
-                enabled = enabled,
-                readOnly = true,
+                value =
+                    selectedText,
+                onValueChange = {
+                },
+                modifier =
+                    Modifier
+                        .menuAnchor()
+                        .fillMaxWidth()
+                        .defaultMinSize(
+                            minHeight =
+                                BBSpacing.Space14
+                        ),
+                enabled =
+                    enabled,
+                readOnly =
+                    true,
                 label = {
-                    Text(text = label)
-                },
-                placeholder = {
-                    Text(text = placeholder)
-                },
-                trailingIcon = {
                     Text(
-                        text = if (isExpanded) {
-                            "â–´"
-                        } else {
-                            "â–¾"
-                        },
-                        style = MaterialTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        text =
+                            label
                     )
                 },
-                isError = errorText != null,
-                shape = BBRadius.Input
+                placeholder = {
+                    Text(
+                        text =
+                            placeholder
+                    )
+                },
+                trailingIcon = {
+                    Icon(
+                        imageVector =
+                            if (isExpanded) {
+                                Icons.Outlined.ArrowDropUp
+                            } else {
+                                Icons.Outlined.ArrowDropDown
+                            },
+                        contentDescription =
+                            if (isExpanded) {
+                                "Listeyi kapat"
+                            } else {
+                                "Listeyi aç"
+                            },
+                        tint =
+                            MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier =
+                            Modifier.defaultMinSize(
+                                minWidth =
+                                    BBIcon.SizeMd,
+                                minHeight =
+                                    BBIcon.SizeMd
+                            )
+                    )
+                },
+                isError =
+                    errorText != null,
+                shape =
+                    BBRadius.Input,
+                colors =
+                    ExposedDropdownMenuDefaults.outlinedTextFieldColors()
             )
 
-            DropdownMenu(
-                expanded = isExpanded,
+            ExposedDropdownMenu(
+                expanded =
+                    isExpanded,
                 onDismissRequest = {
-                    isExpanded = false
+                    isExpanded =
+                        false
                 },
-                modifier = Modifier.fillMaxWidth()
+                modifier =
+                    Modifier.fillMaxWidth()
             ) {
                 options.forEach { option ->
                     DropdownMenuItem(
                         text = {
                             Text(
-                                text = option.text,
-                                style = MaterialTheme.typography.bodyMedium
+                                text =
+                                    option.text,
+                                style =
+                                    MaterialTheme.typography.bodyMedium
                             )
                         },
                         onClick = {
-                            onValueChange(option.value)
-                            isExpanded = false
+                            onValueChange(
+                                option.value
+                            )
+
+                            isExpanded =
+                                false
                         }
                     )
                 }
@@ -110,8 +168,10 @@ fun BbSelectInput(
         }
 
         BbSelectSupportText(
-            helperText = helperText,
-            errorText = errorText
+            helperText =
+                helperText,
+            errorText =
+                errorText
         )
     }
 }
@@ -122,25 +182,40 @@ private fun BbSelectSupportText(
     errorText: String?
 ) {
     if (errorText != null) {
-        Spacer(modifier = Modifier.height(BBSpacing.Space1))
+        Spacer(
+            modifier =
+                Modifier.height(
+                    BBSpacing.Space1
+                )
+        )
 
         Text(
-            text = errorText,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.error
+            text =
+                errorText,
+            style =
+                MaterialTheme.typography.labelSmall,
+            color =
+                MaterialTheme.colorScheme.error
         )
 
         return
     }
 
     if (helperText != null) {
-        Spacer(modifier = Modifier.height(BBSpacing.Space1))
+        Spacer(
+            modifier =
+                Modifier.height(
+                    BBSpacing.Space1
+                )
+        )
 
         Text(
-            text = helperText,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            text =
+                helperText,
+            style =
+                MaterialTheme.typography.labelSmall,
+            color =
+                MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
-

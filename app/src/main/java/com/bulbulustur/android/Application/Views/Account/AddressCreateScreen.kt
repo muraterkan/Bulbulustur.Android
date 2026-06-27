@@ -395,7 +395,7 @@ private fun AddressCreateInfoCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Adres bilgileriniz, siparişlerinizin teslimatının saĞlanması amacıyla işlenir. Detaylar için gizlilik politikasını inceleyebilirsiniz.",
+            text = "Adres bilgileriniz, siparişlerinizin teslimatının sağlanması amacıyla işlenir. Detaylar için gizlilik politikasını inceleyebilirsiniz.",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

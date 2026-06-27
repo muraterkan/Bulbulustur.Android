@@ -12,10 +12,28 @@ class AddressCityRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IAddressCityRepository {
 
-    override suspend fun GetAddressCityListAsync(): Result<List<AddressCityDTO>> {
+    override suspend fun GetAddressCitiesAsync(
+        countryId: Int,
+        count: Int
+    ): Result<List<AddressCityDTO>> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetAddressCityListAsync"
+            baseUrl =
+                ApiRoutes.GLOBALIZATION_BASE_URL,
+            method =
+                "AddressCity/GetAddressCitiesAsync",
+            query =
+                "countryId=$countryId&count=$count"
+        )
+    }
+
+    override suspend fun GetAddressCityListAsync():
+            Result<List<AddressCityDTO>> {
+
+        return GetAddressCitiesAsync(
+            countryId =
+                1,
+            count =
+                100
         )
     }
 
@@ -23,9 +41,12 @@ class AddressCityRepository(
         addressCityId: Int
     ): Result<AddressCityUpdateModel?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetAddressCityByIdAsync",
-            query = "addressCityId=$addressCityId"
+            baseUrl =
+                ApiRoutes.GLOBALIZATION_BASE_URL,
+            method =
+                "AddressCity/GetAddressCityByIdAsync",
+            query =
+                "addressCityId=$addressCityId"
         )
     }
 
@@ -33,9 +54,12 @@ class AddressCityRepository(
         addressCityId: Int
     ): Result<AddressCityDTO?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetAddressCityByIdExtendedAsync",
-            query = "addressCityId=$addressCityId"
+            baseUrl =
+                ApiRoutes.GLOBALIZATION_BASE_URL,
+            method =
+                "AddressCity/GetAddressCityByIdExtendedAsync",
+            query =
+                "addressCityId=$addressCityId"
         )
     }
 
@@ -43,9 +67,12 @@ class AddressCityRepository(
         model: AddressCityInsertModel
     ): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "InsertAsync",
-            data = model
+            baseUrl =
+                ApiRoutes.GLOBALIZATION_BASE_URL,
+            method =
+                "AddressCity/AddressCityInsertAsync",
+            data =
+                model
         )
     }
 
@@ -53,9 +80,12 @@ class AddressCityRepository(
         model: AddressCityUpdateModel
     ): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "UpdateAsync",
-            data = model
+            baseUrl =
+                ApiRoutes.GLOBALIZATION_BASE_URL,
+            method =
+                "AddressCity/AddressCityUpdateAsync",
+            data =
+                model
         )
     }
 
@@ -63,9 +93,12 @@ class AddressCityRepository(
         addressCityId: Int
     ): Result<Unit> {
         return apiClient.DeleteAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "DeleteAsync",
-            query = "addressCityId=$addressCityId"
+            baseUrl =
+                ApiRoutes.GLOBALIZATION_BASE_URL,
+            method =
+                "AddressCity/AddressCityDelete",
+            query =
+                "addressCityId=$addressCityId"
         )
     }
 }

@@ -80,7 +80,7 @@ fun LegalDocumentDetailScreen(
             item {
                 BbSectionHeader(
                     title = "İçerik",
-                    subtitle = "Bu metin API baĞlantısından sonra gerçek içerikle beslenecek"
+                    subtitle = "Bu metin API bağlantısından sonra gerçek içerikle beslenecek"
                 )
             }
 
@@ -329,7 +329,7 @@ private fun LegalDocumentInfoCard() {
                 )
 
                 Text(
-                    text = "Bu ekrandaki metinler mobil API baĞlantısından sonra web tarafındaki güncel içeriklerle eşleşecek.",
+                    text = "Bu ekrandaki metinler mobil API bağlantısından sonra web tarafındaki güncel içeriklerle eşleşecek.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -412,7 +412,7 @@ private fun getLegalPrivacySections(): List<LegalDocumentSection> {
         ),
         LegalDocumentSection(
             title = "TopladıĞımız kişisel veriler",
-            body = "Hesap, iletişim, sipariş, ödeme, teslimat ve platform kullanımına ilişkin veriler gerçek içerik API baĞlantısından sonra gösterilecek."
+            body = "Hesap, iletişim, sipariş, ödeme, teslimat ve platform kullanımına ilişkin veriler gerçek içerik API bağlantısından sonra gösterilecek."
         ),
         LegalDocumentSection(
             title = "Verilerin kullanım amacı",

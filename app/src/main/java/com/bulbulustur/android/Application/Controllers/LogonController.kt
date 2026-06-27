@@ -2,6 +2,11 @@ package com.bulbulustur.android.Application.Controllers
 
 import androidx.lifecycle.viewModelScope
 import com.bulbulustur.android.Application.Session.UserSessionManager
+import com.bulbulustur.android.businesslayer.Core.DTO.AddressCityDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.AddressCountryDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.MemberTempDTO
+import com.bulbulustur.android.businesslayer.Core.Interface.IAddressCityRepository
+import com.bulbulustur.android.businesslayer.Core.Interface.IAddressCountryRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IAuthenticationRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IMemberTempRepository
 import com.bulbulustur.android.businesslayer.Core.Model.AuthResponse
@@ -24,7 +29,22 @@ data class LogonControllerState(
     val IsLoginSuccessful: Boolean = false,
     val IsLogoutCompleted: Boolean = false,
     val IsFirstDoorSuccessful: Boolean = false,
-    val FirstDoorEmail: String = ""
+    val FirstDoorEmail: String = "",
+    val IsMemberTempLoading: Boolean = false,
+    val IsMemberTempLoaded: Boolean = false,
+    val MemberTemp: MemberTempDTO? = null,
+
+    val Countries: List<AddressCountryDTO> = emptyList(),
+    val Cities: List<AddressCityDTO> = emptyList(),
+
+    val SelectedCountryId: Int = 0,
+    val SelectedCityId: Int = 0,
+
+    val IsCountriesLoading: Boolean = false,
+    val IsCitiesLoading: Boolean = false,
+
+    val CountryError: String? = null,
+    val CityError: String? = null
 ) {
 
     val IsLoggingOut: Boolean
@@ -55,6 +75,8 @@ class LogonController(
     private val executeService: IExecuteService,
     private val authenticationRepository: IAuthenticationRepository,
     private val memberTempRepository: IMemberTempRepository,
+    private val addressCountryRepository: IAddressCountryRepository,
+    private val addressCityRepository: IAddressCityRepository,
     private val userSessionManager: UserSessionManager
 ) : BaseController() {
 
@@ -69,9 +91,12 @@ class LogonController(
     fun Login() {
         _state.update { currentState ->
             currentState.copy(
-                CurrentAction = "Login",
-                ErrorMessage = null,
-                IsLoginSuccessful = false
+                CurrentAction =
+                    "Login",
+                ErrorMessage =
+                    null,
+                IsLoginSuccessful =
+                    false
             )
         }
     }
@@ -87,13 +112,17 @@ class LogonController(
 
         val model =
             MemberAuthModel(
-                Email = email.trim(),
-                Password = password
+                Email =
+                    email.trim(),
+                Password =
+                    password
             )
 
         LoginPost(
-            model = model,
-            languageId = languageId
+            model =
+                model,
+            languageId =
+                languageId
         )
     }
 
@@ -107,23 +136,31 @@ class LogonController(
 
         val normalizedModel =
             model.copy(
-                Email = model.Email.trim()
+                Email =
+                    model.Email.trim()
             )
 
         val validationMessage =
             ValidateLogin(
-                email = normalizedModel.Email,
-                password = normalizedModel.Password
+                email =
+                    normalizedModel.Email,
+                password =
+                    normalizedModel.Password
             )
 
         if (validationMessage != null) {
             _state.update { currentState ->
                 currentState.copy(
-                    IsLoading = false,
-                    CurrentAction = "LoginPost",
-                    LastResult = null,
-                    ErrorMessage = validationMessage,
-                    IsLoginSuccessful = false
+                    IsLoading =
+                        false,
+                    CurrentAction =
+                        "LoginPost",
+                    LastResult =
+                        null,
+                    ErrorMessage =
+                        validationMessage,
+                    IsLoginSuccessful =
+                        false
                 )
             }
 
@@ -132,7 +169,8 @@ class LogonController(
 
         viewModelScope.launch {
             SetLoading(
-                currentAction = "LoginPost"
+                currentAction =
+                    "LoginPost"
             )
 
             val response =
@@ -141,13 +179,16 @@ class LogonController(
                         "App.Logon.LoginPost"
                 ) {
                     authenticationRepository.LoginAsync(
-                        languageId = languageId,
-                        model = normalizedModel
+                        languageId =
+                            languageId,
+                        model =
+                            normalizedModel
                     )
                 }
 
             HandleLoginResponse(
-                response = response
+                response =
+                    response
             )
         }
     }
@@ -162,12 +203,18 @@ class LogonController(
 
         _state.update { currentState ->
             currentState.copy(
-                IsLoading = true,
-                CurrentAction = "LogoutPost",
-                LastResult = null,
-                ErrorMessage = null,
-                IsLoginSuccessful = false,
-                IsLogoutCompleted = false
+                IsLoading =
+                    true,
+                CurrentAction =
+                    "LogoutPost",
+                LastResult =
+                    null,
+                ErrorMessage =
+                    null,
+                IsLoginSuccessful =
+                    false,
+                IsLogoutCompleted =
+                    false
             )
         }
 
@@ -207,17 +254,22 @@ class LogonController(
             } finally {
                 _state.update { currentState ->
                     currentState.copy(
-                        IsLoading = false,
-                        CurrentAction = "LogoutPost",
-                        LastResult = logoutResponse,
+                        IsLoading =
+                            false,
+                        CurrentAction =
+                            "LogoutPost",
+                        LastResult =
+                            logoutResponse,
                         ErrorMessage =
                             if (localTokensCleared) {
                                 null
                             } else {
                                 "Oturum bilgileri cihazdan tamamen temizlenemedi."
                             },
-                        IsLoginSuccessful = false,
-                        IsLogoutCompleted = false
+                        IsLoginSuccessful =
+                            false,
+                        IsLogoutCompleted =
+                            false
                     )
                 }
             }
@@ -227,7 +279,8 @@ class LogonController(
     fun ConsumeLogoutCompleted() {
         _state.update { currentState ->
             currentState.copy(
-                IsLogoutCompleted = false
+                IsLogoutCompleted =
+                    false
             )
         }
     }
@@ -235,10 +288,14 @@ class LogonController(
     fun FirstDoor() {
         _state.update { currentState ->
             currentState.copy(
-                CurrentAction = "FirstDoor",
-                LastResult = null,
-                ErrorMessage = null,
-                IsFirstDoorSuccessful = false
+                CurrentAction =
+                    "FirstDoor",
+                LastResult =
+                    null,
+                ErrorMessage =
+                    null,
+                IsFirstDoorSuccessful =
+                    false
             )
         }
     }
@@ -256,17 +313,23 @@ class LogonController(
 
         val validationMessage =
             ValidateEmail(
-                email = normalizedEmail
+                email =
+                    normalizedEmail
             )
 
         if (validationMessage != null) {
             _state.update { currentState ->
                 currentState.copy(
-                    IsLoading = false,
-                    CurrentAction = "FirstDoorPost",
-                    LastResult = null,
-                    ErrorMessage = validationMessage,
-                    IsFirstDoorSuccessful = false
+                    IsLoading =
+                        false,
+                    CurrentAction =
+                        "FirstDoorPost",
+                    LastResult =
+                        null,
+                    ErrorMessage =
+                        validationMessage,
+                    IsFirstDoorSuccessful =
+                        false
                 )
             }
 
@@ -275,12 +338,14 @@ class LogonController(
 
         val model =
             MemberTempFistdoorModel(
-                Email = normalizedEmail
+                Email =
+                    normalizedEmail
             )
 
         viewModelScope.launch {
             SetLoading(
-                currentAction = "FirstDoorPost"
+                currentAction =
+                    "FirstDoorPost"
             )
 
             val response =
@@ -289,22 +354,28 @@ class LogonController(
                         "App.Logon.FirstDoorPost"
                 ) {
                     memberTempRepository.FirstDoorAsync(
-                        languageId = languageId,
-                        model = model
+                        languageId =
+                            languageId,
+                        model =
+                            model
                     )
                 }
 
             if (!response.Success) {
                 _state.update { currentState ->
                     currentState.copy(
-                        IsLoading = false,
-                        CurrentAction = "FirstDoorPost",
-                        LastResult = response,
+                        IsLoading =
+                            false,
+                        CurrentAction =
+                            "FirstDoorPost",
+                        LastResult =
+                            response,
                         ErrorMessage =
                             response.Message.ifBlank {
                                 "Doğrulama e-postası gönderilemedi."
                             },
-                        IsFirstDoorSuccessful = false
+                        IsFirstDoorSuccessful =
+                            false
                     )
                 }
 
@@ -313,12 +384,18 @@ class LogonController(
 
             _state.update { currentState ->
                 currentState.copy(
-                    IsLoading = false,
-                    CurrentAction = "FirstDoorPost",
-                    LastResult = response,
-                    ErrorMessage = null,
-                    IsFirstDoorSuccessful = true,
-                    FirstDoorEmail = normalizedEmail
+                    IsLoading =
+                        false,
+                    CurrentAction =
+                        "FirstDoorPost",
+                    LastResult =
+                        response,
+                    ErrorMessage =
+                        null,
+                    IsFirstDoorSuccessful =
+                        true,
+                    FirstDoorEmail =
+                        normalizedEmail
                 )
             }
         }
@@ -327,7 +404,387 @@ class LogonController(
     fun ConsumeFirstDoorSuccess() {
         _state.update { currentState ->
             currentState.copy(
-                IsFirstDoorSuccessful = false
+                IsFirstDoorSuccessful =
+                    false
+            )
+        }
+    }
+
+    fun GetMemberTempByActivationCode(
+        activationCode: String,
+        languageId: Int
+    ) {
+        if (
+            _state.value.IsLoading ||
+            _state.value.IsMemberTempLoading
+        ) {
+            return
+        }
+
+        val normalizedActivationCode =
+            activationCode.trim()
+
+        if (normalizedActivationCode.isBlank()) {
+            _state.update { currentState ->
+                currentState.copy(
+                    IsLoading =
+                        false,
+                    CurrentAction =
+                        "GetMemberTempByActivationCode",
+                    LastResult =
+                        null,
+                    ErrorMessage =
+                        "Kayıt bağlantısı geçersiz.",
+                    IsMemberTempLoading =
+                        false,
+                    IsMemberTempLoaded =
+                        false,
+                    MemberTemp =
+                        null
+                )
+            }
+
+            return
+        }
+
+        viewModelScope.launch {
+            _state.update { currentState ->
+                currentState.copy(
+                    IsLoading =
+                        false,
+                    CurrentAction =
+                        "GetMemberTempByActivationCode",
+                    LastResult =
+                        null,
+                    ErrorMessage =
+                        null,
+                    IsMemberTempLoading =
+                        true,
+                    IsMemberTempLoaded =
+                        false,
+                    MemberTemp =
+                        null
+                )
+            }
+
+            val response =
+                executeService.GetAsync {
+                    memberTempRepository
+                        .GetMemberTempByActivationCodeAsync(
+                            languageId =
+                                languageId,
+                            uuid =
+                                normalizedActivationCode
+                        )
+                }
+
+            val memberTemp =
+                response.Data
+
+            if (
+                !response.Success ||
+                memberTemp == null ||
+                memberTemp.Email.isBlank() ||
+                memberTemp.ActivationCode.isBlank()
+            ) {
+                _state.update { currentState ->
+                    currentState.copy(
+                        IsLoading =
+                            false,
+                        CurrentAction =
+                            "GetMemberTempByActivationCode",
+                        LastResult =
+                            response,
+                        ErrorMessage =
+                            response.Message.ifBlank {
+                                "Kayıt bağlantısı geçersiz veya süresi dolmuş."
+                            },
+                        IsMemberTempLoading =
+                            false,
+                        IsMemberTempLoaded =
+                            false,
+                        MemberTemp =
+                            null
+                    )
+                }
+
+                return@launch
+            }
+
+            _state.update { currentState ->
+                currentState.copy(
+                    IsLoading =
+                        false,
+                    CurrentAction =
+                        "GetMemberTempByActivationCode",
+                    LastResult =
+                        response,
+                    ErrorMessage =
+                        null,
+                    IsMemberTempLoading =
+                        false,
+                    IsMemberTempLoaded =
+                        true,
+                    MemberTemp =
+                        memberTemp
+                )
+            }
+        }
+    }
+
+    fun ClearMemberTemp() {
+        _state.update { currentState ->
+            currentState.copy(
+                IsMemberTempLoading =
+                    false,
+                IsMemberTempLoaded =
+                    false,
+                MemberTemp =
+                    null,
+                ErrorMessage =
+                    null
+            )
+        }
+    }
+
+    fun LoadCountries(
+        languageId: Int
+    ) {
+        if (_state.value.IsCountriesLoading) {
+            return
+        }
+
+        viewModelScope.launch {
+            _state.update { currentState ->
+                currentState.copy(
+                    IsCountriesLoading =
+                        true,
+                    CountryError =
+                        null
+                )
+            }
+
+            val response =
+                executeService.GetAsync(
+                    cacheKey =
+                        ""
+                ) {
+                    addressCountryRepository.GetAddressCountriesAsync(
+                        languageId =
+                            languageId,
+                        count =
+                            300
+                    )
+                }
+
+            val countries =
+                response.Data
+                    .orEmpty()
+                    .sortedWith(
+                        compareBy<AddressCountryDTO> {
+                            it.DisplayOrder
+                                ?: Int.MAX_VALUE
+                        }.thenBy {
+                            it.Content
+                        }
+                    )
+
+            if (!response.Success) {
+                _state.update { currentState ->
+                    currentState.copy(
+                        Countries =
+                            emptyList(),
+                        SelectedCountryId =
+                            0,
+                        Cities =
+                            emptyList(),
+                        SelectedCityId =
+                            0,
+                        IsCountriesLoading =
+                            false,
+                        CountryError =
+                            response.Message.ifBlank {
+                                "Ülke listesi alınamadı."
+                            }
+                    )
+                }
+
+                return@launch
+            }
+
+            _state.update { currentState ->
+                currentState.copy(
+                    Countries =
+                        countries,
+                    IsCountriesLoading =
+                        false,
+                    CountryError =
+                        if (countries.isEmpty()) {
+                            "Ülke verisi bulunamadı."
+                        } else {
+                            null
+                        }
+                )
+            }
+        }
+    }
+
+    fun SelectCountry(
+        countryId: Int
+    ) {
+        if (countryId <= 0) {
+            _state.update { currentState ->
+                currentState.copy(
+                    SelectedCountryId =
+                        0,
+                    SelectedCityId =
+                        0,
+                    Cities =
+                        emptyList(),
+                    CityError =
+                        null
+                )
+            }
+
+            return
+        }
+
+        if (_state.value.SelectedCountryId == countryId) {
+            return
+        }
+
+        _state.update { currentState ->
+            currentState.copy(
+                SelectedCountryId =
+                    countryId,
+                SelectedCityId =
+                    0,
+                Cities =
+                    emptyList(),
+                CityError =
+                    null
+            )
+        }
+
+        LoadCities(
+            countryId =
+                countryId
+        )
+    }
+
+    fun LoadCities(
+        countryId: Int
+    ) {
+        if (
+            countryId <= 0 ||
+            _state.value.IsCitiesLoading
+        ) {
+            return
+        }
+
+        viewModelScope.launch {
+            _state.update { currentState ->
+                currentState.copy(
+                    IsCitiesLoading =
+                        true,
+                    CityError =
+                        null
+                )
+            }
+
+            val response =
+                executeService.GetAsync(
+                    cacheKey =
+                        ""
+                ) {
+                    addressCityRepository.GetAddressCitiesAsync(
+                        countryId =
+                            countryId,
+                        count =
+                            10000
+                    )
+                }
+
+            val cities =
+                response.Data
+                    .orEmpty()
+                    .sortedWith(
+                        compareBy<AddressCityDTO> {
+                            it.DisplayOrder
+                                ?: Int.MAX_VALUE
+                        }.thenBy {
+                            it.Content
+                        }
+                    )
+
+            if (_state.value.SelectedCountryId != countryId) {
+                _state.update { currentState ->
+                    currentState.copy(
+                        IsCitiesLoading =
+                            false
+                    )
+                }
+
+                return@launch
+            }
+
+            if (!response.Success) {
+                _state.update { currentState ->
+                    currentState.copy(
+                        Cities =
+                            emptyList(),
+                        SelectedCityId =
+                            0,
+                        IsCitiesLoading =
+                            false,
+                        CityError =
+                            response.Message.ifBlank {
+                                "Şehir listesi alınamadı."
+                            }
+                    )
+                }
+
+                return@launch
+            }
+
+            _state.update { currentState ->
+                currentState.copy(
+                    Cities =
+                        cities,
+                    SelectedCityId =
+                        0,
+                    IsCitiesLoading =
+                        false,
+                    CityError =
+                        if (cities.isEmpty()) {
+                            "Bu ülke için şehir verisi bulunamadı."
+                        } else {
+                            null
+                        }
+                )
+            }
+        }
+    }
+
+    fun SelectCity(
+        cityId: Int
+    ) {
+        val cityBelongsToSelectedCountry =
+            _state.value.Cities.any { city ->
+                city.AddressCityId == cityId &&
+                        city.CountryId == _state.value.SelectedCountryId
+            }
+
+        _state.update { currentState ->
+            currentState.copy(
+                SelectedCityId =
+                    if (cityBelongsToSelectedCountry) {
+                        cityId
+                    } else {
+                        0
+                    },
+                CityError =
+                    null
             )
         }
     }
@@ -335,8 +792,10 @@ class LogonController(
     fun RegisterStart() {
         _state.update { currentState ->
             currentState.copy(
-                CurrentAction = "RegisterStart",
-                ErrorMessage = null
+                CurrentAction =
+                    "RegisterStart",
+                ErrorMessage =
+                    null
             )
         }
     }
@@ -344,8 +803,10 @@ class LogonController(
     fun RegisterFinal() {
         _state.update { currentState ->
             currentState.copy(
-                CurrentAction = "RegisterFinal",
-                ErrorMessage = null
+                CurrentAction =
+                    "RegisterFinal",
+                ErrorMessage =
+                    null
             )
         }
     }
@@ -354,15 +815,18 @@ class LogonController(
         body: Any? = null
     ) {
         SetPendingOperation(
-            currentAction = "RegisterFinalPost"
+            currentAction =
+                "RegisterFinalPost"
         )
     }
 
     fun ForgotPassword() {
         _state.update { currentState ->
             currentState.copy(
-                CurrentAction = "ForgotPassword",
-                ErrorMessage = null
+                CurrentAction =
+                    "ForgotPassword",
+                ErrorMessage =
+                    null
             )
         }
     }
@@ -371,15 +835,18 @@ class LogonController(
         body: Any? = null
     ) {
         SetPendingOperation(
-            currentAction = "ForgotPasswordPost"
+            currentAction =
+                "ForgotPasswordPost"
         )
     }
 
     fun Expired() {
         _state.update { currentState ->
             currentState.copy(
-                CurrentAction = "Expired",
-                ErrorMessage = null
+                CurrentAction =
+                    "Expired",
+                ErrorMessage =
+                    null
             )
         }
     }
@@ -387,7 +854,8 @@ class LogonController(
     fun ClearError() {
         _state.update { currentState ->
             currentState.copy(
-                ErrorMessage = null
+                ErrorMessage =
+                    null
             )
         }
     }
@@ -395,7 +863,8 @@ class LogonController(
     fun ConsumeLoginSuccess() {
         _state.update { currentState ->
             currentState.copy(
-                IsLoginSuccessful = false
+                IsLoginSuccessful =
+                    false
             )
         }
     }
@@ -412,13 +881,16 @@ class LogonController(
         ) {
             _state.update { currentState ->
                 currentState.copy(
-                    IsLoading = false,
-                    LastResult = response,
+                    IsLoading =
+                        false,
+                    LastResult =
+                        response,
                     ErrorMessage =
                         response.Message.ifBlank {
                             "Giriş işlemi başarısız oldu."
                         },
-                    IsLoginSuccessful = false
+                    IsLoginSuccessful =
+                        false
                 )
             }
 
@@ -427,17 +899,21 @@ class LogonController(
 
         val sessionSaved =
             userSessionManager.SetAuthenticated(
-                authResponse = authResponse
+                authResponse =
+                    authResponse
             )
 
         if (!sessionSaved) {
             _state.update { currentState ->
                 currentState.copy(
-                    IsLoading = false,
-                    LastResult = response,
+                    IsLoading =
+                        false,
+                    LastResult =
+                        response,
                     ErrorMessage =
                         "Oturum bilgileri güvenli şekilde kaydedilemedi.",
-                    IsLoginSuccessful = false
+                    IsLoginSuccessful =
+                        false
                 )
             }
 
@@ -446,10 +922,14 @@ class LogonController(
 
         _state.update { currentState ->
             currentState.copy(
-                IsLoading = false,
-                LastResult = response,
-                ErrorMessage = null,
-                IsLoginSuccessful = true
+                IsLoading =
+                    false,
+                LastResult =
+                    response,
+                ErrorMessage =
+                    null,
+                IsLoginSuccessful =
+                    true
             )
         }
     }
@@ -459,13 +939,20 @@ class LogonController(
     ) {
         _state.update { currentState ->
             currentState.copy(
-                IsLoading = true,
-                CurrentAction = currentAction,
-                LastResult = null,
-                ErrorMessage = null,
-                IsLoginSuccessful = false,
-                IsLogoutCompleted = false,
-                IsFirstDoorSuccessful = false
+                IsLoading =
+                    true,
+                CurrentAction =
+                    currentAction,
+                LastResult =
+                    null,
+                ErrorMessage =
+                    null,
+                IsLoginSuccessful =
+                    false,
+                IsLogoutCompleted =
+                    false,
+                IsFirstDoorSuccessful =
+                    false
             )
         }
     }
@@ -475,13 +962,18 @@ class LogonController(
     ) {
         _state.update { currentState ->
             currentState.copy(
-                IsLoading = false,
-                CurrentAction = currentAction,
-                LastResult = null,
+                IsLoading =
+                    false,
+                CurrentAction =
+                    currentAction,
+                LastResult =
+                    null,
                 ErrorMessage =
                     "$currentAction işlemi henüz Authentication API'ye bağlanmadı.",
-                IsLoginSuccessful = false,
-                IsLogoutCompleted = false
+                IsLoginSuccessful =
+                    false,
+                IsLogoutCompleted =
+                    false
             )
         }
     }
@@ -492,7 +984,8 @@ class LogonController(
     ): String? {
         val emailValidation =
             ValidateEmail(
-                email = email
+                email =
+                    email
             )
 
         if (emailValidation != null) {

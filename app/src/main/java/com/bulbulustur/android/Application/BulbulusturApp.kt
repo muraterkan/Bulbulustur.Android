@@ -1,5 +1,6 @@
 ﻿package com.bulbulustur.android.Application
 
+import android.net.Uri
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -30,6 +31,7 @@ import com.bulbulustur.android.Application.Navigation.Graph.retailGraph
 import com.bulbulustur.android.Application.Navigation.Graph.settingsGraph
 import com.bulbulustur.android.Application.Navigation.Graph.splashGraph
 import com.bulbulustur.android.Application.Navigation.Graph.wholesaleGraph
+import com.bulbulustur.android.Application.Navigation.Routes.LogonRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.SplashRoutes
 import com.bulbulustur.android.Application.Session.UserSessionManager
 import com.bulbulustur.android.Application.Session.UserSessionState
@@ -38,12 +40,21 @@ import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
 import com.bulbulustur.android.businesslayer.Core.Enums.EBuyerMode
 import com.bulbulustur.android.businesslayer.Core.Repository.AuthenticationRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.LocalizationRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.MemberTempRepository
 import com.bulbulustur.android.businesslayer.Core.Security.SecureTokenStore
 import com.bulbulustur.android.businesslayer.Core.Util.Execute.ExecuteService
-import com.bulbulustur.android.businesslayer.Core.Repository.MemberTempRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.AddressCityRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.AddressCountryRepository
+import com.bulbulustur.android.businesslayer.Core.DTO.AddressCityDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.AddressCountryDTO
+import com.bulbulustur.android.businesslayer.Core.Interface.IAddressCityRepository
+import com.bulbulustur.android.businesslayer.Core.Interface.IAddressCountryRepository
 
 @Composable
-fun BulbulusturApp() {
+fun BulbulusturApp(
+    appLinkUrl: String? = null,
+    onAppLinkConsumed: () -> Unit = {}
+) {
     val context =
         LocalContext.current
 
@@ -147,7 +158,11 @@ fun BulbulusturApp() {
                         sessionState =
                             sessionState,
                         userSessionManager =
-                            userSessionManager
+                            userSessionManager,
+                        appLinkUrl =
+                            appLinkUrl,
+                        onAppLinkConsumed =
+                            onAppLinkConsumed
                     )
                 }
             }
@@ -158,7 +173,9 @@ fun BulbulusturApp() {
 @Composable
 private fun BulbulusturApplicationContent(
     sessionState: UserSessionState,
-    userSessionManager: UserSessionManager
+    userSessionManager: UserSessionManager,
+    appLinkUrl: String?,
+    onAppLinkConsumed: () -> Unit
 ) {
     val navController =
         rememberNavController()
@@ -185,13 +202,25 @@ private fun BulbulusturApplicationContent(
             MemberTempRepository()
         }
 
+    val addressCountryRepository =
+        remember {
+            AddressCountryRepository()
+        }
+
+    val addressCityRepository =
+        remember {
+            AddressCityRepository()
+        }
+
     val logonController =
         remember(
             executeService,
             authenticationRepository,
             memberTempRepository,
+            addressCountryRepository,
+            addressCityRepository,
             userSessionManager
-        ) {
+        ){
             LogonController(
                 executeService =
                     executeService,
@@ -199,6 +228,10 @@ private fun BulbulusturApplicationContent(
                     authenticationRepository,
                 memberTempRepository =
                     memberTempRepository,
+                addressCountryRepository =
+                    addressCountryRepository,
+                addressCityRepository =
+                    addressCityRepository,
                 userSessionManager =
                     userSessionManager
             )
@@ -244,6 +277,71 @@ private fun BulbulusturApplicationContent(
                 }
             )
         }
+
+    LaunchedEffect(
+        appLinkUrl
+    ) {
+        val incomingUrl =
+            appLinkUrl
+                ?: return@LaunchedEffect
+
+        val uri =
+            runCatching {
+                Uri.parse(
+                    incomingUrl
+                )
+            }.getOrNull()
+
+        val isRegisterAppLink =
+            uri?.scheme.equals(
+                "https",
+                ignoreCase = true
+            ) &&
+                    uri?.host.equals(
+                        "www.bulbulustur.com",
+                        ignoreCase = true
+                    ) &&
+                    uri?.path == "/logon/register"
+
+        if (!isRegisterAppLink) {
+            onAppLinkConsumed()
+
+            return@LaunchedEffect
+        }
+
+        val activationCode =
+            uri
+                ?.getQueryParameter(
+                    "uuid"
+                )
+                ?.trim()
+                .orEmpty()
+
+        if (activationCode.isBlank()) {
+            navController.navigate(
+                LogonRoutes.Expired
+            ) {
+                launchSingleTop =
+                    true
+            }
+
+            onAppLinkConsumed()
+
+            return@LaunchedEffect
+        }
+
+        navController.navigate(
+            LogonRoutes.CreateRegisterActivationRoute(
+                activationCode =
+                    activationCode
+            )
+        ) {
+            launchSingleTop =
+                true
+        }
+
+        onAppLinkConsumed()
+    }
 
     NavHost(
         navController =

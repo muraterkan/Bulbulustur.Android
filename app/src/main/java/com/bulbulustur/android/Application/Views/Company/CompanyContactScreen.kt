@@ -224,7 +224,7 @@ private fun CompanyContactHero(
                     )
 
                     Text(
-                        text = "Firma yetkilisine mesaj gönderin; ürün, teklif, numune veya özel üretim talepleriniz için doĞrudan baĞlantı kurun.",
+                        text = "Firma yetkilisine mesaj gönderin; ürün, teklif, numune veya özel üretim talepleriniz için doĞrudan bağlantı kurun.",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

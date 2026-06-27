@@ -242,7 +242,7 @@ private fun SettingsInfoCard() {
                 )
 
                 Text(
-                    text = "Tema ve dil tercihleri daha sonra yerel kayıt alanında saklanacak. API baĞlantısından sonra aktif diller servis üzerinden beslenecek.",
+                    text = "Tema ve dil tercihleri daha sonra yerel kayıt alanında saklanacak. API bağlantısından sonra aktif diller servis üzerinden beslenecek.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

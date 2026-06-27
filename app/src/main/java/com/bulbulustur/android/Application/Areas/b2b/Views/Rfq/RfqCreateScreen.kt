@@ -549,7 +549,7 @@ private fun RfqSubmitCard(
             )
 
             Text(
-                text = "API baĞlantısından sonra bu form gerçek RFQ endpointy'ine gönderilecek.",
+                text = "API bağlantısından sonra bu form gerçek RFQ endpointy'ine gönderilecek.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

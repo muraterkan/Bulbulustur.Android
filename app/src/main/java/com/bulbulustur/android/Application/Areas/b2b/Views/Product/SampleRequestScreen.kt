@@ -373,7 +373,7 @@ private fun SampleRequestSendCard(
                 )
 
                 Text(
-                    text = "Numune isteĞi API baĞlantısından sonra gerçek endpointy'e gönderilecek.",
+                    text = "Numune isteĞi API bağlantısından sonra gerçek endpointy'e gönderilecek.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

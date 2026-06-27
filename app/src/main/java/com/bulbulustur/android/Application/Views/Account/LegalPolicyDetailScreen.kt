@@ -406,7 +406,7 @@ private fun getLegalPolicyDetail(
     val baseSections = listOf(
         LegalPolicyDetailSection(
             title = "Bu Metin Neyi Kapsar?",
-            body = "Bu bölüm, Bulbulustur platformunda kullanıcı, alıcı, satıcı ve ziyaretçi süreçlerinde geçerli temel kuralları açıklar. Mobil uygulamada gösterilen metinler bilgilendirme amaçlıdır ve API baĞlantısı tamamlandıĞında güncel içerikle beslenecektir."
+            body = "Bu bölüm, Bulbulustur platformunda kullanıcı, alıcı, satıcı ve ziyaretçi süreçlerinde geçerli temel kuralları açıklar. Mobil uygulamada gösterilen metinler bilgilendirme amaçlıdır ve API bağlantısı tamamlandıĞında güncel içerikle beslenecektir."
         ),
         LegalPolicyDetailSection(
             title = "Kullanıcı Sorumlulukları",
@@ -414,7 +414,7 @@ private fun getLegalPolicyDetail(
         ),
         LegalPolicyDetailSection(
             title = "Veri ve İşlem GüvenliĞi",
-            body = "Bulbulustur, kullanıcı verilerinin korunması ve işlem güvenliĞinin saĞlanması için teknik ve idari önlemler alır. Detaylı içerik ilgili politika metninde açıklanır."
+            body = "Bulbulustur, kullanıcı verilerinin korunması ve işlem güvenliĞinin sağlanması için teknik ve idari önlemler alır. Detaylı içerik ilgili politika metninde açıklanır."
         ),
         LegalPolicyDetailSection(
             title = "Güncellemeler",

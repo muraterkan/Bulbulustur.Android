@@ -48,7 +48,7 @@ fun ForgotPasswordScreen(
         LogonPublicPageTitle(
             eyebrow = "Hesap Kurtarma",
             title = "Şifremi Unuttum",
-            description = "E-posta adresinizi yazın. Şifre yenileme baĞlantısını size gönderelim."
+            description = "E-posta adresinizi yazın. Şifre yenileme bağlantısını size gönderelim."
         )
 
         Spacer(modifier = Modifier.height(BBSpacing.Space8))
@@ -74,7 +74,7 @@ fun ForgotPasswordScreen(
 
         BbButton(
             modifier = Modifier.fillMaxWidth(),
-            text = "Şifre Yenileme BaĞlantısı Gönder",
+            text = "Şifre Yenileme Bağlantısı Gönder",
             onClick = {
                 onSendResetLinkClick(email)
             },
@@ -142,7 +142,7 @@ private fun ResetPasswordInfoBox() {
             Spacer(modifier = Modifier.height(BBSpacing.Space1))
 
             Text(
-                text = "BaĞlantı yalnızca kısa süre geçerli olur. Hesabınızı korumak için yeni şifrenizi kimseyle paylaşmayın.",
+                text = "Bağlantı yalnızca kısa süre geçerli olur. Hesabınızı korumak için yeni şifrenizi kimseyle paylaşmayın.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

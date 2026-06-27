@@ -588,7 +588,7 @@ private fun getRetailSellerLandingScreenData(): RetailSellerLandingScreenData {
                 id = 3,
                 groupName = "Avantajlar",
                 title = "Güven veren maĞaza profili",
-                description = "MaĞaza Vitrini, puanlama, ürün listeleri ve sipariş akışıyla profesyonel görünüm saĞlanır.",
+                description = "MaĞaza Vitrini, puanlama, ürün listeleri ve sipariş akışıyla profesyonel görünüm sağlanır.",
                 iconText = "GP"
             ),
             RetailSellerInfoItem(
@@ -623,7 +623,7 @@ private fun getRetailSellerLandingScreenData(): RetailSellerLandingScreenData {
                 id = 8,
                 groupName = "Satış kanalları",
                 title = "Toptan satış",
-                description = "Toptan ürün, tedarikçi görünürlüĞü ve RFQ akışlarıyla işletmelere erişim saĞlanır.",
+                description = "Toptan ürün, tedarikçi görünürlüĞü ve RFQ akışlarıyla işletmelere erişim sağlanır.",
                 iconText = "TS"
             ),
             RetailSellerInfoItem(

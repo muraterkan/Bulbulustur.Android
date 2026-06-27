@@ -467,7 +467,7 @@ private fun LastPriceSendCard(
                 )
 
                 Text(
-                    text = "Son fiyat isteĞi API baĞlantısından sonra gerçek endpointy'e gönderilecek.",
+                    text = "Son fiyat isteĞi API bağlantısından sonra gerçek endpointy'e gönderilecek.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

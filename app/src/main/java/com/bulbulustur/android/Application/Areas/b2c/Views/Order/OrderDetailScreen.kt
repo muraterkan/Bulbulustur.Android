@@ -1349,7 +1349,7 @@ private fun getDemoOrderDetail(
         cargoText = "50,00 â‚º",
         totalText = "2.450,75 â‚º",
         estimatedDelivery = "12 Mayıs 2026",
-        addressText = "Murat Erkan Â· İstanbul / Türkiye Â· Teslimat adresi API baĞlandıĞında gerçek kullanıcı adresinden beslenecek.",
+        addressText = "Murat Erkan Â· İstanbul / Türkiye Â· Teslimat adresi API bağlandıĞında gerçek kullanıcı adresinden beslenecek.",
         storeGroups = listOf(
             OrderDetailStoreGroupUiModel(
                 storeKey = "STORE-ORTOBELLA",

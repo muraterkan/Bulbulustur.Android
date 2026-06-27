@@ -2347,7 +2347,7 @@ private fun RetailLowerPriceSheet(
         )
 
         RetailSheetMutedBox(
-            text = "Lütfen yalnızca herkesin erişebileceĞi ürün linklerini paylaşın. Sepet, kişisel hesap veya ödeme ekranı baĞlantıları göndermeyin."
+            text = "Lütfen yalnızca herkesin erişebileceĞi ürün linklerini paylaşın. Sepet, kişisel hesap veya ödeme ekranı bağlantıları göndermeyin."
         )
 
         RetailSheetPrimaryButton(

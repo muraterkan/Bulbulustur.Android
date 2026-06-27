@@ -187,7 +187,7 @@ private fun RegisterFinalStepList(
             },
             description = when (finalState) {
                 RegisterFinalState.Completed -> "Hesabınız giriş için hazır."
-                RegisterFinalState.WaitingEmailVerification -> "Size gönderilen baĞlantıya tıklayarak hesabınızı doğrulayın."
+                RegisterFinalState.WaitingEmailVerification -> "Size gönderilen bağlantıya tıklayarak hesabınızı doğrulayın."
                 RegisterFinalState.WaitingApproval -> "Kurumsal hesap bilgileriniz kontrol edildikten sonra aktifleşir."
             },
             isCompleted = finalState == RegisterFinalState.Completed
@@ -305,7 +305,7 @@ enum class RegisterFinalState(
     WaitingEmailVerification(
         badgeText = "Doğrulama Bekleniyor",
         title = "E-postanızı Kontrol Edin",
-        description = "Hesabınızı aktifleştirmek için e-posta adresinize gönderilen doğrulama baĞlantısını kullanın."
+        description = "Hesabınızı aktifleştirmek için e-posta adresinize gönderilen doğrulama bağlantısını kullanın."
     ),
 
     WaitingApproval(

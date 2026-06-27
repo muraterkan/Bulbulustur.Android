@@ -591,9 +591,9 @@ private fun getDemoOrderContract(
         createdDate = createdDate,
         contractDate = contractDate,
         buyerName = "Murat Erkan",
-        buyerAddress = "İstanbul / Türkiye Â· Alıcı adresi API baĞlandıĞında gerçek sipariş adresinden beslenecek.",
+        buyerAddress = "İstanbul / Türkiye Â· Alıcı adresi API bağlandıĞında gerçek sipariş adresinden beslenecek.",
         sellerName = "Ortobella",
-        sellerAddress = "Satıcı firma ve maĞaza bilgileri API baĞlandıĞında gerçek sipariş satıcısından beslenecek.",
+        sellerAddress = "Satıcı firma ve maĞaza bilgileri API bağlandıĞında gerçek sipariş satıcısından beslenecek.",
         sections = listOf(
             OrderContractSectionUiModel(
                 title = "1 - Sözleşmenin Tarafları ve Konusu",

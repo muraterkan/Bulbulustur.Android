@@ -164,13 +164,13 @@ private fun ExpiredReasonList(
     ) {
         ExpiredReasonItem(
             number = "1",
-            title = "BaĞlantı süresi doldu",
+            title = "Bağlantı süresi doldu",
             description = expiredType.firstReason
         )
 
         ExpiredReasonItem(
             number = "2",
-            title = "Yeni baĞlantı gerekli",
+            title = "Yeni bağlantı gerekli",
             description = expiredType.secondReason
         )
     }
@@ -273,7 +273,7 @@ private fun ExpiredSecurityInfoBox() {
                 Spacer(modifier = Modifier.height(BBSpacing.Space1))
 
                 Text(
-                    text = "Süresi dolan baĞlantılar tekrar kullanılamaz. Yeni baĞlantı oluşturmanız gerekir.",
+                    text = "Süresi dolan bağlantılar tekrar kullanılamaz. Yeni bağlantı oluşturmanız gerekir.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -292,26 +292,26 @@ enum class ExpiredType(
 ) {
     EmailVerification(
         badgeText = "Doğrulama Süresi Doldu",
-        title = "E-posta BaĞlantısı Geçersiz",
-        description = "E-posta doğrulama baĞlantınızın süresi dolmuş olabilir.",
+        title = "E-posta Bağlantısı Geçersiz",
+        description = "E-posta doğrulama bağlantınızın süresi dolmuş olabilir.",
         primaryButtonText = "Doğrulama E-postasını Yeniden Gönder",
-        firstReason = "E-posta doğrulama baĞlantıları güvenlik için sınırlı süre geçerlidir.",
+        firstReason = "E-posta doğrulama bağlantıları güvenlik için sınırlı süre geçerlidir.",
         secondReason = "Yeni doğrulama e-postası göndererek hesabınızı aktifleştirebilirsiniz."
     ),
 
     PasswordReset(
-        badgeText = "Şifre BaĞlantısı Geçersiz",
+        badgeText = "Şifre Bağlantısı Geçersiz",
         title = "Şifre Yenileme Süresi Doldu",
-        description = "Şifre yenileme baĞlantınız artık kullanılamıyor.",
-        primaryButtonText = "Yeni Şifre BaĞlantısı Gönder",
-        firstReason = "Şifre yenileme baĞlantıları tek kullanımlık ve süre sınırlıdır.",
-        secondReason = "Yeni baĞlantı göndererek şifre yenileme işlemini tekrar başlatabilirsiniz."
+        description = "Şifre yenileme bağlantınız artık kullanılamıyor.",
+        primaryButtonText = "Yeni Şifre Bağlantısı Gönder",
+        firstReason = "Şifre yenileme bağlantıları tek kullanımlık ve süre sınırlıdır.",
+        secondReason = "Yeni bağlantı göndererek şifre yenileme işlemini tekrar başlatabilirsiniz."
     ),
 
     RegisterSession(
         badgeText = "Kayıt Oturumu Kapandı",
-        title = "Kayıt BaĞlantısı Geçersiz",
-        description = "Kayıt işleminiz yarıda kalmış veya baĞlantı süresi dolmuş olabilir.",
+        title = "Kayıt Bağlantısı Geçersiz",
+        description = "Kayıt işleminiz yarıda kalmış veya bağlantı süresi dolmuş olabilir.",
         primaryButtonText = "Kayıt İşlemini Yeniden Başlat",
         firstReason = "Yarım kalan kayıt oturumları güvenlik için otomatik kapatılır.",
         secondReason = "Yeni kayıt akışı başlatarak hesabınızı güvenli şekilde oluşturabilirsiniz."

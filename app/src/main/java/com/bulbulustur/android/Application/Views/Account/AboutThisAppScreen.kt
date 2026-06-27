@@ -431,7 +431,7 @@ private fun AboutBrandLinksSheet(
     ) {
         AboutBottomSheetHeader(
             title = "Bulbulustur",
-            subtitle = "Platform bilgileri ve güven baĞlantıları."
+            subtitle = "Platform bilgileri ve güven bağlantıları."
         )
 
         AboutMenuGroup {

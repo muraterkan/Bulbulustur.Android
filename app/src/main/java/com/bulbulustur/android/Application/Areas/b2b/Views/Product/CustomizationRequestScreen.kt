@@ -150,7 +150,7 @@ fun CustomizationRequestScreen(
                         sizeTechnical.value = it
                     },
                     label = "Ölçü / Teknik Detay",
-                    placeholder = "Örn. 30x20 cm, kalınlık, baĞlantı detayı",
+                    placeholder = "Örn. 30x20 cm, kalınlık, bağlantı detayı",
                     icon = Icons.Outlined.Straighten
                 )
             }
@@ -443,7 +443,7 @@ private fun CustomizationSendCard(
                 )
 
                 Text(
-                    text = "Özelleştirme isteĞi API baĞlantısından sonra gerçek endpointy'e gönderilecek.",
+                    text = "Özelleştirme isteĞi API bağlantısından sonra gerçek endpointy'e gönderilecek.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

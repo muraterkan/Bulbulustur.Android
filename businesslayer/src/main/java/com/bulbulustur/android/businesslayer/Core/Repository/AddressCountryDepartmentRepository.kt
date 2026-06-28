@@ -12,10 +12,35 @@ class AddressCountryDepartmentRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IAddressCountryDepartmentRepository {
 
-    override suspend fun GetAddressCountryDepartmentListAsync(): Result<List<AddressCountryDepartmentDTO>> {
+    override suspend fun GetCountryDepartmentsAsync(
+        countryId: Int,
+        countryStateId: Int,
+        count: Int
+    ): Result<List<AddressCountryDepartmentDTO>> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetAddressCountryDepartmentListAsync"
+            baseUrl =
+                ApiRoutes.GLOBALIZATION_BASE_URL,
+            method =
+                "AddressCountryDepartment/GetCountryDepartmentsAsync",
+            query =
+                buildString {
+                    append("countryId=$countryId")
+                    append("&countryStateId=$countryStateId")
+                    append("&count=$count")
+                }
+        )
+    }
+
+    override suspend fun GetAddressCountryDepartmentListAsync():
+            Result<List<AddressCountryDepartmentDTO>> {
+
+        return GetCountryDepartmentsAsync(
+            countryId =
+                1,
+            countryStateId =
+                0,
+            count =
+                100
         )
     }
 
@@ -23,9 +48,12 @@ class AddressCountryDepartmentRepository(
         addressCountryDepartmentId: Int
     ): Result<AddressCountryDepartmentUpdateModel?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetAddressCountryDepartmentByIdAsync",
-            query = "addressCountryDepartmentId=$addressCountryDepartmentId"
+            baseUrl =
+                ApiRoutes.GLOBALIZATION_BASE_URL,
+            method =
+                "AddressCountryDepartment/GetAddressCountryDepartmentByIdAsync",
+            query =
+                "addressCountryDepartmentId=$addressCountryDepartmentId"
         )
     }
 
@@ -33,9 +61,12 @@ class AddressCountryDepartmentRepository(
         addressCountryDepartmentId: Int
     ): Result<AddressCountryDepartmentDTO?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetAddressCountryDepartmentByIdExtendedAsync",
-            query = "addressCountryDepartmentId=$addressCountryDepartmentId"
+            baseUrl =
+                ApiRoutes.GLOBALIZATION_BASE_URL,
+            method =
+                "AddressCountryDepartment/GetAddressCountryDepartmentByIdExtendedAsync",
+            query =
+                "addressCountryDepartmentId=$addressCountryDepartmentId"
         )
     }
 
@@ -43,9 +74,12 @@ class AddressCountryDepartmentRepository(
         model: AddressCountryDepartmentInsertModel
     ): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "InsertAsync",
-            data = model
+            baseUrl =
+                ApiRoutes.GLOBALIZATION_BASE_URL,
+            method =
+                "AddressCountryDepartment/AddressCountryDepartmentInsertAsync",
+            data =
+                model
         )
     }
 
@@ -53,9 +87,12 @@ class AddressCountryDepartmentRepository(
         model: AddressCountryDepartmentUpdateModel
     ): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "UpdateAsync",
-            data = model
+            baseUrl =
+                ApiRoutes.GLOBALIZATION_BASE_URL,
+            method =
+                "AddressCountryDepartment/AddressCountryDepartmentUpdateAsync",
+            data =
+                model
         )
     }
 
@@ -63,9 +100,12 @@ class AddressCountryDepartmentRepository(
         addressCountryDepartmentId: Int
     ): Result<Unit> {
         return apiClient.DeleteAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "DeleteAsync",
-            query = "addressCountryDepartmentId=$addressCountryDepartmentId"
+            baseUrl =
+                ApiRoutes.GLOBALIZATION_BASE_URL,
+            method =
+                "AddressCountryDepartment/AddressCountryDepartmentDelete",
+            query =
+                "addressCountryDepartmentId=$addressCountryDepartmentId"
         )
     }
 }

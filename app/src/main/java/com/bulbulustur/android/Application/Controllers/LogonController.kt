@@ -9,6 +9,7 @@ import com.bulbulustur.android.businesslayer.Core.DTO.MemberTempDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.IAddressCityRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IAddressCountryRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IAuthenticationRepository
+import com.bulbulustur.android.businesslayer.Core.Interface.IMemberRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IMemberTempRepository
 import com.bulbulustur.android.businesslayer.Core.Model.AuthResponse
 import com.bulbulustur.android.businesslayer.Core.Model.GoogleLoginRequest
@@ -19,6 +20,8 @@ import com.bulbulustur.android.businesslayer.Core.Model.MemberTempFistdoorModel
 import com.bulbulustur.android.businesslayer.Core.Model.RevokeTokenRequest
 import com.bulbulustur.android.businesslayer.Core.Util.Execute.IExecuteService
 import com.bulbulustur.android.businesslayer.Core.Util.Result
+import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.MemberInsertModel
+import com.bulbulustur.android.businesslayer.Core.Model.MemberRegisterModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -47,6 +50,10 @@ data class LogonControllerState(
     val IsMemberTempLoading: Boolean = false,
     val IsMemberTempLoaded: Boolean = false,
     val MemberTemp: MemberTempDTO? = null,
+
+    val IsRegisterSuccessful: Boolean = false,
+    val RegisteredMember: MemberInsertModel? = null,
+    val RegisteredEmail: String = "",
 
     val Countries: List<AddressCountryDTO> = emptyList(),
     val Cities: List<AddressCityDTO> = emptyList(),
@@ -85,6 +92,11 @@ data class LogonControllerState(
         get() =
             IsLoading &&
                     CurrentAction == "GoogleLoginPost"
+
+    val IsRegistering: Boolean
+        get() =
+            IsLoading &&
+                    CurrentAction == "RegisterPost"
 }
 
 sealed interface LogonControllerEvent {
@@ -104,6 +116,7 @@ class LogonController(
     private val executeService: IExecuteService,
     private val authenticationRepository: IAuthenticationRepository,
     private val memberTempRepository: IMemberTempRepository,
+    private val memberRepository: IMemberRepository,
     private val addressCountryRepository: IAddressCountryRepository,
     private val addressCityRepository: IAddressCityRepository,
     private val userSessionManager: UserSessionManager
@@ -658,6 +671,10 @@ class LogonController(
                 MemberTemp =
                     null,
                 ErrorMessage =
+                    null,
+                IsRegisterSuccessful =
+                    false,
+                RegisteredMember =
                     null
             )
         }
@@ -908,10 +925,157 @@ class LogonController(
     fun RegisterStart() {
         _state.update { currentState ->
             currentState.copy(
+                IsLoading =
+                    false,
                 CurrentAction =
                     "RegisterStart",
+                LastResult =
+                    null,
                 ErrorMessage =
-                    null
+                    null,
+                IsRegisterSuccessful =
+                    false,
+                RegisteredMember =
+                    null,
+                RegisteredEmail =
+                    ""
+            )
+        }
+    }
+
+    fun RegisterPost(
+        model: MemberRegisterModel,
+        languageId: Int
+    ) {
+        if (_state.value.IsLoading) {
+            return
+        }
+
+        val normalizedModel =
+            model.copy(
+                Email =
+                    model.Email.trim(),
+                Name =
+                    model.Name.trim(),
+                Surname =
+                    model.Surname.trim(),
+                ActivationCode =
+                    model.ActivationCode.trim(),
+                Uuid =
+                    model.Uuid.trim(),
+                LoginProvider =
+                    model.LoginProvider.trim().ifBlank {
+                        "Email"
+                    },
+                LanguageId =
+                    languageId
+            )
+
+        val validationMessage =
+            ValidateRegister(
+                model =
+                    normalizedModel
+            )
+
+        if (validationMessage != null) {
+            _state.update { currentState ->
+                currentState.copy(
+                    IsLoading =
+                        false,
+                    CurrentAction =
+                        "RegisterPost",
+                    LastResult =
+                        null,
+                    ErrorMessage =
+                        validationMessage,
+                    IsRegisterSuccessful =
+                        false,
+                    RegisteredMember =
+                        null,
+                    RegisteredEmail =
+                        ""
+                )
+            }
+
+            return
+        }
+
+        viewModelScope.launch {
+            SetLoading(
+                currentAction =
+                    "RegisterPost"
+            )
+
+            val response =
+                executeService.PostAsync(
+                    operationType =
+                        "App.Logon.RegisterPost"
+                ) {
+                    memberRepository.InsertAsync(
+                        languageId =
+                            languageId,
+                        model =
+                            normalizedModel
+                    )
+                }
+
+            val registeredMember =
+                response.Data
+
+            if (
+                !response.Success ||
+                registeredMember == null
+            ) {
+                _state.update { currentState ->
+                    currentState.copy(
+                        IsLoading =
+                            false,
+                        CurrentAction =
+                            "RegisterPost",
+                        LastResult =
+                            response,
+                        ErrorMessage =
+                            response.Message.ifBlank {
+                                "Üyelik oluşturulamadı."
+                            },
+                        IsRegisterSuccessful =
+                            false,
+                        RegisteredMember =
+                            null,
+                        RegisteredEmail =
+                            ""
+                    )
+                }
+
+                return@launch
+            }
+
+            _state.update { currentState ->
+                currentState.copy(
+                    IsLoading =
+                        false,
+                    CurrentAction =
+                        "RegisterPost",
+                    LastResult =
+                        response,
+                    ErrorMessage =
+                        null,
+                    IsRegisterSuccessful =
+                        true,
+                    RegisteredMember =
+                        registeredMember,
+                    RegisteredEmail =
+                        normalizedModel.Email
+                )
+            }
+        }
+    }
+
+    fun ConsumeRegisterSuccess() {
+        _state.update { currentState ->
+            currentState.copy(
+                IsRegisterSuccessful =
+                    false
             )
         }
     }
@@ -925,15 +1089,6 @@ class LogonController(
                     null
             )
         }
-    }
-
-    fun RegisterFinalPost(
-        body: Any? = null
-    ) {
-        SetPendingOperation(
-            currentAction =
-                "RegisterFinalPost"
-        )
     }
 
     fun ForgotPassword() {
@@ -1392,7 +1547,13 @@ class LogonController(
                 IsSetNewPasswordSuccessful =
                     false,
                 SetNewPasswordMessage =
-                    null
+                    null,
+                IsRegisterSuccessful =
+                    false,
+                RegisteredMember =
+                    null,
+                RegisteredEmail =
+                    ""
             )
         }
     }
@@ -1416,6 +1577,54 @@ class LogonController(
                     false
             )
         }
+    }
+
+    private fun ValidateRegister(
+        model: MemberRegisterModel
+    ): String? {
+        val emailValidation =
+            ValidateEmail(
+                email =
+                    model.Email
+            )
+
+        if (emailValidation != null) {
+            return emailValidation
+        }
+
+        if (model.Name.isBlank()) {
+            return "Adınızı girin."
+        }
+
+        if (model.Surname.isBlank()) {
+            return "Soyadınızı girin."
+        }
+
+        if (model.CountryId <= 0) {
+            return "Ülke seçin."
+        }
+
+        if (model.CityId <= 0) {
+            return "Şehir seçin."
+        }
+
+        if (model.Password.length < 8) {
+            return "Şifreniz en az 8 karakter olmalıdır."
+        }
+
+        if (model.Password != model.PasswordAgain) {
+            return "Şifreler birbiriyle eşleşmiyor."
+        }
+
+        if (model.ActivationCode.isBlank()) {
+            return "Kayıt doğrulama bilgisi bulunamadı."
+        }
+
+        if (model.Uuid.isBlank()) {
+            return "Kayıt bağlantısı geçersiz."
+        }
+
+        return null
     }
 
     private fun ValidateLogin(

@@ -3,21 +3,29 @@ package com.bulbulustur.android.Application.Navigation.Graph
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
-import com.bulbulustur.android.Application.Views.Logon.SetNewPasswordScreen
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.bulbulustur.android.Application.Authentication.GoogleCredentialResult
+import com.bulbulustur.android.Application.Authentication.GoogleCredentialService
 import com.bulbulustur.android.Application.Controllers.LogonController
 import com.bulbulustur.android.Application.Navigation.Routes.LogonRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.RetailRoutes
 import com.bulbulustur.android.Application.Session.UserSessionState
+import com.bulbulustur.android.Application.Shared.Address.AddressCascadeController
+import com.bulbulustur.android.Application.Shared.Address.AddressCascadeEvent
 import com.bulbulustur.android.Application.Views.Logon.ExpiredScreen
 import com.bulbulustur.android.Application.Views.Logon.FirstDoorScreen
 import com.bulbulustur.android.Application.Views.Logon.ForgotPasswordScreen
@@ -25,21 +33,17 @@ import com.bulbulustur.android.Application.Views.Logon.LoginScreen
 import com.bulbulustur.android.Application.Views.Logon.RegisterFinalScreen
 import com.bulbulustur.android.Application.Views.Logon.RegisterFinalState
 import com.bulbulustur.android.Application.Views.Logon.RegisterStartScreen
-import com.bulbulustur.android.businesslayer.Core.Enums.EApplicationLanguage
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
-import com.bulbulustur.android.Application.Authentication.GoogleCredentialResult
-import com.bulbulustur.android.Application.Authentication.GoogleCredentialService
+import com.bulbulustur.android.Application.Views.Logon.SetNewPasswordScreen
 import com.bulbulustur.android.R
+import com.bulbulustur.android.businesslayer.Core.Enums.EApplicationLanguage
+import com.bulbulustur.android.businesslayer.Core.Model.MemberRegisterModel
 import kotlinx.coroutines.launch
 
 fun NavGraphBuilder.logonGraph(
     navController: NavHostController,
     sessionState: UserSessionState,
-    logonController: LogonController
+    logonController: LogonController,
+    addressCascadeController: AddressCascadeController
 ) {
     composable(
         route =
@@ -90,9 +94,7 @@ fun NavGraphBuilder.logonGraph(
         LaunchedEffect(
             logonState.IsLoginSuccessful
         ) {
-            if (
-                !logonState.IsLoginSuccessful
-            ) {
+            if (!logonState.IsLoginSuccessful) {
                 return@LaunchedEffect
             }
 
@@ -183,8 +185,6 @@ fun NavGraphBuilder.logonGraph(
                                 }
 
                                 GoogleCredentialResult.Cancelled -> {
-                                    // Kullanıcı Google hesap
-                                    // seçimini iptal etti.
                                 }
                             }
                         } finally {
@@ -209,9 +209,14 @@ fun NavGraphBuilder.logonGraph(
         logonController.State.collectAsState()
 
         val languageId =
-            when (sessionState.Language) {
-                EApplicationLanguage.Turkish -> 1
-                EApplicationLanguage.English -> 2
+            when (
+                sessionState.Language
+            ) {
+                EApplicationLanguage.Turkish ->
+                    1
+
+                EApplicationLanguage.English ->
+                    2
             }
 
         LaunchedEffect(
@@ -268,9 +273,14 @@ fun NavGraphBuilder.logonGraph(
         logonController.State.collectAsState()
 
         val languageId =
-            when (sessionState.Language) {
-                EApplicationLanguage.Turkish -> 1
-                EApplicationLanguage.English -> 2
+            when (
+                sessionState.Language
+            ) {
+                EApplicationLanguage.Turkish ->
+                    1
+
+                EApplicationLanguage.English ->
+                    2
             }
 
         val activationCode =
@@ -380,9 +390,14 @@ fun NavGraphBuilder.logonGraph(
         logonController.State.collectAsState()
 
         val languageId =
-            when (sessionState.Language) {
-                EApplicationLanguage.Turkish -> 1
-                EApplicationLanguage.English -> 2
+            when (
+                sessionState.Language
+            ) {
+                EApplicationLanguage.Turkish ->
+                    1
+
+                EApplicationLanguage.English ->
+                    2
             }
 
         LaunchedEffect(
@@ -447,33 +462,59 @@ fun NavGraphBuilder.logonGraph(
         val logonState by
         logonController.State.collectAsState()
 
-        val activationCode =
+        val addressCascadeState by
+        addressCascadeController.State.collectAsState()
+
+        val uuid =
             backStackEntry.arguments
                 ?.getString(
                     LogonRoutes.RegisterActivationArgument
                 )
+                ?.trim()
                 .orEmpty()
 
         val languageId =
-            when (sessionState.Language) {
-                EApplicationLanguage.Turkish -> 1
-                EApplicationLanguage.English -> 2
+            when (
+                sessionState.Language
+            ) {
+                EApplicationLanguage.Turkish ->
+                    1
+
+                EApplicationLanguage.English ->
+                    2
             }
 
         LaunchedEffect(
-            activationCode,
+            uuid,
             languageId
         ) {
+            if (uuid.isBlank()) {
+                navController.navigate(
+                    LogonRoutes.Expired
+                ) {
+                    popUpTo(
+                        LogonRoutes.RegisterActivation
+                    ) {
+                        inclusive =
+                            true
+                    }
+
+                    launchSingleTop =
+                        true
+                }
+
+                return@LaunchedEffect
+            }
+
             logonController.ClearMemberTemp()
+
+            addressCascadeController.OnEvent(
+                AddressCascadeEvent.Clear
+            )
 
             logonController.GetMemberTempByActivationCode(
                 activationCode =
-                    activationCode,
-                languageId =
-                    languageId
-            )
-
-            logonController.LoadCountries(
+                    uuid,
                 languageId =
                     languageId
             )
@@ -511,6 +552,54 @@ fun NavGraphBuilder.logonGraph(
             }
         }
 
+        LaunchedEffect(
+            logonState.MemberTemp?.Email,
+            languageId
+        ) {
+            val memberTemp =
+                logonState.MemberTemp
+
+            if (
+                memberTemp != null &&
+                !addressCascadeState.IsInitialized
+            ) {
+                addressCascadeController.OnEvent(
+                    AddressCascadeEvent.SetInitialSelection(
+                        Selection =
+                            addressCascadeState.Selection,
+                        LanguageId =
+                            languageId
+                    )
+                )
+            }
+        }
+
+        LaunchedEffect(
+            logonState.IsRegisterSuccessful
+        ) {
+            if (!logonState.IsRegisterSuccessful) {
+                return@LaunchedEffect
+            }
+
+            addressCascadeController.OnEvent(
+                AddressCascadeEvent.Clear
+            )
+
+            navController.navigate(
+                LogonRoutes.RegisterFinal
+            ) {
+                popUpTo(
+                    LogonRoutes.RegisterActivation
+                ) {
+                    inclusive =
+                        true
+                }
+
+                launchSingleTop =
+                    true
+            }
+        }
+
         val memberTemp =
             logonState.MemberTemp
 
@@ -528,43 +617,108 @@ fun NavGraphBuilder.logonGraph(
 
             logonState.IsMemberTempLoaded &&
                     memberTemp != null -> {
-
                 RegisterStartScreen(
                     verifiedEmail =
                         memberTemp.Email,
-                    countries =
-                        logonState.Countries,
-                    cities =
-                        logonState.Cities,
-                    selectedCountryId =
-                        logonState.SelectedCountryId,
-                    selectedCityId =
-                        logonState.SelectedCityId,
-                    isCountriesLoading =
-                        logonState.IsCountriesLoading,
-                    isCitiesLoading =
-                        logonState.IsCitiesLoading,
-                    countryError =
-                        logonState.CountryError,
-                    cityError =
-                        logonState.CityError,
+                    addressCascadeState =
+                        addressCascadeState,
+                    isRegisterLoading =
+                        logonState.IsRegistering,
+                    registerErrorMessage =
+                        logonState.ErrorMessage,
                     onCountrySelected = { countryId ->
-                        logonController.SelectCountry(
-                            countryId =
-                                countryId
+                        addressCascadeController.OnEvent(
+                            AddressCascadeEvent.SelectCountry(
+                                CountryId =
+                                    countryId,
+                                LanguageId =
+                                    languageId
+                            )
+                        )
+                    },
+                    onCountryStateSelected = { countryStateId ->
+                        addressCascadeController.OnEvent(
+                            AddressCascadeEvent.SelectCountryState(
+                                CountryStateId =
+                                    countryStateId,
+                                LanguageId =
+                                    languageId
+                            )
+                        )
+                    },
+                    onCountryDepartmentSelected = { countryDepartmentId ->
+                        addressCascadeController.OnEvent(
+                            AddressCascadeEvent.SelectCountryDepartment(
+                                CountryDepartmentId =
+                                    countryDepartmentId,
+                                LanguageId =
+                                    languageId
+                            )
                         )
                     },
                     onCitySelected = { cityId ->
-                        logonController.SelectCity(
-                            cityId =
-                                cityId
+                        addressCascadeController.OnEvent(
+                            AddressCascadeEvent.SelectCity(
+                                CityId =
+                                    cityId,
+                                LanguageId =
+                                    languageId
+                            )
                         )
                     },
-                    onContinueClick = {
-                        // Register API bağlantısı bir sonraki aşamada.
+                    onDistrictSelected = { districtId ->
+                        addressCascadeController.OnEvent(
+                            AddressCascadeEvent.SelectDistrict(
+                                DistrictId =
+                                    districtId
+                            )
+                        )
+                    },
+                    onContinueClick = { form ->
+                        logonController.RegisterPost(
+                            model =
+                                MemberRegisterModel(
+                                    Email =
+                                        form.Email,
+                                    Name =
+                                        form.Name,
+                                    Surname =
+                                        form.Surname,
+                                    Password =
+                                        form.Password,
+                                    PasswordAgain =
+                                        form.PasswordAgain,
+                                    ActivationCode =
+                                        memberTemp.ActivationCode,
+                                    CountryId =
+                                        form.CountryId,
+                                    CountryStateId =
+                                        form.CountryStateId,
+                                    CountryDepartmentId =
+                                        form.CountryDepartmentId,
+                                    CityId =
+                                        form.CityId,
+                                    DistrictId =
+                                        form.DistrictId,
+                                    LoginProvider =
+                                        "Email",
+                                    Uuid =
+                                        uuid,
+                                    MemberSecureKey =
+                                        "",
+                                    LanguageId =
+                                        languageId
+                                ),
+                            languageId =
+                                languageId
+                        )
                     },
                     onBackToLogonClick = {
                         logonController.ClearMemberTemp()
+
+                        addressCascadeController.OnEvent(
+                            AddressCascadeEvent.Clear
+                        )
 
                         navController.navigate(
                             LogonRoutes.Logon
@@ -600,46 +754,41 @@ fun NavGraphBuilder.logonGraph(
 
     composable(
         route =
-            LogonRoutes.RegisterStart
-    ) {
-        RegisterStartScreen(
-            onContinueClick = {
-                navController.navigate(
-                    LogonRoutes.RegisterFinal
-                )
-            },
-            onBackToLogonClick = {
-                navController.popBackStack(
-                    route =
-                        LogonRoutes.Logon,
-                    inclusive =
-                        false
-                )
-            },
-            onLanguageClick = {
-            }
-        )
-    }
-
-    composable(
-        route =
             LogonRoutes.RegisterFinal
     ) {
         val logonState by
         logonController.State.collectAsState()
 
+        val isRegistrationCompleted =
+            logonState.RegisteredMember != null
+
         RegisterFinalScreen(
             email =
-                logonState.FirstDoorEmail,
+                logonState.RegisteredEmail.ifBlank {
+                    logonState.FirstDoorEmail
+                },
             finalState =
-                RegisterFinalState.WaitingEmailVerification,
+                if (isRegistrationCompleted) {
+                    RegisterFinalState.Completed
+                } else {
+                    RegisterFinalState.WaitingEmailVerification
+                },
             onGoToLogonClick = {
-                navController.popBackStack(
-                    route =
-                        LogonRoutes.Logon,
-                    inclusive =
-                        false
-                )
+                logonController.ConsumeRegisterSuccess()
+
+                navController.navigate(
+                    LogonRoutes.Logon
+                ) {
+                    popUpTo(
+                        LogonRoutes.RegisterFinal
+                    ) {
+                        inclusive =
+                            true
+                    }
+
+                    launchSingleTop =
+                        true
+                }
             },
             onResendVerificationClick = {
                 val email =
@@ -647,9 +796,14 @@ fun NavGraphBuilder.logonGraph(
 
                 if (email.isNotBlank()) {
                     val languageId =
-                        when (sessionState.Language) {
-                            EApplicationLanguage.Turkish -> 1
-                            EApplicationLanguage.English -> 2
+                        when (
+                            sessionState.Language
+                        ) {
+                            EApplicationLanguage.Turkish ->
+                                1
+
+                            EApplicationLanguage.English ->
+                                2
                         }
 
                     logonController.FirstDoorPost(
@@ -673,6 +827,10 @@ fun NavGraphBuilder.logonGraph(
             onSendAgainClick = {
                 logonController.ClearMemberTemp()
 
+                addressCascadeController.OnEvent(
+                    AddressCascadeEvent.Clear
+                )
+
                 navController.navigate(
                     LogonRoutes.FirstDoor
                 ) {
@@ -689,6 +847,10 @@ fun NavGraphBuilder.logonGraph(
             },
             onGoToLogonClick = {
                 logonController.ClearMemberTemp()
+
+                addressCascadeController.OnEvent(
+                    AddressCascadeEvent.Clear
+                )
 
                 navController.navigate(
                     LogonRoutes.Logon

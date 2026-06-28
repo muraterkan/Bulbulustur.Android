@@ -20,6 +20,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
+import com.bulbulustur.android.Application.Shared.Address.AddressCascadeFields
+import com.bulbulustur.android.Application.Shared.Address.AddressCascadeState
 import com.bulbulustur.android.Application.Views.Shared.LogonPublicFieldLabel
 import com.bulbulustur.android.Application.Views.Shared.LogonPublicPageTitle
 import com.bulbulustur.android.Application.Views.Shared.LogonPublicRegisterLegalFooter
@@ -28,83 +30,57 @@ import com.bulbulustur.android.Application.Views.Shared.LogonPublicTextField
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
-import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbSelectInput
-import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbSelectOption
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
-import com.bulbulustur.android.businesslayer.Core.DTO.AddressCityDTO
-import com.bulbulustur.android.businesslayer.Core.DTO.AddressCountryDTO
 
 @Composable
 fun RegisterStartScreen(
     verifiedEmail: String = "",
-    countries: List<AddressCountryDTO> = emptyList(),
-    cities: List<AddressCityDTO> = emptyList(),
-    selectedCountryId: Int = 0,
-    selectedCityId: Int = 0,
-    isCountriesLoading: Boolean = false,
-    isCitiesLoading: Boolean = false,
-    countryError: String? = null,
-    cityError: String? = null,
+    addressCascadeState: AddressCascadeState =
+        AddressCascadeState(),
+    isRegisterLoading: Boolean = false,
+    registerErrorMessage: String? = null,
     onCountrySelected: (countryId: Int) -> Unit = {},
+    onCountryStateSelected: (countryStateId: Int) -> Unit = {},
+    onCountryDepartmentSelected: (countryDepartmentId: Int?) -> Unit = {},
     onCitySelected: (cityId: Int) -> Unit = {},
+    onDistrictSelected: (districtId: Int?) -> Unit = {},
     onContinueClick: (registerStartForm: RegisterStartForm) -> Unit = {},
     onBackToLogonClick: () -> Unit = {},
     onLanguageClick: () -> Unit = {}
 ) {
-    var name by remember {
+    var name by
+    remember {
         mutableStateOf("")
     }
 
-    var surname by remember {
+    var surname by
+    remember {
         mutableStateOf("")
     }
 
-    var password by remember {
+    var password by
+    remember {
         mutableStateOf("")
     }
 
-    var passwordAgain by remember {
+    var passwordAgain by
+    remember {
         mutableStateOf("")
     }
 
-    val countryOptions =
-        remember(
-            countries
-        ) {
-            countries.map { country ->
-                BbSelectOption(
-                    value =
-                        country.AddressCountryId.toString(),
-                    text =
-                        country.Content
-                )
-            }
-        }
-
-    val cityOptions =
-        remember(
-            cities
-        ) {
-            cities.map { city ->
-                BbSelectOption(
-                    value =
-                        city.AddressCityId.toString(),
-                    text =
-                        city.Content
-                )
-            }
-        }
+    val selection =
+        addressCascadeState.Selection
 
     val isFormReady =
         name.isNotBlank() &&
                 surname.isNotBlank() &&
                 verifiedEmail.isNotBlank() &&
-                selectedCountryId > 0 &&
-                selectedCityId > 0 &&
+                addressCascadeState.IsValid &&
                 password.length >= 8 &&
                 passwordAgain.isNotBlank() &&
-                password == passwordAgain
+                password == passwordAgain &&
+                !isRegisterLoading
 
     LogonPublicScaffold(
         onLanguageSelected = {
@@ -257,106 +233,21 @@ fun RegisterStartScreen(
                 )
         )
 
-        BbSelectInput(
-            selectedValue =
-                selectedCountryId
-                    .takeIf {
-                        it > 0
-                    }
-                    ?.toString()
-                    .orEmpty(),
-            options =
-                countryOptions,
-            onValueChange = { value ->
-                value
-                    .toIntOrNull()
-                    ?.let { countryId ->
-                        onCountrySelected(
-                            countryId
-                        )
-                    }
-            },
-            label =
-                "Ülke",
-            placeholder =
-                if (isCountriesLoading) {
-                    "Ülkeler yükleniyor..."
-                } else {
-                    "Ülke seçiniz"
-                },
-            helperText =
-                if (
-                    !isCountriesLoading &&
-                    countryError == null &&
-                    countries.isEmpty()
-                ) {
-                    "Ülke verisi bulunamadı."
-                } else {
-                    null
-                },
-            errorText =
-                countryError,
+        AddressCascadeFields(
+            state =
+                addressCascadeState,
+            onCountrySelected =
+                onCountrySelected,
+            onCountryStateSelected =
+                onCountryStateSelected,
+            onCountryDepartmentSelected =
+                onCountryDepartmentSelected,
+            onCitySelected =
+                onCitySelected,
+            onDistrictSelected =
+                onDistrictSelected,
             enabled =
-                !isCountriesLoading &&
-                        countries.isNotEmpty()
-        )
-
-        Spacer(
-            modifier =
-                Modifier.height(
-                    BBSpacing.Space4
-                )
-        )
-
-        BbSelectInput(
-            selectedValue =
-                selectedCityId
-                    .takeIf {
-                        it > 0
-                    }
-                    ?.toString()
-                    .orEmpty(),
-            options =
-                cityOptions,
-            onValueChange = { value ->
-                value
-                    .toIntOrNull()
-                    ?.let { cityId ->
-                        onCitySelected(
-                            cityId
-                        )
-                    }
-            },
-            label =
-                "Şehir",
-            placeholder =
-                when {
-                    selectedCountryId <= 0 ->
-                        "Önce ülke seçiniz"
-
-                    isCitiesLoading ->
-                        "Şehirler yükleniyor..."
-
-                    else ->
-                        "Şehir seçiniz"
-                },
-            helperText =
-                if (
-                    selectedCountryId > 0 &&
-                    !isCitiesLoading &&
-                    cityError == null &&
-                    cities.isEmpty()
-                ) {
-                    "Bu ülke için şehir verisi bulunamadı."
-                } else {
-                    null
-                },
-            errorText =
-                cityError,
-            enabled =
-                selectedCountryId > 0 &&
-                        !isCitiesLoading &&
-                        cities.isNotEmpty()
+                !isRegisterLoading
         )
 
         Spacer(
@@ -472,6 +363,24 @@ fun RegisterStartScreen(
             )
         }
 
+        if (!registerErrorMessage.isNullOrBlank()) {
+            Spacer(
+                modifier =
+                    Modifier.height(
+                        BBSpacing.Space3
+                    )
+            )
+
+            Text(
+                text =
+                    registerErrorMessage,
+                style =
+                    MaterialTheme.typography.bodySmall,
+                color =
+                    MaterialTheme.colorScheme.error
+            )
+        }
+
         Spacer(
             modifier =
                 Modifier.height(
@@ -483,10 +392,15 @@ fun RegisterStartScreen(
             modifier =
                 Modifier.fillMaxWidth(),
             text =
-                if (isFormReady) {
-                    "Hesap Oluştur"
-                } else {
-                    "Bilgileri Tamamlayın"
+                when {
+                    isRegisterLoading ->
+                        "Hesap oluşturuluyor..."
+
+                    isFormReady ->
+                        "Hesap Oluştur"
+
+                    else ->
+                        "Bilgileri Tamamlayın"
                 },
             onClick = {
                 if (!isFormReady) {
@@ -502,9 +416,15 @@ fun RegisterStartScreen(
                         Email =
                             verifiedEmail.trim(),
                         CountryId =
-                            selectedCountryId,
+                            selection.CountryId,
+                        CountryStateId =
+                            selection.CountryStateId,
+                        CountryDepartmentId =
+                            selection.CountryDepartmentId,
                         CityId =
-                            selectedCityId,
+                            selection.CityId,
+                        DistrictId =
+                            selection.DistrictId,
                         Password =
                             password,
                         PasswordAgain =
@@ -544,7 +464,9 @@ fun RegisterStartScreen(
 
             TextButton(
                 onClick =
-                    onBackToLogonClick
+                    onBackToLogonClick,
+                enabled =
+                    !isRegisterLoading
             ) {
                 Text(
                     text =
@@ -566,7 +488,10 @@ data class RegisterStartForm(
     val Surname: String,
     val Email: String,
     val CountryId: Int,
+    val CountryStateId: Int,
+    val CountryDepartmentId: Int?,
     val CityId: Int,
+    val DistrictId: Int?,
     val Password: String,
     val PasswordAgain: String
 )
@@ -580,31 +505,7 @@ private fun RegisterStartScreenPreview() {
     BbTheme {
         RegisterStartScreen(
             verifiedEmail =
-                "test@bulbulustur.com",
-            countries =
-                listOf(
-                    AddressCountryDTO(
-                        AddressCountryId =
-                            209,
-                        Content =
-                            "Türkiye"
-                    )
-                ),
-            cities =
-                listOf(
-                    AddressCityDTO(
-                        AddressCityId =
-                            34,
-                        CountryId =
-                            209,
-                        Content =
-                            "İstanbul"
-                    )
-                ),
-            selectedCountryId =
-                209,
-            selectedCityId =
-                34
+                "test@bulbulustur.com"
         )
     }
 }

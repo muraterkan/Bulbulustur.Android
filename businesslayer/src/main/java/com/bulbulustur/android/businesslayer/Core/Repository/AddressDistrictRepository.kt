@@ -1,141 +1,123 @@
 package com.bulbulustur.android.businesslayer.Core.Repository
 
-import com.bulbulustur.android.businesslayer.Core.DTO.AddressCityDTO
-import com.bulbulustur.android.businesslayer.Core.Interface.IAddressCityRepository
-import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.AddressCityInsertModel
-import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.AddressCityUpdateModel
+import com.bulbulustur.android.businesslayer.Core.DTO.AddressDistrictDTO
+import com.bulbulustur.android.businesslayer.Core.Interface.IAddressDistrictRepository
+import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.AddressDistrictInsertModel
+import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.AddressDistrictUpdateModel
 import com.bulbulustur.android.businesslayer.Core.Network.ApiClient
 import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
-class AddressCityRepository(
+class AddressDistrictRepository(
     private val apiClient: ApiClient = ApiClient
-) : IAddressCityRepository {
+) : IAddressDistrictRepository {
 
-    override suspend fun GetAddressCitiesAsync(
-        languageId: Int,
+    override suspend fun GetAddressDistrictsAsync(
         countryId: Int,
         countryStateId: Int,
         countryDepartmentId: Int?,
+        cityId: Int,
         count: Int
-    ): Result<List<AddressCityDTO>> {
+    ): Result<List<AddressDistrictDTO>> {
         return apiClient.GetAsync(
             baseUrl =
                 ApiRoutes.GLOBALIZATION_BASE_URL,
             method =
-                "AddressCity/GetAddressCitiesAsync",
+                "AddressDistrict/GetAddressDistrictsAsync",
             query =
                 buildString {
-                    append("languageId=$languageId")
-                    append("&countryId=$countryId")
+                    append("countryId=$countryId")
                     append("&countryStateId=$countryStateId")
 
                     countryDepartmentId?.let {
                         append("&countryDepartmentId=$it")
                     }
 
+                    append("&cityId=$cityId")
                     append("&count=$count")
                 }
         )
     }
 
-    override suspend fun GetAddressCitiesAsync(
-        countryId: Int,
-        count: Int
-    ): Result<List<AddressCityDTO>> {
-        return GetAddressCitiesAsync(
-            languageId =
-                1,
-            countryId =
-                countryId,
-            countryStateId =
-                0,
-            countryDepartmentId =
-                null,
-            count =
-                count
-        )
-    }
+    override suspend fun GetAddressDistrictListAsync():
+            Result<List<AddressDistrictDTO>> {
 
-    override suspend fun GetAddressCityListAsync():
-            Result<List<AddressCityDTO>> {
-
-        return GetAddressCitiesAsync(
-            languageId =
-                1,
+        return GetAddressDistrictsAsync(
             countryId =
                 1,
             countryStateId =
                 0,
             countryDepartmentId =
                 null,
+            cityId =
+                0,
             count =
                 100
         )
     }
 
-    override suspend fun GetAddressCityByIdAsync(
-        addressCityId: Int
-    ): Result<AddressCityUpdateModel?> {
+    override suspend fun GetAddressDistrictByIdAsync(
+        addressDistrictId: Int
+    ): Result<AddressDistrictUpdateModel?> {
         return apiClient.GetAsync(
             baseUrl =
                 ApiRoutes.GLOBALIZATION_BASE_URL,
             method =
-                "AddressCity/GetAddressCityByIdAsync",
+                "AddressDistrict/GetAddressDistrictByIdAsync",
             query =
-                "addressCityId=$addressCityId"
+                "addressDistrictId=$addressDistrictId"
         )
     }
 
-    override suspend fun GetAddressCityByIdExtendedAsync(
-        addressCityId: Int
-    ): Result<AddressCityDTO?> {
+    override suspend fun GetAddressDistrictByIdExtendedAsync(
+        addressDistrictId: Int
+    ): Result<AddressDistrictDTO?> {
         return apiClient.GetAsync(
             baseUrl =
                 ApiRoutes.GLOBALIZATION_BASE_URL,
             method =
-                "AddressCity/GetAddressCityByIdExtendedAsync",
+                "AddressDistrict/GetAddressDistrictByIdExtendedAsync",
             query =
-                "addressCityId=$addressCityId"
+                "addressDistrictId=$addressDistrictId"
         )
     }
 
     override suspend fun InsertAsync(
-        model: AddressCityInsertModel
+        model: AddressDistrictInsertModel
     ): Result<Unit> {
         return apiClient.PostAsync(
             baseUrl =
                 ApiRoutes.GLOBALIZATION_BASE_URL,
             method =
-                "AddressCity/AddressCityInsertAsync",
+                "AddressDistrict/AddressDistrictInsertAsync",
             data =
                 model
         )
     }
 
     override suspend fun UpdateAsync(
-        model: AddressCityUpdateModel
+        model: AddressDistrictUpdateModel
     ): Result<Unit> {
         return apiClient.PostAsync(
             baseUrl =
                 ApiRoutes.GLOBALIZATION_BASE_URL,
             method =
-                "AddressCity/AddressCityUpdateAsync",
+                "AddressDistrict/AddressDistrictUpdateAsync",
             data =
                 model
         )
     }
 
     override suspend fun DeleteAsync(
-        addressCityId: Int
+        addressDistrictId: Int
     ): Result<Unit> {
         return apiClient.DeleteAsync(
             baseUrl =
                 ApiRoutes.GLOBALIZATION_BASE_URL,
             method =
-                "AddressCity/AddressCityDelete",
+                "AddressDistrict/AddressDistrictDelete",
             query =
-                "addressCityId=$addressCityId"
+                "addressDistrictId=$addressDistrictId"
         )
     }
 }

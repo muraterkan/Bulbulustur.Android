@@ -8,6 +8,14 @@ import com.bulbulustur.android.businesslayer.Core.Util.Result
 interface IAddressCityRepository {
 
     suspend fun GetAddressCitiesAsync(
+        languageId: Int,
+        countryId: Int,
+        countryStateId: Int,
+        countryDepartmentId: Int?,
+        count: Int
+    ): Result<List<AddressCityDTO>>
+
+    suspend fun GetAddressCitiesAsync(
         countryId: Int,
         count: Int
     ): Result<List<AddressCityDTO>>

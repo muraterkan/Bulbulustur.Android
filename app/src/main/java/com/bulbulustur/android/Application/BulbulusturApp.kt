@@ -49,6 +49,11 @@ import com.bulbulustur.android.businesslayer.Core.DTO.AddressCityDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.AddressCountryDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.IAddressCityRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IAddressCountryRepository
+import com.bulbulustur.android.Application.Shared.Address.AddressCascadeController
+import com.bulbulustur.android.businesslayer.Core.Repository.AddressCountryDepartmentRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.AddressCountryStateRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.AddressDistrictRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.MemberRepository
 
 @Composable
 fun BulbulusturApp(
@@ -212,15 +217,65 @@ private fun BulbulusturApplicationContent(
             AddressCityRepository()
         }
 
+    val addressCountryStateRepository =
+        remember {
+            AddressCountryStateRepository()
+        }
+
+    val addressCountryDepartmentRepository =
+        remember {
+            AddressCountryDepartmentRepository()
+        }
+
+    val addressDistrictRepository =
+        remember {
+            AddressDistrictRepository()
+        }
+
+    val memberRepository =
+        remember {
+            MemberRepository()
+        }
+
+
+
+
+
+    val addressCascadeController =
+        remember(
+            executeService,
+            addressCountryRepository,
+            addressCountryStateRepository,
+            addressCountryDepartmentRepository,
+            addressCityRepository,
+            addressDistrictRepository
+        ) {
+            AddressCascadeController(
+                executeService =
+                    executeService,
+                addressCountryRepository =
+                    addressCountryRepository,
+                addressCountryStateRepository =
+                    addressCountryStateRepository,
+                addressCountryDepartmentRepository =
+                    addressCountryDepartmentRepository,
+                addressCityRepository =
+                    addressCityRepository,
+                addressDistrictRepository =
+                    addressDistrictRepository
+            )
+        }
+
     val logonController =
         remember(
             executeService,
             authenticationRepository,
             memberTempRepository,
+            memberRepository,
             addressCountryRepository,
             addressCityRepository,
             userSessionManager
-        ){
+        ) {
             LogonController(
                 executeService =
                     executeService,
@@ -228,6 +283,8 @@ private fun BulbulusturApplicationContent(
                     authenticationRepository,
                 memberTempRepository =
                     memberTempRepository,
+                memberRepository =
+                    memberRepository,
                 addressCountryRepository =
                     addressCountryRepository,
                 addressCityRepository =
@@ -236,6 +293,7 @@ private fun BulbulusturApplicationContent(
                     userSessionManager
             )
         }
+
 
     val currentBackStackEntry by
     navController.currentBackStackEntryAsState()
@@ -386,7 +444,9 @@ private fun BulbulusturApplicationContent(
             sessionState =
                 sessionState,
             logonController =
-                logonController
+                logonController,
+            addressCascadeController =
+                addressCascadeController
         )
 
         messageGraph(

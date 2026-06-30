@@ -18,7 +18,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import android.util.Log
 
 class AddressCascadeController(
     private val executeService: IExecuteService,
@@ -409,7 +408,19 @@ class AddressCascadeController(
 
         val countryStates: List<AddressCountryStateDTO> =
             if (response.Success) {
-                response.Data.orEmpty()
+                response.Data
+                    .orEmpty()
+                    .filter { countryState ->
+                        countryState.HasAdministration
+                    }
+                    .sortedWith(
+                        compareBy<AddressCountryStateDTO> {
+                            it.DisplayOrder
+                                ?: Int.MAX_VALUE
+                        }.thenBy {
+                            it.StateName
+                        }
+                    )
             } else {
                 emptyList()
             }
@@ -647,7 +658,7 @@ class AddressCascadeController(
                 IsCitiesLoading =
                     true,
                 CityError =
-                    null,
+                    "Seçilen şehir bulunamadı.",
                 Cities =
                     emptyList(),
                 Districts =
@@ -712,31 +723,87 @@ class AddressCascadeController(
         languageId: Int,
         initialDistrictId: Int? = null
     ) {
-        _state.update {
-            it.ClearAfterCity(
-                cityId =
-                    cityId
-            )
+        if (cityId <= 0) {
+            _state.update { currentState ->
+                currentState.copy(
+                    Districts =
+                        emptyList(),
+                    Selection =
+                        currentState.Selection.copy(
+                            CityId =
+                                0,
+                            DistrictId =
+                                null
+                        ),
+                    IsDistrictsLoading =
+                        false,
+                    DistrictError =
+                        null
+                )
+            }
+
+            return
         }
 
-        if (cityId <= 0) {
+        val selectedCity =
+            _state.value.Cities.firstOrNull { city ->
+                city.AddressCityId == cityId
+            }
+
+        if (selectedCity == null) {
+            _state.update { currentState ->
+                currentState.copy(
+                    Districts =
+                        emptyList(),
+                    Selection =
+                        currentState.Selection.copy(
+                            CityId =
+                                0,
+                            DistrictId =
+                                null
+                        ),
+                    IsDistrictsLoading =
+                        false,
+                    DistrictError =
+                        null
+                )
+            }
+
             return
+        }
+
+        _state.update { currentState ->
+            currentState.copy(
+                Districts =
+                    emptyList(),
+                Selection =
+                    currentState.Selection.copy(
+                        CountryStateId =
+                            selectedCity.CountryStateId
+                                .takeIf {
+                                    it > 0
+                                }
+                                ?: currentState.Selection.CountryStateId,
+                        CountryDepartmentId =
+                            selectedCity.CountryDepartmentId
+                                ?.takeIf {
+                                    it > 0
+                                }
+                                ?: currentState.Selection.CountryDepartmentId,
+                        CityId =
+                            selectedCity.AddressCityId,
+                        DistrictId =
+                            null
+                    ),
+                IsDistrictsLoading =
+                    false,
+                DistrictError =
+                    null
+            )
         }
 
         val currentSelection =
             _state.value.Selection
-
-        Log.d(
-            "AddressCascade",
-            """
-        SelectCityInternal:
-        CountryId=${currentSelection.CountryId}
-        CountryStateId=${currentSelection.CountryStateId}
-        CountryDepartmentId=${currentSelection.CountryDepartmentId}
-        CityId=$cityId
-        IsTurkey=${currentSelection.IsTurkey}
-        """.trimIndent()
-        )
 
         if (!currentSelection.IsTurkey) {
             return
@@ -750,7 +817,7 @@ class AddressCascadeController(
             countryDepartmentId =
                 currentSelection.CountryDepartmentId,
             cityId =
-                cityId
+                currentSelection.CityId
         )
 
         val normalizedInitialDistrictId =
@@ -783,17 +850,6 @@ class AddressCascadeController(
                     emptyList()
             )
         }
-
-        Log.d(
-            "AddressCascade",
-            """
-            LoadDistrictsInternal:
-            countryId=$countryId
-            countryStateId=$countryStateId
-            countryDepartmentId=$countryDepartmentId
-            cityId=$cityId
-            """.trimIndent()
-        )
 
         val response =
             executeService.GetAsync(

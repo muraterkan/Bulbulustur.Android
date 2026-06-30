@@ -38,7 +38,9 @@ import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
-import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
+import androidx.compose.ui.platform.LocalContext
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
@@ -48,7 +50,8 @@ data class BbProductCardModel(
     val Id: Int,
     val Name: String,
     val StoreName: String,
-    @DrawableRes val ImageResId: Int,
+    @DrawableRes val ImageResId: Int = 0,
+    val ImageUrl: String = "",
     val PriceText: String,
     val OldPriceText: String = "",
     val BadgeText: String = "",
@@ -78,6 +81,7 @@ fun BbProductCard(
         ) {
             BbProductCardMedia(
                 imageResId = product.ImageResId,
+                imageUrl = product.ImageUrl,
                 productName = product.Name,
                 badgeText = product.BadgeText,
                 isFavorite = product.IsFavorite,
@@ -143,11 +147,14 @@ fun BbProductCard(
 @Composable
 private fun BbProductCardMedia(
     @DrawableRes imageResId: Int,
+    imageUrl: String,
     productName: String,
     badgeText: String,
     isFavorite: Boolean,
     onFavoriteClick: () -> Unit
 ) {
+    val context = LocalContext.current
+
     val mediaShape = RoundedCornerShape(
         topStart = BBRadius.lg,
         topEnd = BBRadius.lg,
@@ -161,36 +168,54 @@ private fun BbProductCardMedia(
             .aspectRatio(1f)
             .clip(mediaShape)
     ) {
-        if (imageResId != 0) {
-            Image(
-                painter = painterResource(
-                    id = imageResId
-                ),
-                contentDescription = productName,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(1f)
-                    .clip(mediaShape),
-                contentScale = ContentScale.Crop
-            )
-        } else {
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(1f),
-                color = MaterialTheme.colorScheme.surfaceVariant
-            ) {
-                Box(
-                    contentAlignment = Alignment.Center
+        when {
+            imageUrl.isNotBlank() -> {
+                AsyncImage(
+                    model = ImageRequest.Builder(context)
+                        .data(imageUrl)
+                        .build(),
+                    contentDescription = productName,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(1f)
+                        .clip(mediaShape),
+                    contentScale = ContentScale.Crop
+                )
+            }
+
+            imageResId != 0 -> {
+                Image(
+                    painter = painterResource(
+                        id = imageResId
+                    ),
+                    contentDescription = productName,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(1f)
+                        .clip(mediaShape),
+                    contentScale = ContentScale.Crop
+                )
+            }
+
+            else -> {
+                Surface(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(1f),
+                    color = MaterialTheme.colorScheme.surfaceVariant
                 ) {
-                    Icon(
-                        imageVector = Icons.Outlined.ImageNotSupported,
-                        contentDescription = null,
-                        modifier = Modifier.size(
-                            BBIcon.EmptyStateIcon
-                        ),
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                    Box(
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.ImageNotSupported,
+                            contentDescription = null,
+                            modifier = Modifier.size(
+                                BBIcon.EmptyStateIcon
+                            ),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
                 }
             }
         }

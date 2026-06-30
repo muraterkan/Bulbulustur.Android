@@ -30,7 +30,6 @@ class HomeController(
     private val _state = MutableStateFlow(HomeControllerState())
     val State: StateFlow<HomeControllerState> = _state.asStateFlow()
 
-
     fun Index(parameters: Map<String, Any?> = emptyMap()) {
         viewModelScope.launch {
             _state.update {

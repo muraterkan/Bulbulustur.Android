@@ -24,7 +24,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
-
+import coil3.compose.AsyncImage
+import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -92,11 +93,15 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBLayout
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBAlpha
+import com.bulbulustur.android.Application.Areas.b2c.Controllers.ProductControllerState
+import com.bulbulustur.android.businesslayer.Core.DTO.ProductDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.ProductVariantPictureDTO
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductDetailScreen(
-    productId: Int = 1,
+    State: ProductControllerState = ProductControllerState(),
+    productId: Int = 0,
     onBackClick: () -> Unit = {},
     onSearchClick: (String) -> Unit = {},
     onFavoriteClick: () -> Unit = {},
@@ -116,25 +121,69 @@ fun ProductDetailScreen(
     onReportAbuseClick: () -> Unit = {},
     onReturnPolicyClick: () -> Unit = {}
 ) {
-    val product = remember(productId) {
-        getRetailProductDetail(productId)
-    }
+    val productDto =
+        State.ProductDetailResult
+            ?.Data
+
+    val variantPictures =
+        State.ProductVariantPicturesResult
+            ?.Data
+            .orEmpty()
+
+    val product =
+        remember(
+            productDto,
+            variantPictures,
+            productId
+        ) {
+            productDto
+                ?.ToRetailProductDetail(
+                    variantPictures =
+                        variantPictures
+                )
+                ?: getRetailProductDetail(
+                    productId =
+                        productId
+                )
+        }
 
     var searchText by remember {
         mutableStateOf("")
     }
 
-    var selectedColorId by remember {
-        mutableStateOf(product.colorVariants.first().id)
+    var selectedColorId by remember(
+        product.id,
+        product.colorVariants
+    ) {
+        mutableStateOf(
+            product.colorVariants
+                .firstOrNull()
+                ?.id
+                ?: ""
+        )
     }
 
-    var selectedSizeId by remember {
-        mutableStateOf(product.sizeOptions.first { sizeOption ->
-            sizeOption.state == RetailProductSizeState.Selected
-        }.id)
+    var selectedSizeId by remember(
+        product.id,
+        product.sizeOptions
+    ) {
+        mutableStateOf(
+            product.sizeOptions
+                .firstOrNull { sizeOption ->
+                    sizeOption.state ==
+                            RetailProductSizeState.Selected
+                }
+                ?.id
+                ?: product.sizeOptions
+                    .firstOrNull()
+                    ?.id
+                ?: ""
+        )
     }
 
-    var quantity by remember {
+    var quantity by remember(
+        product.id
+    ) {
         mutableIntStateOf(1)
     }
 
@@ -142,221 +191,424 @@ fun ProductDetailScreen(
         mutableStateOf<RetailProductDetailSheet?>(null)
     }
 
-    val sheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = true
-    )
+    val sheetState =
+        rememberModalBottomSheetState(
+            skipPartiallyExpanded =
+                true
+        )
 
-    val selectedColorVariant = product.colorVariants.first { colorVariant ->
-        colorVariant.id == selectedColorId
+    LaunchedEffect(
+        product.id,
+        product.colorVariants,
+        product.sizeOptions
+    ) {
+        selectedColorId =
+            product.colorVariants
+                .firstOrNull()
+                ?.id
+                ?: ""
+
+        selectedSizeId =
+            product.sizeOptions
+                .firstOrNull { sizeOption ->
+                    sizeOption.state ==
+                            RetailProductSizeState.Selected
+                }
+                ?.id
+                ?: product.sizeOptions.firstOrNull()?.id ?: ""
+
+        quantity = 1
     }
 
-    val selectedSizeOption = product.sizeOptions.first { sizeOption ->
-        sizeOption.id == selectedSizeId
-    }
+    val selectedColorVariant =
+        product.colorVariants
+            .firstOrNull { colorVariant ->
+                colorVariant.id ==
+                        selectedColorId
+            }
+            ?: product.colorVariants.firstOrNull()
+            ?: RetailProductColorVariant(
+                id = "default",
+                name = "Standart",
+                swatchColor = BBColors.Gray.Gray400,
+                images = emptyList()
+            )
 
-    val visibleImages = selectedColorVariant.images
+    val selectedSizeOption =
+        product.sizeOptions
+            .firstOrNull { sizeOption ->
+                sizeOption.id ==
+                        selectedSizeId
+            }
+            ?: product.sizeOptions
+                .firstOrNull()
+            ?: RetailProductSizeOption(
+                id =
+                    "default",
+                label =
+                    "Standart",
+                state =
+                    if (
+                        product.isInStock
+                    ) {
+                        RetailProductSizeState.Selected
+                    } else {
+                        RetailProductSizeState.OutOfStock
+                    }
+            )
 
-    val pagerState = rememberPagerState(
-        pageCount = {
-            visibleImages.size
+    val visibleImages =
+        selectedColorVariant.images
+            .ifEmpty {
+                listOf(
+                    RetailProductImage(
+                        label =
+                            product.name,
+                        backgroundColor =
+                            BBColors.White,
+                        foregroundColor =
+                            BBColors.Gray.Gray500
+                    )
+                )
+            }
+
+    val pagerState =
+        rememberPagerState(
+            initialPage =
+                0,
+            pageCount = {
+                visibleImages.size
+            }
+        )
+
+    LaunchedEffect(
+        product.id,
+        selectedColorId
+    ) {
+        if (
+            visibleImages.isNotEmpty()
+        ) {
+            pagerState.scrollToPage(
+                0
+            )
         }
-    )
-
-    LaunchedEffect(selectedColorId) {
-        pagerState.scrollToPage(0)
     }
 
-    val selection = RetailProductDetailSelection(
-        productId = product.id,
-        selectedColor = selectedColorVariant.name,
-        selectedSize = selectedSizeOption.label,
-        quantity = quantity
-    )
+    val selection =
+        RetailProductDetailSelection(
+            productId =
+                product.id,
+            selectedColor =
+                selectedColorVariant.name,
+            selectedSize =
+                selectedSizeOption.label,
+            quantity =
+                quantity
+        )
 
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+        containerColor =
+            MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             RetailSearchHeader(
-                searchText = searchText,
+                searchText =
+                    searchText,
                 onSearchTextChange = {
-                    searchText = it
+                    searchText =
+                        it
                 },
-                onMenuClick = onBackClick,
-                onFavoriteClick = onFavoriteClick,
-                onMessageClick = onMessageClick,
-                placeholder = product.searchPlaceholder,
+                onMenuClick =
+                    onBackClick,
+                onFavoriteClick =
+                    onFavoriteClick,
+                onMessageClick =
+                    onMessageClick,
+                placeholder =
+                    product.searchPlaceholder,
                 onSearchClick = {
-                    onSearchClick(searchText)
+                    onSearchClick(
+                        searchText
+                    )
                 },
                 onClearClick = {
-                    searchText = ""
+                    searchText =
+                        ""
                 },
-                leadingAction = RetailSearchHeaderLeadingAction.Back,
-                onBackClick = onBackClick
+                leadingAction =
+                    RetailSearchHeaderLeadingAction.Back,
+                onBackClick =
+                    onBackClick
             )
         },
         bottomBar = {
             RetailProductDetailBottomBar(
-                isInStock = product.isInStock,
+                isInStock =
+                    product.isInStock,
                 onAddToBasketClick = {
-                    onAddToBasketClick(selection)
+                    onAddToBasketClick(
+                        selection
+                    )
                 },
                 onBuyNowClick = {
-                    onBuyNowClick(selection)
+                    onBuyNowClick(
+                        selection
+                    )
                 },
                 onStockAlarmClick = {
-                    onStockAlarmClick(selection)
+                    onStockAlarmClick(
+                        selection
+                    )
                 }
             )
         }
     ) { innerPadding ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.surfaceVariant)
-                .padding(innerPadding)
-                .verticalScroll(rememberScrollState())
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(
+                        MaterialTheme.colorScheme.surfaceVariant
+                    )
+                    .padding(
+                        innerPadding
+                    )
+                    .verticalScroll(
+                        rememberScrollState()
+                    )
         ) {
             RetailProductDetailGallery(
-                product = product,
-                images = visibleImages,
-                currentPage = pagerState.currentPage,
+                product =
+                    product,
+                images =
+                    visibleImages,
+                currentPage =
+                    pagerState.currentPage,
                 pagerContent = {
                     HorizontalPager(
-                        state = pagerState,
-                        modifier = Modifier.fillMaxWidth()
+                        state =
+                            pagerState,
+                        modifier =
+                            Modifier.fillMaxWidth()
                     ) { page ->
+                        val image =
+                            visibleImages
+                                .getOrNull(
+                                    page
+                                )
+                                ?: visibleImages.first()
+
                         RetailProductDetailImageSlide(
-                            image = visibleImages[page]
+                            image =
+                                image
                         )
                     }
                 }
             )
 
             RetailProductTitleCard(
-                product = product
+                product =
+                    product
             )
 
             RetailProductRatingSummaryCard(
-                ratingText = product.ratingText,
-                reviewCount = product.reviewCount,
-                onReviewClick = onReviewClick
+                ratingText =
+                    product.ratingText,
+                reviewCount =
+                    product.reviewCount,
+                onReviewClick =
+                    onReviewClick
             )
 
             RetailProductDetailVariantCard(
-                product = product,
-                selectedColorVariant = selectedColorVariant,
-                selectedSizeOption = selectedSizeOption,
-                quantity = quantity,
+                product =
+                    product,
+                selectedColorVariant =
+                    selectedColorVariant,
+                selectedSizeOption =
+                    selectedSizeOption,
+                quantity =
+                    quantity,
                 onColorClick = { colorVariant ->
-                    selectedColorId = colorVariant.id
+                    selectedColorId =
+                        colorVariant.id
                 },
                 onSizeClick = { sizeOption ->
-                    if (sizeOption.state != RetailProductSizeState.Disabled &&
-                        sizeOption.state != RetailProductSizeState.OutOfStock
+                    if (
+                        sizeOption.state !=
+                        RetailProductSizeState.Disabled &&
+                        sizeOption.state !=
+                        RetailProductSizeState.OutOfStock
                     ) {
-                        selectedSizeId = sizeOption.id
+                        selectedSizeId =
+                            sizeOption.id
                     }
                 },
                 onSizeGuideClick = {
-                    activeSheet = RetailProductDetailSheet.SizeGuide
+                    activeSheet =
+                        RetailProductDetailSheet.SizeGuide
+
+                    onSizeGuideClick()
                 },
                 onDecreaseQuantityClick = {
-                    if (quantity > 1) {
-                        quantity -= 1
+                    if (
+                        quantity > 1
+                    ) {
+                        quantity -=
+                            1
                     }
                 },
                 onIncreaseQuantityClick = {
-                    quantity += 1
+                    quantity +=
+                        1
                 }
             )
 
             RetailProductPriceCard(
-                product = product
+                product =
+                    product
             )
 
-            if (!product.isInStock) {
+            if (
+                !product.isInStock
+            ) {
                 RetailProductStockAlertCard(
                     onStockAlarmClick = {
-                        onStockAlarmClick(selection)
+                        onStockAlarmClick(
+                            selection
+                        )
                     }
                 )
             }
 
             RetailProductTrustLinksCard(
                 onLowerPriceClick = {
-                    activeSheet = RetailProductDetailSheet.LowerPrice
+                    activeSheet =
+                        RetailProductDetailSheet.LowerPrice
+
+                    onLowerPriceClick()
                 },
                 onReportAbuseClick = {
-                    activeSheet = RetailProductDetailSheet.ReportAbuse
+                    activeSheet =
+                        RetailProductDetailSheet.ReportAbuse
+
+                    onReportAbuseClick()
                 },
                 onReturnPolicyClick = {
-                    activeSheet = RetailProductDetailSheet.ReturnPolicy
+                    activeSheet =
+                        RetailProductDetailSheet.ReturnPolicy
+
+                    onReturnPolicyClick()
                 }
             )
 
-            RetailSellerProductsCarousel(
-                products = product.sellerProducts,
-                onProductClick = onSellerProductClick,
-                onStoreClick = {
-                    onStoreClick(product.store)
-                }
-            )
+            if (
+                product.sellerProducts.isNotEmpty()
+            ) {
+                RetailSellerProductsCarousel(
+                    products =
+                        product.sellerProducts,
+                    onProductClick =
+                        onSellerProductClick,
+                    onStoreClick = {
+                        onStoreClick(
+                            product.store
+                        )
+                    }
+                )
+            }
 
-            RetailReviewCarousel(
-                reviews = product.reviews,
-                ratingText = product.ratingText,
-                reviewCount = product.reviewCount,
-                onReviewClick = onReviewClick
-            )
+            if (
+                product.reviews.isNotEmpty() ||
+                product.reviewCount > 0
+            ) {
+                RetailReviewCarousel(
+                    reviews =
+                        product.reviews,
+                    ratingText =
+                        product.ratingText,
+                    reviewCount =
+                        product.reviewCount,
+                    onReviewClick =
+                        onReviewClick
+                )
+            }
 
             RetailProductDetailStoreCard(
-                store = product.store,
+                store =
+                    product.store,
                 onStoreClick = {
-                    onStoreClick(product.store)
+                    onStoreClick(
+                        product.store
+                    )
                 }
             )
 
             RetailProductDetailQuickActions(
-                product = product,
-                onOtherSellerClick = onOtherSellerClick,
-                onQuestionClick = onQuestionClick
+                product =
+                    product,
+                onOtherSellerClick =
+                    onOtherSellerClick,
+                onQuestionClick =
+                    onQuestionClick
             )
 
             RetailProductDescriptionSection(
-                description = product.description
+                description =
+                    product.description
             )
 
-            RetailRelatedCategoryChipsSection(
-                categories = product.relatedCategories,
-                onCategoryClick = onRelatedCategoryClick
-            )
+            if (
+                product.relatedCategories.isNotEmpty()
+            ) {
+                RetailRelatedCategoryChipsSection(
+                    categories =
+                        product.relatedCategories,
+                    onCategoryClick =
+                        onRelatedCategoryClick
+                )
+            }
 
             Spacer(
-                modifier = Modifier.height(BBSpacing.Space16)
+                modifier =
+                    Modifier.height(
+                        BBSpacing.Space16
+                    )
             )
         }
     }
 
-    val currentSheet = activeSheet
+    val currentSheet =
+        activeSheet
 
-    if (currentSheet != null) {
+    if (
+        currentSheet != null
+    ) {
         ModalBottomSheet(
             onDismissRequest = {
-                activeSheet = null
+                activeSheet =
+                    null
             },
-            sheetState = sheetState,
-            containerColor = MaterialTheme.colorScheme.surface
+            sheetState =
+                sheetState,
+            containerColor =
+                MaterialTheme.colorScheme.surface
         ) {
             RetailProductDetailSheetContent(
-                sheet = currentSheet,
-                product = product,
+                sheet =
+                    currentSheet,
+                product =
+                    product,
                 onCloseClick = {
-                    activeSheet = null
+                    activeSheet =
+                        null
                 },
                 onStoreClick = {
-                    activeSheet = null
-                    onStoreClick(product.store)
+                    activeSheet =
+                        null
+
+                    onStoreClick(
+                        product.store
+                    )
                 }
             )
         }
@@ -426,25 +678,61 @@ private fun RetailProductDetailImageSlide(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(max = BBLayout.ProductDetailImageMaxHeight)
-            .aspectRatio(0.92f)
-            .background(image.backgroundColor),
-        contentAlignment = Alignment.Center
+            .heightIn(
+                max =
+                    BBLayout.ProductDetailImageMaxHeight
+            )
+            .aspectRatio(
+                0.92f
+            )
+            .background(
+                image.backgroundColor
+            ),
+        contentAlignment =
+            Alignment.Center
     ) {
-        if (image.drawableResId != null) {
-            Image(
-                painter = painterResource(id = image.drawableResId),
-                contentDescription = image.label,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
-            )
-        } else {
-            Text(
-                text = image.label,
-                style = MaterialTheme.typography.displaySmall,
-                color = image.foregroundColor,
-                fontWeight = FontWeight.ExtraBold
-            )
+        when {
+            image.imageUrl.isNotBlank() -> {
+                AsyncImage(
+                    model =
+                        image.imageUrl,
+                    contentDescription =
+                        image.label,
+                    modifier =
+                        Modifier.fillMaxSize(),
+                    contentScale =
+                        ContentScale.Fit
+                )
+            }
+
+            image.drawableResId != null -> {
+                Image(
+                    painter =
+                        painterResource(
+                            id =
+                                image.drawableResId
+                        ),
+                    contentDescription =
+                        image.label,
+                    modifier =
+                        Modifier.fillMaxSize(),
+                    contentScale =
+                        ContentScale.Fit
+                )
+            }
+
+            else -> {
+                Text(
+                    text =
+                        image.label,
+                    style =
+                        MaterialTheme.typography.displaySmall,
+                    color =
+                        image.foregroundColor,
+                    fontWeight =
+                        FontWeight.ExtraBold
+                )
+            }
         }
     }
 }
@@ -776,20 +1064,50 @@ private fun RetailProductColorChoice(
             ) {
                 val previewImage = colorVariant.images.firstOrNull()
 
-                if (previewImage?.drawableResId != null) {
-                    Image(
-                        painter = painterResource(id = previewImage.drawableResId),
-                        contentDescription = colorVariant.name,
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Fit
-                    )
-                } else {
-                    Text(
-                        text = colorVariant.name.take(2),
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontWeight = FontWeight.Bold
-                    )
+                when {
+                    previewImage?.imageUrl?.isNotBlank() == true -> {
+                        AsyncImage(
+                            model =
+                                previewImage.imageUrl,
+                            contentDescription =
+                                colorVariant.name,
+                            modifier =
+                                Modifier.fillMaxSize(),
+                            contentScale =
+                                ContentScale.Fit
+                        )
+                    }
+
+                    previewImage?.drawableResId != null -> {
+                        Image(
+                            painter =
+                                painterResource(
+                                    id =
+                                        previewImage.drawableResId
+                                ),
+                            contentDescription =
+                                colorVariant.name,
+                            modifier =
+                                Modifier.fillMaxSize(),
+                            contentScale =
+                                ContentScale.Fit
+                        )
+                    }
+
+                    else -> {
+                        Text(
+                            text =
+                                colorVariant.name.take(
+                                    2
+                                ),
+                            style =
+                                MaterialTheme.typography.labelMedium,
+                            color =
+                                MaterialTheme.colorScheme.onSurfaceVariant,
+                            fontWeight =
+                                FontWeight.Bold
+                        )
+                    }
                 }
             }
 
@@ -2895,6 +3213,7 @@ data class RetailProductImage(
     val label: String,
     val backgroundColor: Color,
     val foregroundColor: Color,
+    val imageUrl: String = "",
     @DrawableRes val drawableResId: Int? = null
 )
 
@@ -2947,6 +3266,403 @@ data class RetailRelatedCategoryChip(
     val id: Int,
     val name: String
 )
+
+private fun ResolveRetailProductImageUrl(
+    imagePath: String
+): String {
+    val normalizedPath =
+        imagePath.trim()
+
+    if (
+        normalizedPath.isBlank()
+    ) {
+        return ""
+    }
+
+    if (
+        normalizedPath.startsWith(
+            "http://",
+            ignoreCase =
+                true
+        ) ||
+        normalizedPath.startsWith(
+            "https://",
+            ignoreCase =
+                true
+        )
+    ) {
+        return normalizedPath
+    }
+
+    val baseUrl =
+        ApiRoutes.B2C_BASE_URL
+            .substringBefore(
+                "/api/"
+            )
+            .trimEnd(
+                '/'
+            )
+
+    return "$baseUrl/${normalizedPath.trimStart('/')}"
+}
+
+private fun ProductDTO.ToRetailProductDetail(
+    variantPictures: List<ProductVariantPictureDTO>
+): RetailProductDetail {
+    val fallbackProduct =
+        getRetailProductDetail(
+            productId =
+                ProductId
+        )
+
+    val resolvedVariantImages =
+        variantPictures
+            .sortedWith(
+                compareByDescending<ProductVariantPictureDTO> {
+                    it.IsDefault
+                }.thenBy {
+                    it.Sorting
+                }
+            )
+            .mapNotNull { picture ->
+                val rawPicturePath =
+                    if (picture.Picture.isNotBlank()) {
+                        picture.Picture
+                    } else {
+                        picture.DirectoryName +
+                                picture.PictureName
+                    }
+
+                val imageUrl =
+                    ResolveRetailProductImageUrl(
+                        imagePath =
+                            rawPicturePath
+                    )
+
+                if (imageUrl.isBlank()) {
+                    null
+                } else {
+                    RetailProductImage(
+                        label =
+                            picture.PictureName
+                                .ifBlank {
+                                    ProductName
+                                },
+                        backgroundColor =
+                            BBColors.White,
+                        foregroundColor =
+                            BBColors.Gray.Gray500,
+                        imageUrl =
+                            imageUrl
+                    )
+                }
+            }
+
+    val resolvedColorName =
+        Color.takeIf {
+            it.isNotBlank()
+        } ?: "Standart"
+
+    val resolvedColorId =
+        ColorId
+            .takeIf {
+                it > 0
+            }
+            ?.toString()
+            ?: "default"
+
+    val resolvedSizeName =
+        Size.takeIf {
+            it.isNotBlank()
+        } ?: "Standart"
+
+    val resolvedSizeId =
+        SizeId
+            .takeIf {
+                it > 0
+            }
+            ?.toString()
+            ?: "default"
+
+    val resolvedBrandName =
+        BrandData
+            ?.Brand
+            ?.takeIf {
+                it.isNotBlank()
+            }
+            ?: fallbackProduct.brandName
+
+    val resolvedStoreName =
+        Store.takeIf {
+            it.isNotBlank()
+        } ?: "Satıcı"
+
+    val resolvedStoreRating =
+        StoreRating
+            .takeIf {
+                it > 0.0
+            }
+            ?.let { storeRating ->
+                java.lang.String.format(
+                    java.util.Locale(
+                        "tr",
+                        "TR"
+                    ),
+                    "%.1f",
+                    storeRating
+                )
+            }
+            ?: ""
+
+    val resolvedRating =
+        Rating
+            .takeIf {
+                it > 0.0
+            }
+            ?.let { rating ->
+                "★ ${
+                    java.lang.String.format(
+                        java.util.Locale(
+                            "tr",
+                            "TR"
+                        ),
+                        "%.1f",
+                        rating
+                    )
+                }"
+            }
+            ?: ""
+
+    val resolvedReviewCount =
+        ReviewNumber
+            ?: 0
+
+    val resolvedDescription =
+        Description.takeIf {
+            it.isNotBlank()
+        } ?: "Bu ürün için açıklama bilgisi bulunmamaktadır."
+
+    val resolvedCategoryName =
+        CategoryName.takeIf {
+            it.isNotBlank()
+        } ?: fallbackProduct.categoryName
+
+    val resolvedPicture =
+        DefaultPicture
+            .takeIf {
+                it.isNotBlank()
+            }
+            ?: Picture
+
+    val resolvedPictureUrl =
+        ResolveRetailProductImageUrl(
+            imagePath =
+                resolvedPicture
+        )
+
+    val resolvedProductName =
+        ProductName.takeIf {
+            it.isNotBlank()
+        } ?: "Ürün"
+
+    val resolvedStoreLogoText =
+        resolvedStoreName
+            .split(
+                " "
+            )
+            .filter {
+                it.isNotBlank()
+            }
+            .take(
+                2
+            )
+            .mapNotNull {
+                it.firstOrNull()
+                    ?.uppercase()
+            }
+            .joinToString(
+                separator =
+                    ""
+            )
+            .takeIf {
+                it.isNotBlank()
+            }
+            ?: "ST"
+
+    return RetailProductDetail(
+        id =
+            ProductId,
+        name =
+            resolvedProductName,
+        brandName =
+            resolvedBrandName,
+        searchPlaceholder =
+            "Ürün, kategori veya marka ara",
+        shortDescription =
+            resolvedDescription,
+        description =
+            resolvedDescription,
+        categoryName =
+            resolvedCategoryName,
+        priceText =
+            FormatRetailProductPrice(
+                price =
+                    Price,
+                currencySymbol =
+                    CurrencySymbol
+            ),
+        oldPriceText =
+            "",
+        discountText =
+            "",
+        badgeText =
+            "",
+        ratingText =
+            resolvedRating,
+        cargoText =
+            ShippingDuration
+                .takeIf {
+                    it > 0
+                }
+                ?.let {
+                    "$it günde kargo"
+                }
+                ?: "",
+        stockText =
+            if (
+                Stock > 0
+            ) {
+                "Stokta $Stock adet var"
+            } else {
+                "Stokta yok"
+            },
+        isInStock =
+            Stock > 0,
+        reviewCount =
+            resolvedReviewCount,
+        questionCount =
+            0,
+        otherSellerCount =
+            0,
+        colorVariants =
+            listOf(
+                RetailProductColorVariant(
+                    id =
+                        resolvedColorId,
+                    name =
+                        resolvedColorName,
+                    swatchColor =
+                        BBColors.Gray.Gray400,
+                    images =
+                        resolvedVariantImages
+                            .ifEmpty {
+                                listOf(
+                                    RetailProductImage(
+                                        label =
+                                            resolvedProductName,
+                                        backgroundColor =
+                                            BBColors.White,
+                                        foregroundColor =
+                                            BBColors.Gray.Gray500,
+                                        imageUrl =
+                                            resolvedPictureUrl,
+                                        drawableResId =
+                                            if (
+                                                resolvedPictureUrl.isBlank()
+                                            ) {
+                                                fallbackProduct
+                                                    .colorVariants
+                                                    .firstOrNull()
+                                                    ?.images
+                                                    ?.firstOrNull()
+                                                    ?.drawableResId
+                                            } else {
+                                                null
+                                            }
+                                    )
+                                )
+                            }
+                )
+            ),
+        sizeOptions =
+            listOf(
+                RetailProductSizeOption(
+                    id =
+                        resolvedSizeId,
+                    label =
+                        resolvedSizeName,
+                    state =
+                        if (
+                            Stock > 0
+                        ) {
+                            RetailProductSizeState.Selected
+                        } else {
+                            RetailProductSizeState.OutOfStock
+                        }
+                )
+            ),
+        sellerProducts =
+            emptyList(),
+        reviews =
+            emptyList(),
+        relatedCategories =
+            emptyList(),
+        store =
+            RetailProductDetailStore(
+                id =
+                    StoreId,
+                name =
+                    resolvedStoreName,
+                logoText =
+                    resolvedStoreLogoText,
+                ratingText =
+                    resolvedStoreRating,
+                productCount =
+                    0,
+                isVerified =
+                    false
+            )
+    )
+}
+
+private fun FormatRetailProductPrice(
+    price: Double,
+    currencySymbol: String
+): String {
+    val formatter =
+        java.text.NumberFormat.getNumberInstance(
+            java.util.Locale(
+                "tr",
+                "TR"
+            )
+        ).apply {
+            minimumFractionDigits =
+                2
+
+            maximumFractionDigits =
+                2
+        }
+
+    return buildString {
+        if (
+            currencySymbol.isNotBlank()
+        ) {
+            append(
+                currencySymbol
+            )
+
+            append(
+                " "
+            )
+        }
+
+        append(
+            formatter.format(
+                price
+            )
+        )
+    }
+}
 
 private fun getRetailProductDetail(
     productId: Int

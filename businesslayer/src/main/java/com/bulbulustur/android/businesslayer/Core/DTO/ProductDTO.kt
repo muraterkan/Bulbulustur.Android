@@ -1,6 +1,8 @@
 ﻿package com.bulbulustur.android.businesslayer.Core.DTO
 
 data class ProductDTO(
+
+    // ProductInsertModel / ProductUpdateModel alanları
     val ProductId: Int = 0,
     val InsertedBy: Int = 0,
     val InsertedDate: String = "",
@@ -20,5 +22,39 @@ data class ProductDTO(
     val Uuid: String = "",
     val ProductSecureKey: String = "",
     val UnitId: Int = 0,
-    val Buybox: Boolean = false
+    val Buybox: Boolean = false,
+
+    // ProductDTO extended alanları
+    val CategoryName: String = "",
+    val CurrencySymbol: String = "",
+    val Picture: String = "",
+    val StoreId: Int = 0,
+    val Price: Double = 0.0,
+    val Store: String = "",
+    val Stock: Int = 0,
+    val Breadcrumb: String = "",
+    val ConfirmationType: String = "",
+    val VatRate: String = "",
+    val CurrencyId: Int = 0,
+    val Color: String = "",
+    val Size: String = "",
+    val VariantId: Int = 0,
+    val StoreRating: Double = 0.0,
+    val Stockcode: String = "",
+    val Barcode: String = "",
+    val ShippingAddressId: Int = 0,
+    val ReturnAddressId: Int = 0,
+    val Desi: Int = 0,
+    val CommissionRate: Int = 0,
+    val ShippingDuration: Int = 0,
+    val ColorId: Int = 0,
+    val SizeId: Int = 0,
+    val StoreBasedFeatureId: Int = 0,
+    val ShippingAddress: String = "",
+    val ReturnAddress: String = "",
+    val DefaultPicture: String = "",
+    val AdvertSponsoreds: List<AdvertSponsoredDTO>? = null,
+    val BrandData: ProductBrandDTO? = null,
+    val StoreLogo: String = "",
+    val ProductVariantPriceId: Int = 0
 )

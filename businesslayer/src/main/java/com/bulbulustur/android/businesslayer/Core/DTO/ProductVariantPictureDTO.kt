@@ -17,5 +17,6 @@ data class ProductVariantPictureDTO(
     val Sorting: Int = 0,
     val DirectoryName: String = "",
     val Description: String = "",
-    val ConfirmationStatusId: Int = 0
+    val ConfirmationStatusId: Int = 0,
+    val Picture: String = ""
 )

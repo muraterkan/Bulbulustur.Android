@@ -11,37 +11,23 @@ import retrofit2.http.Query
 
 interface IProductVariantPictureRepository {
 
-    @GET("api/ProductVariantPicture/GetProductVariantPictureListAsync")
-    suspend fun GetProductVariantPictureListAsync():
-            Result<List<ProductVariantPictureDTO>>
+    @GET("GetProductVariantPicturesAsync")
+    suspend fun GetProductVariantPicturesAsync(
+        @Query("variantId")
+        variantId: Int,
+        @Query("count")
+        count: Int = 10
+    ): Result<List<ProductVariantPictureDTO>>
 
-    @GET("api/ProductVariantPicture/GetProductVariantPictureByIdAsync")
+    @GET("GetProductVariantPictureByIdAsync")
     suspend fun GetProductVariantPictureByIdAsync(
         @Query("productVariantPictureId")
         productVariantPictureId: Int
     ): Result<ProductVariantPictureUpdateModel?>
 
-    @GET("api/ProductVariantPicture/GetProductVariantPictureByIdExtendedAsync")
+    @GET("GetProductVariantPictureByIdExtendedAsync")
     suspend fun GetProductVariantPictureByIdExtendedAsync(
         @Query("productVariantPictureId")
         productVariantPictureId: Int
     ): Result<ProductVariantPictureDTO?>
-
-    @POST("api/ProductVariantPicture/InsertAsync")
-    suspend fun InsertAsync(
-        @Body
-        model: ProductVariantPictureInsertModel
-    ): Result<Unit>
-
-    @POST("api/ProductVariantPicture/UpdateAsync")
-    suspend fun UpdateAsync(
-        @Body
-        model: ProductVariantPictureUpdateModel
-    ): Result<Unit>
-
-    @POST("api/ProductVariantPicture/DeleteAsync")
-    suspend fun DeleteAsync(
-        @Query("productVariantPictureId")
-        productVariantPictureId: Int
-    ): Result<Unit>
 }

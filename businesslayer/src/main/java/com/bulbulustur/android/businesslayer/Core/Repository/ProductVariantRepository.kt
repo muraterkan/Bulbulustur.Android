@@ -2,7 +2,6 @@ package com.bulbulustur.android.businesslayer.Core.Repository
 
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductVariantDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.IProductVariantRepository
-import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.ProductVariantInsertModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.ProductVariantUpdateModel
 import com.bulbulustur.android.businesslayer.Core.Network.ApiClient
 import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
@@ -12,60 +11,116 @@ class ProductVariantRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IProductVariantRepository {
 
-    override suspend fun GetProductVariantListAsync(): Result<List<ProductVariantDTO>> {
+    override suspend fun GetProductVariantsAsync(
+        languageId: Int,
+        productId: Int,
+        storeId: Int,
+        count: Int
+    ): Result<List<ProductVariantDTO>> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetProductVariantListAsync"
+            baseUrl = ApiRoutes.B2C_PRODUCT_VARIANT_BASE_URL,
+            method = "GetProductVariantsAsync",
+            query =
+                "languageId=$languageId" +
+                        "&productId=$productId" +
+                        "&storeId=$storeId" +
+                        "&count=$count"
         )
     }
 
     override suspend fun GetProductVariantByIdAsync(
-        productVariantId: Int
+        variantId: Int
     ): Result<ProductVariantUpdateModel?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            baseUrl = ApiRoutes.B2C_PRODUCT_VARIANT_BASE_URL,
             method = "GetProductVariantByIdAsync",
-            query = "productVariantId=$productVariantId"
+            query = "variantId=$variantId"
         )
     }
 
     override suspend fun GetProductVariantByIdExtendedAsync(
-        productVariantId: Int
+        languageId: Int,
+        variantId: Int
     ): Result<ProductVariantDTO?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            baseUrl = ApiRoutes.B2C_PRODUCT_VARIANT_BASE_URL,
             method = "GetProductVariantByIdExtendedAsync",
-            query = "productVariantId=$productVariantId"
+            query =
+                "languageId=$languageId" +
+                        "&variantId=$variantId"
         )
     }
 
-    override suspend fun InsertAsync(
-        model: ProductVariantInsertModel
-    ): Result<Unit> {
-        return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "InsertAsync",
-            data = model
+    override suspend fun GetSmallestPriceWithStoreInfoAsync(
+        languageId: Int,
+        productId: Int
+    ): Result<ProductVariantDTO?> {
+        return apiClient.GetAsync(
+            baseUrl = ApiRoutes.B2C_PRODUCT_VARIANT_BASE_URL,
+            method = "GetSmallestPriceWithStoreInfoAsync",
+            query =
+                "languageId=$languageId" +
+                        "&productId=$productId"
         )
     }
 
-    override suspend fun UpdateAsync(
-        model: ProductVariantUpdateModel
-    ): Result<Unit> {
-        return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "UpdateAsync",
-            data = model
+    override suspend fun GetOtherStorePriceAsync(
+        languageId: Int,
+        productId: Int,
+        variantId: Int,
+        storeId: Int
+    ): Result<List<ProductVariantDTO>> {
+        return apiClient.GetAsync(
+            baseUrl = ApiRoutes.B2C_PRODUCT_VARIANT_BASE_URL,
+            method = "GetOtherStorePriceAsync",
+            query =
+                "languageId=$languageId" +
+                        "&productId=$productId" +
+                        "&variantId=$variantId" +
+                        "&storeId=$storeId"
         )
     }
 
-    override suspend fun DeleteAsync(
-        productVariantId: Int
-    ): Result<Unit> {
-        return apiClient.DeleteAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "DeleteAsync",
-            query = "productVariantId=$productVariantId"
+    override suspend fun GetProductVariantOfStoreAsync(
+        languageId: Int,
+        productId: Int
+    ): Result<List<ProductVariantDTO>> {
+        return apiClient.GetAsync(
+            baseUrl = ApiRoutes.B2C_PRODUCT_VARIANT_BASE_URL,
+            method = "GetProductVariantOfStoreAsync",
+            query =
+                "languageId=$languageId" +
+                        "&productId=$productId"
+        )
+    }
+
+    override suspend fun GetProductColorVariantsAsync(
+        languageId: Int,
+        productId: Int,
+        variantId: Int
+    ): Result<List<ProductVariantDTO>> {
+        return apiClient.GetAsync(
+            baseUrl = ApiRoutes.B2C_PRODUCT_VARIANT_BASE_URL,
+            method = "GetProductColorVariantsAsync",
+            query =
+                "languageId=$languageId" +
+                        "&productId=$productId" +
+                        "&variantId=$variantId"
+        )
+    }
+
+    override suspend fun GetProductSizeVariantsAsync(
+        languageId: Int,
+        productId: Int,
+        variantId: Int
+    ): Result<List<ProductVariantDTO>> {
+        return apiClient.GetAsync(
+            baseUrl = ApiRoutes.B2C_PRODUCT_VARIANT_BASE_URL,
+            method = "GetProductSizeVariantsAsync",
+            query =
+                "languageId=$languageId" +
+                        "&productId=$productId" +
+                        "&variantId=$variantId"
         )
     }
 }

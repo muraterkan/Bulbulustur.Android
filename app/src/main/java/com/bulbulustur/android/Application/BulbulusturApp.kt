@@ -49,11 +49,16 @@ import com.bulbulustur.android.businesslayer.Core.DTO.AddressCityDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.AddressCountryDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.IAddressCityRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IAddressCountryRepository
+import com.bulbulustur.android.Application.Areas.b2c.Controllers.ProductController
+import com.bulbulustur.android.businesslayer.Core.Repository.ProductRepository
 import com.bulbulustur.android.Application.Shared.Address.AddressCascadeController
 import com.bulbulustur.android.businesslayer.Core.Repository.AddressCountryDepartmentRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.AddressCountryStateRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.AddressDistrictRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.MemberRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.ProductVariantPictureRepository
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 
 @Composable
 fun BulbulusturApp(
@@ -237,9 +242,28 @@ private fun BulbulusturApplicationContent(
             MemberRepository()
         }
 
+    val productRepository =
+        remember {
+            ProductRepository()
+        }
 
+    val productVariantPictureRepository =
+        remember {
+            ProductVariantPictureRepository()
+        }
 
-
+    val productController =
+        remember(
+            executeService,
+            productRepository,
+            productVariantPictureRepository
+        ) {
+            ProductController(
+                executeService = executeService,
+                productRepository = productRepository,
+                productVariantPictureRepository = productVariantPictureRepository
+            )
+        }
 
     val addressCascadeController =
         remember(
@@ -456,7 +480,9 @@ private fun BulbulusturApplicationContent(
 
         retailGraph(
             navigator =
-                appNavigator
+                appNavigator,
+            productController =
+                productController
         )
 
         wholesaleGraph(

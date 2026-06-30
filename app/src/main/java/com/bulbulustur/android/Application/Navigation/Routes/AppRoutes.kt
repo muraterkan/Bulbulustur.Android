@@ -6,20 +6,59 @@ object SplashRoutes {
 }
 
 object RetailRoutes {
-    const val Home = "retail/home"
-    const val CategoryHome = "retail/category-home"
-    const val CategoryDetail = "retail/category-detail"
-    const val ProductList = "retail/product-list"
-    const val ProductDetail = "retail/product-detail"
-    const val Search = "retail/search"
-    const val Menu = "retail/menu"
 
-    const val ProductReview = "retail/product-review"
-    const val ProductQuestion = "retail/product-question"
-    const val OtherSellerList = "retail/other-seller-list"
+    const val ArgProductId =
+        "productId"
 
-    const val CampaignList = "retail/campaign-list"
-    const val CampaignDetail = "retail/campaign-detail"
+    const val ArgStoreId =
+        "storeId"
+
+    const val ArgVariantId =
+        "variantId"
+
+    const val Home =
+        "retail/home"
+
+    const val CategoryHome =
+        "retail/category-home"
+
+    const val CategoryDetail =
+        "retail/category-detail"
+
+    const val ProductList =
+        "retail/product-list"
+
+    const val ProductDetail =
+        "retail/product-detail/{$ArgProductId}/{$ArgStoreId}/{$ArgVariantId}"
+
+    const val Search =
+        "retail/search"
+
+    const val Menu =
+        "retail/menu"
+
+    const val ProductReview =
+        "retail/product-review"
+
+    const val ProductQuestion =
+        "retail/product-question"
+
+    const val OtherSellerList =
+        "retail/other-seller-list"
+
+    const val CampaignList =
+        "retail/campaign-list"
+
+    const val CampaignDetail =
+        "retail/campaign-detail"
+
+    fun productDetail(
+        productId: Int,
+        storeId: Int,
+        variantId: Int
+    ): String {
+        return "retail/product-detail/$productId/$storeId/$variantId"
+    }
 }
 
 object BasketRoutes {

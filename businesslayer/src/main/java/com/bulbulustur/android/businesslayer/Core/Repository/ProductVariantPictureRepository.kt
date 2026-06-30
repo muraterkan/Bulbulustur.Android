@@ -12,10 +12,14 @@ class ProductVariantPictureRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IProductVariantPictureRepository {
 
-    override suspend fun GetProductVariantPictureListAsync(): Result<List<ProductVariantPictureDTO>> {
+    override suspend fun GetProductVariantPicturesAsync(
+        variantId: Int,
+        count: Int
+    ): Result<List<ProductVariantPictureDTO>> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetProductVariantPictureListAsync"
+            baseUrl = ApiRoutes.B2C_PRODUCT_VARIANT_PICTURE_BASE_URL,
+            method = "GetProductVariantPicturesAsync",
+            query = "variantId=$variantId&count=$count"
         )
     }
 
@@ -23,7 +27,7 @@ class ProductVariantPictureRepository(
         productVariantPictureId: Int
     ): Result<ProductVariantPictureUpdateModel?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            baseUrl = ApiRoutes.B2C_PRODUCT_VARIANT_PICTURE_BASE_URL,
             method = "GetProductVariantPictureByIdAsync",
             query = "productVariantPictureId=$productVariantPictureId"
         )
@@ -33,38 +37,8 @@ class ProductVariantPictureRepository(
         productVariantPictureId: Int
     ): Result<ProductVariantPictureDTO?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            baseUrl = ApiRoutes.B2C_PRODUCT_VARIANT_PICTURE_BASE_URL,
             method = "GetProductVariantPictureByIdExtendedAsync",
-            query = "productVariantPictureId=$productVariantPictureId"
-        )
-    }
-
-    override suspend fun InsertAsync(
-        model: ProductVariantPictureInsertModel
-    ): Result<Unit> {
-        return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "InsertAsync",
-            data = model
-        )
-    }
-
-    override suspend fun UpdateAsync(
-        model: ProductVariantPictureUpdateModel
-    ): Result<Unit> {
-        return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "UpdateAsync",
-            data = model
-        )
-    }
-
-    override suspend fun DeleteAsync(
-        productVariantPictureId: Int
-    ): Result<Unit> {
-        return apiClient.DeleteAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "DeleteAsync",
             query = "productVariantPictureId=$productVariantPictureId"
         )
     }

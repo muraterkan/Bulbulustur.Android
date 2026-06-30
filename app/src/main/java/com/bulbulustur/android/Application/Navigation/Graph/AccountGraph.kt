@@ -555,7 +555,8 @@ fun NavGraphBuilder.accountGraph(
             },
             onProductClick = {
                 navigator.navController.navigate(
-                    RetailRoutes.ProductDetail
+                    //RetailRoutes.ProductDetail
+                    RetailRoutes.ProductList
                 )
             },
             onEditReviewClick = {

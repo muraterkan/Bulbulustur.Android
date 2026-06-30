@@ -96,6 +96,8 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBAlpha
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.ProductControllerState
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductVariantPictureDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.ProductVariantDTO
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -107,6 +109,8 @@ fun ProductDetailScreen(
     onFavoriteClick: () -> Unit = {},
     onMessageClick: () -> Unit = {},
     onModeSwitchClick: () -> Unit = {},
+    onColorVariantChange: (Int) -> Unit = {},
+    onSizeVariantChange: (Int) -> Unit = {},
     onAddToBasketClick: (RetailProductDetailSelection) -> Unit = {},
     onBuyNowClick: (RetailProductDetailSelection) -> Unit = {},
     onStockAlarmClick: (RetailProductDetailSelection) -> Unit = {},
@@ -130,16 +134,48 @@ fun ProductDetailScreen(
             ?.Data
             .orEmpty()
 
+    val colorVariants =
+        State.ColorVariants
+
+    val sizeVariants =
+        State.SizeVariants
+
+    val otherStorePrices =
+        State.OtherStorePrices
+
+    val smallestPrice =
+        State.SmallestPriceResult
+            ?.Data
+
+    val selectedVariant =
+        State.SelectedVariantResult
+            ?.Data
+
     val product =
         remember(
             productDto,
+            selectedVariant,
             variantPictures,
+            colorVariants,
+            sizeVariants,
+            otherStorePrices,
+            smallestPrice,
             productId
         ) {
             productDto
                 ?.ToRetailProductDetail(
                     variantPictures =
-                        variantPictures
+                        variantPictures,
+                    colorVariants =
+                        colorVariants,
+                    sizeVariants =
+                        sizeVariants,
+                    otherStorePrices =
+                        otherStorePrices,
+                    smallestPrice =
+                        smallestPrice,
+                    selectedVariant =
+                        selectedVariant
                 )
                 ?: getRetailProductDetail(
                     productId =
@@ -429,8 +465,28 @@ fun ProductDetailScreen(
                 quantity =
                     quantity,
                 onColorClick = { colorVariant ->
-                    selectedColorId =
+                    val selectedVariantId =
                         colorVariant.id
+                            .toIntOrNull()
+                            ?: 0
+
+                    if (
+                        selectedVariantId > 0 &&
+                        selectedColorId != colorVariant.id
+                    ) {
+                        selectedColorId =
+                            colorVariant.id
+
+                        selectedSizeId =
+                            ""
+
+                        quantity =
+                            1
+
+                        onColorVariantChange(
+                            selectedVariantId
+                        )
+                    }
                 },
                 onSizeClick = { sizeOption ->
                     if (
@@ -439,8 +495,25 @@ fun ProductDetailScreen(
                         sizeOption.state !=
                         RetailProductSizeState.OutOfStock
                     ) {
-                        selectedSizeId =
+                        val selectedVariantId =
                             sizeOption.id
+                                .toIntOrNull()
+                                ?: 0
+
+                        if (
+                            selectedVariantId > 0 &&
+                            selectedSizeId != sizeOption.id
+                        ) {
+                            selectedSizeId =
+                                sizeOption.id
+
+                            quantity =
+                                1
+
+                            onSizeVariantChange(
+                                selectedVariantId
+                            )
+                        }
                     }
                 },
                 onSizeGuideClick = {
@@ -3307,13 +3380,91 @@ private fun ResolveRetailProductImageUrl(
 }
 
 private fun ProductDTO.ToRetailProductDetail(
-    variantPictures: List<ProductVariantPictureDTO>
+    variantPictures: List<ProductVariantPictureDTO>,
+    colorVariants: List<ProductVariantDTO>,
+    sizeVariants: List<ProductVariantDTO>,
+    otherStorePrices: List<ProductVariantDTO>,
+    smallestPrice: ProductVariantDTO?,
+    selectedVariant: ProductVariantDTO?
 ): RetailProductDetail {
     val fallbackProduct =
         getRetailProductDetail(
             productId =
                 ProductId
         )
+
+    val activeVariant =
+        selectedVariant
+            ?: ProductVariantDTO(
+                VariantId =
+                    VariantId,
+                ProductId =
+                    ProductId,
+                ColorId =
+                    ColorId,
+                Color =
+                    Color,
+                SizeId =
+                    SizeId,
+                Size =
+                    Size,
+                StoreId =
+                    StoreId,
+                Store =
+                    Store,
+                Price =
+                    Price,
+                CurrencySymbol =
+                    CurrencySymbol,
+                Stock =
+                    Stock,
+                DefaultPicture =
+                    DefaultPicture,
+                Picture =
+                    Picture,
+                Rating =
+                    StoreRating
+            )
+
+    val activeVariantId =
+        activeVariant.VariantId
+            .takeIf {
+                it > 0
+            }
+            ?: VariantId
+
+    val activePrice =
+        activeVariant.Price
+            .takeIf {
+                it > 0.0
+            }
+            ?: smallestPrice
+                ?.Price
+                ?.takeIf {
+                    it > 0.0
+                }
+            ?: Price
+
+    val activeCurrencySymbol =
+        activeVariant.CurrencySymbol
+            .takeIf {
+                it.isNotBlank()
+            }
+            ?: smallestPrice
+                ?.CurrencySymbol
+                ?.takeIf {
+                    it.isNotBlank()
+                }
+            ?: CurrencySymbol
+
+    val activeStock =
+        if (
+            selectedVariant != null
+        ) {
+            selectedVariant.Stock
+        } else {
+            Stock
+        }
 
     val resolvedVariantImages =
         variantPictures
@@ -3358,30 +3509,193 @@ private fun ProductDTO.ToRetailProductDetail(
                 }
             }
 
+    val resolvedColorVariants =
+        colorVariants
+            .distinctBy {
+                it.ColorId
+            }
+            .map { colorVariant ->
+                val colorImageUrl =
+                    ResolveRetailProductImageUrl(
+                        imagePath =
+                            colorVariant.DefaultPicture
+                                .takeIf {
+                                    it.isNotBlank()
+                                }
+                                ?: colorVariant.Picture
+                    )
+
+                val isActiveColor =
+                    colorVariant.ColorId > 0 &&
+                            colorVariant.ColorId ==
+                            activeVariant.ColorId
+
+                RetailProductColorVariant(
+                    id =
+                        colorVariant.VariantId
+                            .takeIf {
+                                it > 0
+                            }
+                            ?.toString()
+                            ?: colorVariant.ColorId.toString(),
+                    name =
+                        colorVariant.Color
+                            .takeIf {
+                                it.isNotBlank()
+                            }
+                            ?: "Standart",
+                    swatchColor =
+                        BBColors.Gray.Gray400,
+                    images =
+                        if (
+                            isActiveColor &&
+                            resolvedVariantImages.isNotEmpty()
+                        ) {
+                            resolvedVariantImages
+                        } else {
+                            listOfNotNull(
+                                colorImageUrl
+                                    .takeIf {
+                                        it.isNotBlank()
+                                    }
+                                    ?.let { imageUrl ->
+                                        RetailProductImage(
+                                            label =
+                                                colorVariant.Color
+                                                    .takeIf {
+                                                        it.isNotBlank()
+                                                    }
+                                                    ?: ProductName,
+                                            backgroundColor =
+                                                BBColors.White,
+                                            foregroundColor =
+                                                BBColors.Gray.Gray500,
+                                            imageUrl =
+                                                imageUrl
+                                        )
+                                    }
+                            )
+                        }
+                )
+            }
+
+    val resolvedSizeVariants =
+        sizeVariants
+            .distinctBy {
+                it.SizeId
+            }
+            .map { sizeVariant ->
+                RetailProductSizeOption(
+                    id =
+                        sizeVariant.VariantId
+                            .takeIf {
+                                it > 0
+                            }
+                            ?.toString()
+                            ?: sizeVariant.SizeId.toString(),
+                    label =
+                        sizeVariant.Size
+                            .takeIf {
+                                it.isNotBlank()
+                            }
+                            ?: "Standart",
+                    state =
+                        when {
+                            sizeVariant.VariantId ==
+                                    activeVariantId -> {
+                                RetailProductSizeState.Selected
+                            }
+
+                            sizeVariant.Stock <= 0 -> {
+                                RetailProductSizeState.OutOfStock
+                            }
+
+                            sizeVariant.Stock <= 3 -> {
+                                RetailProductSizeState.Limited
+                            }
+
+                            else -> {
+                                RetailProductSizeState.Available
+                            }
+                        }
+                )
+            }
+
+    val resolvedOtherStoreProducts =
+        otherStorePrices
+            .filter {
+                it.StoreId > 0
+            }
+            .map { storeVariant ->
+                RetailSellerProductItem(
+                    id =
+                        storeVariant.StoreId,
+                    name =
+                        storeVariant.Store
+                            .takeIf {
+                                it.isNotBlank()
+                            }
+                            ?: "Satıcı",
+                    priceText =
+                        FormatRetailProductPrice(
+                            price =
+                                storeVariant.Price,
+                            currencySymbol =
+                                storeVariant.CurrencySymbol
+                        ),
+                    imageLabel =
+                        storeVariant.Store
+                            .takeIf {
+                                it.isNotBlank()
+                            }
+                            ?: "Satıcı"
+                )
+            }
+
     val resolvedColorName =
-        Color.takeIf {
-            it.isNotBlank()
-        } ?: "Standart"
+        activeVariant.Color
+            .takeIf {
+                it.isNotBlank()
+            }
+            ?: Color.takeIf {
+                it.isNotBlank()
+            }
+            ?: "Standart"
 
     val resolvedColorId =
-        ColorId
+        activeVariantId
             .takeIf {
                 it > 0
             }
             ?.toString()
+            ?: activeVariant.ColorId
+                .takeIf {
+                    it > 0
+                }
+                ?.toString()
             ?: "default"
 
     val resolvedSizeName =
-        Size.takeIf {
-            it.isNotBlank()
-        } ?: "Standart"
+        activeVariant.Size
+            .takeIf {
+                it.isNotBlank()
+            }
+            ?: Size.takeIf {
+                it.isNotBlank()
+            }
+            ?: "Standart"
 
     val resolvedSizeId =
-        SizeId
+        activeVariantId
             .takeIf {
                 it > 0
             }
             ?.toString()
+            ?: activeVariant.SizeId
+                .takeIf {
+                    it > 0
+                }
+                ?.toString()
             ?: "default"
 
     val resolvedBrandName =
@@ -3507,9 +3821,9 @@ private fun ProductDTO.ToRetailProductDetail(
         priceText =
             FormatRetailProductPrice(
                 price =
-                    Price,
+                    activePrice,
                 currencySymbol =
-                    CurrencySymbol
+                    activeCurrencySymbol
             ),
         oldPriceText =
             "",
@@ -3530,79 +3844,85 @@ private fun ProductDTO.ToRetailProductDetail(
                 ?: "",
         stockText =
             if (
-                Stock > 0
+                activeStock > 0
             ) {
-                "Stokta $Stock adet var"
+                "Stokta $activeStock adet var"
             } else {
                 "Stokta yok"
             },
         isInStock =
-            Stock > 0,
+            activeStock > 0,
         reviewCount =
             resolvedReviewCount,
         questionCount =
             0,
         otherSellerCount =
-            0,
+            resolvedOtherStoreProducts.size,
         colorVariants =
-            listOf(
-                RetailProductColorVariant(
-                    id =
-                        resolvedColorId,
-                    name =
-                        resolvedColorName,
-                    swatchColor =
-                        BBColors.Gray.Gray400,
-                    images =
-                        resolvedVariantImages
-                            .ifEmpty {
-                                listOf(
-                                    RetailProductImage(
-                                        label =
-                                            resolvedProductName,
-                                        backgroundColor =
-                                            BBColors.White,
-                                        foregroundColor =
-                                            BBColors.Gray.Gray500,
-                                        imageUrl =
-                                            resolvedPictureUrl,
-                                        drawableResId =
-                                            if (
-                                                resolvedPictureUrl.isBlank()
-                                            ) {
-                                                fallbackProduct
-                                                    .colorVariants
-                                                    .firstOrNull()
-                                                    ?.images
-                                                    ?.firstOrNull()
-                                                    ?.drawableResId
-                                            } else {
-                                                null
-                                            }
-                                    )
-                                )
-                            }
-                )
-            ),
+            resolvedColorVariants
+                .ifEmpty {
+                    listOf(
+                        RetailProductColorVariant(
+                            id =
+                                resolvedColorId,
+                            name =
+                                resolvedColorName,
+                            swatchColor =
+                                BBColors.Gray.Gray400,
+                            images =
+                                resolvedVariantImages
+                                    .ifEmpty {
+                                        listOf(
+                                            RetailProductImage(
+                                                label =
+                                                    resolvedProductName,
+                                                backgroundColor =
+                                                    BBColors.White,
+                                                foregroundColor =
+                                                    BBColors.Gray.Gray500,
+                                                imageUrl =
+                                                    resolvedPictureUrl,
+                                                drawableResId =
+                                                    if (
+                                                        resolvedPictureUrl.isBlank()
+                                                    ) {
+                                                        fallbackProduct
+                                                            .colorVariants
+                                                            .firstOrNull()
+                                                            ?.images
+                                                            ?.firstOrNull()
+                                                            ?.drawableResId
+                                                    } else {
+                                                        null
+                                                    }
+                                            )
+                                        )
+                                    }
+                        )
+                    )
+                },
         sizeOptions =
-            listOf(
-                RetailProductSizeOption(
-                    id =
-                        resolvedSizeId,
-                    label =
-                        resolvedSizeName,
-                    state =
-                        if (
-                            Stock > 0
-                        ) {
-                            RetailProductSizeState.Selected
-                        } else {
-                            RetailProductSizeState.OutOfStock
-                        }
-                )
-            ),
+            resolvedSizeVariants
+                .ifEmpty {
+                    listOf(
+                        RetailProductSizeOption(
+                            id =
+                                resolvedSizeId,
+                            label =
+                                resolvedSizeName,
+                            state =
+                                if (
+                                    activeStock > 0
+                                ) {
+                                    RetailProductSizeState.Selected
+                                } else {
+                                    RetailProductSizeState.OutOfStock
+                                }
+                        )
+                    )
+                },
         sellerProducts =
-            emptyList(),
+            resolvedOtherStoreProducts,
         reviews =
             emptyList(),
         relatedCategories =

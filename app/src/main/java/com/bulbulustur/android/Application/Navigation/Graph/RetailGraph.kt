@@ -315,32 +315,114 @@ fun NavGraphBuilder.retailGraph(
             variantId
         ) {
             if (
-                productId > 0 &&
-                storeId > 0
+                productId <= 0 ||
+                storeId <= 0
             ) {
-                productController.Detail(
-                    languageId = 1,
-                    storeId = storeId,
-                    productId = productId,
-                    variantId = variantId
-                )
+                return@LaunchedEffect
             }
 
-            if (
-                variantId > 0
-            ) {
+            productController.ClearProductDetail()
+
+            productController.Detail(
+                languageId = 1,
+                storeId = storeId,
+                productId = productId,
+                variantId = variantId
+            )
+
+            productController.Variants(
+                languageId = 1,
+                productId = productId,
+                storeId = storeId,
+                count = 100
+            )
+
+            productController.SmallestPrice(
+                languageId = 1,
+                productId = productId
+            )
+
+            if (variantId > 0) {
+                productController.SelectedVariant(
+                    languageId = 1,
+                    variantId = variantId
+                )
+
                 productController.VariantPictures(
                     variantId = variantId,
                     count = 10
+                )
+
+                productController.ColorVariants(
+                    languageId = 1,
+                    productId = productId,
+                    variantId = variantId
+                )
+
+                productController.SizeVariants(
+                    languageId = 1,
+                    productId = productId,
+                    variantId = variantId
+                )
+
+                productController.OtherSellerList(
+                    languageId = 1,
+                    productId = productId,
+                    variantId = variantId,
+                    storeId = storeId
                 )
             }
         }
 
         ProductDetailScreen(
-            State = productState,
-            productId = productId,
+            State =
+                productState,
+            productId =
+                productId,
             onBackClick = {
                 navigator.back()
+            },
+            onColorVariantChange = { selectedVariantId ->
+                productController.SelectedVariant(
+                    languageId = 1,
+                    variantId = selectedVariantId
+                )
+
+                productController.VariantPictures(
+                    variantId = selectedVariantId,
+                    count = 10
+                )
+
+                productController.SizeVariants(
+                    languageId = 1,
+                    productId = productId,
+                    variantId = selectedVariantId
+                )
+
+                productController.OtherSellerList(
+                    languageId = 1,
+                    productId = productId,
+                    variantId = selectedVariantId,
+                    storeId = storeId
+                )
+            },
+            onSizeVariantChange = { selectedVariantId ->
+                productController.SelectedVariant(
+                    languageId = 1,
+                    variantId = selectedVariantId
+                )
+
+                productController.VariantPictures(
+                    variantId = selectedVariantId,
+                    count = 10
+                )
+
+                productController.OtherSellerList(
+                    languageId = 1,
+                    productId = productId,
+                    variantId = selectedVariantId,
+                    storeId = storeId
+                )
             },
             onStoreClick = {
                 navigator.navController.navigate(

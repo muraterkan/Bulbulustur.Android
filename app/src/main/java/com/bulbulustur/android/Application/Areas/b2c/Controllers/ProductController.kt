@@ -8,6 +8,7 @@ import com.bulbulustur.android.businesslayer.Core.DTO.ProductVariantDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductVariantPictureDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.IProductRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IProductVariantPictureRepository
+import com.bulbulustur.android.businesslayer.Core.Interface.IProductVariantRepository
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.ProductUpdateModel
 import com.bulbulustur.android.businesslayer.Core.Util.Execute.IExecuteService
 import com.bulbulustur.android.businesslayer.Core.Util.Result
@@ -25,6 +26,11 @@ data class ProductControllerState(
     val ProductResult: Result<ProductUpdateModel?>? = null,
     val ProductDetailResult: Result<ProductDTO?>? = null,
     val ProductVariantPicturesResult: Result<List<ProductVariantPictureDTO>>? = null,
+    val ProductVariantsResult: Result<List<ProductVariantDTO>>? = null,
+    val ColorVariantsResult: Result<List<ProductVariantDTO>>? = null,
+    val SizeVariantsResult: Result<List<ProductVariantDTO>>? = null,
+    val SelectedVariantResult: Result<ProductVariantDTO?>? = null,
+    val SmallestPriceResult: Result<ProductVariantDTO?>? = null,
     val StoreProductListResult: Result<B2CProductDataDTO>? = null,
     val OtherStorePricesResult: Result<List<ProductVariantDTO>>? = null,
 
@@ -39,6 +45,18 @@ data class ProductControllerState(
 
     val ProductVariantPictures: List<ProductVariantPictureDTO>
         get() = ProductVariantPicturesResult?.Data ?: emptyList()
+
+    val ProductVariants: List<ProductVariantDTO>
+        get() = ProductVariantsResult?.Data ?: emptyList()
+
+    val ColorVariants: List<ProductVariantDTO>
+        get() = ColorVariantsResult?.Data ?: emptyList()
+
+    val SizeVariants: List<ProductVariantDTO>
+        get() = SizeVariantsResult?.Data ?: emptyList()
+
+    val OtherStorePrices: List<ProductVariantDTO>
+        get() = OtherStorePricesResult?.Data ?: emptyList()
 
     val HasNextProductPage: Boolean
         get() = ProductListData?.Products2?.HasNextPage ?: false
@@ -81,6 +99,36 @@ sealed interface ProductControllerEvent {
     data class LoadOtherStorePrices(
         val LanguageId: Int,
         val ProductId: Int,
+        val VariantId: Int,
+        val StoreId: Int
+    ) : ProductControllerEvent
+
+    data class LoadProductVariants(
+        val LanguageId: Int,
+        val ProductId: Int,
+        val StoreId: Int,
+        val Count: Int = 100
+    ) : ProductControllerEvent
+
+    data class LoadSelectedVariant(
+        val LanguageId: Int,
+        val VariantId: Int
+    ) : ProductControllerEvent
+
+    data class LoadSmallestPrice(
+        val LanguageId: Int,
+        val ProductId: Int
+    ) : ProductControllerEvent
+
+    data class LoadColorVariants(
+        val LanguageId: Int,
+        val ProductId: Int,
+        val VariantId: Int
+    ) : ProductControllerEvent
+
+    data class LoadSizeVariants(
+        val LanguageId: Int,
+        val ProductId: Int,
         val VariantId: Int
     ) : ProductControllerEvent
 
@@ -92,6 +140,7 @@ sealed interface ProductControllerEvent {
 class ProductController(
     private val executeService: IExecuteService,
     private val productRepository: IProductRepository,
+    private val productVariantRepository: IProductVariantRepository,
     private val productVariantPictureRepository: IProductVariantPictureRepository
 ) : BaseController() {
 
@@ -146,6 +195,46 @@ class ProductController(
 
             is ProductControllerEvent.LoadOtherStorePrices -> {
                 OtherSellerList(
+                    languageId = event.LanguageId,
+                    productId = event.ProductId,
+                    variantId = event.VariantId,
+                    storeId = event.StoreId
+                )
+            }
+
+            is ProductControllerEvent.LoadProductVariants -> {
+                Variants(
+                    languageId = event.LanguageId,
+                    productId = event.ProductId,
+                    storeId = event.StoreId,
+                    count = event.Count
+                )
+            }
+
+            is ProductControllerEvent.LoadSelectedVariant -> {
+                SelectedVariant(
+                    languageId = event.LanguageId,
+                    variantId = event.VariantId
+                )
+            }
+
+            is ProductControllerEvent.LoadSmallestPrice -> {
+                SmallestPrice(
+                    languageId = event.LanguageId,
+                    productId = event.ProductId
+                )
+            }
+
+            is ProductControllerEvent.LoadColorVariants -> {
+                ColorVariants(
+                    languageId = event.LanguageId,
+                    productId = event.ProductId,
+                    variantId = event.VariantId
+                )
+            }
+
+            is ProductControllerEvent.LoadSizeVariants -> {
+                SizeVariants(
                     languageId = event.LanguageId,
                     productId = event.ProductId,
                     variantId = event.VariantId
@@ -294,6 +383,276 @@ class ProductController(
         }
     }
 
+    fun Variants(
+        languageId: Int,
+        productId: Int,
+        storeId: Int,
+        count: Int = 100
+    ) {
+        if (
+            languageId <= 0 ||
+            productId <= 0 ||
+            storeId <= 0
+        ) {
+            _state.update {
+                it.copy(
+                    ProductVariantsResult = null
+                )
+            }
+
+            return
+        }
+
+        viewModelScope.launch {
+            StartLoading(
+                actionName = "Variants"
+            )
+
+            val response =
+                executeService.GetAsync(
+                    cacheKey =
+                        "b2c.ProductVariant.GetProductVariantsAsync." +
+                                "languageId=$languageId." +
+                                "productId=$productId." +
+                                "storeId=$storeId." +
+                                "count=$count"
+                ) {
+                    productVariantRepository.GetProductVariantsAsync(
+                        languageId = languageId,
+                        productId = productId,
+                        storeId = storeId,
+                        count = count
+                    )
+                }
+
+            _state.update {
+                it.copy(
+                    IsLoading = false,
+                    CurrentAction = "Variants",
+                    ProductVariantsResult = response,
+                    ErrorMessage =
+                        if (response.Success) {
+                            null
+                        } else {
+                            response.Message
+                        }
+                )
+            }
+        }
+    }
+
+    fun SelectedVariant(
+        languageId: Int,
+        variantId: Int
+    ) {
+        if (
+            languageId <= 0 ||
+            variantId <= 0
+        ) {
+            _state.update {
+                it.copy(
+                    SelectedVariantResult = null
+                )
+            }
+
+            return
+        }
+
+        viewModelScope.launch {
+            StartLoading(
+                actionName = "SelectedVariant"
+            )
+
+            val response =
+                executeService.GetAsync(
+                    cacheKey =
+                        "b2c.ProductVariant.GetProductVariantByIdExtendedAsync." +
+                                "languageId=$languageId." +
+                                "variantId=$variantId"
+                ) {
+                    productVariantRepository.GetProductVariantByIdExtendedAsync(
+                        languageId = languageId,
+                        variantId = variantId
+                    )
+                }
+
+            _state.update {
+                it.copy(
+                    IsLoading = false,
+                    CurrentAction = "SelectedVariant",
+                    SelectedVariantResult = response,
+                    ErrorMessage =
+                        if (response.Success) {
+                            null
+                        } else {
+                            response.Message
+                        }
+                )
+            }
+        }
+    }
+
+    fun SmallestPrice(
+        languageId: Int,
+        productId: Int
+    ) {
+        if (
+            languageId <= 0 ||
+            productId <= 0
+        ) {
+            _state.update {
+                it.copy(
+                    SmallestPriceResult = null
+                )
+            }
+
+            return
+        }
+
+        viewModelScope.launch {
+            StartLoading(
+                actionName = "SmallestPrice"
+            )
+
+            val response =
+                executeService.GetAsync(
+                    cacheKey =
+                        "b2c.ProductVariant.GetSmallestPriceWithStoreInfoAsync." +
+                                "languageId=$languageId." +
+                                "productId=$productId"
+                ) {
+                    productVariantRepository.GetSmallestPriceWithStoreInfoAsync(
+                        languageId = languageId,
+                        productId = productId
+                    )
+                }
+
+            _state.update {
+                it.copy(
+                    IsLoading = false,
+                    CurrentAction = "SmallestPrice",
+                    SmallestPriceResult = response,
+                    ErrorMessage =
+                        if (response.Success) {
+                            null
+                        } else {
+                            response.Message
+                        }
+                )
+            }
+        }
+    }
+
+    fun ColorVariants(
+        languageId: Int,
+        productId: Int,
+        variantId: Int
+    ) {
+        if (
+            languageId <= 0 ||
+            productId <= 0 ||
+            variantId <= 0
+        ) {
+            _state.update {
+                it.copy(
+                    ColorVariantsResult = null
+                )
+            }
+
+            return
+        }
+
+        viewModelScope.launch {
+            StartLoading(
+                actionName = "ColorVariants"
+            )
+
+            val response =
+                executeService.GetAsync(
+                    cacheKey =
+                        "b2c.ProductVariant.GetProductColorVariantsAsync." +
+                                "languageId=$languageId." +
+                                "productId=$productId." +
+                                "variantId=$variantId"
+                ) {
+                    productVariantRepository.GetProductColorVariantsAsync(
+                        languageId = languageId,
+                        productId = productId,
+                        variantId = variantId
+                    )
+                }
+
+            _state.update {
+                it.copy(
+                    IsLoading = false,
+                    CurrentAction = "ColorVariants",
+                    ColorVariantsResult = response,
+                    ErrorMessage =
+                        if (response.Success) {
+                            null
+                        } else {
+                            response.Message
+                        }
+                )
+            }
+        }
+    }
+
+    fun SizeVariants(
+        languageId: Int,
+        productId: Int,
+        variantId: Int
+    ) {
+        if (
+            languageId <= 0 ||
+            productId <= 0 ||
+            variantId <= 0
+        ) {
+            _state.update {
+                it.copy(
+                    SizeVariantsResult = null
+                )
+            }
+
+            return
+        }
+
+        viewModelScope.launch {
+            StartLoading(
+                actionName = "SizeVariants"
+            )
+
+            val response =
+                executeService.GetAsync(
+                    cacheKey =
+                        "b2c.ProductVariant.GetProductSizeVariantsAsync." +
+                                "languageId=$languageId." +
+                                "productId=$productId." +
+                                "variantId=$variantId"
+                ) {
+                    productVariantRepository.GetProductSizeVariantsAsync(
+                        languageId = languageId,
+                        productId = productId,
+                        variantId = variantId
+                    )
+                }
+
+            _state.update {
+                it.copy(
+                    IsLoading = false,
+                    CurrentAction = "SizeVariants",
+                    SizeVariantsResult = response,
+                    ErrorMessage =
+                        if (response.Success) {
+                            null
+                        } else {
+                            response.Message
+                        }
+                )
+            }
+        }
+    }
+
     fun VariantPictures(
         variantId: Int,
         count: Int = 10
@@ -309,14 +668,9 @@ class ProductController(
         }
 
         viewModelScope.launch {
-            _state.update {
-                it.copy(
-                    IsLoading = true,
-                    CurrentAction = "VariantPictures",
-                    ProductVariantPicturesResult = null,
-                    ErrorMessage = null
-                )
-            }
+            StartLoading(
+                actionName = "VariantPictures"
+            )
 
             val response =
                 executeService.GetAsync(
@@ -396,8 +750,24 @@ class ProductController(
     fun OtherSellerList(
         languageId: Int,
         productId: Int,
-        variantId: Int
+        variantId: Int,
+        storeId: Int
     ) {
+        if (
+            languageId <= 0 ||
+            productId <= 0 ||
+            variantId <= 0 ||
+            storeId <= 0
+        ) {
+            _state.update {
+                it.copy(
+                    OtherStorePricesResult = null
+                )
+            }
+
+            return
+        }
+
         viewModelScope.launch {
             StartLoading(
                 actionName = "OtherSellerList"
@@ -406,15 +776,17 @@ class ProductController(
             val response =
                 executeService.GetAsync(
                     cacheKey =
-                        "b2c.Product.GetOtherStorePrices." +
+                        "b2c.ProductVariant.GetOtherStorePriceAsync." +
                                 "languageId=$languageId." +
                                 "productId=$productId." +
-                                "variantId=$variantId"
+                                "variantId=$variantId." +
+                                "storeId=$storeId"
                 ) {
-                    productRepository.GetOtherStorePrices(
+                    productVariantRepository.GetOtherStorePriceAsync(
                         languageId = languageId,
                         productId = productId,
-                        variantId = variantId
+                        variantId = variantId,
+                        storeId = storeId
                     )
                 }
 
@@ -451,6 +823,11 @@ class ProductController(
             it.copy(
                 ProductDetailResult = null,
                 ProductVariantPicturesResult = null,
+                ProductVariantsResult = null,
+                ColorVariantsResult = null,
+                SizeVariantsResult = null,
+                SelectedVariantResult = null,
+                SmallestPriceResult = null,
                 OtherStorePricesResult = null,
                 ErrorMessage = null
             )

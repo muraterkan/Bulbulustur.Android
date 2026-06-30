@@ -17,6 +17,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.bulbulustur.android.Application.Areas.b2c.Controllers.ProductController
 import com.bulbulustur.android.Application.Controllers.LogonController
 import com.bulbulustur.android.Application.Datastore.UserPreferenceDataStore
 import com.bulbulustur.android.Application.Localization.BBLocalizationProvider
@@ -35,30 +36,24 @@ import com.bulbulustur.android.Application.Navigation.Routes.LogonRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.SplashRoutes
 import com.bulbulustur.android.Application.Session.UserSessionManager
 import com.bulbulustur.android.Application.Session.UserSessionState
+import com.bulbulustur.android.Application.Shared.Address.AddressCascadeController
 import com.bulbulustur.android.Application.Views.Shared.Components.BuyerModeSheet
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
 import com.bulbulustur.android.businesslayer.Core.Enums.EBuyerMode
-import com.bulbulustur.android.businesslayer.Core.Repository.AuthenticationRepository
-import com.bulbulustur.android.businesslayer.Core.Repository.LocalizationRepository
-import com.bulbulustur.android.businesslayer.Core.Repository.MemberTempRepository
-import com.bulbulustur.android.businesslayer.Core.Security.SecureTokenStore
-import com.bulbulustur.android.businesslayer.Core.Util.Execute.ExecuteService
 import com.bulbulustur.android.businesslayer.Core.Repository.AddressCityRepository
-import com.bulbulustur.android.businesslayer.Core.Repository.AddressCountryRepository
-import com.bulbulustur.android.businesslayer.Core.DTO.AddressCityDTO
-import com.bulbulustur.android.businesslayer.Core.DTO.AddressCountryDTO
-import com.bulbulustur.android.businesslayer.Core.Interface.IAddressCityRepository
-import com.bulbulustur.android.businesslayer.Core.Interface.IAddressCountryRepository
-import com.bulbulustur.android.Application.Areas.b2c.Controllers.ProductController
-import com.bulbulustur.android.businesslayer.Core.Repository.ProductRepository
-import com.bulbulustur.android.Application.Shared.Address.AddressCascadeController
 import com.bulbulustur.android.businesslayer.Core.Repository.AddressCountryDepartmentRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.AddressCountryRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.AddressCountryStateRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.AddressDistrictRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.AuthenticationRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.LocalizationRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.MemberRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.MemberTempRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.ProductRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.ProductVariantPictureRepository
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import com.bulbulustur.android.businesslayer.Core.Repository.ProductVariantRepository
+import com.bulbulustur.android.businesslayer.Core.Security.SecureTokenStore
+import com.bulbulustur.android.businesslayer.Core.Util.Execute.ExecuteService
 
 @Composable
 fun BulbulusturApp(
@@ -247,6 +242,11 @@ private fun BulbulusturApplicationContent(
             ProductRepository()
         }
 
+    val productVariantRepository =
+        remember {
+            ProductVariantRepository()
+        }
+
     val productVariantPictureRepository =
         remember {
             ProductVariantPictureRepository()
@@ -256,12 +256,18 @@ private fun BulbulusturApplicationContent(
         remember(
             executeService,
             productRepository,
+            productVariantRepository,
             productVariantPictureRepository
         ) {
             ProductController(
-                executeService = executeService,
-                productRepository = productRepository,
-                productVariantPictureRepository = productVariantPictureRepository
+                executeService =
+                    executeService,
+                productRepository =
+                    productRepository,
+                productVariantRepository =
+                    productVariantRepository,
+                productVariantPictureRepository =
+                    productVariantPictureRepository
             )
         }
 
@@ -318,7 +324,6 @@ private fun BulbulusturApplicationContent(
             )
         }
 
-
     val currentBackStackEntry by
     navController.currentBackStackEntryAsState()
 
@@ -333,7 +338,6 @@ private fun BulbulusturApplicationContent(
                 ?.startsWith(
                     "wholesale/"
                 ) == true -> {
-
                 EBuyerMode.Wholesale
             }
 

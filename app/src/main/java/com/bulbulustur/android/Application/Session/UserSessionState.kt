@@ -8,18 +8,23 @@ data class UserSessionState(
     val ThemeMode: EThemeMode = EThemeMode.System,
     val Language: EApplicationLanguage = EApplicationLanguage.Turkish,
     val AuthenticationState: EAuthenticationState =
-        EAuthenticationState.Initializing
+        EAuthenticationState.Initializing,
+    val MemberId: Int = 0
 ) {
 
     val IsAuthenticated: Boolean
-        get() = AuthenticationState ==
-                EAuthenticationState.Authenticated
+        get() =
+            AuthenticationState ==
+                    EAuthenticationState.Authenticated &&
+                    MemberId > 0
 
     val IsAnonymous: Boolean
-        get() = AuthenticationState ==
-                EAuthenticationState.Anonymous
+        get() =
+            AuthenticationState ==
+                    EAuthenticationState.Anonymous
 
     val IsAuthenticationInitializing: Boolean
-        get() = AuthenticationState ==
-                EAuthenticationState.Initializing
+        get() =
+            AuthenticationState ==
+                    EAuthenticationState.Initializing
 }

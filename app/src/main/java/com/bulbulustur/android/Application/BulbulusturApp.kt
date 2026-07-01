@@ -17,8 +17,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.bulbulustur.android.Application.Areas.b2c.Controllers.ProductController
 import com.bulbulustur.android.Application.Controllers.LogonController
+import com.bulbulustur.android.Application.Areas.b2c.Controllers.ProductController
+import com.bulbulustur.android.Application.Areas.b2c.Controllers.ProductQuestionController
+import com.bulbulustur.android.Application.Areas.b2c.Controllers.ProductReviewController
 import com.bulbulustur.android.Application.Datastore.UserPreferenceDataStore
 import com.bulbulustur.android.Application.Localization.BBLocalizationProvider
 import com.bulbulustur.android.Application.Localization.LocalizationManager
@@ -53,7 +55,12 @@ import com.bulbulustur.android.businesslayer.Core.Repository.ProductRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.ProductVariantPictureRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.ProductVariantRepository
 import com.bulbulustur.android.businesslayer.Core.Security.SecureTokenStore
+import com.bulbulustur.android.businesslayer.Core.Repository.ProductCustomerQuestionRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.ReviewRepository
 import com.bulbulustur.android.businesslayer.Core.Util.Execute.ExecuteService
+import com.bulbulustur.android.Application.Areas.b2c.Controllers.BasketController
+import com.bulbulustur.android.businesslayer.Core.Repository.BasketRepository
+
 
 @Composable
 fun BulbulusturApp(
@@ -252,22 +259,67 @@ private fun BulbulusturApplicationContent(
             ProductVariantPictureRepository()
         }
 
-    val productController =
-        remember(
-            executeService,
-            productRepository,
-            productVariantRepository,
-            productVariantPictureRepository
+    val productController = remember(executeService, productRepository, productVariantRepository, productVariantPictureRepository
         ) {
             ProductController(
+                executeService = executeService,
+                productRepository = productRepository,
+                productVariantRepository = productVariantRepository,
+                productVariantPictureRepository = productVariantPictureRepository
+            )
+        }
+
+    val reviewRepository =
+        remember {
+            ReviewRepository()
+        }
+
+    val productReviewController =
+        remember(
+            executeService,
+            reviewRepository
+        ) {
+            ProductReviewController(
                 executeService =
                     executeService,
-                productRepository =
-                    productRepository,
-                productVariantRepository =
-                    productVariantRepository,
-                productVariantPictureRepository =
-                    productVariantPictureRepository
+                reviewRepository =
+                    reviewRepository
+            )
+        }
+
+    val productCustomerQuestionRepository =
+        remember {
+            ProductCustomerQuestionRepository()
+        }
+
+    val productQuestionController =
+        remember(
+            executeService,
+            productCustomerQuestionRepository
+        ) {
+            ProductQuestionController(
+                executeService =
+                    executeService,
+                productCustomerQuestionRepository =
+                    productCustomerQuestionRepository
+            )
+        }
+
+    val basketRepository =
+        remember {
+            BasketRepository()
+        }
+
+    val basketController =
+        remember(
+            executeService,
+            basketRepository
+        ) {
+            BasketController(
+                executeService =
+                    executeService,
+                basketRepository =
+                    basketRepository
             )
         }
 
@@ -486,7 +538,15 @@ private fun BulbulusturApplicationContent(
             navigator =
                 appNavigator,
             productController =
-                productController
+                productController,
+            productReviewController =
+                productReviewController,
+            productQuestionController =
+                productQuestionController,
+            basketController =
+                basketController,
+            sessionState =
+                sessionState
         )
 
         wholesaleGraph(

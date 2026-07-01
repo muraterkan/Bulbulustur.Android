@@ -28,6 +28,7 @@ data class ProductVariantDTO(
     val StoreLogo: String = "",
     val Rating: Double = 0.0,
 
+    val ProductVariantPriceId: Int = 0,
     val Price: Double = 0.0,
     val CurrencyId: Int = 0,
     val CurrencySymbol: String = "",

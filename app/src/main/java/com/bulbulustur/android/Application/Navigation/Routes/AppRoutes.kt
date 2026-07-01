@@ -38,10 +38,10 @@ object RetailRoutes {
         "retail/menu"
 
     const val ProductReview =
-        "retail/product-review"
+        "retail/product-review/{$ArgProductId}/{$ArgStoreId}/{$ArgVariantId}"
 
     const val ProductQuestion =
-        "retail/product-question"
+        "retail/product-question/{$ArgProductId}/{$ArgStoreId}/{$ArgVariantId}"
 
     const val OtherSellerList =
         "retail/other-seller-list"
@@ -58,6 +58,22 @@ object RetailRoutes {
         variantId: Int
     ): String {
         return "retail/product-detail/$productId/$storeId/$variantId"
+    }
+
+    fun productReview(
+        productId: Int,
+        storeId: Int,
+        variantId: Int
+    ): String {
+        return "retail/product-review/$productId/$storeId/$variantId"
+    }
+
+    fun productQuestion(
+        productId: Int,
+        storeId: Int,
+        variantId: Int
+    ): String {
+        return "retail/product-question/$productId/$storeId/$variantId"
     }
 }
 

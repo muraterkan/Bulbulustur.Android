@@ -12,60 +12,80 @@ class ReviewRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IReviewRepository {
 
-    override suspend fun GetReviewListAsync(): Result<List<ReviewDTO>> {
+    override suspend fun GetReviewsAsync(
+        sourceType: String,
+        sourceId: Int,
+        variantId: Int,
+        page: Int,
+        pageSize: Int
+    ): Result<List<ReviewDTO>> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetReviewListAsync"
+            baseUrl =
+                ApiRoutes.COMMERCE_SUPPORT_REVIEW_BASE_URL,
+            method =
+                "GetReviewsAsync",
+            query =
+                "sourceType=$sourceType" +
+                        "&sourceId=$sourceId" +
+                        "&variantId=$variantId" +
+                        "&page=$page" +
+                        "&pageSize=$pageSize"
         )
     }
 
-    override suspend fun GetReviewByIdAsync(
-        reviewId: Int
-    ): Result<ReviewUpdateModel?> {
+    override suspend fun GetMemberReviewsAsync(
+        memberId: Int,
+        count: Int
+    ): Result<List<ReviewDTO>> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetReviewByIdAsync",
-            query = "reviewId=$reviewId"
+            baseUrl =
+                ApiRoutes.COMMERCE_SUPPORT_REVIEW_BASE_URL,
+            method =
+                "GetMemberReviewsAsync",
+            query =
+                "memberId=$memberId" +
+                        "&count=$count"
         )
     }
 
     override suspend fun GetReviewByIdExtendedAsync(
+        languageId: Int,
         reviewId: Int
     ): Result<ReviewDTO?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetReviewByIdExtendedAsync",
-            query = "reviewId=$reviewId"
+            baseUrl =
+                ApiRoutes.COMMERCE_SUPPORT_REVIEW_BASE_URL,
+            method =
+                "GetReviewByIdExtendedAsync",
+            query =
+                "languageId=$languageId" +
+                        "&reviewId=$reviewId"
         )
     }
 
-    override suspend fun InsertAsync(
+    override suspend fun Insert(
         model: ReviewInsertModel
     ): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "InsertAsync",
-            data = model
+            baseUrl =
+                ApiRoutes.COMMERCE_SUPPORT_REVIEW_BASE_URL,
+            method =
+                "Insert",
+            data =
+                model
         )
     }
 
-    override suspend fun UpdateAsync(
+    override suspend fun Update(
         model: ReviewUpdateModel
     ): Result<Unit> {
-        return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "UpdateAsync",
-            data = model
-        )
-    }
-
-    override suspend fun DeleteAsync(
-        reviewId: Int
-    ): Result<Unit> {
-        return apiClient.DeleteAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "DeleteAsync",
-            query = "reviewId=$reviewId"
+        return apiClient.PutAsync(
+            baseUrl =
+                ApiRoutes.COMMERCE_SUPPORT_REVIEW_BASE_URL,
+            method =
+                "Update",
+            data =
+                model
         )
     }
 }

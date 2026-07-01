@@ -4,6 +4,7 @@ import com.bulbulustur.android.Application.Datastore.UserPreferenceDataStore
 import com.bulbulustur.android.businesslayer.Core.Enums.EApplicationLanguage
 import com.bulbulustur.android.businesslayer.Core.Enums.EThemeMode
 import com.bulbulustur.android.businesslayer.Core.Model.AuthResponse
+import com.bulbulustur.android.businesslayer.Core.Security.JwtMemberIdParser
 import com.bulbulustur.android.businesslayer.Core.Security.SecureTokenStore
 import com.bulbulustur.android.businesslayer.Core.Security.TokenExpirationParser
 import kotlinx.coroutines.CoroutineScope
@@ -57,7 +58,9 @@ class UserSessionManager(
             _state.update { currentState ->
                 currentState.copy(
                     AuthenticationState =
-                        EAuthenticationState.Initializing
+                        EAuthenticationState.Initializing,
+                    MemberId =
+                        0
                 )
             }
 
@@ -74,7 +77,8 @@ class UserSessionManager(
 
             val isValid =
                 TokenExpirationParser.IsValid(
-                    value = storedTokens.Expiration
+                    value =
+                        storedTokens.Expiration
                 )
 
             if (!isValid) {
@@ -86,7 +90,9 @@ class UserSessionManager(
             _state.update { currentState ->
                 currentState.copy(
                     AuthenticationState =
-                        EAuthenticationState.Authenticated
+                        EAuthenticationState.Authenticated,
+                    MemberId =
+                        storedTokens.MemberId
                 )
             }
         }
@@ -95,6 +101,17 @@ class UserSessionManager(
     fun SetAuthenticated(
         authResponse: AuthResponse
     ): Boolean {
+        val memberId =
+            JwtMemberIdParser.Parse(
+                token =
+                    authResponse.Token
+            )
+
+        if (memberId <= 0) {
+            SetAnonymous()
+            return false
+        }
+
         val saved =
             secureTokenStore.SaveTokens(
                 accessToken =
@@ -102,7 +119,9 @@ class UserSessionManager(
                 refreshToken =
                     authResponse.RefreshToken,
                 expiration =
-                    authResponse.Expiration
+                    authResponse.Expiration,
+                memberId =
+                    memberId
             )
 
         if (!saved) {
@@ -113,11 +132,17 @@ class UserSessionManager(
         _state.update { currentState ->
             currentState.copy(
                 AuthenticationState =
-                    EAuthenticationState.Authenticated
+                    EAuthenticationState.Authenticated,
+                MemberId =
+                    memberId
             )
         }
 
         return true
+    }
+
+    fun GetMemberId(): Int {
+        return _state.value.MemberId
     }
 
     fun GetRefreshToken(): String? {
@@ -133,7 +158,9 @@ class UserSessionManager(
         _state.update { currentState ->
             currentState.copy(
                 AuthenticationState =
-                    EAuthenticationState.Anonymous
+                    EAuthenticationState.Anonymous,
+                MemberId =
+                    0
             )
         }
     }
@@ -155,7 +182,9 @@ class UserSessionManager(
             _state.value =
                 UserSessionState(
                     AuthenticationState =
-                        EAuthenticationState.Anonymous
+                        EAuthenticationState.Anonymous,
+                    MemberId =
+                        0
                 )
         }
     }

@@ -330,10 +330,92 @@ fun ProductDetailScreen(
         }
     }
 
+    val selectedVariantId =
+        selectedSizeOption.variantId
+            .takeIf {
+                it > 0
+            }
+            ?: selectedColorVariant.variantId
+                .takeIf {
+                    it > 0
+                }
+            ?: selectedVariant
+                ?.VariantId
+            ?: 0
+
+    val selectedPriceId =
+        selectedSizeOption.priceId
+            .takeIf {
+                it > 0
+            }
+            ?: selectedColorVariant.priceId
+                .takeIf {
+                    it > 0
+                }
+            ?: selectedVariant
+                ?.ProductVariantPriceId
+                ?.takeIf {
+                    it > 0
+                }
+            ?: productDto
+                ?.ProductVariantPriceId
+                ?.takeIf {
+                    it > 0
+                }
+            ?: 0
+
+    val selectedStoreId =
+        selectedSizeOption.storeId
+            .takeIf {
+                it > 0
+            }
+            ?: selectedColorVariant.storeId
+                .takeIf {
+                    it > 0
+                }
+            ?: selectedVariant
+                ?.StoreId
+                ?.takeIf {
+                    it > 0
+                }
+            ?: product.store.id
+
+    val selectedColorIdentity =
+        selectedSizeOption.colorId
+            .takeIf {
+                it > 0
+            }
+            ?: selectedColorVariant.colorId
+                .takeIf {
+                    it > 0
+                }
+            ?: selectedVariant
+                ?.ColorId
+            ?: 0
+
+    val selectedSizeIdentity =
+        selectedSizeOption.sizeId
+            .takeIf {
+                it > 0
+            }
+            ?: selectedVariant
+                ?.SizeId
+            ?: 0
+
     val selection =
         RetailProductDetailSelection(
             productId =
                 product.id,
+            variantId =
+                selectedVariantId,
+            priceId =
+                selectedPriceId,
+            storeId =
+                selectedStoreId,
+            colorId =
+                selectedColorIdentity,
+            sizeId =
+                selectedSizeIdentity,
             selectedColor =
                 selectedColorVariant.name,
             selectedSize =
@@ -465,13 +547,8 @@ fun ProductDetailScreen(
                 quantity =
                     quantity,
                 onColorClick = { colorVariant ->
-                    val selectedVariantId =
-                        colorVariant.id
-                            .toIntOrNull()
-                            ?: 0
-
                     if (
-                        selectedVariantId > 0 &&
+                        colorVariant.variantId > 0 &&
                         selectedColorId != colorVariant.id
                     ) {
                         selectedColorId =
@@ -484,7 +561,7 @@ fun ProductDetailScreen(
                             1
 
                         onColorVariantChange(
-                            selectedVariantId
+                            colorVariant.variantId
                         )
                     }
                 },
@@ -493,27 +570,19 @@ fun ProductDetailScreen(
                         sizeOption.state !=
                         RetailProductSizeState.Disabled &&
                         sizeOption.state !=
-                        RetailProductSizeState.OutOfStock
+                        RetailProductSizeState.OutOfStock &&
+                        sizeOption.variantId > 0 &&
+                        selectedSizeId != sizeOption.id
                     ) {
-                        val selectedVariantId =
+                        selectedSizeId =
                             sizeOption.id
-                                .toIntOrNull()
-                                ?: 0
 
-                        if (
-                            selectedVariantId > 0 &&
-                            selectedSizeId != sizeOption.id
-                        ) {
-                            selectedSizeId =
-                                sizeOption.id
+                        quantity =
+                            1
 
-                            quantity =
-                                1
-
-                            onSizeVariantChange(
-                                selectedVariantId
-                            )
-                        }
+                        onSizeVariantChange(
+                            sizeOption.variantId
+                        )
                     }
                 },
                 onSizeGuideClick = {
@@ -3240,6 +3309,11 @@ private fun RetailSheetPrimaryButton(
 @Immutable
 data class RetailProductDetailSelection(
     val productId: Int,
+    val variantId: Int,
+    val priceId: Int,
+    val storeId: Int,
+    val colorId: Int,
+    val sizeId: Int,
     val selectedColor: String,
     val selectedSize: String,
     val quantity: Int
@@ -3276,6 +3350,11 @@ data class RetailProductDetail(
 @Immutable
 data class RetailProductColorVariant(
     val id: String,
+    val variantId: Int = 0,
+    val priceId: Int = 0,
+    val storeId: Int = 0,
+    val colorId: Int = 0,
+    val sizeId: Int = 0,
     val name: String,
     val swatchColor: Color,
     val images: List<RetailProductImage>
@@ -3293,6 +3372,11 @@ data class RetailProductImage(
 @Immutable
 data class RetailProductSizeOption(
     val id: String,
+    val variantId: Int = 0,
+    val priceId: Int = 0,
+    val storeId: Int = 0,
+    val colorId: Int = 0,
+    val sizeId: Int = 0,
     val label: String,
     val state: RetailProductSizeState
 )
@@ -3412,6 +3496,8 @@ private fun ProductDTO.ToRetailProductDetail(
                     StoreId,
                 Store =
                     Store,
+                ProductVariantPriceId =
+                    ProductVariantPriceId,
                 Price =
                     Price,
                 CurrencySymbol =
@@ -3532,12 +3618,18 @@ private fun ProductDTO.ToRetailProductDetail(
 
                 RetailProductColorVariant(
                     id =
-                        colorVariant.VariantId
-                            .takeIf {
-                                it > 0
-                            }
-                            ?.toString()
-                            ?: colorVariant.ColorId.toString(),
+                        colorVariant.ColorId
+                            .toString(),
+                    variantId =
+                        colorVariant.VariantId,
+                    priceId =
+                        colorVariant.ProductVariantPriceId,
+                    storeId =
+                        colorVariant.StoreId,
+                    colorId =
+                        colorVariant.ColorId,
+                    sizeId =
+                        colorVariant.SizeId,
                     name =
                         colorVariant.Color
                             .takeIf {
@@ -3587,12 +3679,18 @@ private fun ProductDTO.ToRetailProductDetail(
             .map { sizeVariant ->
                 RetailProductSizeOption(
                     id =
-                        sizeVariant.VariantId
-                            .takeIf {
-                                it > 0
-                            }
-                            ?.toString()
-                            ?: sizeVariant.SizeId.toString(),
+                        sizeVariant.SizeId
+                            .toString(),
+                    variantId =
+                        sizeVariant.VariantId,
+                    priceId =
+                        sizeVariant.ProductVariantPriceId,
+                    storeId =
+                        sizeVariant.StoreId,
+                    colorId =
+                        sizeVariant.ColorId,
+                    sizeId =
+                        sizeVariant.SizeId,
                     label =
                         sizeVariant.Size
                             .takeIf {

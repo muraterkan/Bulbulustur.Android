@@ -24,10 +24,21 @@ import com.bulbulustur.android.Application.Navigation.Routes.AccountRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.BasketRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.RetailRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.StoreRoutes
+import com.bulbulustur.android.Application.Areas.b2c.Controllers.BasketController
+import com.bulbulustur.android.Application.Session.UserSessionState
+import com.bulbulustur.android.Application.Areas.b2c.Controllers.ProductQuestionController
+import com.bulbulustur.android.Application.Areas.b2c.Controllers.ProductReviewController
+import com.bulbulustur.android.Application.Areas.b2c.Views.Product.ProductQuestionScreen
+import com.bulbulustur.android.Application.Areas.b2c.Views.Product.ProductReviewScreen
+import com.bulbulustur.android.Application.Navigation.Routes.LogonRoutes
 
 fun NavGraphBuilder.retailGraph(
     navigator: BulbulusturNavigator,
-    productController: ProductController
+    productController: ProductController,
+    productReviewController: ProductReviewController,
+    productQuestionController: ProductQuestionController,
+    basketController: BasketController,
+    sessionState: UserSessionState
 ) {
     composable(
         route = RetailRoutes.Home
@@ -184,6 +195,12 @@ fun NavGraphBuilder.retailGraph(
         val productState by
         productController.State.collectAsState()
 
+        val productReviewState by
+        productReviewController.State.collectAsState()
+
+        val productQuestionState by
+        productQuestionController.State.collectAsState()
+
         RetailProductListScreen(
             State =
                 productState,
@@ -337,6 +354,26 @@ fun NavGraphBuilder.retailGraph(
                 count = 100
             )
 
+            productReviewController.List(
+                sourceType =
+                    "PRODUCT",
+                sourceId =
+                    productId,
+                variantId =
+                    variantId,
+                page =
+                    1,
+                pageSize =
+                    10
+            )
+
+            productQuestionController.List(
+                productId =
+                    productId,
+                count =
+                    100
+            )
+
             productController.SmallestPrice(
                 languageId = 1,
                 productId = productId
@@ -384,50 +421,374 @@ fun NavGraphBuilder.retailGraph(
             },
             onColorVariantChange = { selectedVariantId ->
                 productController.SelectedVariant(
-                    languageId = 1,
-                    variantId = selectedVariantId
+                    languageId =
+                        1,
+                    variantId =
+                        selectedVariantId
                 )
 
                 productController.VariantPictures(
-                    variantId = selectedVariantId,
-                    count = 10
+                    variantId =
+                        selectedVariantId,
+                    count =
+                        10
                 )
 
                 productController.SizeVariants(
-                    languageId = 1,
-                    productId = productId,
-                    variantId = selectedVariantId
+                    languageId =
+                        1,
+                    productId =
+                        productId,
+                    variantId =
+                        selectedVariantId
                 )
 
                 productController.OtherSellerList(
-                    languageId = 1,
-                    productId = productId,
-                    variantId = selectedVariantId,
-                    storeId = storeId
+                    languageId =
+                        1,
+                    productId =
+                        productId,
+                    variantId =
+                        selectedVariantId,
+                    storeId =
+                        storeId
+                )
+            },
+            onReviewClick = {
+                navigator.navController.navigate(
+                    RetailRoutes.productReview(
+                        productId =
+                            productId,
+                        storeId =
+                            storeId,
+                        variantId =
+                            variantId
+                    )
+                )
+            },
+            onQuestionClick = {
+                navigator.navController.navigate(
+                    RetailRoutes.productQuestion(
+                        productId =
+                            productId,
+                        storeId =
+                            storeId,
+                        variantId =
+                            variantId
+                    )
                 )
             },
             onSizeVariantChange = { selectedVariantId ->
                 productController.SelectedVariant(
-                    languageId = 1,
-                    variantId = selectedVariantId
+                    languageId =
+                        1,
+                    variantId =
+                        selectedVariantId
                 )
 
                 productController.VariantPictures(
-                    variantId = selectedVariantId,
-                    count = 10
+                    variantId =
+                        selectedVariantId,
+                    count =
+                        10
                 )
 
                 productController.OtherSellerList(
-                    languageId = 1,
-                    productId = productId,
-                    variantId = selectedVariantId,
-                    storeId = storeId
+                    languageId =
+                        1,
+                    productId =
+                        productId,
+                    variantId =
+                        selectedVariantId,
+                    storeId =
+                        storeId
                 )
+            },
+            onAddToBasketClick = { selection ->
+                if (
+                    !sessionState.IsAuthenticated ||
+                    sessionState.MemberId <= 0
+                ) {
+                    navigator.navigateToAccount()
+                } else {
+                    basketController.AddToBasket(
+                        memberId =
+                            sessionState.MemberId,
+                        priceId =
+                            selection.priceId,
+                        quantity =
+                            selection.quantity
+                    )
+                }
+            },
+            onBuyNowClick = { selection ->
+                if (
+                    !sessionState.IsAuthenticated ||
+                    sessionState.MemberId <= 0
+                ) {
+                    navigator.navigateToAccount()
+                } else {
+                    basketController.AddToBasket(
+                        memberId =
+                            sessionState.MemberId,
+                        priceId =
+                            selection.priceId,
+                        quantity =
+                            selection.quantity,
+                        onSuccess = {
+                            navigator.navigateToRetailBasket()
+                        }
+                    )
+                }
             },
             onStoreClick = {
                 navigator.navController.navigate(
                     StoreRoutes.StoreDetail
                 )
+            }
+        )
+    }
+
+    composable(
+        route =
+            RetailRoutes.ProductReview,
+        arguments =
+            listOf(
+                navArgument(
+                    RetailRoutes.ArgProductId
+                ) {
+                    type =
+                        NavType.IntType
+                },
+                navArgument(
+                    RetailRoutes.ArgStoreId
+                ) {
+                    type =
+                        NavType.IntType
+                },
+                navArgument(
+                    RetailRoutes.ArgVariantId
+                ) {
+                    type =
+                        NavType.IntType
+                }
+            )
+    ) { backStackEntry ->
+        val productId =
+            backStackEntry.arguments
+                ?.getInt(
+                    RetailRoutes.ArgProductId
+                )
+                ?: 0
+
+        val storeId =
+            backStackEntry.arguments
+                ?.getInt(
+                    RetailRoutes.ArgStoreId
+                )
+                ?: 0
+
+        val variantId =
+            backStackEntry.arguments
+                ?.getInt(
+                    RetailRoutes.ArgVariantId
+                )
+                ?: 0
+
+        val productState by
+        productController.State.collectAsState()
+
+        val reviewState by
+        productReviewController.State.collectAsState()
+
+        LaunchedEffect(
+            productId,
+            storeId,
+            variantId
+        ) {
+            if (
+                productId <= 0 ||
+                storeId <= 0
+            ) {
+                return@LaunchedEffect
+            }
+
+            productReviewController.Clear()
+
+            productReviewController.List(
+                sourceType =
+                    "PRODUCT",
+                sourceId =
+                    productId,
+                variantId =
+                    variantId,
+                page =
+                    1,
+                pageSize =
+                    10
+            )
+
+            val currentProduct =
+                productState.ProductDetailResult
+                    ?.Data
+
+            if (
+                currentProduct == null ||
+                currentProduct.ProductId != productId
+            ) {
+                productController.Detail(
+                    languageId =
+                        1,
+                    storeId =
+                        storeId,
+                    productId =
+                        productId,
+                    variantId =
+                        variantId
+                )
+            }
+        }
+
+        ProductReviewScreen(
+            State =
+                reviewState,
+            product =
+                productState.ProductDetailResult
+                    ?.Data,
+            onBackClick = {
+                navigator.back()
+            },
+            onLoadMoreClick = {
+                productReviewController.LoadMore()
+            }
+        )
+    }
+
+    composable(
+        route =
+            RetailRoutes.ProductQuestion,
+        arguments =
+            listOf(
+                navArgument(
+                    RetailRoutes.ArgProductId
+                ) {
+                    type =
+                        NavType.IntType
+                },
+                navArgument(
+                    RetailRoutes.ArgStoreId
+                ) {
+                    type =
+                        NavType.IntType
+                },
+                navArgument(
+                    RetailRoutes.ArgVariantId
+                ) {
+                    type =
+                        NavType.IntType
+                }
+            )
+    ) { backStackEntry ->
+        val productId =
+            backStackEntry.arguments
+                ?.getInt(
+                    RetailRoutes.ArgProductId
+                )
+                ?: 0
+
+        val storeId =
+            backStackEntry.arguments
+                ?.getInt(
+                    RetailRoutes.ArgStoreId
+                )
+                ?: 0
+
+        val variantId =
+            backStackEntry.arguments
+                ?.getInt(
+                    RetailRoutes.ArgVariantId
+                )
+                ?: 0
+
+        val productState by
+        productController.State.collectAsState()
+
+        val questionState by
+        productQuestionController.State.collectAsState()
+
+        val product =
+            productState.ProductDetailResult
+                ?.Data
+
+        LaunchedEffect(
+            productId,
+            storeId,
+            variantId
+        ) {
+            if (
+                productId <= 0 ||
+                storeId <= 0
+            ) {
+                return@LaunchedEffect
+            }
+
+            productQuestionController.Clear()
+
+            productQuestionController.List(
+                productId =
+                    productId,
+                count =
+                    100
+            )
+
+            if (
+                product == null ||
+                product.ProductId != productId
+            ) {
+                productController.Detail(
+                    languageId =
+                        1,
+                    storeId =
+                        storeId,
+                    productId =
+                        productId,
+                    variantId =
+                        variantId
+                )
+            }
+        }
+
+        ProductQuestionScreen(
+            State =
+                questionState,
+            productId =
+                productId,
+            productName =
+                product
+                    ?.ProductName
+                    .orEmpty(),
+            storeName =
+                product
+                    ?.Store
+                    .orEmpty(),
+            variantId =
+                variantId,
+            isAuthenticated =
+                sessionState.IsAuthenticated,
+            onBackClick = {
+                navigator.back()
+            },
+            onLoginRequired = {
+                navigator.navController.navigate(
+                    LogonRoutes.Logon
+                )
+            },
+            onInsertQuestion = {
+                /*
+                 * MemberId henüz session contract'ında bulunmuyor.
+                 * Backend JWT claim düzeltmesinden sonra burada
+                 * productQuestionController.Insert(...) çağrılacak.
+                 */
             }
         )
     }
@@ -491,29 +852,111 @@ fun NavGraphBuilder.retailGraph(
     }
 
     composable(
-        route = BasketRoutes.Basket
+        route =
+            BasketRoutes.Basket
     ) {
+        val basketState by
+        basketController.State.collectAsState()
+
+        LaunchedEffect(
+            sessionState.IsAuthenticated,
+            sessionState.MemberId
+        ) {
+            if (
+                sessionState.IsAuthenticated &&
+                sessionState.MemberId > 0
+            ) {
+                basketController.Refresh(
+                    memberId =
+                        sessionState.MemberId
+                )
+            } else {
+                basketController.Clear()
+            }
+        }
+
         BasketScreen(
+            State =
+                basketState,
             onBackClick = {
                 navigator.back()
             },
             onCheckoutClick = {
                 /*
-                 * BasketRoutes.Checkout hedefi graph içine bağlandığında
-                 * checkout navigation burada açılacak.
+                 * Checkout feature açıldığında:
+                 * navigator.navController.navigate(
+                 *     BasketRoutes.Checkout
+                 * )
                  */
             },
-            onProductClick = {
-                /*
-                 * BasketScreen henüz detail kimliklerini taşımıyor.
-                 */
-                navigator.navController.navigate(
-                    RetailRoutes.ProductList
-                )
+            onProductClick = { basket ->
+                if (
+                    basket.ProductId > 0 &&
+                    basket.StoreId > 0 &&
+                    basket.VariantId > 0
+                ) {
+                    navigator.navController.navigate(
+                        RetailRoutes.productDetail(
+                            productId =
+                                basket.ProductId,
+                            storeId =
+                                basket.StoreId,
+                            variantId =
+                                basket.VariantId
+                        )
+                    )
+                } else {
+                    navigator.navController.navigate(
+                        RetailRoutes.ProductList
+                    )
+                }
             },
             onStoreClick = {
                 navigator.navController.navigate(
                     StoreRoutes.StoreDetail
+                )
+            },
+            onIncreaseQuantityClick = { basket ->
+                basketController.UpdateQuantity(
+                    memberId =
+                        sessionState.MemberId,
+                    basketId =
+                        basket.BasketId,
+                    quantity =
+                        basket.Quantity + 1
+                )
+            },
+            onDecreaseQuantityClick = { basket ->
+                if (basket.Quantity <= 1) {
+                    basketController.Delete(
+                        memberId =
+                            sessionState.MemberId,
+                        basketId =
+                            basket.BasketId
+                    )
+                } else {
+                    basketController.UpdateQuantity(
+                        memberId =
+                            sessionState.MemberId,
+                        basketId =
+                            basket.BasketId,
+                        quantity =
+                            basket.Quantity - 1
+                    )
+                }
+            },
+            onRemoveClick = { basket ->
+                basketController.Delete(
+                    memberId =
+                        sessionState.MemberId,
+                    basketId =
+                        basket.BasketId
+                )
+            },
+            onMoveToFavoriteClick = { basket ->
+                basketController.MoveToFavorite(
+                    basketId =
+                        basket.BasketId
                 )
             },
             onHomeClick = {

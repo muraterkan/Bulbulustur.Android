@@ -25,13 +25,15 @@ class SecureTokenStore(
             Context.MODE_PRIVATE
         )
 
-    private val gson = Gson()
+    private val gson =
+        Gson()
 
     @Synchronized
     fun SaveTokens(
         accessToken: String,
         refreshToken: String,
-        expiration: String
+        expiration: String,
+        memberId: Int
     ): Boolean {
         require(accessToken.isNotBlank()) {
             "AccessToken boş olamaz."
@@ -45,15 +47,32 @@ class SecureTokenStore(
             "Expiration boş olamaz."
         }
 
-        val tokenModel = SecureTokenModel(
-            AccessToken = accessToken,
-            RefreshToken = refreshToken,
-            Expiration = expiration
-        )
+        require(memberId > 0) {
+            "MemberId geçerli olmalıdır."
+        }
+
+        val tokenModel =
+            SecureTokenModel(
+                AccessToken =
+                    accessToken,
+                RefreshToken =
+                    refreshToken,
+                Expiration =
+                    expiration,
+                MemberId =
+                    memberId
+            )
 
         return try {
-            val json = gson.toJson(tokenModel)
-            val encryptedPayload = Encrypt(json)
+            val json =
+                gson.toJson(
+                    tokenModel
+                )
+
+            val encryptedPayload =
+                Encrypt(
+                    plainText = json
+                )
 
             preferences
                 .edit()
@@ -69,18 +88,23 @@ class SecureTokenStore(
 
     @Synchronized
     fun ReadTokens(): SecureTokenModel? {
-        val encryptedPayload = preferences.getString(
-            EncryptedTokenPayloadKey,
-            null
-        ) ?: return null
+        val encryptedPayload =
+            preferences.getString(
+                EncryptedTokenPayloadKey,
+                null
+            ) ?: return null
 
         return try {
-            val json = Decrypt(encryptedPayload)
+            val json =
+                Decrypt(
+                    encryptedPayload = encryptedPayload
+                )
 
-            val tokenModel = gson.fromJson(
-                json,
-                SecureTokenModel::class.java
-            )
+            val tokenModel =
+                gson.fromJson(
+                    json,
+                    SecureTokenModel::class.java
+                )
 
             if (!tokenModel.HasTokens) {
                 Clear()
@@ -98,7 +122,9 @@ class SecureTokenStore(
     fun Clear(): Boolean {
         return preferences
             .edit()
-            .remove(EncryptedTokenPayloadKey)
+            .remove(
+                EncryptedTokenPayloadKey
+            )
             .commit()
     }
 
@@ -111,31 +137,40 @@ class SecureTokenStore(
     private fun Encrypt(
         plainText: String
     ): String {
-        val cipher = Cipher.getInstance(
-            CipherTransformation
-        )
+        val cipher =
+            Cipher.getInstance(
+                CipherTransformation
+            )
 
         cipher.init(
             Cipher.ENCRYPT_MODE,
             GetOrCreateSecretKey()
         )
 
-        val plainBytes = plainText.toByteArray(
-            StandardCharsets.UTF_8
-        )
+        val plainBytes =
+            plainText.toByteArray(
+                StandardCharsets.UTF_8
+            )
 
-        val cipherBytes = cipher.doFinal(plainBytes)
-        val iv = cipher.iv
+        val cipherBytes =
+            cipher.doFinal(
+                plainBytes
+            )
 
-        val encodedIv = Base64.encodeToString(
-            iv,
-            Base64.NO_WRAP
-        )
+        val iv =
+            cipher.iv
 
-        val encodedCipherText = Base64.encodeToString(
-            cipherBytes,
-            Base64.NO_WRAP
-        )
+        val encodedIv =
+            Base64.encodeToString(
+                iv,
+                Base64.NO_WRAP
+            )
+
+        val encodedCipherText =
+            Base64.encodeToString(
+                cipherBytes,
+                Base64.NO_WRAP
+            )
 
         return "$encodedIv$PayloadSeparator$encodedCipherText"
     }
@@ -143,33 +178,38 @@ class SecureTokenStore(
     private fun Decrypt(
         encryptedPayload: String
     ): String {
-        val payloadParts = encryptedPayload.split(
-            PayloadSeparator,
-            limit = 2
-        )
+        val payloadParts =
+            encryptedPayload.split(
+                PayloadSeparator,
+                limit = 2
+            )
 
         require(payloadParts.size == 2) {
             "Şifreli token payload formatı geçersiz."
         }
 
-        val iv = Base64.decode(
-            payloadParts[0],
-            Base64.NO_WRAP
-        )
+        val iv =
+            Base64.decode(
+                payloadParts[0],
+                Base64.NO_WRAP
+            )
 
-        val cipherText = Base64.decode(
-            payloadParts[1],
-            Base64.NO_WRAP
-        )
+        val cipherText =
+            Base64.decode(
+                payloadParts[1],
+                Base64.NO_WRAP
+            )
 
-        val cipher = Cipher.getInstance(
-            CipherTransformation
-        )
+        val cipher =
+            Cipher.getInstance(
+                CipherTransformation
+            )
 
-        val parameterSpec = GCMParameterSpec(
-            GcmTagLength,
-            iv
-        )
+        val parameterSpec =
+            GCMParameterSpec(
+                GcmTagLength,
+                iv
+            )
 
         cipher.init(
             Cipher.DECRYPT_MODE,
@@ -177,7 +217,10 @@ class SecureTokenStore(
             parameterSpec
         )
 
-        val plainBytes = cipher.doFinal(cipherText)
+        val plainBytes =
+            cipher.doFinal(
+                cipherText
+            )
 
         return String(
             plainBytes,
@@ -186,42 +229,54 @@ class SecureTokenStore(
     }
 
     private fun GetOrCreateSecretKey(): SecretKey {
-        val keyStore = KeyStore.getInstance(
-            AndroidKeyStoreProvider
-        )
+        val keyStore =
+            KeyStore.getInstance(
+                AndroidKeyStoreProvider
+            )
 
-        keyStore.load(null)
-
-        val existingKey = keyStore.getKey(
-            KeyAlias,
+        keyStore.load(
             null
         )
+
+        val existingKey =
+            keyStore.getKey(
+                KeyAlias,
+                null
+            )
 
         if (existingKey is SecretKey) {
             return existingKey
         }
 
-        val keyGenerator = KeyGenerator.getInstance(
-            KeyProperties.KEY_ALGORITHM_AES,
-            AndroidKeyStoreProvider
-        )
-
-        val keySpecification = KeyGenParameterSpec.Builder(
-            KeyAlias,
-            KeyProperties.PURPOSE_ENCRYPT or
-                    KeyProperties.PURPOSE_DECRYPT
-        )
-            .setBlockModes(
-                KeyProperties.BLOCK_MODE_GCM
+        val keyGenerator =
+            KeyGenerator.getInstance(
+                KeyProperties.KEY_ALGORITHM_AES,
+                AndroidKeyStoreProvider
             )
-            .setEncryptionPaddings(
-                KeyProperties.ENCRYPTION_PADDING_NONE
-            )
-            .setKeySize(AesKeySize)
-            .setRandomizedEncryptionRequired(true)
-            .build()
 
-        keyGenerator.init(keySpecification)
+        val keySpecification =
+            KeyGenParameterSpec.Builder(
+                KeyAlias,
+                KeyProperties.PURPOSE_ENCRYPT or
+                        KeyProperties.PURPOSE_DECRYPT
+            )
+                .setBlockModes(
+                    KeyProperties.BLOCK_MODE_GCM
+                )
+                .setEncryptionPaddings(
+                    KeyProperties.ENCRYPTION_PADDING_NONE
+                )
+                .setKeySize(
+                    AesKeySize
+                )
+                .setRandomizedEncryptionRequired(
+                    true
+                )
+                .build()
+
+        keyGenerator.init(
+            keySpecification
+        )
 
         return keyGenerator.generateKey()
     }

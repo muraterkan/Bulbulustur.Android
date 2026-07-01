@@ -5,8 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,11 +14,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material3.FilterChip
+import androidx.compose.material.icons.outlined.AddComment
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -34,117 +32,219 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.Application.Areas.b2c.Controllers.ProductQuestionControllerState
+import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
+import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
+import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
+import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
-import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
-import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
+import com.bulbulustur.android.businesslayer.Core.DTO.ProductCustomerQuestionDTO
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun ProductQuestionScreen(
-    productId: Int = 1,
+    State: ProductQuestionControllerState =
+        ProductQuestionControllerState(),
+    productId: Int = 0,
+    productName: String = "",
+    storeName: String = "",
+    variantId: Int = 0,
+    isAuthenticated: Boolean = false,
     onBackClick: () -> Unit = {},
-    onAskQuestionClick: (RetailProductQuestionProductSummary) -> Unit = {},
-    onQuestionClick: (RetailProductQuestionItem) -> Unit = {}
+    onLoginRequired: () -> Unit = {},
+    onInsertQuestion: (String) -> Unit = {},
+    onQuestionClick:
+        (ProductCustomerQuestionDTO) -> Unit = {}
 ) {
-    val screenData = remember(productId) {
-        getRetailProductQuestionScreenData(productId)
-    }
-
-    var selectedFilter by remember {
-        mutableStateOf("Tümü")
-    }
-
-    val filteredQuestions = remember(selectedFilter, screenData.questions) {
-        if (selectedFilter == "Tümü") {
-            screenData.questions
-        } else {
-            screenData.questions.filter {
-                it.filterTags.contains(selectedFilter)
-            }
-        }
+    var questionText by
+    remember(
+        productId
+    ) {
+        mutableStateOf(
+            ""
+        )
     }
 
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+        containerColor =
+            MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "Soru & Cevap",
-                onBackClick = onBackClick,
-                actionIcon = Icons.Outlined.Settings,
-                actionContentDescription = "Soru sor",
+                title =
+                    "Soru & Cevap",
+                onBackClick =
+                    onBackClick,
+                actionIcon =
+                    Icons.Outlined.AddComment,
+                actionContentDescription =
+                    "Soru sor",
                 onActionClick = {
-                    onAskQuestionClick(screenData.product)
+                    if (
+                        !isAuthenticated
+                    ) {
+                        onLoginRequired()
+                    }
                 }
             )
         }
     ) { innerPadding ->
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.surfaceVariant)
-                .padding(innerPadding)
-                .navigationBarsPadding(),
-            contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
-                top = BBSpacing.SectionGapCompact,
-                end = BBSpacing.PageHorizontal,
-                bottom = BBSpacing.PageBottom
-            ),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(
+                        MaterialTheme.colorScheme.surfaceVariant
+                    )
+                    .padding(
+                        innerPadding
+                    )
+                    .navigationBarsPadding(),
+            contentPadding =
+                PaddingValues(
+                    start =
+                        BBSpacing.PageHorizontal,
+                    top =
+                        BBSpacing.SectionGapCompact,
+                    end =
+                        BBSpacing.PageHorizontal,
+                    bottom =
+                        BBSpacing.PageBottom
+                ),
+            verticalArrangement =
+                Arrangement.spacedBy(
+                    BBSpacing.CardGap
+                )
         ) {
             item {
                 ProductQuestionProductSummary(
-                    product = screenData.product
+                    productId =
+                        productId,
+                    productName =
+                        productName,
+                    storeName =
+                        storeName,
+                    variantId =
+                        variantId
                 )
             }
 
             item {
                 ProductQuestionAskCard(
-                    product = screenData.product,
-                    onAskQuestionClick = {
-                        onAskQuestionClick(screenData.product)
+                    storeName =
+                        storeName,
+                    questionText =
+                        questionText,
+                    isAuthenticated =
+                        isAuthenticated,
+                    isSubmitting =
+                        State.IsSubmitting,
+                    onQuestionTextChange = {
+                        questionText =
+                            it
+                    },
+                    onLoginRequired =
+                        onLoginRequired,
+                    onSubmitClick = {
+                        val normalizedQuestion =
+                            questionText.trim()
+
+                        if (
+                            normalizedQuestion.isNotBlank()
+                        ) {
+                            onInsertQuestion(
+                                normalizedQuestion
+                            )
+                        }
                     }
                 )
             }
+
+            State.SuccessMessage
+                ?.takeIf {
+                    it.isNotBlank()
+                }
+                ?.let {
+                    item {
+                        ProductQuestionFeedbackCard(
+                            message =
+                                it,
+                            isError =
+                                false
+                        )
+                    }
+                }
+
+            State.ErrorMessage
+                ?.takeIf {
+                    it.isNotBlank()
+                }
+                ?.let {
+                    item {
+                        ProductQuestionFeedbackCard(
+                            message =
+                                it,
+                            isError =
+                                true
+                        )
+                    }
+                }
 
             item {
                 ProductQuestionSummaryCard(
-                    summary = screenData.summary
-                )
-            }
-
-            item {
-                ProductQuestionFilterSection(
-                    filters = screenData.filters,
-                    selectedFilter = selectedFilter,
-                    onFilterChange = {
-                        selectedFilter = it
-                    }
+                    totalQuestionCount =
+                        State.Questions.size
                 )
             }
 
             item {
                 ProductQuestionSectionTitle(
-                    title = "Ürün soruları",
-                    description = "Satıcı ve kullanıcı yanıtlarıyla ürün hakkında merak edilenler."
+                    title =
+                        "Ürün soruları",
+                    description =
+                        "Müşterilerin bu ürün hakkında gönderdiği sorular."
                 )
             }
 
-            items(
-                items = filteredQuestions,
-                key = { question -> question.id }
-            ) { question ->
-                ProductQuestionCard(
-                    question = question,
-                    onClick = {
-                        onQuestionClick(question)
+            when {
+                State.IsLoading &&
+                        State.Questions.isEmpty() -> {
+                    item {
+                        ProductQuestionLoadingCard()
                     }
-                )
+                }
+
+                State.Questions.isEmpty() -> {
+                    item {
+                        ProductQuestionEmptyCard()
+                    }
+                }
+
+                else -> {
+                    items(
+                        items =
+                            State.Questions,
+                        key = {
+                            it.ProductCustomerQuestionId
+                        }
+                    ) { question ->
+                        ProductQuestionCard(
+                            question =
+                                question,
+                            fallbackStoreName =
+                                storeName,
+                            onClick = {
+                                onQuestionClick(
+                                    question
+                                )
+                            }
+                        )
+                    }
+                }
             }
         }
     }
@@ -152,61 +252,130 @@ fun ProductQuestionScreen(
 
 @Composable
 private fun ProductQuestionProductSummary(
-    product: RetailProductQuestionProductSummary
+    productId: Int,
+    productName: String,
+    storeName: String,
+    variantId: Int
 ) {
+    val resolvedProductName =
+        productName.ifBlank {
+            "Ürün Soruları"
+        }
+
+    val resolvedStoreName =
+        storeName.ifBlank {
+            "Satıcı"
+        }
+
     Surface(
-        modifier = Modifier.fillMaxWidth(),
-        shape = BBRadius.XxlShape,
-        color = MaterialTheme.colorScheme.primaryContainer,
-        border = BorderStroke(
-            width = 1.dp,
-            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.35f)
-        )
+        modifier =
+            Modifier.fillMaxWidth(),
+        shape =
+            BBRadius.XxlShape,
+        color =
+            MaterialTheme.colorScheme.primaryContainer,
+        border =
+            BorderStroke(
+                width =
+                    1.dp,
+                color =
+                    MaterialTheme.colorScheme.primary
+                        .copy(
+                            alpha =
+                                0.35f
+                        )
+            )
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(BBSpacing.CardPadding),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        BBSpacing.CardPadding
+                    ),
+            verticalAlignment =
+                Alignment.CenterVertically,
+            horizontalArrangement =
+                Arrangement.spacedBy(
+                    BBSpacing.Space3
+                )
         ) {
             Box(
-                modifier = Modifier
-                    .size(BBSpacing.Space18)
-                    .clip(BBRadius.XlShape)
-                    .background(MaterialTheme.colorScheme.primary),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .size(
+                            BBSpacing.Space18
+                        )
+                        .clip(
+                            BBRadius.XlShape
+                        )
+                        .background(
+                            MaterialTheme.colorScheme.primary
+                        ),
+                contentAlignment =
+                    Alignment.Center
             ) {
                 Text(
-                    text = product.imageText,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
+                    text =
+                        resolvedProductName
+                            .ToInitials(
+                                fallback =
+                                    "Ü"
+                            ),
+                    style =
+                        MaterialTheme.typography.titleMedium,
+                    fontWeight =
+                        FontWeight.Bold,
+                    color =
+                        MaterialTheme.colorScheme.onSurface
                 )
             }
 
             Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+                modifier =
+                    Modifier.weight(
+                        1f
+                    ),
+                verticalArrangement =
+                    Arrangement.spacedBy(
+                        BBSpacing.Space1
+                    )
             ) {
                 Text(
-                    text = product.name,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
+                    text =
+                        resolvedProductName,
+                    style =
+                        MaterialTheme.typography.titleMedium,
+                    fontWeight =
+                        FontWeight.Bold,
+                    color =
+                        MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = product.storeName,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    text =
+                        resolvedStoreName,
+                    style =
+                        MaterialTheme.typography.bodySmall,
+                    color =
+                        MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
                 Text(
-                    text = product.variantText,
-                    style = MaterialTheme.typography.labelMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface
+                    text =
+                        if (
+                            variantId > 0
+                        ) {
+                            "Varyant #$variantId"
+                        } else {
+                            "Ürün #$productId"
+                        },
+                    style =
+                        MaterialTheme.typography.labelMedium,
+                    fontWeight =
+                        FontWeight.SemiBold,
+                    color =
+                        MaterialTheme.colorScheme.onSurface
                 )
             }
         }
@@ -215,332 +384,361 @@ private fun ProductQuestionProductSummary(
 
 @Composable
 private fun ProductQuestionAskCard(
-    product: RetailProductQuestionProductSummary,
-    onAskQuestionClick: () -> Unit
+    storeName: String,
+    questionText: String,
+    isAuthenticated: Boolean,
+    isSubmitting: Boolean,
+    onQuestionTextChange: (String) -> Unit,
+    onLoginRequired: () -> Unit,
+    onSubmitClick: () -> Unit
 ) {
     BbCard(
-        modifier = Modifier.fillMaxWidth(),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium,
-        onClick = onAskQuestionClick
+        modifier =
+            Modifier.fillMaxWidth(),
+        variant =
+            BbCardVariant.Outlined,
+        padding =
+            BbCardPadding.Medium
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+        Column(
+            modifier =
+                Modifier.fillMaxWidth(),
+            verticalArrangement =
+                Arrangement.spacedBy(
+                    BBSpacing.Space3
+                )
         ) {
-            Box(
-                modifier = Modifier
-                    .size(BBSpacing.Space12)
-                    .clip(BBRadius.LgShape)
-                    .background(MaterialTheme.colorScheme.primaryContainer),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "?",
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-            }
-
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
-            ) {
-                Text(
-                    text = "Satıcıya soru sor",
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-
-                Text(
-                    text = "${product.storeName} mağazasına ürün hakkında soru gönderebilirsin.",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
+            Text(
+                text =
+                    "Satıcıya Soru Sor",
+                style =
+                    MaterialTheme.typography.titleMedium,
+                fontWeight =
+                    FontWeight.Bold,
+                color =
+                    MaterialTheme.colorScheme.onSurface
+            )
 
             Text(
-                text = "›",
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                text =
+                    "${storeName.ifBlank { "Satıcı" }} mağazasına ürün hakkında soru gönderebilirsiniz.",
+                style =
+                    MaterialTheme.typography.bodySmall,
+                color =
+                    MaterialTheme.colorScheme.onSurfaceVariant
             )
+
+            if (
+                isAuthenticated
+            ) {
+                OutlinedTextField(
+                    value =
+                        questionText,
+                    onValueChange =
+                        onQuestionTextChange,
+                    modifier =
+                        Modifier.fillMaxWidth(),
+                    label = {
+                        Text(
+                            text =
+                                "Sorunuz"
+                        )
+                    },
+                    placeholder = {
+                        Text(
+                            text =
+                                "Ürün hakkında merak ettiğiniz konuyu yazın."
+                        )
+                    },
+                    minLines =
+                        3,
+                    maxLines =
+                        6,
+                    enabled =
+                        !isSubmitting
+                )
+
+                BbButton(
+                    text =
+                        if (
+                            isSubmitting
+                        ) {
+                            "Gönderiliyor"
+                        } else {
+                            "Soruyu Gönder"
+                        },
+                    onClick =
+                        onSubmitClick,
+                    modifier =
+                        Modifier.fillMaxWidth(),
+                    variant =
+                        BbButtonVariant.Primary,
+                    size =
+                        BbButtonSize.Medium,
+                    enabled =
+                        questionText.isNotBlank() &&
+                                !isSubmitting
+                )
+            } else {
+                BbButton(
+                    text =
+                        "Giriş Yap ve Soru Sor",
+                    onClick =
+                        onLoginRequired,
+                    modifier =
+                        Modifier.fillMaxWidth(),
+                    variant =
+                        BbButtonVariant.Primary,
+                    size =
+                        BbButtonSize.Medium
+                )
+            }
         }
     }
 }
 
 @Composable
 private fun ProductQuestionSummaryCard(
-    summary: RetailProductQuestionSummary
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
-    ) {
-        ProductQuestionStatCard(
-            modifier = Modifier.weight(1f),
-            title = "${summary.totalQuestionCount}",
-            subtitle = "soru"
-        )
-
-        ProductQuestionStatCard(
-            modifier = Modifier.weight(1f),
-            title = "${summary.answeredQuestionCount}",
-            subtitle = "cevaplı"
-        )
-
-        ProductQuestionStatCard(
-            modifier = Modifier.weight(1f),
-            title = summary.averageAnswerTimeText,
-            subtitle = "yanıt"
-        )
-    }
-}
-
-@Composable
-private fun ProductQuestionStatCard(
-    modifier: Modifier,
-    title: String,
-    subtitle: String
+    totalQuestionCount: Int
 ) {
     BbCard(
-        modifier = modifier,
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Small
+        modifier =
+            Modifier.fillMaxWidth(),
+        variant =
+            BbCardVariant.Outlined,
+        padding =
+            BbCardPadding.Medium
     ) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+        Row(
+            modifier =
+                Modifier.fillMaxWidth(),
+            verticalAlignment =
+                Alignment.CenterVertically
         ) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
-            )
+            Column(
+                modifier =
+                    Modifier.weight(
+                        1f
+                    )
+            ) {
+                Text(
+                    text =
+                        totalQuestionCount.toString(),
+                    style =
+                        MaterialTheme.typography.headlineMedium,
+                    fontWeight =
+                        FontWeight.Bold,
+                    color =
+                        MaterialTheme.colorScheme.primary
+                )
 
-            Text(
-                text = subtitle,
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-private fun ProductQuestionFilterSection(
-    filters: List<String>,
-    selectedFilter: String,
-    onFilterChange: (String) -> Unit
-) {
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
-    ) {
-        ProductQuestionSectionTitle(
-            title = "Soru Filtresi",
-            description = "Cevap durumuna veya konuya göre daralt."
-        )
-
-        FlowRow(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
-        ) {
-            filters.forEach { filter ->
-                FilterChip(
-                    selected = selectedFilter == filter,
-                    onClick = {
-                        onFilterChange(filter)
-                    },
-                    label = {
-                        Text(text = filter)
-                    }
+                Text(
+                    text =
+                        "yayınlanmış ürün sorusu",
+                    style =
+                        MaterialTheme.typography.bodySmall,
+                    color =
+                        MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
+
+            Text(
+                text =
+                    "Satıcı cevapları eklendiğinde burada gösterilecektir.",
+                style =
+                    MaterialTheme.typography.labelSmall,
+                color =
+                    MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 }
 
 @Composable
 private fun ProductQuestionCard(
-    question: RetailProductQuestionItem,
+    question: ProductCustomerQuestionDTO,
+    fallbackStoreName: String,
     onClick: () -> Unit
 ) {
+    val customerName =
+        question.Questioner
+            .takeIf {
+                it.isNotBlank()
+            }
+            ?: "Müşteri"
+
+    val storeName =
+        question.StoreName
+            .takeIf {
+                it.isNotBlank()
+            }
+            ?: fallbackStoreName
+                .ifBlank {
+                    "Satıcı"
+                }
+
+    val resolvedVariantId =
+        question.VariantId
+            .takeIf {
+                it > 0
+            }
+
     BbCard(
-        modifier = Modifier.fillMaxWidth(),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium,
-        onClick = onClick
+        modifier =
+            Modifier.fillMaxWidth(),
+        variant =
+            BbCardVariant.Outlined,
+        padding =
+            BbCardPadding.Medium,
+        onClick =
+            onClick
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+            modifier =
+                Modifier.fillMaxWidth(),
+            verticalArrangement =
+                Arrangement.spacedBy(
+                    BBSpacing.Space3
+                )
         ) {
             Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+                verticalAlignment =
+                    Alignment.CenterVertically,
+                horizontalArrangement =
+                    Arrangement.spacedBy(
+                        BBSpacing.Space3
+                    )
             ) {
                 Box(
-                    modifier = Modifier
-                        .size(42.dp)
-                        .clip(BBRadius.IconBoxSoft)
-                        .background(MaterialTheme.colorScheme.surfaceVariant),
-                    contentAlignment = Alignment.Center
+                    modifier =
+                        Modifier
+                            .size(
+                                BBSpacing.Space12
+                            )
+                            .clip(
+                                BBRadius.IconBoxSoft
+                            )
+                            .background(
+                                MaterialTheme.colorScheme.surfaceVariant
+                            ),
+                    contentAlignment =
+                        Alignment.Center
                 ) {
                     Text(
-                        text = question.customerInitials,
-                        style = MaterialTheme.typography.labelLarge,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface
+                        text =
+                            customerName.ToInitials(
+                                fallback =
+                                    "M"
+                            ),
+                        style =
+                            MaterialTheme.typography.labelLarge,
+                        fontWeight =
+                            FontWeight.Bold,
+                        color =
+                            MaterialTheme.colorScheme.onSurface
                     )
                 }
 
                 Column(
-                    modifier = Modifier.weight(1f)
+                    modifier =
+                        Modifier.weight(
+                            1f
+                        )
                 ) {
                     Text(
-                        text = question.customerName,
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface
+                        text =
+                            customerName,
+                        style =
+                            MaterialTheme.typography.titleSmall,
+                        fontWeight =
+                            FontWeight.Bold,
+                        color =
+                            MaterialTheme.colorScheme.onSurface
                     )
 
                     Text(
-                        text = question.dateText,
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        text =
+                            question.InsertedDate.ToReadableDate(),
+                        style =
+                            MaterialTheme.typography.labelSmall,
+                        color =
+                            MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
                 ProductQuestionStatusBadge(
-                    text = question.statusText,
-                    isAnswered = question.answer.isNotBlank()
+                    text =
+                        "Yanıt bekleniyor"
                 )
             }
 
             Text(
-                text = question.question,
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onSurface
+                text =
+                    question.Question,
+                style =
+                    MaterialTheme.typography.bodyMedium,
+                fontWeight =
+                    FontWeight.SemiBold,
+                color =
+                    MaterialTheme.colorScheme.onSurface
             )
 
-            if (question.answer.isNotBlank()) {
-                ProductQuestionAnswerBox(
-                    storeName = question.storeName,
-                    answer = question.answer,
-                    answerDateText = question.answerDateText
-                )
-            }
-
-            FlowRow(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+            Row(
+                horizontalArrangement =
+                    Arrangement.spacedBy(
+                        BBSpacing.Space2
+                    )
             ) {
-                if (question.variantText.isNotBlank()) {
-                    ProductQuestionMetaBadge(
-                        text = question.variantText
-                    )
-                }
+                ProductQuestionMetaBadge(
+                    text =
+                        storeName
+                )
 
-                if (question.topicText.isNotBlank()) {
-                    ProductQuestionMetaBadge(
-                        text = question.topicText
-                    )
-                }
-
-                if (question.helpfulCount > 0) {
-                    ProductQuestionMetaBadge(
-                        text = "${question.helpfulCount} faydalı"
-                    )
-                }
+                resolvedVariantId
+                    ?.let {
+                        ProductQuestionMetaBadge(
+                            text =
+                                "Varyant #$it"
+                        )
+                    }
             }
-        }
-    }
-}
-
-@Composable
-private fun ProductQuestionAnswerBox(
-    storeName: String,
-    answer: String,
-    answerDateText: String
-) {
-    Surface(
-        modifier = Modifier.fillMaxWidth(),
-        shape = BBRadius.LgShape,
-        color = MaterialTheme.colorScheme.surfaceVariant,
-        border = BorderStroke(
-            width = 1.dp,
-            color = MaterialTheme.colorScheme.outlineVariant
-        )
-    ) {
-        Column(
-            modifier = Modifier.padding(BBSpacing.Space3),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
-        ) {
-            Text(
-                text = "$storeName yanıtladı",
-                style = MaterialTheme.typography.labelMedium,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-
-            Text(
-                text = answer,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-
-            Text(
-                text = answerDateText,
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
         }
     }
 }
 
 @Composable
 private fun ProductQuestionStatusBadge(
-    text: String,
-    isAnswered: Boolean
+    text: String
 ) {
-    val containerColor = if (isAnswered) {
-        BBColors.Green.Green50
-    } else {
-        MaterialTheme.colorScheme.surfaceVariant
-    }
-
-    val contentColor = if (isAnswered) {
-        BBColors.Green.Green700
-    } else {
-        MaterialTheme.colorScheme.onSurfaceVariant
-    }
-
     Surface(
-        shape = BBRadius.PillShape,
-        color = containerColor,
-        border = BorderStroke(
-            width = 1.dp,
-            color = MaterialTheme.colorScheme.outlineVariant
-        )
+        shape =
+            BBRadius.PillShape,
+        color =
+            MaterialTheme.colorScheme.surfaceVariant,
+        border =
+            BorderStroke(
+                width =
+                    1.dp,
+                color =
+                    MaterialTheme.colorScheme.outlineVariant
+            )
     ) {
         Text(
-            text = text,
-            modifier = Modifier.padding(
-                horizontal = BBSpacing.Space3,
-                vertical = BBSpacing.Space1
-            ),
-            style = MaterialTheme.typography.labelSmall,
-            fontWeight = FontWeight.Bold,
-            color = contentColor
+            text =
+                text,
+            modifier =
+                Modifier.padding(
+                    horizontal =
+                        BBSpacing.Space3,
+                    vertical =
+                        BBSpacing.Space1
+                ),
+            style =
+                MaterialTheme.typography.labelSmall,
+            fontWeight =
+                FontWeight.Bold,
+            color =
+                MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -550,22 +748,127 @@ private fun ProductQuestionMetaBadge(
     text: String
 ) {
     Surface(
-        shape = BBRadius.PillShape,
-        color = MaterialTheme.colorScheme.surfaceVariant,
-        border = BorderStroke(
-            width = 1.dp,
-            color = MaterialTheme.colorScheme.outlineVariant
-        )
+        shape =
+            BBRadius.PillShape,
+        color =
+            MaterialTheme.colorScheme.surfaceVariant,
+        border =
+            BorderStroke(
+                width =
+                    1.dp,
+                color =
+                    MaterialTheme.colorScheme.outlineVariant
+            )
     ) {
         Text(
-            text = text,
-            modifier = Modifier.padding(
-                horizontal = BBSpacing.Space3,
-                vertical = BBSpacing.Space1
-            ),
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            text =
+                text,
+            modifier =
+                Modifier.padding(
+                    horizontal =
+                        BBSpacing.Space3,
+                    vertical =
+                        BBSpacing.Space1
+                ),
+            style =
+                MaterialTheme.typography.labelSmall,
+            color =
+                MaterialTheme.colorScheme.onSurfaceVariant
         )
+    }
+}
+
+@Composable
+private fun ProductQuestionFeedbackCard(
+    message: String,
+    isError: Boolean
+) {
+    BbCard(
+        modifier =
+            Modifier.fillMaxWidth(),
+        variant =
+            BbCardVariant.Outlined,
+        padding =
+            BbCardPadding.Medium
+    ) {
+        Text(
+            text =
+                message,
+            style =
+                MaterialTheme.typography.bodyMedium,
+            color =
+                if (
+                    isError
+                ) {
+                    MaterialTheme.colorScheme.error
+                } else {
+                    MaterialTheme.colorScheme.onSurface
+                }
+        )
+    }
+}
+
+@Composable
+private fun ProductQuestionLoadingCard() {
+    BbCard(
+        modifier =
+            Modifier.fillMaxWidth(),
+        variant =
+            BbCardVariant.Outlined,
+        padding =
+            BbCardPadding.Large
+    ) {
+        Box(
+            modifier =
+                Modifier.fillMaxWidth(),
+            contentAlignment =
+                Alignment.Center
+        ) {
+            CircularProgressIndicator()
+        }
+    }
+}
+
+@Composable
+private fun ProductQuestionEmptyCard() {
+    BbCard(
+        modifier =
+            Modifier.fillMaxWidth(),
+        variant =
+            BbCardVariant.Outlined,
+        padding =
+            BbCardPadding.Large
+    ) {
+        Column(
+            modifier =
+                Modifier.fillMaxWidth(),
+            horizontalAlignment =
+                Alignment.CenterHorizontally,
+            verticalArrangement =
+                Arrangement.spacedBy(
+                    BBSpacing.Space2
+                )
+        ) {
+            Text(
+                text =
+                    "Henüz soru sorulmamış",
+                style =
+                    MaterialTheme.typography.titleMedium,
+                fontWeight =
+                    FontWeight.Bold,
+                color =
+                    MaterialTheme.colorScheme.onSurface
+            )
+
+            Text(
+                text =
+                    "Bu ürün hakkında ilk soruyu siz gönderebilirsiniz.",
+                style =
+                    MaterialTheme.typography.bodySmall,
+                color =
+                    MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
     }
 }
 
@@ -575,155 +878,88 @@ private fun ProductQuestionSectionTitle(
     description: String
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+        modifier =
+            Modifier.fillMaxWidth(),
+        verticalArrangement =
+            Arrangement.spacedBy(
+                BBSpacing.Space1
+            )
     ) {
         Text(
-            text = title,
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurface
+            text =
+                title,
+            style =
+                MaterialTheme.typography.titleMedium,
+            fontWeight =
+                FontWeight.Bold,
+            color =
+                MaterialTheme.colorScheme.onSurface
         )
 
         Text(
-            text = description,
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            text =
+                description,
+            style =
+                MaterialTheme.typography.bodySmall,
+            color =
+                MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
 
-data class RetailProductQuestionScreenData(
-    val product: RetailProductQuestionProductSummary,
-    val summary: RetailProductQuestionSummary,
-    val filters: List<String>,
-    val questions: List<RetailProductQuestionItem>
-)
-
-data class RetailProductQuestionProductSummary(
-    val id: Int,
-    val name: String,
-    val storeName: String,
-    val variantText: String,
-    val imageText: String
-)
-
-data class RetailProductQuestionSummary(
-    val totalQuestionCount: Int,
-    val answeredQuestionCount: Int,
-    val averageAnswerTimeText: String
-)
-
-data class RetailProductQuestionItem(
-    val id: Int,
-    val customerName: String,
-    val customerInitials: String,
-    val dateText: String,
-    val question: String,
-    val answer: String,
-    val answerDateText: String,
-    val storeName: String,
-    val statusText: String,
-    val variantText: String,
-    val topicText: String,
-    val helpfulCount: Int,
-    val filterTags: List<String>
-)
-
-private fun getRetailProductQuestionScreenData(
-    productId: Int
-): RetailProductQuestionScreenData {
-    return RetailProductQuestionScreenData(
-        product = RetailProductQuestionProductSummary(
-            id = productId,
-            name = "Kadın klasik sneaker ayakkabı",
-            storeName = "Ortobella Store",
-            variantText = "Beyaz . 38 numara",
-            imageText = "P1"
-        ),
-        summary = RetailProductQuestionSummary(
-            totalQuestionCount = 18,
-            answeredQuestionCount = 15,
-            averageAnswerTimeText = "1 gün"
-        ),
-        filters = listOf(
-            "Tümü",
-            "Cevaplı",
-            "Cevapsız",
-            "Beden",
-            "Kargo",
-            "Stok"
-        ),
-        questions = listOf(
-            RetailProductQuestionItem(
-                id = 1,
-                customerName = "Ayşe K.",
-                customerInitials = "AK",
-                dateText = "2 gün önce",
-                question = "Kalıbı dar mı? Normalde 38 giyiyorum, 38 olur mu?",
-                answer = "Merhaba, ürün standart kalıptır. Ayağınız taraklı değilse kendi numaranızı tercih edebilirsiniz.",
-                answerDateText = "1 gün önce yanıtlandı",
-                storeName = "Ortobella Store",
-                statusText = "Cevaplı",
-                variantText = "38 numara",
-                topicText = "Beden",
-                helpfulCount = 12,
-                filterTags = listOf("Cevaplı", "Beden")
-            ),
-            RetailProductQuestionItem(
-                id = 2,
-                customerName = "Merve T.",
-                customerInitials = "MT",
-                dateText = "4 gün önce",
-                question = "Bugün sipariş verirsem ne zaman kargoya verilir?",
-                answer = "Merhaba, hafta içi 14:00 öncesi siparişler aynı gün kargoya teslim edilmektedir.",
-                answerDateText = "3 gün önce yanıtlandı",
-                storeName = "Ortobella Store",
-                statusText = "Cevaplı",
-                variantText = "",
-                topicText = "Kargo",
-                helpfulCount = 8,
-                filterTags = listOf("Cevaplı", "Kargo")
-            ),
-            RetailProductQuestionItem(
-                id = 3,
-                customerName = "Selin A.",
-                customerInitials = "SA",
-                dateText = "1 hafta önce",
-                question = "Beyaz rengi tekrar 39 numarada stoklara gelecek mi?",
-                answer = "",
-                answerDateText = "",
-                storeName = "Ortobella Store",
-                statusText = "Cevapsız",
-                variantText = "39 numara",
-                topicText = "Stok",
-                helpfulCount = 3,
-                filterTags = listOf("Cevapsız", "Stok")
-            ),
-            RetailProductQuestionItem(
-                id = 4,
-                customerName = "Ece D.",
-                customerInitials = "ED",
-                dateText = "2 hafta önce",
-                question = "İade sürecinde kutunun zarar görmemiş olması gerekiyor mu?",
-                answer = "Merhaba, ürünün kullanılmamış olması ve orijinal kutusuyla gönderilmesi yeterlidir.",
-                answerDateText = "2 hafta önce yanıtlandı",
-                storeName = "Ortobella Store",
-                statusText = "Cevaplı",
-                variantText = "",
-                topicText = "İade",
-                helpfulCount = 6,
-                filterTags = listOf("Cevaplı")
-            )
+private fun String.ToInitials(
+    fallback: String
+): String {
+    return trim()
+        .split(
+            " "
         )
-    )
+        .filter {
+            it.isNotBlank()
+        }
+        .take(
+            2
+        )
+        .mapNotNull {
+            it.firstOrNull()
+        }
+        .joinToString(
+            separator =
+                ""
+        )
+        .uppercase()
+        .ifBlank {
+            fallback
+        }
 }
 
-@Preview(showBackground = true)
+private fun String.ToReadableDate(): String {
+    if (isBlank()) {
+        return ""
+    }
+
+    return substringBefore(
+        "T"
+    )
+        .split(
+            "-"
+        )
+        .takeIf {
+            it.size == 3
+        }
+        ?.let {
+            "${it[2]}.${it[1]}.${it[0]}"
+        }
+        ?: this
+}
+
+@Preview(
+    showBackground =
+        true
+)
 @Composable
 private fun ProductQuestionScreenPreview() {
     BbTheme {
         ProductQuestionScreen()
     }
 }
-

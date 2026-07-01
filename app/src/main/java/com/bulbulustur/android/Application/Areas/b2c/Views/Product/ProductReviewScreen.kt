@@ -16,7 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -32,102 +32,243 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.Application.Areas.b2c.Controllers.ProductReviewControllerState
+import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
+import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
+import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
+import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
-import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
-import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
+import com.bulbulustur.android.businesslayer.Core.DTO.ProductDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.ReviewDTO
+import java.util.Locale
+import kotlin.math.roundToInt
+import androidx.compose.ui.unit.dp
+
 
 @Composable
 fun ProductReviewScreen(
-    productId: Int = 1,
+    State: ProductReviewControllerState =
+        ProductReviewControllerState(),
+    product: ProductDTO? = null,
     onBackClick: () -> Unit = {},
-    onReviewClick: (RetailProductReviewItem) -> Unit = {}
+    onLoadMoreClick: () -> Unit = {},
+    onReviewClick: (ReviewDTO) -> Unit = {}
 ) {
-    val screenData = remember(productId) {
-        getRetailProductReviewScreenData(productId)
+    var selectedFilter by
+    remember {
+        mutableStateOf(
+            "Tümü"
+        )
     }
 
-    var selectedFilter by remember {
-        mutableStateOf("Tümü")
-    }
+    val filters =
+        remember {
+            listOf(
+                "Tümü",
+                "5 Yıldız",
+                "4 Yıldız",
+                "3 Yıldız",
+                "2 Yıldız",
+                "1 Yıldız"
+            )
+        }
 
-    val filteredReviews = remember(selectedFilter, screenData.reviews) {
-        if (selectedFilter == "Tümü") {
-            screenData.reviews
-        } else {
-            screenData.reviews.filter {
-                it.filterTags.contains(selectedFilter)
+    val filteredReviews =
+        remember(
+            selectedFilter,
+            State.Reviews
+        ) {
+            if (selectedFilter == "Tümü") {
+                State.Reviews
+            } else {
+                val selectedRating =
+                    selectedFilter
+                        .substringBefore(
+                            " "
+                        )
+                        .toIntOrNull()
+
+                State.Reviews.filter {
+                    it.Rating
+                        .roundToInt() ==
+                            selectedRating
+                }
             }
         }
-    }
+
+    val summary =
+        remember(
+            State.Reviews
+        ) {
+            State.Reviews.ToReviewSummary()
+        }
 
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+        containerColor =
+            MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "Ürün Yorumları",
-                onBackClick = onBackClick
+                title =
+                    "Ürün Yorumları",
+                onBackClick =
+                    onBackClick
             )
         }
     ) { innerPadding ->
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.surfaceVariant)
-                .padding(innerPadding)
-                .navigationBarsPadding(),
-            contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
-                top = BBSpacing.SectionGapCompact,
-                end = BBSpacing.PageHorizontal,
-                bottom = BBSpacing.PageBottom
-            ),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(
+                        MaterialTheme.colorScheme.surfaceVariant
+                    )
+                    .padding(
+                        innerPadding
+                    )
+                    .navigationBarsPadding(),
+            contentPadding =
+                PaddingValues(
+                    start =
+                        BBSpacing.PageHorizontal,
+                    top =
+                        BBSpacing.SectionGapCompact,
+                    end =
+                        BBSpacing.PageHorizontal,
+                    bottom =
+                        BBSpacing.PageBottom
+                ),
+            verticalArrangement =
+                Arrangement.spacedBy(
+                    BBSpacing.CardGap
+                )
         ) {
             item {
                 ProductReviewProductSummary(
-                    product = screenData.product
+                    product =
+                        product
                 )
             }
 
             item {
                 ProductReviewScoreSummary(
-                    summary = screenData.summary
+                    summary =
+                        summary
                 )
             }
 
             item {
                 ProductReviewFilterSection(
-                    filters = screenData.filters,
-                    selectedFilter = selectedFilter,
+                    filters =
+                        filters,
+                    selectedFilter =
+                        selectedFilter,
                     onFilterChange = {
-                        selectedFilter = it
+                        selectedFilter =
+                            it
                     }
                 )
             }
 
-            item {
-                ProductReviewSectionTitle(
-                    title = "Müşteri yorumları",
-                    description = "Ürün deneyimleri, puanlar ve satın alma sonrası notlar."
-                )
-            }
-
-            items(
-                items = filteredReviews,
-                key = { review -> review.id }
-            ) { review ->
-                ProductReviewCard(
-                    review = review,
-                    onClick = {
-                        onReviewClick(review)
+            when {
+                State.IsLoading &&
+                        State.Reviews.isEmpty() -> {
+                    item {
+                        ProductReviewLoadingCard()
                     }
-                )
+                }
+
+                State.ErrorMessage != null &&
+                        State.Reviews.isEmpty() -> {
+                    item {
+                        ProductReviewMessageCard(
+                            title =
+                                "Değerlendirmeler alınamadı",
+                            description =
+                                State.ErrorMessage
+                        )
+                    }
+                }
+
+                State.Reviews.isEmpty() -> {
+                    item {
+                        ProductReviewMessageCard(
+                            title =
+                                "Henüz değerlendirme yok",
+                            description =
+                                "Bu ürün için yayınlanmış bir müşteri değerlendirmesi bulunmuyor."
+                        )
+                    }
+                }
+
+                filteredReviews.isEmpty() -> {
+                    item {
+                        ProductReviewMessageCard(
+                            title =
+                                "Bu filtrede yorum yok",
+                            description =
+                                "Seçtiğiniz puana ait değerlendirme bulunamadı."
+                        )
+                    }
+                }
+
+                else -> {
+                    item {
+                        ProductReviewSectionTitle(
+                            title =
+                                "Müşteri yorumları",
+                            description =
+                                "${filteredReviews.size} değerlendirme gösteriliyor."
+                        )
+                    }
+
+                    items(
+                        items =
+                            filteredReviews,
+                        key = {
+                            it.ReviewId
+                        }
+                    ) { review ->
+                        ProductReviewCard(
+                            review =
+                                review,
+                            onClick = {
+                                onReviewClick(
+                                    review
+                                )
+                            }
+                        )
+                    }
+
+                    if (
+                        State.HasNextPage
+                    ) {
+                        item {
+                            BbButton(
+                                text =
+                                    if (State.IsLoading) {
+                                        "Yükleniyor"
+                                    } else {
+                                        "Daha Fazla Göster"
+                                    },
+                                onClick =
+                                    onLoadMoreClick,
+                                modifier =
+                                    Modifier.fillMaxWidth(),
+                                variant =
+                                    BbButtonVariant.Secondary,
+                                size =
+                                    BbButtonSize.Medium,
+                                enabled =
+                                    !State.IsLoading
+                            )
+                        }
+                    }
+                }
             }
         }
     }
@@ -135,62 +276,152 @@ fun ProductReviewScreen(
 
 @Composable
 private fun ProductReviewProductSummary(
-    product: RetailProductReviewProductSummary
+    product: ProductDTO?
 ) {
-    Surface(
-        modifier = Modifier.fillMaxWidth(),
-        shape = BBRadius.XxlShape,
-        color = MaterialTheme.colorScheme.primaryContainer,
-        border = BorderStroke(
-            width = 1.dp,
-            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.35f)
+    val productName =
+        product
+            ?.ProductName
+            ?.takeIf {
+                it.isNotBlank()
+            }
+            ?: "Ürün Değerlendirmeleri"
+
+    val storeName =
+        product
+            ?.Store
+            ?.takeIf {
+                it.isNotBlank()
+            }
+            ?: "Satıcı bilgisi"
+
+    val variantText =
+        listOfNotNull(
+            product
+                ?.Color
+                ?.takeIf {
+                    it.isNotBlank()
+                },
+            product
+                ?.Size
+                ?.takeIf {
+                    it.isNotBlank()
+                }
+        ).joinToString(
+            separator =
+                " · "
         )
+
+    val imageText =
+        productName
+            .ToInitials(
+                fallback =
+                    "Ü"
+            )
+
+    Surface(
+        modifier =
+            Modifier.fillMaxWidth(),
+        shape =
+            BBRadius.XxlShape,
+        color =
+            MaterialTheme.colorScheme.primaryContainer,
+        border =
+            BorderStroke(
+                width =
+                    1.dp,
+                color =
+                    MaterialTheme.colorScheme.primary
+                        .copy(
+                            alpha =
+                                0.35f
+                        )
+            )
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(BBSpacing.CardPadding),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        BBSpacing.CardPadding
+                    ),
+            verticalAlignment =
+                Alignment.CenterVertically,
+            horizontalArrangement =
+                Arrangement.spacedBy(
+                    BBSpacing.Space3
+                )
         ) {
             Box(
-                modifier = Modifier
-                    .size(BBSpacing.Space18)
-                    .clip(BBRadius.XlShape)
-                    .background(MaterialTheme.colorScheme.primary),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .size(
+                            BBSpacing.Space18
+                        )
+                        .clip(
+                            BBRadius.XlShape
+                        )
+                        .background(
+                            MaterialTheme.colorScheme.primary
+                        ),
+                contentAlignment =
+                    Alignment.Center
             ) {
                 Text(
-                    text = product.imageText,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
+                    text =
+                        imageText,
+                    style =
+                        MaterialTheme.typography.titleMedium,
+                    fontWeight =
+                        FontWeight.Bold,
+                    color =
+                        MaterialTheme.colorScheme.onSurface
                 )
             }
 
             Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+                modifier =
+                    Modifier.weight(
+                        1f
+                    ),
+                verticalArrangement =
+                    Arrangement.spacedBy(
+                        BBSpacing.Space1
+                    )
             ) {
                 Text(
-                    text = product.name,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
+                    text =
+                        productName,
+                    style =
+                        MaterialTheme.typography.titleMedium,
+                    fontWeight =
+                        FontWeight.Bold,
+                    color =
+                        MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = product.storeName,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    text =
+                        storeName,
+                    style =
+                        MaterialTheme.typography.bodySmall,
+                    color =
+                        MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
-                Text(
-                    text = product.variantText,
-                    style = MaterialTheme.typography.labelMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
+                if (
+                    variantText.isNotBlank()
+                ) {
+                    Text(
+                        text =
+                            variantText,
+                        style =
+                            MaterialTheme.typography.labelMedium,
+                        fontWeight =
+                            FontWeight.SemiBold,
+                        color =
+                            MaterialTheme.colorScheme.onSurface
+                    )
+                }
             }
         }
     }
@@ -201,92 +432,77 @@ private fun ProductReviewScoreSummary(
     summary: RetailProductReviewSummary
 ) {
     BbCard(
-        modifier = Modifier.fillMaxWidth(),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium
+        modifier =
+            Modifier.fillMaxWidth(),
+        variant =
+            BbCardVariant.Outlined,
+        padding =
+            BbCardPadding.Medium
     ) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
+        Row(
+            modifier =
+                Modifier.fillMaxWidth(),
+            verticalAlignment =
+                Alignment.CenterVertically
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
+            Column(
+                modifier =
+                    Modifier.weight(
+                        1f
+                    )
             ) {
-                Column(
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text(
-                        text = summary.averageScoreText,
-                        style = MaterialTheme.typography.headlineLarge,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-
-                    Text(
-                        text = summary.starText,
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
-
-                Column(
-                    horizontalAlignment = Alignment.End
-                ) {
-                    Text(
-                        text = "${summary.reviewCount} yorum",
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-
-                    Text(
-                        text = "${summary.verifiedBuyerCount} doğrulanmış alışveriş",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-            }
-
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
-            ) {
-                ProductReviewSummaryPill(
-                    text = "Kalite: ${summary.qualityScoreText}"
+                Text(
+                    text =
+                        summary.averageScoreText,
+                    style =
+                        MaterialTheme.typography.headlineLarge,
+                    fontWeight =
+                        FontWeight.Bold,
+                    color =
+                        MaterialTheme.colorScheme.primary
                 )
 
-                ProductReviewSummaryPill(
-                    text = "Kargo: ${summary.cargoScoreText}"
+                Text(
+                    text =
+                        summary.starText,
+                    style =
+                        MaterialTheme.typography.titleMedium,
+                    color =
+                        MaterialTheme.colorScheme.primary
+                )
+            }
+
+            Column(
+                horizontalAlignment =
+                    Alignment.End
+            ) {
+                Text(
+                    text =
+                        "${summary.reviewCount} yorum",
+                    style =
+                        MaterialTheme.typography.titleSmall,
+                    fontWeight =
+                        FontWeight.Bold,
+                    color =
+                        MaterialTheme.colorScheme.onSurface
+                )
+
+                Text(
+                    text =
+                        "Yayınlanmış değerlendirmeler",
+                    style =
+                        MaterialTheme.typography.bodySmall,
+                    color =
+                        MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
     }
 }
 
-@Composable
-private fun ProductReviewSummaryPill(
-    text: String
-) {
-    Surface(
-        shape = BBRadius.PillShape,
-        color = MaterialTheme.colorScheme.surfaceVariant,
-        border = BorderStroke(
-            width = 1.dp,
-            color = MaterialTheme.colorScheme.outlineVariant
-        )
-    ) {
-        Text(
-            text = text,
-            modifier = Modifier.padding(
-                horizontal = BBSpacing.Space3,
-                vertical = BBSpacing.Space2
-            ),
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-    }
-}
-
-@OptIn(ExperimentalLayoutApi::class)
+@OptIn(
+    ExperimentalLayoutApi::class
+)
 @Composable
 private fun ProductReviewFilterSection(
     filters: List<String>,
@@ -294,27 +510,46 @@ private fun ProductReviewFilterSection(
     onFilterChange: (String) -> Unit
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+        modifier =
+            Modifier.fillMaxWidth(),
+        verticalArrangement =
+            Arrangement.spacedBy(
+                BBSpacing.Space2
+            )
     ) {
         ProductReviewSectionTitle(
-            title = "Yorum Filtresi",
-            description = "Yorumları deneyim türüne göre daralt."
+            title =
+                "Puan Filtresi",
+            description =
+                "Değerlendirmeleri verilen puana göre filtreleyin."
         )
 
         FlowRow(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+            modifier =
+                Modifier.fillMaxWidth(),
+            horizontalArrangement =
+                Arrangement.spacedBy(
+                    BBSpacing.Space2
+                ),
+            verticalArrangement =
+                Arrangement.spacedBy(
+                    BBSpacing.Space2
+                )
         ) {
-            filters.forEach { filter ->
+            filters.forEach {
                 FilterChip(
-                    selected = selectedFilter == filter,
+                    selected =
+                        selectedFilter == it,
                     onClick = {
-                        onFilterChange(filter)
+                        onFilterChange(
+                            it
+                        )
                     },
                     label = {
-                        Text(text = filter)
+                        Text(
+                            text =
+                                it
+                        )
                     }
                 )
             }
@@ -324,89 +559,183 @@ private fun ProductReviewFilterSection(
 
 @Composable
 private fun ProductReviewCard(
-    review: RetailProductReviewItem,
+    review: ReviewDTO,
     onClick: () -> Unit
 ) {
+    val customerName =
+        review.ResolveCustomerName()
+
+    val locationText =
+        listOfNotNull(
+            review.CountryName
+                .takeIf {
+                    it.isNotBlank()
+                },
+            review.CityName
+                .takeIf {
+                    it.isNotBlank()
+                }
+        ).joinToString(
+            separator =
+                " · "
+        )
+
+    val variantText =
+        review.VariantId
+            ?.takeIf {
+                it > 0
+            }
+            ?.let {
+                "Varyant #$it"
+            }
+            .orEmpty()
+
     BbCard(
-        modifier = Modifier.fillMaxWidth(),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium,
-        onClick = onClick
+        modifier =
+            Modifier.fillMaxWidth(),
+        variant =
+            BbCardVariant.Outlined,
+        padding =
+            BbCardPadding.Medium,
+        onClick =
+            onClick
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+            modifier =
+                Modifier.fillMaxWidth(),
+            verticalArrangement =
+                Arrangement.spacedBy(
+                    BBSpacing.Space3
+                )
         ) {
             Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+                verticalAlignment =
+                    Alignment.CenterVertically,
+                horizontalArrangement =
+                    Arrangement.spacedBy(
+                        BBSpacing.Space3
+                    )
             ) {
                 Box(
-                    modifier = Modifier
-                        .size(46.dp)
-                        .clip(BBRadius.IconBoxSoft)
-                        .background(MaterialTheme.colorScheme.surfaceVariant),
-                    contentAlignment = Alignment.Center
+                    modifier =
+                        Modifier
+                            .size(
+                                BBSpacing.Space12
+                            )
+                            .clip(
+                                BBRadius.IconBoxSoft
+                            )
+                            .background(
+                                MaterialTheme.colorScheme.surfaceVariant
+                            ),
+                    contentAlignment =
+                        Alignment.Center
                 ) {
                     Text(
-                        text = review.customerInitials,
-                        style = MaterialTheme.typography.labelLarge,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface
+                        text =
+                            customerName.ToInitials(
+                                fallback =
+                                    "M"
+                            ),
+                        style =
+                            MaterialTheme.typography.labelLarge,
+                        fontWeight =
+                            FontWeight.Bold,
+                        color =
+                            MaterialTheme.colorScheme.onSurface
                     )
                 }
 
                 Column(
-                    modifier = Modifier.weight(1f)
+                    modifier =
+                        Modifier.weight(
+                            1f
+                        )
                 ) {
                     Text(
-                        text = review.customerName,
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface
+                        text =
+                            customerName,
+                        style =
+                            MaterialTheme.typography.titleSmall,
+                        fontWeight =
+                            FontWeight.Bold,
+                        color =
+                            MaterialTheme.colorScheme.onSurface
                     )
 
                     Text(
-                        text = review.dateText,
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        text =
+                            review.InsertedDate.ToReadableDate(),
+                        style =
+                            MaterialTheme.typography.labelSmall,
+                        color =
+                            MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
                 Text(
-                    text = review.ratingText,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary
+                    text =
+                        String.format(
+                            Locale.getDefault(),
+                            "%.1f",
+                            review.Rating
+                        ),
+                    style =
+                        MaterialTheme.typography.titleMedium,
+                    fontWeight =
+                        FontWeight.Bold,
+                    color =
+                        MaterialTheme.colorScheme.primary
                 )
             }
 
             Text(
-                text = review.comment,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface
+                text =
+                    review.Content.ifBlank {
+                        "Değerlendirme metni bulunmuyor."
+                    },
+                style =
+                    MaterialTheme.typography.bodyMedium,
+                color =
+                    MaterialTheme.colorScheme.onSurface
             )
 
             FlowRow(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+                modifier =
+                    Modifier.fillMaxWidth(),
+                horizontalArrangement =
+                    Arrangement.spacedBy(
+                        BBSpacing.Space2
+                    ),
+                verticalArrangement =
+                    Arrangement.spacedBy(
+                        BBSpacing.Space2
+                    )
             ) {
-                if (review.isVerifiedBuyer) {
+                if (
+                    locationText.isNotBlank()
+                ) {
                     ProductReviewBadge(
-                        text = "Doğrulanmış alışveriş"
+                        text =
+                            locationText
                     )
                 }
 
-                if (review.variantText.isNotBlank()) {
+                if (
+                    variantText.isNotBlank()
+                ) {
                     ProductReviewBadge(
-                        text = review.variantText
+                        text =
+                            variantText
                     )
                 }
 
-                if (review.helpfulCount > 0) {
+                if (
+                    review.ReviewPictures.isNotEmpty()
+                ) {
                     ProductReviewBadge(
-                        text = "${review.helpfulCount} kişi faydalı buldu"
+                        text =
+                            "${review.ReviewPictures.size} fotoğraf"
                     )
                 }
             }
@@ -419,22 +748,100 @@ private fun ProductReviewBadge(
     text: String
 ) {
     Surface(
-        shape = BBRadius.PillShape,
-        color = MaterialTheme.colorScheme.surfaceVariant,
-        border = BorderStroke(
-            width = 1.dp,
-            color = MaterialTheme.colorScheme.outlineVariant
-        )
+        shape =
+            BBRadius.PillShape,
+        color =
+            MaterialTheme.colorScheme.surfaceVariant,
+        border =
+            BorderStroke(
+                width =
+                    1.dp,
+                color =
+                    MaterialTheme.colorScheme.outlineVariant
+            )
     ) {
         Text(
-            text = text,
-            modifier = Modifier.padding(
-                horizontal = BBSpacing.Space3,
-                vertical = BBSpacing.Space1
-            ),
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            text =
+                text,
+            modifier =
+                Modifier.padding(
+                    horizontal =
+                        BBSpacing.Space3,
+                    vertical =
+                        BBSpacing.Space1
+                ),
+            style =
+                MaterialTheme.typography.labelSmall,
+            color =
+                MaterialTheme.colorScheme.onSurfaceVariant
         )
+    }
+}
+
+@Composable
+private fun ProductReviewLoadingCard() {
+    BbCard(
+        modifier =
+            Modifier.fillMaxWidth(),
+        variant =
+            BbCardVariant.Outlined,
+        padding =
+            BbCardPadding.Large
+    ) {
+        Box(
+            modifier =
+                Modifier.fillMaxWidth(),
+            contentAlignment =
+                Alignment.Center
+        ) {
+            CircularProgressIndicator()
+        }
+    }
+}
+
+@Composable
+private fun ProductReviewMessageCard(
+    title: String,
+    description: String
+) {
+    BbCard(
+        modifier =
+            Modifier.fillMaxWidth(),
+        variant =
+            BbCardVariant.Outlined,
+        padding =
+            BbCardPadding.Large
+    ) {
+        Column(
+            modifier =
+                Modifier.fillMaxWidth(),
+            horizontalAlignment =
+                Alignment.CenterHorizontally,
+            verticalArrangement =
+                Arrangement.spacedBy(
+                    BBSpacing.Space2
+                )
+        ) {
+            Text(
+                text =
+                    title,
+                style =
+                    MaterialTheme.typography.titleMedium,
+                fontWeight =
+                    FontWeight.Bold,
+                color =
+                    MaterialTheme.colorScheme.onSurface
+            )
+
+            Text(
+                text =
+                    description,
+                style =
+                    MaterialTheme.typography.bodySmall,
+                color =
+                    MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
     }
 }
 
@@ -444,146 +851,166 @@ private fun ProductReviewSectionTitle(
     description: String
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+        modifier =
+            Modifier.fillMaxWidth(),
+        verticalArrangement =
+            Arrangement.spacedBy(
+                BBSpacing.Space1
+            )
     ) {
         Text(
-            text = title,
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurface
+            text =
+                title,
+            style =
+                MaterialTheme.typography.titleMedium,
+            fontWeight =
+                FontWeight.Bold,
+            color =
+                MaterialTheme.colorScheme.onSurface
         )
 
         Text(
-            text = description,
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            text =
+                description,
+            style =
+                MaterialTheme.typography.bodySmall,
+            color =
+                MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
 
-data class RetailProductReviewScreenData(
-    val product: RetailProductReviewProductSummary,
-    val summary: RetailProductReviewSummary,
-    val filters: List<String>,
-    val reviews: List<RetailProductReviewItem>
-)
-
-data class RetailProductReviewProductSummary(
-    val id: Int,
-    val name: String,
-    val storeName: String,
-    val variantText: String,
-    val imageText: String
-)
-
 data class RetailProductReviewSummary(
     val averageScoreText: String,
     val starText: String,
-    val reviewCount: Int,
-    val verifiedBuyerCount: Int,
-    val qualityScoreText: String,
-    val cargoScoreText: String
+    val reviewCount: Int
 )
 
-data class RetailProductReviewItem(
-    val id: Int,
-    val customerName: String,
-    val customerInitials: String,
-    val dateText: String,
-    val ratingText: String,
-    val comment: String,
-    val variantText: String,
-    val helpfulCount: Int,
-    val isVerifiedBuyer: Boolean,
-    val filterTags: List<String>
-)
+private fun List<ReviewDTO>.ToReviewSummary():
+        RetailProductReviewSummary {
+    val averageRating =
+        if (isEmpty()) {
+            0.0
+        } else {
+            map {
+                it.Rating
+            }.average()
+        }
 
-private fun getRetailProductReviewScreenData(
-    productId: Int
-): RetailProductReviewScreenData {
-    return RetailProductReviewScreenData(
-        product = RetailProductReviewProductSummary(
-            id = productId,
-            name = "Kadın klasik sneaker ayakkabı",
-            storeName = "Ortobella Store",
-            variantText = "Beyaz . 38 numara",
-            imageText = "P1"
-        ),
-        summary = RetailProductReviewSummary(
-            averageScoreText = "4.8",
-            starText = "★★★★★",
-            reviewCount = 126,
-            verifiedBuyerCount = 98,
-            qualityScoreText = "4.7",
-            cargoScoreText = "4.6"
-        ),
-        filters = listOf(
-            "Tümü",
-            "Doğrulanmış",
-            "Fotoğraflı",
-            "Yüksek puan",
-            "Beden yorumu",
-            "Kargo yorumu"
-        ),
-        reviews = listOf(
-            RetailProductReviewItem(
-                id = 1,
-                customerName = "Ayşe K.",
-                customerInitials = "AK",
-                dateText = "2 gün önce",
-                ratingText = "5.0",
-                comment = "Ürün çok rahat. Normalde 38 giyiyorum, 38 tam oldu. Kargo da hızlı geldi.",
-                variantText = "38 numara",
-                helpfulCount = 14,
-                isVerifiedBuyer = true,
-                filterTags = listOf("Doğrulanmış", "Yüksek puan", "Beden yorumu", "Kargo yorumu")
-            ),
-            RetailProductReviewItem(
-                id = 2,
-                customerName = "Merve T.",
-                customerInitials = "MT",
-                dateText = "1 hafta önce",
-                ratingText = "4.5",
-                comment = "Günlük kullanım için güzel. Kalıbı biraz dar, yarım numara büyük alınabilir.",
-                variantText = "37 numara",
-                helpfulCount = 8,
-                isVerifiedBuyer = true,
-                filterTags = listOf("Doğrulanmış", "Beden yorumu")
-            ),
-            RetailProductReviewItem(
-                id = 3,
-                customerName = "Selin A.",
-                customerInitials = "SA",
-                dateText = "2 hafta önce",
-                ratingText = "5.0",
-                comment = "Rengi fotoğraftaki gibi. Paketleme temizdi, satıcı hızlı gönderdi.",
-                variantText = "Beyaz",
-                helpfulCount = 21,
-                isVerifiedBuyer = true,
-                filterTags = listOf("Doğrulanmış", "Fotoğraflı", "Yüksek puan", "Kargo yorumu")
-            ),
-            RetailProductReviewItem(
-                id = 4,
-                customerName = "Ece D.",
-                customerInitials = "ED",
-                dateText = "3 hafta önce",
-                ratingText = "4.0",
-                comment = "Ürün güzel ama kalıp dar. Değişim süreci sorunsuz ilerledi.",
-                variantText = "39 numara",
-                helpfulCount = 5,
-                isVerifiedBuyer = true,
-                filterTags = listOf("Doğrulanmış", "Beden yorumu")
+    val fullStarCount =
+        averageRating
+            .roundToInt()
+            .coerceIn(
+                0,
+                5
             )
-        )
+
+    return RetailProductReviewSummary(
+        averageScoreText =
+            String.format(
+                Locale.getDefault(),
+                "%.1f",
+                averageRating
+            ),
+        starText =
+            buildString {
+                repeat(
+                    fullStarCount
+                ) {
+                    append(
+                        "★"
+                    )
+                }
+
+                repeat(
+                    5 -
+                            fullStarCount
+                ) {
+                    append(
+                        "☆"
+                    )
+                }
+            },
+        reviewCount =
+            size
     )
 }
 
-@Preview(showBackground = true)
+private fun ReviewDTO.ResolveCustomerName(): String {
+    return Fullname
+        .takeIf {
+            it.isNotBlank()
+        }
+        ?: listOf(
+            Name,
+            Surname
+        )
+            .filter {
+                it.isNotBlank()
+            }
+            .joinToString(
+                separator =
+                    " "
+            )
+            .takeIf {
+                it.isNotBlank()
+            }
+        ?: "Müşteri"
+}
+
+private fun String.ToInitials(
+    fallback: String
+): String {
+    return trim()
+        .split(
+            " "
+        )
+        .filter {
+            it.isNotBlank()
+        }
+        .take(
+            2
+        )
+        .mapNotNull {
+            it.firstOrNull()
+        }
+        .joinToString(
+            separator =
+                ""
+        )
+        .uppercase()
+        .ifBlank {
+            fallback
+        }
+}
+
+private fun String.ToReadableDate(): String {
+    if (isBlank()) {
+        return ""
+    }
+
+    return substringBefore(
+        "T"
+    )
+        .split(
+            "-"
+        )
+        .takeIf {
+            it.size == 3
+        }
+        ?.let {
+            "${it[2]}.${it[1]}.${it[0]}"
+        }
+        ?: this
+}
+
+@Preview(
+    showBackground =
+        true
+)
 @Composable
 private fun ProductReviewScreenPreview() {
     BbTheme {
         ProductReviewScreen()
     }
 }
-

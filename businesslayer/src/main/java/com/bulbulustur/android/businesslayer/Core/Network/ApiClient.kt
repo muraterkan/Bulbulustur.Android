@@ -14,6 +14,7 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Url
 
 object ApiClient {
@@ -34,7 +35,9 @@ object ApiClient {
 
     private val retrofit: Retrofit =
         Retrofit.Builder()
-            .baseUrl(ApiRoutes.DEFAULT_BASE_URL)
+            .baseUrl(
+                ApiRoutes.DEFAULT_BASE_URL
+            )
             .build()
 
     @PublishedApi
@@ -71,29 +74,19 @@ object ApiClient {
             > PostAsync(
         baseUrl: String,
         method: String,
-        data: TRequest
+        data: TRequest,
+        query: String? = null
     ): Result<TResponse> {
         val url =
             BuildUrl(
                 baseUrl = baseUrl,
                 method = method,
-                query = null
-            )
-
-        val json =
-            gson.toJson(
-                data
-            )
-
-        val mediaType =
-            MediaType.parse(
-                JSON_MEDIA_TYPE
+                query = query
             )
 
         val requestBody =
-            RequestBody.create(
-                mediaType,
-                json
+            CreateRequestBody(
+                data = data
             )
 
         val response =
@@ -103,6 +96,102 @@ object ApiClient {
             )
 
         return ParseResult(
+            response = response
+        )
+    }
+
+    suspend inline fun <
+            reified TRequest,
+            reified TResponse
+            > PostRawAsync(
+        baseUrl: String,
+        method: String,
+        data: TRequest,
+        query: String? = null
+    ): Result<TResponse> {
+        val url =
+            BuildUrl(
+                baseUrl = baseUrl,
+                method = method,
+                query = query
+            )
+
+        val requestBody =
+            CreateRequestBody(
+                data = data
+            )
+
+        val response =
+            genericApi.PostAsync(
+                url = url,
+                body = requestBody
+            )
+
+        return ParseRawResult(
+            response = response
+        )
+    }
+
+    suspend inline fun <
+            reified TRequest,
+            reified TResponse
+            > PutAsync(
+        baseUrl: String,
+        method: String,
+        data: TRequest,
+        query: String? = null
+    ): Result<TResponse> {
+        val url =
+            BuildUrl(
+                baseUrl = baseUrl,
+                method = method,
+                query = query
+            )
+
+        val requestBody =
+            CreateRequestBody(
+                data = data
+            )
+
+        val response =
+            genericApi.PutAsync(
+                url = url,
+                body = requestBody
+            )
+
+        return ParseResult(
+            response = response
+        )
+    }
+
+    suspend inline fun <
+            reified TRequest,
+            reified TResponse
+            > PutRawAsync(
+        baseUrl: String,
+        method: String,
+        data: TRequest,
+        query: String? = null
+    ): Result<TResponse> {
+        val url =
+            BuildUrl(
+                baseUrl = baseUrl,
+                method = method,
+                query = query
+            )
+
+        val requestBody =
+            CreateRequestBody(
+                data = data
+            )
+
+        val response =
+            genericApi.PutAsync(
+                url = url,
+                body = requestBody
+            )
+
+        return ParseRawResult(
             response = response
         )
     }
@@ -129,6 +218,28 @@ object ApiClient {
         )
     }
 
+    suspend inline fun <reified T> DeleteRawAsync(
+        baseUrl: String,
+        method: String,
+        query: String? = null
+    ): Result<T> {
+        val url =
+            BuildUrl(
+                baseUrl = baseUrl,
+                method = method,
+                query = query
+            )
+
+        val response =
+            genericApi.DeleteAsync(
+                url = url
+            )
+
+        return ParseRawResult(
+            response = response
+        )
+    }
+
     fun BuildUrl(
         baseUrl: String,
         method: String,
@@ -145,6 +256,26 @@ object ApiClient {
         } else {
             "$cleanBaseUrl/$cleanMethod?$query"
         }
+    }
+
+    @PublishedApi
+    internal inline fun <reified T> CreateRequestBody(
+        data: T
+    ): RequestBody {
+        val json =
+            gson.toJson(
+                data
+            )
+
+        val mediaType =
+            MediaType.parse(
+                JSON_MEDIA_TYPE
+            )
+
+        return RequestBody.create(
+            mediaType,
+            json
+        )
     }
 
     @PublishedApi
@@ -209,20 +340,145 @@ object ApiClient {
                     } else {
                         "HTTP hata: ${response.code()} ${response.message()}"
                     },
-                Exception =
-                    exception.message
+                Exception = exception.message
             )
         } catch (exception: Exception) {
             Result(
                 Success = false,
                 Message =
                     "Sunucu yanıtı işlenirken hata oluştu.",
-                Exception =
-                    exception.message
+                Exception = exception.message
             )
         }
     }
+
+    @PublishedApi
+    internal inline fun <reified T> ParseRawResult(
+        response: Response<ResponseBody>
+    ): Result<T> {
+        val responseBody =
+            if (response.isSuccessful) {
+                response.body()
+            } else {
+                response.errorBody()
+            }
+
+        val json =
+            responseBody
+                ?.string()
+                .orEmpty()
+
+        if (json.isBlank()) {
+            return Result(
+                Success = false,
+                Message =
+                    if (response.isSuccessful) {
+                        "Boş yanıt alındı."
+                    } else {
+                        "HTTP hata: ${response.code()} ${response.message()}"
+                    }
+            )
+        }
+
+        return try {
+            if (!response.isSuccessful) {
+                val errorMessage =
+                    ResolveRawErrorMessage(
+                        json = json,
+                        response = response
+                    )
+
+                return Result(
+                    Success = false,
+                    Message = errorMessage,
+                    Exception = "HTTP ${response.code()}"
+                )
+            }
+
+            val responseType =
+                object : TypeToken<T>() {
+                }.type
+
+            val data =
+                gson.fromJson<T>(
+                    json,
+                    responseType
+                )
+
+            Result(
+                Success = true,
+                Data = data
+            )
+        } catch (exception: JsonSyntaxException) {
+            Result(
+                Success = false,
+                Message =
+                    "Sunucu yanıtı çözümlenemedi.",
+                Exception = exception.message
+            )
+        } catch (exception: Exception) {
+            Result(
+                Success = false,
+                Message =
+                    "Sunucu yanıtı işlenirken hata oluştu.",
+                Exception = exception.message
+            )
+        }
+    }
+
+    @PublishedApi
+    internal fun ResolveRawErrorMessage(
+        json: String,
+        response: Response<ResponseBody>
+    ): String {
+        val resultMessage =
+            runCatching {
+                gson.fromJson(
+                    json,
+                    RawErrorResponse::class.java
+                )
+            }.getOrNull()
+                ?.Message
+                .orEmpty()
+
+        if (resultMessage.isNotBlank()) {
+            return resultMessage
+        }
+
+        val lowercaseMessage =
+            runCatching {
+                gson.fromJson(
+                    json,
+                    RawLowercaseErrorResponse::class.java
+                )
+            }.getOrNull()
+                ?.message
+                .orEmpty()
+
+        if (lowercaseMessage.isNotBlank()) {
+            return lowercaseMessage
+        }
+
+        val trimmedJson =
+            json
+                .trim()
+                .trim('"')
+
+        if (trimmedJson.isNotBlank()) {
+            return trimmedJson
+        }
+
+        return "HTTP hata: ${response.code()} ${response.message()}"
+    }
 }
+
+internal data class RawErrorResponse(
+    val Message: String = ""
+)
+
+internal data class RawLowercaseErrorResponse(
+    val message: String = ""
+)
 
 interface GenericApi {
 
@@ -234,6 +490,14 @@ interface GenericApi {
 
     @POST
     suspend fun PostAsync(
+        @Url
+        url: String,
+        @Body
+        body: RequestBody
+    ): Response<ResponseBody>
+
+    @PUT
+    suspend fun PutAsync(
         @Url
         url: String,
         @Body

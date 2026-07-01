@@ -3,69 +3,73 @@ package com.bulbulustur.android.businesslayer.Core.Repository
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductBrowsingHistoryDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.IProductBrowsingHistoryRepository
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.ProductBrowsingHistoryInsertModel
-import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.ProductBrowsingHistoryUpdateModel
 import com.bulbulustur.android.businesslayer.Core.Network.ApiClient
 import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
 import com.bulbulustur.android.businesslayer.Core.Util.Result
+import com.bulbulustur.android.businesslayer.Core.Util.PaginatedList
 
 class ProductBrowsingHistoryRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IProductBrowsingHistoryRepository {
 
-    override suspend fun GetProductBrowsingHistoryListAsync(): Result<List<ProductBrowsingHistoryDTO>> {
+    override suspend fun GetProductBrowsingHistoriesAsync(
+        memberId: Int,
+        page: Int,
+        pageSize: Int
+    ):  Result<PaginatedList<ProductBrowsingHistoryDTO>> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetProductBrowsingHistoryListAsync"
+            baseUrl =
+                ApiRoutes.B2C_PRODUCT_BROWSING_HISTORY_BASE_URL,
+            method =
+                "GetProductBrowsingHistoriesAsync",
+            query =
+                "memberId=$memberId" +
+                        "&page=$page" +
+                        "&pageSize=$pageSize"
         )
     }
 
-    override suspend fun GetProductBrowsingHistoryByIdAsync(
-        productBrowsingHistoryId: Int
-    ): Result<ProductBrowsingHistoryUpdateModel?> {
-        return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetProductBrowsingHistoryByIdAsync",
-            query = "productBrowsingHistoryId=$productBrowsingHistoryId"
-        )
-    }
-
-    override suspend fun GetProductBrowsingHistoryByIdExtendedAsync(
-        productBrowsingHistoryId: Int
-    ): Result<ProductBrowsingHistoryDTO?> {
-        return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetProductBrowsingHistoryByIdExtendedAsync",
-            query = "productBrowsingHistoryId=$productBrowsingHistoryId"
-        )
-    }
-
-    override suspend fun InsertAsync(
+    override suspend fun InsertProductBrowsingHistoryAsync(
+        memberId: Int,
         model: ProductBrowsingHistoryInsertModel
     ): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "InsertAsync",
-            data = model
+            baseUrl =
+                ApiRoutes.B2C_PRODUCT_BROWSING_HISTORY_BASE_URL,
+            method =
+                "InsertProductBrowsingHistoryAsync",
+            query =
+                "memberId=$memberId",
+            data =
+                model
         )
     }
 
-    override suspend fun UpdateAsync(
-        model: ProductBrowsingHistoryUpdateModel
-    ): Result<Unit> {
-        return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "UpdateAsync",
-            data = model
-        )
-    }
-
-    override suspend fun DeleteAsync(
-        productBrowsingHistoryId: Int
+    override suspend fun DeleteProductBrowsingHistoryAsync(
+        memberId: Int,
+        browsingHistoryId: Int
     ): Result<Unit> {
         return apiClient.DeleteAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "DeleteAsync",
-            query = "productBrowsingHistoryId=$productBrowsingHistoryId"
+            baseUrl =
+                ApiRoutes.B2C_PRODUCT_BROWSING_HISTORY_BASE_URL,
+            method =
+                "DeleteProductBrowsingHistory",
+            query =
+                "memberId=$memberId" +
+                        "&browsingHistoryId=$browsingHistoryId"
+        )
+    }
+
+    override suspend fun DeleteAllProductBrowsingHistoriesAsync(
+        memberId: Int
+    ): Result<Unit> {
+        return apiClient.DeleteAsync(
+            baseUrl =
+                ApiRoutes.B2C_PRODUCT_BROWSING_HISTORY_BASE_URL,
+            method =
+                "DeleteAllProductBrowsingHistories",
+            query =
+                "memberId=$memberId"
         )
     }
 }

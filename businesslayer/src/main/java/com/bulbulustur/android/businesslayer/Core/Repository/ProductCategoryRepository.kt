@@ -12,10 +12,15 @@ class ProductCategoryRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IProductCategoryRepository {
 
-    override suspend fun GetProductCategoryListAsync(): Result<List<ProductCategoryDTO>> {
+    override suspend fun GetProductCategoryListAsync():
+            Result<List<ProductCategoryDTO>> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetProductCategoryListAsync"
+            baseUrl =
+                ApiRoutes.PRODUCT_CATEGORY_PRODUCT_CATEGORIES_BASE_URL,
+            method =
+                "GetProductCategories",
+            query =
+                "languageId=1&count=30000"
         )
     }
 
@@ -23,9 +28,13 @@ class ProductCategoryRepository(
         productCategoryId: Int
     ): Result<ProductCategoryUpdateModel?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetProductCategoryByIdAsync",
-            query = "productCategoryId=$productCategoryId"
+            baseUrl =
+                ApiRoutes.PRODUCT_CATEGORY_PRODUCT_CATEGORIES_BASE_URL,
+            method =
+                "GetProductCategoryById",
+            query =
+                "languageId=1" +
+                        "&productCategoryId=$productCategoryId"
         )
     }
 
@@ -33,9 +42,28 @@ class ProductCategoryRepository(
         productCategoryId: Int
     ): Result<ProductCategoryDTO?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetProductCategoryByIdExtendedAsync",
-            query = "productCategoryId=$productCategoryId"
+            baseUrl =
+                ApiRoutes.PRODUCT_CATEGORY_PRODUCT_CATEGORIES_BASE_URL,
+            method =
+                "GetProductCategoryByIdExtended",
+            query =
+                "languageId=1" +
+                        "&productCategoryId=$productCategoryId"
+        )
+    }
+
+    override suspend fun GetProductChildCategoriesAsync(
+        languageId: Int,
+        productCategoryId: Int
+    ): Result<List<ProductCategoryDTO>> {
+        return apiClient.GetAsync(
+            baseUrl =
+                ApiRoutes.PRODUCT_CATEGORY_PRODUCT_CATEGORIES_BASE_URL,
+            method =
+                "GetProductChildCategories",
+            query =
+                "languageId=$languageId" +
+                        "&productCategoryId=$productCategoryId"
         )
     }
 
@@ -43,19 +71,25 @@ class ProductCategoryRepository(
         model: ProductCategoryInsertModel
     ): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "InsertAsync",
-            data = model
+            baseUrl =
+                ApiRoutes.PRODUCT_CATEGORY_PRODUCT_CATEGORIES_BASE_URL,
+            method =
+                "InsertAsync",
+            data =
+                model
         )
     }
 
     override suspend fun UpdateAsync(
         model: ProductCategoryUpdateModel
     ): Result<Unit> {
-        return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "UpdateAsync",
-            data = model
+        return apiClient.PutAsync(
+            baseUrl =
+                ApiRoutes.PRODUCT_CATEGORY_PRODUCT_CATEGORIES_BASE_URL,
+            method =
+                "UpdateAsync",
+            data =
+                model
         )
     }
 
@@ -63,9 +97,12 @@ class ProductCategoryRepository(
         productCategoryId: Int
     ): Result<Unit> {
         return apiClient.DeleteAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "DeleteAsync",
-            query = "productCategoryId=$productCategoryId"
+            baseUrl =
+                ApiRoutes.PRODUCT_CATEGORY_PRODUCT_CATEGORIES_BASE_URL,
+            method =
+                "DeleteAsync",
+            query =
+                "productCategoryId=$productCategoryId"
         )
     }
 }

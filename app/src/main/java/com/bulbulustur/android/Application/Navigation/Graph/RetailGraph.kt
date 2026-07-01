@@ -326,6 +326,20 @@ fun NavGraphBuilder.retailGraph(
         val productState by
         productController.State.collectAsState()
 
+        val productDetail =
+            productState.ProductDetailResult
+                ?.Data
+
+        val productCategoryId =
+            productDetail
+                ?.ProductCategoryId
+                ?: 0
+
+        val brandId =
+            productDetail
+                ?.BrandId
+                ?: 0
+
         LaunchedEffect(
             productId,
             storeId,
@@ -408,6 +422,84 @@ fun NavGraphBuilder.retailGraph(
                     variantId = variantId,
                     storeId = storeId
                 )
+            }
+        }
+
+        LaunchedEffect(
+            productCategoryId,
+            brandId,
+            sessionState.MemberId,
+            productId,
+            storeId,
+            variantId
+        ) {
+            if (
+                productId <= 0 ||
+                storeId <= 0
+            ) {
+                return@LaunchedEffect
+            }
+
+            if (
+                productCategoryId > 0
+            ) {
+                productController.SponsoredAdverts(
+                    languageId =
+                        1,
+                    productCategoryId =
+                        productCategoryId,
+                    count =
+                        8
+                )
+
+                productController.RelatedCategories(
+                    languageId =
+                        1,
+                    productCategoryId =
+                        productCategoryId
+                )
+            }
+
+            if (
+                brandId > 0
+            ) {
+                productController.ProductBrandSections(
+                    languageId =
+                        1,
+                    brandId =
+                        brandId,
+                    count =
+                        5
+                )
+            }
+
+            if (
+                sessionState.IsAuthenticated &&
+                sessionState.MemberId > 0
+            ) {
+                productController.ProductBrowsingHistories(
+                    memberId =
+                        sessionState.MemberId,
+                    page =
+                        1,
+                    pageSize =
+                        20
+                )
+
+                if (
+                    variantId > 0
+                ) {
+                    productController.InsertBrowsingHistory(
+                        memberId =
+                            sessionState.MemberId,
+                        storeId =
+                            storeId,
+                        productId =
+                            productId,
+                        variantId =
+                            variantId
+                    )
+                }
             }
         }
 
@@ -540,6 +632,78 @@ fun NavGraphBuilder.retailGraph(
                         }
                     )
                 }
+            },
+            onSponsoredAdvertClick = { advert ->
+                if (
+                    advert.ProductId > 0 &&
+                    advert.StoreId > 0 &&
+                    advert.VariantId > 0
+                ) {
+                    navigator.navController.navigate(
+                        RetailRoutes.productDetail(
+                            productId =
+                                advert.ProductId,
+                            storeId =
+                                advert.StoreId,
+                            variantId =
+                                advert.VariantId
+                        )
+                    )
+                }
+            },
+            onBrandSectionPageClick = { page ->
+                if (
+                    page.ProductId > 0 &&
+                    page.StoreId > 0 &&
+                    page.VariantId > 0
+                ) {
+                    navigator.navController.navigate(
+                        RetailRoutes.productDetail(
+                            productId =
+                                page.ProductId,
+                            storeId =
+                                page.StoreId,
+                            variantId =
+                                page.VariantId
+                        )
+                    )
+                } else if (
+                    page.ProductCategoryId > 0
+                ) {
+                    /*
+                     * Retail kategori route'u henüz categoryId taşımıyor.
+                     * Şimdilik mevcut kategori detay ekranına gidiyoruz.
+                     */
+                    navigator.navController.navigate(
+                        RetailRoutes.CategoryDetail
+                    )
+                }
+            },
+            onBrowsingHistoryProductClick = { history ->
+                if (
+                    history.ProductId > 0 &&
+                    history.StoreId > 0 &&
+                    history.VariantId > 0
+                ) {
+                    navigator.navController.navigate(
+                        RetailRoutes.productDetail(
+                            productId =
+                                history.ProductId,
+                            storeId =
+                                history.StoreId,
+                            variantId =
+                                history.VariantId
+                        )
+                    )
+                }
+            },
+            onRelatedCategoryClick = {
+                /*
+                 * RetailRoutes.CategoryDetail henüz categoryId taşımıyor.
+                 */
+                navigator.navController.navigate(
+                    RetailRoutes.CategoryDetail
+                )
             },
             onStoreClick = {
                 navigator.navController.navigate(

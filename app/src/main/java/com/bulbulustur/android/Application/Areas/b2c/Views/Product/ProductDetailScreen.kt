@@ -97,7 +97,13 @@ import com.bulbulustur.android.Application.Areas.b2c.Controllers.ProductControll
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductVariantPictureDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductVariantDTO
-
+import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components._B2CRelatedCategoryLinks
+import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components._B2CProductBrowsingHistory
+import com.bulbulustur.android.businesslayer.Core.DTO.ProductBrowsingHistoryDTO
+import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components._B2CSponsoredAdverts
+import com.bulbulustur.android.businesslayer.Core.DTO.AdvertSponsoredDTO
+import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components._FromBrands
+import com.bulbulustur.android.businesslayer.Core.DTO.ProductBrandSectionPageDTO
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -120,6 +126,9 @@ fun ProductDetailScreen(
     onReviewClick: () -> Unit = {},
     onQuestionClick: () -> Unit = {},
     onSellerProductClick: (RetailSellerProductItem) -> Unit = {},
+    onSponsoredAdvertClick: (AdvertSponsoredDTO) -> Unit = {},
+    onBrandSectionPageClick: (ProductBrandSectionPageDTO) -> Unit = {},
+    onBrowsingHistoryProductClick: (ProductBrowsingHistoryDTO) -> Unit = {},
     onRelatedCategoryClick: (RetailRelatedCategoryChip) -> Unit = {},
     onLowerPriceClick: () -> Unit = {},
     onReportAbuseClick: () -> Unit = {},
@@ -699,16 +708,41 @@ fun ProductDetailScreen(
                     product.description
             )
 
-            if (
-                product.relatedCategories.isNotEmpty()
-            ) {
-                RetailRelatedCategoryChipsSection(
-                    categories =
-                        product.relatedCategories,
-                    onCategoryClick =
-                        onRelatedCategoryClick
-                )
-            }
+            _B2CSponsoredAdverts(
+                Adverts =
+                    State.SponsoredAdverts,
+                onAdvertClick =
+                    onSponsoredAdvertClick
+            )
+
+            _FromBrands(
+                Sections =
+                    State.ProductBrandSections,
+                onPageClick =
+                    onBrandSectionPageClick
+            )
+
+            _B2CProductBrowsingHistory(
+                Histories =
+                    State.ProductBrowsingHistories,
+                onProductClick =
+                    onBrowsingHistoryProductClick
+            )
+
+            _B2CRelatedCategoryLinks(
+                Categories =
+                    State.RelatedCategories,
+                onCategoryClick = { category ->
+                    onRelatedCategoryClick(
+                        RetailRelatedCategoryChip(
+                            id =
+                                category.ProductCategoryId,
+                            name =
+                                category.CategoryName
+                        )
+                    )
+                }
+            )
 
             Spacer(
                 modifier =
@@ -2271,56 +2305,6 @@ private fun RetailProductDescriptionSection(
 }
 
 @Composable
-private fun RetailRelatedCategoryChipsSection(
-    categories: List<RetailRelatedCategoryChip>,
-    onCategoryClick: (RetailRelatedCategoryChip) -> Unit
-) {
-    Column(
-        modifier = Modifier.padding(
-            top = BBSpacing.Space3
-        ),
-        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
-    ) {
-        RetailSectionTitle(
-            title = "İlgili Kategoriler",
-            actionText = "",
-            onActionClick = {}
-        )
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .horizontalScroll(rememberScrollState())
-                .padding(horizontal = BBSpacing.PageHorizontal),
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
-        ) {
-            categories.forEach { category ->
-                Surface(
-                    modifier = Modifier
-                        .clip(BBRadius.PillShape)
-                        .clickable {
-                            onCategoryClick(category)
-                        },
-                    shape = BBRadius.PillShape,
-                    color = MaterialTheme.colorScheme.surface
-                ) {
-                    Text(
-                        modifier = Modifier.padding(
-                            horizontal = BBSpacing.Space3,
-                            vertical = BBSpacing.Space2
-                        ),
-                        text = category.name,
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
 private fun RetailSectionTitle(
     title: String,
     actionText: String,
@@ -3343,7 +3327,6 @@ data class RetailProductDetail(
     val sizeOptions: List<RetailProductSizeOption>,
     val sellerProducts: List<RetailSellerProductItem>,
     val reviews: List<RetailReviewItem>,
-    val relatedCategories: List<RetailRelatedCategoryChip>,
     val store: RetailProductDetailStore
 )
 
@@ -4023,8 +4006,6 @@ private fun ProductDTO.ToRetailProductDetail(
             resolvedOtherStoreProducts,
         reviews =
             emptyList(),
-        relatedCategories =
-            emptyList(),
         store =
             RetailProductDetailStore(
                 id =
@@ -4265,14 +4246,6 @@ private fun getRetailProductDetail(
                 dateText = "1 ay önce",
                 comment = "Rahat ve şık. Günlük kombinlerde iyi duruyor."
             )
-        ),
-        relatedCategories = listOf(
-            RetailRelatedCategoryChip(1, "Sneaker"),
-            RetailRelatedCategoryChip(2, "Kadın Ayakkabı"),
-            RetailRelatedCategoryChip(3, "Günlük Ayakkabı"),
-            RetailRelatedCategoryChip(4, "Spor Ayakkabı"),
-            RetailRelatedCategoryChip(5, "Rahat Taban"),
-            RetailRelatedCategoryChip(6, "Yeni Sezon")
         ),
         store = RetailProductDetailStore(
             id = 1,

@@ -12,10 +12,15 @@ class AdvertSponsoredRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IAdvertSponsoredRepository {
 
-    override suspend fun GetAdvertSponsoredListAsync(): Result<List<AdvertSponsoredDTO>> {
+    override suspend fun GetAdvertSponsoredListAsync():
+            Result<List<AdvertSponsoredDTO>> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetAdvertSponsoredListAsync"
+            baseUrl =
+                ApiRoutes.ADVERT_BASE_URL,
+            method =
+                "Advert/GetSponsoredAdvertsAsync",
+            query =
+                "productCategoryId=0&count=100"
         )
     }
 
@@ -23,9 +28,12 @@ class AdvertSponsoredRepository(
         advertSponsoredId: Int
     ): Result<AdvertSponsoredUpdateModel?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetAdvertSponsoredByIdAsync",
-            query = "advertSponsoredId=$advertSponsoredId"
+            baseUrl =
+                ApiRoutes.ADVERT_BASE_URL,
+            method =
+                "Advert/GetAdvertSponsoredByIdAsync",
+            query =
+                "advertSponsoredId=$advertSponsoredId"
         )
     }
 
@@ -33,9 +41,28 @@ class AdvertSponsoredRepository(
         advertSponsoredId: Int
     ): Result<AdvertSponsoredDTO?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetAdvertSponsoredByIdExtendedAsync",
-            query = "advertSponsoredId=$advertSponsoredId"
+            baseUrl =
+                ApiRoutes.ADVERT_BASE_URL,
+            method =
+                "Advert/GetAdvertSponsoredByIdExtendedAsync",
+            query =
+                "advertSponsoredId=$advertSponsoredId"
+        )
+    }
+
+    override suspend fun GetSponsoredAdvertsAsync(
+        languageId: Int,
+        productCategoryId: Int,
+        count: Int
+    ): Result<List<AdvertSponsoredDTO>> {
+        return apiClient.GetAsync(
+            baseUrl =
+                ApiRoutes.ADVERT_BASE_URL,
+            method =
+                "Advert/GetSponsoredAdvertsAsync",
+            query =
+                "productCategoryId=$productCategoryId" +
+                        "&count=$count"
         )
     }
 
@@ -43,19 +70,25 @@ class AdvertSponsoredRepository(
         model: AdvertSponsoredInsertModel
     ): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "InsertAsync",
-            data = model
+            baseUrl =
+                ApiRoutes.ADVERT_BASE_URL,
+            method =
+                "Advert/InsertAdvertSponsoredAsync",
+            data =
+                model
         )
     }
 
     override suspend fun UpdateAsync(
         model: AdvertSponsoredUpdateModel
     ): Result<Unit> {
-        return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "UpdateAsync",
-            data = model
+        return apiClient.PutAsync(
+            baseUrl =
+                ApiRoutes.ADVERT_BASE_URL,
+            method =
+                "Advert/UpdateAdvertSponsoredAsync",
+            data =
+                model
         )
     }
 
@@ -63,9 +96,12 @@ class AdvertSponsoredRepository(
         advertSponsoredId: Int
     ): Result<Unit> {
         return apiClient.DeleteAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "DeleteAsync",
-            query = "advertSponsoredId=$advertSponsoredId"
+            baseUrl =
+                ApiRoutes.ADVERT_BASE_URL,
+            method =
+                "Advert/DeleteAdvertSponsoredAsync",
+            query =
+                "advertSponsoredId=$advertSponsoredId"
         )
     }
 }

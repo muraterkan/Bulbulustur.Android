@@ -5,8 +5,8 @@ object ApiRoutes {
     /*
      * Production servis sunucuları
      *
-     * Globalization servisi farklı sunucuda çalışıyor.
-     * Diğer mikroservisler ana servis sunucusunda çalışıyor.
+     * Globalization servisi farklı sunucuda çalışır.
+     * Diğer mikroservisler ana uygulama sunucusunda çalışır.
      */
     private const val APPLICATION_SERVER_HOST =
         "37.60.239.76"
@@ -15,7 +15,7 @@ object ApiRoutes {
         "77.92.144.197"
 
     /*
-     * ApiClient için varsayılan adres.
+     * ApiClient tarafından kullanılan varsayılan adres.
      *
      * Mevcut çalışan davranış korunmuştur.
      */
@@ -96,26 +96,26 @@ object ApiRoutes {
         "http://$APPLICATION_SERVER_HOST:30240/api/"
 
     // -------------------------------------------------------------------------
-    // Authentication
+    // Authentication API
     // -------------------------------------------------------------------------
 
     const val AUTHENTICATION_BASE_URL =
         "https://authentication.bulbulustur.com/api/Auth/"
 
     // -------------------------------------------------------------------------
-    // Globalization
+    // Globalization API - 30215
     // -------------------------------------------------------------------------
 
     const val RESOURCE_BASE_URL =
         "http://$GLOBALIZATION_SERVER_HOST:30215/api/Resource/"
 
     // -------------------------------------------------------------------------
-    // Member Service - 30180
+    // Member API - 30180
     // -------------------------------------------------------------------------
 
     /*
-     * Eski Android repository kullanımları bozulmasın diye
-     * MEMBER_BASE_URL adı korunmuştur.
+     * Eski repository kullanımları bozulmasın diye MEMBER_BASE_URL adı
+     * korunmaktadır.
      */
     const val MEMBER_BASE_URL =
         "http://$APPLICATION_SERVER_HOST:30180/api/Member/"
@@ -156,28 +156,31 @@ object ApiRoutes {
         "http://$APPLICATION_SERVER_HOST:30200/api/UsAbout/"
 
     // -------------------------------------------------------------------------
-    // Product Category API - 30225
-    // -------------------------------------------------------------------------
-
-    const val PRODUCT_SPECIAL_GROUP_BASE_URL =
-        "http://$APPLICATION_SERVER_HOST:30225/api/ProductSpecialGroup/"
-
-    // -------------------------------------------------------------------------
     // Brand API - 30210
     // -------------------------------------------------------------------------
 
     /*
-     * Mevcut repository metotlarının:
-     *
-     * ProductBrand/GetProductBrands
-     *
-     * biçiminde action yolu gönderebilmesi için service root olarak tutuldu.
+     * ProductBrand/GetProductBrands biçiminde action yolu gönderen mevcut
+     * repository kullanımları için service root korunmuştur.
      */
     const val PRODUCT_BRAND_BASE_URL =
         "http://$APPLICATION_SERVER_HOST:30210/api/"
 
     const val PRODUCT_BRAND_CONTROLLER_BASE_URL =
         "http://$APPLICATION_SERVER_HOST:30210/api/ProductBrand/"
+
+    const val BRAND_PRODUCT_SECTION_BASE_URL =
+        "http://$APPLICATION_SERVER_HOST:30210/api/ProductBrandSection/"
+
+    // -------------------------------------------------------------------------
+    // Product Category API - 30225
+    // -------------------------------------------------------------------------
+
+    const val PRODUCT_CATEGORY_PRODUCT_CATEGORIES_BASE_URL =
+        "http://$APPLICATION_SERVER_HOST:30225/api/ProductCategories/"
+
+    const val PRODUCT_SPECIAL_GROUP_BASE_URL =
+        "http://$APPLICATION_SERVER_HOST:30225/api/ProductSpecialGroup/"
 
     // -------------------------------------------------------------------------
     // Campaign API - 30150
@@ -213,7 +216,7 @@ object ApiRoutes {
         "http://$APPLICATION_SERVER_HOST:30140/api/Banner/"
 
     // -------------------------------------------------------------------------
-    // CompanyPage API - 30155
+    // Company Page API - 30155
     // -------------------------------------------------------------------------
 
     const val COMPANY_PAGE_PRODUCT_SPECIAL_BASE_URL =
@@ -238,6 +241,12 @@ object ApiRoutes {
     const val B2C_PRODUCT_BROWSING_HISTORY_BASE_URL =
         "http://$APPLICATION_SERVER_HOST:30240/api/ProductBrowsingHistory/"
 
+    const val B2C_PRODUCT_VARIANT_PICTURE_BASE_URL =
+        "http://$APPLICATION_SERVER_HOST:30240/api/ProductVariantPicture/"
+
+    const val B2C_PRODUCT_VARIANT_BASE_URL =
+        "http://$APPLICATION_SERVER_HOST:30240/api/ProductVariant/"
+
     // -------------------------------------------------------------------------
     // B2B API - 30235
     // -------------------------------------------------------------------------
@@ -246,7 +255,7 @@ object ApiRoutes {
         "http://$APPLICATION_SERVER_HOST:30235/api/Product/"
 
     /*
-     * RFQ artık ayrı API değildir.
+     * RFQ ayrı bir API değildir.
      *
      * BuyerRequest, AssignedToSeller, BuyerRequestFile ve SendedOffer
      * B2B API altında çalışır.
@@ -264,7 +273,7 @@ object ApiRoutes {
         "http://$APPLICATION_SERVER_HOST:30235/api/SendedOffer/"
 
     // -------------------------------------------------------------------------
-    // CommerceSupport API - 30185
+    // Commerce Support API - 30185
     // -------------------------------------------------------------------------
 
     const val COMMERCE_SUPPORT_BASKET_BASE_URL =
@@ -284,10 +293,4 @@ object ApiRoutes {
 
     const val COMMERCE_SUPPORT_STORE_BASE_URL =
         "http://$APPLICATION_SERVER_HOST:30185/api/Store/"
-
-    const val B2C_PRODUCT_VARIANT_PICTURE_BASE_URL =
-        "http://37.60.239.76:30240/api/ProductVariantPicture/"
-
-    const val B2C_PRODUCT_VARIANT_BASE_URL =
-        "http://37.60.239.76:30240/api/ProductVariant/"
 }

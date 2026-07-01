@@ -57,6 +57,10 @@ import com.bulbulustur.android.businesslayer.Core.Repository.ProductVariantRepos
 import com.bulbulustur.android.businesslayer.Core.Security.SecureTokenStore
 import com.bulbulustur.android.businesslayer.Core.Repository.ProductCustomerQuestionRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.ReviewRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.AdvertSponsoredRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.ProductBrandSectionRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.ProductBrowsingHistoryRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.ProductCategoryRepository
 import com.bulbulustur.android.businesslayer.Core.Util.Execute.ExecuteService
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.BasketController
 import com.bulbulustur.android.businesslayer.Core.Repository.BasketRepository
@@ -259,13 +263,54 @@ private fun BulbulusturApplicationContent(
             ProductVariantPictureRepository()
         }
 
-    val productController = remember(executeService, productRepository, productVariantRepository, productVariantPictureRepository
+    val advertSponsoredRepository =
+        remember {
+            AdvertSponsoredRepository()
+        }
+
+    val productBrandSectionRepository =
+        remember {
+            ProductBrandSectionRepository()
+        }
+
+    val productBrowsingHistoryRepository =
+        remember {
+            ProductBrowsingHistoryRepository()
+        }
+
+    val productCategoryRepository =
+        remember {
+            ProductCategoryRepository()
+        }
+
+    val productController =
+        remember(
+            executeService,
+            productRepository,
+            productVariantRepository,
+            productVariantPictureRepository,
+            advertSponsoredRepository,
+            productBrandSectionRepository,
+            productBrowsingHistoryRepository,
+            productCategoryRepository
         ) {
             ProductController(
-                executeService = executeService,
-                productRepository = productRepository,
-                productVariantRepository = productVariantRepository,
-                productVariantPictureRepository = productVariantPictureRepository
+                executeService =
+                    executeService,
+                productRepository =
+                    productRepository,
+                productVariantRepository =
+                    productVariantRepository,
+                productVariantPictureRepository =
+                    productVariantPictureRepository,
+                advertSponsoredRepository =
+                    advertSponsoredRepository,
+                productBrandSectionRepository =
+                    productBrandSectionRepository,
+                productBrowsingHistoryRepository =
+                    productBrowsingHistoryRepository,
+                productCategoryRepository =
+                    productCategoryRepository
             )
         }
 

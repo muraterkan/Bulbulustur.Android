@@ -15,49 +15,38 @@ class MemberRepository(
 
     override suspend fun GetMemberListAsync(): Result<List<MemberDTO>> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetMemberListAsync"
+            baseUrl = ApiRoutes.MEMBER_BASE_URL,
+            method = "GetMembers",
+            query = "languageId=1&count=100"
         )
     }
 
-    override suspend fun GetMemberByIdAsync(
-        memberId: Int
-    ): Result<MemberUpdateModel?> {
+    override suspend fun GetMemberByIdAsync(languageId: Int, memberId: Int): Result<MemberUpdateModel?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            baseUrl = ApiRoutes.MEMBER_BASE_URL,
             method = "GetMemberByIdAsync",
-            query = "memberId=$memberId"
+            query = "languageId=$languageId&memberId=$memberId"
         )
     }
 
-    override suspend fun GetMemberByIdExtendedAsync(
-        memberId: Int
-    ): Result<MemberDTO?> {
+    override suspend fun GetMemberByIdExtendedAsync(languageId: Int, memberId: Int): Result<MemberDTO?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            baseUrl = ApiRoutes.MEMBER_BASE_URL,
             method = "GetMemberByIdExtendedAsync",
-            query = "memberId=$memberId"
+            query = "languageId=$languageId&memberId=$memberId"
         )
     }
 
-    override suspend fun InsertAsync(
-        model: MemberInsertModel
-    ): Result<Unit> {
+    override suspend fun InsertAsync(model: MemberInsertModel): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "InsertAsync",
+            baseUrl = ApiRoutes.MEMBER_BASE_URL,
+            method = "MemberInsert",
             data = model
         )
     }
 
-    override suspend fun InsertAsync(
-        languageId: Int,
-        model: MemberRegisterModel
-    ): Result<MemberInsertModel> {
-        val registerModel =
-            model.copy(
-                LanguageId = languageId
-            )
+    override suspend fun InsertAsync(languageId: Int, model: MemberRegisterModel): Result<MemberInsertModel> {
+        val registerModel = model.copy(LanguageId = languageId)
 
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.AUTHENTICATION_BASE_URL,
@@ -66,23 +55,27 @@ class MemberRepository(
         )
     }
 
-    override suspend fun UpdateAsync(
-        model: MemberUpdateModel
-    ): Result<Unit> {
+    override suspend fun UpdateAsync(model: MemberUpdateModel): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "UpdateAsync",
+            baseUrl = ApiRoutes.MEMBER_BASE_URL,
+            method = "MemberUpdate",
             data = model
         )
     }
 
-    override suspend fun DeleteAsync(
-        memberId: Int
-    ): Result<Unit> {
-        return apiClient.DeleteAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "DeleteAsync",
-            query = "memberId=$memberId"
+    override suspend fun SetContactPreferenceAsync(model: MemberUpdateModel): Result<Unit> {
+        return apiClient.PostAsync(
+            baseUrl = ApiRoutes.MEMBER_BASE_URL,
+            method = "SetContactPreference",
+            data = model
+        )
+    }
+
+    override suspend fun DeleteAsync(memberId: Int): Result<Unit> {
+        return apiClient.PostAsync(
+            baseUrl = ApiRoutes.MEMBER_BASE_URL,
+            method = "MemberDelete",
+            data = memberId
         )
     }
 }

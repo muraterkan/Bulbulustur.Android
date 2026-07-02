@@ -12,59 +12,53 @@ class SystemDescCurrencyRepository(
     private val apiClient: ApiClient = ApiClient
 ) : ISystemDescCurrencyRepository {
 
-    override suspend fun GetSystemDescCurrencyListAsync(): Result<List<SystemDescCurrencyDTO>> {
+    override suspend fun GetSystemDescCurrenciesAsync(languageId: Int, count: Int): Result<List<SystemDescCurrencyDTO>> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetSystemDescCurrencyListAsync"
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "MasterData/GetSystemDescCurrenciesAsync",
+            query = "languageId=$languageId&count=$count"
         )
     }
 
-    override suspend fun GetSystemDescCurrencyByIdAsync(
-        systemDescCurrencyId: Int
-    ): Result<SystemDescCurrencyUpdateModel?> {
+    override suspend fun GetSystemDescCurrencyByIdAsync(systemDescCurrencyId: Int): Result<SystemDescCurrencyUpdateModel?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetSystemDescCurrencyByIdAsync",
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "SystemDescCurrency/GetSystemDescCurrencyByIdAsync",
             query = "systemDescCurrencyId=$systemDescCurrencyId"
         )
     }
 
     override suspend fun GetSystemDescCurrencyByIdExtendedAsync(
+        languageId: Int,
         systemDescCurrencyId: Int
     ): Result<SystemDescCurrencyDTO?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetSystemDescCurrencyByIdExtendedAsync",
-            query = "systemDescCurrencyId=$systemDescCurrencyId"
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "SystemDescCurrency/GetSystemDescCurrencyByIdExtendedAsync",
+            query = "languageId=$languageId&systemDescCurrencyId=$systemDescCurrencyId"
         )
     }
 
-    override suspend fun InsertAsync(
-        model: SystemDescCurrencyInsertModel
-    ): Result<Unit> {
+    override suspend fun InsertAsync(model: SystemDescCurrencyInsertModel): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "InsertAsync",
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "SystemDescCurrency/SystemDescCurrencyInsertAsync",
             data = model
         )
     }
 
-    override suspend fun UpdateAsync(
-        model: SystemDescCurrencyUpdateModel
-    ): Result<Unit> {
+    override suspend fun UpdateAsync(model: SystemDescCurrencyUpdateModel): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "UpdateAsync",
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "SystemDescCurrency/SystemDescCurrencyUpdateAsync",
             data = model
         )
     }
 
-    override suspend fun DeleteAsync(
-        systemDescCurrencyId: Int
-    ): Result<Unit> {
+    override suspend fun DeleteAsync(systemDescCurrencyId: Int): Result<Unit> {
         return apiClient.DeleteAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "DeleteAsync",
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "SystemDescCurrency/SystemDescCurrencyDelete",
             query = "systemDescCurrencyId=$systemDescCurrencyId"
         )
     }

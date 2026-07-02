@@ -53,6 +53,10 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BbTypography
 
 @Composable
 fun AccountSettingsScreen(
+    languageName: String,
+    themeName: String,
+    countryName: String,
+    currencyCode: String,
     onBackClick: () -> Unit = {},
     onAccountSecurityClick: () -> Unit = {},
     onPrivacyClick: () -> Unit = {},
@@ -111,7 +115,7 @@ fun AccountSettingsScreen(
                 SettingsMenuGroup {
                     SettingsMenuRow(
                         title = "Dil",
-                        value = "Türkçe",
+                        value = languageName,
                         icon = Icons.Outlined.Language,
                         onClick = onLanguageClick
                     )
@@ -120,7 +124,7 @@ fun AccountSettingsScreen(
 
                     SettingsMenuRow(
                         title = "Görünüm",
-                        value = "Açık tema",
+                        value = themeName,
                         icon = Icons.Outlined.Palette,
                         onClick = onAppearanceClick
                     )
@@ -129,7 +133,7 @@ fun AccountSettingsScreen(
 
                     SettingsMenuRow(
                         title = "Ülke ve Bölge",
-                        value = "Türkiye",
+                        value = countryName,
                         icon = Icons.Outlined.Public,
                         onClick = onRegionClick
                     )
@@ -138,7 +142,7 @@ fun AccountSettingsScreen(
 
                     SettingsMenuRow(
                         title = "Para Birimi",
-                        value = "TRY",
+                        value = currencyCode,
                         icon = Icons.Outlined.Payments,
                         onClick = onCurrencyClick
                     )

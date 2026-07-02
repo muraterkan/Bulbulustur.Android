@@ -87,7 +87,7 @@ object ApiRoutes {
         "http://$APPLICATION_SERVER_HOST:30225/api/"
 
     const val STATUS_BASE_URL =
-        "http://$APPLICATION_SERVER_HOST:30230/api/"
+        "http://$APPLICATION_SERVER_HOST:30230/api/status/"
 
     const val B2B_BASE_URL =
         "http://$APPLICATION_SERVER_HOST:30235/api/"
@@ -120,9 +120,12 @@ object ApiRoutes {
     const val MEMBER_BASE_URL =
         "http://$APPLICATION_SERVER_HOST:30180/api/Member/"
 
-    // -------------------------------------------------------------------------
-    // Support API - 30190
-    // -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
+// Support API - 30190
+// -------------------------------------------------------------------------
+
+    const val FAQ_BASE_URL =
+        "http://$APPLICATION_SERVER_HOST:30190/api/Faq/"
 
     const val TOOLTIP_BASE_URL =
         "http://$APPLICATION_SERVER_HOST:30190/api/Tooltip/"
@@ -276,11 +279,14 @@ object ApiRoutes {
     // Commerce Support API - 30185
     // -------------------------------------------------------------------------
 
+    const val COMMERCE_SUPPORT_ACCOUNT_BASE_URL =
+        "http://$APPLICATION_SERVER_HOST:30185/api/Account/"
+
     const val COMMERCE_SUPPORT_BASKET_BASE_URL =
         "http://$APPLICATION_SERVER_HOST:30185/api/Basket/"
 
     const val COMMERCE_SUPPORT_MEMBER_BASE_URL =
-        "http://$APPLICATION_SERVER_HOST:30185/api/Member/"
+        "http://$APPLICATION_SERVER_HOST:30185/api/Account/"
 
     const val COMMERCE_SUPPORT_ORDER_BASE_URL =
         "http://$APPLICATION_SERVER_HOST:30185/api/Order/"
@@ -293,4 +299,5 @@ object ApiRoutes {
 
     const val COMMERCE_SUPPORT_STORE_BASE_URL =
         "http://$APPLICATION_SERVER_HOST:30185/api/Store/"
+
 }

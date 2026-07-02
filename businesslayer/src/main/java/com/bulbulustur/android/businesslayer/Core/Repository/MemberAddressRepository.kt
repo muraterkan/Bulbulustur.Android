@@ -8,64 +8,47 @@ import com.bulbulustur.android.businesslayer.Core.Network.ApiClient
 import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
-class MemberAddressRepository(
-    private val apiClient: ApiClient = ApiClient
-) : IMemberAddressRepository {
+class MemberAddressRepository(private val apiClient: ApiClient = ApiClient) : IMemberAddressRepository {
 
-    override suspend fun GetMemberAddressListAsync(): Result<List<MemberAddressDTO>> {
+    override suspend fun GetAccountAddressesAsync(memberId: Int, count: Int): Result<List<MemberAddressDTO>> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetMemberAddressListAsync"
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_ACCOUNT_BASE_URL,
+            method = "GetAccountAddressesAsync",
+            query = "memberId=$memberId&count=$count"
         )
     }
 
-    override suspend fun GetMemberAddressByIdAsync(
-        memberAddressId: Int
-    ): Result<MemberAddressUpdateModel?> {
+    override suspend fun GetAccountAddressByIdAsync(memberId: Int, addressKey: String): Result<MemberAddressUpdateModel?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetMemberAddressByIdAsync",
-            query = "memberAddressId=$memberAddressId"
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_ACCOUNT_BASE_URL,
+            method = "GetAccountAddressByIdAsync",
+            query = "memberId=$memberId&addressKey=$addressKey"
         )
     }
 
-    override suspend fun GetMemberAddressByIdExtendedAsync(
-        memberAddressId: Int
-    ): Result<MemberAddressDTO?> {
-        return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetMemberAddressByIdExtendedAsync",
-            query = "memberAddressId=$memberAddressId"
+    override suspend fun InsertAccountAddressAsync(memberId: Int, model: MemberAddressInsertModel): Result<Unit> {
+        return apiClient.PostAsync<MemberAddressInsertModel, Unit>(
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_ACCOUNT_BASE_URL,
+            method = "InsertAccountAddressAsync",
+            data = model,
+            query = "memberId=$memberId"
         )
     }
 
-    override suspend fun InsertAsync(
-        model: MemberAddressInsertModel
-    ): Result<Unit> {
-        return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "InsertAsync",
-            data = model
+    override suspend fun UpdateAccountAddressAsync(memberId: Int, model: MemberAddressUpdateModel): Result<Unit> {
+        return apiClient.PutAsync<MemberAddressUpdateModel, Unit>(
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_ACCOUNT_BASE_URL,
+            method = "UpdateAccountAddressAsync",
+            data = model,
+            query = "memberId=$memberId"
         )
     }
 
-    override suspend fun UpdateAsync(
-        model: MemberAddressUpdateModel
-    ): Result<Unit> {
-        return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "UpdateAsync",
-            data = model
-        )
-    }
-
-    override suspend fun DeleteAsync(
-        memberAddressId: Int
-    ): Result<Unit> {
+    override suspend fun DeleteAccountAddressAsync(memberId: Int, addressId: Int): Result<Unit> {
         return apiClient.DeleteAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "DeleteAsync",
-            query = "memberAddressId=$memberAddressId"
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_ACCOUNT_BASE_URL,
+            method = "DeleteAccountAddress",
+            query = "memberId=$memberId&addressId=$addressId"
         )
     }
 }

@@ -7,24 +7,23 @@ data class UserSessionState(
     val IsInitialized: Boolean = false,
     val ThemeMode: EThemeMode = EThemeMode.System,
     val Language: EApplicationLanguage = EApplicationLanguage.Turkish,
-    val AuthenticationState: EAuthenticationState =
-        EAuthenticationState.Initializing,
+    val CountryId: Int = 0,
+    val CountryName: String = "Türkiye",
+    val CountryCode: String = "TR",
+    val CurrencyId: Int = 0,
+    val CurrencyCode: String = "TRY",
+    val CurrencyName: String = "Türk Lirası",
+    val CurrencySymbol: String = "₺",
+    val AuthenticationState: EAuthenticationState = EAuthenticationState.Initializing,
     val MemberId: Int = 0
 ) {
 
     val IsAuthenticated: Boolean
-        get() =
-            AuthenticationState ==
-                    EAuthenticationState.Authenticated &&
-                    MemberId > 0
+        get() = AuthenticationState == EAuthenticationState.Authenticated && MemberId > 0
 
     val IsAnonymous: Boolean
-        get() =
-            AuthenticationState ==
-                    EAuthenticationState.Anonymous
+        get() = AuthenticationState == EAuthenticationState.Anonymous
 
     val IsAuthenticationInitializing: Boolean
-        get() =
-            AuthenticationState ==
-                    EAuthenticationState.Initializing
+        get() = AuthenticationState == EAuthenticationState.Initializing
 }

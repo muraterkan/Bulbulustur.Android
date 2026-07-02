@@ -7,6 +7,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.bulbulustur.android.Application.Controllers.AccountController
 import com.bulbulustur.android.Application.Controllers.LogonController
 import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
 import com.bulbulustur.android.Application.Navigation.Routes.AccountRoutes
@@ -54,7 +55,8 @@ import com.bulbulustur.android.businesslayer.Core.Enums.EApplicationLanguage
 fun NavGraphBuilder.accountGraph(
     navigator: BulbulusturNavigator,
     sessionState: UserSessionState,
-    logonController: LogonController
+    logonController: LogonController,
+    accountController: AccountController
 ) {
     composable(
         route = AccountRoutes.AccountHome
@@ -602,11 +604,9 @@ fun NavGraphBuilder.accountGraph(
             onBackClick = {
                 navigator.back()
             },
-            onRequestDetailClick = {
+            onRequestDetailClick = { requestId ->
                 navigator.navController.navigate(
-                    OrderRoutes.detail(
-                        1
-                    )
+                    AccountRoutes.requestDetail(requestId)
                 )
             },
             onOrderListClick = {
@@ -618,8 +618,15 @@ fun NavGraphBuilder.accountGraph(
     }
 
     composable(
-        route = AccountRoutes.RequestDetail
-    ) {
+        route = AccountRoutes.RequestDetail,
+        arguments = listOf(
+            navArgument("requestId") {
+                type = NavType.IntType
+            }
+        )
+    ) { backStackEntry ->
+        val requestId = backStackEntry.arguments?.getInt("requestId") ?: 0
+
         RequestDetailScreen(
             onBackClick = {
                 navigator.back()

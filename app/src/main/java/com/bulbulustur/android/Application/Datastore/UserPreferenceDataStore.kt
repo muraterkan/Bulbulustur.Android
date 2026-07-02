@@ -5,6 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.bulbulustur.android.Application.Session.UserSessionState
@@ -41,23 +42,48 @@ class UserPreferenceDataStore(
                 UserSessionState(
                     IsInitialized = true,
                     ThemeMode = preferences.ReadThemeMode(),
-                    Language = preferences.ReadLanguage()
+                    Language = preferences.ReadLanguage(),
+                    CountryId = preferences[PreferenceKeys.CountryId] ?: 0,
+                    CountryName = preferences[PreferenceKeys.CountryName] ?: "Türkiye",
+                    CountryCode = preferences[PreferenceKeys.CountryCode] ?: "TR",
+                    CurrencyId = preferences[PreferenceKeys.CurrencyId] ?: 0,
+                    CurrencyCode = preferences[PreferenceKeys.CurrencyCode] ?: "TRY",
+                    CurrencyName = preferences[PreferenceKeys.CurrencyName] ?: "Türk Lirası",
+                    CurrencySymbol = preferences[PreferenceKeys.CurrencySymbol] ?: "₺"
                 )
             }
 
-    suspend fun SetThemeMode(
-        themeMode: EThemeMode
-    ) {
+    suspend fun SetThemeMode(themeMode: EThemeMode) {
         DataStore.edit { preferences ->
             preferences[PreferenceKeys.ThemeMode] = themeMode.name
         }
     }
 
-    suspend fun SetLanguage(
-        language: EApplicationLanguage
-    ) {
+    suspend fun SetLanguage(language: EApplicationLanguage) {
         DataStore.edit { preferences ->
             preferences[PreferenceKeys.LanguageCode] = language.Code
+        }
+    }
+
+    suspend fun SetCountry(countryId: Int, countryName: String, countryCode: String) {
+        DataStore.edit { preferences ->
+            preferences[PreferenceKeys.CountryId] = countryId
+            preferences[PreferenceKeys.CountryName] = countryName
+            preferences[PreferenceKeys.CountryCode] = countryCode
+        }
+    }
+
+    suspend fun SetCurrency(
+        currencyId: Int,
+        currencyCode: String,
+        currencyName: String,
+        currencySymbol: String
+    ) {
+        DataStore.edit { preferences ->
+            preferences[PreferenceKeys.CurrencyId] = currencyId
+            preferences[PreferenceKeys.CurrencyCode] = currencyCode
+            preferences[PreferenceKeys.CurrencyName] = currencyName
+            preferences[PreferenceKeys.CurrencySymbol] = currencySymbol
         }
     }
 
@@ -87,12 +113,16 @@ class UserPreferenceDataStore(
 
     private object PreferenceKeys {
 
-        val ThemeMode = stringPreferencesKey(
-            name = "theme_mode"
-        )
+        val ThemeMode = stringPreferencesKey("theme_mode")
+        val LanguageCode = stringPreferencesKey("language_code")
 
-        val LanguageCode = stringPreferencesKey(
-            name = "language_code"
-        )
+        val CountryId = intPreferencesKey("country_id")
+        val CountryName = stringPreferencesKey("country_name")
+        val CountryCode = stringPreferencesKey("country_code")
+
+        val CurrencyId = intPreferencesKey("currency_id")
+        val CurrencyCode = stringPreferencesKey("currency_code")
+        val CurrencyName = stringPreferencesKey("currency_name")
+        val CurrencySymbol = stringPreferencesKey("currency_symbol")
     }
 }

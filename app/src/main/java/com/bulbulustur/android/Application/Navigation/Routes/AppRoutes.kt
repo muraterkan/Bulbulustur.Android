@@ -246,7 +246,11 @@ object AccountRoutes {
     const val ReviewEdit = "account/reviews/edit"
     const val Coupons = "account/coupons"
     const val Requests = "account/requests"
-    const val RequestDetail = "account/requests/detail"
+    const val RequestDetail = "account/requests/detail/{requestId}"
+
+    fun requestDetail(requestId: Int): String {
+        return "account/requests/detail/$requestId"
+    }
     const val Subscriptions = "account/subscriptions"
     const val SubscriptionDetail = "account/subscriptions/detail"
     const val WalletBalance = "account/wallet-balance"

@@ -13,20 +13,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material.icons.outlined.Language
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import coil3.compose.AsyncImage
-import coil3.request.ImageRequest
-import com.bulbulustur.android.Application.Localization.BBLocalization
-import com.bulbulustur.android.Application.Localization.LocalizationKeys
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
@@ -35,41 +30,23 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BbTypography
-import com.bulbulustur.android.businesslayer.Core.Enums.EApplicationLanguage
+import com.bulbulustur.android.businesslayer.Core.DTO.SystemDescLanguageDTO
 
 @Composable
 fun LanguageSettingsScreen(
-    selectedLanguage: EApplicationLanguage,
-    onLanguageSelected: (EApplicationLanguage) -> Unit,
+    languages: List<SystemDescLanguageDTO>,
+    selectedLanguageId: Int,
+    isLoading: Boolean,
+    errorMessage: String?,
+    onLanguageSelected: (SystemDescLanguageDTO) -> Unit,
     onBackClick: () -> Unit = {}
 ) {
-    val localization = BBLocalization.Current
-
-    val languages = remember {
-        listOf(
-            LanguageOption(
-                Language = EApplicationLanguage.Turkish,
-                NameKey = LocalizationKeys.Language.Turkish,
-                Region = "Türkiye",
-                FlagFileName = "turkey.svg"
-            ),
-            LanguageOption(
-                Language = EApplicationLanguage.English,
-                NameKey = LocalizationKeys.Language.English,
-                Region = "United States",
-                FlagFileName = "United States of America.svg"
-            )
-        )
-    }
-
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = localization.Get(
-                    LocalizationKeys.Language.HeaderLabel
-                ),
+                title = "Dil",
                 onBackClick = onBackClick
             )
         }
@@ -77,40 +54,57 @@ fun LanguageSettingsScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(
-                    MaterialTheme.colorScheme.background
-                ),
+                .background(MaterialTheme.colorScheme.background),
             contentPadding = PaddingValues(
                 start = BBSpacing.PageHorizontal,
-                top = innerPadding.calculateTopPadding() +
-                        BBSpacing.PageTopCompact,
+                top = innerPadding.calculateTopPadding() + BBSpacing.PageTopCompact,
                 end = BBSpacing.PageHorizontal,
-                bottom = innerPadding.calculateBottomPadding() +
-                        BBSpacing.PageBottom
+                bottom = innerPadding.calculateBottomPadding() + BBSpacing.PageBottom
             ),
-            verticalArrangement = Arrangement.spacedBy(
-                BBSpacing.CardGap
-            )
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
             item {
                 LanguageIntroCard()
             }
 
-            items(
-                items = languages,
-                key = { language ->
-                    language.Language.name
-                }
-            ) { language ->
-                LanguageRow(
-                    item = language,
-                    isSelected = selectedLanguage == language.Language,
-                    onClick = {
-                        if (selectedLanguage != language.Language) {
-                            onLanguageSelected(language.Language)
-                        }
+            when {
+                isLoading -> {
+                    item {
+                        SettingsLoadingCard("Diller yükleniyor...")
                     }
-                )
+                }
+
+                !errorMessage.isNullOrBlank() -> {
+                    item {
+                        SettingsErrorCard(errorMessage)
+                    }
+                }
+
+                languages.isEmpty() -> {
+                    item {
+                        SettingsErrorCard("Kullanılabilir dil bulunamadı.")
+                    }
+                }
+
+                else -> {
+                    items(
+                        items = languages.filter {
+                            it.SystemDescLanguageId == 1 ||
+                                    it.SystemDescLanguageId == 2
+                        },
+                        key = { it.SystemDescLanguageId }
+                    ) { language ->
+                        LanguageRow(
+                            item = language,
+                            isSelected = language.SystemDescLanguageId == selectedLanguageId,
+                            onClick = {
+                                if (language.SystemDescLanguageId != selectedLanguageId) {
+                                    onLanguageSelected(language)
+                                }
+                            }
+                        )
+                    }
+                }
             }
         }
     }
@@ -118,17 +112,13 @@ fun LanguageSettingsScreen(
 
 @Composable
 private fun LanguageIntroCard() {
-    val localization = BBLocalization.Current
-
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = localization.Get(
-                LocalizationKeys.Language.LocalPreferenceDescription
-            ),
+            text = "Uygulamada kullanmak istediğiniz dili seçin.",
             style = BbTypography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -137,12 +127,10 @@ private fun LanguageIntroCard() {
 
 @Composable
 private fun LanguageRow(
-    item: LanguageOption,
+    item: SystemDescLanguageDTO,
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
-    val localization = BBLocalization.Current
-
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
@@ -151,32 +139,38 @@ private fun LanguageRow(
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(
-                BBSpacing.Space3
-            ),
+            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            LanguageFlag(
-                flagFileName = item.FlagFileName,
-                contentDescription = item.Region
-            )
+            Box(
+                modifier = Modifier
+                    .size(BBIcon.BoxLg)
+                    .background(
+                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        shape = BBRadius.PillShape
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Language,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(BBIcon.SizeLg)
+                )
+            }
 
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(
-                    BBSpacing.Space1
-                )
+                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = localization.Get(
-                        item.NameKey
-                    ),
+                    text = item.Content,
                     style = BbTypography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = item.Region,
+                    text = item.LanguageIsoCode.uppercase(),
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -185,7 +179,7 @@ private fun LanguageRow(
             if (isSelected) {
                 Icon(
                     imageVector = Icons.Outlined.CheckCircle,
-                    contentDescription = null,
+                    contentDescription = "Seçili dil",
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(BBIcon.SizeLg)
                 )
@@ -195,37 +189,42 @@ private fun LanguageRow(
 }
 
 @Composable
-private fun LanguageFlag(
-    flagFileName: String,
-    contentDescription: String
-) {
-    val context = LocalContext.current
-
-    Box(
-        modifier = Modifier
-            .size(BBIcon.BoxLg)
-            .background(
-                color = MaterialTheme.colorScheme.surfaceVariant,
-                shape = BBRadius.PillShape
-            ),
-        contentAlignment = Alignment.Center
+private fun SettingsLoadingCard(message: String) {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
     ) {
-        AsyncImage(
-            model = ImageRequest.Builder(context)
-                .data(
-                    "file:///android_asset/flags/$flagFileName"
-                )
-                .build(),
-            contentDescription = contentDescription,
-            modifier = Modifier.size(BBIcon.Size2Xl),
-            contentScale = ContentScale.Fit
-        )
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            CircularProgressIndicator(
+                modifier = Modifier.size(BBIcon.SizeLg),
+                strokeWidth = BBSpacing.Space1 / 2,
+                color = MaterialTheme.colorScheme.primary
+            )
+
+            Text(
+                text = message,
+                style = BbTypography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
     }
 }
 
-private data class LanguageOption(
-    val Language: EApplicationLanguage,
-    val NameKey: String,
-    val Region: String,
-    val FlagFileName: String
-)
+@Composable
+private fun SettingsErrorCard(message: String) {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
+        Text(
+            text = message,
+            style = BbTypography.bodySmall,
+            color = MaterialTheme.colorScheme.error
+        )
+    }
+}

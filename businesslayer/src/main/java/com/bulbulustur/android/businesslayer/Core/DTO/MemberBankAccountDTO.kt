@@ -6,5 +6,9 @@ data class MemberBankAccountDTO(
     val InsertedDate: String = "",
     val StatusId: Int = 0,
     val BankId: Int = 0,
-    val BankIban: String = ""
+    val BankIban: String = "",
+    val MemberId: Int = 0,
+    val BankName: String = "",
+    val Picture: String = "",
+    val BankHolder: String = ""
 )

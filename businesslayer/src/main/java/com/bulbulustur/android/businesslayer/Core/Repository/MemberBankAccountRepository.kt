@@ -8,64 +8,47 @@ import com.bulbulustur.android.businesslayer.Core.Network.ApiClient
 import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
-class MemberBankAccountRepository(
-    private val apiClient: ApiClient = ApiClient
-) : IMemberBankAccountRepository {
+class MemberBankAccountRepository(private val apiClient: ApiClient = ApiClient) : IMemberBankAccountRepository {
 
-    override suspend fun GetMemberBankAccountListAsync(): Result<List<MemberBankAccountDTO>> {
+    override suspend fun GetAccountBankAccountsAsync(memberId: Int, count: Int): Result<List<MemberBankAccountDTO>> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetMemberBankAccountListAsync"
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_ACCOUNT_BASE_URL,
+            method = "GetAccountBankAccountsAsync",
+            query = "memberId=$memberId&count=$count"
         )
     }
 
-    override suspend fun GetMemberBankAccountByIdAsync(
-        memberBankAccountId: Int
-    ): Result<MemberBankAccountUpdateModel?> {
+    override suspend fun GetAccountBankAccountByIdAsync(memberId: Int, bankAccountId: Int): Result<MemberBankAccountUpdateModel?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetMemberBankAccountByIdAsync",
-            query = "memberBankAccountId=$memberBankAccountId"
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_ACCOUNT_BASE_URL,
+            method = "GetAccountBankAccountByIdAsync",
+            query = "memberId=$memberId&bankAccountId=$bankAccountId"
         )
     }
 
-    override suspend fun GetMemberBankAccountByIdExtendedAsync(
-        memberBankAccountId: Int
-    ): Result<MemberBankAccountDTO?> {
-        return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetMemberBankAccountByIdExtendedAsync",
-            query = "memberBankAccountId=$memberBankAccountId"
+    override suspend fun InsertAccountBankAccountAsync(memberId: Int, model: MemberBankAccountInsertModel): Result<Unit> {
+        return apiClient.PostAsync<MemberBankAccountInsertModel, Unit>(
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_ACCOUNT_BASE_URL,
+            method = "InsertAccountBankAccount",
+            data = model,
+            query = "memberId=$memberId"
         )
     }
 
-    override suspend fun InsertAsync(
-        model: MemberBankAccountInsertModel
-    ): Result<Unit> {
-        return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "InsertAsync",
-            data = model
+    override suspend fun UpdateAccountBankAccountAsync(memberId: Int, model: MemberBankAccountUpdateModel): Result<Unit> {
+        return apiClient.PutAsync<MemberBankAccountUpdateModel, Unit>(
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_ACCOUNT_BASE_URL,
+            method = "UpdateAccountBankAccount",
+            data = model,
+            query = "memberId=$memberId"
         )
     }
 
-    override suspend fun UpdateAsync(
-        model: MemberBankAccountUpdateModel
-    ): Result<Unit> {
-        return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "UpdateAsync",
-            data = model
-        )
-    }
-
-    override suspend fun DeleteAsync(
-        memberBankAccountId: Int
-    ): Result<Unit> {
+    override suspend fun DeleteAccountBankAccountAsync(memberId: Int, bankAccountId: Int): Result<Unit> {
         return apiClient.DeleteAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "DeleteAsync",
-            query = "memberBankAccountId=$memberBankAccountId"
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_ACCOUNT_BASE_URL,
+            method = "DeleteAccountBankAccount",
+            query = "memberId=$memberId&bankAccountId=$bankAccountId"
         )
     }
 }

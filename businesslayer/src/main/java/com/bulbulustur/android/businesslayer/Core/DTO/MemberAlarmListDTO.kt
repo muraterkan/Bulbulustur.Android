@@ -13,5 +13,8 @@ data class MemberAlarmListDTO(
     val CurrencyId: Int? = null,
     val Processed: Boolean = false,
     val BuyerAcceptsOtherSellers: Boolean = false,
-    val TriggerCheck: Boolean = false
+    val TriggerCheck: Boolean = false,
+    val MemberName: String = "",
+    val ProductName: String = "",
+    val DefaultPicture: String = ""
 )

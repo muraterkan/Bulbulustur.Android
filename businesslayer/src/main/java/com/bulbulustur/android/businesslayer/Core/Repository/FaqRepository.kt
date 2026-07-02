@@ -12,60 +12,51 @@ class FaqRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IFaqRepository {
 
-    override suspend fun GetFaqListAsync(): Result<List<FaqDTO>> {
+    override suspend fun GetFaqs(languageId: Int, faqSectionId: Int, count: Int): Result<List<FaqDTO>> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetFaqListAsync"
+            baseUrl = ApiRoutes.FAQ_BASE_URL,
+            method = "GetFaqs",
+            query = "languageId=$languageId&faqSectionId=$faqSectionId&count=$count"
         )
     }
 
-    override suspend fun GetFaqByIdAsync(
-        faqId: Int
-    ): Result<FaqUpdateModel?> {
+    override suspend fun GetFaqById(languageId: Int, helpId: Int): Result<FaqUpdateModel?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetFaqByIdAsync",
-            query = "faqId=$faqId"
+            baseUrl = ApiRoutes.FAQ_BASE_URL,
+            method = "GetFaqById",
+            query = "languageId=$languageId&helpId=$helpId"
         )
     }
 
-    override suspend fun GetFaqByIdExtendedAsync(
-        faqId: Int
-    ): Result<FaqDTO?> {
+    override suspend fun GetFaqByIdExtended(languageId: Int, helpId: Int): Result<FaqDTO?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetFaqByIdExtendedAsync",
-            query = "faqId=$faqId"
+            baseUrl = ApiRoutes.FAQ_BASE_URL,
+            method = "GetFaqByIdExtended",
+            query = "languageId=$languageId&helpId=$helpId"
         )
     }
 
-    override suspend fun InsertAsync(
-        model: FaqInsertModel
-    ): Result<Unit> {
+    override suspend fun Insert(model: FaqInsertModel): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "InsertAsync",
+            baseUrl = ApiRoutes.FAQ_BASE_URL,
+            method = "FaqInsert",
             data = model
         )
     }
 
-    override suspend fun UpdateAsync(
-        model: FaqUpdateModel
-    ): Result<Unit> {
+    override suspend fun Update(model: FaqUpdateModel): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "UpdateAsync",
+            baseUrl = ApiRoutes.FAQ_BASE_URL,
+            method = "FaqUpdate",
             data = model
         )
     }
 
-    override suspend fun DeleteAsync(
-        faqId: Int
-    ): Result<Unit> {
-        return apiClient.DeleteAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "DeleteAsync",
-            query = "faqId=$faqId"
+    override suspend fun Delete(helpId: Int): Result<Unit> {
+        return apiClient.PostAsync(
+            baseUrl = ApiRoutes.FAQ_BASE_URL,
+            method = "FaqDelete",
+            data = helpId
         )
     }
 }

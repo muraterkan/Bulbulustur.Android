@@ -1,9 +1,14 @@
 package com.bulbulustur.android.Application.Navigation.Graph
 
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.bulbulustur.android.Application.Controllers.AccountController
+import com.bulbulustur.android.Application.Controllers.SettingsController
 import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
 import com.bulbulustur.android.Application.Navigation.Routes.AccountRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.SettingsRoutes
@@ -19,15 +24,36 @@ import com.bulbulustur.android.Application.Views.Account.LegalPoliciesScreen
 import com.bulbulustur.android.Application.Views.Account.LegalPolicyDetailScreen
 import com.bulbulustur.android.Application.Views.Account.RegionSettingsScreen
 import com.bulbulustur.android.Application.Views.Account.SystemStatusScreen
+import com.bulbulustur.android.businesslayer.Core.Enums.EApplicationLanguage
+import androidx.compose.ui.platform.LocalUriHandler
 
 fun NavGraphBuilder.settingsGraph(
     navigator: BulbulusturNavigator,
     sessionState: UserSessionState,
-    userSessionManager: UserSessionManager
+    userSessionManager: UserSessionManager,
+    accountController: AccountController,
+    settingsController: SettingsController
 ) {
 
     composable(SettingsRoutes.Home) {
+        val languageName = when (sessionState.Language.Code.lowercase()) {
+            "tr" -> "Türkçe"
+            "en" -> "English"
+            else -> sessionState.Language.Code.uppercase()
+        }
+
+        val themeName = when (sessionState.ThemeMode.name) {
+            "System" -> "Sistem teması"
+            "Light" -> "Açık tema"
+            "Dark" -> "Koyu tema"
+            else -> sessionState.ThemeMode.name
+        }
+
         AccountSettingsScreen(
+            languageName = languageName,
+            themeName = themeName,
+            countryName = sessionState.CountryName,
+            currencyCode = sessionState.CurrencyCode,
             onBackClick = {
                 navigator.back()
             },
@@ -90,9 +116,35 @@ fun NavGraphBuilder.settingsGraph(
     }
 
     composable(SettingsRoutes.Language) {
+        val settingsState by settingsController.State.collectAsState()
+
+        val languageId = when (sessionState.Language) {
+            EApplicationLanguage.Turkish -> 1
+            EApplicationLanguage.English -> 2
+        }
+
+        LaunchedEffect(languageId) {
+            settingsController.GetLanguages(languageId)
+        }
+
         LanguageSettingsScreen(
-            selectedLanguage = sessionState.Language,
-            onLanguageSelected = userSessionManager::SetLanguage,
+            languages = settingsState.Languages,
+            selectedLanguageId = languageId,
+            isLoading = settingsState.IsLoadingLanguages,
+            errorMessage = settingsState.LanguageResult
+                ?.takeIf { !it.Success }
+                ?.Message,
+            onLanguageSelected = { selectedLanguage ->
+                when (selectedLanguage.SystemDescLanguageId) {
+                    1 -> userSessionManager.SetLanguage(
+                        EApplicationLanguage.Turkish
+                    )
+
+                    2 -> userSessionManager.SetLanguage(
+                        EApplicationLanguage.English
+                    )
+                }
+            },
             onBackClick = {
                 navigator.back()
             }
@@ -110,7 +162,33 @@ fun NavGraphBuilder.settingsGraph(
     }
 
     composable(SettingsRoutes.Region) {
+        val settingsState by settingsController.State.collectAsState()
+
+        val languageId = when (sessionState.Language) {
+            EApplicationLanguage.Turkish -> 1
+            EApplicationLanguage.English -> 2
+        }
+
+        LaunchedEffect(languageId) {
+            settingsController.GetCountries(languageId)
+        }
+
         RegionSettingsScreen(
+            countries = settingsState.Countries,
+            selectedCountryId = sessionState.CountryId,
+            isLoading = settingsState.IsLoadingCountries,
+            errorMessage = settingsState.CountryResult
+                ?.takeIf { !it.Success }
+                ?.Message,
+            onCountrySelected = { country ->
+                userSessionManager.SetCountry(
+                    countryId = country.AddressCountryId,
+                    countryName = country.Content,
+                    countryCode = country.IsoShortCode.ifBlank {
+                        country.Code
+                    }
+                )
+            },
             onBackClick = {
                 navigator.back()
             }
@@ -118,7 +196,33 @@ fun NavGraphBuilder.settingsGraph(
     }
 
     composable(SettingsRoutes.Currency) {
+        val settingsState by settingsController.State.collectAsState()
+
+        val languageId = when (sessionState.Language) {
+            EApplicationLanguage.Turkish -> 1
+            EApplicationLanguage.English -> 2
+        }
+
+        LaunchedEffect(languageId) {
+            settingsController.GetCurrencies(languageId)
+        }
+
         CurrencySettingsScreen(
+            currencies = settingsState.Currencies,
+            selectedCurrencyId = sessionState.CurrencyId,
+            selectedCurrencyCode = sessionState.CurrencyCode,
+            isLoading = settingsState.IsLoadingCurrencies,
+            errorMessage = settingsState.CurrencyResult
+                ?.takeIf { !it.Success }
+                ?.Message,
+            onCurrencySelected = { currency ->
+                userSessionManager.SetCurrency(
+                    currencyId = currency.SystemDescCurrencyId,
+                    currencyCode = currency.IsoCode,
+                    currencyName = currency.Content,
+                    currencySymbol = currency.CurrencySymbol
+                )
+            },
             onBackClick = {
                 navigator.back()
             }
@@ -126,9 +230,37 @@ fun NavGraphBuilder.settingsGraph(
     }
 
     composable(SettingsRoutes.Communication) {
+        val accountState by accountController.State.collectAsState()
+
+        val languageId = when (sessionState.Language) {
+            EApplicationLanguage.Turkish -> 1
+            EApplicationLanguage.English -> 2
+        }
+
+        LaunchedEffect(languageId, sessionState.MemberId) {
+            accountController.GetMember(
+                languageId = languageId,
+                memberId = sessionState.MemberId
+            )
+        }
+
         CommunicationPreferenceScreen(
+            member = accountState.MemberUpdateResult?.Data,
+            isLoading = accountState.IsLoading &&
+                    accountState.CurrentAction == "GetMember",
+            isSaving = accountState.IsContactPreferenceSaving,
+            errorMessage = accountState.ErrorMessage,
+            isSaved = accountState.IsContactPreferenceSaved,
             onBackClick = {
                 navigator.back()
+            },
+            onSaveClick = { emailAllowed, smsAllowed, phoneAllowed ->
+                accountController.SetContactPreference(
+                    memberId = sessionState.MemberId,
+                    emailPreference = if (emailAllowed) 1 else 0,
+                    smsPreference = if (smsAllowed) 1 else 0,
+                    phonePreference = if (phoneAllowed) 1 else 0
+                )
             }
         )
     }
@@ -147,11 +279,27 @@ fun NavGraphBuilder.settingsGraph(
     }
 
     composable(SettingsRoutes.SystemStatus) {
+        val settingsState by settingsController.State.collectAsState()
+        val uriHandler = LocalUriHandler.current
+
+        LaunchedEffect(Unit) {
+            settingsController.GetStatusOverview()
+        }
+
         SystemStatusScreen(
+            overview = settingsState.StatusOverview,
+            isLoading = settingsState.IsLoadingStatus,
+            errorMessage = settingsState.StatusOverviewResult
+                ?.takeIf { !it.Success }
+                ?.Message,
             onBackClick = {
                 navigator.back()
             },
+            onRetryClick = {
+                settingsController.RefreshStatusOverview()
+            },
             onOpenStatusPageClick = {
+                uriHandler.openUri("https://status.bulbulustur.com")
             }
         )
     }
@@ -179,7 +327,6 @@ fun NavGraphBuilder.settingsGraph(
             }
         )
     ) { backStackEntry ->
-
         val policyKey = backStackEntry.arguments
             ?.getString("policyKey")
             .orEmpty()

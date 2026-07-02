@@ -4,44 +4,18 @@ import com.bulbulustur.android.businesslayer.Core.DTO.MemberAlarmListDTO
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.MemberAlarmListInsertModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberAlarmListUpdateModel
 import com.bulbulustur.android.businesslayer.Core.Util.Result
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
 
 interface IMemberAlarmListRepository {
 
-    @GET("api/MemberAlarmList/GetMemberAlarmListListAsync")
-    suspend fun GetMemberAlarmListListAsync():
-            Result<List<MemberAlarmListDTO>>
+    suspend fun GetAccountAlarmLists(memberId: Int, count: Int): Result<List<MemberAlarmListDTO>>
 
-    @GET("api/MemberAlarmList/GetMemberAlarmListByIdAsync")
-    suspend fun GetMemberAlarmListByIdAsync(
-        @Query("memberAlarmListId")
-        memberAlarmListId: Int
-    ): Result<MemberAlarmListUpdateModel?>
+    suspend fun GetAccountAlarmListByIdAsync(memberId: Int, memberAlarmListId: Int): Result<MemberAlarmListUpdateModel?>
 
-    @GET("api/MemberAlarmList/GetMemberAlarmListByIdExtendedAsync")
-    suspend fun GetMemberAlarmListByIdExtendedAsync(
-        @Query("memberAlarmListId")
-        memberAlarmListId: Int
-    ): Result<MemberAlarmListDTO?>
+    suspend fun GetAccountAlarmListByIdExtendedAsync(memberId: Int, memberAlarmListId: Int): Result<MemberAlarmListDTO?>
 
-    @POST("api/MemberAlarmList/InsertAsync")
-    suspend fun InsertAsync(
-        @Body
-        model: MemberAlarmListInsertModel
-    ): Result<Unit>
+    suspend fun InsertAccountAlarmAsync(memberId: Int, model: MemberAlarmListInsertModel): Result<Unit>
 
-    @POST("api/MemberAlarmList/UpdateAsync")
-    suspend fun UpdateAsync(
-        @Body
-        model: MemberAlarmListUpdateModel
-    ): Result<Unit>
+    suspend fun UpdateAccountAlarmAsync(memberId: Int, model: MemberAlarmListUpdateModel): Result<Unit>
 
-    @POST("api/MemberAlarmList/DeleteAsync")
-    suspend fun DeleteAsync(
-        @Query("memberAlarmListId")
-        memberAlarmListId: Int
-    ): Result<Unit>
+    suspend fun DeleteAccountAlarmAsync(memberId: Int, memberAlarmListId: Int): Result<Unit>
 }

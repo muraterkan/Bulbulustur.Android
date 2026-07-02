@@ -12,59 +12,53 @@ class SystemDescLanguageRepository(
     private val apiClient: ApiClient = ApiClient
 ) : ISystemDescLanguageRepository {
 
-    override suspend fun GetSystemDescLanguageListAsync(): Result<List<SystemDescLanguageDTO>> {
+    override suspend fun GetSystemDescLanguagesAsync(languageId: Int, count: Int): Result<List<SystemDescLanguageDTO>> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetSystemDescLanguageListAsync"
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "MasterData/GetSystemDescLanguagesAsync",
+            query = "languageId=$languageId&count=$count"
         )
     }
 
-    override suspend fun GetSystemDescLanguageByIdAsync(
-        systemDescLanguageId: Int
-    ): Result<SystemDescLanguageUpdateModel?> {
+    override suspend fun GetSystemDescLanguageByIdAsync(systemDescLanguageId: Int): Result<SystemDescLanguageUpdateModel?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetSystemDescLanguageByIdAsync",
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "SystemDescLanguage/GetSystemDescLanguageByIdAsync",
             query = "systemDescLanguageId=$systemDescLanguageId"
         )
     }
 
     override suspend fun GetSystemDescLanguageByIdExtendedAsync(
+        languageId: Int,
         systemDescLanguageId: Int
     ): Result<SystemDescLanguageDTO?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetSystemDescLanguageByIdExtendedAsync",
-            query = "systemDescLanguageId=$systemDescLanguageId"
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "SystemDescLanguage/GetSystemDescLanguageByIdExtendedAsync",
+            query = "languageId=$languageId&systemDescLanguageId=$systemDescLanguageId"
         )
     }
 
-    override suspend fun InsertAsync(
-        model: SystemDescLanguageInsertModel
-    ): Result<Unit> {
+    override suspend fun InsertAsync(model: SystemDescLanguageInsertModel): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "InsertAsync",
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "SystemDescLanguage/SystemDescLanguageInsertAsync",
             data = model
         )
     }
 
-    override suspend fun UpdateAsync(
-        model: SystemDescLanguageUpdateModel
-    ): Result<Unit> {
+    override suspend fun UpdateAsync(model: SystemDescLanguageUpdateModel): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "UpdateAsync",
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "SystemDescLanguage/SystemDescLanguageUpdateAsync",
             data = model
         )
     }
 
-    override suspend fun DeleteAsync(
-        systemDescLanguageId: Int
-    ): Result<Unit> {
+    override suspend fun DeleteAsync(systemDescLanguageId: Int): Result<Unit> {
         return apiClient.DeleteAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "DeleteAsync",
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "SystemDescLanguage/SystemDescLanguageDelete",
             query = "systemDescLanguageId=$systemDescLanguageId"
         )
     }

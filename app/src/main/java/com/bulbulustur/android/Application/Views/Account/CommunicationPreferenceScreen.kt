@@ -12,12 +12,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -25,28 +27,33 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
-import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
+import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdateModel
 
 @Composable
 fun CommunicationPreferenceScreen(
+    member: MemberUpdateModel?,
+    isLoading: Boolean,
+    isSaving: Boolean,
+    errorMessage: String?,
+    isSaved: Boolean,
     onBackClick: () -> Unit = {},
     onSaveClick: (
         emailAllowed: Boolean,
         smsAllowed: Boolean,
-        phoneAllowed: Boolean,
-        appNotificationAllowed: Boolean
-    ) -> Unit = { _, _, _, _ -> }
+        phoneAllowed: Boolean
+    ) -> Unit = { _, _, _ -> }
 ) {
     val emailAllowedState = remember {
-        mutableStateOf(true)
+        mutableStateOf(false)
     }
 
     val smsAllowedState = remember {
@@ -57,8 +64,10 @@ fun CommunicationPreferenceScreen(
         mutableStateOf(false)
     }
 
-    val appNotificationAllowedState = remember {
-        mutableStateOf(true)
+    LaunchedEffect(member) {
+        emailAllowedState.value = member?.ContactPreferenceEmail == 1
+        smsAllowedState.value = member?.ContactPreferenceSms == 1
+        phoneAllowedState.value = member?.ContactPreferencePhone == 1
     }
 
     Scaffold(
@@ -88,39 +97,62 @@ fun CommunicationPreferenceScreen(
         ) {
             CommunicationDescriptionCard()
 
-            CommunicationPreferenceCard(
-                emailAllowed = emailAllowedState.value,
-                smsAllowed = smsAllowedState.value,
-                phoneAllowed = phoneAllowedState.value,
-                appNotificationAllowed = appNotificationAllowedState.value,
-                onEmailAllowedChange = { value ->
-                    emailAllowedState.value = value
-                },
-                onSmsAllowedChange = { value ->
-                    smsAllowedState.value = value
-                },
-                onPhoneAllowedChange = { value ->
-                    phoneAllowedState.value = value
-                },
-                onAppNotificationAllowedChange = { value ->
-                    appNotificationAllowedState.value = value
+            when {
+                isLoading -> {
+                    CommunicationLoadingCard()
                 }
-            )
 
-            BbButton(
-                text = "Tercihleri Kaydet",
-                onClick = {
-                    onSaveClick(
-                        emailAllowedState.value,
-                        smsAllowedState.value,
-                        phoneAllowedState.value,
-                        appNotificationAllowedState.value
+                member == null -> {
+                    CommunicationErrorCard(
+                        message = errorMessage
+                            ?: "İletişim tercihleri yüklenemedi."
                     )
-                },
-                modifier = Modifier.fillMaxWidth(),
-                variant = BbButtonVariant.Primary,
-                size = BbButtonSize.Medium
-            )
+                }
+
+                else -> {
+                    CommunicationPreferenceCard(
+                        emailAllowed = emailAllowedState.value,
+                        smsAllowed = smsAllowedState.value,
+                        phoneAllowed = phoneAllowedState.value,
+                        enabled = !isSaving,
+                        onEmailAllowedChange = { value ->
+                            emailAllowedState.value = value
+                        },
+                        onSmsAllowedChange = { value ->
+                            smsAllowedState.value = value
+                        },
+                        onPhoneAllowedChange = { value ->
+                            phoneAllowedState.value = value
+                        }
+                    )
+
+                    if (!errorMessage.isNullOrBlank()) {
+                        CommunicationErrorCard(
+                            message = errorMessage
+                        )
+                    }
+
+                    if (isSaved) {
+                        CommunicationSuccessCard()
+                    }
+
+                    BbButton(
+                        text = "Tercihleri Kaydet",
+                        onClick = {
+                            onSaveClick(
+                                emailAllowedState.value,
+                                smsAllowedState.value,
+                                phoneAllowedState.value
+                            )
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        variant = BbButtonVariant.Primary,
+                        size = BbButtonSize.Medium,
+                        enabled = !isSaving,
+                        isLoading = isSaving
+                    )
+                }
+            }
         }
     }
 }
@@ -133,7 +165,7 @@ private fun CommunicationDescriptionCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "E-posta, SMS, telefon ve uygulama bildirimleri için tercihlerinizi buradan yönetebilirsiniz. Zorunlu hesap, güvenlik ve sipariş bildirimleri yasal süreçler kapsamında ayrıca gönderilebilir.",
+            text = "E-posta, SMS ve telefon tercihlerinizi buradan yönetebilirsiniz. Zorunlu hesap, güvenlik ve sipariş bildirimleri yasal süreçler kapsamında ayrıca gönderilebilir.",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -145,11 +177,10 @@ private fun CommunicationPreferenceCard(
     emailAllowed: Boolean,
     smsAllowed: Boolean,
     phoneAllowed: Boolean,
-    appNotificationAllowed: Boolean,
+    enabled: Boolean,
     onEmailAllowedChange: (Boolean) -> Unit,
     onSmsAllowedChange: (Boolean) -> Unit,
-    onPhoneAllowedChange: (Boolean) -> Unit,
-    onAppNotificationAllowedChange: (Boolean) -> Unit
+    onPhoneAllowedChange: (Boolean) -> Unit
 ) {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
@@ -165,6 +196,7 @@ private fun CommunicationPreferenceCard(
                 title = "E-Posta Bildirimleri",
                 description = "Sipariş, kampanya ve hesap bilgilendirmeleri e-posta ile gönderilebilir.",
                 checked = emailAllowed,
+                enabled = enabled,
                 onCheckedChange = onEmailAllowedChange
             )
 
@@ -174,6 +206,7 @@ private fun CommunicationPreferenceCard(
                 title = "SMS Bildirimleri",
                 description = "Kısa bilgilendirme ve doğrulama mesajları SMS ile gönderilebilir.",
                 checked = smsAllowed,
+                enabled = enabled,
                 onCheckedChange = onSmsAllowedChange
             )
 
@@ -183,16 +216,8 @@ private fun CommunicationPreferenceCard(
                 title = "Telefon Araması",
                 description = "Gerekli durumlarda hesabınızla ilgili telefonla iletişim kurulabilir.",
                 checked = phoneAllowed,
+                enabled = enabled,
                 onCheckedChange = onPhoneAllowedChange
-            )
-
-            CommunicationDashedDivider()
-
-            CommunicationPreferenceRow(
-                title = "Uygulama Bildirimleri",
-                description = "Mobil uygulama üzerinden bildirim almayı yönetebilirsiniz.",
-                checked = appNotificationAllowed,
-                onCheckedChange = onAppNotificationAllowedChange
             )
         }
     }
@@ -203,6 +228,7 @@ private fun CommunicationPreferenceRow(
     title: String,
     description: String,
     checked: Boolean,
+    enabled: Boolean,
     onCheckedChange: (Boolean) -> Unit
 ) {
     Row(
@@ -231,9 +257,8 @@ private fun CommunicationPreferenceRow(
 
         Switch(
             checked = checked,
-            onCheckedChange = { value ->
-                onCheckedChange(value)
-            },
+            enabled = enabled,
+            onCheckedChange = onCheckedChange,
             colors = SwitchDefaults.colors(
                 checkedThumbColor = BBColors.White,
                 checkedTrackColor = MaterialTheme.colorScheme.primary,
@@ -242,6 +267,65 @@ private fun CommunicationPreferenceRow(
                 uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant,
                 uncheckedBorderColor = MaterialTheme.colorScheme.outline
             )
+        )
+    }
+}
+
+@Composable
+private fun CommunicationLoadingCard() {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            CircularProgressIndicator(
+                modifier = Modifier.size(24.dp),
+                strokeWidth = 2.dp,
+                color = MaterialTheme.colorScheme.primary
+            )
+
+            Text(
+                text = "İletişim tercihleri yükleniyor...",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+@Composable
+private fun CommunicationErrorCard(
+    message: String
+) {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
+        Text(
+            text = message,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.error
+        )
+    }
+}
+
+@Composable
+private fun CommunicationSuccessCard() {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
+        Text(
+            text = "İletişim tercihleriniz kaydedildi.",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.primary
         )
     }
 }
@@ -274,5 +358,3 @@ private fun CommunicationDashedDivider() {
         )
     }
 }
-
-

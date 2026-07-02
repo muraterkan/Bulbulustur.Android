@@ -8,64 +8,55 @@ import com.bulbulustur.android.businesslayer.Core.Network.ApiClient
 import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
-class MemberAlarmListRepository(
-    private val apiClient: ApiClient = ApiClient
-) : IMemberAlarmListRepository {
+class MemberAlarmListRepository(private val apiClient: ApiClient = ApiClient) : IMemberAlarmListRepository {
 
-    override suspend fun GetMemberAlarmListListAsync(): Result<List<MemberAlarmListDTO>> {
+    override suspend fun GetAccountAlarmLists(memberId: Int, count: Int): Result<List<MemberAlarmListDTO>> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetMemberAlarmListListAsync"
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_ACCOUNT_BASE_URL,
+            method = "GetAccountAlarmLists",
+            query = "memberId=$memberId&count=$count"
         )
     }
 
-    override suspend fun GetMemberAlarmListByIdAsync(
-        memberAlarmListId: Int
-    ): Result<MemberAlarmListUpdateModel?> {
+    override suspend fun GetAccountAlarmListByIdAsync(memberId: Int, memberAlarmListId: Int): Result<MemberAlarmListUpdateModel?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetMemberAlarmListByIdAsync",
-            query = "memberAlarmListId=$memberAlarmListId"
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_ACCOUNT_BASE_URL,
+            method = "GetAccountAlarmListByIdAsync",
+            query = "memberId=$memberId&memberAlarmListId=$memberAlarmListId"
         )
     }
 
-    override suspend fun GetMemberAlarmListByIdExtendedAsync(
-        memberAlarmListId: Int
-    ): Result<MemberAlarmListDTO?> {
+    override suspend fun GetAccountAlarmListByIdExtendedAsync(memberId: Int, memberAlarmListId: Int): Result<MemberAlarmListDTO?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetMemberAlarmListByIdExtendedAsync",
-            query = "memberAlarmListId=$memberAlarmListId"
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_ACCOUNT_BASE_URL,
+            method = "GetAccountAlarmListByIdExtendedAsync",
+            query = "memberId=$memberId&memberAlarmListId=$memberAlarmListId"
         )
     }
 
-    override suspend fun InsertAsync(
-        model: MemberAlarmListInsertModel
-    ): Result<Unit> {
-        return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "InsertAsync",
-            data = model
+    override suspend fun InsertAccountAlarmAsync(memberId: Int, model: MemberAlarmListInsertModel): Result<Unit> {
+        return apiClient.PostAsync<MemberAlarmListInsertModel, Unit>(
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_ACCOUNT_BASE_URL,
+            method = "InsertAccountAlarmAsync",
+            data = model,
+            query = "memberId=$memberId"
         )
     }
 
-    override suspend fun UpdateAsync(
-        model: MemberAlarmListUpdateModel
-    ): Result<Unit> {
-        return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "UpdateAsync",
-            data = model
+    override suspend fun UpdateAccountAlarmAsync(memberId: Int, model: MemberAlarmListUpdateModel): Result<Unit> {
+        return apiClient.PutAsync<MemberAlarmListUpdateModel, Unit>(
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_ACCOUNT_BASE_URL,
+            method = "UpdateAccountAlarmAsync",
+            data = model,
+            query = "memberId=$memberId"
         )
     }
 
-    override suspend fun DeleteAsync(
-        memberAlarmListId: Int
-    ): Result<Unit> {
+    override suspend fun DeleteAccountAlarmAsync(memberId: Int, memberAlarmListId: Int): Result<Unit> {
         return apiClient.DeleteAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "DeleteAsync",
-            query = "memberAlarmListId=$memberAlarmListId"
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_ACCOUNT_BASE_URL,
+            method = "DeleteAccountAlarmAsync",
+            query = "memberId=$memberId&memberAlarmListId=$memberAlarmListId"
         )
     }
 }

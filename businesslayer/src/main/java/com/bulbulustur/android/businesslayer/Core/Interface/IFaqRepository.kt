@@ -4,44 +4,18 @@ import com.bulbulustur.android.businesslayer.Core.DTO.FaqDTO
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.FaqInsertModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.FaqUpdateModel
 import com.bulbulustur.android.businesslayer.Core.Util.Result
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
 
 interface IFaqRepository {
 
-    @GET("api/Faq/GetFaqListAsync")
-    suspend fun GetFaqListAsync():
-            Result<List<FaqDTO>>
+    suspend fun GetFaqs(languageId: Int, faqSectionId: Int, count: Int = 100): Result<List<FaqDTO>>
 
-    @GET("api/Faq/GetFaqByIdAsync")
-    suspend fun GetFaqByIdAsync(
-        @Query("faqId")
-        faqId: Int
-    ): Result<FaqUpdateModel?>
+    suspend fun GetFaqById(languageId: Int, helpId: Int): Result<FaqUpdateModel?>
 
-    @GET("api/Faq/GetFaqByIdExtendedAsync")
-    suspend fun GetFaqByIdExtendedAsync(
-        @Query("faqId")
-        faqId: Int
-    ): Result<FaqDTO?>
+    suspend fun GetFaqByIdExtended(languageId: Int, helpId: Int): Result<FaqDTO?>
 
-    @POST("api/Faq/InsertAsync")
-    suspend fun InsertAsync(
-        @Body
-        model: FaqInsertModel
-    ): Result<Unit>
+    suspend fun Insert(model: FaqInsertModel): Result<Unit>
 
-    @POST("api/Faq/UpdateAsync")
-    suspend fun UpdateAsync(
-        @Body
-        model: FaqUpdateModel
-    ): Result<Unit>
+    suspend fun Update(model: FaqUpdateModel): Result<Unit>
 
-    @POST("api/Faq/DeleteAsync")
-    suspend fun DeleteAsync(
-        @Query("faqId")
-        faqId: Int
-    ): Result<Unit>
+    suspend fun Delete(helpId: Int): Result<Unit>
 }

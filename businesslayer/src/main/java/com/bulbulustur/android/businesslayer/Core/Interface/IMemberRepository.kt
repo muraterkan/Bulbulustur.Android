@@ -5,49 +5,22 @@ import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.MemberInser
 import com.bulbulustur.android.businesslayer.Core.Model.MemberRegisterModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdateModel
 import com.bulbulustur.android.businesslayer.Core.Util.Result
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
 
 interface IMemberRepository {
 
-    @GET("api/Member/GetMemberListAsync")
-    suspend fun GetMemberListAsync():
-            Result<List<MemberDTO>>
+    suspend fun GetMemberListAsync(): Result<List<MemberDTO>>
 
-    @GET("api/Member/GetMemberByIdAsync")
-    suspend fun GetMemberByIdAsync(
-        @Query("memberId")
-        memberId: Int
-    ): Result<MemberUpdateModel?>
+    suspend fun GetMemberByIdAsync(languageId: Int, memberId: Int): Result<MemberUpdateModel?>
 
-    @GET("api/Member/GetMemberByIdExtendedAsync")
-    suspend fun GetMemberByIdExtendedAsync(
-        @Query("memberId")
-        memberId: Int
-    ): Result<MemberDTO?>
+    suspend fun GetMemberByIdExtendedAsync(languageId: Int, memberId: Int): Result<MemberDTO?>
 
-    @POST("api/Member/InsertAsync")
-    suspend fun InsertAsync(
-        @Body
-        model: MemberInsertModel
-    ): Result<Unit>
+    suspend fun InsertAsync(model: MemberInsertModel): Result<Unit>
 
-    suspend fun InsertAsync(
-        languageId: Int,
-        model: MemberRegisterModel
-    ): Result<MemberInsertModel>
+    suspend fun InsertAsync(languageId: Int, model: MemberRegisterModel): Result<MemberInsertModel>
 
-    @POST("api/Member/UpdateAsync")
-    suspend fun UpdateAsync(
-        @Body
-        model: MemberUpdateModel
-    ): Result<Unit>
+    suspend fun UpdateAsync(model: MemberUpdateModel): Result<Unit>
 
-    @POST("api/Member/DeleteAsync")
-    suspend fun DeleteAsync(
-        @Query("memberId")
-        memberId: Int
-    ): Result<Unit>
+    suspend fun SetContactPreferenceAsync(model: MemberUpdateModel): Result<Unit>
+
+    suspend fun DeleteAsync(memberId: Int): Result<Unit>
 }

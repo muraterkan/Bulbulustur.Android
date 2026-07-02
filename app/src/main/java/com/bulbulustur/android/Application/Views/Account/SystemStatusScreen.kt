@@ -14,18 +14,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Api
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.CloudDone
-import androidx.compose.material.icons.outlined.Dns
+import androidx.compose.material.icons.outlined.ErrorOutline
 import androidx.compose.material.icons.outlined.History
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Language
-import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.OpenInNew
-import androidx.compose.material.icons.outlined.Payments
+import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material.icons.outlined.Storage
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -34,8 +31,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
@@ -47,16 +44,21 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BbTypography
+import com.bulbulustur.android.businesslayer.Core.DTO.StatusComponentDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.StatusIncidentDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.StatusMaintenanceDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.StatusOverviewDTO
+import java.util.Locale
 
 @Composable
 fun SystemStatusScreen(
+    overview: StatusOverviewDTO?,
+    isLoading: Boolean,
+    errorMessage: String?,
     onBackClick: () -> Unit = {},
+    onRetryClick: () -> Unit = {},
     onOpenStatusPageClick: () -> Unit = {}
 ) {
-    val components = getDemoSystemStatusComponents()
-    val activeIncidents = getDemoActiveIncidents()
-    val recentIncidents = getDemoRecentIncidents()
-
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
@@ -68,67 +70,32 @@ fun SystemStatusScreen(
             )
         }
     ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.surfaceVariant)
-                .padding(innerPadding)
-                .navigationBarsPadding(),
-            contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
-                top = BBSpacing.PageTopCompact,
-                end = BBSpacing.PageHorizontal,
-                bottom = BBSpacing.PageBottom
-            ),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
-        ) {
-            item {
-                SystemStatusHeroCard()
-            }
-
-            item {
-                SystemStatusComponentCard(
-                    components = components
+        when {
+            isLoading && overview == null -> {
+                SystemStatusLoadingContent(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
                 )
             }
 
-            item {
-                SystemStatusIncidentCard(
-                    title = "Aktif Olaylar",
-                    subtitle = "Şu anda kullanıcıları etkileyen olaylar.",
-                    emptyText = "Aktif olay bulunmuyor.",
-                    incidents = activeIncidents
+            overview == null -> {
+                SystemStatusErrorContent(
+                    message = errorMessage ?: "Sistem durumu alınamadı.",
+                    onRetryClick = onRetryClick,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
                 )
             }
 
-            item {
-                SystemStatusMaintenanceCard()
-            }
-
-            item {
-                SystemStatusIncidentCard(
-                    title = "Son Olaylar",
-                    subtitle = "Yakın dönemde kapatılmış operasyon kayıtları.",
-                    emptyText = "Yakın dönemde olay kaydı bulunmuyor.",
-                    incidents = recentIncidents
-                )
-            }
-
-            item {
-                BbButton(
-                    text = "Detaylı Durum Sayfasını Aç",
-                    onClick = onOpenStatusPageClick,
-                    modifier = Modifier.fillMaxWidth(),
-                    variant = BbButtonVariant.Light,
-                    size = BbButtonSize.Medium,
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Outlined.OpenInNew,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.size(BBIcon.ButtonIcon)
-                        )
-                    }
+            else -> {
+                SystemStatusContent(
+                    overview = overview,
+                    onOpenStatusPageClick = onOpenStatusPageClick,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
                 )
             }
         }
@@ -136,7 +103,78 @@ fun SystemStatusScreen(
 }
 
 @Composable
-private fun SystemStatusHeroCard() {
+private fun SystemStatusContent(
+    overview: StatusOverviewDTO,
+    onOpenStatusPageClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    LazyColumn(
+        modifier = modifier
+            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .navigationBarsPadding(),
+        contentPadding = PaddingValues(
+            start = BBSpacing.PageHorizontal,
+            top = BBSpacing.PageTopCompact,
+            end = BBSpacing.PageHorizontal,
+            bottom = BBSpacing.PageBottom
+        ),
+        verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
+    ) {
+        item {
+            SystemStatusHeroCard(overview = overview)
+        }
+
+        item {
+            SystemStatusComponentCard(components = overview.Components)
+        }
+
+        item {
+            SystemStatusIncidentCard(
+                title = "Aktif Olaylar",
+                subtitle = "Şu anda kullanıcıları etkileyen olaylar.",
+                emptyText = "Aktif olay bulunmuyor.",
+                incidents = overview.ActiveIncidents
+            )
+        }
+
+        item {
+            SystemStatusMaintenanceCard(
+                maintenances = overview.ScheduledMaintenances
+            )
+        }
+
+        item {
+            SystemStatusIncidentCard(
+                title = "Son Olaylar",
+                subtitle = "Yakın dönemde kapatılmış operasyon kayıtları.",
+                emptyText = "Yakın dönemde olay kaydı bulunmuyor.",
+                incidents = overview.HistoryIncidents.take(3)
+            )
+        }
+
+        item {
+            BbButton(
+                text = "Detaylı Durum Sayfasını Aç",
+                onClick = onOpenStatusPageClick,
+                modifier = Modifier.fillMaxWidth(),
+                variant = BbButtonVariant.Light,
+                size = BbButtonSize.Medium,
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Outlined.OpenInNew,
+                        contentDescription = null,
+                        modifier = Modifier.size(BBIcon.ButtonIcon)
+                    )
+                }
+            )
+        }
+    }
+}
+
+@Composable
+private fun SystemStatusHeroCard(overview: StatusOverviewDTO) {
+    val statusColors = systemStatusColors(overview.OverallState)
+
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
@@ -148,29 +186,36 @@ private fun SystemStatusHeroCard() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             SystemStatusIconBox(
-                icon = Icons.Outlined.CloudDone,
-                backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
-                iconColor = MaterialTheme.colorScheme.onSecondaryContainer
-            )
+                backgroundColor = statusColors.Background,
+                contentColor = statusColors.Content
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.CloudDone,
+                    contentDescription = null,
+                    modifier = Modifier.size(BBIcon.Section)
+                )
+            }
 
             Column(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Tüm Sistemler Çalışıyor",
+                    text = overview.OverallStateText.ifBlank {
+                        "Sistem Durumu Bilinmiyor"
+                    },
                     style = BbTypography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = "API, web platformu, ödeme, bildirim ve durum servisleri normal çalışıyor.",
+                    text = "Son 90 gün erişilebilirlik: %${formatPercentage(overview.Last90DaysUptimePercentage)}",
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
                 Text(
-                    text = "Son kontrol: Bugün 14:32",
+                    text = "Son kontrol: ${formatStatusDate(overview.LastCheckedDate)}",
                     style = BbTypography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -180,24 +225,86 @@ private fun SystemStatusHeroCard() {
 }
 
 @Composable
-private fun SystemStatusComponentCard(
-    components: List<SystemStatusComponentUiModel>
-) {
+private fun SystemStatusComponentCard(components: List<StatusComponentDTO>) {
     SystemStatusSectionCard(
         title = "Servis Bileşenleri",
         subtitle = "Temel Bulbulustur servislerinin operasyon durumu."
     ) {
-        components.forEachIndexed { index, component ->
-            SystemStatusComponentRow(
-                component = component
+        if (components.isEmpty()) {
+            SystemStatusEmptyRow(
+                text = "Servis bileşeni bulunmuyor.",
+                icon = Icons.Outlined.Storage
             )
+        } else {
+            components.forEachIndexed { index, component ->
+                SystemStatusComponentRow(component = component)
 
-            if (index != components.lastIndex) {
-                HorizontalDivider(
-                    color = MaterialTheme.colorScheme.outlineVariant
-                )
+                if (index != components.lastIndex) {
+                    HorizontalDivider(
+                        color = MaterialTheme.colorScheme.outlineVariant
+                    )
+                }
             }
         }
+    }
+}
+
+@Composable
+private fun SystemStatusComponentRow(component: StatusComponentDTO) {
+    val statusColors = systemStatusColors(component.CurrentStateKey)
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(BBSpacing.CardPaddingCompact),
+        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        SystemStatusIconBox(
+            backgroundColor = statusColors.Background,
+            contentColor = statusColors.Content
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Storage,
+                contentDescription = null,
+                modifier = Modifier.size(BBIcon.Section)
+            )
+        }
+
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+        ) {
+            Text(
+                text = component.PublicName.ifBlank {
+                    component.ComponentKey
+                },
+                style = BbTypography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
+            if (component.Description.isNotBlank()) {
+                Text(
+                    text = component.Description,
+                    style = BbTypography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            Text(
+                text = "90 gün: %${formatPercentage(component.Last90DaysUptimePercentage)}",
+                style = BbTypography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+
+        SystemStatusBadge(
+            text = component.CurrentStateName.ifBlank {
+                "Bilinmiyor"
+            },
+            backgroundColor = statusColors.Background,
+            contentColor = statusColors.Content
+        )
     }
 }
 
@@ -206,38 +313,20 @@ private fun SystemStatusIncidentCard(
     title: String,
     subtitle: String,
     emptyText: String,
-    incidents: List<SystemStatusIncidentUiModel>
+    incidents: List<StatusIncidentDTO>
 ) {
     SystemStatusSectionCard(
         title = title,
         subtitle = subtitle
     ) {
         if (incidents.isEmpty()) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(BBSpacing.CardPaddingCompact),
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                SystemStatusIconBox(
-                    icon = Icons.Outlined.CheckCircle,
-                    backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
-                    iconColor = MaterialTheme.colorScheme.onSecondaryContainer
-                )
-
-                Text(
-                    text = emptyText,
-                    style = BbTypography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.weight(1f)
-                )
-            }
+            SystemStatusEmptyRow(
+                text = emptyText,
+                icon = Icons.Outlined.CheckCircle
+            )
         } else {
             incidents.forEachIndexed { index, incident ->
-                SystemStatusIncidentRow(
-                    incident = incident
-                )
+                SystemStatusIncidentRow(incident = incident)
 
                 if (index != incidents.lastIndex) {
                     HorizontalDivider(
@@ -250,95 +339,12 @@ private fun SystemStatusIncidentCard(
 }
 
 @Composable
-private fun SystemStatusMaintenanceCard() {
-    SystemStatusSectionCard(
-        title = "Planlı Bakım",
-        subtitle = "Yaklaşan bakım ve sürüm geçişleri."
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(BBSpacing.CardPaddingCompact),
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            SystemStatusIconBox(
-                icon = Icons.Outlined.Schedule,
-                backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
-                iconColor = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
-            ) {
-                Text(
-                    text = "Planlı bakım bulunmuyor",
-                    style = BbTypography.titleSmall,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-
-                Text(
-                    text = "Yaklaşan bakım olduğunda burada gösterilecek.",
-                    style = BbTypography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-        }
+private fun SystemStatusIncidentRow(incident: StatusIncidentDTO) {
+    val statusText = incident.IncidentStateName.ifBlank {
+        incident.SeverityName
     }
-}
 
-@Composable
-private fun SystemStatusComponentRow(
-    component: SystemStatusComponentUiModel
-) {
-    val statusBackgroundColor = component.status.backgroundColor()
-    val statusContentColor = component.status.contentColor()
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(BBSpacing.CardPaddingCompact),
-        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        SystemStatusIconBox(
-            icon = component.icon,
-            backgroundColor = statusBackgroundColor,
-            iconColor = statusContentColor
-        )
-
-        Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
-        ) {
-            Text(
-                text = component.title,
-                style = BbTypography.titleSmall,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-
-            Text(
-                text = component.description,
-                style = BbTypography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-
-        SystemStatusBadge(
-            text = component.status.label,
-            backgroundColor = statusBackgroundColor,
-            contentColor = statusContentColor
-        )
-    }
-}
-
-@Composable
-private fun SystemStatusIncidentRow(
-    incident: SystemStatusIncidentUiModel
-) {
-    val statusBackgroundColor = incident.status.backgroundColor()
-    val statusContentColor = incident.status.contentColor()
+    val statusColors = systemStatusColors(statusText)
 
     Row(
         modifier = Modifier
@@ -348,38 +354,141 @@ private fun SystemStatusIncidentRow(
         verticalAlignment = Alignment.Top
     ) {
         SystemStatusIconBox(
-            icon = incident.icon,
-            backgroundColor = statusBackgroundColor,
-            iconColor = statusContentColor
-        )
+            backgroundColor = statusColors.Background,
+            contentColor = statusColors.Content
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.History,
+                contentDescription = null,
+                modifier = Modifier.size(BBIcon.Section)
+            )
+        }
 
         Column(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
         ) {
             Text(
-                text = incident.title,
+                text = incident.Title.ifBlank {
+                    "Durum Kaydı"
+                },
                 style = BbTypography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
-            Text(
-                text = incident.description,
-                style = BbTypography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+            if (incident.Summary.isNotBlank()) {
+                Text(
+                    text = incident.Summary,
+                    style = BbTypography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
 
             Text(
-                text = incident.dateText,
+                text = formatStatusDate(incident.StartedDate),
                 style = BbTypography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
 
         SystemStatusBadge(
-            text = incident.status.label,
-            backgroundColor = statusBackgroundColor,
-            contentColor = statusContentColor
+            text = statusText.ifBlank {
+                "Bilgi"
+            },
+            backgroundColor = statusColors.Background,
+            contentColor = statusColors.Content
+        )
+    }
+}
+
+@Composable
+private fun SystemStatusMaintenanceCard(
+    maintenances: List<StatusMaintenanceDTO>
+) {
+    SystemStatusSectionCard(
+        title = "Planlı Bakım",
+        subtitle = "Yaklaşan bakım ve sürüm geçişleri."
+    ) {
+        if (maintenances.isEmpty()) {
+            SystemStatusEmptyRow(
+                text = "Planlı bakım bulunmuyor.",
+                icon = Icons.Outlined.Schedule
+            )
+        } else {
+            maintenances.forEachIndexed { index, maintenance ->
+                SystemStatusMaintenanceRow(
+                    maintenance = maintenance
+                )
+
+                if (index != maintenances.lastIndex) {
+                    HorizontalDivider(
+                        color = MaterialTheme.colorScheme.outlineVariant
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun SystemStatusMaintenanceRow(
+    maintenance: StatusMaintenanceDTO
+) {
+    val statusColors = systemStatusColors(
+        maintenance.MaintenanceStateName
+    )
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(BBSpacing.CardPaddingCompact),
+        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+        verticalAlignment = Alignment.Top
+    ) {
+        SystemStatusIconBox(
+            backgroundColor = statusColors.Background,
+            contentColor = statusColors.Content
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Schedule,
+                contentDescription = null,
+                modifier = Modifier.size(BBIcon.Section)
+            )
+        }
+
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+        ) {
+            Text(
+                text = maintenance.Title.ifBlank {
+                    "Planlı Bakım"
+                },
+                style = BbTypography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
+            if (maintenance.Description.isNotBlank()) {
+                Text(
+                    text = maintenance.Description,
+                    style = BbTypography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            Text(
+                text = "${formatStatusDate(maintenance.ScheduledStart)} - ${formatStatusDate(maintenance.ScheduledEnd)}",
+                style = BbTypography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+
+        SystemStatusBadge(
+            text = maintenance.MaintenanceStateName.ifBlank {
+                "Planlandı"
+            },
+            backgroundColor = statusColors.Background,
+            contentColor = statusColors.Content
         )
     }
 }
@@ -421,10 +530,73 @@ private fun SystemStatusSectionCard(
                 color = MaterialTheme.colorScheme.outlineVariant
             )
 
-            Column(
-                modifier = Modifier.fillMaxWidth()
+            content()
+        }
+    }
+}
+
+@Composable
+private fun SystemStatusEmptyRow(
+    text: String,
+    icon: androidx.compose.ui.graphics.vector.ImageVector
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(BBSpacing.CardPaddingCompact),
+        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        SystemStatusIconBox(
+            backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
+            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                modifier = Modifier.size(BBIcon.Section)
+            )
+        }
+
+        Text(
+            text = text,
+            style = BbTypography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.weight(1f)
+        )
+    }
+}
+
+@Composable
+private fun SystemStatusIconBox(
+    backgroundColor: Color,
+    contentColor: Color,
+    content: @Composable () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .size(BBIcon.ActionBox)
+            .clip(BBRadius.MdShape)
+            .background(backgroundColor),
+        contentAlignment = Alignment.Center
+    ) {
+        Box(
+            modifier = Modifier,
+            contentAlignment = Alignment.Center
+        ) {
+            androidx.compose.material3.ProvideTextStyle(
+                value = BbTypography.bodyMedium
             ) {
-                content()
+                Box(
+                    modifier = Modifier,
+                    contentAlignment = Alignment.Center
+                ) {
+                    androidx.compose.runtime.CompositionLocalProvider(
+                        androidx.compose.material3.LocalContentColor provides contentColor
+                    ) {
+                        content()
+                    }
+                }
             }
         }
     }
@@ -438,10 +610,8 @@ private fun SystemStatusBadge(
 ) {
     Box(
         modifier = Modifier
-            .background(
-                color = backgroundColor,
-                shape = BBRadius.Badge
-            )
+            .clip(BBRadius.Badge)
+            .background(backgroundColor)
             .padding(
                 horizontal = BBSpacing.BadgePaddingHorizontal,
                 vertical = BBSpacing.BadgePaddingVertical
@@ -457,173 +627,151 @@ private fun SystemStatusBadge(
 }
 
 @Composable
-private fun SystemStatusIconBox(
-    icon: ImageVector,
-    backgroundColor: Color,
-    iconColor: Color
+private fun SystemStatusLoadingContent(
+    modifier: Modifier = Modifier
 ) {
-    Box(
-        modifier = Modifier
-            .size(BBIcon.BoxMd)
-            .background(
-                color = backgroundColor,
-                shape = BBRadius.LgShape
-            ),
-        contentAlignment = Alignment.Center
+    Column(
+        modifier = modifier
+            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .padding(BBSpacing.PageHorizontal),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        CircularProgressIndicator()
+
+        Text(
+            text = "Sistem durumu kontrol ediliyor...",
+            style = BbTypography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(
+                top = BBSpacing.Space3
+            )
+        )
+    }
+}
+
+@Composable
+private fun SystemStatusErrorContent(
+    message: String,
+    onRetryClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .padding(BBSpacing.PageHorizontal),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
         Icon(
-            imageVector = icon,
+            imageVector = Icons.Outlined.ErrorOutline,
             contentDescription = null,
-            tint = iconColor,
-            modifier = Modifier.size(BBIcon.Ui)
+            tint = MaterialTheme.colorScheme.error,
+            modifier = Modifier.size(BBIcon.ErrorStateIcon)
+        )
+
+        Text(
+            text = message,
+            style = BbTypography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(
+                top = BBSpacing.Space3
+            )
+        )
+
+        BbButton(
+            text = "Tekrar Dene",
+            onClick = onRetryClick,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = BBSpacing.Space4),
+            variant = BbButtonVariant.Light,
+            size = BbButtonSize.Medium,
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Outlined.Refresh,
+                    contentDescription = null,
+                    modifier = Modifier.size(BBIcon.ButtonIcon)
+                )
+            }
         )
     }
 }
 
-private fun getDemoSystemStatusComponents(): List<SystemStatusComponentUiModel> {
-    return listOf(
-        SystemStatusComponentUiModel(
-            title = "Bulbulustur API",
-            description = "Mobil uygulama ve platform servisleri.",
-            icon = Icons.Outlined.Api,
-            status = SystemStatusLevel.Operational
-        ),
-        SystemStatusComponentUiModel(
-            title = "Web Platformu",
-            description = "bulbulustur.com ve ticaret arayüzleri.",
-            icon = Icons.Outlined.Language,
-            status = SystemStatusLevel.Operational
-        ),
-        SystemStatusComponentUiModel(
-            title = "Ödeme Servisleri",
-            description = "Sepet, ödeme ve sipariş operasyonları.",
-            icon = Icons.Outlined.Payments,
-            status = SystemStatusLevel.Operational
-        ),
-        SystemStatusComponentUiModel(
-            title = "Bildirimler",
-            description = "E-posta, SMS ve uygulama bildirimleri.",
-            icon = Icons.Outlined.Notifications,
-            status = SystemStatusLevel.Operational
-        ),
-        SystemStatusComponentUiModel(
-            title = "Veri ve Dosya Servisleri",
-            description = "Veritabanı, medya ve doküman servisleri.",
-            icon = Icons.Outlined.Storage,
-            status = SystemStatusLevel.Operational
-        ),
-        SystemStatusComponentUiModel(
-            title = "Status Platformu",
-            description = "status.bulbulustur.com izleme servisi.",
-            icon = Icons.Outlined.Dns,
-            status = SystemStatusLevel.Operational
-        )
-    )
-}
-
-private fun getDemoActiveIncidents(): List<SystemStatusIncidentUiModel> {
-    return emptyList()
-}
-
-private fun getDemoRecentIncidents(): List<SystemStatusIncidentUiModel> {
-    return listOf(
-        SystemStatusIncidentUiModel(
-            title = "Bildirim kuyruğu gecikmesi",
-            description = "Kısa süreli e-posta gecikmesi izlendi ve kapatıldı.",
-            dateText = "22 Haziran 2026",
-            icon = Icons.Outlined.History,
-            status = SystemStatusLevel.Resolved
-        ),
-        SystemStatusIncidentUiModel(
-            title = "Web arayüz yavaşlaması",
-            description = "Bölgesel ağ gecikmesi sonrası servis normal duruma döndü.",
-            dateText = "18 Haziran 2026",
-            icon = Icons.Outlined.Info,
-            status = SystemStatusLevel.Resolved
-        )
-    )
-}
-
-private data class SystemStatusComponentUiModel(
-    val title: String,
-    val description: String,
-    val icon: ImageVector,
-    val status: SystemStatusLevel
-)
-
-private data class SystemStatusIncidentUiModel(
-    val title: String,
-    val description: String,
-    val dateText: String,
-    val icon: ImageVector,
-    val status: SystemStatusLevel
-)
-
-private enum class SystemStatusLevel(
-    val label: String
-) {
-    Operational(
-        label = "Çalışıyor"
-    ),
-    Degraded(
-        label = "Yavaş"
-    ),
-    PartialOutage(
-        label = "Kısmi Kesinti"
-    ),
-    MajorOutage(
-        label = "Kesinti"
-    ),
-    Maintenance(
-        label = "Bakım"
-    ),
-    Resolved(
-        label = "Çözüldü"
-    )
-}
-
 @Composable
-private fun SystemStatusLevel.backgroundColor(): Color {
-    return when (this) {
-        SystemStatusLevel.Operational ->
-            MaterialTheme.colorScheme.secondaryContainer
+private fun systemStatusColors(
+    state: String
+): SystemStatusColors {
+    val normalizedState = state.lowercase(Locale.getDefault())
 
-        SystemStatusLevel.Degraded ->
-            MaterialTheme.colorScheme.primaryContainer
+    return when {
+        normalizedState.contains("operational") ||
+                normalizedState.contains("çalışıyor") ||
+                normalizedState.contains("resolved") ||
+                normalizedState.contains("çözüldü") -> {
+            SystemStatusColors(
+                Background = MaterialTheme.colorScheme.secondaryContainer,
+                Content = MaterialTheme.colorScheme.onSecondaryContainer
+            )
+        }
 
-        SystemStatusLevel.PartialOutage ->
-            MaterialTheme.colorScheme.tertiaryContainer
+        normalizedState.contains("degraded") ||
+                normalizedState.contains("maintenance") ||
+                normalizedState.contains("bakım") ||
+                normalizedState.contains("planlandı") -> {
+            SystemStatusColors(
+                Background = MaterialTheme.colorScheme.tertiaryContainer,
+                Content = MaterialTheme.colorScheme.onTertiaryContainer
+            )
+        }
 
-        SystemStatusLevel.MajorOutage ->
-            MaterialTheme.colorScheme.errorContainer
+        normalizedState.contains("outage") ||
+                normalizedState.contains("kesinti") ||
+                normalizedState.contains("critical") ||
+                normalizedState.contains("major") ||
+                normalizedState.contains("hata") -> {
+            SystemStatusColors(
+                Background = MaterialTheme.colorScheme.errorContainer,
+                Content = MaterialTheme.colorScheme.onErrorContainer
+            )
+        }
 
-        SystemStatusLevel.Maintenance ->
-            MaterialTheme.colorScheme.surfaceVariant
-
-        SystemStatusLevel.Resolved ->
-            MaterialTheme.colorScheme.secondaryContainer
+        else -> {
+            SystemStatusColors(
+                Background = MaterialTheme.colorScheme.surfaceVariant,
+                Content = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
     }
 }
 
-@Composable
-private fun SystemStatusLevel.contentColor(): Color {
-    return when (this) {
-        SystemStatusLevel.Operational ->
-            MaterialTheme.colorScheme.onSecondaryContainer
+private data class SystemStatusColors(
+    val Background: Color,
+    val Content: Color
+)
 
-        SystemStatusLevel.Degraded ->
-            MaterialTheme.colorScheme.onPrimaryContainer
+private fun formatPercentage(value: Double): String {
+    return if (value % 1.0 == 0.0) {
+        value.toInt().toString()
+    } else {
+        String.format(
+            Locale.getDefault(),
+            "%.2f",
+            value
+        )
+    }
+}
 
-        SystemStatusLevel.PartialOutage ->
-            MaterialTheme.colorScheme.onTertiaryContainer
+private fun formatStatusDate(value: String?): String {
+    if (value.isNullOrBlank()) {
+        return "Bilinmiyor"
+    }
 
-        SystemStatusLevel.MajorOutage ->
-            MaterialTheme.colorScheme.onErrorContainer
+    val normalizedValue = value.replace("T", " ")
 
-        SystemStatusLevel.Maintenance ->
-            MaterialTheme.colorScheme.onSurfaceVariant
-
-        SystemStatusLevel.Resolved ->
-            MaterialTheme.colorScheme.onSecondaryContainer
+    return if (normalizedValue.length >= 16) {
+        normalizedValue.take(16)
+    } else {
+        normalizedValue
     }
 }

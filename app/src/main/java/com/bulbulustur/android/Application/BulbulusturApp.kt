@@ -54,16 +54,31 @@ import com.bulbulustur.android.businesslayer.Core.Repository.MemberTempRepositor
 import com.bulbulustur.android.businesslayer.Core.Repository.ProductRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.ProductVariantPictureRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.ProductVariantRepository
-import com.bulbulustur.android.businesslayer.Core.Security.SecureTokenStore
 import com.bulbulustur.android.businesslayer.Core.Repository.ProductCustomerQuestionRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.ReviewRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.AdvertSponsoredRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.ProductBrandSectionRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.ProductBrowsingHistoryRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.ProductCategoryRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.MemberAddressRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.MemberBankAccountRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.MemberAlarmListRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.MemberFollowedCompanyRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.MemberFollowedStoreRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.MemberAgreementRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.MemberLoginActivityRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.MemberCouponRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.ProductFavoriteRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.WholesaleFavoriteRepository
+import com.bulbulustur.android.businesslayer.Core.Security.SecureTokenStore
 import com.bulbulustur.android.businesslayer.Core.Util.Execute.ExecuteService
+import com.bulbulustur.android.Application.Controllers.SettingsController
+import com.bulbulustur.android.businesslayer.Core.Repository.SystemDescCurrencyRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.SystemDescLanguageRepository
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.BasketController
 import com.bulbulustur.android.businesslayer.Core.Repository.BasketRepository
+import com.bulbulustur.android.Application.Controllers.AccountController
+import com.bulbulustur.android.businesslayer.Core.Repository.StatusRepository
 
 
 @Composable
@@ -218,6 +233,15 @@ private fun BulbulusturApplicationContent(
             MemberTempRepository()
         }
 
+    val systemDescLanguageRepository =
+        remember {
+            SystemDescLanguageRepository()
+        }
+    val systemDescCurrencyRepository =
+        remember {
+            SystemDescCurrencyRepository()
+        }
+
     val addressCountryRepository =
         remember {
             AddressCountryRepository()
@@ -248,6 +272,52 @@ private fun BulbulusturApplicationContent(
             MemberRepository()
         }
 
+    val memberAddressRepository = remember {
+        MemberAddressRepository()
+    }
+
+    val memberBankAccountRepository = remember {
+        MemberBankAccountRepository()
+    }
+
+    val memberAlarmListRepository = remember {
+        MemberAlarmListRepository()
+    }
+
+    val memberFollowedCompanyRepository = remember {
+        MemberFollowedCompanyRepository()
+    }
+
+    val memberFollowedStoreRepository = remember {
+        MemberFollowedStoreRepository()
+    }
+
+    val memberAgreementRepository = remember {
+        MemberAgreementRepository()
+    }
+
+    val memberLoginActivityRepository = remember {
+        MemberLoginActivityRepository()
+    }
+
+    val memberCouponRepository = remember {
+        MemberCouponRepository()
+    }
+
+    val productFavoriteRepository = remember {
+        ProductFavoriteRepository()
+    }
+
+    val wholesaleFavoriteRepository = remember {
+        WholesaleFavoriteRepository()
+    }
+
+
+
+
+
+
+
     val productRepository =
         remember {
             ProductRepository()
@@ -267,6 +337,10 @@ private fun BulbulusturApplicationContent(
         remember {
             AdvertSponsoredRepository()
         }
+
+    val statusRepository = remember {
+        StatusRepository()
+    }
 
     val productBrandSectionRepository =
         remember {
@@ -420,6 +494,51 @@ private fun BulbulusturApplicationContent(
                     userSessionManager
             )
         }
+
+    val accountController = remember(
+        executeService,
+        memberRepository,
+        memberAddressRepository,
+        memberBankAccountRepository,
+        memberAlarmListRepository,
+        memberFollowedCompanyRepository,
+        memberFollowedStoreRepository,
+        memberAgreementRepository,
+        memberLoginActivityRepository,
+        memberCouponRepository,
+        productFavoriteRepository,
+        wholesaleFavoriteRepository
+    ) {
+        AccountController(
+            executeService = executeService,
+            memberRepository = memberRepository,
+            memberAddressRepository = memberAddressRepository,
+            memberBankAccountRepository = memberBankAccountRepository,
+            memberAlarmListRepository = memberAlarmListRepository,
+            memberFollowedCompanyRepository = memberFollowedCompanyRepository,
+            memberFollowedStoreRepository = memberFollowedStoreRepository,
+            memberAgreementRepository = memberAgreementRepository,
+            memberLoginActivityRepository = memberLoginActivityRepository,
+            memberCouponRepository = memberCouponRepository,
+            productFavoriteRepository = productFavoriteRepository,
+            wholesaleFavoriteRepository = wholesaleFavoriteRepository
+        )
+    }
+
+    val settingsController = remember(
+        executeService,
+        systemDescLanguageRepository,
+        addressCountryRepository,
+        systemDescCurrencyRepository
+    ) {
+        SettingsController(
+            executeService = executeService,
+            systemDescLanguageRepository = systemDescLanguageRepository,
+            addressCountryRepository = addressCountryRepository,
+            systemDescCurrencyRepository = systemDescCurrencyRepository,
+            statusRepository = statusRepository
+        )
+    }
 
     val currentBackStackEntry by
     navController.currentBackStackEntryAsState()
@@ -610,21 +729,18 @@ private fun BulbulusturApplicationContent(
         )
 
         accountGraph(
-            navigator =
-                appNavigator,
-            sessionState =
-                sessionState,
-            logonController =
-                logonController
+            navigator = appNavigator,
+            sessionState = sessionState,
+            logonController = logonController,
+            accountController = accountController
         )
 
         settingsGraph(
-            navigator =
-                appNavigator,
-            sessionState =
-                sessionState,
-            userSessionManager =
-                userSessionManager
+            navigator = appNavigator,
+            sessionState = sessionState,
+            userSessionManager = userSessionManager,
+            accountController = accountController,
+            settingsController = settingsController
         )
     }
 

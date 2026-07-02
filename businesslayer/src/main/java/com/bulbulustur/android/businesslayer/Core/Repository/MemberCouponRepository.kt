@@ -12,60 +12,43 @@ class MemberCouponRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IMemberCouponRepository {
 
-    override suspend fun GetMemberCouponListAsync(): Result<List<MemberCouponDTO>> {
+    override suspend fun GetMemberCouponsAsync(memberId: Int, count: Int): Result<List<MemberCouponDTO>> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetMemberCouponListAsync"
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_BASE_URL,
+            method = "Account/GetAccountCouponsAsync",
+            query = "memberId=$memberId&count=$count"
         )
     }
 
-    override suspend fun GetMemberCouponByIdAsync(
-        memberCouponId: Int
-    ): Result<MemberCouponUpdateModel?> {
+    override suspend fun GetMemberCouponByIdAsync(memberId: Int, couponId: Int): Result<MemberCouponUpdateModel?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetMemberCouponByIdAsync",
-            query = "memberCouponId=$memberCouponId"
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_BASE_URL,
+            method = "Account/GetAccountCouponsByIdAsync",
+            query = "memberId=$memberId&couponId=$couponId"
         )
     }
 
-    override suspend fun GetMemberCouponByIdExtendedAsync(
-        memberCouponId: Int
-    ): Result<MemberCouponDTO?> {
-        return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetMemberCouponByIdExtendedAsync",
-            query = "memberCouponId=$memberCouponId"
-        )
-    }
-
-    override suspend fun InsertAsync(
-        model: MemberCouponInsertModel
-    ): Result<Unit> {
+    override suspend fun InsertAsync(memberId: Int, model: MemberCouponInsertModel): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "InsertAsync",
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_BASE_URL,
+            method = "Account/InsertAccountCouponsAsync?memberId=$memberId",
             data = model
         )
     }
 
-    override suspend fun UpdateAsync(
-        model: MemberCouponUpdateModel
-    ): Result<Unit> {
-        return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "UpdateAsync",
+    override suspend fun UpdateAsync(memberId: Int, model: MemberCouponUpdateModel): Result<Unit> {
+        return apiClient.PutAsync(
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_BASE_URL,
+            method = "Account/UpdateAccountCouponsAsync?memberId=$memberId",
             data = model
         )
     }
 
-    override suspend fun DeleteAsync(
-        memberCouponId: Int
-    ): Result<Unit> {
+    override suspend fun DeleteAsync(couponId: Int): Result<Unit> {
         return apiClient.DeleteAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "DeleteAsync",
-            query = "memberCouponId=$memberCouponId"
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_BASE_URL,
+            method = "Account/DeleteAccountCouponsAsync",
+            query = "couponId=$couponId"
         )
     }
 }

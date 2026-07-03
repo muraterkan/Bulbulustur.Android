@@ -1,6 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Devices
+import androidx.compose.material.icons.outlined.ErrorOutline
+import androidx.compose.material.icons.outlined.History
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -19,20 +26,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
+import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
-import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
-import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
+import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
+import com.bulbulustur.android.Application.wwwroot.DesignTokens.BbTypography
+import com.bulbulustur.android.businesslayer.Core.DTO.MemberLoginActivityDTO
 
 @Composable
 fun LoginActivitiesScreen(
-    onBackClick: () -> Unit = {}
+    activities: List<MemberLoginActivityDTO>,
+    isLoading: Boolean,
+    errorMessage: String?,
+    onBackClick: () -> Unit = {},
+    onRetryClick: () -> Unit = {}
 ) {
-    val loginActivities = getDemoLoginActivities()
-
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
@@ -55,18 +66,87 @@ fun LoginActivitiesScreen(
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
-            if (loginActivities.isEmpty()) {
-                item {
-                    LoginActivitiesEmptyState()
-                }
+            item {
+                LoginActivitiesIntroCard()
             }
 
-            items(
-                items = loginActivities,
-                key = { activity -> activity.loginActivityId }
-            ) { activity ->
-                LoginActivityCard(
-                    activity = activity
+            when {
+                isLoading -> {
+                    item {
+                        LoginActivitiesLoadingState()
+                    }
+                }
+
+                !errorMessage.isNullOrBlank() -> {
+                    item {
+                        LoginActivitiesErrorState(
+                            errorMessage = errorMessage,
+                            onRetryClick = onRetryClick
+                        )
+                    }
+                }
+
+                activities.isEmpty() -> {
+                    item {
+                        LoginActivitiesEmptyState()
+                    }
+                }
+
+                else -> {
+                    items(
+                        items = activities,
+                        key = { activity -> activity.LogId }
+                    ) { activity ->
+                        LoginActivityCard(activity)
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun LoginActivitiesIntroCard() {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(BBIcon.BoxMd)
+                    .background(
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        shape = BBRadius.LgShape
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.History,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                    modifier = Modifier.size(BBIcon.Ui)
+                )
+            }
+
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+            ) {
+                Text(
+                    text = "Oturum Geçmişi",
+                    style = BbTypography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+
+                Text(
+                    text = "Hesabınıza yapılan son girişleri, cihazları ve erişim bilgilerini inceleyin.",
+                    style = BbTypography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -74,9 +154,7 @@ fun LoginActivitiesScreen(
 }
 
 @Composable
-private fun LoginActivityCard(
-    activity: LoginActivityUiModel
-) {
+private fun LoginActivityCard(activity: MemberLoginActivityDTO) {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
@@ -91,49 +169,181 @@ private fun LoginActivityCard(
                 horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                LoginActivityIconBox(
-                    text = activity.shortCode
-                )
+                LoginActivityIconBox(activity)
 
                 Column(
                     modifier = Modifier.weight(1f),
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                 ) {
                     Text(
-                        text = activity.deviceName,
-                        style = MaterialTheme.typography.titleSmall,
+                        text = getLoginActivityTitle(activity),
+                        style = BbTypography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurface,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
 
                     Text(
-                        text = activity.browserName,
-                        style = MaterialTheme.typography.bodySmall,
+                        text = getLoginActivitySubtitle(activity),
+                        style = BbTypography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 1,
+                        maxLines = 2,
                         overflow = TextOverflow.Ellipsis
-                    )
-
-                    LoginActivityStatusBadge(
-                        trusted = activity.trusted
                     )
                 }
             }
 
             LoginActivityInfoRow(
                 label = "IP Adresi",
-                value = activity.ipAddress
+                value = activity.Ip.ifBlank { "Bilgi bulunmuyor" }
             )
 
             LoginActivityInfoRow(
-                label = "Konum",
-                value = activity.locationText
+                label = "İşletim Sistemi",
+                value = activity.Os.ifBlank { "Bilgi bulunmuyor" }
+            )
+
+            LoginActivityInfoRow(
+                label = "Giriş Yöntemi",
+                value = getLoginProviderText(activity.LoginProvider)
             )
 
             LoginActivityInfoRow(
                 label = "Tarih",
-                value = activity.loginDate
+                value = activity.InsertedDate.ifBlank { "Bilgi bulunmuyor" }
+            )
+        }
+    }
+}
+
+@Composable
+private fun LoginActivityIconBox(activity: MemberLoginActivityDTO) {
+    Box(
+        modifier = Modifier
+            .size(BBIcon.BoxLg)
+            .background(
+                color = MaterialTheme.colorScheme.primaryContainer,
+                shape = BBRadius.XlShape
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = getLoginActivityShortCode(activity),
+            style = BbTypography.titleSmall,
+            color = MaterialTheme.colorScheme.onPrimaryContainer
+        )
+    }
+}
+
+@Composable
+private fun LoginActivityInfoRow(
+    label: String,
+    value: String
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+    ) {
+        Text(
+            text = label,
+            style = BbTypography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
+        Text(
+            text = value,
+            style = BbTypography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis
+        )
+    }
+}
+
+@Composable
+private fun LoginActivitiesLoadingState() {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Large
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+        ) {
+            CircularProgressIndicator(
+                modifier = Modifier.size(BBIcon.BoxSm),
+                color = MaterialTheme.colorScheme.primary
+            )
+
+            Text(
+                text = "Giriş hareketleri yükleniyor",
+                style = BbTypography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
+            Text(
+                text = "Hesabınıza ait son oturum kayıtları getiriliyor.",
+                style = BbTypography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+@Composable
+private fun LoginActivitiesErrorState(
+    errorMessage: String,
+    onRetryClick: () -> Unit
+) {
+    BbCard(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                onRetryClick()
+            },
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Large
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(BBIcon.BoxLg)
+                    .background(
+                        color = MaterialTheme.colorScheme.errorContainer,
+                        shape = BBRadius.LgShape
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.ErrorOutline,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onErrorContainer,
+                    modifier = Modifier.size(BBIcon.Section)
+                )
+            }
+
+            Text(
+                text = "Giriş Hareketleri Alınamadı",
+                style = BbTypography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
+            Text(
+                text = errorMessage,
+                style = BbTypography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+
+            Text(
+                text = "Yeniden denemek için dokunun",
+                style = BbTypography.labelLarge,
+                color = MaterialTheme.colorScheme.primary
             )
         }
     }
@@ -151,164 +361,79 @@ private fun LoginActivitiesEmptyState() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
-            LoginActivityEmptyIconBox()
+            Box(
+                modifier = Modifier
+                    .size(BBIcon.BoxLg)
+                    .background(
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        shape = BBRadius.LgShape
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Devices,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                    modifier = Modifier.size(BBIcon.Section)
+                )
+            }
 
             Text(
                 text = "Giriş Kaydı Bulunmuyor",
-                style = MaterialTheme.typography.titleMedium,
+                style = BbTypography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
-                text = "Hesabınıza ait giriş hareketleri oluştuğunda burada listelenir.",
-                style = MaterialTheme.typography.bodySmall,
+                text = "Hesabınıza ait giriş hareketleri oluştuğunda burada listelenecektir.",
+                style = BbTypography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
 }
 
-@Composable
-private fun LoginActivityInfoRow(
-    label: String,
-    value: String
-) {
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
-    ) {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
+private fun getLoginActivityTitle(activity: MemberLoginActivityDTO): String {
+    if (activity.Device.isNotBlank()) return activity.Device
+    if (activity.Os.isNotBlank()) return activity.Os
+    if (activity.Browser.isNotBlank()) return activity.Browser
 
-        Text(
-            text = value,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface,
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis
-        )
+    return "Bilinmeyen Cihaz"
+}
+
+private fun getLoginActivitySubtitle(activity: MemberLoginActivityDTO): String {
+    val values = listOf(activity.Browser, activity.Os)
+        .filter { value -> value.isNotBlank() }
+        .distinct()
+
+    return values.joinToString(" • ").ifBlank {
+        "Cihaz bilgisi bulunmuyor"
     }
 }
 
-@Composable
-private fun LoginActivityStatusBadge(
-    trusted: Boolean
-) {
-    val backgroundColor = if (trusted) {
-        BBColors.Green.Green50
-    } else {
-        BBColors.Orange.Orange50
-    }
+private fun getLoginActivityShortCode(activity: MemberLoginActivityDTO): String {
+    val source = "${activity.Device} ${activity.Os}".lowercase()
 
-    val textColor = if (trusted) {
-        BBColors.Green.Green700
-    } else {
-        BBColors.Orange.Orange700
-    }
-
-    val text = if (trusted) {
-        "Tanıdık Giriş"
-    } else {
-        "Kontrol Edilmeli"
-    }
-
-    Box(
-        modifier = Modifier
-            .background(
-                color = backgroundColor,
-                shape = BBRadius.Badge
-            )
-            .padding(
-                horizontal = BBSpacing.BadgePaddingHorizontal,
-                vertical = BBSpacing.BadgePaddingVertical
-            )
-    ) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.labelSmall,
-            color = textColor
-        )
+    return when {
+        "android" in source -> "AN"
+        "iphone" in source || "ios" in source -> "IO"
+        "windows" in source -> "PC"
+        "mac" in source -> "MC"
+        "linux" in source -> "LX"
+        "tablet" in source -> "TB"
+        "mobile" in source || "mobil" in source -> "MB"
+        else -> "CI"
     }
 }
 
-@Composable
-private fun LoginActivityIconBox(
-    text: String
-) {
-    Box(
-        modifier = Modifier
-            .size(BBSpacing.Space14)
-            .background(
-                color = MaterialTheme.colorScheme.primaryContainer,
-                shape = BBRadius.XlShape
-            ),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.titleSmall,
-            color = BBColors.Yellow.Yellow800
-        )
+private fun getLoginProviderText(loginProvider: String): String {
+    if (loginProvider.isBlank()) return "Standart giriş"
+
+    return when (loginProvider.lowercase()) {
+        "google" -> "Google"
+        "apple" -> "Apple"
+        "facebook" -> "Facebook"
+        "email", "password", "local" -> "E-posta ve şifre"
+        else -> loginProvider
     }
 }
-
-@Composable
-private fun LoginActivityEmptyIconBox() {
-    Box(
-        modifier = Modifier
-            .size(BBSpacing.Space12)
-            .background(
-                color = MaterialTheme.colorScheme.primaryContainer,
-                shape = BBRadius.LgShape
-            )
-            .padding(BBSpacing.Space2),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = "IP",
-            style = MaterialTheme.typography.titleSmall,
-            color = BBColors.Yellow.Yellow800
-        )
-    }
-}
-
-private fun getDemoLoginActivities(): List<LoginActivityUiModel> {
-    return listOf(
-        LoginActivityUiModel(
-            loginActivityId = 1,
-            deviceName = "Windows Chrome",
-            browserName = "Chrome",
-            ipAddress = "176.88.xxx.xxx",
-            locationText = "Türkiye",
-            loginDate = "04 Haziran 2026 15:42",
-            shortCode = "PC",
-            trusted = true
-        ),
-        LoginActivityUiModel(
-            loginActivityId = 2,
-            deviceName = "Android Mobil",
-            browserName = "Bulbulustur Android App",
-            ipAddress = "176.88.xxx.xxx",
-            locationText = "Türkiye",
-            loginDate = "03 Haziran 2026 21:10",
-            shortCode = "MB",
-            trusted = true
-        )
-    )
-}
-
-private data class LoginActivityUiModel(
-    val loginActivityId: Int,
-    val deviceName: String,
-    val browserName: String,
-    val ipAddress: String,
-    val locationText: String,
-    val loginDate: String,
-    val shortCode: String,
-    val trusted: Boolean
-)
-
-

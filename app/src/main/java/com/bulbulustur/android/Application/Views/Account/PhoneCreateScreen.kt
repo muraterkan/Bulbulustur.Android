@@ -20,24 +20,34 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
+import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
-import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 
 @Composable
 fun PhoneCreateScreen(
+    isLoading: Boolean = false,
+    errorMessage: String? = null,
     onBackClick: () -> Unit = {},
     onSaveClick: (String) -> Unit = {}
 ) {
     val phoneState = remember {
         mutableStateOf("")
     }
+
+    val normalizedPhone = phoneState.value
+        .filter { character ->
+            character.isDigit() || character == '+'
+        }
+
+    val canSubmit = normalizedPhone.length >= 10 &&
+            !isLoading
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -85,7 +95,7 @@ fun PhoneCreateScreen(
                         )
 
                         Text(
-                            text = "Cep telefonu numaranızı ülke kodu ile birlikte girebilirsiniz.",
+                            text = "Cep telefonu numaranızı ülke kodu ile birlikte girin.",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -104,10 +114,17 @@ fun PhoneCreateScreen(
                             Text(text = "+90 5xx xxx xx xx")
                         },
                         singleLine = true,
+                        enabled = !isLoading,
                         shape = BBRadius.Input,
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Phone
                         ),
+                        supportingText = {
+                            Text(
+                                text = "Örnek: +905557106417",
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        },
                         colors = TextFieldDefaults.colors(
                             focusedContainerColor = MaterialTheme.colorScheme.surface,
                             unfocusedContainerColor = MaterialTheme.colorScheme.surface,
@@ -118,14 +135,26 @@ fun PhoneCreateScreen(
                         )
                     )
 
+                    errorMessage
+                        ?.takeIf { it.isNotBlank() }
+                        ?.let { message ->
+                            Text(
+                                text = message,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+
                     BbButton(
                         text = "Telefonu Kaydet",
                         onClick = {
-                            onSaveClick(phoneState.value)
+                            onSaveClick(normalizedPhone)
                         },
                         modifier = Modifier.fillMaxWidth(),
                         variant = BbButtonVariant.Primary,
-                        size = BbButtonSize.Medium
+                        size = BbButtonSize.Medium,
+                        enabled = canSubmit,
+                        isLoading = isLoading
                     )
                 }
             }
@@ -141,11 +170,9 @@ private fun PhoneCreateIntroCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Hesabınıza yeni bir cep telefonu numarası ekleyin. Numara doğrulama adımından sonra hesabınıza bağlanır.",
+            text = "Telefon numarası kaydedildikten sonra doğrulama kodu SMS ile gönderilecektir.",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
-
-

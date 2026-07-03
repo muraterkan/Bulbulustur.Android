@@ -214,7 +214,11 @@ object AccountRoutes {
 
     const val PhoneList = "account/phones"
     const val PhoneCreate = "account/phones/create"
-    const val PhoneVerify = "account/phones/verify"
+    const val PhoneVerify = "account/phones/verify/{memberPhoneId}"
+
+    fun PhoneVerify(memberPhoneId: Int): String {
+        return "account/phones/verify/$memberPhoneId"
+    }
 
     const val AddressList = "account/address"
     const val AddressCreate = "account/address/create"

@@ -78,6 +78,7 @@ import com.bulbulustur.android.businesslayer.Core.Repository.SystemDescLanguageR
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.BasketController
 import com.bulbulustur.android.businesslayer.Core.Repository.BasketRepository
 import com.bulbulustur.android.Application.Controllers.AccountController
+import com.bulbulustur.android.businesslayer.Core.Repository.MemberPhoneRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.StatusRepository
 
 
@@ -315,7 +316,9 @@ private fun BulbulusturApplicationContent(
 
 
 
-
+    val memberPhoneRepository = remember {
+        MemberPhoneRepository()
+    }
 
 
     val productRepository =
@@ -507,7 +510,8 @@ private fun BulbulusturApplicationContent(
         memberLoginActivityRepository,
         memberCouponRepository,
         productFavoriteRepository,
-        wholesaleFavoriteRepository
+        wholesaleFavoriteRepository,
+        memberPhoneRepository
     ) {
         AccountController(
             executeService = executeService,
@@ -521,7 +525,8 @@ private fun BulbulusturApplicationContent(
             memberLoginActivityRepository = memberLoginActivityRepository,
             memberCouponRepository = memberCouponRepository,
             productFavoriteRepository = productFavoriteRepository,
-            wholesaleFavoriteRepository = wholesaleFavoriteRepository
+            wholesaleFavoriteRepository = wholesaleFavoriteRepository,
+            memberPhoneRepository = memberPhoneRepository
         )
     }
 
@@ -732,7 +737,8 @@ private fun BulbulusturApplicationContent(
             navigator = appNavigator,
             sessionState = sessionState,
             logonController = logonController,
-            accountController = accountController
+            accountController = accountController,
+            addressCascadeController = addressCascadeController
         )
 
         settingsGraph(

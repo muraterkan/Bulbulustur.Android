@@ -31,14 +31,21 @@ import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.MemberFollo
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberAddressUpdateModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberBankAccountUpdateModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdateModel
+import com.bulbulustur.android.businesslayer.Core.Model.ChangePasswordModel
 import com.bulbulustur.android.businesslayer.Core.Util.Execute.IExecuteService
 import com.bulbulustur.android.businesslayer.Core.Util.Result
+import com.bulbulustur.android.businesslayer.Core.DTO.MemberPhoneDTO
+import com.bulbulustur.android.businesslayer.Core.Interface.IMemberPhoneRepository
+import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.MemberPhoneInsertModel
+import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberPhoneUpdateModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+
+import com.bulbulustur.android.businesslayer.Core.Model.ChangeMailModel
 
 data class AccountControllerState(
     val IsLoading: Boolean = false,
@@ -72,7 +79,22 @@ data class AccountControllerState(
     val ProductFavoriteListResult: Result<List<ProductFavoriteDTO>>? = null,
     val WholesaleFavoriteListResult: Result<List<WholesaleFavoriteDTO>>? = null,
     val ContactPreferenceResult: Result<Unit>? = null,
-    val ErrorMessage: String? = null
+    val ChangeMailResult: Result<ChangeMailModel>? = null,
+    val IsChangeMailRequestSent: Boolean = false,
+    val ChangeMailMessage: String? = null,
+    val PasswordChangeResult: Result<Unit>? = null,
+    val IsPasswordChanged: Boolean = false,
+    val PasswordChangeMessage: String? = null,
+    val ErrorMessage: String? = null,
+    val PhoneListResult: Result<List<MemberPhoneDTO>>? = null,
+    val PhoneDetailResult: Result<MemberPhoneDTO?>? = null,
+    val PhoneInsertResult: Result<Int>? = null,
+    val PhoneDeleteResult: Result<Unit>? = null,
+    val PhoneSmsResult: Result<Unit>? = null,
+    val PhoneVerifyResult: Result<Unit>? = null,
+    val IsPhoneInserted: Boolean = false,
+    val IsPhoneVerified: Boolean = false,
+    val PhoneMessage: String? = null,
 ) {
     val Member: MemberDTO?
         get() = MemberResult?.Data
@@ -109,6 +131,9 @@ data class AccountControllerState(
 
     val WholesaleFavorites: List<WholesaleFavoriteDTO>
         get() = WholesaleFavoriteListResult?.Data.orEmpty()
+
+    val Phones: List<MemberPhoneDTO>
+        get() = PhoneListResult?.Data.orEmpty()
 }
 
 class AccountController(
@@ -123,7 +148,8 @@ class AccountController(
     private val memberLoginActivityRepository: IMemberLoginActivityRepository,
     private val memberCouponRepository: IMemberCouponRepository,
     private val productFavoriteRepository: IProductFavoriteRepository,
-    private val wholesaleFavoriteRepository: IWholesaleFavoriteRepository
+    private val wholesaleFavoriteRepository: IWholesaleFavoriteRepository,
+    private val memberPhoneRepository: IMemberPhoneRepository,
 ) : BaseController() {
 
     private val _state = MutableStateFlow(AccountControllerState())
@@ -334,6 +360,111 @@ class AccountController(
             }
 
             if (response.Success) onSuccess?.invoke()
+        }
+    }
+
+    fun SendEmailChangingRequest(model: ChangeMailModel) {
+        if (!ValidateMember(model.MemberId)) return
+
+        val newEmail = model.NewEmail.trim()
+        val reNewEmail = model.ReNewEmail.trim()
+
+        if (newEmail.isBlank() || reNewEmail.isBlank()) {
+            SetError("Yeni e-posta adreslerini giriniz.")
+            return
+        }
+
+        if (!newEmail.equals(reNewEmail, ignoreCase = true)) {
+            SetError("Yeni e-posta adresleri eşleşmiyor.")
+            return
+        }
+
+        if (model.Email.trim().equals(newEmail, ignoreCase = true)) {
+            SetError("Yeni e-posta adresi mevcut e-posta adresinizle aynı olamaz.")
+            return
+        }
+
+        val requestModel = model.copy(
+            Email = model.Email.trim(),
+            NewEmail = newEmail,
+            ReNewEmail = reNewEmail
+        )
+
+        viewModelScope.launch {
+            SetLoading("SendEmailChangingRequest")
+
+            val response = executeService.PostAsync(operationType = "Account.Email.ChangeRequest") {
+                memberRepository.SendEmailChangingRequestAsync(requestModel)
+            }
+
+            Complete {
+                copy(
+                    ChangeMailResult = response,
+                    IsChangeMailRequestSent = response.Success,
+                    ChangeMailMessage = response.Message.takeIf { response.Success },
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+        }
+    }
+
+    fun ChangePassword(languageId: Int, model: ChangePasswordModel, onSuccess: (() -> Unit)? = null) {
+        if (!ValidateMember(model.MemberId)) return
+
+        if (model.ActivePassword.isBlank()) {
+            SetError("Mevcut şifrenizi giriniz.")
+            return
+        }
+
+        if (model.NewPassword.length !in 8..16) {
+            SetError("Yeni şifreniz 8 ile 16 karakter arasında olmalıdır.")
+            return
+        }
+
+        if (model.NewPassword != model.ReNewPassword) {
+            SetError("Yeni şifreler birbiriyle eşleşmiyor.")
+            return
+        }
+
+        viewModelScope.launch {
+            SetLoading("ChangePassword")
+
+            val response = executeService.PostAsync(operationType = "Account.Password.Change") {
+                memberRepository.ChangePasswordAsync(languageId, model)
+            }
+
+            Complete {
+                copy(
+                    PasswordChangeResult = response,
+                    IsPasswordChanged = response.Success,
+                    PasswordChangeMessage = response.Message.takeIf { response.Success },
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+
+            if (response.Success) onSuccess?.invoke()
+        }
+    }
+
+    fun ResetPasswordChangeState() {
+        _state.update {
+            it.copy(
+                PasswordChangeResult = null,
+                IsPasswordChanged = false,
+                PasswordChangeMessage = null,
+                ErrorMessage = null
+            )
+        }
+    }
+
+    fun ResetChangeMailState() {
+        _state.update {
+            it.copy(
+                ChangeMailResult = null,
+                IsChangeMailRequestSent = false,
+                ChangeMailMessage = null,
+                ErrorMessage = null
+            )
         }
     }
 
@@ -661,6 +792,226 @@ class AccountController(
                     ErrorMessage = response.Message.takeIf { !response.Success }
                 )
             }
+        }
+    }
+
+    fun GetPhones(languageId: Int, memberId: Int, count: Int = 100) {
+        if (!ValidateMember(memberId)) return
+
+        viewModelScope.launch {
+            SetLoading("GetPhones")
+
+            val response = executeService.GetAsync(cacheKey = "") {
+                memberPhoneRepository.GetMemberPhonesAsync(
+                    languageId = languageId,
+                    memberId = memberId,
+                    count = count
+                )
+            }
+
+            Complete {
+                copy(
+                    PhoneListResult = response,
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+        }
+    }
+
+    fun GetPhone(languageId: Int, memberPhoneId: Int, memberId: Int) {
+        if (!ValidateMember(memberId)) return
+        if (!ValidateId(memberPhoneId, "Telefon kaydı bulunamadı.")) return
+
+        viewModelScope.launch {
+            SetLoading("GetPhone")
+
+            val response = executeService.GetAsync(cacheKey = "") {
+                memberPhoneRepository.GetMemberPhoneByIdExtendedAsync(
+                    languageId = languageId,
+                    memberPhoneId = memberPhoneId,
+                    memberId = memberId
+                )
+            }
+
+            Complete {
+                copy(
+                    PhoneDetailResult = response,
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+        }
+    }
+
+    fun InsertPhone(
+        languageId: Int,
+        memberId: Int,
+        phone: String,
+        onSuccess: ((Int) -> Unit)? = null
+    ) {
+        if (!ValidateMember(memberId)) return
+
+        val normalizedPhone = phone.trim()
+
+        if (normalizedPhone.isBlank()) {
+            SetError("Telefon numarası giriniz.")
+            return
+        }
+
+        val model = MemberPhoneInsertModel(
+            InsertedBy = memberId,
+            Phone = normalizedPhone
+        )
+
+        viewModelScope.launch {
+            SetLoading("InsertPhone")
+
+            val response = executeService.PostAsync(operationType = "Account.Phone.Insert") {
+                memberPhoneRepository.InsertAsync(
+                    languageId = languageId,
+                    model = model
+                )
+            }
+
+            Complete {
+                copy(
+                    PhoneInsertResult = response,
+                    IsPhoneInserted = response.Success,
+                    PhoneMessage = response.Message.takeIf { response.Success },
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+
+            val memberPhoneId = response.Data ?: 0
+
+            if (response.Success && memberPhoneId > 0) {
+                onSuccess?.invoke(memberPhoneId)
+            }
+        }
+    }
+
+    fun DeletePhone(
+        languageId: Int,
+        memberId: Int,
+        memberPhoneId: Int,
+        onSuccess: (() -> Unit)? = null
+    ) {
+        if (!ValidateMember(memberId)) return
+        if (!ValidateId(memberPhoneId, "Telefon kaydı bulunamadı.")) return
+
+        viewModelScope.launch {
+            SetLoading("DeletePhone")
+
+            val response = executeService.PostAsync(operationType = "Account.Phone.Delete") {
+                memberPhoneRepository.DeleteAsync(
+                    languageId = languageId,
+                    phoneId = memberPhoneId,
+                    memberId = memberId
+                )
+            }
+
+            Complete {
+                copy(
+                    PhoneDeleteResult = response,
+                    PhoneMessage = response.Message.takeIf { response.Success },
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+
+            if (response.Success) onSuccess?.invoke()
+        }
+    }
+
+    fun SendPhoneVerificationSms(
+        languageId: Int,
+        memberId: Int,
+        memberPhoneId: Int,
+        onSuccess: (() -> Unit)? = null
+    ) {
+        if (!ValidateMember(memberId)) return
+        if (!ValidateId(memberPhoneId, "Telefon kaydı bulunamadı.")) return
+
+        viewModelScope.launch {
+            SetLoading("SendPhoneVerificationSms")
+
+            val response = executeService.GetAsync(cacheKey = "") {
+                memberPhoneRepository.SendVerificationSmsAsync(
+                    languageId = languageId,
+                    memberPhoneId = memberPhoneId,
+                    memberId = memberId
+                )
+            }
+
+            Complete {
+                copy(
+                    PhoneSmsResult = response,
+                    PhoneMessage = response.Message.takeIf { response.Success },
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+
+            if (response.Success) onSuccess?.invoke()
+        }
+    }
+
+    fun VerifyPhone(
+        languageId: Int,
+        memberId: Int,
+        memberPhoneId: Int,
+        verificationCode: String,
+        onSuccess: (() -> Unit)? = null
+    ) {
+        if (!ValidateMember(memberId)) return
+        if (!ValidateId(memberPhoneId, "Telefon kaydı bulunamadı.")) return
+
+        val normalizedCode = verificationCode.trim()
+
+        if (normalizedCode.length != 4 || normalizedCode.any { !it.isDigit() }) {
+            SetError("4 haneli doğrulama kodunu giriniz.")
+            return
+        }
+
+        val model = MemberPhoneUpdateModel(
+            MemberPhoneId = memberPhoneId,
+            InsertedBy = memberId,
+            VerificationCode = normalizedCode
+        )
+
+        viewModelScope.launch {
+            SetLoading("VerifyPhone")
+
+            val response = executeService.PostAsync(operationType = "Account.Phone.Verify") {
+                memberPhoneRepository.VerifyPhoneAsync(
+                    languageId = languageId,
+                    model = model
+                )
+            }
+
+            Complete {
+                copy(
+                    PhoneVerifyResult = response,
+                    IsPhoneVerified = response.Success,
+                    PhoneMessage = response.Message.takeIf { response.Success },
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+
+            if (response.Success) onSuccess?.invoke()
+        }
+    }
+
+    fun ResetPhoneState() {
+        _state.update {
+            it.copy(
+                PhoneDetailResult = null,
+                PhoneInsertResult = null,
+                PhoneDeleteResult = null,
+                PhoneSmsResult = null,
+                PhoneVerifyResult = null,
+                IsPhoneInserted = false,
+                IsPhoneVerified = false,
+                PhoneMessage = null,
+                ErrorMessage = null
+            )
         }
     }
 

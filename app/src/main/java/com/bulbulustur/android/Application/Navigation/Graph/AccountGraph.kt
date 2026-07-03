@@ -5,8 +5,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
-import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import androidx.navigation.compose.composable
 import com.bulbulustur.android.Application.Controllers.AccountController
 import com.bulbulustur.android.Application.Controllers.LogonController
 import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
@@ -49,14 +49,22 @@ import com.bulbulustur.android.Application.Views.Account.SubscriptionDetailScree
 import com.bulbulustur.android.Application.Views.Account.SubscriptionListScreen
 import com.bulbulustur.android.Application.Views.Account.WalletBalanceScreen
 import com.bulbulustur.android.Application.Views.Preference.UsagePurposeScreen
+import com.bulbulustur.android.Application.Shared.Address.AddressCascadeController
+import com.bulbulustur.android.Application.Shared.Address.AddressCascadeEvent
+import com.bulbulustur.android.Application.Shared.Address.AddressCascadeSelection
+import com.bulbulustur.android.Application.Views.Account.ProfileEditScreen
+
 import com.bulbulustur.android.Application.Views.Question.QuestionAnswerScreen
+import com.bulbulustur.android.businesslayer.Core.Model.ChangePasswordModel
 import com.bulbulustur.android.businesslayer.Core.Enums.EApplicationLanguage
+import com.bulbulustur.android.businesslayer.Core.Model.ChangeMailModel
 
 fun NavGraphBuilder.accountGraph(
     navigator: BulbulusturNavigator,
     sessionState: UserSessionState,
     logonController: LogonController,
-    accountController: AccountController
+    accountController: AccountController,
+    addressCascadeController: AddressCascadeController
 ) {
     composable(
         route = AccountRoutes.AccountHome
@@ -253,9 +261,52 @@ fun NavGraphBuilder.accountGraph(
     composable(
         route = AccountRoutes.EmailChange
     ) {
+        val accountState by accountController.State.collectAsState()
+
+        val languageId = when (sessionState.Language) {
+            EApplicationLanguage.Turkish -> 1
+            EApplicationLanguage.English -> 2
+        }
+
+        val currentEmail = accountState.Member?.Email.orEmpty()
+
+        LaunchedEffect(sessionState.MemberId) {
+            accountController.ResetChangeMailState()
+
+            if (accountState.Member == null) {
+                accountController.GetAccount(
+                    languageId = languageId,
+                    memberId = sessionState.MemberId
+                )
+            }
+        }
+
         ChangeEmailScreen(
+            currentEmail = currentEmail,
+            isLoading = accountState.IsLoading &&
+                    (
+                            accountState.CurrentAction == "GetAccount" ||
+                                    accountState.CurrentAction == "SendEmailChangingRequest"
+                            ),
+            errorMessage = accountState.ChangeMailResult
+                ?.takeIf { result ->
+                    !result.Success
+                }
+                ?.Message,
+            successMessage = accountState.ChangeMailMessage,
             onBackClick = {
                 navigator.back()
+            },
+            onSaveClick = { newEmail, reNewEmail ->
+                accountController.SendEmailChangingRequest(
+                    model = ChangeMailModel(
+                        MemberId = sessionState.MemberId,
+                        Email = currentEmail,
+                        NewEmail = newEmail,
+                        ReNewEmail = reNewEmail,
+                        LanguageId = languageId
+                    )
+                )
             }
         )
     }
@@ -263,9 +314,38 @@ fun NavGraphBuilder.accountGraph(
     composable(
         route = AccountRoutes.PasswordChange
     ) {
+        val accountState by accountController.State.collectAsState()
+
+        val languageId = when (sessionState.Language) {
+            EApplicationLanguage.Turkish -> 1
+            EApplicationLanguage.English -> 2
+        }
+
+        LaunchedEffect(Unit) {
+            accountController.ResetPasswordChangeState()
+        }
+
         ChangePasswordScreen(
+            isLoading = accountState.IsLoading &&
+                    accountState.CurrentAction == "ChangePassword",
+            errorMessage = accountState.PasswordChangeResult
+                ?.takeIf { !it.Success }
+                ?.Message,
+            successMessage = accountState.PasswordChangeMessage,
             onBackClick = {
                 navigator.back()
+            },
+            onSaveClick = { oldPassword, newPassword, newPasswordAgain ->
+                accountController.ChangePassword(
+                    languageId = languageId,
+                    model = ChangePasswordModel(
+                        MemberId = sessionState.MemberId,
+                        ActivePassword = oldPassword,
+                        NewPassword = newPassword,
+                        ReNewPassword = newPasswordAgain,
+                        LanguageId = languageId
+                    )
+                )
             }
         )
     }
@@ -273,9 +353,28 @@ fun NavGraphBuilder.accountGraph(
     composable(
         route = AccountRoutes.LoginActivities
     ) {
+        val accountState by accountController.State.collectAsState()
+
+        LaunchedEffect(sessionState.MemberId) {
+            accountController.GetLoginActivities(
+                memberId = sessionState.MemberId
+            )
+        }
+
         LoginActivitiesScreen(
+            activities = accountState.LoginActivities,
+            isLoading = accountState.IsLoading &&
+                    accountState.CurrentAction == "GetLoginActivities",
+            errorMessage = accountState.LoginActivityListResult
+                ?.takeIf { !it.Success }
+                ?.Message,
             onBackClick = {
                 navigator.back()
+            },
+            onRetryClick = {
+                accountController.GetLoginActivities(
+                    memberId = sessionState.MemberId
+                )
             }
         )
     }
@@ -283,7 +382,55 @@ fun NavGraphBuilder.accountGraph(
     composable(
         route = AccountRoutes.ProfileInfo
     ) {
+        val accountState by accountController.State.collectAsState()
+        val addressCascadeState by addressCascadeController.State.collectAsState()
+
+        val languageId = when (sessionState.Language) {
+            EApplicationLanguage.Turkish -> 1
+            EApplicationLanguage.English -> 2
+        }
+
+        val member = accountState.Member
+
+        LaunchedEffect(sessionState.MemberId) {
+            accountController.GetAccount(
+                languageId = languageId,
+                memberId = sessionState.MemberId
+            )
+        }
+
+        LaunchedEffect(
+            member?.MemberId,
+            member?.CountryId,
+            member?.CountryStateId,
+            member?.CountryDepartmentId,
+            member?.CityId,
+            member?.DistrictId
+        ) {
+            if (member == null) return@LaunchedEffect
+
+            addressCascadeController.OnEvent(
+                AddressCascadeEvent.SetInitialSelection(
+                    Selection = AddressCascadeSelection(
+                        CountryId = member.CountryId,
+                        CountryStateId = member.CountryStateId,
+                        CountryDepartmentId = member.CountryDepartmentId,
+                        CityId = member.CityId,
+                        DistrictId = member.DistrictId
+                    ),
+                    LanguageId = languageId
+                )
+            )
+        }
+
         ProfileScreen(
+            member = member,
+            addressCascadeState = addressCascadeState,
+            isLoading = accountState.IsLoading &&
+                    accountState.CurrentAction == "GetAccount",
+            errorMessage = accountState.MemberResult
+                ?.takeIf { !it.Success }
+                ?.Message,
             onBackClick = {
                 navigator.back()
             },
@@ -323,17 +470,155 @@ fun NavGraphBuilder.accountGraph(
     composable(
         route = AccountRoutes.ProfileEdit
     ) {
-        ProfileScreen(
+        val accountState by accountController.State.collectAsState()
+        val addressCascadeState by addressCascadeController.State.collectAsState()
+
+        val languageId = when (sessionState.Language) {
+            EApplicationLanguage.Turkish -> 1
+            EApplicationLanguage.English -> 2
+        }
+
+        val member = accountState.MemberUpdateResult?.Data
+
+        LaunchedEffect(sessionState.MemberId) {
+            addressCascadeController.OnEvent(
+                AddressCascadeEvent.Clear
+            )
+
+            accountController.GetMember(
+                languageId = languageId,
+                memberId = sessionState.MemberId
+            )
+        }
+
+        LaunchedEffect(
+            member?.MemberId,
+            member?.CountryId,
+            member?.CountryStateId,
+            member?.CountryDepartmentId,
+            member?.CityId,
+            member?.DistrictId
+        ) {
+            if (member == null) return@LaunchedEffect
+
+            addressCascadeController.OnEvent(
+                AddressCascadeEvent.SetInitialSelection(
+                    Selection = AddressCascadeSelection(
+                        CountryId = member.CountryId,
+                        CountryStateId = member.CountryStateId,
+                        CountryDepartmentId = member.CountryDepartmentId,
+                        CityId = member.CityId,
+                        DistrictId = member.DistrictId
+                    ),
+                    LanguageId = languageId
+                )
+            )
+        }
+
+        ProfileEditScreen(
+            member = member,
+            addressCascadeState = addressCascadeState,
+            isLoading = accountState.IsLoading &&
+                    (
+                            accountState.CurrentAction == "GetMember" ||
+                                    accountState.CurrentAction == "UpdateMember"
+                            ),
+            errorMessage = accountState.ErrorMessage,
             onBackClick = {
+                addressCascadeController.OnEvent(
+                    AddressCascadeEvent.Clear
+                )
+
                 navigator.back()
+            },
+            onCountrySelected = { countryId ->
+                addressCascadeController.OnEvent(
+                    AddressCascadeEvent.SelectCountry(
+                        CountryId = countryId,
+                        LanguageId = languageId
+                    )
+                )
+            },
+            onCountryStateSelected = { countryStateId ->
+                addressCascadeController.OnEvent(
+                    AddressCascadeEvent.SelectCountryState(
+                        CountryStateId = countryStateId,
+                        LanguageId = languageId
+                    )
+                )
+            },
+            onCountryDepartmentSelected = { countryDepartmentId ->
+                addressCascadeController.OnEvent(
+                    AddressCascadeEvent.SelectCountryDepartment(
+                        CountryDepartmentId = countryDepartmentId,
+                        LanguageId = languageId
+                    )
+                )
+            },
+            onCitySelected = { cityId ->
+                addressCascadeController.OnEvent(
+                    AddressCascadeEvent.SelectCity(
+                        CityId = cityId,
+                        LanguageId = languageId
+                    )
+                )
+            },
+            onDistrictSelected = { districtId ->
+                addressCascadeController.OnEvent(
+                    AddressCascadeEvent.SelectDistrict(
+                        DistrictId = districtId
+                    )
+                )
+            },
+            onSaveClick = { name, surname, profession, birthDate ->
+                val currentMember = member ?: return@ProfileEditScreen
+                val selection = addressCascadeState.Selection
+
+                accountController.UpdateMember(
+                    model = currentMember.copy(
+                        Name = name.trim(),
+                        Surname = surname.trim(),
+                        Profession = profession.trim(),
+                        BirthDate = birthDate.trim().ifBlank { null },
+                        CountryId = selection.CountryId,
+                        CountryStateId = selection.CountryStateId,
+                        CountryDepartmentId = selection.CountryDepartmentId,
+                        CityId = selection.CityId,
+                        DistrictId = selection.DistrictId
+                    ),
+                    onSuccess = {
+                        addressCascadeController.OnEvent(
+                            AddressCascadeEvent.Clear
+                        )
+
+                        navigator.back()
+                    }
+                )
             }
         )
     }
-
     composable(
         route = AccountRoutes.PhoneList
     ) {
+        val accountState by accountController.State.collectAsState()
+
+        val languageId = when (sessionState.Language) {
+            EApplicationLanguage.Turkish -> 1
+            EApplicationLanguage.English -> 2
+        }
+
+        LaunchedEffect(sessionState.MemberId) {
+            accountController.GetPhones(
+                languageId = languageId,
+                memberId = sessionState.MemberId
+            )
+        }
+
         PhoneListScreen(
+            phones = accountState.Phones,
+            isLoading = accountState.IsLoading,
+            currentAction = accountState.CurrentAction,
+            errorMessage = accountState.ErrorMessage,
             onBackClick = {
                 navigator.back()
             },
@@ -342,9 +627,35 @@ fun NavGraphBuilder.accountGraph(
                     AccountRoutes.PhoneCreate
                 )
             },
-            onVerifyPhoneClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.PhoneVerify
+            onVerifyPhoneClick = { memberPhoneId ->
+                accountController.SendPhoneVerificationSms(
+                    languageId = languageId,
+                    memberId = sessionState.MemberId,
+                    memberPhoneId = memberPhoneId,
+                    onSuccess = {
+                        navigator.navController.navigate(
+                            AccountRoutes.PhoneVerify(memberPhoneId)
+                        )
+                    }
+                )
+            },
+            onDeletePhoneClick = { memberPhoneId ->
+                accountController.DeletePhone(
+                    languageId = languageId,
+                    memberId = sessionState.MemberId,
+                    memberPhoneId = memberPhoneId,
+                    onSuccess = {
+                        accountController.GetPhones(
+                            languageId = languageId,
+                            memberId = sessionState.MemberId
+                        )
+                    }
+                )
+            },
+            onRetryClick = {
+                accountController.GetPhones(
+                    languageId = languageId,
+                    memberId = sessionState.MemberId
                 )
             }
         )
@@ -353,19 +664,118 @@ fun NavGraphBuilder.accountGraph(
     composable(
         route = AccountRoutes.PhoneCreate
     ) {
+        val accountState by accountController.State.collectAsState()
+
+        val languageId = when (sessionState.Language) {
+            EApplicationLanguage.Turkish -> 1
+            EApplicationLanguage.English -> 2
+        }
+
+        LaunchedEffect(Unit) {
+            accountController.ResetPhoneState()
+        }
+
         PhoneCreateScreen(
+            isLoading = accountState.IsLoading &&
+                    accountState.CurrentAction == "InsertPhone",
+            errorMessage = accountState.ErrorMessage,
             onBackClick = {
                 navigator.back()
+            },
+            onSaveClick = { phone ->
+                accountController.InsertPhone(
+                    languageId = languageId,
+                    memberId = sessionState.MemberId,
+                    phone = phone,
+                    onSuccess = { memberPhoneId ->
+                        accountController.SendPhoneVerificationSms(
+                            languageId = languageId,
+                            memberId = sessionState.MemberId,
+                            memberPhoneId = memberPhoneId,
+                            onSuccess = {
+                                navigator.navController.navigate(
+                                    AccountRoutes.PhoneVerify(memberPhoneId)
+                                ) {
+                                    popUpTo(AccountRoutes.PhoneCreate) {
+                                        inclusive = true
+                                    }
+                                }
+                            }
+                        )
+                    }
+                )
             }
         )
     }
 
     composable(
-        route = AccountRoutes.PhoneVerify
-    ) {
+        route = AccountRoutes.PhoneVerify,
+        arguments = listOf(
+            navArgument("memberPhoneId") {
+                type = NavType.IntType
+            }
+        )
+    ) { backStackEntry ->
+        val accountState by accountController.State.collectAsState()
+
+        val languageId = when (sessionState.Language) {
+            EApplicationLanguage.Turkish -> 1
+            EApplicationLanguage.English -> 2
+        }
+
+        val memberPhoneId = backStackEntry.arguments
+            ?.getInt("memberPhoneId")
+            ?: 0
+
+        val phone = accountState.PhoneDetailResult
+            ?.Data
+            ?.Phone
+            .orEmpty()
+
+        LaunchedEffect(memberPhoneId, sessionState.MemberId) {
+            accountController.ResetPhoneState()
+
+            accountController.GetPhone(
+                languageId = languageId,
+                memberPhoneId = memberPhoneId,
+                memberId = sessionState.MemberId
+            )
+        }
+
         PhoneVerifyScreen(
+            phone = phone,
+            isLoading = accountState.IsLoading,
+            currentAction = accountState.CurrentAction,
+            errorMessage = accountState.ErrorMessage,
+            successMessage = accountState.PhoneMessage,
             onBackClick = {
                 navigator.back()
+            },
+            onVerifyClick = { verificationCode ->
+                accountController.VerifyPhone(
+                    languageId = languageId,
+                    memberId = sessionState.MemberId,
+                    memberPhoneId = memberPhoneId,
+                    verificationCode = verificationCode,
+                    onSuccess = {
+                        navigator.navController.navigate(
+                            AccountRoutes.PhoneList
+                        ) {
+                            popUpTo(AccountRoutes.PhoneList) {
+                                inclusive = true
+                            }
+
+                            launchSingleTop = true
+                        }
+                    }
+                )
+            },
+            onResendCodeClick = {
+                accountController.SendPhoneVerificationSms(
+                    languageId = languageId,
+                    memberId = sessionState.MemberId,
+                    memberPhoneId = memberPhoneId
+                )
             }
         )
     }

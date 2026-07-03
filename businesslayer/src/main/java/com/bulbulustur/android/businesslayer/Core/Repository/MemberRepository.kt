@@ -2,6 +2,8 @@ package com.bulbulustur.android.businesslayer.Core.Repository
 
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.IMemberRepository
+import com.bulbulustur.android.businesslayer.Core.Model.ChangeMailModel
+import com.bulbulustur.android.businesslayer.Core.Model.ChangePasswordModel
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.MemberInsertModel
 import com.bulbulustur.android.businesslayer.Core.Model.MemberRegisterModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdateModel
@@ -68,6 +70,24 @@ class MemberRepository(
             baseUrl = ApiRoutes.MEMBER_BASE_URL,
             method = "SetContactPreference",
             data = model
+        )
+    }
+
+    override suspend fun SendEmailChangingRequestAsync(model: ChangeMailModel): Result<ChangeMailModel> {
+        return apiClient.PostAsync(
+            baseUrl = ApiRoutes.MEMBER_BASE_URL,
+            method = "SendEmailChangingRequest",
+            data = model
+        )
+    }
+
+    override suspend fun ChangePasswordAsync(languageId: Int, model: ChangePasswordModel): Result<Unit> {
+        val requestModel = model.copy(LanguageId = languageId)
+
+        return apiClient.PostAsync(
+            baseUrl = ApiRoutes.MEMBER_BASE_URL,
+            method = "ChangePassword?languageId=$languageId",
+            data = requestModel
         )
     }
 

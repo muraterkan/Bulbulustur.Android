@@ -59,9 +59,15 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BbTypography
+import com.bulbulustur.android.Application.Shared.Address.AddressCascadeState
+import com.bulbulustur.android.businesslayer.Core.DTO.MemberDTO
 
 @Composable
 fun ProfileScreen(
+    member: MemberDTO?,
+    addressCascadeState: AddressCascadeState,
+    isLoading: Boolean = false,
+    errorMessage: String? = null,
     onBackClick: () -> Unit = {},
     onEditClick: () -> Unit = {},
     onPhonesClick: () -> Unit = {},
@@ -70,6 +76,56 @@ fun ProfileScreen(
     onCompanyInfoClick: () -> Unit = {},
     onB2BStatusClick: () -> Unit = {}
 ) {
+    val fullName = listOfNotNull(
+        member?.Name?.trim()?.takeIf { it.isNotBlank() },
+        member?.Surname?.trim()?.takeIf { it.isNotBlank() }
+    ).joinToString(" ").ifBlank {
+        "Profil bilgisi bulunamadı"
+    }
+
+    val accountCode = member
+        ?.MemberId
+        ?.takeIf { it > 0 }
+        ?.let { "ME-$it" }
+        ?: "-"
+
+    val email = member?.Email.orEmpty().ifBlank {
+        "E-posta bilgisi bulunamadı"
+    }
+
+    val countryName = addressCascadeState.Countries
+        .firstOrNull {
+            it.AddressCountryId == member?.CountryId
+        }
+        ?.Content
+        .orEmpty()
+
+    val cityName = addressCascadeState.Cities
+        .firstOrNull {
+            it.AddressCityId == member?.CityId
+        }
+        ?.Content
+        .orEmpty()
+
+    val locationText = listOf(countryName, cityName)
+        .filter { it.isNotBlank() }
+        .joinToString(" / ")
+        .ifBlank {
+            "Konum bilgisi bulunamadı"
+        }
+
+    val genderText = member
+        ?.GenderId
+        ?.takeIf { it > 0 }
+        ?.toString()
+        ?: "Belirtilmemiş"
+
+    val activationText = when (member?.Activation) {
+        true -> "Doğrulanmış"
+        false -> "Doğrulanmamış"
+        null -> "Bilinmiyor"
+    }
+
     var showProfilePhotoSheet by remember {
         mutableStateOf(false)
     }
@@ -140,6 +196,9 @@ fun ProfileScreen(
         ) {
             item {
                 ProfileHeroCard(
+                    fullName = fullName,
+                    accountCode = accountCode,
+                    email = email,
                     hasProfilePhoto = hasProfilePhoto,
                     onProfilePhotoClick = {
                         showProfilePhotoSheet = true
@@ -160,13 +219,13 @@ fun ProfileScreen(
                     description = "Hesabınızın görünen temel bilgileri.",
                     icon = Icons.Outlined.PermIdentity
                 ) {
-                    ProfileInfoRow("Hesap ID", "ME-10000", Icons.Outlined.Badge, onEditClick)
+                    ProfileInfoRow("Hesap ID", accountCode, Icons.Outlined.Badge, onEditClick)
                     ProfileDashedDivider()
-                    ProfileInfoRow("Ad Soyad", "Murat Erkan", Icons.Outlined.PermIdentity, onEditClick)
+                    ProfileInfoRow("Ad Soyad", fullName, Icons.Outlined.PermIdentity, onEditClick)
                     ProfileDashedDivider()
-                    ProfileInfoRow("Cinsiyet", "Erkek", Icons.Outlined.Man, onEditClick)
+                    ProfileInfoRow("Cinsiyet", genderText, Icons.Outlined.Man, onEditClick)
                     ProfileDashedDivider()
-                    ProfileInfoRow("Ülke / Şehir", "Türkiye / Ankara", Icons.Outlined.LocationOn, onEditClick)
+                    ProfileInfoRow("Ülke / Şehir", locationText, Icons.Outlined.LocationOn, onEditClick)
                 }
             }
 
@@ -176,11 +235,11 @@ fun ProfileScreen(
                     description = "Güvenlik ve hesap doğrulama bilgileri.",
                     icon = Icons.Outlined.Security
                 ) {
-                    ProfileInfoRow("E-Posta", "muraterkan500@gmail.com", Icons.Outlined.Email, onEmailClick)
+                    ProfileInfoRow("E-Posta", email, Icons.Outlined.Email, onEmailClick)
                     ProfileDashedDivider()
-                    ProfileInfoRow("Telefonlarım", "1 telefon kayıtlı . doğrulama bekliyor", Icons.Outlined.PhoneIphone, onPhonesClick)
+                    ProfileInfoRow("Telefonlarım", "Telefon bilgilerini yönetin", Icons.Outlined.PhoneIphone, onPhonesClick)
                     ProfileDashedDivider()
-                    ProfileInfoRow("E-Posta Doğrulama", "Doğrulanmış", Icons.Outlined.Verified, onEmailClick)
+                    ProfileInfoRow("E-Posta Doğrulama", activationText, Icons.Outlined.Verified, onEmailClick)
                 }
             }
 
@@ -225,6 +284,9 @@ fun ProfileScreen(
 
 @Composable
 private fun ProfileHeroCard(
+    fullName: String,
+    accountCode: String,
+    email: String,
     hasProfilePhoto: Boolean,
     onProfilePhotoClick: () -> Unit
 ) {
@@ -258,13 +320,13 @@ private fun ProfileHeroCard(
                 )
 
                 Text(
-                    text = "Murat Erkan",
+                    text = fullName,
                     style = BbTypography.titleLarge,
                     color = MaterialTheme.colorScheme.inverseOnSurface
                 )
 
                 Text(
-                    text = "ME-10000 . muraterkan500@gmail.com",
+                    text = "$accountCode · $email",
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.inverseOnSurface.copy(alpha = BBAlpha.Muted)
                 )

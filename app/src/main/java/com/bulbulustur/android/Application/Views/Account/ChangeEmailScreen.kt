@@ -22,43 +22,49 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
+import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
-import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 
 @Composable
 fun ChangeEmailScreen(
-    currentEmail: String = "murat@example.com",
+    currentEmail: String,
     isLoading: Boolean = false,
     errorMessage: String? = null,
     successMessage: String? = null,
     onBackClick: () -> Unit = {},
-    onSaveClick: (String) -> Unit = {}
+    onSaveClick: (newEmail: String, reNewEmail: String) -> Unit = { _, _ -> }
 ) {
     val newEmailState = remember {
         mutableStateOf("")
     }
 
+    val reNewEmailState = remember {
+        mutableStateOf("")
+    }
+
     val emailValidationState = remember(
         currentEmail,
-        newEmailState.value
+        newEmailState.value,
+        reNewEmailState.value
     ) {
         derivedStateOf {
-            validateEmailForm(
+            ValidateEmailForm(
                 currentEmail = currentEmail,
-                newEmail = newEmailState.value
+                newEmail = newEmailState.value,
+                reNewEmail = reNewEmailState.value
             )
         }
     }
 
-    val canSubmit = emailValidationState.value.canSubmit && !isLoading
+    val canSubmit = emailValidationState.value.CanSubmit && !isLoading
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -100,41 +106,40 @@ fun ChangeEmailScreen(
                         currentEmail = currentEmail
                     )
 
-                    OutlinedTextField(
+                    EmailTextField(
                         value = newEmailState.value,
                         onValueChange = { value ->
                             newEmailState.value = value
                         },
-                        modifier = Modifier.fillMaxWidth(),
-                        label = {
-                            Text(text = "Yeni E-Posta")
-                        },
-                        placeholder = {
-                            Text(text = "ornek@bulbulustur.com")
-                        },
-                        singleLine = true,
-                        shape = BBRadius.Input,
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Email
-                        ),
+                        label = "Yeni E-Posta",
+                        placeholder = "ornek@bulbulustur.com",
                         isError = newEmailState.value.isNotBlank() &&
-                                !emailValidationState.value.isValidEmailFormat,
+                                (!emailValidationState.value.IsNewEmailValid ||
+                                        emailValidationState.value.IsSameEmail),
                         supportingText = {
-                            EmailSupportingText(
+                            NewEmailSupportingText(
                                 validation = emailValidationState.value,
                                 newEmail = newEmailState.value
                             )
+                        }
+                    )
+
+                    EmailTextField(
+                        value = reNewEmailState.value,
+                        onValueChange = { value ->
+                            reNewEmailState.value = value
                         },
-                        colors = TextFieldDefaults.colors(
-                            focusedContainerColor = MaterialTheme.colorScheme.surface,
-                            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-                            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
-                            unfocusedIndicatorColor = MaterialTheme.colorScheme.outline,
-                            errorIndicatorColor = MaterialTheme.colorScheme.error,
-                            focusedLabelColor = MaterialTheme.colorScheme.primary,
-                            unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                            errorLabelColor = MaterialTheme.colorScheme.error
-                        )
+                        label = "Yeni E-Posta Tekrar",
+                        placeholder = "ornek@bulbulustur.com",
+                        isError = reNewEmailState.value.isNotBlank() &&
+                                (!emailValidationState.value.IsReNewEmailValid ||
+                                        !emailValidationState.value.EmailsMatch),
+                        supportingText = {
+                            ReNewEmailSupportingText(
+                                validation = emailValidationState.value,
+                                reNewEmail = reNewEmailState.value
+                            )
+                        }
                     )
 
                     ChangeEmailInfoBox()
@@ -153,16 +158,19 @@ fun ChangeEmailScreen(
                         message.isNotBlank()
                     }?.let { message ->
                         EmailMessageBox(
-                            title = "E-Posta Güncellendi",
+                            title = "Doğrulama Bağlantısı Gönderildi",
                             message = message,
                             type = EmailMessageType.Success
                         )
                     }
 
                     BbButton(
-                        text = "E-Postayı Güncelle",
+                        text = "Doğrulama Bağlantısı Gönder",
                         onClick = {
-                            onSaveClick(newEmailState.value)
+                            onSaveClick(
+                                newEmailState.value.trim(),
+                                reNewEmailState.value.trim()
+                            )
                         },
                         modifier = Modifier.fillMaxWidth(),
                         variant = BbButtonVariant.Primary,
@@ -184,7 +192,7 @@ private fun ChangeEmailIntroCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Hesabınıza bağlı e-posta adresini güncelleyin. Yeni e-posta için doğrulama süreci gerekebilir.",
+            text = "Yeni e-posta adresinize bir doğrulama bağlantısı gönderilir. E-posta adresiniz, bağlantıyı açtıktan sonra değiştirilir.",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -214,7 +222,9 @@ private fun CurrentEmailBox(
             )
 
             Text(
-                text = currentEmail,
+                text = currentEmail.ifBlank {
+                    "E-posta bilgisi bulunamadı"
+                },
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -223,41 +233,114 @@ private fun CurrentEmailBox(
 }
 
 @Composable
-private fun EmailSupportingText(
+private fun EmailTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    placeholder: String,
+    isError: Boolean,
+    supportingText: @Composable () -> Unit
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = Modifier.fillMaxWidth(),
+        label = {
+            Text(text = label)
+        },
+        placeholder = {
+            Text(text = placeholder)
+        },
+        singleLine = true,
+        shape = BBRadius.Input,
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Email
+        ),
+        isError = isError,
+        supportingText = supportingText,
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = MaterialTheme.colorScheme.surface,
+            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+            unfocusedIndicatorColor = MaterialTheme.colorScheme.outline,
+            errorIndicatorColor = MaterialTheme.colorScheme.error,
+            focusedLabelColor = MaterialTheme.colorScheme.primary,
+            unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            errorLabelColor = MaterialTheme.colorScheme.error
+        )
+    )
+}
+
+@Composable
+private fun NewEmailSupportingText(
     validation: EmailValidationState,
     newEmail: String
 ) {
-    if (newEmail.isBlank()) {
-        Text(
-            text = "Yeni e-posta adresinizi yazın.",
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
+    when {
+        newEmail.isBlank() -> {
+            Text(
+                text = "Yeni e-posta adresinizi yazın.",
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
 
-        return
+        !validation.IsNewEmailValid -> {
+            Text(
+                text = "Geçerli bir e-posta adresi girin.",
+                color = MaterialTheme.colorScheme.error
+            )
+        }
+
+        validation.IsSameEmail -> {
+            Text(
+                text = "Yeni e-posta mevcut e-posta ile aynı olamaz.",
+                color = MaterialTheme.colorScheme.error
+            )
+        }
+
+        else -> {
+            Text(
+                text = "E-posta formatı uygun görünüyor.",
+                color = BBColors.Green.Green700
+            )
+        }
     }
+}
 
-    if (!validation.isValidEmailFormat) {
-        Text(
-            text = "Geçerli bir e-posta adresi girin.",
-            color = MaterialTheme.colorScheme.error
-        )
+@Composable
+private fun ReNewEmailSupportingText(
+    validation: EmailValidationState,
+    reNewEmail: String
+) {
+    when {
+        reNewEmail.isBlank() -> {
+            Text(
+                text = "Yeni e-posta adresinizi tekrar yazın.",
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
 
-        return
+        !validation.IsReNewEmailValid -> {
+            Text(
+                text = "Geçerli bir e-posta adresini tekrar girin.",
+                color = MaterialTheme.colorScheme.error
+            )
+        }
+
+        !validation.EmailsMatch -> {
+            Text(
+                text = "Yeni e-posta adresleri eşleşmiyor.",
+                color = MaterialTheme.colorScheme.error
+            )
+        }
+
+        else -> {
+            Text(
+                text = "E-posta adresleri eşleşiyor.",
+                color = BBColors.Green.Green700
+            )
+        }
     }
-
-    if (validation.isSameEmail) {
-        Text(
-            text = "Yeni e-posta mevcut e-posta ile aynı olamaz.",
-            color = MaterialTheme.colorScheme.error
-        )
-
-        return
-    }
-
-    Text(
-        text = "E-posta formatı uygun görünüyor.",
-        color = BBColors.Green.Green700
-    )
 }
 
 @Composable
@@ -275,13 +358,13 @@ private fun ChangeEmailInfoBox() {
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
         ) {
             Text(
-                text = "Doğrulama Gerekebilir",
+                text = "Doğrulama Bağlantısı",
                 style = MaterialTheme.typography.labelLarge,
                 color = BBColors.Blue.Blue700
             )
 
             Text(
-                text = "E-posta değişikliğinden sonra hesabınızın güvenliği için yeni adresin doğrulanması istenebilir.",
+                text = "Bağlantı yeni e-posta adresinize gönderilir. Değişiklik tamamlandığında güvenlik nedeniyle yeniden giriş yapmanız gerekebilir.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -332,36 +415,40 @@ private fun EmailMessageBox(
     }
 }
 
-private fun validateEmailForm(
+private fun ValidateEmailForm(
     currentEmail: String,
-    newEmail: String
+    newEmail: String,
+    reNewEmail: String
 ): EmailValidationState {
-    val trimmedCurrentEmail = currentEmail.trim()
-    val trimmedNewEmail = newEmail.trim()
+    val normalizedCurrentEmail = currentEmail.trim()
+    val normalizedNewEmail = newEmail.trim()
+    val normalizedReNewEmail = reNewEmail.trim()
 
-    val hasEmail = trimmedNewEmail.isNotBlank()
-    val isValidEmailFormat = isValidEmailAddress(trimmedNewEmail)
-    val isSameEmail = trimmedCurrentEmail.equals(
-        other = trimmedNewEmail,
+    val isNewEmailValid = IsValidEmailAddress(normalizedNewEmail)
+    val isReNewEmailValid = IsValidEmailAddress(normalizedReNewEmail)
+    val isSameEmail = normalizedCurrentEmail.equals(
+        other = normalizedNewEmail,
         ignoreCase = true
     )
+    val emailsMatch = normalizedNewEmail.isNotBlank() &&
+            normalizedNewEmail.equals(
+                other = normalizedReNewEmail,
+                ignoreCase = true
+            )
 
     return EmailValidationState(
-        hasEmail = hasEmail,
-        isValidEmailFormat = isValidEmailFormat,
-        isSameEmail = isSameEmail
+        IsNewEmailValid = isNewEmailValid,
+        IsReNewEmailValid = isReNewEmailValid,
+        IsSameEmail = isSameEmail,
+        EmailsMatch = emailsMatch
     )
 }
 
-private fun isValidEmailAddress(
-    email: String
-): Boolean {
-    if (email.isBlank()) {
-        return false
-    }
+private fun IsValidEmailAddress(email: String): Boolean {
+    if (email.isBlank()) return false
 
     val emailRegex = Regex(
-        pattern = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
+        pattern = "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
     )
 
     return emailRegex.matches(email)
@@ -373,16 +460,14 @@ private enum class EmailMessageType {
 }
 
 private data class EmailValidationState(
-    val hasEmail: Boolean,
-    val isValidEmailFormat: Boolean,
-    val isSameEmail: Boolean
+    val IsNewEmailValid: Boolean,
+    val IsReNewEmailValid: Boolean,
+    val IsSameEmail: Boolean,
+    val EmailsMatch: Boolean
 ) {
-    val canSubmit: Boolean
-        get() {
-            return hasEmail &&
-                    isValidEmailFormat &&
-                    !isSameEmail
-        }
+    val CanSubmit: Boolean
+        get() = IsNewEmailValid &&
+                IsReNewEmailValid &&
+                !IsSameEmail &&
+                EmailsMatch
 }
-
-

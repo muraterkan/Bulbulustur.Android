@@ -16,43 +16,48 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
+import com.bulbulustur.android.Application.Shared.Address.AddressCascadeFields
+import com.bulbulustur.android.Application.Shared.Address.AddressCascadeState
+import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
-import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
+import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdateModel
 
 @Composable
-fun ProfileScreen(
+fun ProfileEditScreen(
+    member: MemberUpdateModel?,
+    addressCascadeState: AddressCascadeState,
+    isLoading: Boolean = false,
+    errorMessage: String? = null,
     onBackClick: () -> Unit = {},
+    onCountrySelected: (Int) -> Unit = {},
+    onCountryStateSelected: (Int) -> Unit = {},
+    onCountryDepartmentSelected: (Int?) -> Unit = {},
+    onCitySelected: (Int) -> Unit = {},
+    onDistrictSelected: (Int?) -> Unit = {},
     onSaveClick: (
         name: String,
         surname: String,
-        gender: String,
         profession: String,
-        birthDate: String,
-        country: String,
-        city: String,
-        district: String
-    ) -> Unit = { _, _, _, _, _, _, _, _ -> }
+        birthDate: String
+    ) -> Unit = { _, _, _, _ -> }
 ) {
     val nameState = remember {
-        mutableStateOf("Murat")
+        mutableStateOf("")
     }
 
     val surnameState = remember {
-        mutableStateOf("Erkan")
-    }
-
-    val genderState = remember {
         mutableStateOf("")
     }
 
@@ -64,17 +69,20 @@ fun ProfileScreen(
         mutableStateOf("")
     }
 
-    val countryState = remember {
-        mutableStateOf("Türkiye")
+    LaunchedEffect(member?.MemberId) {
+        val currentMember = member ?: return@LaunchedEffect
+
+        nameState.value = currentMember.Name
+        surnameState.value = currentMember.Surname
+        professionState.value = currentMember.Profession
+        birthDateState.value = currentMember.BirthDate.orEmpty()
     }
 
-    val cityState = remember {
-        mutableStateOf("")
-    }
-
-    val districtState = remember {
-        mutableStateOf("")
-    }
+    val canSubmit = member != null &&
+            nameState.value.isNotBlank() &&
+            surnameState.value.isNotBlank() &&
+            addressCascadeState.IsValid &&
+            !isLoading
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -101,7 +109,7 @@ fun ProfileScreen(
                 ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.SectionGap)
         ) {
-            ProfileIntroCard()
+            ProfileEditIntroCard()
 
             BbCard(
                 modifier = Modifier.fillMaxWidth(),
@@ -112,55 +120,50 @@ fun ProfileScreen(
                     modifier = Modifier.fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
                 ) {
-                    AccountFormSectionHeader(
+                    ProfileEditSectionHeader(
                         title = "Kişisel Bilgiler",
                         description = "Ad, soyad, meslek ve doğum tarihi bilgilerinizi güncelleyin."
                     )
 
-                    AccountTextField(
+                    ProfileEditTextField(
                         value = nameState.value,
-                        onValueChange = { value ->
-                            nameState.value = value
+                        onValueChange = {
+                            nameState.value = it
                         },
                         label = "İsim",
-                        placeholder = "İsminiz"
+                        placeholder = "İsminiz",
+                        enabled = !isLoading
                     )
 
-                    AccountTextField(
+                    ProfileEditTextField(
                         value = surnameState.value,
-                        onValueChange = { value ->
-                            surnameState.value = value
+                        onValueChange = {
+                            surnameState.value = it
                         },
                         label = "Soyisim",
-                        placeholder = "Soyisminiz"
+                        placeholder = "Soyisminiz",
+                        enabled = !isLoading
                     )
 
-                    AccountTextField(
-                        value = genderState.value,
-                        onValueChange = { value ->
-                            genderState.value = value
-                        },
-                        label = "Cinsiyet",
-                        placeholder = "Seçiniz"
-                    )
-
-                    AccountTextField(
+                    ProfileEditTextField(
                         value = professionState.value,
-                        onValueChange = { value ->
-                            professionState.value = value
+                        onValueChange = {
+                            professionState.value = it
                         },
                         label = "Meslek",
-                        placeholder = "Mesleğiniz"
+                        placeholder = "Mesleğiniz",
+                        enabled = !isLoading
                     )
 
-                    AccountTextField(
+                    ProfileEditTextField(
                         value = birthDateState.value,
-                        onValueChange = { value ->
-                            birthDateState.value = value
+                        onValueChange = {
+                            birthDateState.value = it
                         },
                         label = "Doğum Günü",
                         placeholder = "gg.aa.yyyy",
-                        keyboardType = KeyboardType.Number
+                        keyboardType = KeyboardType.Number,
+                        enabled = !isLoading
                     )
                 }
             }
@@ -174,39 +177,32 @@ fun ProfileScreen(
                     modifier = Modifier.fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
                 ) {
-                    AccountFormSectionHeader(
+                    ProfileEditSectionHeader(
                         title = "Konum Bilgileri",
-                        description = "Ülke, şehir ve ilçe bilgilerinizi düzenleyin."
+                        description = "Ülke, şehir ve varsa bölge veya ilçe bilgilerinizi düzenleyin."
                     )
 
-                    AccountTextField(
-                        value = countryState.value,
-                        onValueChange = { value ->
-                            countryState.value = value
-                        },
-                        label = "Ülke",
-                        placeholder = "Ülke seçiniz"
-                    )
-
-                    AccountTextField(
-                        value = cityState.value,
-                        onValueChange = { value ->
-                            cityState.value = value
-                        },
-                        label = "Şehir",
-                        placeholder = "Şehir seçiniz"
-                    )
-
-                    AccountTextField(
-                        value = districtState.value,
-                        onValueChange = { value ->
-                            districtState.value = value
-                        },
-                        label = "İlçe",
-                        placeholder = "İlçe seçiniz"
+                    AddressCascadeFields(
+                        state = addressCascadeState,
+                        onCountrySelected = onCountrySelected,
+                        onCountryStateSelected = onCountryStateSelected,
+                        onCountryDepartmentSelected = onCountryDepartmentSelected,
+                        onCitySelected = onCitySelected,
+                        onDistrictSelected = onDistrictSelected,
+                        enabled = !isLoading
                     )
                 }
             }
+
+            errorMessage
+                ?.takeIf { it.isNotBlank() }
+                ?.let { message ->
+                    Text(
+                        text = message,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
 
             BbButton(
                 text = "Güncelle",
@@ -214,24 +210,22 @@ fun ProfileScreen(
                     onSaveClick(
                         nameState.value,
                         surnameState.value,
-                        genderState.value,
                         professionState.value,
-                        birthDateState.value,
-                        countryState.value,
-                        cityState.value,
-                        districtState.value
+                        birthDateState.value
                     )
                 },
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Primary,
-                size = BbButtonSize.Medium
+                size = BbButtonSize.Medium,
+                enabled = canSubmit,
+                isLoading = isLoading
             )
         }
     }
 }
 
 @Composable
-private fun ProfileIntroCard() {
+private fun ProfileEditIntroCard() {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
@@ -246,7 +240,7 @@ private fun ProfileIntroCard() {
 }
 
 @Composable
-private fun AccountFormSectionHeader(
+private fun ProfileEditSectionHeader(
     title: String,
     description: String
 ) {
@@ -268,18 +262,17 @@ private fun AccountFormSectionHeader(
 }
 
 @Composable
-private fun AccountTextField(
+private fun ProfileEditTextField(
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
     placeholder: String,
-    keyboardType: KeyboardType = KeyboardType.Text
+    keyboardType: KeyboardType = KeyboardType.Text,
+    enabled: Boolean = true
 ) {
     OutlinedTextField(
         value = value,
-        onValueChange = { newValue ->
-            onValueChange(newValue)
-        },
+        onValueChange = onValueChange,
         modifier = Modifier.fillMaxWidth(),
         label = {
             Text(text = label)
@@ -288,6 +281,7 @@ private fun AccountTextField(
             Text(text = placeholder)
         },
         singleLine = true,
+        enabled = enabled,
         shape = BBRadius.Input,
         keyboardOptions = KeyboardOptions(
             keyboardType = keyboardType
@@ -302,5 +296,3 @@ private fun AccountTextField(
         )
     )
 }
-
-

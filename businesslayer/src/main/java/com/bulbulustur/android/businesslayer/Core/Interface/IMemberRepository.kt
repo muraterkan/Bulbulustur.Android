@@ -5,6 +5,8 @@ import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.MemberInser
 import com.bulbulustur.android.businesslayer.Core.Model.MemberRegisterModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdateModel
 import com.bulbulustur.android.businesslayer.Core.Util.Result
+import com.bulbulustur.android.businesslayer.Core.Model.ChangePasswordModel
+import com.bulbulustur.android.businesslayer.Core.Model.ChangeMailModel
 
 interface IMemberRepository {
 
@@ -21,6 +23,10 @@ interface IMemberRepository {
     suspend fun UpdateAsync(model: MemberUpdateModel): Result<Unit>
 
     suspend fun SetContactPreferenceAsync(model: MemberUpdateModel): Result<Unit>
+
+    suspend fun ChangePasswordAsync(languageId: Int, model: ChangePasswordModel): Result<Unit>
+
+    suspend fun SendEmailChangingRequestAsync(model: ChangeMailModel): Result<ChangeMailModel>
 
     suspend fun DeleteAsync(memberId: Int): Result<Unit>
 }

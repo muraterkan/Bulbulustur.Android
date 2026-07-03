@@ -16,32 +16,37 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
-import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
+import com.bulbulustur.android.businesslayer.Core.DTO.MemberPhoneDTO
 
 @Composable
 fun PhoneListScreen(
+    phones: List<MemberPhoneDTO>,
+    isLoading: Boolean = false,
+    currentAction: String? = null,
+    errorMessage: String? = null,
     onBackClick: () -> Unit = {},
     onCreatePhoneClick: () -> Unit = {},
     onVerifyPhoneClick: (Int) -> Unit = {},
-    onDeletePhoneClick: (Int) -> Unit = {}
+    onDeletePhoneClick: (Int) -> Unit = {},
+    onRetryClick: () -> Unit = {}
 ) {
-    val phones = getDemoPhones()
-
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
@@ -67,23 +72,48 @@ fun PhoneListScreen(
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
-            if (phones.isEmpty()) {
+            if (isLoading && currentAction == "GetPhones" && phones.isEmpty()) {
+                item {
+                    PhoneLoadingState()
+                }
+            } else if (!errorMessage.isNullOrBlank() && phones.isEmpty()) {
+                item {
+                    PhoneErrorState(
+                        message = errorMessage,
+                        onRetryClick = onRetryClick
+                    )
+                }
+            } else if (phones.isEmpty()) {
                 item {
                     PhoneEmptyState(
                         onCreatePhoneClick = onCreatePhoneClick
                     )
                 }
+            } else {
+                items(
+                    items = phones,
+                    key = { phone -> phone.MemberPhoneId }
+                ) { phone ->
+                    PhoneCard(
+                        phone = phone,
+                        isDeleting = isLoading &&
+                                currentAction == "DeletePhone",
+                        isSendingSms = isLoading &&
+                                currentAction == "SendPhoneVerificationSms",
+                        onVerifyPhoneClick = onVerifyPhoneClick,
+                        onDeletePhoneClick = onDeletePhoneClick
+                    )
+                }
             }
 
-            items(
-                items = phones,
-                key = { phone -> phone.memberPhoneId }
-            ) { phone ->
-                PhoneCard(
-                    phone = phone,
-                    onVerifyPhoneClick = onVerifyPhoneClick,
-                    onDeletePhoneClick = onDeletePhoneClick
-                )
+            if (!errorMessage.isNullOrBlank() && phones.isNotEmpty()) {
+                item {
+                    Text(
+                        text = errorMessage,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
             }
         }
     }
@@ -91,7 +121,9 @@ fun PhoneListScreen(
 
 @Composable
 private fun PhoneCard(
-    phone: AccountPhoneUiModel,
+    phone: MemberPhoneDTO,
+    isDeleting: Boolean,
+    isSendingSms: Boolean,
     onVerifyPhoneClick: (Int) -> Unit,
     onDeletePhoneClick: (Int) -> Unit
 ) {
@@ -110,7 +142,7 @@ private fun PhoneCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 PhoneIconBox(
-                    text = "Ş"
+                    text = "T"
                 )
 
                 Column(
@@ -118,19 +150,25 @@ private fun PhoneCard(
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                 ) {
                     Text(
-                        text = "Telefon",
+                        text = if (phone.IsDefault) {
+                            "Varsayılan Telefon"
+                        } else {
+                            "Telefon"
+                        },
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
 
                     Text(
-                        text = phone.phone,
+                        text = phone.Phone.ifBlank {
+                            "Telefon bilgisi bulunamadı"
+                        },
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurface
                     )
 
                     PhoneStatusBadge(
-                        verified = phone.verified
+                        verified = phone.Verified
                     )
                 }
             }
@@ -139,26 +177,30 @@ private fun PhoneCard(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
             ) {
-                if (!phone.verified) {
+                if (!phone.Verified) {
                     BbButton(
                         text = "Doğrula",
                         onClick = {
-                            onVerifyPhoneClick(phone.memberPhoneId)
+                            onVerifyPhoneClick(phone.MemberPhoneId)
                         },
                         modifier = Modifier.weight(1f),
                         variant = BbButtonVariant.Light,
-                        size = BbButtonSize.Small
+                        size = BbButtonSize.Small,
+                        enabled = !isSendingSms && !isDeleting,
+                        isLoading = isSendingSms
                     )
                 }
 
                 BbButton(
                     text = "Sil",
                     onClick = {
-                        onDeletePhoneClick(phone.memberPhoneId)
+                        onDeletePhoneClick(phone.MemberPhoneId)
                     },
                     modifier = Modifier.weight(1f),
                     variant = BbButtonVariant.Danger,
-                    size = BbButtonSize.Small
+                    size = BbButtonSize.Small,
+                    enabled = !isSendingSms && !isDeleting,
+                    isLoading = isDeleting
                 )
             }
         }
@@ -166,9 +208,64 @@ private fun PhoneCard(
 }
 
 @Composable
-private fun PhoneEmptyState(
-    onCreatePhoneClick: () -> Unit
-) {
+private fun PhoneLoadingState() {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Large
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+        ) {
+            CircularProgressIndicator()
+
+            Text(
+                text = "Telefonlar yükleniyor...",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+@Composable
+private fun PhoneErrorState(message: String, onRetryClick: () -> Unit) {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Large
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+        ) {
+            Text(
+                text = "Telefonlar Alınamadı",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
+            Text(
+                text = message,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.error
+            )
+
+            BbButton(
+                text = "Tekrar Dene",
+                onClick = onRetryClick,
+                variant = BbButtonVariant.Light,
+                size = BbButtonSize.Medium
+            )
+        }
+    }
+}
+
+@Composable
+private fun PhoneEmptyState(onCreatePhoneClick: () -> Unit) {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
@@ -180,7 +277,7 @@ private fun PhoneEmptyState(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             PhoneIconBox(
-                text = "Ş"
+                text = "T"
             )
 
             Text(
@@ -195,7 +292,9 @@ private fun PhoneEmptyState(
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
-            Spacer(modifier = Modifier.height(BBSpacing.Space1))
+            Spacer(
+                modifier = Modifier.height(BBSpacing.Space1)
+            )
 
             BbButton(
                 text = "Telefon Ekle",
@@ -208,9 +307,7 @@ private fun PhoneEmptyState(
 }
 
 @Composable
-private fun PhoneStatusBadge(
-    verified: Boolean
-) {
+private fun PhoneStatusBadge(verified: Boolean) {
     val backgroundColor = if (verified) {
         BBColors.Green.Green50
     } else {
@@ -249,9 +346,7 @@ private fun PhoneStatusBadge(
 }
 
 @Composable
-private fun PhoneIconBox(
-    text: String
-) {
+private fun PhoneIconBox(text: String) {
     Box(
         modifier = Modifier
             .size(BBSpacing.Space10)
@@ -268,26 +363,3 @@ private fun PhoneIconBox(
         )
     }
 }
-
-private fun getDemoPhones(): List<AccountPhoneUiModel> {
-    return listOf(
-        AccountPhoneUiModel(
-            memberPhoneId = 1,
-            phone = "+90 555 710 64 17",
-            verified = true
-        ),
-        AccountPhoneUiModel(
-            memberPhoneId = 2,
-            phone = "+90 532 000 00 00",
-            verified = false
-        )
-    )
-}
-
-private data class AccountPhoneUiModel(
-    val memberPhoneId: Int,
-    val phone: String,
-    val verified: Boolean
-)
-
-

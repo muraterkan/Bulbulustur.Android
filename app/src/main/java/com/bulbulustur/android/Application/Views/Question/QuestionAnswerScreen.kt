@@ -2,6 +2,7 @@ package com.bulbulustur.android.Application.Views.Question
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,6 +19,7 @@ import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.QuestionAnswer
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material.icons.outlined.Storefront
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -30,44 +32,33 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
+import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
+import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
-import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
+import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBAlpha
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BbTypography
-import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBAlpha
+import com.bulbulustur.android.businesslayer.Core.DTO.ProductCustomerQuestionDTO
 
 @Composable
 fun QuestionAnswerScreen(
-    onBackClick: () -> Unit = {}
+    questions: List<ProductCustomerQuestionDTO>,
+    isLoading: Boolean = false,
+    errorMessage: String? = null,
+    onBackClick: () -> Unit = {},
+    onRetryClick: () -> Unit = {},
+    onProductClick: (productId: Int, storeId: Int, variantId: Int) -> Unit = { _, _, _ -> }
 ) {
     val pageBackground = Brush.verticalGradient(
         colors = listOf(
             MaterialTheme.colorScheme.primaryContainer.copy(alpha = BBAlpha.DisabledLabel),
             MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.80f),
             MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.95f)
-        )
-    )
-
-    val questions = listOf(
-        QuestionAnswerItem(
-            productName = "Ortopedik Spor Ayakkabı",
-            storeName = "Ortobella",
-            question = "Bu ürünün 42 numarası ne zaman stokta olur?",
-            answer = "Merhaba, 42 numara için yeni stok girişi bu hafta içinde bekleniyor.",
-            statusText = "Cevaplandı",
-            statusIcon = Icons.Outlined.CheckCircle
-        ),
-        QuestionAnswerItem(
-            productName = "Pamuklu Tişört",
-            storeName = "Bulbulustur Store",
-            question = "Toptan alımda farklı renkleri karıştırabilir miyim?",
-            answer = null,
-            statusText = "Cevap Bekliyor",
-            statusIcon = Icons.Outlined.Schedule
         )
     )
 
@@ -80,30 +71,74 @@ fun QuestionAnswerScreen(
             )
         }
     ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(pageBackground)
-                .padding(innerPadding),
-            contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
-                top = BBSpacing.PageTopCompact,
-                end = BBSpacing.PageHorizontal,
-                bottom = BBSpacing.PageBottom
-            ),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
-        ) {
-            item {
-                QuestionAnswerIntroCard()
+        when {
+            isLoading && questions.isEmpty() -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
             }
 
-            items(
-                items = questions,
-                key = { question -> "${question.productName}-${question.question}" }
-            ) { question ->
-                QuestionAnswerCard(
-                    item = question
+            errorMessage != null && questions.isEmpty() -> {
+                QuestionAnswerMessageState(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
+                    title = "Sorular alınamadı",
+                    message = errorMessage,
+                    buttonText = "Tekrar Dene",
+                    onButtonClick = onRetryClick
                 )
+            }
+
+            questions.isEmpty() -> {
+                QuestionAnswerMessageState(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
+                    title = "Henüz soru sormadın",
+                    message = "Ürünler hakkında sorduğun sorular ve satıcı cevapları burada görüntülenir."
+                )
+            }
+
+            else -> {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(pageBackground)
+                        .padding(innerPadding),
+                    contentPadding = PaddingValues(
+                        start = BBSpacing.PageHorizontal,
+                        top = BBSpacing.PageTopCompact,
+                        end = BBSpacing.PageHorizontal,
+                        bottom = BBSpacing.PageBottom
+                    ),
+                    verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
+                ) {
+                    item {
+                        QuestionAnswerIntroCard()
+                    }
+
+                    items(
+                        items = questions,
+                        key = { question -> question.ProductCustomerQuestionId }
+                    ) { question ->
+                        QuestionAnswerCard(
+                            item = question,
+                            onClick = {
+                                onProductClick(
+                                    question.ProductId,
+                                    question.StoreId,
+                                    question.VariantId
+                                )
+                            }
+                        )
+                    }
+                }
             }
         }
     }
@@ -160,10 +195,17 @@ private fun QuestionAnswerIntroCard() {
 
 @Composable
 private fun QuestionAnswerCard(
-    item: QuestionAnswerItem
+    item: ProductCustomerQuestionDTO,
+    onClick: () -> Unit
 ) {
+    val isAnswered = item.IsAnswered && !item.Message.isNullOrBlank()
+    val statusText = if (isAnswered) "Cevaplandı" else "Cevap Bekliyor"
+    val statusIcon = if (isAnswered) Icons.Outlined.CheckCircle else Icons.Outlined.Schedule
+
     BbCard(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
         variant = BbCardVariant.Outlined,
         padding = BbCardPadding.Medium
     ) {
@@ -196,21 +238,29 @@ private fun QuestionAnswerCard(
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                 ) {
                     Text(
-                        text = item.productName,
+                        text = item.ProductName.orEmpty().ifBlank { "Ürün" },
                         style = BbTypography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurface
                     )
 
                     Text(
-                        text = item.storeName,
+                        text = item.StoreName.orEmpty().ifBlank { "Mağaza" },
                         style = BbTypography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
+
+                    if (item.InsertedDate.isNotBlank()) {
+                        Text(
+                            text = item.InsertedDate,
+                            style = BbTypography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
                 }
 
                 QuestionStatusBadge(
-                    text = item.statusText,
-                    icon = item.statusIcon
+                    text = statusText,
+                    icon = statusIcon
                 )
             }
 
@@ -218,13 +268,13 @@ private fun QuestionAnswerCard(
 
             QuestionTextBlock(
                 label = "Soru",
-                text = item.question
+                text = item.Question
             )
 
-            if (item.answer != null) {
+            if (isAnswered) {
                 QuestionTextBlock(
                     label = "Cevap",
-                    text = item.answer
+                    text = item.Message.orEmpty()
                 )
             } else {
                 Box(
@@ -303,6 +353,51 @@ private fun QuestionTextBlock(
 }
 
 @Composable
+private fun QuestionAnswerMessageState(
+    modifier: Modifier,
+    title: String,
+    message: String,
+    buttonText: String? = null,
+    onButtonClick: () -> Unit = {}
+) {
+    Column(
+        modifier = modifier.padding(BBSpacing.PageHorizontal),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Icon(
+            imageVector = Icons.Outlined.QuestionAnswer,
+            contentDescription = null,
+            modifier = Modifier.size(BBIcon.Empty),
+            tint = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
+        Text(
+            text = title,
+            modifier = Modifier.padding(top = BBSpacing.Space4),
+            style = BbTypography.titleSmall,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+
+        Text(
+            text = message,
+            modifier = Modifier.padding(top = BBSpacing.Space2),
+            style = BbTypography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
+        if (buttonText != null) {
+            BbButton(
+                text = buttonText,
+                onClick = onButtonClick,
+                modifier = Modifier.padding(top = BBSpacing.Space4),
+                variant = BbButtonVariant.Primary
+            )
+        }
+    }
+}
+
+@Composable
 private fun AccountQuestionDivider() {
     val dividerColor = MaterialTheme.colorScheme.outlineVariant
 
@@ -323,13 +418,3 @@ private fun AccountQuestionDivider() {
         )
     }
 }
-
-private data class QuestionAnswerItem(
-    val productName: String,
-    val storeName: String,
-    val question: String,
-    val answer: String?,
-    val statusText: String,
-    val statusIcon: ImageVector
-)
-

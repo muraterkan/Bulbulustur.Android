@@ -1014,9 +1014,30 @@ fun NavGraphBuilder.accountGraph(
     }
 
     composable(route = AccountRoutes.QuestionAnswers) {
+        val accountState by accountController.State.collectAsState()
+
+        LaunchedEffect(sessionState.MemberId) {
+            accountController.GetMemberProductCustomerQuestions(memberId = sessionState.MemberId)
+        }
+
         QuestionAnswerScreen(
+            questions = accountState.ProductCustomerQuestions,
+            isLoading = accountState.IsLoading && accountState.CurrentAction == "GetMemberProductCustomerQuestions",
+            errorMessage = accountState.ProductCustomerQuestionListResult?.takeIf { !it.Success }?.Message,
             onBackClick = {
                 navigator.back()
+            },
+            onRetryClick = {
+                accountController.GetMemberProductCustomerQuestions(memberId = sessionState.MemberId)
+            },
+            onProductClick = { productId, storeId, variantId ->
+                navigator.navController.navigate(
+                    RetailRoutes.productDetail(
+                        productId = productId,
+                        storeId = storeId,
+                        variantId = variantId
+                    )
+                )
             }
         )
     }

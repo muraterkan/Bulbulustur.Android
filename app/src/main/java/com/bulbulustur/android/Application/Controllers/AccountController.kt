@@ -38,6 +38,8 @@ import com.bulbulustur.android.businesslayer.Core.DTO.MemberPhoneDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.IMemberPhoneRepository
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.MemberPhoneInsertModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberPhoneUpdateModel
+import com.bulbulustur.android.businesslayer.Core.DTO.ProductCustomerQuestionDTO
+import com.bulbulustur.android.businesslayer.Core.Interface.IProductCustomerQuestionRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -98,6 +100,7 @@ data class AccountControllerState(
     val PhoneMessage: String? = null,
     val ProductFavoriteDeleteResult: Result<Unit>? = null,
     val WholesaleFavoriteDeleteResult: Result<Unit>? = null,
+    val ProductCustomerQuestionListResult: Result<List<ProductCustomerQuestionDTO>>? = null
 ) {
     val Member: MemberDTO?
         get() = MemberResult?.Data
@@ -137,6 +140,9 @@ data class AccountControllerState(
 
     val Phones: List<MemberPhoneDTO>
         get() = PhoneListResult?.Data.orEmpty()
+
+    val ProductCustomerQuestions: List<ProductCustomerQuestionDTO>
+        get() = ProductCustomerQuestionListResult?.Data.orEmpty()
 }
 
 class AccountController(
@@ -153,6 +159,8 @@ class AccountController(
     private val productFavoriteRepository: IProductFavoriteRepository,
     private val wholesaleFavoriteRepository: IWholesaleFavoriteRepository,
     private val memberPhoneRepository: IMemberPhoneRepository,
+    private val productCustomerQuestionRepository: IProductCustomerQuestionRepository
+
 ) : BaseController() {
 
     private val _state = MutableStateFlow(AccountControllerState())
@@ -1031,6 +1039,25 @@ class AccountController(
             Complete {
                 copy(
                     CouponListResult = response,
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+        }
+    }
+
+    fun GetMemberProductCustomerQuestions(memberId: Int, count: Int = 100) {
+        if (!ValidateMember(memberId)) return
+
+        viewModelScope.launch {
+            SetLoading("GetMemberProductCustomerQuestions")
+
+            val response = executeService.GetAsync(cacheKey = "") {
+                productCustomerQuestionRepository.GetMemberProductCustomerQuestionsAsync(memberId, count)
+            }
+
+            Complete {
+                copy(
+                    ProductCustomerQuestionListResult = response,
                     ErrorMessage = response.Message.takeIf { !response.Success }
                 )
             }

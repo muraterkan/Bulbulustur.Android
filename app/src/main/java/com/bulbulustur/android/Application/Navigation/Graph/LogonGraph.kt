@@ -38,6 +38,7 @@ import com.bulbulustur.android.R
 import com.bulbulustur.android.businesslayer.Core.Enums.EApplicationLanguage
 import com.bulbulustur.android.businesslayer.Core.Model.MemberRegisterModel
 import kotlinx.coroutines.launch
+import androidx.compose.ui.res.stringResource
 
 fun NavGraphBuilder.logonGraph(
     navController: NavHostController,
@@ -75,10 +76,7 @@ fun NavGraphBuilder.logonGraph(
             )
         }
 
-        val googleWebClientId =
-            context.getString(
-                R.string.google_web_client_id
-            )
+        val googleWebClientId = stringResource(R.string.google_web_client_id)
 
         val languageId =
             when (

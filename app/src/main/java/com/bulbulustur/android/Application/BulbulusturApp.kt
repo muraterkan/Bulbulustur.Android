@@ -546,7 +546,8 @@ private fun BulbulusturApplicationContent(
         memberCouponRepository,
         productFavoriteRepository,
         wholesaleFavoriteRepository,
-        memberPhoneRepository
+        memberPhoneRepository,
+        productCustomerQuestionRepository
     ) {
         AccountController(
             executeService = executeService,
@@ -561,7 +562,8 @@ private fun BulbulusturApplicationContent(
             memberCouponRepository = memberCouponRepository,
             productFavoriteRepository = productFavoriteRepository,
             wholesaleFavoriteRepository = wholesaleFavoriteRepository,
-            memberPhoneRepository = memberPhoneRepository
+            memberPhoneRepository = memberPhoneRepository,
+            productCustomerQuestionRepository
         )
     }
 

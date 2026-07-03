@@ -18,4 +18,6 @@ interface IExecuteService {
         hideException: Boolean = true,
         serviceMethod: suspend () -> Result<T>
     ): Result<T>
+
+    fun ClearMemoryCache()
 }

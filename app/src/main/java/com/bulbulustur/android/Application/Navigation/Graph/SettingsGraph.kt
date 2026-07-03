@@ -26,6 +26,7 @@ import com.bulbulustur.android.Application.Views.Account.RegionSettingsScreen
 import com.bulbulustur.android.Application.Views.Account.SystemStatusScreen
 import com.bulbulustur.android.businesslayer.Core.Enums.EApplicationLanguage
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.LocalContext
 
 fun NavGraphBuilder.settingsGraph(
     navigator: BulbulusturNavigator,
@@ -266,6 +267,8 @@ fun NavGraphBuilder.settingsGraph(
     }
 
     composable(SettingsRoutes.AboutThisApp) {
+        val context = LocalContext.current
+
         AboutThisAppScreen(
             onBackClick = {
                 navigator.back()
@@ -273,6 +276,11 @@ fun NavGraphBuilder.settingsGraph(
             onSystemStatusClick = {
                 navigator.navController.navigate(
                     SettingsRoutes.SystemStatus
+                )
+            },
+            onClearCacheClick = {
+                settingsController.ClearApplicationCache(
+                    context = context.applicationContext
                 )
             }
         )

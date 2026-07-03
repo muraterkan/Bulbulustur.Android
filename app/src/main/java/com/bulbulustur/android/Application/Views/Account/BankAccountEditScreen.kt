@@ -9,55 +9,61 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
-import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbTextInput
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
+import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 
 @Composable
 fun BankAccountEditScreen(
-    bankAccountId: Int? = null,
+    bankAccountId: Int,
     initialIban: String = "",
+    isLoading: Boolean = false,
+    isSubmitting: Boolean = false,
+    errorMessage: String? = null,
     onBackClick: () -> Unit = {},
     onSaveClick: (String) -> Unit = {}
 ) {
-    val ibanState = remember(initialIban) {
+    var iban by remember(initialIban) {
         mutableStateOf(initialIban)
     }
 
-    val isEditMode = bankAccountId != null
-
-    val title = if (isEditMode) {
-        "IBAN Numarasını Değiştir"
-    } else {
-        "IBAN Numarası Ekle"
+    var validationMessage by remember {
+        mutableStateOf<String?>(null)
     }
 
-    val saveButtonText = if (isEditMode) {
-        "Güncelle"
-    } else {
-        "Kaydet"
-    }
+    val normalizedIban = iban
+        .replace(" ", "")
+        .uppercase()
+
+    val hasValidPrefix = normalizedIban.startsWith("TR")
+    val hasValidLength = normalizedIban.length == 26
+    val canSubmit = hasValidPrefix && hasValidLength && !isLoading && !isSubmitting
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = title,
+                title = "IBAN Numarasını Değiştir",
                 onBackClick = onBackClick
             )
         }
@@ -78,55 +84,93 @@ fun BankAccountEditScreen(
                 ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.SectionGap)
         ) {
-            BankAccountEditIntroCard(
-                isEditMode = isEditMode
-            )
+            BankAccountEditIntroCard()
 
-            BbCard(
-                modifier = Modifier.fillMaxWidth(),
-                variant = BbCardVariant.Outlined,
-                padding = BbCardPadding.Medium
-            ) {
-                Column(
+            if (isLoading) {
+                BankAccountEditLoadingState()
+            } else {
+                BbCard(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
+                    variant = BbCardVariant.Outlined,
+                    padding = BbCardPadding.Medium
                 ) {
                     Column(
-                        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
                     ) {
-                        Text(
-                            text = "IBAN Bilgisi",
-                            style = MaterialTheme.typography.titleSmall,
-                            color = MaterialTheme.colorScheme.onSurface
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+                        ) {
+                            Text(
+                                text = "IBAN Bilgisi",
+                                style = MaterialTheme.typography.titleSmall,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+
+                            Text(
+                                text = "IBAN bilgisini boşluk bırakmadan ya da boşluklu olarak girebilirsiniz.",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+
+                        BbTextInput(
+                            value = iban,
+                            onValueChange = { value ->
+                                iban = value.uppercase()
+                                validationMessage = null
+                            },
+                            label = "IBAN",
+                            placeholder = "TR00 0000 0000 0000 0000 0000 00",
+                            enabled = !isSubmitting
                         )
 
-                        Text(
-                            text = "IBAN bilgisini boşluk bırakmadan ya da boşluklu olarak girebilirsiniz.",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        BankAccountEditValidationCard(
+                            iban = iban,
+                            hasValidPrefix = hasValidPrefix,
+                            hasValidLength = hasValidLength
+                        )
+
+                        BankAccountWarningBox()
+
+                        if (!validationMessage.isNullOrBlank()) {
+                            Text(
+                                text = validationMessage.orEmpty(),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+
+                        if (!errorMessage.isNullOrBlank()) {
+                            Text(
+                                text = errorMessage,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+
+                        BbButton(
+                            text = "Güncelle",
+                            onClick = {
+                                if (!hasValidPrefix) {
+                                    validationMessage = "IBAN numarası TR ile başlamalıdır."
+                                    return@BbButton
+                                }
+
+                                if (!hasValidLength) {
+                                    validationMessage = "Türkiye IBAN numarası 26 karakter olmalıdır."
+                                    return@BbButton
+                                }
+
+                                onSaveClick(normalizedIban)
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                            variant = BbButtonVariant.Primary,
+                            size = BbButtonSize.Medium,
+                            enabled = canSubmit,
+                            isLoading = isSubmitting
                         )
                     }
-
-                    BbTextInput(
-                        value = ibanState.value,
-                        onValueChange = { value ->
-                            ibanState.value = value.uppercase()
-                        },
-                        label = "IBAN",
-                        placeholder = "TR00 0000 0000 0000 0000 0000 00"
-                    )
-
-                    BankAccountWarningBox()
-
-                    BbButton(
-                        text = saveButtonText,
-                        onClick = {
-                            onSaveClick(ibanState.value)
-                        },
-                        modifier = Modifier.fillMaxWidth(),
-                        variant = BbButtonVariant.Primary,
-                        size = BbButtonSize.Medium
-                    )
                 }
             }
         }
@@ -134,25 +178,95 @@ fun BankAccountEditScreen(
 }
 
 @Composable
-private fun BankAccountEditIntroCard(
-    isEditMode: Boolean
-) {
-    val description = if (isEditMode) {
-        "Kayıtlı banka hesabınıza ait IBAN bilgisini düzenleyebilirsiniz. Girdiğiniz IBAN vadeli hesaba ait olmamalıdır."
-    } else {
-        "Para aktarımı ve ödeme sürecinde kullanılacak banka hesabını güvenli şekilde kaydedebilirsiniz. Girdiğiniz IBAN vadeli hesaba ait olmamalıdır."
-    }
-
+private fun BankAccountEditIntroCard() {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = description,
+            text = "Kayıtlı banka hesabınıza ait IBAN bilgisini düzenleyebilirsiniz. Girdiğiniz IBAN vadeli hesaba ait olmamalıdır.",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
+    }
+}
+
+@Composable
+private fun BankAccountEditLoadingState() {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Large
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+        ) {
+            CircularProgressIndicator(
+                modifier = Modifier.padding(BBSpacing.Space2),
+                color = MaterialTheme.colorScheme.primary
+            )
+
+            Text(
+                text = "Banka hesabı yükleniyor.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+@Composable
+private fun BankAccountEditValidationCard(
+    iban: String,
+    hasValidPrefix: Boolean,
+    hasValidLength: Boolean
+) {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+        ) {
+            Text(
+                text = "IBAN Kontrolü",
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
+            Text(
+                text = when {
+                    iban.isBlank() -> "IBAN numarası TR ile başlamalıdır."
+                    hasValidPrefix -> "IBAN ülke kodu uygun görünüyor."
+                    else -> "Türkiye IBAN numarası TR ile başlamalıdır."
+                },
+                style = MaterialTheme.typography.bodySmall,
+                color = if (iban.isBlank() || hasValidPrefix) {
+                    MaterialTheme.colorScheme.onSurfaceVariant
+                } else {
+                    MaterialTheme.colorScheme.error
+                }
+            )
+
+            Text(
+                text = when {
+                    iban.isBlank() -> "Türkiye IBAN numarası 26 karakter olmalıdır."
+                    hasValidLength -> "IBAN uzunluğu uygun görünüyor."
+                    else -> "IBAN uzunluğu kontrol edilmeli. Türkiye IBAN numarası 26 karakter olmalıdır."
+                },
+                style = MaterialTheme.typography.bodySmall,
+                color = if (iban.isBlank() || hasValidLength) {
+                    MaterialTheme.colorScheme.onSurfaceVariant
+                } else {
+                    MaterialTheme.colorScheme.error
+                }
+            )
+        }
     }
 }
 
@@ -181,5 +295,3 @@ private fun BankAccountWarningBox() {
         )
     }
 }
-
-

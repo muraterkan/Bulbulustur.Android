@@ -27,8 +27,6 @@ import androidx.compose.material.icons.outlined.Man
 import androidx.compose.material.icons.outlined.PermIdentity
 import androidx.compose.material.icons.outlined.PhoneIphone
 import androidx.compose.material.icons.outlined.Security
-import androidx.compose.material.icons.outlined.Storefront
-import androidx.compose.material.icons.outlined.Tune
 import androidx.compose.material.icons.outlined.Verified
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
@@ -48,6 +46,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.Application.Shared.Address.AddressCascadeState
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
@@ -59,7 +58,6 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BbTypography
-import com.bulbulustur.android.Application.Shared.Address.AddressCascadeState
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberDTO
 
 @Composable
@@ -72,7 +70,6 @@ fun ProfileScreen(
     onEditClick: () -> Unit = {},
     onPhonesClick: () -> Unit = {},
     onEmailClick: () -> Unit = {},
-    onUsagePurposeClick: () -> Unit = {},
     onCompanyInfoClick: () -> Unit = {},
     onB2BStatusClick: () -> Unit = {}
 ) {
@@ -240,18 +237,6 @@ fun ProfileScreen(
                     ProfileInfoRow("Telefonlarım", "Telefon bilgilerini yönetin", Icons.Outlined.PhoneIphone, onPhonesClick)
                     ProfileDashedDivider()
                     ProfileInfoRow("E-Posta Doğrulama", activationText, Icons.Outlined.Verified, onEmailClick)
-                }
-            }
-
-            item {
-                ProfileInfoSection(
-                    title = "Bulbulustur Kullanımı",
-                    description = "Uygulama deneyimini şekillendiren bilgiler.",
-                    icon = Icons.Outlined.Tune
-                ) {
-                    ProfileInfoRow("Kullanım Amacı", "Toptan ve perakende alışveriş", Icons.Outlined.Tune, onUsagePurposeClick)
-                    ProfileDashedDivider()
-                    ProfileInfoRow("Hesap Modu", "Toptan / Perakende", Icons.Outlined.Storefront, onUsagePurposeClick)
                 }
             }
 

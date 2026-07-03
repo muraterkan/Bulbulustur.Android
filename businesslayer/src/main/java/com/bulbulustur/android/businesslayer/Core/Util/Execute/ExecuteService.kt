@@ -111,4 +111,8 @@ class ExecuteService(
             }
         }
     }
+
+    override fun ClearMemoryCache() {
+        memoryCacheService.ClearAll()
+    }
 }

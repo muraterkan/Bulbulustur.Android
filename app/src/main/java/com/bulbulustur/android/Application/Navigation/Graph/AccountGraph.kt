@@ -53,7 +53,10 @@ import com.bulbulustur.android.Application.Shared.Address.AddressCascadeControll
 import com.bulbulustur.android.Application.Shared.Address.AddressCascadeEvent
 import com.bulbulustur.android.Application.Shared.Address.AddressCascadeSelection
 import com.bulbulustur.android.Application.Views.Account.ProfileEditScreen
-
+import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.MemberBankAccountInsertModel
+import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberBankAccountUpdateModel
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
 import com.bulbulustur.android.Application.Views.Question.QuestionAnswerScreen
 import com.bulbulustur.android.businesslayer.Core.Model.ChangePasswordModel
 import com.bulbulustur.android.businesslayer.Core.Enums.EApplicationLanguage
@@ -447,11 +450,6 @@ fun NavGraphBuilder.accountGraph(
             onEmailClick = {
                 navigator.navController.navigate(
                     AccountRoutes.EmailChange
-                )
-            },
-            onUsagePurposeClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.UsagePurpose
                 )
             },
             onCompanyInfoClick = {
@@ -1094,38 +1092,82 @@ fun NavGraphBuilder.accountGraph(
         )
     }
 
-    composable(
-        route = BankAccountRoutes.List
-    ) {
+
+    composable(route = BankAccountRoutes.List) {
+        val accountState by accountController.State.collectAsState()
+        val clipboardManager = LocalClipboardManager.current
+
+        LaunchedEffect(sessionState.MemberId) {
+            accountController.GetBankAccounts(memberId = sessionState.MemberId)
+        }
+
         BankAccountListScreen(
+            bankAccounts = accountState.BankAccounts,
+            isLoading = accountState.IsLoading,
+            currentAction = accountState.CurrentAction,
+            errorMessage = accountState.BankAccountListResult
+                ?.takeIf { !it.Success }
+                ?.Message,
             onBackClick = {
                 navigator.back()
             },
             onCreateBankAccountClick = {
-                navigator.navController.navigate(
-                    BankAccountRoutes.Create
-                )
+                navigator.navController.navigate(BankAccountRoutes.Create)
             },
             onEditBankAccountClick = { bankAccountId ->
                 navigator.navController.navigate(
-                    BankAccountRoutes.edit(
-                        bankAccountId
-                    )
+                    BankAccountRoutes.edit(bankAccountId)
                 )
             },
-            onDeleteBankAccountClick = {
+            onDeleteBankAccountClick = { bankAccountId ->
+                accountController.DeleteBankAccount(
+                    memberId = sessionState.MemberId,
+                    bankAccountId = bankAccountId,
+                    onSuccess = {
+                        accountController.GetBankAccounts(
+                            memberId = sessionState.MemberId
+                        )
+                    }
+                )
             },
-            onCopyIbanClick = {
+            onCopyIbanClick = { iban ->
+                clipboardManager.setText(
+                    AnnotatedString(iban)
+                )
+            },
+            onRetryClick = {
+                accountController.GetBankAccounts(
+                    memberId = sessionState.MemberId
+                )
             }
         )
     }
 
-    composable(
-        route = BankAccountRoutes.Create
-    ) {
+    composable(route = BankAccountRoutes.Create) {
+        val accountState by accountController.State.collectAsState()
+
         BankAccountCreateScreen(
+            isSubmitting = accountState.IsLoading &&
+                    accountState.CurrentAction == "InsertBankAccount",
             onBackClick = {
                 navigator.back()
+            },
+            onBankAccountCreateClick = { formState ->
+                accountController.InsertBankAccount(
+                    memberId = sessionState.MemberId,
+                    model = MemberBankAccountInsertModel(
+                        InsertedBy = sessionState.MemberId,
+                        MemberId = sessionState.MemberId,
+                        BankIban = formState.normalizedIban
+                    ),
+                    onSuccess = {
+                        accountController.GetBankAccounts(
+                            memberId = sessionState.MemberId
+                        )
+
+                        navigator.back()
+                    }
+                )
             }
         )
     }
@@ -1133,26 +1175,138 @@ fun NavGraphBuilder.accountGraph(
     composable(
         route = BankAccountRoutes.Edit,
         arguments = listOf(
-            navArgument(
-                "bankAccountId"
-            ) {
-                type =
-                    NavType.IntType
+            navArgument("bankAccountId") {
+                type = NavType.IntType
             }
         )
     ) { backStackEntry ->
+        val accountState by accountController.State.collectAsState()
+
         val bankAccountId =
-            backStackEntry.arguments
-                ?.getInt(
-                    "bankAccountId"
-                )
-                ?: 0
+            backStackEntry.arguments?.getInt("bankAccountId") ?: 0
+
+        val bankAccountDetailResult =
+            accountState.BankAccountDetailResult
+
+        val bankAccountUpdateResult =
+            accountState.BankAccountUpdateResult
+
+        val currentBankAccount =
+            accountState.BankAccount?.takeIf {
+                it.MemberBankAccountId == bankAccountId
+            }
+
+        val errorMessage = when {
+            bankAccountDetailResult?.Success == false ->
+                bankAccountDetailResult.Message
+
+            bankAccountUpdateResult?.Success == false ->
+                bankAccountUpdateResult.Message
+
+            else -> null
+        }
+
+        LaunchedEffect(sessionState.MemberId, bankAccountId) {
+            accountController.GetBankAccount(
+                memberId = sessionState.MemberId,
+                bankAccountId = bankAccountId
+            )
+        }
 
         BankAccountEditScreen(
-            bankAccountId =
-                bankAccountId,
+            bankAccountId = bankAccountId,
+            initialIban = currentBankAccount?.BankIban.orEmpty(),
+            isLoading = accountState.IsLoading &&
+                    accountState.CurrentAction == "GetBankAccount",
+            isSubmitting = accountState.IsLoading &&
+                    accountState.CurrentAction == "UpdateBankAccount",
+            errorMessage = errorMessage,
             onBackClick = {
                 navigator.back()
+            },
+            onSaveClick = { iban ->
+                val bankAccount =
+                    currentBankAccount ?: return@BankAccountEditScreen
+
+                accountController.UpdateBankAccount(
+                    memberId = sessionState.MemberId,
+                    model = MemberBankAccountUpdateModel(
+                        MemberBankAccountId = bankAccount.MemberBankAccountId,
+                        InsertedBy = bankAccount.InsertedBy,
+                        InsertedDate = bankAccount.InsertedDate,
+                        StatusId = bankAccount.StatusId,
+                        BankId = bankAccount.BankId,
+                        BankIban = iban,
+                        MemberId = bankAccount.MemberId
+                    ),
+                    onSuccess = {
+                        accountController.GetBankAccounts(
+                            memberId = sessionState.MemberId
+                        )
+
+                        navigator.back()
+                    }
+                )
+            }
+        )
+    }
+
+    composable(
+        route = BankAccountRoutes.Edit,
+        arguments = listOf(
+            navArgument("bankAccountId") {
+                type = NavType.IntType
+            }
+        )
+    ) { backStackEntry ->
+        val accountState by accountController.State.collectAsState()
+
+        val bankAccountId = backStackEntry.arguments?.getInt("bankAccountId") ?: 0
+
+        LaunchedEffect(sessionState.MemberId, bankAccountId) {
+            accountController.GetBankAccount(
+                memberId = sessionState.MemberId,
+                bankAccountId = bankAccountId
+            )
+        }
+
+        BankAccountEditScreen(
+            bankAccountId = bankAccountId,
+            initialIban = accountState.BankAccount?.BankIban.orEmpty(),
+            isLoading = accountState.IsLoading &&
+                    accountState.CurrentAction == "GetBankAccount",
+            isSubmitting = accountState.IsLoading &&
+                    accountState.CurrentAction == "UpdateBankAccount",
+
+            errorMessage = accountState.BankAccountDetailResult
+                ?.takeIf { !it.Success }
+                ?.Message
+                ?: accountState.BankAccountUpdateResult
+                    ?.takeIf { !it.Success }
+                    ?.Message,
+
+            onBackClick = {
+                navigator.back()
+            },
+            onSaveClick = { iban ->
+                val currentBankAccount = accountState.BankAccount ?: return@BankAccountEditScreen
+
+                accountController.UpdateBankAccount(
+                    memberId = sessionState.MemberId,
+                    model = MemberBankAccountUpdateModel(
+                        MemberBankAccountId = currentBankAccount.MemberBankAccountId,
+                        InsertedBy = currentBankAccount.InsertedBy,
+                        InsertedDate = currentBankAccount.InsertedDate,
+                        StatusId = currentBankAccount.StatusId,
+                        BankId = currentBankAccount.BankId,
+                        BankIban = iban,
+                        MemberId = currentBankAccount.MemberId
+                    ),
+                    onSuccess = {
+                        accountController.GetBankAccounts(memberId = sessionState.MemberId)
+                        navigator.back()
+                    }
+                )
             }
         )
     }

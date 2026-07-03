@@ -1,6 +1,8 @@
 package com.bulbulustur.android.Application.Controllers
 
+import android.content.Context
 import androidx.lifecycle.viewModelScope
+import coil3.imageLoader
 import com.bulbulustur.android.businesslayer.Core.DTO.AddressCountryDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.StatusOverviewDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.SystemDescCurrencyDTO
@@ -22,6 +24,8 @@ data class SettingsControllerState(
     val IsLoadingCountries: Boolean = false,
     val IsLoadingCurrencies: Boolean = false,
     val IsLoadingStatus: Boolean = false,
+    val IsClearingCache: Boolean = false,
+    val IsCacheCleared: Boolean = false,
     val CurrentAction: String? = null,
     val Languages: List<SystemDescLanguageDTO> = emptyList(),
     val Countries: List<AddressCountryDTO> = emptyList(),
@@ -31,6 +35,7 @@ data class SettingsControllerState(
     val CountryResult: Result<List<AddressCountryDTO>>? = null,
     val CurrencyResult: Result<List<SystemDescCurrencyDTO>>? = null,
     val StatusOverviewResult: Result<StatusOverviewDTO?>? = null,
+    val CacheMessage: String? = null,
     val ErrorMessage: String? = null
 )
 
@@ -177,6 +182,50 @@ class SettingsController(
 
     fun RefreshStatusOverview() {
         GetStatusOverview()
+    }
+
+    fun ClearApplicationCache(context: Context) {
+        if (_state.value.IsClearingCache) return
+
+        viewModelScope.launch {
+            _state.update { currentState ->
+                currentState.copy(
+                    IsClearingCache = true,
+                    IsCacheCleared = false,
+                    CurrentAction = "ClearApplicationCache",
+                    CacheMessage = null,
+                    ErrorMessage = null
+                )
+            }
+
+            val result = runCatching {
+                executeService.ClearMemoryCache()
+
+                context.imageLoader.memoryCache?.clear()
+                context.imageLoader.diskCache?.clear()
+
+                context.cacheDir.listFiles().orEmpty().forEach { cacheFile ->
+                    cacheFile.deleteRecursively()
+                }
+
+                context.externalCacheDir?.listFiles().orEmpty().forEach { cacheFile ->
+                    cacheFile.deleteRecursively()
+                }
+            }
+
+            _state.update { currentState ->
+                currentState.copy(
+                    IsClearingCache = false,
+                    IsCacheCleared = result.isSuccess,
+                    CacheMessage = if (result.isSuccess) {
+                        "Önbellek başarıyla temizlendi."
+                    } else {
+                        "Önbellek tamamen temizlenemedi."
+                    },
+                    ErrorMessage = result.exceptionOrNull()?.message
+                )
+            }
+        }
     }
 
     fun ClearError() {

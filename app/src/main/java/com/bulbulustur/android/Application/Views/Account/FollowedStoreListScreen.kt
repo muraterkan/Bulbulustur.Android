@@ -14,33 +14,42 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Storefront
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
-import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
+import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
+import com.bulbulustur.android.businesslayer.Core.DTO.MemberFollowedStoreDTO
 
 @Composable
 fun FollowedStoreListScreen(
+    stores: List<MemberFollowedStoreDTO> = emptyList(),
+    isLoading: Boolean = false,
+    errorMessage: String? = null,
     onBackClick: () -> Unit = {},
-    onStoreClick: (Int) -> Unit = {},
-    onUnfollowStoreClick: (Int) -> Unit = {}
+    onRetryClick: () -> Unit = {},
+    onStoreClick: (storeId: Int) -> Unit = {},
+    onUnfollowStoreClick: (followedStoreId: Int) -> Unit = {}
 ) {
-    val followedStores = getDemoFollowedStores()
-
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
@@ -50,34 +59,67 @@ fun FollowedStoreListScreen(
             )
         }
     ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
-                .padding(innerPadding),
-            contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
-                top = BBSpacing.PageTopCompact,
-                end = BBSpacing.PageHorizontal,
-                bottom = BBSpacing.PageBottom
-            ),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
-        ) {
-            if (followedStores.isEmpty()) {
-                item {
-                    FollowedStoreEmptyState()
-                }
+        when {
+            isLoading && stores.isEmpty() -> {
+                FollowedStoreLoadingState(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.background)
+                        .padding(innerPadding)
+                )
             }
 
-            items(
-                items = followedStores,
-                key = { store -> store.followedStoreId }
-            ) { store ->
-                FollowedStoreCard(
-                    store = store,
-                    onStoreClick = onStoreClick,
-                    onUnfollowStoreClick = onUnfollowStoreClick
+            !errorMessage.isNullOrBlank() && stores.isEmpty() -> {
+                FollowedStoreErrorState(
+                    message = errorMessage,
+                    onRetryClick = onRetryClick,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.background)
+                        .padding(innerPadding)
                 )
+            }
+
+            else -> {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.background)
+                        .padding(innerPadding),
+                    contentPadding = PaddingValues(
+                        start = BBSpacing.PageHorizontal,
+                        top = BBSpacing.PageTopCompact,
+                        end = BBSpacing.PageHorizontal,
+                        bottom = BBSpacing.PageBottom
+                    ),
+                    verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
+                ) {
+                    if (!errorMessage.isNullOrBlank()) {
+                        item(key = "followed-store-inline-error") {
+                            FollowedStoreInlineError(
+                                message = errorMessage,
+                                onRetryClick = onRetryClick
+                            )
+                        }
+                    }
+
+                    if (stores.isEmpty()) {
+                        item(key = "followed-store-empty") {
+                            FollowedStoreEmptyState()
+                        }
+                    }
+
+                    items(
+                        items = stores,
+                        key = { store -> store.MemberFollowedStoreId }
+                    ) { store ->
+                        FollowedStoreCard(
+                            store = store,
+                            onStoreClick = onStoreClick,
+                            onUnfollowStoreClick = onUnfollowStoreClick
+                        )
+                    }
+                }
             }
         }
     }
@@ -85,7 +127,7 @@ fun FollowedStoreListScreen(
 
 @Composable
 private fun FollowedStoreCard(
-    store: FollowedStoreUiModel,
+    store: MemberFollowedStoreDTO,
     onStoreClick: (Int) -> Unit,
     onUnfollowStoreClick: (Int) -> Unit
 ) {
@@ -110,27 +152,32 @@ private fun FollowedStoreCard(
                 FollowStatusBadge()
 
                 Text(
-                    text = store.storeName,
+                    text = store.Store.ifBlank {
+                        "Mağaza #${store.StoreId}"
+                    },
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.Bold,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
 
                 Text(
-                    text = store.description,
+                    text = store.followedStoreDescription(),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
 
-                Spacer(modifier = Modifier.height(BBSpacing.Space1))
+                Spacer(
+                    modifier = Modifier.height(BBSpacing.Space1)
+                )
 
                 BbButton(
                     text = "Mağaza Profilini Görüntüle",
                     onClick = {
-                        onStoreClick(store.storeId)
+                        onStoreClick(store.StoreId)
                     },
                     modifier = Modifier.fillMaxWidth(),
                     variant = BbButtonVariant.Light,
@@ -140,7 +187,9 @@ private fun FollowedStoreCard(
                 BbButton(
                     text = "Takipten Çıkar",
                     onClick = {
-                        onUnfollowStoreClick(store.followedStoreId)
+                        onUnfollowStoreClick(
+                            store.MemberFollowedStoreId
+                        )
                     },
                     modifier = Modifier.fillMaxWidth(),
                     variant = BbButtonVariant.Danger,
@@ -153,12 +202,12 @@ private fun FollowedStoreCard(
 
 @Composable
 private fun StoreLogoArea(
-    store: FollowedStoreUiModel
+    store: MemberFollowedStoreDTO
 ) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .aspectRatio(2.35f)
+            .aspectRatio(2.8f)
             .background(
                 color = MaterialTheme.colorScheme.surfaceVariant
             ),
@@ -168,15 +217,16 @@ private fun StoreLogoArea(
             modifier = Modifier
                 .size(BBSpacing.Space20)
                 .background(
-                    color = store.logoBackgroundColor,
+                    color = MaterialTheme.colorScheme.primaryContainer,
                     shape = BBRadius.MdShape
                 ),
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = store.logoText,
+                text = store.storeLogoText(),
                 style = MaterialTheme.typography.headlineSmall,
-                color = store.logoTextColor,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                fontWeight = FontWeight.Bold,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -200,8 +250,104 @@ private fun FollowStatusBadge() {
         Text(
             text = "Takip Ediyor",
             style = MaterialTheme.typography.labelSmall,
-            color = BBColors.Yellow.Yellow800
+            color = BBColors.Yellow.Yellow800,
+            fontWeight = FontWeight.Bold
         )
+    }
+}
+
+@Composable
+private fun FollowedStoreLoadingState(
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(
+            color = MaterialTheme.colorScheme.primary
+        )
+    }
+}
+
+@Composable
+private fun FollowedStoreInlineError(
+    message: String,
+    onRetryClick: () -> Unit
+) {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+        ) {
+            Text(
+                text = message,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.error
+            )
+
+            BbButton(
+                text = "Tekrar Dene",
+                onClick = onRetryClick,
+                modifier = Modifier.fillMaxWidth(),
+                variant = BbButtonVariant.Light,
+                size = BbButtonSize.Small
+            )
+        }
+    }
+}
+
+@Composable
+private fun FollowedStoreErrorState(
+    message: String,
+    onRetryClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center
+    ) {
+        BbCard(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(BBSpacing.PageHorizontal),
+            variant = BbCardVariant.Outlined,
+            padding = BbCardPadding.Large
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+            ) {
+                StoreEmptyIconBox()
+
+                Text(
+                    text = "Mağazalar Alınamadı",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Text(
+                    text = message,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center
+                )
+
+                BbButton(
+                    text = "Tekrar Dene",
+                    onClick = onRetryClick,
+                    modifier = Modifier.fillMaxWidth(),
+                    variant = BbButtonVariant.Light,
+                    size = BbButtonSize.Small
+                )
+            }
+        }
     }
 }
 
@@ -222,13 +368,15 @@ private fun FollowedStoreEmptyState() {
             Text(
                 text = "Kayıt Bulunamadı",
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
+                fontWeight = FontWeight.Bold
             )
 
             Text(
                 text = "Henüz takip ettiğiniz mağaza bulunmuyor. Mağaza profillerini takip ederek burada hızlı erişim listesi oluşturabilirsiniz.",
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center
             )
         }
     }
@@ -238,62 +386,56 @@ private fun FollowedStoreEmptyState() {
 private fun StoreEmptyIconBox() {
     Box(
         modifier = Modifier
-            .size(BBSpacing.Space12)
+            .size(BBIcon.BoxLg)
             .background(
                 color = MaterialTheme.colorScheme.primaryContainer,
                 shape = BBRadius.LgShape
-            )
-            .padding(BBSpacing.Space2),
+            ),
         contentAlignment = Alignment.Center
     ) {
-        Text(
-            text = "â–£",
-            style = MaterialTheme.typography.headlineSmall,
-            color = BBColors.Yellow.Yellow800
+        Icon(
+            imageVector = Icons.Outlined.Storefront,
+            contentDescription = null,
+            tint = BBColors.Yellow.Yellow800,
+            modifier = Modifier.size(BBIcon.SizeLg)
         )
     }
 }
 
-private fun getDemoFollowedStores(): List<FollowedStoreUiModel> {
-    return listOf(
-        FollowedStoreUiModel(
-            followedStoreId = 1,
-            storeId = 501,
-            storeName = "Base & Quality Store",
-            description = "Takip ettiğiniz mağaza",
-            logoText = "B&Q",
-            logoBackgroundColor = BBColors.Orange.Orange300,
-            logoTextColor = BBColors.White
-        ),
-        FollowedStoreUiModel(
-            followedStoreId = 2,
-            storeId = 502,
-            storeName = "Ortobella Comfort",
-            description = "Takip ettiğiniz mağaza",
-            logoText = "CİTRİX",
-            logoBackgroundColor = BBColors.Green.Green700,
-            logoTextColor = BBColors.White
-        ),
-        FollowedStoreUiModel(
-            followedStoreId = 3,
-            storeId = 503,
-            storeName = "Ortobella Comfort",
-            description = "Takip ettiğiniz mağaza",
-            logoText = "CİTRİX",
-            logoBackgroundColor = BBColors.Green.Green700,
-            logoTextColor = BBColors.White
-        )
-    )
+private fun MemberFollowedStoreDTO.storeLogoText(): String {
+    val words = Store
+        .trim()
+        .split(Regex("\\s+"))
+        .filter { word -> word.isNotBlank() }
+
+    if (words.isEmpty()) {
+        return "M"
+    }
+
+    if (words.size == 1) {
+        return words.first()
+            .take(2)
+            .uppercase()
+    }
+
+    return words
+        .take(2)
+        .mapNotNull { word ->
+            word.firstOrNull()
+        }
+        .joinToString("")
+        .uppercase()
 }
 
-private data class FollowedStoreUiModel(
-    val followedStoreId: Int,
-    val storeId: Int,
-    val storeName: String,
-    val description: String,
-    val logoText: String,
-    val logoBackgroundColor: Color,
-    val logoTextColor: Color
-)
+private fun MemberFollowedStoreDTO.followedStoreDescription(): String {
+    return when {
+        Company.isNotBlank() ->
+            Company
 
+        FollowedStoresType.isNotBlank() ->
+            FollowedStoresType
 
+        else ->
+            "Takip ettiğiniz mağaza"
+    }
+}

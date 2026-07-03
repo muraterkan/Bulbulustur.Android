@@ -7,7 +7,9 @@ import com.bulbulustur.android.businesslayer.Core.Network.ApiClient
 import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
-class MemberFollowedStoreRepository(private val apiClient: ApiClient = ApiClient) : IMemberFollowedStoreRepository {
+class MemberFollowedStoreRepository(
+    private val apiClient: ApiClient = ApiClient
+) : IMemberFollowedStoreRepository {
 
     override suspend fun GetAccountFollowedStores(memberId: Int, count: Int): Result<List<MemberFollowedStoreDTO>> {
         return apiClient.GetAsync(
@@ -18,7 +20,7 @@ class MemberFollowedStoreRepository(private val apiClient: ApiClient = ApiClient
     }
 
     override suspend fun InsertAccountFollowedStoreAsync(memberId: Int, model: MemberFollowedStoreInsertModel): Result<Unit> {
-        return apiClient.PostAsync<MemberFollowedStoreInsertModel, Unit>(
+        return apiClient.PostAsync(
             baseUrl = ApiRoutes.COMMERCE_SUPPORT_ACCOUNT_BASE_URL,
             method = "InsertAccountFollowedStoreAsync",
             data = model,

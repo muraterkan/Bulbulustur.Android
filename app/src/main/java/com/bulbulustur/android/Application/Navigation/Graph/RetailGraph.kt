@@ -993,24 +993,21 @@ fun NavGraphBuilder.retailGraph(
     }
 
     composable(
-        route = StoreRoutes.StoreDetail
-    ) {
+        route = StoreRoutes.StoreDetail,
+        arguments = listOf(
+            navArgument(StoreRoutes.ArgStoreId) {
+                type = NavType.IntType
+            }
+        )
+    ) { backStackEntry ->
+        val storeId = backStackEntry.arguments
+            ?.getInt(StoreRoutes.ArgStoreId)
+            ?: 0
+
         StoreDetailScreen(
+            storeId = storeId,
             onBackClick = {
                 navigator.back()
-            },
-            onProductClick = {
-                /*
-                 * StoreDetailScreen henüz detail kimliklerini taşımıyor.
-                 */
-                navigator.navController.navigate(
-                    RetailRoutes.ProductList
-                )
-            },
-            onStoreListClick = {
-                navigator.navController.navigate(
-                    StoreRoutes.StoreList
-                )
             }
         )
     }

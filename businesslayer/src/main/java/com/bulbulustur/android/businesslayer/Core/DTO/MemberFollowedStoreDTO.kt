@@ -5,6 +5,8 @@ data class MemberFollowedStoreDTO(
     val InsertedBy: Int = 0,
     val InsertedDate: String = "",
     val StatusId: Int = 0,
+    val FollowedStoresTypeId: Int = 0,
+    val MemberId: Int = 0,
     val StoreId: Int = 0,
     val FollowedStoresType: String = "",
     val MemberName: String = "",

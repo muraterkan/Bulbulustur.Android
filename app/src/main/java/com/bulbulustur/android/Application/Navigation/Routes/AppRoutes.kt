@@ -71,11 +71,21 @@ object BasketRoutes {
 }
 
 object StoreRoutes {
+
+    const val ArgStoreId = "storeId"
+
     const val StoreList = "store/list"
-    const val StoreDetail = "store/detail"
+
+    const val StoreDetail =
+        "store/detail/{$ArgStoreId}"
+
     const val StoreProductList = "store/product-list"
     const val StoreOnboardingInfo = "b2c/store/onboarding-info"
     const val StoreLanding = "store/landing"
+
+    fun storeDetail(storeId: Int): String {
+        return "store/detail/$storeId"
+    }
 }
 
 object WholesaleRoutes {

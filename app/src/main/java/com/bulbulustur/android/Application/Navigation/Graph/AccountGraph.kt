@@ -1021,10 +1021,52 @@ fun NavGraphBuilder.accountGraph(
         )
     }
 
-    composable(route = AccountRoutes.FollowedStores) {
+    composable(
+        route = AccountRoutes.FollowedStores
+    ) {
+        val accountState by accountController.State.collectAsState()
+
+        LaunchedEffect(sessionState.MemberId) {
+            accountController.GetFollowedStores(
+                memberId = sessionState.MemberId
+            )
+        }
+
         FollowedStoreListScreen(
+            stores = accountState.FollowedStores,
+            isLoading = accountState.IsLoading && (
+                    accountState.CurrentAction == "GetFollowedStores" ||
+                            accountState.CurrentAction == "DeleteFollowedStore"
+                    ),
+            errorMessage = accountState.FollowedStoreListResult
+                ?.takeIf { !it.Success }
+                ?.Message
+                ?: accountState.FollowedStoreDeleteResult
+                    ?.takeIf { !it.Success }
+                    ?.Message,
             onBackClick = {
                 navigator.back()
+            },
+            onRetryClick = {
+                accountController.GetFollowedStores(
+                    memberId = sessionState.MemberId
+                )
+            },
+            onStoreClick = { storeId: Int ->
+                navigator.navController.navigate(
+                    StoreRoutes.storeDetail(storeId)
+                )
+            },
+            onUnfollowStoreClick = { followedStoreId: Int ->
+                accountController.DeleteFollowedStore(
+                    memberId = sessionState.MemberId,
+                    followedStoreId = followedStoreId,
+                    onSuccess = {
+                        accountController.GetFollowedStores(
+                            memberId = sessionState.MemberId
+                        )
+                    }
+                )
             }
         )
     }
@@ -1176,10 +1218,14 @@ fun NavGraphBuilder.accountGraph(
                 navigator.back()
             },
             onOrderClick = {
-                navigator.navController.navigate(AccountRoutes.OrderDetail)
+                navigator.navController.navigate(
+                    AccountRoutes.OrderDetail
+                )
             },
             onStoreClick = {
-                navigator.navController.navigate(StoreRoutes.StoreDetail)
+                navigator.navController.navigate(
+                    StoreRoutes.StoreList
+                )
             }
         )
     }

@@ -20,6 +20,7 @@ import androidx.compose.material.icons.outlined.LocalOffer
 import androidx.compose.material.icons.outlined.ReceiptLong
 import androidx.compose.material.icons.outlined.Redeem
 import androidx.compose.material.icons.outlined.Timelapse
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -31,21 +32,34 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
+import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
+import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
+import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
+import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
-import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
+import com.bulbulustur.android.businesslayer.Core.DTO.MemberCouponDTO
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @Composable
 fun CouponListScreen(
-    onBackClick: () -> Unit = {}
+    coupons: List<MemberCouponDTO> = emptyList(),
+    isLoading: Boolean = false,
+    errorMessage: String? = null,
+    onBackClick: () -> Unit = {},
+    onRetryClick: () -> Unit = {}
 ) {
-    val coupons = getDemoCoupons()
-
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
@@ -55,41 +69,75 @@ fun CouponListScreen(
             )
         }
     ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
-                .padding(innerPadding),
-            contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
-                top = BBSpacing.PageTopCompact,
-                end = BBSpacing.PageHorizontal,
-                bottom = BBSpacing.PageBottom
-            ),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
-        ) {
-            if (coupons.isEmpty()) {
-                item {
-                    CouponEmptyState()
-                }
+        when {
+            isLoading && coupons.isEmpty() -> {
+                CouponLoadingState(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                )
             }
 
-            items(
-                items = coupons,
-                key = { coupon -> coupon.couponId }
-            ) { coupon ->
-                CouponCard(
-                    coupon = coupon
+            !errorMessage.isNullOrBlank() && coupons.isEmpty() -> {
+                CouponErrorState(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
+                    message = errorMessage,
+                    onRetryClick = onRetryClick
                 )
+            }
+
+            coupons.isEmpty() -> {
+                CouponEmptyState(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                )
+            }
+
+            else -> {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.background)
+                        .padding(innerPadding),
+                    contentPadding = PaddingValues(
+                        start = BBSpacing.PageHorizontal,
+                        top = BBSpacing.PageTopCompact,
+                        end = BBSpacing.PageHorizontal,
+                        bottom = BBSpacing.PageBottom
+                    ),
+                    verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
+                ) {
+                    if (!errorMessage.isNullOrBlank()) {
+                        item {
+                            CouponFeedbackCard(
+                                message = errorMessage,
+                                onRetryClick = onRetryClick
+                            )
+                        }
+                    }
+
+                    items(
+                        items = coupons,
+                        key = { coupon -> coupon.MemberCouponId }
+                    ) { coupon ->
+                        CouponCard(coupon = coupon)
+                    }
+                }
             }
         }
     }
 }
 
 @Composable
-private fun CouponCard(
-    coupon: CouponUiModel
-) {
+private fun CouponCard(coupon: MemberCouponDTO) {
+    val status = coupon.ResolveCouponStatus()
+    val usageText = coupon.ResolveUsageText()
+    val expireDate = coupon.LastUsingDate.ToCouponDateText()
+    val code = coupon.CouponCode.ifBlank { "Kupon" }
+
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
@@ -101,7 +149,8 @@ private fun CouponCard(
                 .background(MaterialTheme.colorScheme.surface)
         ) {
             CouponCardHeader(
-                coupon = coupon
+                code = code,
+                amountText = coupon.Amount.ToTurkishCurrency()
             )
 
             HorizontalDivider(
@@ -116,21 +165,34 @@ private fun CouponCard(
             ) {
                 CouponInfoBox(
                     title = "Geçerlilik tarihi",
-                    value = coupon.expireDate,
+                    value = expireDate,
                     icon = Icons.Outlined.CalendarMonth,
                     iconColor = BBColors.Yellow.Yellow800
                 )
 
                 CouponInfoBox(
                     title = "Kullanım tarihi / sipariş no",
-                    value = coupon.usageText,
+                    value = usageText,
                     icon = Icons.Outlined.ReceiptLong,
                     iconColor = BBColors.Blue.Blue600
                 )
 
-                CouponStatusBadge(
-                    status = coupon.status
-                )
+                if (coupon.UpAmount > 0.0) {
+                    CouponInfoBox(
+                        title = "Minimum sepet tutarı",
+                        value = coupon.UpAmount.ToTurkishCurrency(),
+                        icon = Icons.Outlined.LocalOffer,
+                        iconColor = BBColors.Yellow.Yellow800
+                    )
+                }
+
+                if (coupon.Descripion.isNotBlank()) {
+                    CouponDescriptionBox(
+                        description = coupon.Descripion
+                    )
+                }
+
+                CouponStatusBadge(status = status)
             }
         }
     }
@@ -138,7 +200,8 @@ private fun CouponCard(
 
 @Composable
 private fun CouponCardHeader(
-    coupon: CouponUiModel
+    code: String,
+    amountText: String
 ) {
     Row(
         modifier = Modifier
@@ -163,7 +226,7 @@ private fun CouponCardHeader(
             )
 
             Text(
-                text = coupon.code,
+                text = code,
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface,
                 maxLines = 1,
@@ -177,7 +240,7 @@ private fun CouponCardHeader(
             )
 
             Text(
-                text = coupon.amountText,
+                text = amountText,
                 style = MaterialTheme.typography.titleSmall,
                 color = BBColors.Yellow.Yellow800
             )
@@ -236,9 +299,26 @@ private fun CouponInfoBox(
 }
 
 @Composable
-private fun CouponStatusBadge(
-    status: CouponStatus
-) {
+private fun CouponDescriptionBox(description: String) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                shape = BBRadius.LgShape
+            )
+            .padding(BBSpacing.CardPaddingCompact)
+    ) {
+        Text(
+            text = description,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+
+@Composable
+private fun CouponStatusBadge(status: CouponStatus) {
     val backgroundColor = when (status) {
         CouponStatus.Active -> BBColors.Orange.Orange50
         CouponStatus.Used -> BBColors.Green.Green50
@@ -280,7 +360,7 @@ private fun CouponStatusBadge(
             )
 
             Text(
-                text = status.title,
+                text = status.Title,
                 style = MaterialTheme.typography.labelSmall,
                 color = textColor
             )
@@ -289,9 +369,7 @@ private fun CouponStatusBadge(
 }
 
 @Composable
-private fun CouponIconBox(
-    icon: ImageVector
-) {
+private fun CouponIconBox(icon: ImageVector) {
     Box(
         modifier = Modifier
             .size(BBIcon.BoxLg)
@@ -311,9 +389,7 @@ private fun CouponIconBox(
 }
 
 @Composable
-private fun CouponSmallIconBox(
-    icon: ImageVector
-) {
+private fun CouponSmallIconBox(icon: ImageVector) {
     Box(
         modifier = Modifier
             .size(BBIcon.BoxMd)
@@ -333,78 +409,181 @@ private fun CouponSmallIconBox(
 }
 
 @Composable
-private fun CouponEmptyState() {
+private fun CouponLoadingState(modifier: Modifier) {
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator()
+    }
+}
+
+@Composable
+private fun CouponErrorState(
+    modifier: Modifier,
+    message: String,
+    onRetryClick: () -> Unit
+) {
+    Column(
+        modifier = modifier.padding(BBSpacing.PageHorizontal),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        CouponIconBox(
+            icon = Icons.Outlined.LocalOffer
+        )
+
+        Text(
+            text = "Kuponlar alınamadı",
+            modifier = Modifier.padding(top = BBSpacing.Space3),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+
+        Text(
+            text = message,
+            modifier = Modifier.padding(top = BBSpacing.Space2),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
+        BbButton(
+            text = "Tekrar Dene",
+            onClick = onRetryClick,
+            modifier = Modifier.padding(top = BBSpacing.Space4),
+            variant = BbButtonVariant.Primary,
+            size = BbButtonSize.Medium
+        )
+    }
+}
+
+@Composable
+private fun CouponFeedbackCard(
+    message: String,
+    onRetryClick: () -> Unit
+) {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Large
+        padding = BbCardPadding.Medium
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
-            CouponIconBox(
-                icon = Icons.Outlined.LocalOffer
-            )
-
             Text(
-                text = "Kupon bulunamadı",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-
-            Text(
-                text = "Hesabınıza tanımlı kupon oluştuğunda burada listelenecek.",
+                text = message,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.error
+            )
+
+            BbButton(
+                text = "Tekrar Dene",
+                onClick = onRetryClick,
+                modifier = Modifier.fillMaxWidth(),
+                variant = BbButtonVariant.Secondary,
+                size = BbButtonSize.Medium
             )
         }
     }
 }
 
-private fun getDemoCoupons(): List<CouponUiModel> {
-    return listOf(
-        CouponUiModel(
-            couponId = 1,
-            code = "WELCOME2026",
-            amountText = "150,00 ₺",
-            expireDate = "1.01.0001 00:00:00",
-            usageText = "-",
-            status = CouponStatus.Active
-        ),
-        CouponUiModel(
-            couponId = 2,
-            code = "BULBUL25",
-            amountText = "250,00 ₺",
-            expireDate = "1.01.0001 00:00:00",
-            usageText = "-",
-            status = CouponStatus.Used
+@Composable
+private fun CouponEmptyState(modifier: Modifier) {
+    Column(
+        modifier = modifier.padding(BBSpacing.PageHorizontal),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        CouponIconBox(
+            icon = Icons.Outlined.LocalOffer
         )
-    )
+
+        Text(
+            text = "Kupon bulunamadı",
+            modifier = Modifier.padding(top = BBSpacing.Space3),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+
+        Text(
+            text = "Hesabınıza tanımlı kupon oluştuğunda burada listelenecek.",
+            modifier = Modifier.padding(top = BBSpacing.Space2),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
 }
 
-private enum class CouponStatus(
-    val title: String
-) {
-    Active(
-        title = "Etkin"
-    ),
-    Used(
-        title = "Kullanılmış"
-    ),
-    Expired(
-        title = "Süresi Dolmuş"
-    )
+private fun MemberCouponDTO.ResolveCouponStatus(): CouponStatus {
+    if (Used == 1 || OrderId.isNotBlank()) {
+        return CouponStatus.Used
+    }
+
+    val lastUsingDate = LastUsingDate.ToCouponLocalDate()
+
+    if (lastUsingDate != null && lastUsingDate.isBefore(LocalDate.now())) {
+        return CouponStatus.Expired
+    }
+
+    return CouponStatus.Active
 }
 
-private data class CouponUiModel(
-    val couponId: Int,
-    val code: String,
-    val amountText: String,
-    val expireDate: String,
-    val usageText: String,
-    val status: CouponStatus
-)
+private fun MemberCouponDTO.ResolveUsageText(): String {
+    val usedDate = UsedDate.ToCouponDateText()
+    val orderId = OrderId.trim()
 
+    return when {
+        usedDate != "-" && orderId.isNotBlank() -> "$usedDate / $orderId"
+        usedDate != "-" -> usedDate
+        orderId.isNotBlank() -> orderId
+        else -> "-"
+    }
+}
 
+private fun Double.ToTurkishCurrency(): String {
+    val symbols = DecimalFormatSymbols(Locale("tr", "TR"))
+    val formatter = DecimalFormat("#,##0.00", symbols)
+
+    return "${formatter.format(this)} ₺"
+}
+
+private fun String.ToCouponDateText(): String {
+    val date = ToCouponLocalDate() ?: return "-"
+
+    if (date.year <= 1) {
+        return "-"
+    }
+
+    return date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+}
+
+private fun String.ToCouponLocalDate(): LocalDate? {
+    val normalizedValue = trim()
+
+    if (
+        normalizedValue.isBlank() ||
+        normalizedValue.startsWith("0001-01-01") ||
+        normalizedValue.startsWith("1.01.0001")
+    ) {
+        return null
+    }
+
+    return runCatching {
+        OffsetDateTime.parse(normalizedValue).toLocalDate()
+    }.getOrElse {
+        runCatching {
+            LocalDateTime.parse(normalizedValue).toLocalDate()
+        }.getOrElse {
+            runCatching {
+                LocalDate.parse(normalizedValue.substringBefore("T"))
+            }.getOrNull()
+        }
+    }
+}
+
+private enum class CouponStatus(val Title: String) {
+    Active(Title = "Etkin"),
+    Used(Title = "Kullanılmış"),
+    Expired(Title = "Süresi Dolmuş")
+}

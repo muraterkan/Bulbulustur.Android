@@ -1199,9 +1199,21 @@ fun NavGraphBuilder.accountGraph(
     }
 
     composable(route = AccountRoutes.Coupons) {
+        val accountState by accountController.State.collectAsState()
+
+        LaunchedEffect(sessionState.MemberId) {
+            accountController.GetCoupons(memberId = sessionState.MemberId)
+        }
+
         CouponListScreen(
+            coupons = accountState.Coupons,
+            isLoading = accountState.IsLoading && accountState.CurrentAction == "GetCoupons",
+            errorMessage = accountState.CouponListResult?.takeIf { !it.Success }?.Message,
             onBackClick = {
                 navigator.back()
+            },
+            onRetryClick = {
+                accountController.GetCoupons(memberId = sessionState.MemberId)
             }
         )
     }

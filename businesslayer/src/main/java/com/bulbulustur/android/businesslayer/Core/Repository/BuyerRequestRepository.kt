@@ -12,60 +12,67 @@ class BuyerRequestRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IBuyerRequestRepository {
 
-    override suspend fun GetBuyerRequestListAsync(): Result<List<BuyerRequestDTO>> {
+    override suspend fun GetBuyerRequestsAsync(count: Int): Result<List<BuyerRequestDTO>> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetBuyerRequestListAsync"
+            baseUrl = ApiRoutes.B2B_BASE_URL,
+            method = "BuyerRequest/GetBuyerRequestsAsync",
+            query = "count=$count"
         )
     }
 
-    override suspend fun GetBuyerRequestByIdAsync(
-        buyerRequestId: Int
-    ): Result<BuyerRequestUpdateModel?> {
+    override suspend fun GetBuyerRequestsByMemberAsync(memberId: Int, count: Int): Result<List<BuyerRequestDTO>> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetBuyerRequestByIdAsync",
-            query = "buyerRequestId=$buyerRequestId"
+            baseUrl = ApiRoutes.B2B_BASE_URL,
+            method = "BuyerRequest/GetBuyerRequestsByMemberAsync",
+            query = "memberId=$memberId&count=$count"
         )
     }
 
-    override suspend fun GetBuyerRequestByIdExtendedAsync(
-        buyerRequestId: Int
-    ): Result<BuyerRequestDTO?> {
+    override suspend fun GetBuyerRequestsByIdAsync(buyerRequestKey: String): Result<BuyerRequestUpdateModel?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetBuyerRequestByIdExtendedAsync",
-            query = "buyerRequestId=$buyerRequestId"
+            baseUrl = ApiRoutes.B2B_BASE_URL,
+            method = "BuyerRequest/GetBuyerRequestsByIdAsync",
+            query = "buyerRequestKey=$buyerRequestKey"
         )
     }
 
-    override suspend fun InsertAsync(
-        model: BuyerRequestInsertModel
-    ): Result<Unit> {
+    override suspend fun GetBuyerRequestsByIdExtendedAsync(buyerRequestKey: String): Result<BuyerRequestDTO?> {
+        return apiClient.GetAsync(
+            baseUrl = ApiRoutes.B2B_BASE_URL,
+            method = "BuyerRequest/GetBuyerRequestsByIdExtendedAsync",
+            query = "buyerRequestKey=$buyerRequestKey"
+        )
+    }
+
+    override suspend fun InsertAsync(model: BuyerRequestInsertModel): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "InsertAsync",
+            baseUrl = ApiRoutes.B2B_BASE_URL,
+            method = "BuyerRequest/BuyerRequestInsertAsync",
             data = model
         )
     }
 
-    override suspend fun UpdateAsync(
-        model: BuyerRequestUpdateModel
-    ): Result<Unit> {
+    override suspend fun UpdateAsync(model: BuyerRequestUpdateModel): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "UpdateAsync",
+            baseUrl = ApiRoutes.B2B_BASE_URL,
+            method = "BuyerRequest/BuyerRequestUpdateAsync",
             data = model
         )
     }
 
-    override suspend fun DeleteAsync(
-        buyerRequestId: Int
-    ): Result<Unit> {
-        return apiClient.DeleteAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "DeleteAsync",
-            query = "buyerRequestId=$buyerRequestId"
+    override suspend fun DeleteAsync(buyerRequestKey: String): Result<Unit> {
+        return apiClient.PostAsync(
+            baseUrl = ApiRoutes.B2B_BASE_URL,
+            method = "BuyerRequest/BuyerRequestDeleteAsync",
+            data = buyerRequestKey
+        )
+    }
+
+    override suspend fun GetPastRequestsAsync(count: Int): Result<List<BuyerRequestDTO>> {
+        return apiClient.GetAsync(
+            baseUrl = ApiRoutes.B2B_BASE_URL,
+            method = "BuyerRequest/GetPastRequestsAsync",
+            query = "count=$count"
         )
     }
 }

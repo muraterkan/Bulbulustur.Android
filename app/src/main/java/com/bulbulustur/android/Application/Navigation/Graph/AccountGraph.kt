@@ -21,7 +21,8 @@ import com.bulbulustur.android.Application.Navigation.Routes.StoreRoutes
 import com.bulbulustur.android.Application.Session.UserSessionState
 import com.bulbulustur.android.Application.Views.Account.AccountScreen
 import com.bulbulustur.android.Application.Views.Account.AccountSecurityScreen
-import com.bulbulustur.android.Application.Views.Account.AddressFormScreen
+import com.bulbulustur.android.Application.Views.Account.AddressCreateScreen
+import com.bulbulustur.android.Application.Views.Account.AddressEditScreen
 import com.bulbulustur.android.Application.Views.Account.AddressListScreen
 import com.bulbulustur.android.Application.Views.Account.BankAccountCreateScreen
 import com.bulbulustur.android.Application.Views.Account.BankAccountEditScreen
@@ -61,6 +62,9 @@ import com.bulbulustur.android.Application.Views.Question.QuestionAnswerScreen
 import com.bulbulustur.android.businesslayer.Core.Model.ChangePasswordModel
 import com.bulbulustur.android.businesslayer.Core.Enums.EApplicationLanguage
 import com.bulbulustur.android.businesslayer.Core.Model.ChangeMailModel
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 
 fun NavGraphBuilder.accountGraph(
     navigator: BulbulusturNavigator,
@@ -781,7 +785,28 @@ fun NavGraphBuilder.accountGraph(
     composable(
         route = AccountRoutes.AddressList
     ) {
+        val accountState by accountController.State.collectAsState()
+
+        LaunchedEffect(sessionState.MemberId) {
+            accountController.GetAddresses(
+                memberId = sessionState.MemberId
+            )
+        }
+
         AddressListScreen(
+            addresses = accountState.Addresses,
+            isLoading = accountState.IsLoading &&
+                    (
+                            accountState.CurrentAction == "GetAddresses" ||
+                                    accountState.CurrentAction == "DeleteAddress"
+                            ),
+            errorMessage = accountState.AddressListResult
+                ?.takeIf { !it.Success }
+                ?.Message
+                ?: accountState.AddressDeleteResult
+                    ?.takeIf { !it.Success }
+                    ?.Message,
+            deletingAddressId = null,
             onBackClick = {
                 navigator.back()
             },
@@ -790,11 +815,25 @@ fun NavGraphBuilder.accountGraph(
                     AccountRoutes.AddressCreate
                 )
             },
-            onEditAddressClick = { addressId ->
+            onEditAddressClick = { addressKey ->
                 navigator.navController.navigate(
-                    AccountRoutes.editAddress(
-                        addressId
-                    )
+                    AccountRoutes.editAddress(addressKey)
+                )
+            },
+            onDeleteAddressClick = { addressId ->
+                accountController.DeleteAddress(
+                    memberId = sessionState.MemberId,
+                    addressId = addressId,
+                    onSuccess = {
+                        accountController.GetAddresses(
+                            memberId = sessionState.MemberId
+                        )
+                    }
+                )
+            },
+            onRetryClick = {
+                accountController.GetAddresses(
+                    memberId = sessionState.MemberId
                 )
             }
         )
@@ -803,10 +842,87 @@ fun NavGraphBuilder.accountGraph(
     composable(
         route = AccountRoutes.AddressCreate
     ) {
-        AddressFormScreen(
-            addressId = null,
+        val accountState by accountController.State.collectAsState()
+        val addressCascadeState by addressCascadeController.State.collectAsState()
+
+        val languageId = when (sessionState.Language) {
+            EApplicationLanguage.Turkish -> 1
+            EApplicationLanguage.English -> 2
+        }
+
+        LaunchedEffect(Unit) {
+            addressCascadeController.OnEvent(AddressCascadeEvent.Clear)
+
+            addressCascadeController.OnEvent(
+                AddressCascadeEvent.LoadCountries(
+                    LanguageId = languageId
+                )
+            )
+        }
+
+        AddressCreateScreen(
+            addressCascadeState = addressCascadeState,
+            isLoading = accountState.IsLoading && accountState.CurrentAction == "InsertAddress",
+            errorMessage = accountState.AddressInsertResult?.takeIf { !it.Success }?.Message,
             onBackClick = {
+                addressCascadeController.OnEvent(AddressCascadeEvent.Clear)
                 navigator.back()
+            },
+            onCountrySelected = { countryId ->
+                addressCascadeController.OnEvent(
+                    AddressCascadeEvent.SelectCountry(
+                        CountryId = countryId,
+                        LanguageId = languageId
+                    )
+                )
+            },
+            onCountryStateSelected = { countryStateId ->
+                addressCascadeController.OnEvent(
+                    AddressCascadeEvent.SelectCountryState(
+                        CountryStateId = countryStateId,
+                        LanguageId = languageId
+                    )
+                )
+            },
+            onCountryDepartmentSelected = { countryDepartmentId ->
+                addressCascadeController.OnEvent(
+                    AddressCascadeEvent.SelectCountryDepartment(
+                        CountryDepartmentId = countryDepartmentId,
+                        LanguageId = languageId
+                    )
+                )
+            },
+            onCitySelected = { cityId ->
+                addressCascadeController.OnEvent(
+                    AddressCascadeEvent.SelectCity(
+                        CityId = cityId,
+                        LanguageId = languageId
+                    )
+                )
+            },
+            onDistrictSelected = { districtId ->
+                addressCascadeController.OnEvent(
+                    AddressCascadeEvent.SelectDistrict(
+                        DistrictId = districtId
+                    )
+                )
+            },
+            onSaveClick = { model ->
+                accountController.InsertAddress(
+                    memberId = sessionState.MemberId,
+                    model = model,
+                    onSuccess = {
+                        addressCascadeController.OnEvent(AddressCascadeEvent.Clear)
+
+                        navigator.navController.navigate(AccountRoutes.AddressList) {
+                            popUpTo(AccountRoutes.AddressList) {
+                                inclusive = true
+                            }
+
+                            launchSingleTop = true
+                        }
+                    }
+                )
             }
         )
     }
@@ -814,26 +930,130 @@ fun NavGraphBuilder.accountGraph(
     composable(
         route = AccountRoutes.AddressEdit,
         arguments = listOf(
-            navArgument(
-                "addressId"
-            ) {
-                type =
-                    NavType.IntType
+            navArgument("addressKey") {
+                type = NavType.StringType
             }
         )
     ) { backStackEntry ->
-        val addressId =
-            backStackEntry.arguments
-                ?.getInt(
-                    "addressId"
-                )
-                ?: 0
+        val accountState by accountController.State.collectAsState()
+        val addressCascadeState by addressCascadeController.State.collectAsState()
 
-        AddressFormScreen(
-            addressId =
-                addressId,
+        val languageId = when (sessionState.Language) {
+            EApplicationLanguage.Turkish -> 1
+            EApplicationLanguage.English -> 2
+        }
+
+        val addressKey = backStackEntry.arguments?.getString("addressKey").orEmpty()
+
+        val address = accountState.Address?.takeIf {
+            it.AddressKey == addressKey
+        }
+
+        LaunchedEffect(addressKey, sessionState.MemberId) {
+            addressCascadeController.OnEvent(AddressCascadeEvent.Clear)
+
+            accountController.GetAddress(
+                memberId = sessionState.MemberId,
+                addressKey = addressKey
+            )
+        }
+
+        LaunchedEffect(
+            address?.AddressKey,
+            address?.CountryId,
+            address?.CountryStateId,
+            address?.CountryDepartmentId,
+            address?.CityId,
+            address?.DistrictId
+        ) {
+            val currentAddress = address ?: return@LaunchedEffect
+
+            addressCascadeController.OnEvent(
+                AddressCascadeEvent.SetInitialSelection(
+                    Selection = AddressCascadeSelection(
+                        CountryId = currentAddress.CountryId ?: 0,
+                        CountryStateId = currentAddress.CountryStateId ?: 0,
+                        CountryDepartmentId = currentAddress.CountryDepartmentId,
+                        CityId = currentAddress.CityId ?: 0,
+                        DistrictId = currentAddress.DistrictId
+                    ),
+                    LanguageId = languageId
+                )
+            )
+        }
+
+        AddressEditScreen(
+            address = address,
+            addressCascadeState = addressCascadeState,
+            isLoading = accountState.IsLoading && (
+                    accountState.CurrentAction == "GetAddress" ||
+                            accountState.CurrentAction == "UpdateAddress"
+                    ),
+            errorMessage = accountState.AddressDetailResult
+                ?.takeIf { !it.Success }
+                ?.Message
+                ?: accountState.AddressUpdateResult
+                    ?.takeIf { !it.Success }
+                    ?.Message,
             onBackClick = {
+                addressCascadeController.OnEvent(AddressCascadeEvent.Clear)
                 navigator.back()
+            },
+            onCountrySelected = { countryId ->
+                addressCascadeController.OnEvent(
+                    AddressCascadeEvent.SelectCountry(
+                        CountryId = countryId,
+                        LanguageId = languageId
+                    )
+                )
+            },
+            onCountryStateSelected = { countryStateId ->
+                addressCascadeController.OnEvent(
+                    AddressCascadeEvent.SelectCountryState(
+                        CountryStateId = countryStateId,
+                        LanguageId = languageId
+                    )
+                )
+            },
+            onCountryDepartmentSelected = { countryDepartmentId ->
+                addressCascadeController.OnEvent(
+                    AddressCascadeEvent.SelectCountryDepartment(
+                        CountryDepartmentId = countryDepartmentId,
+                        LanguageId = languageId
+                    )
+                )
+            },
+            onCitySelected = { cityId ->
+                addressCascadeController.OnEvent(
+                    AddressCascadeEvent.SelectCity(
+                        CityId = cityId,
+                        LanguageId = languageId
+                    )
+                )
+            },
+            onDistrictSelected = { districtId ->
+                addressCascadeController.OnEvent(
+                    AddressCascadeEvent.SelectDistrict(
+                        DistrictId = districtId
+                    )
+                )
+            },
+            onSaveClick = { model ->
+                accountController.UpdateAddress(
+                    memberId = sessionState.MemberId,
+                    model = model,
+                    onSuccess = {
+                        addressCascadeController.OnEvent(AddressCascadeEvent.Clear)
+
+                        navigator.navController.navigate(AccountRoutes.AddressList) {
+                            popUpTo(AccountRoutes.AddressList) {
+                                inclusive = true
+                            }
+
+                            launchSingleTop = true
+                        }
+                    }
+                )
             }
         )
     }

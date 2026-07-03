@@ -125,24 +125,22 @@ object WholesaleRoutes {
 }
 
 object RfqRoutes {
-    const val List = "wholesale/rfq/list"
-    const val Create = "wholesale/rfq/create"
-    const val Detail = "wholesale/rfq/detail/{buyerRequestId}"
-    const val OfferDetail = "wholesale/rfq/offer-detail/{buyerRequestId}/{sendedOfferId}"
 
-    const val ArgBuyerRequestId = "buyerRequestId"
+    const val List = "wholesale/rfq"
+    const val Create = "wholesale/rfq/create"
+
+    const val ArgBuyerRequestKey = "buyerRequestKey"
     const val ArgSendedOfferId = "sendedOfferId"
 
-    fun detail(buyerRequestId: Int): String {
-        return "wholesale/rfq/detail/$buyerRequestId"
-    }
+    const val Detail = "wholesale/rfq/detail/{$ArgBuyerRequestKey}"
+    const val Offers = "wholesale/rfq/offers/{$ArgBuyerRequestKey}"
+    const val OfferDetail = "wholesale/rfq/offer/{$ArgSendedOfferId}"
 
-    fun offerDetail(
-        buyerRequestId: Int,
-        sendedOfferId: Int
-    ): String {
-        return "wholesale/rfq/offer-detail/$buyerRequestId/$sendedOfferId"
-    }
+    fun detail(buyerRequestKey: String): String = "wholesale/rfq/detail/$buyerRequestKey"
+
+    fun offers(buyerRequestKey: String): String = "wholesale/rfq/offers/$buyerRequestKey"
+
+    fun offerDetail(sendedOfferId: Int): String = "wholesale/rfq/offer/$sendedOfferId"
 }
 
 object OrderRoutes {
@@ -222,10 +220,10 @@ object AccountRoutes {
 
     const val AddressList = "account/address"
     const val AddressCreate = "account/address/create"
-    const val AddressEdit = "account/address/edit/{addressId}"
+    const val AddressEdit = "account/address/edit/{addressKey}"
 
-    fun editAddress(addressId: Int): String {
-        return "account/address/edit/$addressId"
+    fun editAddress(addressKey: String): String {
+        return "account/address/edit/$addressKey"
     }
 
     const val Notifications = "account/notifications"

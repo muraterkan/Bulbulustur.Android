@@ -2,6 +2,7 @@ package com.bulbulustur.android.Application.Areas.b2b.Views.Rfq
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -10,12 +11,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Business
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Handshake
-import androidx.compose.material.icons.outlined.Message
-import androidx.compose.material.icons.outlined.RequestQuote
+import androidx.compose.material.icons.outlined.KeyboardArrowRight
+import androidx.compose.material.icons.outlined.LocalOffer
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -32,25 +34,26 @@ import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
+import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BbTypography
 import com.bulbulustur.android.businesslayer.Core.DTO.SendedOfferDTO
 
 @Composable
-fun RfqOfferDetailScreen(
-    offer: SendedOfferDTO?,
+fun RfqOffersScreen(
+    buyerRequestKey: String,
+    offers: List<SendedOfferDTO>,
     isLoading: Boolean = false,
     errorMessage: String? = null,
     onBackClick: () -> Unit = {},
-    onSellerClick: () -> Unit = {},
-    onMessageClick: () -> Unit = {},
+    onOfferClick: (Int) -> Unit = {},
     onRetryClick: () -> Unit = {}
 ) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "Teklif Detayı",
+                title = "Gelen Teklifler",
                 onBackClick = onBackClick
             )
         }
@@ -68,45 +71,43 @@ fun RfqOfferDetailScreen(
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
+            item {
+                RfqOffersSummaryCard(
+                    buyerRequestKey = buyerRequestKey,
+                    offerCount = offers.size
+                )
+            }
+
             when {
-                isLoading && offer == null -> {
+                isLoading && offers.isEmpty() -> {
                     item {
-                        RfqOfferDetailLoadingCard()
+                        RfqOffersLoadingCard()
                     }
                 }
 
-                !errorMessage.isNullOrBlank() && offer == null -> {
+                !errorMessage.isNullOrBlank() && offers.isEmpty() -> {
                     item {
-                        RfqOfferDetailErrorCard(
+                        RfqOffersErrorCard(
                             message = errorMessage,
                             onRetryClick = onRetryClick
                         )
                     }
                 }
 
-                offer == null -> {
+                offers.isEmpty() -> {
                     item {
-                        RfqOfferDetailEmptyCard()
+                        RfqOffersEmptyCard()
                     }
                 }
 
                 else -> {
-                    item {
-                        RfqOfferSummaryCard(offer = offer)
-                    }
-
-                    item {
-                        RfqOfferInfoCard(offer = offer)
-                    }
-
-                    item {
-                        RfqOfferMessageCard(offer = offer)
-                    }
-
-                    item {
-                        RfqOfferActionCard(
-                            onSellerClick = onSellerClick,
-                            onMessageClick = onMessageClick
+                    items(
+                        items = offers,
+                        key = { offer -> offer.SendedOfferId }
+                    ) { offer ->
+                        RfqOfferListCard(
+                            offer = offer,
+                            onOfferClick = onOfferClick
                         )
                     }
                 }
@@ -116,7 +117,10 @@ fun RfqOfferDetailScreen(
 }
 
 @Composable
-private fun RfqOfferSummaryCard(offer: SendedOfferDTO) {
+private fun RfqOffersSummaryCard(
+    buyerRequestKey: String,
+    offerCount: Int
+) {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
@@ -125,34 +129,131 @@ private fun RfqOfferSummaryCard(offer: SendedOfferDTO) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
-            verticalAlignment = Alignment.Top
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = Icons.Outlined.Handshake,
-                contentDescription = null,
-                tint = BBColors.Yellow.Yellow800,
-                modifier = Modifier.size(BBIcon.Section)
-            )
+            Box(
+                modifier = Modifier
+                    .size(BBIcon.BoxMd)
+                    .background(
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        shape = BBRadius.MdShape
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.LocalOffer,
+                    contentDescription = null,
+                    tint = BBColors.Yellow.Yellow800,
+                    modifier = Modifier.size(BBIcon.Section)
+                )
+            }
 
             Column(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Satıcı Teklifi",
-                    style = BbTypography.labelSmall,
-                    color = BBColors.Yellow.Yellow800
-                )
-
-                Text(
-                    text = offer.Seller.ifBlank { "Satıcı" },
+                    text = "Teklifler",
                     style = BbTypography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = "RFQ No: ${offer.BuyerRequestId} · Teklif No: ${offer.SendedOfferId}",
+                    text = "RFQ: $buyerRequestKey",
                     style = BbTypography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            Text(
+                text = offerCount.toString(),
+                style = BbTypography.titleMedium,
+                color = BBColors.Yellow.Yellow800
+            )
+        }
+    }
+}
+
+@Composable
+private fun RfqOfferListCard(
+    offer: SendedOfferDTO,
+    onOfferClick: (Int) -> Unit
+) {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium,
+        onClick = {
+            onOfferClick(offer.SendedOfferId)
+        }
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+                verticalAlignment = Alignment.Top
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(BBIcon.BoxMd)
+                        .background(
+                            color = MaterialTheme.colorScheme.primaryContainer,
+                            shape = BBRadius.MdShape
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Handshake,
+                        contentDescription = null,
+                        tint = BBColors.Yellow.Yellow800,
+                        modifier = Modifier.size(BBIcon.Section)
+                    )
+                }
+
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+                ) {
+                    Text(
+                        text = offer.Seller.ifBlank { "Satıcı" },
+                        style = BbTypography.titleSmall,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+
+                    Text(
+                        text = "Teklif No: ${offer.SendedOfferId}",
+                        style = BbTypography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+
+                Icon(
+                    imageVector = Icons.Outlined.KeyboardArrowRight,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(BBIcon.Action)
+                )
+            }
+
+            RfqOfferListInfoRow(
+                icon = Icons.Outlined.Business,
+                title = "Satıcı",
+                value = offer.Seller.ifBlank { "-" }
+            )
+
+            RfqOfferListInfoRow(
+                icon = Icons.Outlined.CalendarMonth,
+                title = "Gönderim Tarihi",
+                value = offer.InsertedDate.ifBlank { "-" }
+            )
+
+            if (offer.OfferDetail.isNotBlank()) {
+                Text(
+                    text = offer.OfferDetail,
+                    style = BbTypography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
@@ -161,71 +262,7 @@ private fun RfqOfferSummaryCard(offer: SendedOfferDTO) {
 }
 
 @Composable
-private fun RfqOfferInfoCard(offer: SendedOfferDTO) {
-    BbCard(
-        modifier = Modifier.fillMaxWidth(),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium
-    ) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
-        ) {
-            RfqOfferInfoRow(
-                icon = Icons.Outlined.Business,
-                title = "Satıcı",
-                value = offer.Seller.ifBlank { "-" }
-            )
-
-            RfqOfferInfoRow(
-                icon = Icons.Outlined.CalendarMonth,
-                title = "Gönderim Tarihi",
-                value = offer.InsertedDate.ifBlank { "-" }
-            )
-
-            RfqOfferInfoRow(
-                icon = Icons.Outlined.RequestQuote,
-                title = "Bağlı RFQ",
-                value = "RFQ-${offer.BuyerRequestId}"
-            )
-
-            RfqOfferInfoRow(
-                icon = Icons.Outlined.Handshake,
-                title = "Teklif Durumu",
-                value = offer.StatusId.toString()
-            )
-        }
-    }
-}
-
-@Composable
-private fun RfqOfferMessageCard(offer: SendedOfferDTO) {
-    BbCard(
-        modifier = Modifier.fillMaxWidth(),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium
-    ) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
-        ) {
-            Text(
-                text = "Teklif Açıklaması",
-                style = BbTypography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-
-            Text(
-                text = offer.OfferDetail.ifBlank { "Teklif açıklaması bulunmuyor." },
-                style = BbTypography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-    }
-}
-
-@Composable
-private fun RfqOfferInfoRow(
+private fun RfqOfferListInfoRow(
     icon: androidx.compose.ui.graphics.vector.ImageVector,
     title: String,
     value: String
@@ -238,7 +275,7 @@ private fun RfqOfferInfoRow(
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = BBColors.Yellow.Yellow800,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.size(BBIcon.Ui)
         )
 
@@ -262,61 +299,14 @@ private fun RfqOfferInfoRow(
 }
 
 @Composable
-private fun RfqOfferActionCard(
-    onSellerClick: () -> Unit,
-    onMessageClick: () -> Unit
-) {
-    BbCard(
-        modifier = Modifier.fillMaxWidth(),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium
-    ) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
-        ) {
-            BbButton(
-                text = "Satıcıyı Gör",
-                onClick = onSellerClick,
-                modifier = Modifier.fillMaxWidth(),
-                variant = BbButtonVariant.Light,
-                size = BbButtonSize.Medium,
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Outlined.Business,
-                        contentDescription = null,
-                        modifier = Modifier.size(BBIcon.ButtonIcon)
-                    )
-                }
-            )
-
-            BbButton(
-                text = "Mesaj Gönder",
-                onClick = onMessageClick,
-                modifier = Modifier.fillMaxWidth(),
-                variant = BbButtonVariant.Primary,
-                size = BbButtonSize.Medium,
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Outlined.Message,
-                        contentDescription = null,
-                        modifier = Modifier.size(BBIcon.ButtonIcon)
-                    )
-                }
-            )
-        }
-    }
-}
-
-@Composable
-private fun RfqOfferDetailLoadingCard() {
+private fun RfqOffersLoadingCard() {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Teklif detayı yükleniyor...",
+            text = "Teklifler yükleniyor...",
             style = BbTypography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -324,7 +314,7 @@ private fun RfqOfferDetailLoadingCard() {
 }
 
 @Composable
-private fun RfqOfferDetailErrorCard(
+private fun RfqOffersErrorCard(
     message: String,
     onRetryClick: () -> Unit
 ) {
@@ -340,7 +330,7 @@ private fun RfqOfferDetailErrorCard(
             Text(
                 text = message,
                 style = BbTypography.bodySmall,
-                color = MaterialTheme.colorScheme.error
+                color = BBColors.Red.Red600
             )
 
             BbButton(
@@ -355,16 +345,45 @@ private fun RfqOfferDetailErrorCard(
 }
 
 @Composable
-private fun RfqOfferDetailEmptyCard() {
+private fun RfqOffersEmptyCard() {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
         padding = BbCardPadding.Medium
     ) {
-        Text(
-            text = "Teklif kaydı bulunamadı.",
-            style = BbTypography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(BBIcon.BoxLg)
+                    .background(
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        shape = BBRadius.LgShape
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.LocalOffer,
+                    contentDescription = null,
+                    tint = BBColors.Yellow.Yellow800,
+                    modifier = Modifier.size(BBIcon.Section)
+                )
+            }
+
+            Text(
+                text = "Henüz Teklif Yok",
+                style = BbTypography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
+            Text(
+                text = "Bu fiyat teklifi isteğine henüz satıcı teklifi gönderilmedi.",
+                style = BbTypography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
     }
 }

@@ -8,5 +8,7 @@ data class SendedOfferDTO(
     val BuyerRequestId: Int = 0,
     val BuyerRequestKey: String = "",
     val AssignedToSellerId: Int = 0,
-    val OfferDetail: String = ""
+    val OfferDetail: String = "",
+    val Seller: String = "",
+    val Buyer: String = ""
 )

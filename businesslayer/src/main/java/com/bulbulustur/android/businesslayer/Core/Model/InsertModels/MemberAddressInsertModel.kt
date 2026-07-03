@@ -1,18 +1,14 @@
 ﻿package com.bulbulustur.android.businesslayer.Core.Model.InsertModels
 
 data class MemberAddressInsertModel(
-    val InsertedBy: Int = 0,
-    val InsertedDate: String = "",
-    val StatusId: Int = 0,
     val Ecommerce: Int = 0,
-    val MemberId: Int = 0,
     val AddressTitle: String = "",
     val Name: String = "",
     val Surname: String = "",
-    val CountryId: Int? = null,
-    val CountryStateId: Int? = null,
+    val CountryId: Int = 0,
+    val CountryStateId: Int = 0,
     val CountryDepartmentId: Int? = null,
-    val CityId: Int? = null,
+    val CityId: Int = 0,
     val DistrictId: Int? = null,
     val PostCode: String = "",
     val Address: String = "",

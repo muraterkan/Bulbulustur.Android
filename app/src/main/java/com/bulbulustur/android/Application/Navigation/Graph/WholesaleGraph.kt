@@ -1,9 +1,13 @@
 package com.bulbulustur.android.Application.Navigation.Graph
 
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.bulbulustur.android.Application.Areas.b2b.Controllers.RfqController
 import com.bulbulustur.android.Application.Areas.b2b.Views.Category.CategoryDetailScreen as WholesaleCategoryDetailScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Category.WholesaleCategoryHomeScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Home.WholesaleHomeScreen
@@ -13,23 +17,24 @@ import com.bulbulustur.android.Application.Areas.b2b.Views.Rfq.RfqCreateScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Rfq.RfqDetailScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Rfq.RfqListScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Rfq.RfqOfferDetailScreen
+import com.bulbulustur.android.Application.Areas.b2b.Views.Rfq.RfqOffersScreen
 import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
 import com.bulbulustur.android.Application.Navigation.Routes.AccountRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.CompanyRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.RfqRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.WholesaleRoutes
+import com.bulbulustur.android.Application.Session.UserSessionState
+import com.bulbulustur.android.businesslayer.Core.Enums.EApplicationLanguage
 
 fun NavGraphBuilder.wholesaleGraph(
-    navigator: BulbulusturNavigator
+    navigator: BulbulusturNavigator,
+    sessionState: UserSessionState,
+    rfqController: RfqController
 ) {
-    composable(
-        route = WholesaleRoutes.Home
-    ) {
+    composable(route = WholesaleRoutes.Home) {
         WholesaleHomeScreen(
             onSearchClick = {
-                navigator.navController.navigate(
-                    WholesaleRoutes.Search
-                )
+                navigator.navController.navigate(WholesaleRoutes.Search)
             },
             onMenuClick = {
                 navigator.navigateToWholesaleCategories()
@@ -38,47 +43,31 @@ fun NavGraphBuilder.wholesaleGraph(
                 navigator.navigateToWholesaleCategories()
             },
             onProductListClick = {
-                navigator.navController.navigate(
-                    WholesaleRoutes.ProductList
-                )
+                navigator.navController.navigate(WholesaleRoutes.ProductList)
             },
             onProductDetailClick = {
-                navigator.navController.navigate(
-                    WholesaleRoutes.ProductDetail
-                )
+                navigator.navController.navigate(WholesaleRoutes.ProductDetail)
             },
             onRfqListClick = {
-                navigator.navController.navigate(
-                    RfqRoutes.List
-                )
+                navigator.navController.navigate(RfqRoutes.List)
             },
             onRfqCreateClick = {
-                navigator.navController.navigate(
-                    RfqRoutes.Create
-                )
+                navigator.navController.navigate(RfqRoutes.Create)
             },
             onLastPriceRequestClick = {
-                navigator.navController.navigate(
-                    RfqRoutes.Create
-                )
+                navigator.navController.navigate(RfqRoutes.Create)
             },
             onSampleRequestClick = {
-                navigator.navController.navigate(
-                    RfqRoutes.Create
-                )
+                navigator.navController.navigate(RfqRoutes.Create)
             },
             onCustomizationRequestClick = {
-                navigator.navController.navigate(
-                    RfqRoutes.Create
-                )
+                navigator.navController.navigate(RfqRoutes.Create)
             },
             onModeSwitchClick = {
                 navigator.openModeSheet()
             },
             onFavoriteClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.Favorites
-                )
+                navigator.navController.navigate(AccountRoutes.Favorites)
             },
             onMessageClick = {
                 navigator.navigateToInbox()
@@ -89,33 +78,25 @@ fun NavGraphBuilder.wholesaleGraph(
         )
     }
 
-    composable(
-        route = WholesaleRoutes.CategoryHome
-    ) {
+    composable(route = WholesaleRoutes.CategoryHome) {
         WholesaleCategoryHomeScreen(
             onBackClick = {
                 navigator.back()
             },
             onSearchClick = {
-                navigator.navController.navigate(
-                    WholesaleRoutes.Search
-                )
+                navigator.navController.navigate(WholesaleRoutes.Search)
             },
             onMenuClick = {
                 navigator.navigateToWholesaleCategories()
             },
             onFavoriteClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.Favorites
-                )
+                navigator.navController.navigate(AccountRoutes.Favorites)
             },
             onMessageClick = {
                 navigator.navigateToInbox()
             },
             onHomeClick = {
-                navigator.navController.navigate(
-                    WholesaleRoutes.Home
-                ) {
+                navigator.navController.navigate(WholesaleRoutes.Home) {
                     launchSingleTop = true
                 }
             },
@@ -123,49 +104,33 @@ fun NavGraphBuilder.wholesaleGraph(
                 navigator.openModeSheet()
             },
             onBasketClick = {
-                navigator.navController.navigate(
-                    RfqRoutes.List
-                )
+                navigator.navController.navigate(RfqRoutes.List)
             },
             onAccountClick = {
                 navigator.navigateToAccount()
             },
             onProductListClick = {
-                navigator.navController.navigate(
-                    WholesaleRoutes.ProductList
-                )
+                navigator.navController.navigate(WholesaleRoutes.ProductList)
             },
             onSubCategoryClick = {
                 navigator.navController.navigate(
-                    WholesaleRoutes.categoryDetail(
-                        categoryId = 1
-                    )
+                    WholesaleRoutes.categoryDetail(categoryId = 1)
                 )
             },
             onCompanyListClick = {
-                navigator.navController.navigate(
-                    CompanyRoutes.CompanyList
-                )
+                navigator.navController.navigate(CompanyRoutes.CompanyList)
             },
             onRfqClick = {
-                navigator.navController.navigate(
-                    RfqRoutes.Create
-                )
+                navigator.navController.navigate(RfqRoutes.Create)
             },
             onLastPriceRequestClick = {
-                navigator.navController.navigate(
-                    RfqRoutes.Create
-                )
+                navigator.navController.navigate(RfqRoutes.Create)
             },
             onSampleRequestClick = {
-                navigator.navController.navigate(
-                    RfqRoutes.Create
-                )
+                navigator.navController.navigate(RfqRoutes.Create)
             },
             onCustomizationRequestClick = {
-                navigator.navController.navigate(
-                    RfqRoutes.Create
-                )
+                navigator.navController.navigate(RfqRoutes.Create)
             }
         )
     }
@@ -173,17 +138,13 @@ fun NavGraphBuilder.wholesaleGraph(
     composable(
         route = WholesaleRoutes.CategoryDetail,
         arguments = listOf(
-            navArgument(
-                name = WholesaleRoutes.ArgCategoryId
-            ) {
+            navArgument(WholesaleRoutes.ArgCategoryId) {
                 type = NavType.IntType
             }
         )
     ) { backStackEntry ->
         val categoryId = backStackEntry.arguments
-            ?.getInt(
-                WholesaleRoutes.ArgCategoryId
-            )
+            ?.getInt(WholesaleRoutes.ArgCategoryId)
             ?: return@composable
 
         WholesaleCategoryDetailScreen(
@@ -193,58 +154,40 @@ fun NavGraphBuilder.wholesaleGraph(
             },
             onSubCategoryClick = { subCategoryId ->
                 navigator.navController.navigate(
-                    WholesaleRoutes.categoryDetail(
-                        categoryId = subCategoryId
-                    )
+                    WholesaleRoutes.categoryDetail(categoryId = subCategoryId)
                 )
             },
             onProductListClick = {
-                navigator.navController.navigate(
-                    WholesaleRoutes.ProductList
-                )
+                navigator.navController.navigate(WholesaleRoutes.ProductList)
             },
             onCompanyListClick = {
-                navigator.navController.navigate(
-                    CompanyRoutes.CompanyList
-                )
+                navigator.navController.navigate(CompanyRoutes.CompanyList)
             },
             onRfqCreateClick = {
-                navigator.navController.navigate(
-                    RfqRoutes.Create
-                )
+                navigator.navController.navigate(RfqRoutes.Create)
             },
             onPopularProductGroupClick = { _, _ ->
-                navigator.navController.navigate(
-                    WholesaleRoutes.ProductList
-                )
+                navigator.navController.navigate(WholesaleRoutes.ProductList)
             }
         )
     }
 
-    composable(
-        route = WholesaleRoutes.ProductList
-    ) {
+    composable(route = WholesaleRoutes.ProductList) {
         WholesaleProductListScreen(
             onBackClick = {
                 navigator.back()
             },
             onSearchClick = {
-                navigator.navController.navigate(
-                    WholesaleRoutes.Search
-                )
+                navigator.navController.navigate(WholesaleRoutes.Search)
             },
             onFavoriteClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.Favorites
-                )
+                navigator.navController.navigate(AccountRoutes.Favorites)
             },
             onMessageClick = {
                 navigator.navigateToInbox()
             },
             onHomeClick = {
-                navigator.navController.navigate(
-                    WholesaleRoutes.Home
-                ) {
+                navigator.navController.navigate(WholesaleRoutes.Home) {
                     launchSingleTop = true
                 }
             },
@@ -255,32 +198,22 @@ fun NavGraphBuilder.wholesaleGraph(
                 navigator.openModeSheet()
             },
             onBasketClick = {
-                navigator.navController.navigate(
-                    RfqRoutes.List
-                )
+                navigator.navController.navigate(RfqRoutes.List)
             },
             onAccountClick = {
                 navigator.navigateToAccount()
             },
             onProductDetailClick = {
-                navigator.navController.navigate(
-                    WholesaleRoutes.ProductDetail
-                )
+                navigator.navController.navigate(WholesaleRoutes.ProductDetail)
             },
-            onProductFavoriteClick = {
-                // API entegrasyonunda favori işlemi bağlanacak.
-            },
+            onProductFavoriteClick = {},
             onRfqClick = {
-                navigator.navController.navigate(
-                    RfqRoutes.Create
-                )
+                navigator.navController.navigate(RfqRoutes.Create)
             }
         )
     }
 
-    composable(
-        route = WholesaleRoutes.ProductDetail
-    ) {
+    composable(route = WholesaleRoutes.ProductDetail) {
         WholesaleProductDetailScreen(
             onBackClick = {
                 navigator.back()
@@ -288,44 +221,64 @@ fun NavGraphBuilder.wholesaleGraph(
         )
     }
 
-    composable(
-        route = RfqRoutes.List
-    ) {
+    composable(route = RfqRoutes.List) {
+        val rfqState by rfqController.State.collectAsState()
+
+        LaunchedEffect(sessionState.MemberId) {
+            rfqController.GetBuyerRequests(
+                memberId = sessionState.MemberId
+            )
+        }
+
         RfqListScreen(
+            requests = rfqState.BuyerRequests,
+            isLoading = rfqState.IsLoading && (
+                    rfqState.CurrentAction == "GetBuyerRequests" ||
+                            rfqState.CurrentAction == "DeleteBuyerRequest"
+                    ),
+            errorMessage = rfqState.BuyerRequestListResult
+                ?.takeIf { !it.Success }
+                ?.Message
+                ?: rfqState.BuyerRequestDeleteResult
+                    ?.takeIf { !it.Success }
+                    ?.Message,
+            deletingBuyerRequestKey = null,
             onBackClick = {
                 navigator.back()
             },
             onDiscoverWholesaleClick = {
+                navigator.navController.navigate(WholesaleRoutes.ProductList)
+            },
+            onOffersClick = { buyerRequestKey ->
                 navigator.navController.navigate(
-                    WholesaleRoutes.ProductList
+                    RfqRoutes.offers(buyerRequestKey)
                 )
             },
-            onOffersClick = { buyerRequestId ->
+            onDetailClick = { buyerRequestKey ->
                 navigator.navController.navigate(
-                    RfqRoutes.detail(
-                        buyerRequestId = buyerRequestId
-                    )
+                    RfqRoutes.detail(buyerRequestKey)
                 )
             },
-            onDetailClick = { buyerRequestId ->
-                navigator.navController.navigate(
-                    RfqRoutes.detail(
-                        buyerRequestId = buyerRequestId
-                    )
+            onDeleteClick = { buyerRequestKey ->
+                rfqController.DeleteBuyerRequest(
+                    buyerRequestKey = buyerRequestKey,
+                    onSuccess = {
+                        rfqController.GetBuyerRequests(
+                            memberId = sessionState.MemberId
+                        )
+                    }
                 )
-            },
-            onDeleteClick = {
-                // API entegrasyonunda silme işlemi bağlanacak.
             },
             onCreateRfqClick = {
-                navigator.navController.navigate(
-                    RfqRoutes.Create
+                navigator.navController.navigate(RfqRoutes.Create)
+            },
+            onRetryClick = {
+                rfqController.GetBuyerRequests(
+                    memberId = sessionState.MemberId
                 )
             },
             onHomeClick = {
-                navigator.navController.navigate(
-                    WholesaleRoutes.Home
-                ) {
+                navigator.navController.navigate(WholesaleRoutes.Home) {
                     launchSingleTop = true
                 }
             },
@@ -336,9 +289,7 @@ fun NavGraphBuilder.wholesaleGraph(
                 navigator.openModeSheet()
             },
             onBasketClick = {
-                navigator.navController.navigate(
-                    RfqRoutes.List
-                ) {
+                navigator.navController.navigate(RfqRoutes.List) {
                     launchSingleTop = true
                 }
             },
@@ -348,12 +299,58 @@ fun NavGraphBuilder.wholesaleGraph(
         )
     }
 
-    composable(
-        route = RfqRoutes.Create
-    ) {
+    composable(route = RfqRoutes.Create) {
+        val rfqState by rfqController.State.collectAsState()
+
+        val languageId = when (sessionState.Language) {
+            EApplicationLanguage.Turkish -> 1
+            EApplicationLanguage.English -> 2
+        }
+
+        LaunchedEffect(languageId) {
+            rfqController.ClearInsertResult()
+            rfqController.LoadCreateOptions(languageId)
+        }
+
         RfqCreateScreen(
+            memberId = sessionState.MemberId,
+            productCategories = rfqState.ProductCategories,
+            units = rfqState.Units,
+            currencies = rfqState.Currencies,
+            colors = rfqState.Colors,
+            materialTypes = rfqState.MaterialTypes,
+            paymentTerms = rfqState.PaymentTerms,
+            tradeTerms = rfqState.TradeTerms,
+            isOptionsLoading = rfqState.IsCreateOptionsLoading,
+            isSubmitting = rfqState.IsLoading &&
+                    rfqState.CurrentAction == "InsertBuyerRequest",
+            errorMessage = rfqState.CreateOptionsErrorMessage
+                ?: rfqState.BuyerRequestInsertResult
+                    ?.takeIf { !it.Success }
+                    ?.Message,
             onBackClick = {
                 navigator.back()
+            },
+            onRetryOptionsClick = {
+                rfqController.LoadCreateOptions(languageId)
+            },
+            onSendClick = { model ->
+                rfqController.InsertBuyerRequest(
+                    model = model,
+                    onSuccess = {
+                        rfqController.GetBuyerRequests(
+                            memberId = sessionState.MemberId
+                        )
+
+                        navigator.navController.navigate(RfqRoutes.List) {
+                            popUpTo(RfqRoutes.Create) {
+                                inclusive = true
+                            }
+
+                            launchSingleTop = true
+                        }
+                    }
+                )
             }
         )
     }
@@ -361,35 +358,96 @@ fun NavGraphBuilder.wholesaleGraph(
     composable(
         route = RfqRoutes.Detail,
         arguments = listOf(
-            navArgument(
-                name = RfqRoutes.ArgBuyerRequestId
-            ) {
-                type = NavType.IntType
+            navArgument(RfqRoutes.ArgBuyerRequestKey) {
+                type = NavType.StringType
             }
         )
     ) { backStackEntry ->
-        val buyerRequestId = backStackEntry.arguments
-            ?.getInt(
-                RfqRoutes.ArgBuyerRequestId
-            )
-            ?: return@composable
+        val rfqState by rfqController.State.collectAsState()
+
+        val buyerRequestKey = backStackEntry.arguments
+            ?.getString(RfqRoutes.ArgBuyerRequestKey)
+            .orEmpty()
+
+        LaunchedEffect(buyerRequestKey) {
+            rfqController.ClearBuyerRequestDetail()
+
+            if (buyerRequestKey.isNotBlank()) {
+                rfqController.GetBuyerRequest(
+                    buyerRequestKey = buyerRequestKey
+                )
+            }
+        }
 
         RfqDetailScreen(
-            buyerRequestId = buyerRequestId,
+            buyerRequest = rfqState.BuyerRequest,
+            isLoading = rfqState.IsLoading &&
+                    rfqState.CurrentAction == "GetBuyerRequest",
+            errorMessage = rfqState.BuyerRequestDetailResult
+                ?.takeIf { !it.Success }
+                ?.Message,
+            onBackClick = {
+                navigator.back()
+            },
+            onOffersClick = {
+                if (buyerRequestKey.isNotBlank()) {
+                    navigator.navController.navigate(
+                        RfqRoutes.offers(buyerRequestKey)
+                    )
+                }
+            },
+            onCreateRfqClick = {
+                navigator.navController.navigate(RfqRoutes.Create)
+            },
+            onRetryClick = {
+                rfqController.GetBuyerRequest(
+                    buyerRequestKey = buyerRequestKey
+                )
+            }
+        )
+    }
+
+    composable(
+        route = RfqRoutes.Offers,
+        arguments = listOf(
+            navArgument(RfqRoutes.ArgBuyerRequestKey) {
+                type = NavType.StringType
+            }
+        )
+    ) { backStackEntry ->
+        val rfqState by rfqController.State.collectAsState()
+
+        val buyerRequestKey = backStackEntry.arguments
+            ?.getString(RfqRoutes.ArgBuyerRequestKey)
+            .orEmpty()
+
+        LaunchedEffect(buyerRequestKey) {
+            if (buyerRequestKey.isNotBlank()) {
+                rfqController.GetSendedOffers(
+                    buyerRequestKey = buyerRequestKey
+                )
+            }
+        }
+
+        RfqOffersScreen(
+            buyerRequestKey = buyerRequestKey,
+            offers = rfqState.SendedOffers,
+            isLoading = rfqState.IsLoading &&
+                    rfqState.CurrentAction == "GetSendedOffers",
+            errorMessage = rfqState.SendedOfferListResult
+                ?.takeIf { !it.Success }
+                ?.Message,
             onBackClick = {
                 navigator.back()
             },
             onOfferClick = { sendedOfferId ->
                 navigator.navController.navigate(
-                    RfqRoutes.offerDetail(
-                        buyerRequestId = buyerRequestId,
-                        sendedOfferId = sendedOfferId
-                    )
+                    RfqRoutes.offerDetail(sendedOfferId)
                 )
             },
-            onCreateRfqClick = {
-                navigator.navController.navigate(
-                    RfqRoutes.Create
+            onRetryClick = {
+                rfqController.GetSendedOffers(
+                    buyerRequestKey = buyerRequestKey
                 )
             }
         )
@@ -398,33 +456,29 @@ fun NavGraphBuilder.wholesaleGraph(
     composable(
         route = RfqRoutes.OfferDetail,
         arguments = listOf(
-            navArgument(
-                name = RfqRoutes.ArgBuyerRequestId
-            ) {
-                type = NavType.IntType
-            },
-            navArgument(
-                name = RfqRoutes.ArgSendedOfferId
-            ) {
+            navArgument(RfqRoutes.ArgSendedOfferId) {
                 type = NavType.IntType
             }
         )
     ) { backStackEntry ->
-        val buyerRequestId = backStackEntry.arguments
-            ?.getInt(
-                RfqRoutes.ArgBuyerRequestId
-            )
-            ?: return@composable
+        val rfqState by rfqController.State.collectAsState()
 
         val sendedOfferId = backStackEntry.arguments
-            ?.getInt(
-                RfqRoutes.ArgSendedOfferId
-            )
+            ?.getInt(RfqRoutes.ArgSendedOfferId)
             ?: return@composable
 
+        LaunchedEffect(sendedOfferId) {
+            rfqController.ClearSendedOfferDetail()
+            rfqController.GetSendedOffer(sendedOfferId)
+        }
+
         RfqOfferDetailScreen(
-            buyerRequestId = buyerRequestId,
-            sendedOfferId = sendedOfferId,
+            offer = rfqState.SendedOffer,
+            isLoading = rfqState.IsLoading &&
+                    rfqState.CurrentAction == "GetSendedOffer",
+            errorMessage = rfqState.SendedOfferDetailResult
+                ?.takeIf { !it.Success }
+                ?.Message,
             onBackClick = {
                 navigator.back()
             },
@@ -435,6 +489,9 @@ fun NavGraphBuilder.wholesaleGraph(
             },
             onMessageClick = {
                 navigator.navigateToInbox()
+            },
+            onRetryClick = {
+                rfqController.GetSendedOffer(sendedOfferId)
             }
         )
     }

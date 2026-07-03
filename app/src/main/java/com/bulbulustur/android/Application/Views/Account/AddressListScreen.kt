@@ -26,28 +26,32 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
-import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BbTypography
+import com.bulbulustur.android.businesslayer.Core.DTO.MemberAddressDTO
 
 @Composable
 fun AddressListScreen(
+    addresses: List<MemberAddressDTO>,
+    isLoading: Boolean = false,
+    errorMessage: String? = null,
+    deletingAddressId: Int? = null,
     onBackClick: () -> Unit = {},
     onCreateAddressClick: () -> Unit = {},
-    onEditAddressClick: (Int) -> Unit = {},
-    onDeleteAddressClick: (Int) -> Unit = {}
+    onEditAddressClick: (String) -> Unit = {},
+    onDeleteAddressClick: (Int) -> Unit = {},
+    onRetryClick: () -> Unit = {}
 ) {
-    val addresses = getDemoAddresses()
-
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
@@ -73,20 +77,42 @@ fun AddressListScreen(
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
+            if (isLoading && addresses.isEmpty()) {
+                item {
+                    AddressLoadingState()
+                }
+
+                return@LazyColumn
+            }
+
+            if (!errorMessage.isNullOrBlank() && addresses.isEmpty()) {
+                item {
+                    AddressErrorState(
+                        message = errorMessage,
+                        onRetryClick = onRetryClick
+                    )
+                }
+
+                return@LazyColumn
+            }
+
             if (addresses.isEmpty()) {
                 item {
                     AddressEmptyState(
                         onCreateAddressClick = onCreateAddressClick
                     )
                 }
+
+                return@LazyColumn
             }
 
             items(
                 items = addresses,
-                key = { address -> address.addressId }
+                key = { address -> address.MemberAddressId }
             ) { address ->
                 AddressCard(
                     address = address,
+                    isDeleting = deletingAddressId == address.MemberAddressId,
                     onEditAddressClick = onEditAddressClick,
                     onDeleteAddressClick = onDeleteAddressClick
                 )
@@ -97,8 +123,9 @@ fun AddressListScreen(
 
 @Composable
 private fun AddressCard(
-    address: AddressUiModel,
-    onEditAddressClick: (Int) -> Unit,
+    address: MemberAddressDTO,
+    isDeleting: Boolean,
+    onEditAddressClick: (String) -> Unit,
     onDeleteAddressClick: (Int) -> Unit
 ) {
     BbCard(
@@ -111,9 +138,7 @@ private fun AddressCard(
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.surface)
         ) {
-            AddressCardHeader(
-                address = address
-            )
+            AddressCardHeader(address = address)
 
             Column(
                 modifier = Modifier
@@ -124,16 +149,24 @@ private fun AddressCard(
                 AddressInfoRow(
                     icon = Icons.Outlined.Person,
                     title = "Alıcı",
-                    value = address.receiverName
+                    value = "${address.Name} ${address.Surname}".trim()
                 )
 
                 AddressInfoRow(
                     icon = Icons.Outlined.LocationOn,
                     title = "Adres",
-                    value = address.fullAddress
+                    value = address.Address
                 )
 
-                if (address.isDefault) {
+                if (address.Phone.isNotBlank()) {
+                    AddressInfoRow(
+                        icon = Icons.Outlined.Person,
+                        title = "Telefon",
+                        value = address.Phone
+                    )
+                }
+
+                if (address.IsDefault) {
                     AddressDefaultBadge()
                 }
 
@@ -144,16 +177,16 @@ private fun AddressCard(
                     BbButton(
                         text = "Düzenle",
                         onClick = {
-                            onEditAddressClick(address.addressId)
+                            onEditAddressClick(address.AddressKey)
                         },
                         modifier = Modifier.weight(1f),
                         variant = BbButtonVariant.Primary,
                         size = BbButtonSize.Medium,
+                        enabled = !isDeleting,
                         leadingIcon = {
                             Icon(
                                 imageVector = Icons.Outlined.Edit,
                                 contentDescription = null,
-                                tint = MaterialTheme.colorScheme.onSurface,
                                 modifier = Modifier.size(BBIcon.ButtonIcon)
                             )
                         }
@@ -162,16 +195,17 @@ private fun AddressCard(
                     BbButton(
                         text = "Sil",
                         onClick = {
-                            onDeleteAddressClick(address.addressId)
+                            onDeleteAddressClick(address.MemberAddressId)
                         },
                         modifier = Modifier.weight(1f),
-                        variant = BbButtonVariant.Danger,
+                        variant = BbButtonVariant.Outline,
                         size = BbButtonSize.Medium,
+                        enabled = !isDeleting,
+                        isLoading = isDeleting,
                         leadingIcon = {
                             Icon(
                                 imageVector = Icons.Outlined.Delete,
                                 contentDescription = null,
-                                tint = BBColors.White,
                                 modifier = Modifier.size(BBIcon.ButtonIcon)
                             )
                         }
@@ -183,34 +217,52 @@ private fun AddressCard(
 }
 
 @Composable
-private fun AddressCardHeader(
-    address: AddressUiModel
-) {
+private fun AddressCardHeader(address: MemberAddressDTO) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.primaryContainer)
-            .padding(BBSpacing.CardPadding),
+            .background(
+                color = MaterialTheme.colorScheme.primaryContainer,
+                shape = BBRadius.LgShape
+            )
+            .padding(BBSpacing.CardPaddingCompact),
         horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        AddressIconBox()
+        Box(
+            modifier = Modifier
+                .size(BBIcon.BoxMd)
+                .background(
+                    color = MaterialTheme.colorScheme.surface,
+                    shape = BBRadius.MdShape
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Home,
+                contentDescription = null,
+                tint = BBColors.Yellow.Yellow800,
+                modifier = Modifier.size(BBIcon.Section)
+            )
+        }
 
         Column(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
         ) {
             Text(
-                text = address.title,
-                style = BbTypography.titleMedium,
+                text = address.AddressTitle.ifBlank { "Adres" },
+                style = BbTypography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
-            Text(
-                text = address.receiverName,
-                style = BbTypography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+            if (address.PostCode.isNotBlank()) {
+                Text(
+                    text = "Posta Kodu: ${address.PostCode}",
+                    style = BbTypography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
         }
     }
 }
@@ -222,13 +274,7 @@ private fun AddressInfoRow(
     value: String
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(
-                color = MaterialTheme.colorScheme.surfaceVariant,
-                shape = BBRadius.LgShape
-            )
-            .padding(BBSpacing.CardPaddingCompact),
+        modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
         verticalAlignment = Alignment.Top
     ) {
@@ -236,7 +282,7 @@ private fun AddressInfoRow(
             imageVector = icon,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.size(BBIcon.Ui)
+            modifier = Modifier.size(BBIcon.SizeMd)
         )
 
         Column(
@@ -250,7 +296,7 @@ private fun AddressInfoRow(
             )
 
             Text(
-                text = value,
+                text = value.ifBlank { "-" },
                 style = BbTypography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -264,11 +310,11 @@ private fun AddressDefaultBadge() {
         modifier = Modifier
             .background(
                 color = BBColors.Green.Green50,
-                shape = BBRadius.Badge
+                shape = BBRadius.PillShape
             )
             .padding(
                 horizontal = BBSpacing.Space3,
-                vertical = BBSpacing.Space2
+                vertical = BBSpacing.Space1
             )
     ) {
         Text(
@@ -280,20 +326,81 @@ private fun AddressDefaultBadge() {
 }
 
 @Composable
+private fun AddressLoadingState() {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
+        Text(
+            text = "Adresler yükleniyor...",
+            style = BbTypography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+
+@Composable
+private fun AddressErrorState(
+    message: String,
+    onRetryClick: () -> Unit
+) {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+        ) {
+            Text(
+                text = message,
+                style = BbTypography.bodySmall,
+                color = BBColors.Red.Red600
+            )
+
+            BbButton(
+                text = "Tekrar Dene",
+                onClick = onRetryClick,
+                modifier = Modifier.fillMaxWidth(),
+                variant = BbButtonVariant.Outline,
+                size = BbButtonSize.Medium
+            )
+        }
+    }
+}
+
+@Composable
 private fun AddressEmptyState(
     onCreateAddressClick: () -> Unit
 ) {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Large
+        padding = BbCardPadding.Medium
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
-            AddressIconBox()
+            Box(
+                modifier = Modifier
+                    .size(BBIcon.BoxLg)
+                    .background(
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        shape = BBRadius.LgShape
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Home,
+                    contentDescription = null,
+                    tint = BBColors.Yellow.Yellow800,
+                    modifier = Modifier.size(BBIcon.Section)
+                )
+            }
 
             Text(
                 text = "Kayıt Bulunamadı",
@@ -316,45 +423,3 @@ private fun AddressEmptyState(
         }
     }
 }
-
-@Composable
-private fun AddressIconBox() {
-    Box(
-        modifier = Modifier
-            .size(BBIcon.BoxLg)
-            .background(
-                color = MaterialTheme.colorScheme.primaryContainer,
-                shape = BBRadius.LgShape
-            ),
-        contentAlignment = Alignment.Center
-    ) {
-        Icon(
-            imageVector = Icons.Outlined.Home,
-            contentDescription = null,
-            tint = BBColors.Yellow.Yellow800,
-            modifier = Modifier.size(BBIcon.Section)
-        )
-    }
-}
-
-private fun getDemoAddresses(): List<AddressUiModel> {
-    return listOf(
-        AddressUiModel(
-            addressId = 1,
-            title = "Ev Adresim",
-            receiverName = "Murat Erkan",
-            fullAddress = "Fulya mah. Aytekinkotil cad., No: 11/1",
-            isDefault = true
-        )
-    )
-}
-
-private data class AddressUiModel(
-    val addressId: Int,
-    val title: String,
-    val receiverName: String,
-    val fullAddress: String,
-    val isDefault: Boolean
-)
-
-

@@ -80,7 +80,14 @@ import com.bulbulustur.android.businesslayer.Core.Repository.BasketRepository
 import com.bulbulustur.android.Application.Controllers.AccountController
 import com.bulbulustur.android.businesslayer.Core.Repository.MemberPhoneRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.StatusRepository
-
+import com.bulbulustur.android.Application.Areas.b2b.Controllers.RfqController
+import com.bulbulustur.android.businesslayer.Core.Repository.BuyerRequestRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.SendedOfferRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.SystemDescColorRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.SystemDescMaterialTypeRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.SystemDescPaymentTermRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.SystemDescTradeTermRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.SystemDescUnitRepository
 
 @Composable
 fun BulbulusturApp(
@@ -224,6 +231,26 @@ private fun BulbulusturApplicationContent(
             ExecuteService()
         }
 
+    val systemDescUnitRepository = remember {
+        SystemDescUnitRepository()
+    }
+
+    val systemDescColorRepository = remember {
+        SystemDescColorRepository()
+    }
+
+    val systemDescMaterialTypeRepository = remember {
+        SystemDescMaterialTypeRepository()
+    }
+
+    val systemDescPaymentTermRepository = remember {
+        SystemDescPaymentTermRepository()
+    }
+
+    val systemDescTradeTermRepository = remember {
+        SystemDescTradeTermRepository()
+    }
+
     val authenticationRepository =
         remember {
             AuthenticationRepository()
@@ -272,6 +299,14 @@ private fun BulbulusturApplicationContent(
         remember {
             MemberRepository()
         }
+
+    val buyerRequestRepository = remember {
+        BuyerRequestRepository()
+    }
+
+    val sendedOfferRepository = remember {
+        SendedOfferRepository()
+    }
 
     val memberAddressRepository = remember {
         MemberAddressRepository()
@@ -530,6 +565,32 @@ private fun BulbulusturApplicationContent(
         )
     }
 
+    val rfqController = remember(
+        executeService,
+        buyerRequestRepository,
+        sendedOfferRepository,
+        productCategoryRepository,
+        systemDescUnitRepository,
+        systemDescCurrencyRepository,
+        systemDescColorRepository,
+        systemDescMaterialTypeRepository,
+        systemDescPaymentTermRepository,
+        systemDescTradeTermRepository
+    ) {
+        RfqController(
+            executeService = executeService,
+            buyerRequestRepository = buyerRequestRepository,
+            sendedOfferRepository = sendedOfferRepository,
+            productCategoryRepository = productCategoryRepository,
+            systemDescUnitRepository = systemDescUnitRepository,
+            systemDescCurrencyRepository = systemDescCurrencyRepository,
+            systemDescColorRepository = systemDescColorRepository,
+            systemDescMaterialTypeRepository = systemDescMaterialTypeRepository,
+            systemDescPaymentTermRepository = systemDescPaymentTermRepository,
+            systemDescTradeTermRepository = systemDescTradeTermRepository
+        )
+    }
+
     val settingsController = remember(
         executeService,
         systemDescLanguageRepository,
@@ -719,8 +780,9 @@ private fun BulbulusturApplicationContent(
         )
 
         wholesaleGraph(
-            navigator =
-                appNavigator
+            navigator = appNavigator,
+            sessionState = sessionState,
+            rfqController = rfqController
         )
 
         companyGraph(

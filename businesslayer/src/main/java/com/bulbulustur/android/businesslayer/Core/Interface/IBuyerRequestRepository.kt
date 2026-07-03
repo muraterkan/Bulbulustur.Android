@@ -4,44 +4,22 @@ import com.bulbulustur.android.businesslayer.Core.DTO.BuyerRequestDTO
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.BuyerRequestInsertModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.BuyerRequestUpdateModel
 import com.bulbulustur.android.businesslayer.Core.Util.Result
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
 
 interface IBuyerRequestRepository {
 
-    @GET("api/BuyerRequest/GetBuyerRequestListAsync")
-    suspend fun GetBuyerRequestListAsync():
-            Result<List<BuyerRequestDTO>>
+    suspend fun GetBuyerRequestsAsync(count: Int = 100): Result<List<BuyerRequestDTO>>
 
-    @GET("api/BuyerRequest/GetBuyerRequestByIdAsync")
-    suspend fun GetBuyerRequestByIdAsync(
-        @Query("buyerRequestId")
-        buyerRequestId: Int
-    ): Result<BuyerRequestUpdateModel?>
+    suspend fun GetBuyerRequestsByMemberAsync(memberId: Int, count: Int = 100): Result<List<BuyerRequestDTO>>
 
-    @GET("api/BuyerRequest/GetBuyerRequestByIdExtendedAsync")
-    suspend fun GetBuyerRequestByIdExtendedAsync(
-        @Query("buyerRequestId")
-        buyerRequestId: Int
-    ): Result<BuyerRequestDTO?>
+    suspend fun GetBuyerRequestsByIdAsync(buyerRequestKey: String): Result<BuyerRequestUpdateModel?>
 
-    @POST("api/BuyerRequest/InsertAsync")
-    suspend fun InsertAsync(
-        @Body
-        model: BuyerRequestInsertModel
-    ): Result<Unit>
+    suspend fun GetBuyerRequestsByIdExtendedAsync(buyerRequestKey: String): Result<BuyerRequestDTO?>
 
-    @POST("api/BuyerRequest/UpdateAsync")
-    suspend fun UpdateAsync(
-        @Body
-        model: BuyerRequestUpdateModel
-    ): Result<Unit>
+    suspend fun InsertAsync(model: BuyerRequestInsertModel): Result<Unit>
 
-    @POST("api/BuyerRequest/DeleteAsync")
-    suspend fun DeleteAsync(
-        @Query("buyerRequestId")
-        buyerRequestId: Int
-    ): Result<Unit>
+    suspend fun UpdateAsync(model: BuyerRequestUpdateModel): Result<Unit>
+
+    suspend fun DeleteAsync(buyerRequestKey: String): Result<Unit>
+
+    suspend fun GetPastRequestsAsync(count: Int = 100): Result<List<BuyerRequestDTO>>
 }

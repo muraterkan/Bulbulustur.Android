@@ -20,6 +20,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,10 +40,11 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BbTypography
-import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.MemberAddressInsertModel
+import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberAddressUpdateModel
 
 @Composable
-fun AddressCreateScreen(
+fun AddressEditScreen(
+    address: MemberAddressUpdateModel?,
     addressCascadeState: AddressCascadeState,
     isLoading: Boolean = false,
     errorMessage: String? = null,
@@ -52,7 +54,7 @@ fun AddressCreateScreen(
     onCountryDepartmentSelected: (Int?) -> Unit = {},
     onCitySelected: (Int) -> Unit = {},
     onDistrictSelected: (Int?) -> Unit = {},
-    onSaveClick: (MemberAddressInsertModel) -> Unit = {}
+    onSaveClick: (MemberAddressUpdateModel) -> Unit = {}
 ) {
     var name by remember { mutableStateOf("") }
     var surname by remember { mutableStateOf("") }
@@ -62,10 +64,23 @@ fun AddressCreateScreen(
     var addressTitle by remember { mutableStateOf("") }
     var isDefault by remember { mutableStateOf(false) }
 
+    LaunchedEffect(address?.AddressKey) {
+        val currentAddress = address ?: return@LaunchedEffect
+
+        name = currentAddress.Name
+        surname = currentAddress.Surname
+        phone = currentAddress.Phone
+        postCode = currentAddress.PostCode
+        addressText = currentAddress.Address
+        addressTitle = currentAddress.AddressTitle
+        isDefault = currentAddress.IsDefault
+    }
+
     val selection = addressCascadeState.Selection
 
     val canSubmit =
-        name.isNotBlank() &&
+        address != null &&
+                name.isNotBlank() &&
                 surname.isNotBlank() &&
                 phone.trim().length >= 10 &&
                 addressText.trim().length >= 10 &&
@@ -78,7 +93,7 @@ fun AddressCreateScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Yeni Adres Ekle",
+                title = "Adresi Düzenle",
                 onBackClick = onBackClick
             )
         }
@@ -99,44 +114,48 @@ fun AddressCreateScreen(
                 ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.SectionGap)
         ) {
-            AddressCreateSection(
+            AddressEditSection(
                 title = "Alıcı Bilgileri",
-                description = "Teslimatı alacak kişinin bilgilerini girin."
+                description = "Teslimatı alacak kişinin bilgilerini düzenleyin."
             ) {
-                AddressCreateTextField(
+                AddressEditTextField(
                     value = name,
                     onValueChange = { name = it },
                     label = "Ad",
-                    placeholder = "Adınız"
+                    placeholder = "Adınız",
+                    enabled = address != null && !isLoading
                 )
 
-                AddressCreateTextField(
+                AddressEditTextField(
                     value = surname,
                     onValueChange = { surname = it },
                     label = "Soyad",
-                    placeholder = "Soyadınız"
+                    placeholder = "Soyadınız",
+                    enabled = address != null && !isLoading
                 )
 
-                AddressCreateTextField(
+                AddressEditTextField(
                     value = phone,
                     onValueChange = { phone = it },
                     label = "Telefon",
                     placeholder = "5xx xxx xx xx",
-                    keyboardType = KeyboardType.Phone
+                    keyboardType = KeyboardType.Phone,
+                    enabled = address != null && !isLoading
                 )
 
-                AddressCreateTextField(
+                AddressEditTextField(
                     value = postCode,
                     onValueChange = { postCode = it },
                     label = "Posta Kodu",
                     placeholder = "Posta kodu",
-                    keyboardType = KeyboardType.Number
+                    keyboardType = KeyboardType.Number,
+                    enabled = address != null && !isLoading
                 )
             }
 
-            AddressCreateSection(
+            AddressEditSection(
                 title = "Konum Bilgileri",
-                description = "Adresin ülke, bölge, şehir ve ilçe bilgilerini seçin."
+                description = "Adresin ülke, bölge, şehir ve ilçe bilgilerini düzenleyin."
             ) {
                 AddressCascadeFields(
                     state = addressCascadeState,
@@ -146,58 +165,64 @@ fun AddressCreateScreen(
                     onCitySelected = onCitySelected,
                     onDistrictSelected = onDistrictSelected,
                     modifier = Modifier.fillMaxWidth(),
-                    enabled = !isLoading
+                    enabled = address != null && !isLoading
                 )
             }
 
-            AddressCreateSection(
+            AddressEditSection(
                 title = "Adres Detayı",
-                description = "Açık adresi ve adres başlığını girin."
+                description = "Açık adresi ve adres başlığını düzenleyin."
             ) {
-                AddressCreateTextArea(
+                AddressEditTextArea(
                     value = addressText,
                     onValueChange = { addressText = it },
                     label = "Açık Adres",
-                    placeholder = "Mahalle, cadde, sokak, bina, kat ve daire bilgisi"
+                    placeholder = "Mahalle, cadde, sokak, bina, kat ve daire bilgisi",
+                    enabled = address != null && !isLoading
                 )
 
-                AddressCreateTextField(
+                AddressEditTextField(
                     value = addressTitle,
                     onValueChange = { addressTitle = it },
                     label = "Adres Başlığı",
-                    placeholder = "Ev Adresim"
+                    placeholder = "Ev Adresim",
+                    enabled = address != null && !isLoading
                 )
 
-                AddressCreateDefaultField(
+                AddressEditDefaultField(
                     checked = isDefault,
                     onCheckedChange = { isDefault = it },
-                    enabled = !isLoading
+                    enabled = address != null && !isLoading
                 )
             }
 
             if (!errorMessage.isNullOrBlank()) {
-                AddressCreateError(message = errorMessage)
+                AddressEditError(message = errorMessage)
             }
 
             BbButton(
-                text = "Adresi Kaydet",
+                text = "Adresi Güncelle",
                 onClick = {
-                    onSaveClick(
-                        MemberAddressInsertModel(
-                            AddressTitle = addressTitle.trim(),
-                            Name = name.trim(),
-                            Surname = surname.trim(),
-                            CountryId = selection.CountryId,
-                            CountryStateId = selection.CountryStateId,
-                            CountryDepartmentId = selection.CountryDepartmentId,
-                            CityId = selection.CityId,
-                            DistrictId = selection.DistrictId,
-                            PostCode = postCode.trim(),
-                            Address = addressText.trim(),
-                            Phone = phone.trim(),
-                            IsDefault = isDefault
+                    val currentAddress = address
+
+                    if (currentAddress != null) {
+                        onSaveClick(
+                            currentAddress.copy(
+                                AddressTitle = addressTitle.trim(),
+                                Name = name.trim(),
+                                Surname = surname.trim(),
+                                CountryId = selection.CountryId,
+                                CountryStateId = selection.CountryStateId,
+                                CountryDepartmentId = selection.CountryDepartmentId,
+                                CityId = selection.CityId,
+                                DistrictId = selection.DistrictId,
+                                PostCode = postCode.trim(),
+                                Address = addressText.trim(),
+                                Phone = phone.trim(),
+                                IsDefault = isDefault
+                            )
                         )
-                    )
+                    }
                 },
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Primary,
@@ -210,7 +235,7 @@ fun AddressCreateScreen(
 }
 
 @Composable
-private fun AddressCreateSection(
+private fun AddressEditSection(
     title: String,
     description: String,
     content: @Composable ColumnScope.() -> Unit
@@ -253,17 +278,19 @@ private fun AddressCreateSection(
 }
 
 @Composable
-private fun AddressCreateTextField(
+private fun AddressEditTextField(
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
     placeholder: String,
-    keyboardType: KeyboardType = KeyboardType.Text
+    keyboardType: KeyboardType = KeyboardType.Text,
+    enabled: Boolean
 ) {
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
         modifier = Modifier.fillMaxWidth(),
+        enabled = enabled,
         label = {
             Text(
                 text = label,
@@ -297,16 +324,18 @@ private fun AddressCreateTextField(
 }
 
 @Composable
-private fun AddressCreateTextArea(
+private fun AddressEditTextArea(
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
-    placeholder: String
+    placeholder: String,
+    enabled: Boolean
 ) {
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
         modifier = Modifier.fillMaxWidth(),
+        enabled = enabled,
         label = {
             Text(
                 text = label,
@@ -339,7 +368,7 @@ private fun AddressCreateTextArea(
 }
 
 @Composable
-private fun AddressCreateDefaultField(
+private fun AddressEditDefaultField(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
     enabled: Boolean
@@ -384,7 +413,7 @@ private fun AddressCreateDefaultField(
 }
 
 @Composable
-private fun AddressCreateError(message: String) {
+private fun AddressEditError(message: String) {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,

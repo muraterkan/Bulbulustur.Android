@@ -12,60 +12,43 @@ class AssignedToSellerRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IAssignedToSellerRepository {
 
-    override suspend fun GetAssignedToSellerListAsync(): Result<List<AssignedToSellerDTO>> {
+    override suspend fun GetAssignedToSellersAsync(assignedMemberId: Int): Result<List<AssignedToSellerDTO>> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetAssignedToSellerListAsync"
+            baseUrl = ApiRoutes.B2B_BASE_URL,
+            method = "AssignedToSeller/GetAssignedToSellersAsync",
+            query = "assignedMemberId=$assignedMemberId"
         )
     }
 
-    override suspend fun GetAssignedToSellerByIdAsync(
-        assignedToSellerId: Int
-    ): Result<AssignedToSellerUpdateModel?> {
+    override suspend fun GetAssignedToSellersByIdAsync(assignedToSellerId: Int): Result<AssignedToSellerUpdateModel?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetAssignedToSellerByIdAsync",
+            baseUrl = ApiRoutes.B2B_BASE_URL,
+            method = "AssignedToSeller/GetAssignedToSellersByIdAsync",
             query = "assignedToSellerId=$assignedToSellerId"
         )
     }
 
-    override suspend fun GetAssignedToSellerByIdExtendedAsync(
-        assignedToSellerId: Int
-    ): Result<AssignedToSellerDTO?> {
+    override suspend fun GetAssignedToSellersByIdExtendedAsync(assignedToSellerId: Int): Result<AssignedToSellerDTO?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetAssignedToSellerByIdExtendedAsync",
+            baseUrl = ApiRoutes.B2B_BASE_URL,
+            method = "AssignedToSeller/GetAssignedToSellersByIdExtendedAsync",
             query = "assignedToSellerId=$assignedToSellerId"
         )
     }
 
-    override suspend fun InsertAsync(
-        model: AssignedToSellerInsertModel
-    ): Result<Unit> {
+    override suspend fun InsertAsync(model: AssignedToSellerInsertModel): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "InsertAsync",
+            baseUrl = ApiRoutes.B2B_BASE_URL,
+            method = "AssignedToSeller/AssignedToSellerInsertAsync",
             data = model
         )
     }
 
-    override suspend fun UpdateAsync(
-        model: AssignedToSellerUpdateModel
-    ): Result<Unit> {
+    override suspend fun UpdateAsync(model: AssignedToSellerUpdateModel): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "UpdateAsync",
+            baseUrl = ApiRoutes.B2B_BASE_URL,
+            method = "AssignedToSeller/AssignedToSellerUpdateAsync",
             data = model
-        )
-    }
-
-    override suspend fun DeleteAsync(
-        assignedToSellerId: Int
-    ): Result<Unit> {
-        return apiClient.DeleteAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "DeleteAsync",
-            query = "assignedToSellerId=$assignedToSellerId"
         )
     }
 }

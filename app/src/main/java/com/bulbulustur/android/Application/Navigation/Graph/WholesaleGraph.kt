@@ -45,8 +45,10 @@ fun NavGraphBuilder.wholesaleGraph(
             onProductListClick = {
                 navigator.navController.navigate(WholesaleRoutes.ProductList)
             },
-            onProductDetailClick = {
-                navigator.navController.navigate(WholesaleRoutes.ProductDetail)
+            onProductDetailClick = { productId ->
+                navigator.navController.navigate(
+                    WholesaleRoutes.productDetail(productId)
+                )
             },
             onRfqListClick = {
                 navigator.navController.navigate(RfqRoutes.List)
@@ -203,18 +205,34 @@ fun NavGraphBuilder.wholesaleGraph(
             onAccountClick = {
                 navigator.navigateToAccount()
             },
-            onProductDetailClick = {
-                navigator.navController.navigate(WholesaleRoutes.ProductDetail)
+            onProductDetailClick = { productId ->
+                navigator.navController.navigate(
+                    WholesaleRoutes.productDetail(productId)
+                )
             },
-            onProductFavoriteClick = {},
+            onProductFavoriteClick = {
+            },
             onRfqClick = {
                 navigator.navController.navigate(RfqRoutes.Create)
             }
         )
     }
 
-    composable(route = WholesaleRoutes.ProductDetail) {
+    composable(
+        route = WholesaleRoutes.ProductDetailRoute,
+        arguments = listOf(
+            navArgument(WholesaleRoutes.ArgProductId) {
+                type = NavType.IntType
+                defaultValue = 1
+            }
+        )
+    ) { backStackEntry ->
+        val productId = backStackEntry.arguments
+            ?.getInt(WholesaleRoutes.ArgProductId)
+            ?: 1
+
         WholesaleProductDetailScreen(
+            productId = productId,
             onBackClick = {
                 navigator.back()
             }

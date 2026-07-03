@@ -3,7 +3,6 @@ package com.bulbulustur.android.businesslayer.Core.Repository
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductFavoriteDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.IProductFavoriteRepository
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.ProductFavoriteInsertModel
-import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.ProductFavoriteUpdateModel
 import com.bulbulustur.android.businesslayer.Core.Network.ApiClient
 import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
 import com.bulbulustur.android.businesslayer.Core.Util.Result
@@ -12,60 +11,35 @@ class ProductFavoriteRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IProductFavoriteRepository {
 
-    override suspend fun GetProductFavoriteListAsync(): Result<List<ProductFavoriteDTO>> {
+    override suspend fun GetProductFavoritesAsync(memberId: Int, count: Int): Result<List<ProductFavoriteDTO>> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetProductFavoriteListAsync"
+            baseUrl = ApiRoutes.B2C_PRODUCT_FAVORITE_BASE_URL,
+            method = "GetProductFavoritesAsync",
+            query = "memberId=$memberId&count=$count"
         )
     }
 
-    override suspend fun GetProductFavoriteByIdAsync(
-        productFavoriteId: Int
-    ): Result<ProductFavoriteUpdateModel?> {
-        return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetProductFavoriteByIdAsync",
-            query = "productFavoriteId=$productFavoriteId"
-        )
-    }
-
-    override suspend fun GetProductFavoriteByIdExtendedAsync(
-        productFavoriteId: Int
-    ): Result<ProductFavoriteDTO?> {
-        return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetProductFavoriteByIdExtendedAsync",
-            query = "productFavoriteId=$productFavoriteId"
-        )
-    }
-
-    override suspend fun InsertAsync(
-        model: ProductFavoriteInsertModel
-    ): Result<Unit> {
+    override suspend fun InsertProductFavoriteAsync(memberId: Int, model: ProductFavoriteInsertModel): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "InsertAsync",
+            baseUrl = ApiRoutes.B2C_PRODUCT_FAVORITE_BASE_URL,
+            method = "InsertProductFavoriteAsync?memberId=$memberId",
             data = model
         )
     }
 
-    override suspend fun UpdateAsync(
-        model: ProductFavoriteUpdateModel
-    ): Result<Unit> {
-        return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "UpdateAsync",
-            data = model
-        )
-    }
-
-    override suspend fun DeleteAsync(
-        productFavoriteId: Int
-    ): Result<Unit> {
+    override suspend fun DeleteProductFavoriteAsync(memberId: Int, favoriteId: Int): Result<Unit> {
         return apiClient.DeleteAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "DeleteAsync",
-            query = "productFavoriteId=$productFavoriteId"
+            baseUrl = ApiRoutes.B2C_PRODUCT_FAVORITE_BASE_URL,
+            method = "DeleteProductFavoriteAsync",
+            query = "memberId=$memberId&favoriteId=$favoriteId"
+        )
+    }
+
+    override suspend fun MoveProductFavoriteToBasketAsync(memberId: Int, favoriteId: Int): Result<Unit> {
+        return apiClient.PostAsync(
+            baseUrl = ApiRoutes.B2C_PRODUCT_FAVORITE_BASE_URL,
+            method = "MoveProductFavoriteToBasketAsync?memberId=$memberId&favoriteId=$favoriteId",
+            data = Unit
         )
     }
 }

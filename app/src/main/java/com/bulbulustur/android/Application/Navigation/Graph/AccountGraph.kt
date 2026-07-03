@@ -3,10 +3,12 @@ package com.bulbulustur.android.Application.Navigation.Graph
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
-import androidx.navigation.navArgument
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.bulbulustur.android.Application.Controllers.AccountController
 import com.bulbulustur.android.Application.Controllers.LogonController
 import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
@@ -15,10 +17,15 @@ import com.bulbulustur.android.Application.Navigation.Routes.BankAccountRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.LogonRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.OrderRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.RetailRoutes
+import com.bulbulustur.android.Application.Navigation.Routes.RfqRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.SettingsRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.SplashRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.StoreRoutes
+import com.bulbulustur.android.Application.Navigation.Routes.WholesaleRoutes
 import com.bulbulustur.android.Application.Session.UserSessionState
+import com.bulbulustur.android.Application.Shared.Address.AddressCascadeController
+import com.bulbulustur.android.Application.Shared.Address.AddressCascadeEvent
+import com.bulbulustur.android.Application.Shared.Address.AddressCascadeSelection
 import com.bulbulustur.android.Application.Views.Account.AccountScreen
 import com.bulbulustur.android.Application.Views.Account.AccountSecurityScreen
 import com.bulbulustur.android.Application.Views.Account.AddressCreateScreen
@@ -41,6 +48,7 @@ import com.bulbulustur.android.Application.Views.Account.NotificationListScreen
 import com.bulbulustur.android.Application.Views.Account.PhoneCreateScreen
 import com.bulbulustur.android.Application.Views.Account.PhoneListScreen
 import com.bulbulustur.android.Application.Views.Account.PhoneVerifyScreen
+import com.bulbulustur.android.Application.Views.Account.ProfileEditScreen
 import com.bulbulustur.android.Application.Views.Account.ProfileScreen
 import com.bulbulustur.android.Application.Views.Account.RequestDetailScreen
 import com.bulbulustur.android.Application.Views.Account.RequestListScreen
@@ -50,21 +58,12 @@ import com.bulbulustur.android.Application.Views.Account.SubscriptionDetailScree
 import com.bulbulustur.android.Application.Views.Account.SubscriptionListScreen
 import com.bulbulustur.android.Application.Views.Account.WalletBalanceScreen
 import com.bulbulustur.android.Application.Views.Preference.UsagePurposeScreen
-import com.bulbulustur.android.Application.Shared.Address.AddressCascadeController
-import com.bulbulustur.android.Application.Shared.Address.AddressCascadeEvent
-import com.bulbulustur.android.Application.Shared.Address.AddressCascadeSelection
-import com.bulbulustur.android.Application.Views.Account.ProfileEditScreen
-import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.MemberBankAccountInsertModel
-import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberBankAccountUpdateModel
-import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.text.AnnotatedString
 import com.bulbulustur.android.Application.Views.Question.QuestionAnswerScreen
-import com.bulbulustur.android.businesslayer.Core.Model.ChangePasswordModel
 import com.bulbulustur.android.businesslayer.Core.Enums.EApplicationLanguage
 import com.bulbulustur.android.businesslayer.Core.Model.ChangeMailModel
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import com.bulbulustur.android.businesslayer.Core.Model.ChangePasswordModel
+import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.MemberBankAccountInsertModel
+import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberBankAccountUpdateModel
 
 fun NavGraphBuilder.accountGraph(
     navigator: BulbulusturNavigator,
@@ -73,26 +72,18 @@ fun NavGraphBuilder.accountGraph(
     accountController: AccountController,
     addressCascadeController: AddressCascadeController
 ) {
-    composable(
-        route = AccountRoutes.AccountHome
-    ) {
-        val logonState by
-        logonController.State.collectAsState()
+    composable(route = AccountRoutes.AccountHome) {
+        val logonState by logonController.State.collectAsState()
 
-        val languageId =
-            when (sessionState.Language) {
-                EApplicationLanguage.Turkish -> 1
-                EApplicationLanguage.English -> 2
-            }
+        val languageId = when (sessionState.Language) {
+            EApplicationLanguage.Turkish -> 1
+            EApplicationLanguage.English -> 2
+        }
 
         if (!sessionState.IsAuthenticated) {
             LaunchedEffect(Unit) {
-                navigator.navController.navigate(
-                    LogonRoutes.Logon
-                ) {
-                    popUpTo(
-                        AccountRoutes.AccountHome
-                    ) {
+                navigator.navController.navigate(LogonRoutes.Logon) {
+                    popUpTo(AccountRoutes.AccountHome) {
                         inclusive = true
                     }
 
@@ -104,83 +95,54 @@ fun NavGraphBuilder.accountGraph(
         }
 
         AccountScreen(
-            isLogoutLoading =
-                logonState.IsLoggingOut,
+            isLogoutLoading = logonState.IsLoggingOut,
             onSecurityClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.Security
-                )
+                navigator.navController.navigate(AccountRoutes.Security)
             },
             onProfileClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.ProfileInfo
-                )
+                navigator.navController.navigate(AccountRoutes.ProfileInfo)
             },
             onAddressClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.AddressList
-                )
+                navigator.navController.navigate(AccountRoutes.AddressList)
             },
             onNotificationClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.Notifications
-                )
+                navigator.navController.navigate(AccountRoutes.Notifications)
             },
             onCompanyInfoClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.CompanyInfo
-                )
+                navigator.navController.navigate(AccountRoutes.CompanyInfo)
             },
             onFollowedStoresClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.FollowedStores
-                )
+                navigator.navController.navigate(AccountRoutes.FollowedStores)
             },
             onQuotationRequestsClick = {
                 navigator.navigateToWholesaleOffers()
             },
             onOrdersClick = {
-                navigator.navController.navigate(
-                    OrderRoutes.List
-                )
+                navigator.navController.navigate(OrderRoutes.List)
             },
             onFavoritesClick = {
                 navigator.navigateToFavorites()
             },
             onReviewsClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.Reviews
-                )
+                navigator.navController.navigate(AccountRoutes.Reviews)
             },
             onCouponsClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.Coupons
-                )
+                navigator.navController.navigate(AccountRoutes.Coupons)
             },
             onRequestsClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.Requests
-                )
+                navigator.navController.navigate(AccountRoutes.Requests)
             },
             onSubscriptionsClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.Subscriptions
-                )
+                navigator.navController.navigate(AccountRoutes.Subscriptions)
             },
             onWalletBalanceClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.WalletBalance
-                )
+                navigator.navController.navigate(AccountRoutes.WalletBalance)
             },
             onBankAccountsClick = {
-                navigator.navController.navigate(
-                    BankAccountRoutes.List
-                )
+                navigator.navController.navigate(BankAccountRoutes.List)
             },
             onSettingsClick = {
-                navigator.navController.navigate(
-                    SettingsRoutes.Home
-                )
+                navigator.navController.navigate(SettingsRoutes.Home)
             },
             onMessagesClick = {
                 navigator.navigateToInbox()
@@ -191,12 +153,8 @@ fun NavGraphBuilder.accountGraph(
                 logonController.LogoutPost(
                     languageId = languageId,
                     onCompleted = {
-                        navigator.navController.navigate(
-                            SplashRoutes.ModeSelection
-                        ) {
-                            popUpTo(
-                                navigator.navController.graph.startDestinationId
-                            ) {
+                        navigator.navController.navigate(SplashRoutes.ModeSelection) {
+                            popUpTo(navigator.navController.graph.startDestinationId) {
                                 inclusive = true
                             }
 
@@ -206,14 +164,10 @@ fun NavGraphBuilder.accountGraph(
                 )
             },
             onQuestionsClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.QuestionAnswers
-                )
+                navigator.navController.navigate(AccountRoutes.QuestionAnswers)
             },
             onUsagePurposeClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.UsagePurpose
-                )
+                navigator.navController.navigate(AccountRoutes.UsagePurpose)
             },
             onHomeClick = {
                 navigator.navigateToRetailHome()
@@ -230,44 +184,30 @@ fun NavGraphBuilder.accountGraph(
         )
     }
 
-    composable(
-        route = AccountRoutes.Security
-    ) {
+    composable(route = AccountRoutes.Security) {
         AccountSecurityScreen(
             onBackClick = {
                 navigator.back()
             },
             onProfileInfoClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.ProfileInfo
-                )
+                navigator.navController.navigate(AccountRoutes.ProfileInfo)
             },
             onEmailChangeClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.EmailChange
-                )
+                navigator.navController.navigate(AccountRoutes.EmailChange)
             },
             onPasswordChangeClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.PasswordChange
-                )
+                navigator.navController.navigate(AccountRoutes.PasswordChange)
             },
             onPhonesClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.PhoneList
-                )
+                navigator.navController.navigate(AccountRoutes.PhoneList)
             },
             onLoginActivitiesClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.LoginActivities
-                )
+                navigator.navController.navigate(AccountRoutes.LoginActivities)
             }
         )
     }
 
-    composable(
-        route = AccountRoutes.EmailChange
-    ) {
+    composable(route = AccountRoutes.EmailChange) {
         val accountState by accountController.State.collectAsState()
 
         val languageId = when (sessionState.Language) {
@@ -290,15 +230,12 @@ fun NavGraphBuilder.accountGraph(
 
         ChangeEmailScreen(
             currentEmail = currentEmail,
-            isLoading = accountState.IsLoading &&
-                    (
-                            accountState.CurrentAction == "GetAccount" ||
-                                    accountState.CurrentAction == "SendEmailChangingRequest"
-                            ),
+            isLoading = accountState.IsLoading && (
+                    accountState.CurrentAction == "GetAccount" ||
+                            accountState.CurrentAction == "SendEmailChangingRequest"
+                    ),
             errorMessage = accountState.ChangeMailResult
-                ?.takeIf { result ->
-                    !result.Success
-                }
+                ?.takeIf { !it.Success }
                 ?.Message,
             successMessage = accountState.ChangeMailMessage,
             onBackClick = {
@@ -318,9 +255,7 @@ fun NavGraphBuilder.accountGraph(
         )
     }
 
-    composable(
-        route = AccountRoutes.PasswordChange
-    ) {
+    composable(route = AccountRoutes.PasswordChange) {
         val accountState by accountController.State.collectAsState()
 
         val languageId = when (sessionState.Language) {
@@ -357,15 +292,11 @@ fun NavGraphBuilder.accountGraph(
         )
     }
 
-    composable(
-        route = AccountRoutes.LoginActivities
-    ) {
+    composable(route = AccountRoutes.LoginActivities) {
         val accountState by accountController.State.collectAsState()
 
         LaunchedEffect(sessionState.MemberId) {
-            accountController.GetLoginActivities(
-                memberId = sessionState.MemberId
-            )
+            accountController.GetLoginActivities(memberId = sessionState.MemberId)
         }
 
         LoginActivitiesScreen(
@@ -379,16 +310,12 @@ fun NavGraphBuilder.accountGraph(
                 navigator.back()
             },
             onRetryClick = {
-                accountController.GetLoginActivities(
-                    memberId = sessionState.MemberId
-                )
+                accountController.GetLoginActivities(memberId = sessionState.MemberId)
             }
         )
     }
 
-    composable(
-        route = AccountRoutes.ProfileInfo
-    ) {
+    composable(route = AccountRoutes.ProfileInfo) {
         val accountState by accountController.State.collectAsState()
         val addressCascadeState by addressCascadeController.State.collectAsState()
 
@@ -442,36 +369,24 @@ fun NavGraphBuilder.accountGraph(
                 navigator.back()
             },
             onEditClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.ProfileEdit
-                )
+                navigator.navController.navigate(AccountRoutes.ProfileEdit)
             },
             onPhonesClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.PhoneList
-                )
+                navigator.navController.navigate(AccountRoutes.PhoneList)
             },
             onEmailClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.EmailChange
-                )
+                navigator.navController.navigate(AccountRoutes.EmailChange)
             },
             onCompanyInfoClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.CompanyInfo
-                )
+                navigator.navController.navigate(AccountRoutes.CompanyInfo)
             },
             onB2BStatusClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.CompanyB2BStatus
-                )
+                navigator.navController.navigate(AccountRoutes.CompanyB2BStatus)
             }
         )
     }
 
-    composable(
-        route = AccountRoutes.ProfileEdit
-    ) {
+    composable(route = AccountRoutes.ProfileEdit) {
         val accountState by accountController.State.collectAsState()
         val addressCascadeState by addressCascadeController.State.collectAsState()
 
@@ -483,9 +398,7 @@ fun NavGraphBuilder.accountGraph(
         val member = accountState.MemberUpdateResult?.Data
 
         LaunchedEffect(sessionState.MemberId) {
-            addressCascadeController.OnEvent(
-                AddressCascadeEvent.Clear
-            )
+            addressCascadeController.OnEvent(AddressCascadeEvent.Clear)
 
             accountController.GetMember(
                 languageId = languageId,
@@ -520,17 +433,13 @@ fun NavGraphBuilder.accountGraph(
         ProfileEditScreen(
             member = member,
             addressCascadeState = addressCascadeState,
-            isLoading = accountState.IsLoading &&
-                    (
-                            accountState.CurrentAction == "GetMember" ||
-                                    accountState.CurrentAction == "UpdateMember"
-                            ),
+            isLoading = accountState.IsLoading && (
+                    accountState.CurrentAction == "GetMember" ||
+                            accountState.CurrentAction == "UpdateMember"
+                    ),
             errorMessage = accountState.ErrorMessage,
             onBackClick = {
-                addressCascadeController.OnEvent(
-                    AddressCascadeEvent.Clear
-                )
-
+                addressCascadeController.OnEvent(AddressCascadeEvent.Clear)
                 navigator.back()
             },
             onCountrySelected = { countryId ->
@@ -567,9 +476,7 @@ fun NavGraphBuilder.accountGraph(
             },
             onDistrictSelected = { districtId ->
                 addressCascadeController.OnEvent(
-                    AddressCascadeEvent.SelectDistrict(
-                        DistrictId = districtId
-                    )
+                    AddressCascadeEvent.SelectDistrict(DistrictId = districtId)
                 )
             },
             onSaveClick = { name, surname, profession, birthDate ->
@@ -589,19 +496,15 @@ fun NavGraphBuilder.accountGraph(
                         DistrictId = selection.DistrictId
                     ),
                     onSuccess = {
-                        addressCascadeController.OnEvent(
-                            AddressCascadeEvent.Clear
-                        )
-
+                        addressCascadeController.OnEvent(AddressCascadeEvent.Clear)
                         navigator.back()
                     }
                 )
             }
         )
     }
-    composable(
-        route = AccountRoutes.PhoneList
-    ) {
+
+    composable(route = AccountRoutes.PhoneList) {
         val accountState by accountController.State.collectAsState()
 
         val languageId = when (sessionState.Language) {
@@ -625,9 +528,7 @@ fun NavGraphBuilder.accountGraph(
                 navigator.back()
             },
             onCreatePhoneClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.PhoneCreate
-                )
+                navigator.navController.navigate(AccountRoutes.PhoneCreate)
             },
             onVerifyPhoneClick = { memberPhoneId ->
                 accountController.SendPhoneVerificationSms(
@@ -663,9 +564,7 @@ fun NavGraphBuilder.accountGraph(
         )
     }
 
-    composable(
-        route = AccountRoutes.PhoneCreate
-    ) {
+    composable(route = AccountRoutes.PhoneCreate) {
         val accountState by accountController.State.collectAsState()
 
         val languageId = when (sessionState.Language) {
@@ -760,9 +659,7 @@ fun NavGraphBuilder.accountGraph(
                     memberPhoneId = memberPhoneId,
                     verificationCode = verificationCode,
                     onSuccess = {
-                        navigator.navController.navigate(
-                            AccountRoutes.PhoneList
-                        ) {
+                        navigator.navController.navigate(AccountRoutes.PhoneList) {
                             popUpTo(AccountRoutes.PhoneList) {
                                 inclusive = true
                             }
@@ -782,24 +679,19 @@ fun NavGraphBuilder.accountGraph(
         )
     }
 
-    composable(
-        route = AccountRoutes.AddressList
-    ) {
+    composable(route = AccountRoutes.AddressList) {
         val accountState by accountController.State.collectAsState()
 
         LaunchedEffect(sessionState.MemberId) {
-            accountController.GetAddresses(
-                memberId = sessionState.MemberId
-            )
+            accountController.GetAddresses(memberId = sessionState.MemberId)
         }
 
         AddressListScreen(
             addresses = accountState.Addresses,
-            isLoading = accountState.IsLoading &&
-                    (
-                            accountState.CurrentAction == "GetAddresses" ||
-                                    accountState.CurrentAction == "DeleteAddress"
-                            ),
+            isLoading = accountState.IsLoading && (
+                    accountState.CurrentAction == "GetAddresses" ||
+                            accountState.CurrentAction == "DeleteAddress"
+                    ),
             errorMessage = accountState.AddressListResult
                 ?.takeIf { !it.Success }
                 ?.Message
@@ -811,9 +703,7 @@ fun NavGraphBuilder.accountGraph(
                 navigator.back()
             },
             onCreateAddressClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.AddressCreate
-                )
+                navigator.navController.navigate(AccountRoutes.AddressCreate)
             },
             onEditAddressClick = { addressKey ->
                 navigator.navController.navigate(
@@ -832,16 +722,12 @@ fun NavGraphBuilder.accountGraph(
                 )
             },
             onRetryClick = {
-                accountController.GetAddresses(
-                    memberId = sessionState.MemberId
-                )
+                accountController.GetAddresses(memberId = sessionState.MemberId)
             }
         )
     }
 
-    composable(
-        route = AccountRoutes.AddressCreate
-    ) {
+    composable(route = AccountRoutes.AddressCreate) {
         val accountState by accountController.State.collectAsState()
         val addressCascadeState by addressCascadeController.State.collectAsState()
 
@@ -854,16 +740,17 @@ fun NavGraphBuilder.accountGraph(
             addressCascadeController.OnEvent(AddressCascadeEvent.Clear)
 
             addressCascadeController.OnEvent(
-                AddressCascadeEvent.LoadCountries(
-                    LanguageId = languageId
-                )
+                AddressCascadeEvent.LoadCountries(LanguageId = languageId)
             )
         }
 
         AddressCreateScreen(
             addressCascadeState = addressCascadeState,
-            isLoading = accountState.IsLoading && accountState.CurrentAction == "InsertAddress",
-            errorMessage = accountState.AddressInsertResult?.takeIf { !it.Success }?.Message,
+            isLoading = accountState.IsLoading &&
+                    accountState.CurrentAction == "InsertAddress",
+            errorMessage = accountState.AddressInsertResult
+                ?.takeIf { !it.Success }
+                ?.Message,
             onBackClick = {
                 addressCascadeController.OnEvent(AddressCascadeEvent.Clear)
                 navigator.back()
@@ -902,9 +789,7 @@ fun NavGraphBuilder.accountGraph(
             },
             onDistrictSelected = { districtId ->
                 addressCascadeController.OnEvent(
-                    AddressCascadeEvent.SelectDistrict(
-                        DistrictId = districtId
-                    )
+                    AddressCascadeEvent.SelectDistrict(DistrictId = districtId)
                 )
             },
             onSaveClick = { model ->
@@ -943,7 +828,9 @@ fun NavGraphBuilder.accountGraph(
             EApplicationLanguage.English -> 2
         }
 
-        val addressKey = backStackEntry.arguments?.getString("addressKey").orEmpty()
+        val addressKey = backStackEntry.arguments
+            ?.getString("addressKey")
+            .orEmpty()
 
         val address = accountState.Address?.takeIf {
             it.AddressKey == addressKey
@@ -1033,9 +920,7 @@ fun NavGraphBuilder.accountGraph(
             },
             onDistrictSelected = { districtId ->
                 addressCascadeController.OnEvent(
-                    AddressCascadeEvent.SelectDistrict(
-                        DistrictId = districtId
-                    )
+                    AddressCascadeEvent.SelectDistrict(DistrictId = districtId)
                 )
             },
             onSaveClick = { model ->
@@ -1058,9 +943,7 @@ fun NavGraphBuilder.accountGraph(
         )
     }
 
-    composable(
-        route = AccountRoutes.Notifications
-    ) {
+    composable(route = AccountRoutes.Notifications) {
         NotificationListScreen(
             onBackClick = {
                 navigator.back()
@@ -1068,31 +951,23 @@ fun NavGraphBuilder.accountGraph(
         )
     }
 
-    composable(
-        route = AccountRoutes.CompanyInfo
-    ) {
+    composable(route = AccountRoutes.CompanyInfo) {
         CompanyInfoScreen(
             onBackClick = {
                 navigator.back()
             },
             onEditClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.CompanyInfoEdit
-                )
+                navigator.navController.navigate(AccountRoutes.CompanyInfoEdit)
             },
             onB2BIndexClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.CompanyB2BIndex
-                )
+                navigator.navController.navigate(AccountRoutes.CompanyB2BIndex)
             },
             onB2CStoreClick = {
             }
         )
     }
 
-    composable(
-        route = AccountRoutes.CompanyInfoEdit
-    ) {
+    composable(route = AccountRoutes.CompanyInfoEdit) {
         CompanyInfoEditScreen(
             onBackClick = {
                 navigator.back()
@@ -1100,24 +975,18 @@ fun NavGraphBuilder.accountGraph(
         )
     }
 
-    composable(
-        route = AccountRoutes.CompanyB2BIndex
-    ) {
+    composable(route = AccountRoutes.CompanyB2BIndex) {
         CompanyB2BIndexScreen(
             onBackClick = {
                 navigator.back()
             },
             onActivateClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.CompanyB2BStatus
-                )
+                navigator.navController.navigate(AccountRoutes.CompanyB2BStatus)
             }
         )
     }
 
-    composable(
-        route = AccountRoutes.CompanyB2BStatus
-    ) {
+    composable(route = AccountRoutes.CompanyB2BStatus) {
         CompanyB2BStatusScreen(
             onBackClick = {
                 navigator.back()
@@ -1127,9 +996,7 @@ fun NavGraphBuilder.accountGraph(
         )
     }
 
-    composable(
-        route = AccountRoutes.UsagePurpose
-    ) {
+    composable(route = AccountRoutes.UsagePurpose) {
         UsagePurposeScreen(
             onBackClick = {
                 navigator.back()
@@ -1146,9 +1013,7 @@ fun NavGraphBuilder.accountGraph(
         )
     }
 
-    composable(
-        route = AccountRoutes.QuestionAnswers
-    ) {
+    composable(route = AccountRoutes.QuestionAnswers) {
         QuestionAnswerScreen(
             onBackClick = {
                 navigator.back()
@@ -1156,9 +1021,7 @@ fun NavGraphBuilder.accountGraph(
         )
     }
 
-    composable(
-        route = AccountRoutes.FollowedStores
-    ) {
+    composable(route = AccountRoutes.FollowedStores) {
         FollowedStoreListScreen(
             onBackClick = {
                 navigator.back()
@@ -1166,42 +1029,99 @@ fun NavGraphBuilder.accountGraph(
         )
     }
 
-    composable(
-        route = AccountRoutes.Favorites
-    ) {
+    composable(route = AccountRoutes.Favorites) {
+        val accountState by accountController.State.collectAsState()
+
+        LaunchedEffect(sessionState.MemberId) {
+            accountController.GetFavorites(memberId = sessionState.MemberId)
+        }
+
         FavoriteListScreen(
+            retailFavorites = accountState.ProductFavorites,
+            wholesaleFavorites = accountState.WholesaleFavorites,
+            isLoading = accountState.IsLoading && (
+                    accountState.CurrentAction == "GetFavorites" ||
+                            accountState.CurrentAction == "GetProductFavorites" ||
+                            accountState.CurrentAction == "GetWholesaleFavorites" ||
+                            accountState.CurrentAction == "MoveProductFavoriteToBasket"
+                    ),
+            errorMessage = accountState.ErrorMessage,
             onBackClick = {
                 navigator.back()
+            },
+            onRetryClick = {
+                accountController.GetFavorites(memberId = sessionState.MemberId)
+            },
+            onRetailProductClick = { productId, storeId, variantId ->
+                navigator.navController.navigate(
+                    RetailRoutes.productDetail(
+                        productId = productId,
+                        storeId = storeId,
+                        variantId = variantId
+                    )
+                )
+            },
+            onWholesaleProductClick = { wholesaleProductId ->
+                navigator.navController.navigate(
+                    WholesaleRoutes.productDetail(wholesaleProductId)
+                )
+            },
+            onRemoveRetailFavoriteClick = { favoriteId ->
+                accountController.DeleteProductFavorite(
+                    memberId = sessionState.MemberId,
+                    favoriteId = favoriteId,
+                    onSuccess = {
+                        accountController.GetProductFavorites(
+                            memberId = sessionState.MemberId
+                        )
+                    }
+                )
+            },
+            onRemoveWholesaleFavoriteClick = { wholesaleFavoriteId ->
+                accountController.DeleteWholesaleFavorite(
+                    memberId = sessionState.MemberId,
+                    wholesaleFavoriteId = wholesaleFavoriteId,
+                    onSuccess = {
+                        accountController.GetWholesaleFavorites(
+                            memberId = sessionState.MemberId
+                        )
+                    }
+                )
+            },
+            onAddRetailFavoriteToBasketClick = { favoriteId ->
+                accountController.MoveProductFavoriteToBasket(
+                    memberId = sessionState.MemberId,
+                    favoriteId = favoriteId,
+                    onSuccess = {
+                        accountController.GetProductFavorites(
+                            memberId = sessionState.MemberId
+                        )
+                    }
+                )
+            },
+            onRequestQuoteClick = {
+                navigator.navController.navigate(RfqRoutes.Create)
             }
         )
     }
 
-    composable(
-        route = AccountRoutes.Reviews
-    ) {
+    composable(route = AccountRoutes.Reviews) {
         ReviewListScreen(
             onBackClick = {
                 navigator.back()
             },
             onProductClick = {
-                navigator.navController.navigate(
-                    //RetailRoutes.ProductDetail
-                    RetailRoutes.ProductList
-                )
+                navigator.navController.navigate(RetailRoutes.ProductList)
             },
             onEditReviewClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.ReviewEdit
-                )
+                navigator.navController.navigate(AccountRoutes.ReviewEdit)
             },
             onDeleteReviewClick = {
             }
         )
     }
 
-    composable(
-        route = AccountRoutes.ReviewEdit
-    ) {
+    composable(route = AccountRoutes.ReviewEdit) {
         ReviewEditScreen(
             onBackClick = {
                 navigator.back()
@@ -1215,9 +1135,7 @@ fun NavGraphBuilder.accountGraph(
         )
     }
 
-    composable(
-        route = AccountRoutes.Coupons
-    ) {
+    composable(route = AccountRoutes.Coupons) {
         CouponListScreen(
             onBackClick = {
                 navigator.back()
@@ -1225,9 +1143,7 @@ fun NavGraphBuilder.accountGraph(
         )
     }
 
-    composable(
-        route = AccountRoutes.Requests
-    ) {
+    composable(route = AccountRoutes.Requests) {
         RequestListScreen(
             onBackClick = {
                 navigator.back()
@@ -1238,9 +1154,7 @@ fun NavGraphBuilder.accountGraph(
                 )
             },
             onOrderListClick = {
-                navigator.navController.navigate(
-                    OrderRoutes.List
-                )
+                navigator.navController.navigate(OrderRoutes.List)
             }
         )
     }
@@ -1253,28 +1167,24 @@ fun NavGraphBuilder.accountGraph(
             }
         )
     ) { backStackEntry ->
-        val requestId = backStackEntry.arguments?.getInt("requestId") ?: 0
+        val requestId = backStackEntry.arguments
+            ?.getInt("requestId")
+            ?: 0
 
         RequestDetailScreen(
             onBackClick = {
                 navigator.back()
             },
             onOrderClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.OrderDetail
-                )
+                navigator.navController.navigate(AccountRoutes.OrderDetail)
             },
             onStoreClick = {
-                navigator.navController.navigate(
-                    StoreRoutes.StoreDetail
-                )
+                navigator.navController.navigate(StoreRoutes.StoreDetail)
             }
         )
     }
 
-    composable(
-        route = AccountRoutes.Subscriptions
-    ) {
+    composable(route = AccountRoutes.Subscriptions) {
         SubscriptionListScreen(
             onBackClick = {
                 navigator.back()
@@ -1287,9 +1197,7 @@ fun NavGraphBuilder.accountGraph(
         )
     }
 
-    composable(
-        route = AccountRoutes.SubscriptionDetail
-    ) {
+    composable(route = AccountRoutes.SubscriptionDetail) {
         SubscriptionDetailScreen(
             onBackClick = {
                 navigator.back()
@@ -1297,21 +1205,16 @@ fun NavGraphBuilder.accountGraph(
         )
     }
 
-    composable(
-        route = AccountRoutes.WalletBalance
-    ) {
+    composable(route = AccountRoutes.WalletBalance) {
         WalletBalanceScreen(
             onBackClick = {
                 navigator.back()
             },
             onBankAccountsClick = {
-                navigator.navController.navigate(
-                    BankAccountRoutes.List
-                )
+                navigator.navController.navigate(BankAccountRoutes.List)
             }
         )
     }
-
 
     composable(route = BankAccountRoutes.List) {
         val accountState by accountController.State.collectAsState()
@@ -1351,14 +1254,10 @@ fun NavGraphBuilder.accountGraph(
                 )
             },
             onCopyIbanClick = { iban ->
-                clipboardManager.setText(
-                    AnnotatedString(iban)
-                )
+                clipboardManager.setText(AnnotatedString(iban))
             },
             onRetryClick = {
-                accountController.GetBankAccounts(
-                    memberId = sessionState.MemberId
-                )
+                accountController.GetBankAccounts(memberId = sessionState.MemberId)
             }
         )
     }
@@ -1402,19 +1301,16 @@ fun NavGraphBuilder.accountGraph(
     ) { backStackEntry ->
         val accountState by accountController.State.collectAsState()
 
-        val bankAccountId =
-            backStackEntry.arguments?.getInt("bankAccountId") ?: 0
+        val bankAccountId = backStackEntry.arguments
+            ?.getInt("bankAccountId")
+            ?: 0
 
-        val bankAccountDetailResult =
-            accountState.BankAccountDetailResult
+        val bankAccountDetailResult = accountState.BankAccountDetailResult
+        val bankAccountUpdateResult = accountState.BankAccountUpdateResult
 
-        val bankAccountUpdateResult =
-            accountState.BankAccountUpdateResult
-
-        val currentBankAccount =
-            accountState.BankAccount?.takeIf {
-                it.MemberBankAccountId == bankAccountId
-            }
+        val currentBankAccount = accountState.BankAccount?.takeIf {
+            it.MemberBankAccountId == bankAccountId
+        }
 
         val errorMessage = when {
             bankAccountDetailResult?.Success == false ->
@@ -1464,66 +1360,6 @@ fun NavGraphBuilder.accountGraph(
                             memberId = sessionState.MemberId
                         )
 
-                        navigator.back()
-                    }
-                )
-            }
-        )
-    }
-
-    composable(
-        route = BankAccountRoutes.Edit,
-        arguments = listOf(
-            navArgument("bankAccountId") {
-                type = NavType.IntType
-            }
-        )
-    ) { backStackEntry ->
-        val accountState by accountController.State.collectAsState()
-
-        val bankAccountId = backStackEntry.arguments?.getInt("bankAccountId") ?: 0
-
-        LaunchedEffect(sessionState.MemberId, bankAccountId) {
-            accountController.GetBankAccount(
-                memberId = sessionState.MemberId,
-                bankAccountId = bankAccountId
-            )
-        }
-
-        BankAccountEditScreen(
-            bankAccountId = bankAccountId,
-            initialIban = accountState.BankAccount?.BankIban.orEmpty(),
-            isLoading = accountState.IsLoading &&
-                    accountState.CurrentAction == "GetBankAccount",
-            isSubmitting = accountState.IsLoading &&
-                    accountState.CurrentAction == "UpdateBankAccount",
-
-            errorMessage = accountState.BankAccountDetailResult
-                ?.takeIf { !it.Success }
-                ?.Message
-                ?: accountState.BankAccountUpdateResult
-                    ?.takeIf { !it.Success }
-                    ?.Message,
-
-            onBackClick = {
-                navigator.back()
-            },
-            onSaveClick = { iban ->
-                val currentBankAccount = accountState.BankAccount ?: return@BankAccountEditScreen
-
-                accountController.UpdateBankAccount(
-                    memberId = sessionState.MemberId,
-                    model = MemberBankAccountUpdateModel(
-                        MemberBankAccountId = currentBankAccount.MemberBankAccountId,
-                        InsertedBy = currentBankAccount.InsertedBy,
-                        InsertedDate = currentBankAccount.InsertedDate,
-                        StatusId = currentBankAccount.StatusId,
-                        BankId = currentBankAccount.BankId,
-                        BankIban = iban,
-                        MemberId = currentBankAccount.MemberId
-                    ),
-                    onSuccess = {
-                        accountController.GetBankAccounts(memberId = sessionState.MemberId)
                         navigator.back()
                     }
                 )

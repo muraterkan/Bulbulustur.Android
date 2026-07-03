@@ -52,27 +52,15 @@ object RetailRoutes {
     const val CampaignDetail =
         "retail/campaign-detail"
 
-    fun productDetail(
-        productId: Int,
-        storeId: Int,
-        variantId: Int
-    ): String {
+    fun productDetail(productId: Int, storeId: Int, variantId: Int): String {
         return "retail/product-detail/$productId/$storeId/$variantId"
     }
 
-    fun productReview(
-        productId: Int,
-        storeId: Int,
-        variantId: Int
-    ): String {
+    fun productReview(productId: Int, storeId: Int, variantId: Int): String {
         return "retail/product-review/$productId/$storeId/$variantId"
     }
 
-    fun productQuestion(
-        productId: Int,
-        storeId: Int,
-        variantId: Int
-    ): String {
+    fun productQuestion(productId: Int, storeId: Int, variantId: Int): String {
         return "retail/product-question/$productId/$storeId/$variantId"
     }
 }
@@ -93,6 +81,7 @@ object StoreRoutes {
 object WholesaleRoutes {
 
     const val ArgCategoryId = "categoryId"
+    const val ArgProductId = "productId"
 
     const val Home = "wholesale/home"
     const val CategoryHome = "wholesale/category-home"
@@ -101,7 +90,13 @@ object WholesaleRoutes {
         "wholesale/category-detail/{$ArgCategoryId}"
 
     const val ProductList = "wholesale/product-list"
-    const val ProductDetail = "wholesale/product-detail"
+
+    const val ProductDetail =
+        "wholesale/product-detail"
+
+    const val ProductDetailRoute =
+        "$ProductDetail?$ArgProductId={$ArgProductId}"
+
     const val Search = "wholesale/search"
     const val Menu = "wholesale/menu"
 
@@ -117,10 +112,12 @@ object WholesaleRoutes {
     const val CustomizationRequest =
         "wholesale/customization-request"
 
-    fun categoryDetail(
-        categoryId: Int
-    ): String {
+    fun categoryDetail(categoryId: Int): String {
         return "wholesale/category-detail/$categoryId"
+    }
+
+    fun productDetail(productId: Int): String {
+        return "$ProductDetail?$ArgProductId=$productId"
     }
 }
 
@@ -163,38 +160,23 @@ object OrderRoutes {
         return "order/detail/$orderId"
     }
 
-    fun contract(
-        orderKey: String,
-        storeKey: String
-    ): String {
+    fun contract(orderKey: String, storeKey: String): String {
         return "order/contract/$orderKey/$storeKey"
     }
 
-    fun cancelRequest(
-        orderStoreLineId: Long,
-        orderKey: String
-    ): String {
+    fun cancelRequest(orderStoreLineId: Long, orderKey: String): String {
         return "order/cancel-request/$orderStoreLineId/$orderKey"
     }
 
-    fun returnRequest(
-        orderStoreLineId: Long,
-        orderKey: String
-    ): String {
+    fun returnRequest(orderStoreLineId: Long, orderKey: String): String {
         return "order/return-request/$orderStoreLineId/$orderKey"
     }
 
-    fun reviewCreate(
-        orderStoreLineId: Long,
-        productId: Long,
-        memberKey: String
-    ): String {
+    fun reviewCreate(orderStoreLineId: Long, productId: Long, memberKey: String): String {
         return "order/review-create/$orderStoreLineId/$productId/$memberKey"
     }
 
-    fun shipmentTracking(
-        orderStoreLineId: Long
-    ): String {
+    fun shipmentTracking(orderStoreLineId: Long): String {
         return "order/shipment-tracking/$orderStoreLineId"
     }
 }
@@ -253,6 +235,7 @@ object AccountRoutes {
     fun requestDetail(requestId: Int): String {
         return "account/requests/detail/$requestId"
     }
+
     const val Subscriptions = "account/subscriptions"
     const val SubscriptionDetail = "account/subscriptions/detail"
     const val WalletBalance = "account/wallet-balance"
@@ -306,4 +289,3 @@ object MessageRoutes {
         return "message/detail/$messageId"
     }
 }
-

@@ -78,6 +78,7 @@ data class AccountControllerState(
     val CouponListResult: Result<List<MemberCouponDTO>>? = null,
     val ProductFavoriteListResult: Result<List<ProductFavoriteDTO>>? = null,
     val WholesaleFavoriteListResult: Result<List<WholesaleFavoriteDTO>>? = null,
+    val ProductFavoriteMoveToBasketResult: Result<Unit>? = null,
     val ContactPreferenceResult: Result<Unit>? = null,
     val ChangeMailResult: Result<ChangeMailModel>? = null,
     val IsChangeMailRequestSent: Boolean = false,
@@ -95,6 +96,8 @@ data class AccountControllerState(
     val IsPhoneInserted: Boolean = false,
     val IsPhoneVerified: Boolean = false,
     val PhoneMessage: String? = null,
+    val ProductFavoriteDeleteResult: Result<Unit>? = null,
+    val WholesaleFavoriteDeleteResult: Result<Unit>? = null,
 ) {
     val Member: MemberDTO?
         get() = MemberResult?.Data
@@ -1034,19 +1037,21 @@ class AccountController(
         }
     }
 
-    fun GetFavorites() {
+    fun GetFavorites(memberId: Int, count: Int = 100) {
+        if (!ValidateMember(memberId)) return
+
         viewModelScope.launch {
             SetLoading("GetFavorites")
 
             val productFavoritesDeferred = async {
                 executeService.GetAsync(cacheKey = "") {
-                    productFavoriteRepository.GetProductFavoriteListAsync()
+                    productFavoriteRepository.GetProductFavoritesAsync(memberId, count)
                 }
             }
 
             val wholesaleFavoritesDeferred = async {
                 executeService.GetAsync(cacheKey = "") {
-                    wholesaleFavoriteRepository.GetWholesaleFavoriteListAsync()
+                    wholesaleFavoriteRepository.GetWholesaleFavoriteListAsync(memberId, count)
                 }
             }
 
@@ -1065,6 +1070,133 @@ class AccountController(
                     WholesaleFavoriteListResult = wholesaleFavorites,
                     ErrorMessage = errorMessage
                 )
+            }
+        }
+    }
+
+    fun GetProductFavorites(memberId: Int, count: Int = 100) {
+        if (!ValidateMember(memberId)) return
+
+        viewModelScope.launch {
+            SetLoading("GetProductFavorites")
+
+            val response = executeService.GetAsync(cacheKey = "") {
+                productFavoriteRepository.GetProductFavoritesAsync(memberId, count)
+            }
+
+            Complete {
+                copy(
+                    ProductFavoriteListResult = response,
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+        }
+    }
+
+    fun GetWholesaleFavorites(memberId: Int, count: Int = 100) {
+        if (!ValidateMember(memberId)) return
+
+        viewModelScope.launch {
+            SetLoading("GetWholesaleFavorites")
+
+            val response = executeService.GetAsync(cacheKey = "") {
+                wholesaleFavoriteRepository.GetWholesaleFavoriteListAsync(memberId, count)
+            }
+
+            Complete {
+                copy(
+                    WholesaleFavoriteListResult = response,
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+        }
+    }
+
+    fun DeleteProductFavorite(
+        memberId: Int,
+        favoriteId: Int,
+        onSuccess: (() -> Unit)? = null
+    ) {
+        if (!ValidateMember(memberId)) return
+        if (!ValidateId(favoriteId, "Favori ürün bilgisi bulunamadı.")) return
+
+        viewModelScope.launch {
+            SetLoading("DeleteProductFavorite")
+
+            val response = executeService.PostAsync(operationType = "Account.ProductFavorite.Delete") {
+                productFavoriteRepository.DeleteProductFavoriteAsync(memberId, favoriteId)
+            }
+
+            Complete {
+                copy(
+                    ProductFavoriteDeleteResult = response,
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+
+            if (response.Success) {
+                onSuccess?.invoke()
+            }
+        }
+    }
+
+    fun MoveProductFavoriteToBasket(
+        memberId: Int,
+        favoriteId: Int,
+        onSuccess: (() -> Unit)? = null
+    ) {
+        if (!ValidateMember(memberId)) return
+        if (!ValidateId(favoriteId, "Favori ürün bilgisi bulunamadı.")) return
+
+        viewModelScope.launch {
+            SetLoading("MoveProductFavoriteToBasket")
+
+            val response = executeService.PostAsync(
+                operationType = "Account.ProductFavorite.MoveToBasket"
+            ) {
+                productFavoriteRepository.MoveProductFavoriteToBasketAsync(
+                    memberId = memberId,
+                    favoriteId = favoriteId
+                )
+            }
+
+            Complete {
+                copy(
+                    ProductFavoriteMoveToBasketResult = response,
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+
+            if (response.Success) {
+                onSuccess?.invoke()
+            }
+        }
+    }
+
+    fun DeleteWholesaleFavorite(
+        memberId: Int,
+        wholesaleFavoriteId: Int,
+        onSuccess: (() -> Unit)? = null
+    ) {
+        if (!ValidateMember(memberId)) return
+        if (!ValidateId(wholesaleFavoriteId, "Toptan favori ürün bilgisi bulunamadı.")) return
+
+        viewModelScope.launch {
+            SetLoading("DeleteWholesaleFavorite")
+
+            val response = executeService.PostAsync(operationType = "Account.WholesaleFavorite.Delete") {
+                wholesaleFavoriteRepository.DeleteAsync(memberId, wholesaleFavoriteId)
+            }
+
+            Complete {
+                copy(
+                    WholesaleFavoriteDeleteResult = response,
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+
+            if (response.Success) {
+                onSuccess?.invoke()
             }
         }
     }

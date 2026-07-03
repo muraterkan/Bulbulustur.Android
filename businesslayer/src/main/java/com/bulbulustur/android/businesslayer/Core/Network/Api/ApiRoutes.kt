@@ -257,6 +257,9 @@ object ApiRoutes {
     const val B2B_PRODUCT_BASE_URL =
         "http://$APPLICATION_SERVER_HOST:30235/api/Product/"
 
+    const val B2B_WHOLESALE_FAVORITE_BASE_URL =
+        "http://$APPLICATION_SERVER_HOST:30235/api/WholesaleFavorite/"
+
     /*
      * RFQ ayrı bir API değildir.
      *

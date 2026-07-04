@@ -2,9 +2,6 @@
 
 data class CompanyUpdateModel(
     val CompanyId: Int = 0,
-    val InsertedBy: Int = 0,
-    val InsertedDate: String = "",
-    val StatusId: Int = 0,
     val CompanyTypeId: Int = 0,
     val CompanyName: String = "",
     val CountryId: Int = 0,
@@ -15,25 +12,10 @@ data class CompanyUpdateModel(
     val PostCode: String = "",
     val Address: String = "",
     val Url: String = "",
-    val MemberId: Int = 0,
     val MersisNo: String = "",
     val KepAddress: String = "",
     val TaxOffice: String = "",
     val TaxId: String = "",
-    val CurrencyId: Int = 0,
-    val TradeRegisterNumber: String = "",
-    val Ettn: String = "",
-    val Fax: String = "",
-    val Logo: String = "",
-    val Slogan: String = "",
-    val Verified: Boolean = false,
-    val Uuid: String = "",
-    val B2bIndex: Boolean = false,
     val YearEstablished: String = "",
-    val CoverPicture: String = "",
-    val Email: String = "",
-    val Level: Int = 0,
-    val CompanyKey: String = "",
-    val SeoTitle: String = "",
-    val SeoDescription: String = ""
+    val Email: String = ""
 )

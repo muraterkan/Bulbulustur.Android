@@ -1,6 +1,5 @@
 package com.bulbulustur.android.Application.Views.Account
 
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material.icons.outlined.ErrorOutline
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Public
@@ -25,66 +25,52 @@ import androidx.compose.material.icons.outlined.Verified
 import androidx.compose.material.icons.outlined.WorkspacePremium
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
-import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
+import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBAlpha
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BbTypography
-import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBAlpha
-
+import com.bulbulustur.android.businesslayer.Core.DTO.CompanyDTO
 
 @Composable
 fun CompanyB2BIndexScreen(
+    company: CompanyDTO?,
+    isLoading: Boolean,
+    errorMessage: String?,
     onBackClick: () -> Unit = {},
+    onRetryClick: () -> Unit = {},
     onActivateClick: () -> Unit = {}
 ) {
-    val agreementAcceptedState = remember {
-        mutableStateOf(false)
-    }
-
-    val pageBackground = Brush.verticalGradient(
-        colors = listOf(
-            MaterialTheme.colorScheme.primaryContainer.copy(alpha = BBAlpha.DisabledLabel),
-            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.80f),
-            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.95f)
-        )
-    )
+    var agreementAccepted by remember { mutableStateOf(false) }
 
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.background,
-        topBar = {
-            BbInnerPageHeader(
-                title = "B2B Index",
-                onBackClick = onBackClick
-            )
-        }
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+        topBar = { BbInnerPageHeader(title = "B2B Index", onBackClick = onBackClick) }
     ) { innerPadding ->
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(pageBackground)
-                .padding(innerPadding),
+            modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surfaceVariant).padding(innerPadding),
             contentPadding = PaddingValues(
                 start = BBSpacing.PageHorizontal,
                 top = BBSpacing.PageTopCompact,
@@ -93,74 +79,65 @@ fun CompanyB2BIndexScreen(
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
-            item {
-                CompanyB2BIndexIntroCard()
-            }
-
-            item {
-                CompanyB2BIndexSummaryCard()
-            }
-
-            item {
-                CompanyB2BIndexStatsGrid()
-            }
-
-            item {
-                CompanyB2BIndexSection(
-                    title = "B2B Index Ne Sağlar?",
-                    description = "Firmanızın toptan ticaret akışlarında daha görünür olmasına yardımcı olur.",
-                    icon = Icons.Outlined.WorkspacePremium
-                ) {
-                    CompanyB2BIndexBenefitRow(
-                        title = "Global Görünürlük",
-                        description = "Şirket profiliniz uluslararası alıcılar için daha Keşfedilebilir hale gelir.",
-                        icon = Icons.Outlined.Public
-                    )
-
-                    CompanyDashedDivider()
-
-                    CompanyB2BIndexBenefitRow(
-                        title = "RFQ Fırsatları",
-                        description = "Potansiyel alıcılardan gelen fiyat teklifi süreçlerine daha yakın olursunuz.",
-                        icon = Icons.Outlined.RequestQuote
-                    )
-
-                    CompanyDashedDivider()
-
-                    CompanyB2BIndexBenefitRow(
-                        title = "Kurumsal Vitrin",
-                        description = "Şirket bilgileriniz daha düzenli ve güven veren bir B2B profilinde sunulur.",
-                        icon = Icons.Outlined.Storefront
-                    )
+            when {
+                isLoading -> item { CompanyB2BLoadingState() }
+                !errorMessage.isNullOrBlank() -> item {
+                    CompanyB2BErrorState(message = errorMessage, onRetryClick = onRetryClick)
                 }
-            }
+                company == null -> item { CompanyB2BNotFoundState(onRetryClick = onRetryClick) }
+                else -> {
+                    item { CompanyB2BIndexIntroCard() }
+                    item { CompanyB2BIndexSummaryCard(company = company) }
+                    item { CompanyB2BIndexStatsGrid(company = company) }
 
-            item {
-                CompanyB2BIndexAgreementCard(
-                    isAccepted = agreementAcceptedState.value,
-                    onAcceptedChange = { isAccepted ->
-                        agreementAcceptedState.value = isAccepted
-                    }
-                )
-            }
+                    item {
+                        CompanyB2BIndexSection(
+                            title = "B2B Index Ne Sağlar?",
+                            description = "Firmanızın toptan ticaret akışlarında daha görünür olmasına yardımcı olur.",
+                            icon = Icons.Outlined.WorkspacePremium
+                        ) {
+                            CompanyB2BIndexBenefitRow(
+                                title = "Global Görünürlük",
+                                description = "Şirket profiliniz uluslararası alıcılar için daha keşfedilebilir hale gelir.",
+                                icon = Icons.Outlined.Public
+                            )
 
-            item {
-                BbButton(
-                    text = "Şirketimi B2B Indexy'e Dahil Et",
-                    onClick = {
-                        if (agreementAcceptedState.value) {
-                            onActivateClick()
+                            CompanyB2BDivider()
+
+                            CompanyB2BIndexBenefitRow(
+                                title = "RFQ Fırsatları",
+                                description = "Potansiyel alıcılardan gelen fiyat teklifi süreçlerine daha yakın olursunuz.",
+                                icon = Icons.Outlined.RequestQuote
+                            )
+
+                            CompanyB2BDivider()
+
+                            CompanyB2BIndexBenefitRow(
+                                title = "Kurumsal Vitrin",
+                                description = "Şirket bilgileriniz daha düzenli ve güven veren bir B2B profilinde sunulur.",
+                                icon = Icons.Outlined.Storefront
+                            )
                         }
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    variant = if (agreementAcceptedState.value) {
-                        BbButtonVariant.Primary
-                    } else {
-                        BbButtonVariant.Light
-                    },
-                    size = BbButtonSize.Large,
-                    enabled = agreementAcceptedState.value
-                )
+                    }
+
+                    item {
+                        CompanyB2BIndexAgreementCard(
+                            isAccepted = agreementAccepted,
+                            onAcceptedChange = { agreementAccepted = it }
+                        )
+                    }
+
+                    item {
+                        BbButton(
+                            text = "Şirketimi B2B Index'e Dahil Et",
+                            onClick = onActivateClick,
+                            modifier = Modifier.fillMaxWidth(),
+                            variant = if (agreementAccepted) BbButtonVariant.Primary else BbButtonVariant.Light,
+                            size = BbButtonSize.Large,
+                            enabled = agreementAccepted
+                        )
+                    }
+                }
             }
         }
     }
@@ -168,22 +145,16 @@ fun CompanyB2BIndexScreen(
 
 @Composable
 private fun CompanyB2BIndexIntroCard() {
-    BbCard(
-        modifier = Modifier.fillMaxWidth(),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium
-    ) {
+    BbCard(modifier = Modifier.fillMaxWidth(), variant = BbCardVariant.Outlined, padding = BbCardPadding.Medium) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
-                modifier = Modifier
-                    .size(BBIcon.BoxXl)
-                    .background(
-                        color = MaterialTheme.colorScheme.primaryContainer,
-                        shape = BBRadius.XlShape
-                    ),
+                modifier = Modifier.size(BBIcon.BoxXl).background(
+                    color = MaterialTheme.colorScheme.primaryContainer,
+                    shape = BBRadius.XlShape
+                ),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
@@ -194,10 +165,7 @@ private fun CompanyB2BIndexIntroCard() {
                 )
             }
 
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
-            ) {
+            Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)) {
                 Text(
                     text = "Şirketinizi Global Alıcılara Açın",
                     style = BbTypography.titleLarge,
@@ -205,7 +173,7 @@ private fun CompanyB2BIndexIntroCard() {
                 )
 
                 Text(
-                    text = "Toptan alıcıların firmanızı keşfetmesi, teklif süreçlerinize ulaşması ve kurumsal profilinizi görmesi için şirketinizi B2B Indexy'e dahil edin.",
+                    text = "Toptan alıcıların firmanızı keşfetmesi ve kurumsal profilinize ulaşması için şirketinizi B2B Index'e dahil edin.",
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -215,27 +183,22 @@ private fun CompanyB2BIndexIntroCard() {
 }
 
 @Composable
-private fun CompanyB2BIndexSummaryCard() {
+private fun CompanyB2BIndexSummaryCard(company: CompanyDTO) {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(
-                color = MaterialTheme.colorScheme.inverseSurface,
-                shape = BBRadius.XlShape
-            )
-            .padding(BBSpacing.CardPadding)
+        modifier = Modifier.fillMaxWidth().background(
+            color = MaterialTheme.colorScheme.inverseSurface,
+            shape = BBRadius.XlShape
+        ).padding(BBSpacing.CardPadding)
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
-                modifier = Modifier
-                    .size(BBIcon.BoxXl)
-                    .background(
-                        color = MaterialTheme.colorScheme.primary,
-                        shape = BBRadius.XlShape
-                    ),
+                modifier = Modifier.size(BBIcon.BoxXl).background(
+                    color = MaterialTheme.colorScheme.primary,
+                    shape = BBRadius.XlShape
+                ),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
@@ -246,18 +209,18 @@ private fun CompanyB2BIndexSummaryCard() {
                 )
             }
 
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
-            ) {
+            Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)) {
                 Text(
-                    text = "Türkiye Global Ticaret Limited Şirketi",
+                    text = company.CompanyName.ifBlank { "-" },
                     style = BbTypography.titleMedium,
                     color = MaterialTheme.colorScheme.inverseOnSurface
                 )
 
                 Text(
-                    text = "Limited Şirket . İstanbul / Türkiye",
+                    text = listOf(company.CompanyType, company.CityName, company.CountryName)
+                        .filter { it.isNotBlank() }
+                        .joinToString(" · ")
+                        .ifBlank { "-" },
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.inverseOnSurface.copy(alpha = BBAlpha.Muted)
                 )
@@ -267,12 +230,12 @@ private fun CompanyB2BIndexSummaryCard() {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     CompanyB2BIndexStatusPill(
-                        text = "B2B Index Kapalı",
+                        text = if (company.B2bIndex) "B2B Index Aktif" else "B2B Index Kapalı",
                         icon = Icons.Outlined.Verified
                     )
 
                     CompanyB2BIndexStatusPill(
-                        text = "Profil Aktif",
+                        text = if (company.StatusId > 0) "Profil Aktif" else "Profil Pasif",
                         icon = Icons.Outlined.CheckCircle
                     )
                 }
@@ -282,20 +245,12 @@ private fun CompanyB2BIndexSummaryCard() {
 }
 
 @Composable
-private fun CompanyB2BIndexStatusPill(
-    text: String,
-    icon: ImageVector
-) {
+private fun CompanyB2BIndexStatusPill(text: String, icon: ImageVector) {
     Row(
-        modifier = Modifier
-            .background(
-                color = MaterialTheme.colorScheme.inverseOnSurface.copy(alpha = BBAlpha.Overlay),
-                shape = BBRadius.Badge
-            )
-            .padding(
-                horizontal = BBSpacing.Space2,
-                vertical = BBSpacing.Space1
-            ),
+        modifier = Modifier.background(
+            color = MaterialTheme.colorScheme.inverseOnSurface.copy(alpha = BBAlpha.Overlay),
+            shape = BBRadius.Badge
+        ).padding(horizontal = BBSpacing.Space2, vertical = BBSpacing.Space1),
         horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space1),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -315,72 +270,51 @@ private fun CompanyB2BIndexStatusPill(
 }
 
 @Composable
-private fun CompanyB2BIndexStatsGrid() {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
-        ) {
+private fun CompanyB2BIndexStatsGrid(company: CompanyDTO) {
+    Column(verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)) {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)) {
             CompanyB2BIndexStatCard(
                 modifier = Modifier.weight(1f),
                 icon = Icons.Outlined.Storefront,
                 label = "Firma Kimliği",
-                value = "2-FGA0IBO7EGAZ5nB"
+                value = company.CompanyKey.ifBlank { "-" }
             )
 
             CompanyB2BIndexStatCard(
                 modifier = Modifier.weight(1f),
                 icon = Icons.Outlined.LocationOn,
                 label = "Lokasyon",
-                value = "İstanbul"
+                value = company.CityName.ifBlank { "-" }
             )
         }
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
-        ) {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)) {
             CompanyB2BIndexStatCard(
                 modifier = Modifier.weight(1f),
                 icon = Icons.Outlined.Public,
                 label = "Görünürlük",
-                value = "Kapalı"
+                value = if (company.B2bIndex) "Açık" else "Kapalı"
             )
 
             CompanyB2BIndexStatCard(
                 modifier = Modifier.weight(1f),
                 icon = Icons.Outlined.RequestQuote,
                 label = "RFQ",
-                value = "Hazır"
+                value = if (company.B2bIndex) "Açık" else "Hazır"
             )
         }
     }
 }
 
 @Composable
-private fun CompanyB2BIndexStatCard(
-    modifier: Modifier,
-    icon: ImageVector,
-    label: String,
-    value: String
-) {
-    BbCard(
-        modifier = modifier,
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium
-    ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
-        ) {
+private fun CompanyB2BIndexStatCard(modifier: Modifier, icon: ImageVector, label: String, value: String) {
+    BbCard(modifier = modifier, variant = BbCardVariant.Outlined, padding = BbCardPadding.Medium) {
+        Column(verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)) {
             Box(
-                modifier = Modifier
-                    .size(BBIcon.BoxMd)
-                    .background(
-                        color = MaterialTheme.colorScheme.primaryContainer,
-                        shape = BBRadius.PillShape
-                    ),
+                modifier = Modifier.size(BBIcon.BoxMd).background(
+                    color = MaterialTheme.colorScheme.primaryContainer,
+                    shape = BBRadius.PillShape
+                ),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
@@ -391,17 +325,8 @@ private fun CompanyB2BIndexStatCard(
                 )
             }
 
-            Text(
-                text = label,
-                style = BbTypography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-
-            Text(
-                text = value,
-                style = BbTypography.titleSmall,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+            Text(text = label, style = BbTypography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(text = value, style = BbTypography.titleSmall, color = MaterialTheme.colorScheme.onSurface)
         }
     }
 }
@@ -413,28 +338,18 @@ private fun CompanyB2BIndexSection(
     icon: ImageVector,
     content: @Composable ColumnScope.() -> Unit
 ) {
-    BbCard(
-        modifier = Modifier.fillMaxWidth(),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.None
-    ) {
-        Column(
-            modifier = Modifier.background(MaterialTheme.colorScheme.surface)
-        ) {
+    BbCard(modifier = Modifier.fillMaxWidth(), variant = BbCardVariant.Outlined, padding = BbCardPadding.None) {
+        Column(modifier = Modifier.background(MaterialTheme.colorScheme.surface)) {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(BBSpacing.CardPadding),
+                modifier = Modifier.fillMaxWidth().padding(BBSpacing.CardPadding),
                 horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Box(
-                    modifier = Modifier
-                        .size(BBIcon.BoxMd)
-                        .background(
-                            color = MaterialTheme.colorScheme.primaryContainer,
-                            shape = BBRadius.LgShape
-                        ),
+                    modifier = Modifier.size(BBIcon.BoxMd).background(
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        shape = BBRadius.LgShape
+                    ),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
@@ -445,52 +360,30 @@ private fun CompanyB2BIndexSection(
                     )
                 }
 
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
-                ) {
-                    Text(
-                        text = title,
-                        style = BbTypography.titleSmall,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-
-                    Text(
-                        text = description,
-                        style = BbTypography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                Column(verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)) {
+                    Text(text = title, style = BbTypography.titleSmall, color = MaterialTheme.colorScheme.onSurface)
+                    Text(text = description, style = BbTypography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
 
-            CompanyDashedDivider()
-
-            Column {
-                content()
-            }
+            CompanyB2BDivider()
+            Column { content() }
         }
     }
 }
 
 @Composable
-private fun CompanyB2BIndexBenefitRow(
-    title: String,
-    description: String,
-    icon: ImageVector
-) {
+private fun CompanyB2BIndexBenefitRow(title: String, description: String, icon: ImageVector) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(BBSpacing.CardPadding),
+        modifier = Modifier.fillMaxWidth().padding(BBSpacing.CardPadding),
         horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
-            modifier = Modifier
-                .size(BBIcon.BoxMd)
-                .background(
-                    color = MaterialTheme.colorScheme.surfaceVariant,
-                    shape = BBRadius.PillShape
-                ),
+            modifier = Modifier.size(BBIcon.BoxMd).background(
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                shape = BBRadius.PillShape
+            ),
             contentAlignment = Alignment.Center
         ) {
             Icon(
@@ -501,40 +394,21 @@ private fun CompanyB2BIndexBenefitRow(
             )
         }
 
-        Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
-        ) {
-            Text(
-                text = title,
-                style = BbTypography.titleSmall,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-
-            Text(
-                text = description,
-                style = BbTypography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+        Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)) {
+            Text(text = title, style = BbTypography.titleSmall, color = MaterialTheme.colorScheme.onSurface)
+            Text(text = description, style = BbTypography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
 }
 
 @Composable
-private fun CompanyB2BIndexAgreementCard(
-    isAccepted: Boolean,
-    onAcceptedChange: (Boolean) -> Unit
-) {
+private fun CompanyB2BIndexAgreementCard(isAccepted: Boolean, onAcceptedChange: (Boolean) -> Unit) {
     BbCard(
-        modifier = Modifier
-            .fillMaxWidth()
-            .toggleable(
-                value = isAccepted,
-                role = Role.Checkbox,
-                onValueChange = { checked ->
-                    onAcceptedChange(checked)
-                }
-            ),
+        modifier = Modifier.fillMaxWidth().toggleable(
+            value = isAccepted,
+            role = Role.Checkbox,
+            onValueChange = onAcceptedChange
+        ),
         variant = BbCardVariant.Outlined,
         padding = BbCardPadding.Medium
     ) {
@@ -544,9 +418,7 @@ private fun CompanyB2BIndexAgreementCard(
         ) {
             Checkbox(
                 checked = isAccepted,
-                onCheckedChange = { checked ->
-                    onAcceptedChange(checked)
-                },
+                onCheckedChange = onAcceptedChange,
                 colors = CheckboxDefaults.colors(
                     checkedColor = MaterialTheme.colorScheme.primary,
                     uncheckedColor = MaterialTheme.colorScheme.outline,
@@ -554,17 +426,15 @@ private fun CompanyB2BIndexAgreementCard(
                 )
             )
 
-            Column(
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
-            ) {
+            Column(verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)) {
                 Text(
-                    text = "Bulbulustur Kullanıcı Sözleşmesiy'ni okudum ve kabul ediyorum.",
+                    text = "Bulbulustur Kullanıcı Sözleşmesi'ni okudum ve kabul ediyorum.",
                     style = BbTypography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = "B2B Indexy'e dahil olduğunuzda şirket profiliniz ve uygun kurumsal bilgileriniz platform üzerinde görünür olabilir.",
+                    text = "B2B Index'e dahil olduğunuzda şirket profiliniz ve uygun kurumsal bilgileriniz platform üzerinde görünür olabilir.",
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -574,29 +444,55 @@ private fun CompanyB2BIndexAgreementCard(
 }
 
 @Composable
-private fun CompanyDashedDivider() {
-    val dividerColor = MaterialTheme.colorScheme.outlineVariant
-
-    Canvas(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(
-                start = BBSpacing.Space4,
-                end = BBSpacing.Space4
-            )
-            .size(height = 1.dp, width = BBSpacing.BorderThin)
-    ) {
-        drawLine(
-            color = dividerColor,
-            start = Offset(0f, 0f),
-            end = Offset(size.width, 0f),
-            strokeWidth = 1.dp.toPx(),
-            pathEffect = PathEffect.dashPathEffect(
-                intervals = floatArrayOf(10f, 8f),
-                phase = 0f
-            )
-        )
+private fun CompanyB2BLoadingState() {
+    BbCard(modifier = Modifier.fillMaxWidth(), variant = BbCardVariant.Outlined, padding = BbCardPadding.Large) {
+        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+        }
     }
 }
 
+@Composable
+private fun CompanyB2BErrorState(message: String, onRetryClick: () -> Unit) {
+    BbCard(modifier = Modifier.fillMaxWidth(), variant = BbCardVariant.Outlined, padding = BbCardPadding.Large) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.ErrorOutline,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.error,
+                modifier = Modifier.size(BBIcon.Section)
+            )
+            Text(text = message, style = BbTypography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            BbButton(text = "Tekrar Dene", onClick = onRetryClick, variant = BbButtonVariant.Primary, size = BbButtonSize.Small)
+        }
+    }
+}
 
+@Composable
+private fun CompanyB2BNotFoundState(onRetryClick: () -> Unit) {
+    BbCard(modifier = Modifier.fillMaxWidth(), variant = BbCardVariant.Outlined, padding = BbCardPadding.Large) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Storefront,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.size(BBIcon.Section)
+            )
+            Text(text = "Firma bilgisi bulunamadı", style = BbTypography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
+            BbButton(text = "Tekrar Dene", onClick = onRetryClick, variant = BbButtonVariant.Primary, size = BbButtonSize.Small)
+        }
+    }
+}
+
+@Composable
+private fun CompanyB2BDivider() {
+    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+}

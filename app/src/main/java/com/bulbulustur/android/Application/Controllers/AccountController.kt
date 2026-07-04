@@ -48,12 +48,16 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-
+import com.bulbulustur.android.businesslayer.Core.DTO.StoreRequestDTO
+import com.bulbulustur.android.businesslayer.Core.Interface.IStoreRequestRepository
 import com.bulbulustur.android.businesslayer.Core.Model.ChangeMailModel
 import com.bulbulustur.android.businesslayer.Core.DTO.ReviewDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.IReviewRepository
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberSubscriptionDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.IMemberSubscriptionRepository
+import com.bulbulustur.android.businesslayer.Core.DTO.CompanyDTO
+import com.bulbulustur.android.businesslayer.Core.Interface.ICompanyRepository
+import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.CompanyUpdateModel
 
 data class AccountControllerState(
     val IsLoading: Boolean = false,
@@ -112,7 +116,12 @@ data class AccountControllerState(
     val ReviewListResult: Result<List<ReviewDTO>>? = null,
     val MemberSubscriptionListResult: Result<List<MemberSubscriptionDTO>>? = null,
     val MemberSubscriptionDetailResult: Result<MemberSubscriptionDTO?>? = null,
+    val CompanyResult: Result<CompanyDTO?>? = null,
+    val CompanyUpdateResult: Result<Any?>? = null,
+    val StoreRequestResult: Result<StoreRequestDTO?>? = null,
 ) {
+    val Company: CompanyDTO?
+        get() = CompanyResult?.Data
     val Member: MemberDTO?
         get() = MemberResult?.Data
 
@@ -169,6 +178,9 @@ data class AccountControllerState(
 
     val MemberSubscription: MemberSubscriptionDTO?
         get() = MemberSubscriptionDetailResult?.Data
+
+    val StoreRequest: StoreRequestDTO?
+        get() = StoreRequestResult?.Data
 }
 
 class AccountController(
@@ -188,12 +200,66 @@ class AccountController(
     private val productCustomerQuestionRepository: IProductCustomerQuestionRepository,
     private val returnRequestRepository: IReturnRequestRepository,
     private val reviewRepository: IReviewRepository,
-    private val memberSubscriptionRepository: IMemberSubscriptionRepository
+    private val memberSubscriptionRepository: IMemberSubscriptionRepository,
+    private val companyRepository: ICompanyRepository,
+    private val storeRequestRepository: IStoreRequestRepository,
 
 ) : BaseController() {
 
     private val _state = MutableStateFlow(AccountControllerState())
     val State: StateFlow<AccountControllerState> = _state.asStateFlow()
+
+    fun GetAccountCompany(languageId: Int, memberId: Int) {
+        if (!ValidateMember(memberId)) return
+
+        viewModelScope.launch {
+            SetLoading("GetAccountCompany")
+
+            val response = executeService.GetAsync(cacheKey = "") {
+                companyRepository.GetAccountCompanyAsync(languageId, memberId)
+            }
+
+            Complete {
+                copy(
+                    CompanyResult = response,
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+        }
+    }
+
+    fun UpdateAccountCompany(languageId: Int, memberId: Int, updateModel: CompanyUpdateModel) {
+        if (!ValidateMember(memberId)) return
+        if (!ValidateId(updateModel.CompanyId, "Şirket bilgisi bulunamadı.")) return
+
+        viewModelScope.launch {
+            SetLoading("UpdateAccountCompany")
+
+            val response = executeService.PostAsync {
+                companyRepository.UpdateAccountCompanyAsync(memberId, updateModel)
+            }
+
+            Complete {
+                copy(
+                    CompanyUpdateResult = response,
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+
+            if (response.Success) {
+                GetAccountCompany(languageId = languageId, memberId = memberId)
+            }
+        }
+    }
+
+    fun ResetCompanyUpdateResult() {
+        _state.update {
+            it.copy(
+                CompanyUpdateResult = null,
+                ErrorMessage = null
+            )
+        }
+    }
 
     fun GetAccount(languageId: Int, memberId: Int) {
         if (!ValidateMember(memberId)) return
@@ -1342,6 +1408,25 @@ class AccountController(
 
             if (response.Success) {
                 onSuccess?.invoke()
+            }
+        }
+    }
+
+    fun GetAccountStoreRequestStatus(memberId: Int) {
+        if (!ValidateMember(memberId)) return
+
+        viewModelScope.launch {
+            SetLoading("GetAccountStoreRequestStatus")
+
+            val response = executeService.GetAsync(cacheKey = "") {
+                storeRequestRepository.GetAccountStoreRequestStatusAsync(memberId)
+            }
+
+            Complete {
+                copy(
+                    StoreRequestResult = response,
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
             }
         }
     }

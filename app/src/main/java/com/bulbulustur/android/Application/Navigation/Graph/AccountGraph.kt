@@ -15,6 +15,7 @@ import com.bulbulustur.android.Application.Controllers.LogonController
 import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
 import com.bulbulustur.android.Application.Navigation.Routes.AccountRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.BankAccountRoutes
+import com.bulbulustur.android.Application.Navigation.Routes.CompanyRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.LogonRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.OrderRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.RetailRoutes
@@ -951,46 +952,168 @@ fun NavGraphBuilder.accountGraph(
             }
         )
     }
-
     composable(route = AccountRoutes.CompanyInfo) {
+        val accountState by accountController.State.collectAsState()
+
+        val languageId = when (sessionState.Language) {
+            EApplicationLanguage.Turkish -> 1
+            EApplicationLanguage.English -> 2
+        }
+
+        LaunchedEffect(languageId, sessionState.MemberId) {
+            accountController.GetAccountCompany(languageId = languageId, memberId = sessionState.MemberId)
+            accountController.GetMemberSubscriptions(memberId = sessionState.MemberId, count = 1)
+            accountController.GetAccountStoreRequestStatus(memberId = sessionState.MemberId)
+        }
+
         CompanyInfoScreen(
-            onBackClick = {
-                navigator.back()
+            company = accountState.Company,
+            storeRequest = accountState.StoreRequest,
+            subscription = accountState.MemberSubscriptions.firstOrNull(),
+            isLoading = accountState.IsLoading && (
+                    accountState.CurrentAction == "GetAccountCompany" ||
+                            accountState.CurrentAction == "GetMemberSubscriptions" ||
+                            accountState.CurrentAction == "GetAccountStoreRequestStatus"
+                    ),
+            errorMessage = accountState.CompanyResult?.takeIf { !it.Success }?.Message
+                ?: accountState.StoreRequestResult?.takeIf { !it.Success }?.Message,
+            onBackClick = { navigator.back() },
+            onRetryClick = {
+                accountController.GetAccountCompany(languageId = languageId, memberId = sessionState.MemberId)
+                accountController.GetMemberSubscriptions(memberId = sessionState.MemberId, count = 1)
+                accountController.GetAccountStoreRequestStatus(memberId = sessionState.MemberId)
             },
             onEditClick = {
                 navigator.navController.navigate(AccountRoutes.CompanyInfoEdit)
             },
             onB2BIndexClick = {
-                navigator.navController.navigate(AccountRoutes.CompanyB2BIndex)
+                val route = if (accountState.Company?.B2bIndex == true) {
+                    AccountRoutes.CompanyB2BStatus
+                } else {
+                    AccountRoutes.CompanyB2BIndex
+                }
+
+                navigator.navController.navigate(route)
             },
             onB2CStoreClick = {
+                when (accountState.StoreRequest?.StoreConfirmation) {
+                    3 -> {
+                        navigator.navController.navigate(
+                            CompanyRoutes.CompanyHome
+                        )
+                    }
+
+                    else -> {
+                        navigator.navController.navigate(
+                            CompanyRoutes.CompanyActivate
+                        )
+                    }
+                }
             }
         )
     }
 
     composable(route = AccountRoutes.CompanyInfoEdit) {
-        CompanyInfoEditScreen(
-            onBackClick = {
+        val accountState by accountController.State.collectAsState()
+
+        val languageId = when (sessionState.Language) {
+            EApplicationLanguage.Turkish -> 1
+            EApplicationLanguage.English -> 2
+        }
+
+        LaunchedEffect(languageId, sessionState.MemberId) {
+            if (accountState.Company == null) {
+                accountController.GetAccountCompany(languageId = languageId, memberId = sessionState.MemberId)
+            }
+
+            accountController.ResetCompanyUpdateResult()
+        }
+
+        LaunchedEffect(accountState.CompanyUpdateResult?.Success) {
+            if (accountState.CompanyUpdateResult?.Success == true) {
                 navigator.back()
+            }
+        }
+
+        CompanyInfoEditScreen(
+            company = accountState.Company,
+            isLoading = accountState.IsLoading,
+            errorMessage = accountState.ErrorMessage,
+            onBackClick = { navigator.back() },
+            onRetryClick = {
+                accountController.GetAccountCompany(languageId = languageId, memberId = sessionState.MemberId)
+            },
+            onSaveClick = { updateModel ->
+                accountController.UpdateAccountCompany(
+                    languageId = languageId,
+                    memberId = sessionState.MemberId,
+                    updateModel = updateModel
+                )
             }
         )
     }
 
     composable(route = AccountRoutes.CompanyB2BIndex) {
+        val accountState by accountController.State.collectAsState()
+
+        val languageId = when (sessionState.Language) {
+            EApplicationLanguage.Turkish -> 1
+            EApplicationLanguage.English -> 2
+        }
+
+        LaunchedEffect(languageId, sessionState.MemberId) {
+            accountController.GetAccountCompany(languageId = languageId, memberId = sessionState.MemberId)
+        }
+
         CompanyB2BIndexScreen(
-            onBackClick = {
-                navigator.back()
+            company = accountState.Company,
+            isLoading = accountState.IsLoading && accountState.CurrentAction == "GetAccountCompany",
+            errorMessage = accountState.CompanyResult?.takeIf { !it.Success }?.Message,
+            onBackClick = { navigator.back() },
+            onRetryClick = {
+                accountController.GetAccountCompany(
+                    languageId = languageId,
+                    memberId = sessionState.MemberId
+                )
             },
             onActivateClick = {
-                navigator.navController.navigate(AccountRoutes.CompanyB2BStatus)
             }
         )
     }
 
     composable(route = AccountRoutes.CompanyB2BStatus) {
+        val accountState by accountController.State.collectAsState()
+
+        val languageId = when (sessionState.Language) {
+            EApplicationLanguage.Turkish -> 1
+            EApplicationLanguage.English -> 2
+        }
+
+        LaunchedEffect(languageId, sessionState.MemberId) {
+            accountController.GetAccountCompany(languageId = languageId, memberId = sessionState.MemberId)
+            accountController.GetMemberSubscriptions(memberId = sessionState.MemberId, count = 1)
+            accountController.GetAccountStoreRequestStatus(memberId = sessionState.MemberId)
+        }
+
         CompanyB2BStatusScreen(
-            onBackClick = {
-                navigator.back()
+            company = accountState.Company,
+            subscription = accountState.MemberSubscriptions.firstOrNull(),
+            isLoading = accountState.IsLoading && (
+                    accountState.CurrentAction == "GetAccountCompany" ||
+                            accountState.CurrentAction == "GetMemberSubscriptions" || accountState.CurrentAction == "GetAccountStoreRequestStatus"
+                    ),
+            errorMessage = accountState.CompanyResult?.takeIf { !it.Success }?.Message,
+            onBackClick = { navigator.back() },
+            onRetryClick = {
+                accountController.GetAccountCompany(
+                    languageId = languageId,
+                    memberId = sessionState.MemberId
+                )
+
+                accountController.GetMemberSubscriptions(
+                    memberId = sessionState.MemberId,
+                    count = 1
+                )
             },
             onB2BManagementPanelClick = {
             }

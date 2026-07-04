@@ -2,70 +2,27 @@ package com.bulbulustur.android.businesslayer.Core.Repository
 
 import com.bulbulustur.android.businesslayer.Core.DTO.CompanyDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.ICompanyRepository
-import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.CompanyInsertModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.CompanyUpdateModel
 import com.bulbulustur.android.businesslayer.Core.Network.ApiClient
 import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
-class CompanyRepository(
-    private val apiClient: ApiClient = ApiClient
-) : ICompanyRepository {
+class CompanyRepository(private val apiClient: ApiClient = ApiClient) : ICompanyRepository {
 
-    override suspend fun GetCompanyListAsync(): Result<List<CompanyDTO>> {
+    override suspend fun GetAccountCompanyAsync(languageId: Int, memberId: Int): Result<CompanyDTO?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetCompanyListAsync"
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_BASE_URL,
+            method = "Company/GetAccountCompanyAsync",
+            query = "languageId=$languageId&memberId=$memberId"
         )
     }
 
-    override suspend fun GetCompanyByIdAsync(
-        companyId: Int
-    ): Result<CompanyUpdateModel?> {
-        return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetCompanyByIdAsync",
-            query = "companyId=$companyId"
-        )
-    }
-
-    override suspend fun GetCompanyByIdExtendedAsync(
-        companyId: Int
-    ): Result<CompanyDTO?> {
-        return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetCompanyByIdExtendedAsync",
-            query = "companyId=$companyId"
-        )
-    }
-
-    override suspend fun InsertAsync(
-        model: CompanyInsertModel
-    ): Result<Unit> {
-        return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "InsertAsync",
-            data = model
-        )
-    }
-
-    override suspend fun UpdateAsync(
-        model: CompanyUpdateModel
-    ): Result<Unit> {
-        return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "UpdateAsync",
-            data = model
-        )
-    }
-
-    override suspend fun DeleteAsync(
-        companyId: Int
-    ): Result<Unit> {
-        return apiClient.DeleteAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "DeleteAsync",
-            query = "companyId=$companyId"
+    override suspend fun UpdateAccountCompanyAsync(memberId: Int, updateModel: CompanyUpdateModel): Result<Any?> {
+        return apiClient.PutAsync<CompanyUpdateModel, Any?>(
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_BASE_URL,
+            method = "Company/UpdateAccountCompanyAsync",
+            query = "memberId=$memberId",
+            data = updateModel
         )
     }
 }

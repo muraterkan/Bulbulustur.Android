@@ -240,10 +240,10 @@ object AccountRoutes {
     const val ReviewEdit = "account/reviews/edit"
     const val Coupons = "account/coupons"
     const val Requests = "account/requests"
-    const val RequestDetail = "account/requests/detail/{requestId}"
+    const val RequestDetail = "account/request-detail/{requestId}"
 
     fun requestDetail(requestId: Int): String {
-        return "account/requests/detail/$requestId"
+        return "account/request-detail/$requestId"
     }
 
     const val Subscriptions = "account/subscriptions"

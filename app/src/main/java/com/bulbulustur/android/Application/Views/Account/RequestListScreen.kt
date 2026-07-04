@@ -14,11 +14,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CalendarMonth
+import androidx.compose.material.icons.outlined.ErrorOutline
 import androidx.compose.material.icons.outlined.Inventory2
 import androidx.compose.material.icons.outlined.PhotoLibrary
 import androidx.compose.material.icons.outlined.ReceiptLong
+import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Storefront
 import androidx.compose.material.icons.outlined.Visibility
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -28,26 +31,33 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
-import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BbTypography
+import com.bulbulustur.android.businesslayer.Core.DTO.ReturnRequestDTO
+import java.time.LocalDateTime
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @Composable
 fun RequestListScreen(
+    requests: List<ReturnRequestDTO>,
+    isLoading: Boolean,
+    errorMessage: String?,
     onBackClick: () -> Unit = {},
+    onRetryClick: () -> Unit = {},
     onRequestDetailClick: (Int) -> Unit = {},
     onOrderListClick: () -> Unit = {}
 ) {
-    val requests = getDemoRequests()
-
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
@@ -57,35 +67,70 @@ fun RequestListScreen(
             )
         }
     ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
-                .padding(innerPadding),
-            contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
-                top = BBSpacing.PageTopCompact,
-                end = BBSpacing.PageHorizontal,
-                bottom = BBSpacing.PageBottom
-            ),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
-        ) {
-            if (requests.isEmpty()) {
-                item {
-                    RequestEmptyState(
-                        onOrderListClick = onOrderListClick
+        when {
+            isLoading && requests.isEmpty() -> {
+                RequestLoadingState(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                )
+            }
+
+            !errorMessage.isNullOrBlank() && requests.isEmpty() -> {
+                RequestErrorState(
+                    message = errorMessage,
+                    onRetryClick = onRetryClick,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                )
+            }
+
+            requests.isEmpty() -> {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.background)
+                        .padding(innerPadding),
+                    contentPadding = PaddingValues(
+                        start = BBSpacing.PageHorizontal,
+                        top = BBSpacing.PageTopCompact,
+                        end = BBSpacing.PageHorizontal,
+                        bottom = BBSpacing.PageBottom
                     )
+                ) {
+                    item {
+                        RequestEmptyState(
+                            onOrderListClick = onOrderListClick
+                        )
+                    }
                 }
             }
 
-            items(
-                items = requests,
-                key = { request -> request.requestId }
-            ) { request ->
-                RequestCard(
-                    request = request,
-                    onRequestDetailClick = onRequestDetailClick
-                )
+            else -> {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.background)
+                        .padding(innerPadding),
+                    contentPadding = PaddingValues(
+                        start = BBSpacing.PageHorizontal,
+                        top = BBSpacing.PageTopCompact,
+                        end = BBSpacing.PageHorizontal,
+                        bottom = BBSpacing.PageBottom
+                    ),
+                    verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
+                ) {
+                    items(
+                        items = requests,
+                        key = { request -> request.ReturnRequestId }
+                    ) { request ->
+                        RequestCard(
+                            request = request,
+                            onRequestDetailClick = onRequestDetailClick
+                        )
+                    }
+                }
             }
         }
     }
@@ -93,7 +138,7 @@ fun RequestListScreen(
 
 @Composable
 private fun RequestCard(
-    request: RequestUiModel,
+    request: ReturnRequestDTO,
     onRequestDetailClick: (Int) -> Unit
 ) {
     BbCard(
@@ -106,9 +151,7 @@ private fun RequestCard(
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.surface)
         ) {
-            RequestCardHeader(
-                request = request
-            )
+            RequestCardHeader(request = request)
 
             Column(
                 modifier = Modifier
@@ -123,7 +166,7 @@ private fun RequestCard(
                     RequestInfoBox(
                         modifier = Modifier.weight(1f),
                         title = "Satıcı",
-                        value = request.sellerName,
+                        value = request.StoreName.ifBlank { "-" },
                         icon = Icons.Outlined.Storefront,
                         iconColor = BBColors.Blue.Blue600
                     )
@@ -131,7 +174,7 @@ private fun RequestCard(
                     RequestInfoBox(
                         modifier = Modifier.weight(1f),
                         title = "Talep Nedeni",
-                        value = request.reason,
+                        value = request.ReturnRequestType.ifBlank { "-" },
                         icon = Icons.Outlined.ReceiptLong,
                         iconColor = BBColors.Orange.Orange600
                     )
@@ -140,24 +183,26 @@ private fun RequestCard(
                 RequestInfoBox(
                     modifier = Modifier.fillMaxWidth(),
                     title = "Ürün",
-                    value = request.productName,
+                    value = request.ProductName.ifBlank { "-" },
                     icon = Icons.Outlined.Inventory2,
                     iconColor = BBColors.Yellow.Yellow800,
                     highlighted = true
                 )
 
-                RequestDescriptionBox(
-                    description = request.description
-                )
+                if (request.Description.isNotBlank()) {
+                    RequestDescriptionBox(
+                        description = request.Description
+                    )
+                }
 
                 RequestPhotoBox(
-                    photoCount = request.photoCount
+                    photoCount = request.Pictures.size
                 )
 
                 BbButton(
                     text = "Detaylar",
                     onClick = {
-                        onRequestDetailClick(request.requestId)
+                        onRequestDetailClick(request.ReturnRequestId)
                     },
                     modifier = Modifier.fillMaxWidth(),
                     variant = BbButtonVariant.Light,
@@ -166,7 +211,7 @@ private fun RequestCard(
                         Icon(
                             imageVector = Icons.Outlined.Visibility,
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurface,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.size(BBSpacing.Space5)
                         )
                     }
@@ -177,9 +222,7 @@ private fun RequestCard(
 }
 
 @Composable
-private fun RequestCardHeader(
-    request: RequestUiModel
-) {
+private fun RequestCardHeader(request: ReturnRequestDTO) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -203,7 +246,7 @@ private fun RequestCardHeader(
             )
 
             Text(
-                text = request.requestNumber,
+                text = "#${request.ReturnRequestId}",
                 style = BbTypography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -220,7 +263,7 @@ private fun RequestCardHeader(
                 )
 
                 Text(
-                    text = request.createdDate,
+                    text = FormatReturnRequestDate(request.InsertedDate),
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -228,7 +271,10 @@ private fun RequestCardHeader(
         }
 
         RequestStatusBadge(
-            status = request.status
+            statusText = request.ReturnRequestStatus.ifBlank {
+                GetReturnRequestStatusFallback(request.ReturnRequestStatusId)
+            },
+            statusId = request.ReturnRequestStatusId
         )
     }
 }
@@ -288,9 +334,7 @@ private fun RequestInfoBox(
 }
 
 @Composable
-private fun RequestDescriptionBox(
-    description: String
-) {
+private fun RequestDescriptionBox(description: String) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -319,9 +363,7 @@ private fun RequestDescriptionBox(
 }
 
 @Composable
-private fun RequestPhotoBox(
-    photoCount: Int
-) {
+private fun RequestPhotoBox(photoCount: Int) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -331,42 +373,36 @@ private fun RequestPhotoBox(
             )
             .padding(BBSpacing.CardPaddingCompact)
     ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.PhotoLibrary,
-                    contentDescription = null,
-                    tint = BBColors.Yellow.Yellow800,
-                    modifier = Modifier.size(BBSpacing.Space5)
-                )
+            Icon(
+                imageVector = Icons.Outlined.PhotoLibrary,
+                contentDescription = null,
+                tint = BBColors.Yellow.Yellow800,
+                modifier = Modifier.size(BBSpacing.Space5)
+            )
 
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+            ) {
                 Text(
                     text = "İade Edilen Ürünün Fotoğrafları",
                     style = BbTypography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-            }
 
-            if (photoCount > 0) {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
-                ) {
-                    repeat(photoCount) { index ->
-                        RequestPhotoThumbnail(
-                            index = index
-                        )
-                    }
-                }
-            } else {
                 Text(
-                    text = "Fotoğraf bulunmuyor.",
+                    text = if (photoCount > 0) {
+                        "$photoCount fotoğraf eklendi"
+                    } else {
+                        "Fotoğraf bulunmuyor"
+                    },
                     style = BbTypography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
         }
@@ -374,46 +410,24 @@ private fun RequestPhotoBox(
 }
 
 @Composable
-private fun RequestPhotoThumbnail(
-    index: Int
-) {
-    Box(
-        modifier = Modifier
-            .size(BBSpacing.Space12)
-            .background(
-                color = if (index % 2 == 0) {
-                    BBColors.Orange.Orange100
-                } else {
-                    BBColors.Blue.Blue100
-                },
-                shape = BBRadius.MdShape
-            ),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = "IMG",
-            style = BbTypography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurface
-        )
-    }
-}
-
-@Composable
 private fun RequestStatusBadge(
-    status: RequestStatus
+    statusText: String,
+    statusId: Int
 ) {
-    val backgroundColor = when (status) {
-        RequestStatus.DamagedProduct -> BBColors.Red.Red50
-        RequestStatus.WaitingReview -> BBColors.Orange.Orange50
-        RequestStatus.Approved -> BBColors.Green.Green50
-        RequestStatus.Rejected -> BBColors.Gray.Gray100
+    val backgroundColor = when (statusId) {
+        2 -> BBColors.Orange.Orange50
+        3 -> BBColors.Green.Green50
+        4 -> BBColors.Red.Red50
+        5 -> BBColors.Green.Green50
+        else -> BBColors.Blue.Blue50
     }
 
-    val textColor = when (status) {
-        RequestStatus.DamagedProduct -> BBColors.Red.Red700
-        RequestStatus.WaitingReview -> BBColors.Orange.Orange700
-        RequestStatus.Approved -> BBColors.Green.Green700
-        RequestStatus.Rejected -> BBColors.Gray.Gray700
+    val textColor = when (statusId) {
+        2 -> BBColors.Orange.Orange700
+        3 -> BBColors.Green.Green700
+        4 -> BBColors.Red.Red700
+        5 -> BBColors.Green.Green700
+        else -> BBColors.Blue.Blue700
     }
 
     Box(
@@ -428,7 +442,7 @@ private fun RequestStatusBadge(
             )
     ) {
         Text(
-            text = status.title,
+            text = statusText,
             style = BbTypography.labelSmall,
             color = textColor
         )
@@ -436,9 +450,7 @@ private fun RequestStatusBadge(
 }
 
 @Composable
-private fun RequestIconBox(
-    icon: ImageVector
-) {
+private fun RequestIconBox(icon: ImageVector) {
     Box(
         modifier = Modifier
             .size(BBSpacing.Space12)
@@ -458,9 +470,73 @@ private fun RequestIconBox(
 }
 
 @Composable
-private fun RequestEmptyState(
-    onOrderListClick: () -> Unit
+private fun RequestLoadingState(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(
+            color = MaterialTheme.colorScheme.primary
+        )
+    }
+}
+
+@Composable
+private fun RequestErrorState(
+    message: String,
+    onRetryClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
+    Box(
+        modifier = modifier.padding(BBSpacing.PageHorizontal),
+        contentAlignment = Alignment.Center
+    ) {
+        BbCard(
+            modifier = Modifier.fillMaxWidth(),
+            variant = BbCardVariant.Outlined,
+            padding = BbCardPadding.Large
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+            ) {
+                RequestIconBox(
+                    icon = Icons.Outlined.ErrorOutline
+                )
+
+                Text(
+                    text = "Talepler Yüklenemedi",
+                    style = BbTypography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+
+                Text(
+                    text = message,
+                    style = BbTypography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+
+                BbButton(
+                    text = "Tekrar Dene",
+                    onClick = onRetryClick,
+                    variant = BbButtonVariant.Primary,
+                    size = BbButtonSize.Medium,
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Outlined.Refresh,
+                            contentDescription = null,
+                            modifier = Modifier.size(BBSpacing.Space5)
+                        )
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun RequestEmptyState(onOrderListClick: () -> Unit) {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
@@ -482,7 +558,7 @@ private fun RequestEmptyState(
             )
 
             Text(
-                text = "Henüz oluşturulmuş iade veya sipariş talebiniz bulunmuyor. Sipariş detayından yeni talep Oluşturabilirsiniz.",
+                text = "Henüz oluşturulmuş iade talebiniz bulunmuyor. Sipariş detayından yeni bir iade talebi oluşturabilirsiniz.",
                 style = BbTypography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -497,60 +573,32 @@ private fun RequestEmptyState(
     }
 }
 
-private fun getDemoRequests(): List<RequestUiModel> {
-    return listOf(
-        RequestUiModel(
-            requestId = 1,
-            requestNumber = "#1",
-            createdDate = "10 Mayıs 2026",
-            sellerName = "Base & Quality Store",
-            reason = "Ürün Defolu/Hasarlı Geldi",
-            productName = "Ortobella Comfort Genç Garson Bot 8028",
-            description = "Ürünün sağ tarafında dikiş hatası mevcut, değişim veya iade talep ediyorum.",
-            photoCount = 1,
-            status = RequestStatus.DamagedProduct
-        ),
-        RequestUiModel(
-            requestId = 2,
-            requestNumber = "#2",
-            createdDate = "14 Mayıs 2026",
-            sellerName = "Ortobella Comfort",
-            reason = "Yanlış Ürün Gönderildi",
-            productName = "Ortobella Comfort Hakiki Deri Terlik M13",
-            description = "Sipariş ettiğim varyanttan farklı bir ürün teslim edildi. Değişim sürecini başlatmak istiyorum.",
-            photoCount = 2,
-            status = RequestStatus.WaitingReview
-        )
-    )
+private fun GetReturnRequestStatusFallback(statusId: Int): String {
+    return when (statusId) {
+        1 -> "Talep Alındı"
+        2 -> "İncelemede"
+        3 -> "Onaylandı"
+        4 -> "Reddedildi"
+        5 -> "Tamamlandı"
+        else -> "Talep Alındı"
+    }
 }
 
-private enum class RequestStatus(
-    val title: String
-) {
-    DamagedProduct(
-        title = "Ürün Defolu/Hasarlı Geldi"
-    ),
-    WaitingReview(
-        title = "İncelemede"
-    ),
-    Approved(
-        title = "Onaylandı"
-    ),
-    Rejected(
-        title = "Reddedildi"
+private fun FormatReturnRequestDate(value: String): String {
+    if (value.isBlank() || value.startsWith("0001-01-01")) {
+        return "-"
+    }
+
+    val outputFormatter = DateTimeFormatter.ofPattern(
+        "dd MMMM yyyy",
+        Locale("tr", "TR")
     )
+
+    return runCatching {
+        OffsetDateTime.parse(value).format(outputFormatter)
+    }.recoverCatching {
+        LocalDateTime.parse(value).format(outputFormatter)
+    }.getOrElse {
+        value
+    }
 }
-
-private data class RequestUiModel(
-    val requestId: Int,
-    val requestNumber: String,
-    val createdDate: String,
-    val sellerName: String,
-    val reason: String,
-    val productName: String,
-    val description: String,
-    val photoCount: Int,
-    val status: RequestStatus
-)
-
-

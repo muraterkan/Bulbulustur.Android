@@ -40,6 +40,8 @@ import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.MemberPhone
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberPhoneUpdateModel
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductCustomerQuestionDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.IProductCustomerQuestionRepository
+import com.bulbulustur.android.businesslayer.Core.DTO.ReturnRequestDTO
+import com.bulbulustur.android.businesslayer.Core.Interface.IReturnRequestRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -100,7 +102,9 @@ data class AccountControllerState(
     val PhoneMessage: String? = null,
     val ProductFavoriteDeleteResult: Result<Unit>? = null,
     val WholesaleFavoriteDeleteResult: Result<Unit>? = null,
-    val ProductCustomerQuestionListResult: Result<List<ProductCustomerQuestionDTO>>? = null
+    val ProductCustomerQuestionListResult: Result<List<ProductCustomerQuestionDTO>>? = null,
+    val ReturnRequestListResult: Result<List<ReturnRequestDTO>>? = null,
+    val ReturnRequestDetailResult: Result<ReturnRequestDTO?>? = null,
 ) {
     val Member: MemberDTO?
         get() = MemberResult?.Data
@@ -143,6 +147,12 @@ data class AccountControllerState(
 
     val ProductCustomerQuestions: List<ProductCustomerQuestionDTO>
         get() = ProductCustomerQuestionListResult?.Data.orEmpty()
+
+    val ReturnRequests: List<ReturnRequestDTO>
+        get() = ReturnRequestListResult?.Data.orEmpty()
+
+    val ReturnRequest: ReturnRequestDTO?
+        get() = ReturnRequestDetailResult?.Data
 }
 
 class AccountController(
@@ -159,7 +169,8 @@ class AccountController(
     private val productFavoriteRepository: IProductFavoriteRepository,
     private val wholesaleFavoriteRepository: IWholesaleFavoriteRepository,
     private val memberPhoneRepository: IMemberPhoneRepository,
-    private val productCustomerQuestionRepository: IProductCustomerQuestionRepository
+    private val productCustomerQuestionRepository: IProductCustomerQuestionRepository,
+    private val returnRequestRepository: IReturnRequestRepository,
 
 ) : BaseController() {
 
@@ -1042,6 +1053,54 @@ class AccountController(
                     ErrorMessage = response.Message.takeIf { !response.Success }
                 )
             }
+        }
+    }
+
+    fun GetReturnRequests(languageId: Int, memberId: Int, count: Int = 100) {
+        if (!ValidateMember(memberId)) return
+
+        viewModelScope.launch {
+            SetLoading("GetReturnRequests")
+
+            val response = executeService.GetAsync(cacheKey = "") {
+                returnRequestRepository.GetReturnRequestsAsync(languageId, memberId, count)
+            }
+
+            Complete {
+                copy(
+                    ReturnRequestListResult = response,
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+        }
+    }
+
+    fun GetReturnRequest(languageId: Int, memberId: Int, returnRequestId: Int) {
+        if (!ValidateMember(memberId)) return
+        if (!ValidateId(returnRequestId, "İade talebi bulunamadı.")) return
+
+        viewModelScope.launch {
+            SetLoading("GetReturnRequest")
+
+            val response = executeService.GetAsync(cacheKey = "") {
+                returnRequestRepository.GetReturnRequestByIdExtendedAsync(languageId, memberId, returnRequestId)
+            }
+
+            Complete {
+                copy(
+                    ReturnRequestDetailResult = response,
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+        }
+    }
+
+    fun ResetReturnRequestDetail() {
+        _state.update {
+            it.copy(
+                ReturnRequestDetailResult = null,
+                ErrorMessage = null
+            )
         }
     }
 

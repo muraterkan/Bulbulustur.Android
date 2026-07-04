@@ -88,6 +88,7 @@ import com.bulbulustur.android.businesslayer.Core.Repository.SystemDescMaterialT
 import com.bulbulustur.android.businesslayer.Core.Repository.SystemDescPaymentTermRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.SystemDescTradeTermRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.SystemDescUnitRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.ReturnRequestRepository
 
 @Composable
 fun BulbulusturApp(
@@ -426,6 +427,10 @@ private fun BulbulusturApplicationContent(
             )
         }
 
+    val returnRequestRepository = remember {
+        ReturnRequestRepository()
+    }
+
     val reviewRepository =
         remember {
             ReviewRepository()
@@ -544,6 +549,7 @@ private fun BulbulusturApplicationContent(
         memberAgreementRepository,
         memberLoginActivityRepository,
         memberCouponRepository,
+        returnRequestRepository,
         productFavoriteRepository,
         wholesaleFavoriteRepository,
         memberPhoneRepository,
@@ -560,10 +566,11 @@ private fun BulbulusturApplicationContent(
             memberAgreementRepository = memberAgreementRepository,
             memberLoginActivityRepository = memberLoginActivityRepository,
             memberCouponRepository = memberCouponRepository,
+            returnRequestRepository = returnRequestRepository,
             productFavoriteRepository = productFavoriteRepository,
             wholesaleFavoriteRepository = wholesaleFavoriteRepository,
             memberPhoneRepository = memberPhoneRepository,
-            productCustomerQuestionRepository
+            productCustomerQuestionRepository = productCustomerQuestionRepository
         )
     }
 

@@ -9,6 +9,11 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.navigation.navArgument
 import com.bulbulustur.android.Application.Controllers.AccountController
 import com.bulbulustur.android.Application.Controllers.LogonController
 import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
@@ -1219,13 +1224,38 @@ fun NavGraphBuilder.accountGraph(
     }
 
     composable(route = AccountRoutes.Requests) {
+        val accountState by accountController.State.collectAsState()
+
+        val languageId = when (sessionState.Language) {
+            EApplicationLanguage.Turkish -> 1
+            EApplicationLanguage.English -> 2
+        }
+
+        LaunchedEffect(languageId, sessionState.MemberId) {
+            accountController.GetReturnRequests(
+                languageId = languageId,
+                memberId = sessionState.MemberId
+            )
+        }
+
         RequestListScreen(
+            requests = accountState.ReturnRequests,
+            isLoading = accountState.IsLoading && accountState.CurrentAction == "GetReturnRequests",
+            errorMessage = accountState.ReturnRequestListResult
+                ?.takeIf { !it.Success }
+                ?.Message,
             onBackClick = {
                 navigator.back()
             },
-            onRequestDetailClick = { requestId ->
+            onRetryClick = {
+                accountController.GetReturnRequests(
+                    languageId = languageId,
+                    memberId = sessionState.MemberId
+                )
+            },
+            onRequestDetailClick = { returnRequestId ->
                 navigator.navController.navigate(
-                    AccountRoutes.requestDetail(requestId)
+                    AccountRoutes.requestDetail(returnRequestId)
                 )
             },
             onOrderListClick = {
@@ -1242,22 +1272,49 @@ fun NavGraphBuilder.accountGraph(
             }
         )
     ) { backStackEntry ->
-        val requestId = backStackEntry.arguments
-            ?.getInt("requestId")
-            ?: 0
+        val accountState by accountController.State.collectAsState()
+        val returnRequestId = backStackEntry.arguments?.getInt("requestId") ?: 0
+
+        val languageId = when (sessionState.Language) {
+            EApplicationLanguage.Turkish -> 1
+            EApplicationLanguage.English -> 2
+        }
+
+        LaunchedEffect(languageId, sessionState.MemberId, returnRequestId) {
+            if (returnRequestId > 0) {
+                accountController.GetReturnRequest(
+                    languageId = languageId,
+                    memberId = sessionState.MemberId,
+                    returnRequestId = returnRequestId
+                )
+            }
+        }
+
+        DisposableEffect(returnRequestId) {
+            onDispose {
+                accountController.ResetReturnRequestDetail()
+            }
+        }
 
         RequestDetailScreen(
+            request = accountState.ReturnRequest,
+            isLoading = accountState.IsLoading && accountState.CurrentAction == "GetReturnRequest",
+            errorMessage = accountState.ReturnRequestDetailResult
+                ?.takeIf { !it.Success }
+                ?.Message,
             onBackClick = {
                 navigator.back()
             },
-            onOrderClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.OrderDetail
+            onRetryClick = {
+                accountController.GetReturnRequest(
+                    languageId = languageId,
+                    memberId = sessionState.MemberId,
+                    returnRequestId = returnRequestId
                 )
             },
-            onStoreClick = {
+            onStoreClick = { storeId ->
                 navigator.navController.navigate(
-                    StoreRoutes.StoreList
+                    StoreRoutes.storeDetail(storeId)
                 )
             }
         )

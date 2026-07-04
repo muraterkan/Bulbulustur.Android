@@ -10,10 +10,6 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.navigation.navArgument
 import com.bulbulustur.android.Application.Controllers.AccountController
 import com.bulbulustur.android.Application.Controllers.LogonController
 import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
@@ -1174,18 +1170,23 @@ fun NavGraphBuilder.accountGraph(
     }
 
     composable(route = AccountRoutes.Reviews) {
+        val accountState by accountController.State.collectAsState()
+
+        LaunchedEffect(sessionState.MemberId) {
+            accountController.GetMemberReviews(memberId = sessionState.MemberId)
+        }
+
         ReviewListScreen(
-            onBackClick = {
-                navigator.back()
-            },
-            onProductClick = {
-                navigator.navController.navigate(RetailRoutes.ProductList)
-            },
-            onEditReviewClick = {
-                navigator.navController.navigate(AccountRoutes.ReviewEdit)
-            },
-            onDeleteReviewClick = {
-            }
+            reviews = accountState.Reviews,
+            isLoading = accountState.IsLoading && accountState.CurrentAction == "GetMemberReviews",
+            errorMessage = accountState.ReviewListResult?.takeIf { !it.Success }?.Message,
+            onBackClick = { navigator.back() },
+            onRetryClick = { accountController.GetMemberReviews(memberId = sessionState.MemberId) },
+            onStoreClick = { storeId -> navigator.navController.navigate(StoreRoutes.storeDetail(storeId)) },
+            onProductClick = { _, _, _ -> },
+            onCompanyClick = { },
+            onEditReviewClick = { },
+            onDeleteReviewClick = { }
         )
     }
 

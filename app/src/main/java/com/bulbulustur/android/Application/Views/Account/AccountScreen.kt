@@ -266,7 +266,7 @@ fun AccountScreen(
                 ) {
                     AccountMenuRow(
                         title = "Soru ve Cevaplarım",
-                        description = "Ürün sorularını ve satıcı cevaplarını takip et.",
+                        description = "Sorularını ve satıcı cevaplarını görüntüle.",
                         icon = Icons.Outlined.QuestionAnswer,
                         onClick = onQuestionsClick
                     )
@@ -275,7 +275,7 @@ fun AccountScreen(
 
                     AccountMenuRow(
                         title = "Değerlendirmelerim",
-                        description = "Yorum ve ürün değerlendirmelerini görüntüle.",
+                        description = "Yorum ve değerlendirmelerini görüntüle.",
                         icon = Icons.Outlined.Reviews,
                         onClick = onReviewsClick
                     )

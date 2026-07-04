@@ -396,6 +396,7 @@ private fun BulbulusturApplicationContent(
             ProductCategoryRepository()
         }
 
+
     val productController =
         remember(
             executeService,
@@ -550,6 +551,7 @@ private fun BulbulusturApplicationContent(
         memberLoginActivityRepository,
         memberCouponRepository,
         returnRequestRepository,
+        reviewRepository,
         productFavoriteRepository,
         wholesaleFavoriteRepository,
         memberPhoneRepository,
@@ -567,6 +569,7 @@ private fun BulbulusturApplicationContent(
             memberLoginActivityRepository = memberLoginActivityRepository,
             memberCouponRepository = memberCouponRepository,
             returnRequestRepository = returnRequestRepository,
+            reviewRepository = reviewRepository,
             productFavoriteRepository = productFavoriteRepository,
             wholesaleFavoriteRepository = wholesaleFavoriteRepository,
             memberPhoneRepository = memberPhoneRepository,

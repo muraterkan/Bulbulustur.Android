@@ -50,6 +50,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 import com.bulbulustur.android.businesslayer.Core.Model.ChangeMailModel
+import com.bulbulustur.android.businesslayer.Core.DTO.ReviewDTO
+import com.bulbulustur.android.businesslayer.Core.Interface.IReviewRepository
 
 data class AccountControllerState(
     val IsLoading: Boolean = false,
@@ -105,6 +107,7 @@ data class AccountControllerState(
     val ProductCustomerQuestionListResult: Result<List<ProductCustomerQuestionDTO>>? = null,
     val ReturnRequestListResult: Result<List<ReturnRequestDTO>>? = null,
     val ReturnRequestDetailResult: Result<ReturnRequestDTO?>? = null,
+    val ReviewListResult: Result<List<ReviewDTO>>? = null,
 ) {
     val Member: MemberDTO?
         get() = MemberResult?.Data
@@ -153,6 +156,9 @@ data class AccountControllerState(
 
     val ReturnRequest: ReturnRequestDTO?
         get() = ReturnRequestDetailResult?.Data
+
+    val Reviews: List<ReviewDTO>
+        get() = ReviewListResult?.Data.orEmpty()
 }
 
 class AccountController(
@@ -171,6 +177,7 @@ class AccountController(
     private val memberPhoneRepository: IMemberPhoneRepository,
     private val productCustomerQuestionRepository: IProductCustomerQuestionRepository,
     private val returnRequestRepository: IReturnRequestRepository,
+    private val reviewRepository: IReviewRepository,
 
 ) : BaseController() {
 
@@ -1069,6 +1076,25 @@ class AccountController(
             Complete {
                 copy(
                     ReturnRequestListResult = response,
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+        }
+    }
+
+    fun GetMemberReviews(memberId: Int, count: Int = 100) {
+        if (!ValidateMember(memberId)) return
+
+        viewModelScope.launch {
+            SetLoading("GetMemberReviews")
+
+            val response = executeService.GetAsync(cacheKey = "") {
+                reviewRepository.GetMemberReviewsAsync(memberId, count)
+            }
+
+            Complete {
+                copy(
+                    ReviewListResult = response,
                     ErrorMessage = response.Message.takeIf { !response.Success }
                 )
             }

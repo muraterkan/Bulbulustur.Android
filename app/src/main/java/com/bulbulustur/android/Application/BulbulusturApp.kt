@@ -89,6 +89,7 @@ import com.bulbulustur.android.businesslayer.Core.Repository.SystemDescPaymentTe
 import com.bulbulustur.android.businesslayer.Core.Repository.SystemDescTradeTermRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.SystemDescUnitRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.ReturnRequestRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.MemberSubscriptionRepository
 
 @Composable
 fun BulbulusturApp(
@@ -256,6 +257,10 @@ private fun BulbulusturApplicationContent(
         remember {
             AuthenticationRepository()
         }
+
+    val memberSubscriptionRepository = remember {
+        MemberSubscriptionRepository()
+    }
 
     val memberTempRepository =
         remember {
@@ -555,7 +560,8 @@ private fun BulbulusturApplicationContent(
         productFavoriteRepository,
         wholesaleFavoriteRepository,
         memberPhoneRepository,
-        productCustomerQuestionRepository
+        productCustomerQuestionRepository,
+        memberSubscriptionRepository
     ) {
         AccountController(
             executeService = executeService,
@@ -573,7 +579,8 @@ private fun BulbulusturApplicationContent(
             productFavoriteRepository = productFavoriteRepository,
             wholesaleFavoriteRepository = wholesaleFavoriteRepository,
             memberPhoneRepository = memberPhoneRepository,
-            productCustomerQuestionRepository = productCustomerQuestionRepository
+            productCustomerQuestionRepository = productCustomerQuestionRepository,
+            memberSubscriptionRepository = memberSubscriptionRepository,
         )
     }
 

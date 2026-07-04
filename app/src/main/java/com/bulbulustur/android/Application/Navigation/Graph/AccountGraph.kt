@@ -1322,22 +1322,60 @@ fun NavGraphBuilder.accountGraph(
     }
 
     composable(route = AccountRoutes.Subscriptions) {
+        val accountState by accountController.State.collectAsState()
+
+        LaunchedEffect(sessionState.MemberId) {
+            accountController.GetMemberSubscriptions(memberId = sessionState.MemberId)
+        }
+
         SubscriptionListScreen(
-            onBackClick = {
-                navigator.back()
-            },
-            onSubscriptionDetailClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.SubscriptionDetail
-                )
+            subscriptions = accountState.MemberSubscriptions,
+            isLoading = accountState.IsLoading && accountState.CurrentAction == "GetMemberSubscriptions",
+            errorMessage = accountState.MemberSubscriptionListResult?.takeIf { !it.Success }?.Message,
+            onBackClick = { navigator.back() },
+            onRetryClick = { accountController.GetMemberSubscriptions(memberId = sessionState.MemberId) },
+            onSubscriptionDetailClick = { memberSubscriptionId ->
+                navigator.navController.navigate(AccountRoutes.subscriptionDetail(memberSubscriptionId))
             }
         )
     }
 
-    composable(route = AccountRoutes.SubscriptionDetail) {
+    composable(
+        route = AccountRoutes.SubscriptionDetail,
+        arguments = listOf(
+            navArgument("memberSubscriptionId") {
+                type = NavType.IntType
+            }
+        )
+    ) { backStackEntry ->
+        val accountState by accountController.State.collectAsState()
+        val memberSubscriptionId = backStackEntry.arguments?.getInt("memberSubscriptionId") ?: 0
+
+        LaunchedEffect(sessionState.MemberId, memberSubscriptionId) {
+            if (memberSubscriptionId > 0) {
+                accountController.GetMemberSubscription(
+                    memberId = sessionState.MemberId,
+                    memberSubscriptionId = memberSubscriptionId
+                )
+            }
+        }
+
+        DisposableEffect(memberSubscriptionId) {
+            onDispose {
+                accountController.ResetMemberSubscriptionDetail()
+            }
+        }
+
         SubscriptionDetailScreen(
-            onBackClick = {
-                navigator.back()
+            subscription = accountState.MemberSubscription,
+            isLoading = accountState.IsLoading && accountState.CurrentAction == "GetMemberSubscription",
+            errorMessage = accountState.MemberSubscriptionDetailResult?.takeIf { !it.Success }?.Message,
+            onBackClick = { navigator.back() },
+            onRetryClick = {
+                accountController.GetMemberSubscription(
+                    memberId = sessionState.MemberId,
+                    memberSubscriptionId = memberSubscriptionId
+                )
             }
         )
     }

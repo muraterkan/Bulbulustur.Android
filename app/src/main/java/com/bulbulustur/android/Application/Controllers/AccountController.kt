@@ -52,6 +52,8 @@ import kotlinx.coroutines.launch
 import com.bulbulustur.android.businesslayer.Core.Model.ChangeMailModel
 import com.bulbulustur.android.businesslayer.Core.DTO.ReviewDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.IReviewRepository
+import com.bulbulustur.android.businesslayer.Core.DTO.MemberSubscriptionDTO
+import com.bulbulustur.android.businesslayer.Core.Interface.IMemberSubscriptionRepository
 
 data class AccountControllerState(
     val IsLoading: Boolean = false,
@@ -108,6 +110,8 @@ data class AccountControllerState(
     val ReturnRequestListResult: Result<List<ReturnRequestDTO>>? = null,
     val ReturnRequestDetailResult: Result<ReturnRequestDTO?>? = null,
     val ReviewListResult: Result<List<ReviewDTO>>? = null,
+    val MemberSubscriptionListResult: Result<List<MemberSubscriptionDTO>>? = null,
+    val MemberSubscriptionDetailResult: Result<MemberSubscriptionDTO?>? = null,
 ) {
     val Member: MemberDTO?
         get() = MemberResult?.Data
@@ -159,6 +163,12 @@ data class AccountControllerState(
 
     val Reviews: List<ReviewDTO>
         get() = ReviewListResult?.Data.orEmpty()
+
+    val MemberSubscriptions: List<MemberSubscriptionDTO>
+        get() = MemberSubscriptionListResult?.Data.orEmpty()
+
+    val MemberSubscription: MemberSubscriptionDTO?
+        get() = MemberSubscriptionDetailResult?.Data
 }
 
 class AccountController(
@@ -178,6 +188,7 @@ class AccountController(
     private val productCustomerQuestionRepository: IProductCustomerQuestionRepository,
     private val returnRequestRepository: IReturnRequestRepository,
     private val reviewRepository: IReviewRepository,
+    private val memberSubscriptionRepository: IMemberSubscriptionRepository
 
 ) : BaseController() {
 
@@ -1101,6 +1112,8 @@ class AccountController(
         }
     }
 
+
+
     fun GetReturnRequest(languageId: Int, memberId: Int, returnRequestId: Int) {
         if (!ValidateMember(memberId)) return
         if (!ValidateId(returnRequestId, "İade talebi bulunamadı.")) return
@@ -1125,6 +1138,54 @@ class AccountController(
         _state.update {
             it.copy(
                 ReturnRequestDetailResult = null,
+                ErrorMessage = null
+            )
+        }
+    }
+
+    fun GetMemberSubscriptions(memberId: Int, count: Int = 100) {
+        if (!ValidateMember(memberId)) return
+
+        viewModelScope.launch {
+            SetLoading("GetMemberSubscriptions")
+
+            val response = executeService.GetAsync(cacheKey = "") {
+                memberSubscriptionRepository.GetAccountSubscriptionsAsync(memberId, count)
+            }
+
+            Complete {
+                copy(
+                    MemberSubscriptionListResult = response,
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+        }
+    }
+
+    fun GetMemberSubscription(memberId: Int, memberSubscriptionId: Int) {
+        if (!ValidateMember(memberId)) return
+        if (!ValidateId(memberSubscriptionId, "Abonelik bilgisi bulunamadı.")) return
+
+        viewModelScope.launch {
+            SetLoading("GetMemberSubscription")
+
+            val response = executeService.GetAsync(cacheKey = "") {
+                memberSubscriptionRepository.GetAccountSubscriptionByIdExtendedAsync(memberId, memberSubscriptionId)
+            }
+
+            Complete {
+                copy(
+                    MemberSubscriptionDetailResult = response,
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+        }
+    }
+
+    fun ResetMemberSubscriptionDetail() {
+        _state.update {
+            it.copy(
+                MemberSubscriptionDetailResult = null,
                 ErrorMessage = null
             )
         }

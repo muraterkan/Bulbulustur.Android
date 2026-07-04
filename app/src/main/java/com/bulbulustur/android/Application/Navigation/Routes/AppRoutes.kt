@@ -247,7 +247,11 @@ object AccountRoutes {
     }
 
     const val Subscriptions = "account/subscriptions"
-    const val SubscriptionDetail = "account/subscriptions/detail"
+    const val SubscriptionDetail = "account/subscriptions/detail/{memberSubscriptionId}"
+
+    fun subscriptionDetail(memberSubscriptionId: Int): String {
+        return "account/subscriptions/detail/$memberSubscriptionId"
+    }
     const val WalletBalance = "account/wallet-balance"
 }
 

@@ -1,5 +1,6 @@
 package com.bulbulustur.android.Application.Navigation.Graph
 
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -10,6 +11,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.compose.runtime.DisposableEffect
+import com.bulbulustur.android.Application.Config.LegalPolicyUrls
 import com.bulbulustur.android.Application.Controllers.AccountController
 import com.bulbulustur.android.Application.Controllers.LogonController
 import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
@@ -96,6 +98,8 @@ fun NavGraphBuilder.accountGraph(
             return@composable
         }
 
+        val uriHandler = LocalUriHandler.current
+
         AccountScreen(
             isLogoutLoading = logonState.IsLoggingOut,
             onSecurityClick = {
@@ -150,6 +154,7 @@ fun NavGraphBuilder.accountGraph(
                 navigator.navigateToInbox()
             },
             onSupportClick = {
+                uriHandler.openUri(LegalPolicyUrls.HelpCenter)
             },
             onLogoutClick = {
                 logonController.LogoutPost(

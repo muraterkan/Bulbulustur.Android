@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Config.LegalPolicyUrls
+
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,14 +18,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Article
-import androidx.compose.material.icons.outlined.Balance
 import androidx.compose.material.icons.outlined.ChevronRight
 import androidx.compose.material.icons.outlined.Cookie
 import androidx.compose.material.icons.outlined.RequestQuote
-import androidx.compose.material.icons.outlined.Gavel
 import androidx.compose.material.icons.outlined.Policy
 import androidx.compose.material.icons.outlined.PrivacyTip
-import androidx.compose.material.icons.outlined.ReportProblem
 import androidx.compose.material.icons.outlined.Rule
 import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material.icons.outlined.SupportAgent
@@ -331,7 +330,7 @@ private fun LegalDashedDivider() {
 
 @Immutable
 data class LegalPolicyItem(
-    val key: String,
+    val url: String,
     val title: String,
     val description: String,
     val icon: ImageVector
@@ -353,31 +352,31 @@ private fun getLegalPolicyGroups(): List<LegalPolicyGroup> {
             icon = Icons.Outlined.Policy,
             items = listOf(
                 LegalPolicyItem(
-                    key = "privacy-policy",
+                    url = LegalPolicyUrls.Privacy,
                     title = "Gizlilik Politikası",
                     description = "Kişisel verilerin nasıl işlendiğini ve korunduğunu inceleyin.",
                     icon = Icons.Outlined.PrivacyTip
                 ),
                 LegalPolicyItem(
-                    key = "cookie-policy",
+                    url = LegalPolicyUrls.Cookie,
                     title = "Çerez Politikası",
                     description = "Çerez ve benzeri teknolojilerin kullanım detayları.",
                     icon = Icons.Outlined.Cookie
                 ),
                 LegalPolicyItem(
-                    key = "kvkk",
+                    url = LegalPolicyUrls.Kvkk,
                     title = "KVKK Aydınlatma Metni",
                     description = "Kişisel verilerinizle ilgili yasal bilgilendirme.",
                     icon = Icons.Outlined.Security
                 ),
                 LegalPolicyItem(
-                    key = "review-policy",
+                    url = LegalPolicyUrls.Review,
                     title = "Değerlendirme Politikası",
                     description = "Ürün yorumları ve değerlendirme süreçleri.",
                     icon = Icons.Outlined.VerifiedUser
                 ),
                 LegalPolicyItem(
-                    key = "content-policy",
+                    url = LegalPolicyUrls.ContentPublishing,
                     title = "İçerik Yayınlama Politikası",
                     description = "Platformda yayınlanan içerikler için temel kurallar.",
                     icon = Icons.Outlined.Article
@@ -386,55 +385,35 @@ private fun getLegalPolicyGroups(): List<LegalPolicyGroup> {
         ),
         LegalPolicyGroup(
             title = "Koşullar",
-            description = "Kullanıcı, alıcı ve satıcı süreçlerine ait kurallar.",
+            description = "Platform kullanımına ait temel koşullar.",
             icon = Icons.Outlined.Rule,
             items = listOf(
                 LegalPolicyItem(
-                    key = "terms-of-use",
+                    url = LegalPolicyUrls.Terms,
                     title = "Kullanım Koşulları",
                     description = "Bulbulustur hizmetlerini kullanırken geçerli temel koşullar.",
                     icon = Icons.Outlined.RequestQuote
-                ),
-                LegalPolicyItem(
-                    key = "buyer-rules",
-                    title = "Alıcı Kuralları",
-                    description = "Sipariş, ödeme, iade ve alıcı sorumlulukları.",
-                    icon = Icons.Outlined.Balance
-                ),
-                LegalPolicyItem(
-                    key = "seller-rules",
-                    title = "Satıcı Kuralları",
-                    description = "Satıcı hesapları, ürün yayınlama ve ticari sorumluluklar.",
-                    icon = Icons.Outlined.Gavel
                 )
             )
         ),
         LegalPolicyGroup(
             title = "Prosedürler",
-            description = "Destek, şikayet ve uyuşmazlık süreçleri.",
+            description = "Soru ve destek süreçlerine ilişkin kurallar.",
             icon = Icons.Outlined.SupportAgent,
             items = listOf(
                 LegalPolicyItem(
-                    key = "question-policy",
+                    url = LegalPolicyUrls.Question,
                     title = "Soru Sorma Politikası",
                     description = "Ürün ve satıcı sorularında geçerli iletişim kuralları.",
                     icon = Icons.Outlined.SupportAgent
                 ),
                 LegalPolicyItem(
-                    key = "complaint-dispute",
-                    title = "Şikayet ve Uyuşmazlık Süreci",
-                    description = "Sipariş veya platform işlemlerindeki uyuşmazlık akışı.",
-                    icon = Icons.Outlined.ReportProblem
-                ),
-                LegalPolicyItem(
-                    key = "secure-payment",
-                    title = "Güvenli Ödeme Süreci",
-                    description = "Ödeme, koruma ve işlem güvenliği hakkında bilgiler.",
-                    icon = Icons.Outlined.Security
+                    url = LegalPolicyUrls.Support,
+                    title = "Destek Politikası",
+                    description = "Destek süreçleri ve kullanıcı iletişim kuralları.",
+                    icon = Icons.Outlined.SupportAgent
                 )
             )
         )
     )
 }
-
-

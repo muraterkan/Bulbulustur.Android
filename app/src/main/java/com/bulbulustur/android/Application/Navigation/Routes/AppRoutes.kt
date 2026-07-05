@@ -276,11 +276,6 @@ object SettingsRoutes {
     const val LegalPolicies = "settings/legal-policies"
     const val AboutThisApp = "settings/about-this-app"
     const val SystemStatus = "settings/system-status"
-    const val LegalPolicyDetail = "settings/legal-policy-detail/{policyKey}"
-
-    fun legalPolicyDetail(policyKey: String): String {
-        return "settings/legal-policy-detail/$policyKey"
-    }
 }
 
 object CompanyRoutes {
@@ -296,11 +291,11 @@ object CompanyRoutes {
 
 object MessageRoutes {
     const val Inbox = "message/inbox"
-
-    const val Detail = "message/detail/{messageId}"
+    const val Detail = "message/detail/{messageThreadId}/{messageId}"
+    const val ArgMessageThreadId = "messageThreadId"
     const val ArgMessageId = "messageId"
 
-    fun detail(messageId: Int): String {
-        return "message/detail/$messageId"
+    fun detail(messageThreadId: Int, messageId: Int): String {
+        return "message/detail/$messageThreadId/$messageId"
     }
 }

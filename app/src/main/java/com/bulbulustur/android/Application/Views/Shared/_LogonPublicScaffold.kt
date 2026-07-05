@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Shared
 
+import com.bulbulustur.android.Application.Config.LegalPolicyUrls
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.Image
@@ -401,8 +403,8 @@ fun LogonPublicDefaultFooter(
 @Composable
 fun LogonPublicRegisterLegalFooter(
     modifier: Modifier = Modifier,
-    termsUrl: String = "https://www.bulbulustur.com/kullanim-kosullari",
-    privacyUrl: String = "https://www.bulbulustur.com/gizlilik-politikasi"
+    termsUrl: String = LegalPolicyUrls.Terms,
+    privacyUrl: String = LegalPolicyUrls.Privacy
 ) {
     val uriHandler = LocalUriHandler.current
 

@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Home
 
+import com.bulbulustur.android.Application.Config.LegalPolicyUrls
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -366,7 +368,7 @@ private fun ModeSelectionLegalFooter() {
         TextButton(
             onClick = {
                 uriHandler.openUri(
-                    "https://www.bulbulustur.com/support/condition/1/kosullar"
+                    LegalPolicyUrls.Terms
                 )
             }
         ) {
@@ -387,7 +389,7 @@ private fun ModeSelectionLegalFooter() {
         TextButton(
             onClick = {
                 uriHandler.openUri(
-                    "https://www.bulbulustur.com/support/condition/2/politikalar"
+                    LegalPolicyUrls.Privacy
                 )
             }
         ) {

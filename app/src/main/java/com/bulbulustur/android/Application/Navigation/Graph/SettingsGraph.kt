@@ -4,9 +4,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavType
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
 import com.bulbulustur.android.Application.Controllers.AccountController
 import com.bulbulustur.android.Application.Controllers.SettingsController
 import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
@@ -21,12 +19,12 @@ import com.bulbulustur.android.Application.Views.Account.CommunicationPreference
 import com.bulbulustur.android.Application.Views.Account.CurrencySettingsScreen
 import com.bulbulustur.android.Application.Views.Account.LanguageSettingsScreen
 import com.bulbulustur.android.Application.Views.Account.LegalPoliciesScreen
-import com.bulbulustur.android.Application.Views.Account.LegalPolicyDetailScreen
 import com.bulbulustur.android.Application.Views.Account.RegionSettingsScreen
 import com.bulbulustur.android.Application.Views.Account.SystemStatusScreen
 import com.bulbulustur.android.businesslayer.Core.Enums.EApplicationLanguage
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.LocalContext
+import com.bulbulustur.android.Application.Config.LegalPolicyUrls
 
 fun NavGraphBuilder.settingsGraph(
     navigator: BulbulusturNavigator,
@@ -37,6 +35,8 @@ fun NavGraphBuilder.settingsGraph(
 ) {
 
     composable(SettingsRoutes.Home) {
+        val uriHandler = LocalUriHandler.current
+
         val languageName = when (sessionState.Language.Code.lowercase()) {
             "tr" -> "Türkçe"
             "en" -> "English"
@@ -74,9 +74,7 @@ fun NavGraphBuilder.settingsGraph(
                 )
             },
             onHelpCenterClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.QuestionAnswers
-                )
+                uriHandler.openUri(LegalPolicyUrls.HelpCenter)
             },
             onLanguageClick = {
                 navigator.navController.navigate(
@@ -313,38 +311,14 @@ fun NavGraphBuilder.settingsGraph(
     }
 
     composable(SettingsRoutes.LegalPolicies) {
+        val uriHandler = LocalUriHandler.current
+
         LegalPoliciesScreen(
             onBackClick = {
                 navigator.back()
             },
             onPolicyClick = { item ->
-                navigator.navController.navigate(
-                    SettingsRoutes.legalPolicyDetail(
-                        policyKey = item.key
-                    )
-                )
-            }
-        )
-    }
-
-    composable(
-        route = SettingsRoutes.LegalPolicyDetail,
-        arguments = listOf(
-            navArgument("policyKey") {
-                type = NavType.StringType
-            }
-        )
-    ) { backStackEntry ->
-        val policyKey = backStackEntry.arguments
-            ?.getString("policyKey")
-            .orEmpty()
-
-        LegalPolicyDetailScreen(
-            policyKey = policyKey,
-            onBackClick = {
-                navigator.back()
-            },
-            onOpenWebClick = {
+                uriHandler.openUri(item.url)
             }
         )
     }

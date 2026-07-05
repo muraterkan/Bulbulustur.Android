@@ -14,11 +14,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CheckCircle
-import androidx.compose.material.icons.outlined.RequestQuote
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.RadioButtonUnchecked
 import androidx.compose.material.icons.outlined.ReceiptLong
+import androidx.compose.material.icons.outlined.RequestQuote
 import androidx.compose.material.icons.outlined.Send
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -26,7 +27,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -34,6 +37,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bulbulustur.android.Application.Areas.b2c.Controllers.OrderController
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
@@ -45,28 +51,39 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
+import com.bulbulustur.android.businesslayer.Core.DTO.SystemDescOrderCancelationTypeDTO
+import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.OrderCancelationInsertModel
 
 @Composable
 fun OrderCancelRequestScreen(
+    orderStoreLineId: Long,
+    orderKey: String,
+    memberId: Int,
+    languageId: Int,
     onBackClick: () -> Unit = {},
-    onSubmitClick: () -> Unit = {}
+    onSubmitSuccess: () -> Unit = {},
+    controller: OrderController = viewModel()
 ) {
-    val reasons = remember {
-        listOf(
-            "Yanlış ürün sipariş verdim",
-            "Teslimat süresi bana uygun değil",
-            "Adres veya sipariş bilgisi hatalı",
-            "Üründen vazgeçtim",
-            "Diğer"
-        )
-    }
+    val state by controller.State.collectAsStateWithLifecycle()
 
-    var selectedReason by remember {
-        mutableStateOf(reasons.first())
+    var selectedReasonId by remember {
+        mutableIntStateOf(0)
     }
 
     var description by remember {
         mutableStateOf("")
+    }
+
+    LaunchedEffect(Unit) {
+        controller.ResetCancelationResult()
+        controller.GetOrderCancelationTypes()
+    }
+
+    LaunchedEffect(state.IsCancelationCompleted) {
+        if (state.IsCancelationCompleted) {
+            controller.ResetCancelationResult()
+            onSubmitSuccess()
+        }
     }
 
     Scaffold(
@@ -92,49 +109,136 @@ fun OrderCancelRequestScreen(
                 end = BBSpacing.PageHorizontal,
                 bottom = BBSpacing.PageBottom
             ),
-            verticalArrangement = Arrangement.spacedBy(
-                BBSpacing.CardGap
-            )
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
             item {
-                OrderCancelIntroCard()
+                OrderCancelIntroCard(
+                    orderKey = orderKey,
+                    orderStoreLineId = orderStoreLineId
+                )
             }
 
-            item {
-                OrderCancelReasonCard(
-                    reasons = reasons,
-                    selectedReason = selectedReason,
-                    onReasonClick = { reason ->
-                        selectedReason = reason
+            when {
+                orderStoreLineId <= 0L || orderKey.isBlank() -> {
+                    item {
+                        OrderCancelMessageCard(
+                            title = "Sipariş bilgisi eksik",
+                            description = "İptal talebi için sipariş satırı veya sipariş anahtarı bulunamadı."
+                        )
                     }
-                )
-            }
+                }
 
-            item {
-                OrderCancelDescriptionCard(
-                    description = description,
-                    onDescriptionChange = { value ->
-                        description = value
+                memberId <= 0 -> {
+                    item {
+                        OrderCancelMessageCard(
+                            title = "Oturum bilgisi bulunamadı",
+                            description = "İptal talebi oluşturmak için hesabınıza giriş yapmanız gerekiyor."
+                        )
                     }
-                )
-            }
+                }
 
-            item {
-                OrderCancelWarningCard()
-            }
+                state.IsLoading &&
+                        state.CurrentAction == "GetOrderCancelationTypes" &&
+                        state.CancelationTypes.isEmpty() -> {
+                    item {
+                        OrderCancelLoadingCard(
+                            text = "İptal nedenleri yükleniyor"
+                        )
+                    }
+                }
 
-            item {
-                OrderCancelActionCard(
-                    onBackClick = onBackClick,
-                    onSubmitClick = onSubmitClick
-                )
+                state.ErrorMessage != null &&
+                        state.CancelationTypes.isEmpty() &&
+                        state.CurrentAction == "GetOrderCancelationTypes" -> {
+                    item {
+                        OrderCancelMessageCard(
+                            title = "İptal nedenleri alınamadı",
+                            description = state.ErrorMessage.orEmpty()
+                        )
+                    }
+                }
+
+                state.CancelationTypes.isEmpty() -> {
+                    item {
+                        OrderCancelMessageCard(
+                            title = "İptal nedeni bulunamadı",
+                            description = "İptal talebi için kullanılabilir neden kaydı bulunamadı."
+                        )
+                    }
+                }
+
+                else -> {
+                    item {
+                        OrderCancelReasonCard(
+                            reasons = state.CancelationTypes,
+                            selectedReasonId = selectedReasonId,
+                            onReasonClick = { reasonId ->
+                                selectedReasonId = reasonId
+                            }
+                        )
+                    }
+
+                    item {
+                        OrderCancelDescriptionCard(
+                            description = description,
+                            onDescriptionChange = { value ->
+                                description = value
+                            }
+                        )
+                    }
+
+                    item {
+                        OrderCancelWarningCard()
+                    }
+
+                    state.ErrorMessage
+                        ?.takeIf {
+                            state.CurrentAction == "InsertOrderCancelationAsync"
+                        }
+                        ?.let { errorMessage ->
+                            item {
+                                OrderCancelMessageCard(
+                                    title = "Talep gönderilemedi",
+                                    description = errorMessage
+                                )
+                            }
+                        }
+
+                    item {
+                        OrderCancelActionCard(
+                            isLoading = state.IsLoading &&
+                                    state.CurrentAction == "InsertOrderCancelationAsync",
+                            isEnabled = selectedReasonId > 0 &&
+                                    orderStoreLineId > 0 &&
+                                    orderKey.isNotBlank() &&
+                                    memberId > 0,
+                            onBackClick = onBackClick,
+                            onSubmitClick = {
+                                controller.InsertOrderCancelationAsync(
+                                    languageId = languageId,
+                                    memberId = memberId,
+                                    insertModel = OrderCancelationInsertModel(
+                                        InsertedBy = memberId,
+                                        OrderStoreLineId = orderStoreLineId.toInt(),
+                                        OrderCancelationTypeId = selectedReasonId,
+                                        OrderKey = orderKey,
+                                        Description = description.trim()
+                                    )
+                                )
+                            }
+                        )
+                    }
+                }
             }
         }
     }
 }
 
 @Composable
-private fun OrderCancelIntroCard() {
+private fun OrderCancelIntroCard(
+    orderKey: String,
+    orderStoreLineId: Long
+) {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
@@ -142,9 +246,7 @@ private fun OrderCancelIntroCard() {
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(
-                BBSpacing.Space3
-            ),
+            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
             verticalAlignment = Alignment.Top
         ) {
             OrderCancelIconBox(
@@ -155,9 +257,7 @@ private fun OrderCancelIntroCard() {
 
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(
-                    BBSpacing.Space1
-                )
+                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
                     text = "İptal Talebi Oluştur",
@@ -166,10 +266,18 @@ private fun OrderCancelIntroCard() {
                 )
 
                 Text(
-                    text = "İptal nedeninizi seçin ve sorunu kısaca açıklayın. Talep sonucunu sipariş detayından takip edebilirsiniz.",
+                    text = orderKey.ifBlank { "Sipariş bilgisi bulunamadı" },
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+
+                if (orderStoreLineId > 0) {
+                    Text(
+                        text = "Sipariş satırı: $orderStoreLineId",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
         }
     }
@@ -177,9 +285,9 @@ private fun OrderCancelIntroCard() {
 
 @Composable
 private fun OrderCancelReasonCard(
-    reasons: List<String>,
-    selectedReason: String,
-    onReasonClick: (String) -> Unit
+    reasons: List<SystemDescOrderCancelationTypeDTO>,
+    selectedReasonId: Int,
+    onReasonClick: (Int) -> Unit
 ) {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
@@ -188,9 +296,7 @@ private fun OrderCancelReasonCard(
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(
-                BBSpacing.Space4
-            )
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
             OrderCancelSectionTitle(
                 title = "İptal Nedeni",
@@ -199,16 +305,16 @@ private fun OrderCancelReasonCard(
 
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(
-                    BBSpacing.Space2
-                )
+                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
             ) {
                 reasons.forEach { reason ->
                     OrderCancelReasonRow(
-                        text = reason,
-                        selected = reason == selectedReason,
+                        text = reason.Content.ifBlank {
+                            "İptal nedeni #${reason.OrderCancelationTypeId}"
+                        },
+                        selected = reason.OrderCancelationTypeId == selectedReasonId,
                         onClick = {
-                            onReasonClick(reason)
+                            onReasonClick(reason.OrderCancelationTypeId)
                         }
                     )
                 }
@@ -236,12 +342,8 @@ private fun OrderCancelReasonRow(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(
-                    BBSpacing.CardPaddingCompact
-                ),
-            horizontalArrangement = Arrangement.spacedBy(
-                BBSpacing.Space3
-            ),
+                .padding(BBSpacing.CardPaddingCompact),
+            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
@@ -256,9 +358,7 @@ private fun OrderCancelReasonRow(
                 } else {
                     MaterialTheme.colorScheme.onSurfaceVariant
                 },
-                modifier = Modifier.size(
-                    BBIcon.Action
-                )
+                modifier = Modifier.size(BBIcon.Action)
             )
 
             Text(
@@ -283,13 +383,11 @@ private fun OrderCancelDescriptionCard(
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(
-                BBSpacing.Space3
-            )
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             OrderCancelSectionTitle(
                 title = "Açıklama",
-                subtitle = "Talebin daha hızlı değerlendirilmesi için kısa bir açıklama yazın."
+                subtitle = "Talebin değerlendirilmesi için kısa bir açıklama yazabilirsiniz."
             )
 
             OutlinedTextField(
@@ -300,7 +398,7 @@ private fun OrderCancelDescriptionCard(
                 shape = BBRadius.Input,
                 placeholder = {
                     Text(
-                        text = "Lütfen iptal talebinizle ilgili detaylı bilgi verin."
+                        text = "İptal talebinizle ilgili açıklama yazın."
                     )
                 },
                 leadingIcon = {
@@ -323,9 +421,7 @@ private fun OrderCancelWarningCard() {
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(
-                BBSpacing.Space3
-            ),
+            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
             verticalAlignment = Alignment.Top
         ) {
             OrderCancelIconBox(
@@ -336,9 +432,7 @@ private fun OrderCancelWarningCard() {
 
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(
-                    BBSpacing.Space1
-                )
+                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
                     text = "İptal Süreci",
@@ -347,7 +441,7 @@ private fun OrderCancelWarningCard() {
                 )
 
                 Text(
-                    text = "İptal talebiniz sipariş durumuna göre değerlendirilir. Talep sonucunu sipariş detayınızdan takip edebilirsiniz.",
+                    text = "Talebiniz sipariş durumuna göre değerlendirilir. Sonuç sipariş kayıtlarına yansıtılır.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -358,6 +452,8 @@ private fun OrderCancelWarningCard() {
 
 @Composable
 private fun OrderCancelActionCard(
+    isLoading: Boolean,
+    isEnabled: Boolean,
     onBackClick: () -> Unit,
     onSubmitClick: () -> Unit
 ) {
@@ -368,25 +464,33 @@ private fun OrderCancelActionCard(
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(
-                BBSpacing.Space3
-            )
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             BbButton(
-                text = "Talebi Gönder",
+                text = if (isLoading) {
+                    "Talep Gönderiliyor"
+                } else {
+                    "Talebi Gönder"
+                },
                 onClick = onSubmitClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Primary,
                 size = BbButtonSize.Medium,
+                enabled = isEnabled && !isLoading,
                 leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Outlined.Send,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onPrimary,
-                        modifier = Modifier.size(
-                            BBIcon.ButtonIcon
+                    if (isLoading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(BBIcon.ButtonIcon),
+                            strokeWidth = BBSpacing.BorderThin
                         )
-                    )
+                    } else {
+                        Icon(
+                            imageVector = Icons.Outlined.Send,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onPrimary,
+                            modifier = Modifier.size(BBIcon.ButtonIcon)
+                        )
+                    }
                 }
             )
 
@@ -402,14 +506,71 @@ private fun OrderCancelActionCard(
 }
 
 @Composable
+private fun OrderCancelLoadingCard(text: String) {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Large
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+        ) {
+            CircularProgressIndicator()
+
+            Text(
+                text = text,
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        }
+    }
+}
+
+@Composable
+private fun OrderCancelMessageCard(
+    title: String,
+    description: String
+) {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Large
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+        ) {
+            OrderCancelIconBox(
+                icon = Icons.Outlined.Info,
+                backgroundColor = MaterialTheme.colorScheme.primaryContainer,
+                iconColor = BBColors.Yellow.Yellow800
+            )
+
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
+            Text(
+                text = description,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+@Composable
 private fun OrderCancelSectionTitle(
     title: String,
     subtitle: String
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(
-            BBSpacing.Space1
-        )
+        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
     ) {
         Text(
             text = title,
@@ -433,9 +594,7 @@ private fun OrderCancelIconBox(
 ) {
     Box(
         modifier = Modifier
-            .size(
-                BBIcon.BoxMd
-            )
+            .size(BBIcon.BoxMd)
             .background(
                 color = backgroundColor,
                 shape = BBRadius.LgShape
@@ -446,9 +605,7 @@ private fun OrderCancelIconBox(
             imageVector = icon,
             contentDescription = null,
             tint = iconColor,
-            modifier = Modifier.size(
-                BBIcon.Action
-            )
+            modifier = Modifier.size(BBIcon.Action)
         )
     }
 }

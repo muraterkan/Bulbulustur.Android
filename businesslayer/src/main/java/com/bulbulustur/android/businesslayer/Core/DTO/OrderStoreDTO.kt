@@ -1,0 +1,32 @@
+package com.bulbulustur.android.businesslayer.Core.DTO
+
+data class OrderStoreDTO(
+    val OrderStoreId: Int = 0,
+    val InsertedBy: Int = 0,
+    val InsertedDate: String = "",
+    val StatusId: Int = 0,
+    val OrderId: Int = 0,
+    val StoreGrandTotal: Double = 0.0,
+    val StoreTotalNetPrice: Double = 0.0,
+    val StoreTotalVat: Double = 0.0,
+    val StoreTotalShipping: Double = 0.0,
+    val StoreShippingBasePrice: Double = 0.0,
+    val StoreShippingAfterDiscount: Double = 0.0,
+    val StoreInstallmentFee: Double = 0.0,
+    val StoreGrandTotalWithFee: Double = 0.0,
+    val StoreFinalDesi: Double = 0.0,
+    val StoreId: Int = 0,
+    val StoreKey: String = "",
+    val StoreName: String = "",
+    val StoreCountryId: Int? = null,
+    val StoreCountryStateId: Int? = null,
+    val StoreCountryDepartmentId: Int? = null,
+    val StoreCityId: Int? = null,
+    val StoreDistrictId: Int? = null,
+    val StoreDistrict: String = "",
+    val StorePostalCode: String = "",
+    val StoreAddress: String = "",
+    val OrderKey: String = "",
+    val CompanyId: Int = 0,
+    val OrderStoreLines: List<OrderStoreLineDTO> = emptyList()
+)

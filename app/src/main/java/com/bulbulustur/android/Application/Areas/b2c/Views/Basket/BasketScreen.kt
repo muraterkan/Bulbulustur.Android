@@ -30,6 +30,7 @@ import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material.icons.outlined.ShoppingBasket
 import androidx.compose.material.icons.outlined.Storefront
 import androidx.compose.material.icons.outlined.Wallet
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -66,12 +67,18 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBAlpha
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.BasketControllerState
 import com.bulbulustur.android.businesslayer.Core.DTO.BasketDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.ProductFavoriteDTO
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BasketScreen(
     State: BasketControllerState = BasketControllerState(),
+    favorites: List<ProductFavoriteDTO> = emptyList(),
+    isFavoriteLoading: Boolean = false,
+    favoriteErrorMessage: String? = null,
     onBackClick: () -> Unit = {},
+    onRetryFavoritesClick: () -> Unit = {},
+    onAddFavoriteToBasketClick: (ProductFavoriteDTO) -> Unit = {},
     onCheckoutClick: (List<BasketDTO>) -> Unit = {},
     onProductClick: (BasketDTO) -> Unit = {},
     onStoreClick: (Int) -> Unit = {},
@@ -148,9 +155,11 @@ fun BasketScreen(
 
     if (showFavoriteSheet) {
         BasketFavoriteSheet(
-            onAddFavoriteClick = {
-                showFavoriteSheet = false
-            },
+            favorites = favorites,
+            isLoading = isFavoriteLoading,
+            errorMessage = favoriteErrorMessage,
+            onRetryClick = onRetryFavoritesClick,
+            onAddFavoriteClick = onAddFavoriteToBasketClick,
             onDismiss = {
                 showFavoriteSheet = false
             }
@@ -217,6 +226,17 @@ fun BasketScreen(
 
             if (basketLines.isEmpty()) {
                 item { BasketEmptyCard() }
+
+                if (favorites.isNotEmpty() || isFavoriteLoading || !favoriteErrorMessage.isNullOrBlank()) {
+                    item {
+                        BasketFavoriteShortcutCard(
+                            onClick = {
+                                showFavoriteSheet = true
+                            }
+                        )
+                    }
+                }
+
                 item { BasketBuyerProtectionCard() }
             } else {
                 item {
@@ -1106,11 +1126,13 @@ private fun BasketCouponOption(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun BasketFavoriteSheet(
-    onAddFavoriteClick: () -> Unit,
+    favorites: List<ProductFavoriteDTO>,
+    isLoading: Boolean,
+    errorMessage: String?,
+    onRetryClick: () -> Unit,
+    onAddFavoriteClick: (ProductFavoriteDTO) -> Unit,
     onDismiss: () -> Unit
 ) {
-    val favorites = getFavoriteSuggestions()
-
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         containerColor = MaterialTheme.colorScheme.surface
@@ -1133,19 +1155,67 @@ private fun BasketFavoriteSheet(
                 color = MaterialTheme.colorScheme.onSurface
             )
 
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
-                contentPadding = PaddingValues(end = BBSpacing.PageHorizontal)
-            ) {
-                items(
-                    items = favorites,
-                    key = { favorite -> favorite.name }
-                ) { favorite ->
-                    BasketFavoriteSuggestionCard(
-                        modifier = Modifier.fillParentMaxWidth(0.42f),
-                        favorite = favorite,
-                        onAddFavoriteClick = onAddFavoriteClick
+            when {
+                isLoading -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(BBSpacing.Space20),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
+
+                !errorMessage.isNullOrBlank() -> {
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+                    ) {
+                        Text(
+                            text = errorMessage,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.error
+                        )
+
+                        BbButton(
+                            text = "Tekrar Dene",
+                            onClick = onRetryClick,
+                            variant = BbButtonVariant.Primary,
+                            size = BbButtonSize.Small
+                        )
+                    }
+                }
+
+                favorites.isEmpty() -> {
+                    Text(
+                        text = "Henüz sepete ekleyebileceğin bir favorin bulunmuyor.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
+                }
+
+                else -> {
+                    LazyRow(
+                        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+                        contentPadding = PaddingValues(end = BBSpacing.PageHorizontal)
+                    ) {
+                        items(
+                            items = favorites,
+                            key = { favorite -> favorite.FavoriteId }
+                        ) { favorite ->
+                            BasketFavoriteSuggestionCard(
+                                modifier = Modifier.fillParentMaxWidth(0.42f),
+                                favorite = favorite,
+                                onAddFavoriteClick = {
+                                    onAddFavoriteClick(favorite)
+                                }
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -1155,9 +1225,20 @@ private fun BasketFavoriteSheet(
 @Composable
 private fun BasketFavoriteSuggestionCard(
     modifier: Modifier = Modifier,
-    favorite: BasketFavoriteSuggestion,
+    favorite: ProductFavoriteDTO,
     onAddFavoriteClick: () -> Unit
 ) {
+    val currencySymbol = favorite.CurrencySymbol.ifBlank { "₺" }
+    val imageText = favorite.ProductName
+        .trim()
+        .split(" ")
+        .filter { it.isNotBlank() }
+        .take(2)
+        .mapNotNull { word -> word.firstOrNull() }
+        .joinToString("")
+        .uppercase()
+        .ifBlank { "Ü" }
+
     Column(
         modifier = modifier
             .background(
@@ -1178,7 +1259,7 @@ private fun BasketFavoriteSuggestionCard(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = favorite.imageText,
+                text = imageText,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -1186,7 +1267,7 @@ private fun BasketFavoriteSuggestionCard(
         }
 
         Text(
-            text = favorite.name,
+            text = favorite.ProductName.ifBlank { "Ürün" },
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold,
@@ -1194,7 +1275,10 @@ private fun BasketFavoriteSuggestionCard(
         )
 
         Text(
-            text = favorite.priceText,
+            text = FormatBasketPrice(
+                value = favorite.Price,
+                currencySymbol = currencySymbol
+            ),
             style = MaterialTheme.typography.labelSmall,
             color = BBColors.Yellow.Yellow800,
             fontWeight = FontWeight.Bold
@@ -1381,37 +1465,6 @@ private fun FormatBasketPrice(
             )
     }"
 }
-private data class BasketFavoriteSuggestion(
-    val name: String,
-    val priceText: String,
-    val imageText: String
-)
-
-private fun getFavoriteSuggestions(): List<BasketFavoriteSuggestion> {
-    return listOf(
-        BasketFavoriteSuggestion(
-            name = "Ortobella deri terlik",
-            priceText = "₺849,90",
-            imageText = "F1"
-        ),
-        BasketFavoriteSuggestion(
-            name = "Pamuklu basic tişört",
-            priceText = "₺349,90",
-            imageText = "F2"
-        ),
-        BasketFavoriteSuggestion(
-            name = "Kışlık bot koleksiyonu",
-            priceText = "₺1.249,00",
-            imageText = "F3"
-        ),
-        BasketFavoriteSuggestion(
-            name = "Rahat taban günlük ayakkabı",
-            priceText = "₺749,90",
-            imageText = "F4"
-        )
-    )
-}
-
 private fun formatPrice(value: Double): String {
     return "₺${String.format("%.2f", value).replace(".", ",")}"
 }

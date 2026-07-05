@@ -31,12 +31,14 @@ import com.bulbulustur.android.Application.Areas.b2c.Controllers.ProductReviewCo
 import com.bulbulustur.android.Application.Areas.b2c.Views.Product.ProductQuestionScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.Product.ProductReviewScreen
 import com.bulbulustur.android.Application.Navigation.Routes.LogonRoutes
+import com.bulbulustur.android.Application.Controllers.AccountController
 
 fun NavGraphBuilder.retailGraph(
     navigator: BulbulusturNavigator,
     productController: ProductController,
     productReviewController: ProductReviewController,
     productQuestionController: ProductQuestionController,
+    accountController: AccountController,
     basketController: BasketController,
     sessionState: UserSessionState
 ) {
@@ -1019,6 +1021,9 @@ fun NavGraphBuilder.retailGraph(
         val basketState by
         basketController.State.collectAsState()
 
+        val accountState by
+        accountController.State.collectAsState()
+
         LaunchedEffect(
             sessionState.IsAuthenticated,
             sessionState.MemberId
@@ -1031,6 +1036,11 @@ fun NavGraphBuilder.retailGraph(
                     memberId =
                         sessionState.MemberId
                 )
+
+                accountController.GetProductFavorites(
+                    memberId =
+                        sessionState.MemberId
+                )
             } else {
                 basketController.Clear()
             }
@@ -1039,8 +1049,47 @@ fun NavGraphBuilder.retailGraph(
         BasketScreen(
             State =
                 basketState,
+            favorites =
+                accountState.ProductFavorites,
+            isFavoriteLoading =
+                accountState.IsLoading &&
+                        (
+                                accountState.CurrentAction == "GetProductFavorites" ||
+                                        accountState.CurrentAction == "MoveProductFavoriteToBasket"
+                                ),
+            favoriteErrorMessage =
+                accountState.ProductFavoriteListResult
+                    ?.takeIf {
+                        !it.Success
+                    }
+                    ?.Message,
             onBackClick = {
                 navigator.back()
+            },
+            onRetryFavoritesClick = {
+                accountController.GetProductFavorites(
+                    memberId =
+                        sessionState.MemberId
+                )
+            },
+            onAddFavoriteToBasketClick = { favorite ->
+                accountController.MoveProductFavoriteToBasket(
+                    memberId =
+                        sessionState.MemberId,
+                    favoriteId =
+                        favorite.FavoriteId,
+                    onSuccess = {
+                        basketController.Refresh(
+                            memberId =
+                                sessionState.MemberId
+                        )
+
+                        accountController.GetProductFavorites(
+                            memberId =
+                                sessionState.MemberId
+                        )
+                    }
+                )
             },
             onCheckoutClick = {
                 /*
@@ -1072,10 +1121,12 @@ fun NavGraphBuilder.retailGraph(
                     )
                 }
             },
-            onStoreClick = {
-                navigator.navController.navigate(
-                    StoreRoutes.StoreDetail
-                )
+            onStoreClick = { storeId ->
+                if (storeId > 0) {
+                    navigator.navController.navigate(
+                        StoreRoutes.storeDetail(storeId)
+                    )
+                }
             },
             onIncreaseQuantityClick = { basket ->
                 basketController.UpdateQuantity(
@@ -1116,6 +1167,8 @@ fun NavGraphBuilder.retailGraph(
             },
             onMoveToFavoriteClick = { basket ->
                 basketController.MoveToFavorite(
+                    memberId =
+                        sessionState.MemberId,
                     basketId =
                         basket.BasketId
                 )

@@ -1,0 +1,50 @@
+warning: in the working copy of 'app/src/main/java/com/bulbulustur/android/Application/Areas/b2c/Controllers/BasketController.kt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/src/main/java/com/bulbulustur/android/Application/Areas/b2c/Views/Basket/BasketScreen.kt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/src/main/java/com/bulbulustur/android/Application/Areas/b2c/Views/Order/OrderCancelRequestScreen.kt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/src/main/java/com/bulbulustur/android/Application/Areas/b2c/Views/Order/OrderContractScreen.kt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/src/main/java/com/bulbulustur/android/Application/Areas/b2c/Views/Order/OrderDetailScreen.kt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/src/main/java/com/bulbulustur/android/Application/Areas/b2c/Views/Order/OrderListScreen.kt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/src/main/java/com/bulbulustur/android/Application/Areas/b2c/Views/Order/OrderReviewCreateScreen.kt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/src/main/java/com/bulbulustur/android/Application/Areas/b2c/Views/Order/OrderShipmentTrackingScreen.kt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/src/main/java/com/bulbulustur/android/Application/Navigation/Graph/OrderGraph.kt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/src/main/java/com/bulbulustur/android/Application/Navigation/Graph/RetailGraph.kt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'businesslayer/src/main/java/com/bulbulustur/android/businesslayer/Core/DTO/SystemDescOrderCancelationTypeDTO.kt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'businesslayer/src/main/java/com/bulbulustur/android/businesslayer/Core/Interface/IContractRepository.kt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'businesslayer/src/main/java/com/bulbulustur/android/businesslayer/Core/Interface/IOrderRepository.kt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'businesslayer/src/main/java/com/bulbulustur/android/businesslayer/Core/Interface/IReturnRequestRepository.kt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'businesslayer/src/main/java/com/bulbulustur/android/businesslayer/Core/Interface/IReviewRepository.kt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'businesslayer/src/main/java/com/bulbulustur/android/businesslayer/Core/Interface/ISystemDescReturnRequestReasonRepository.kt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'businesslayer/src/main/java/com/bulbulustur/android/businesslayer/Core/Model/InsertModels/OrderCancelationInsertModel.kt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'businesslayer/src/main/java/com/bulbulustur/android/businesslayer/Core/Repository/ContractRepository.kt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'businesslayer/src/main/java/com/bulbulustur/android/businesslayer/Core/Repository/OrderRepository.kt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'businesslayer/src/main/java/com/bulbulustur/android/businesslayer/Core/Repository/ReturnRequestRepository.kt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'businesslayer/src/main/java/com/bulbulustur/android/businesslayer/Core/Repository/ReviewRepository.kt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'businesslayer/src/main/java/com/bulbulustur/android/businesslayer/Core/Repository/SystemDescReturnRequestReasonRepository.kt', LF will be replaced by CRLF the next time Git touches it
+ .../Areas/b2c/Controllers/BasketController.kt      |   14 [32m+[m
+ .../Areas/b2c/Views/Basket/BasketScreen.kt         |  159 [32m++[m[31m-[m
+ .../b2c/Views/Order/OrderCancelRequestScreen.kt    |  361 [32m+++[m[31m--[m
+ .../Areas/b2c/Views/Order/OrderContractScreen.kt   |  554 [32m+++[m[31m-----[m
+ .../Areas/b2c/Views/Order/OrderDetailScreen.kt     | 1437 [32m++++++[m[31m--------------[m
+ .../Areas/b2c/Views/Order/OrderListScreen.kt       |  376 [32m++[m[31m---[m
+ .../b2c/Views/Order/OrderReviewCreateScreen.kt     |  167 [32m++[m[31m-[m
+ .../b2c/Views/Order/OrderShipmentTrackingScreen.kt |  424 [32m+++[m[31m---[m
+ .../android/Application/BulbulusturApp.kt          |    7 [32m+[m[31m-[m
+ .../Application/Navigation/Graph/OrderGraph.kt     |  147 [32m+[m[31m-[m
+ .../Application/Navigation/Graph/RetailGraph.kt    |   61 [32m+[m[31m-[m
+ .../Application/Navigation/Routes/AppRoutes.kt     |   21 [32m+[m[31m-[m
+ .../businesslayer/Core/DTO/OrderStoreDTO.kt        |   32 [32m+[m[31m-[m
+ .../businesslayer/Core/DTO/OrderStoreLineDTO.kt    |   59 [32m+[m[31m-[m
+ .../Core/DTO/SystemDescOrderCancelationTypeDTO.kt  |   10 [32m+[m[31m-[m
+ .../Core/Interface/IContractRepository.kt          |   42 [32m+[m[31m-[m
+ .../Core/Interface/IOrderRepository.kt             |   46 [32m+[m[31m-[m
+ .../Core/Interface/IReturnRequestRepository.kt     |    2 [32m+[m
+ .../Core/Interface/IReviewRepository.kt            |    3 [32m+[m
+ .../ISystemDescReturnRequestReasonRepository.kt    |   42 [32m+[m[31m-[m
+ .../InsertModels/OrderCancelationInsertModel.kt    |    9 [32m+[m[31m-[m
+ .../businesslayer/Core/Network/Api/ApiRoutes.kt    |    1 [31m-[m
+ .../Core/Repository/ContractRepository.kt          |   59 [32m+[m[31m-[m
+ .../Core/Repository/OrderRepository.kt             |   66 [32m+[m[31m-[m
+ .../Core/Repository/ReturnRequestRepository.kt     |   25 [32m+[m[31m-[m
+ .../Core/Repository/ReviewRepository.kt            |   17 [32m+[m[31m-[m
+ .../SystemDescReturnRequestReasonRepository.kt     |   52 [31m-[m
+ 27 files changed, 1870 insertions(+), 2323 deletions(-)

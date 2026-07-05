@@ -803,6 +803,8 @@ private fun BulbulusturApplicationContent(
                 productReviewController,
             productQuestionController =
                 productQuestionController,
+            accountController =
+                accountController,
             basketController =
                 basketController,
             sessionState =
@@ -821,8 +823,9 @@ private fun BulbulusturApplicationContent(
         )
 
         orderGraph(
-            navigator =
-                appNavigator
+            navigator = appNavigator,
+            memberId = sessionState.MemberId,
+            languageId = sessionState.Language.Id
         )
 
         accountGraph(

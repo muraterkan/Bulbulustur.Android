@@ -10,4 +10,6 @@ interface IReturnRequestRepository {
     suspend fun GetReturnRequestByIdExtendedAsync(languageId: Int, memberId: Int, returnRequestId: Int): Result<ReturnRequestDTO?>
 
     suspend fun GetReturnRequestSimpleAsync(memberId: Int, returnRequestId: Int): Result<ReturnRequestDTO?>
+
+    suspend fun InsertReturnRequestAsync(languageId: Int, memberId: Int, returnRequest: ReturnRequestDTO): Result<Unit>
 }

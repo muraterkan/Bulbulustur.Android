@@ -14,21 +14,25 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CalendarMonth
-import androidx.compose.material.icons.outlined.RequestQuote
-import androidx.compose.material.icons.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Numbers
 import androidx.compose.material.icons.outlined.Print
 import androidx.compose.material.icons.outlined.ReceiptLong
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material.icons.outlined.RequestQuote
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bulbulustur.android.Application.Areas.b2c.Controllers.OrderController
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
@@ -40,20 +44,26 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
+import com.bulbulustur.android.businesslayer.Core.DTO.ContractDTO
 
 @Composable
 fun OrderContractScreen(
-    orderCode: String = "ORD-F4QO-AFPR-J5EX",
-    createdDate: String = "10 Mayıs 2026 08:54",
-    contractDate: String = "28 Temmuz 2025",
+    orderKey: String,
+    storeKey: String,
     onBackClick: () -> Unit = {},
-    onPrintClick: () -> Unit = {}
+    onPrintClick: (String) -> Unit = {},
+    controller: OrderController = viewModel()
 ) {
-    val contract = getDemoOrderContract(
-        orderCode = orderCode,
-        createdDate = createdDate,
-        contractDate = contractDate
-    )
+    val state by controller.State.collectAsStateWithLifecycle()
+
+    LaunchedEffect(orderKey, storeKey) {
+        if (orderKey.isNotBlank() && storeKey.isNotBlank()) {
+            controller.GetOrderStoreContractAsync(
+                orderKey = orderKey,
+                storeKey = storeKey
+            )
+        }
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -78,58 +88,74 @@ fun OrderContractScreen(
                 end = BBSpacing.PageHorizontal,
                 bottom = BBSpacing.PageBottom
             ),
-            verticalArrangement = Arrangement.spacedBy(
-                BBSpacing.CardGap
-            )
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
-            item {
-                OrderContractSummaryCard(
-                    contract = contract,
-                    onPrintClick = onPrintClick
-                )
-            }
-
-            item {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(
-                        BBSpacing.Space3
-                    )
-                ) {
-                    OrderContractInfoBox(
-                        modifier = Modifier.weight(1f),
-                        title = "SİPARİŞ",
-                        value = contract.orderCode,
-                        icon = Icons.Outlined.Numbers,
-                        iconColor = BBColors.Yellow.Yellow800
-                    )
-
-                    OrderContractInfoBox(
-                        modifier = Modifier.weight(1f),
-                        title = "TARİH",
-                        value = contract.createdDate,
-                        icon = Icons.Outlined.CalendarMonth,
-                        iconColor = BBColors.Blue.Blue600
-                    )
+            when {
+                orderKey.isBlank() || storeKey.isBlank() -> {
+                    item {
+                        OrderContractMessageCard(
+                            title = "Sözleşme bilgisi eksik",
+                            description = "Sipariş veya mağaza anahtarı bulunamadı."
+                        )
+                    }
                 }
-            }
 
-            item {
-                OrderContractPartiesCard(
-                    contract = contract
-                )
-            }
+                state.IsLoading && state.Contract == null -> {
+                    item {
+                        OrderContractLoadingCard()
+                    }
+                }
 
-            item {
-                OrderContractLegalTextCard(
-                    contract = contract
-                )
-            }
+                state.ErrorMessage != null && state.Contract == null -> {
+                    item {
+                        OrderContractMessageCard(
+                            title = "Sözleşme alınamadı",
+                            description = state.ErrorMessage.orEmpty()
+                        )
+                    }
+                }
 
-            item {
-                OrderContractBottomActionCard(
-                    onPrintClick = onPrintClick
-                )
+                state.Contract == null -> {
+                    item {
+                        OrderContractMessageCard(
+                            title = "Sözleşme bulunamadı",
+                            description = "Bu sipariş ve mağaza için kayıtlı sözleşme bulunamadı."
+                        )
+                    }
+                }
+
+                else -> {
+                    val contract = state.Contract!!
+
+                    item {
+                        OrderContractSummaryCard(
+                            contract = contract,
+                            onPrintClick = {
+                                onPrintClick(contract.ContractText)
+                            }
+                        )
+                    }
+
+                    item {
+                        OrderContractInfoGrid(
+                            contract = contract
+                        )
+                    }
+
+                    item {
+                        OrderContractLegalTextCard(
+                            contractText = contract.ContractText
+                        )
+                    }
+
+                    item {
+                        OrderContractBottomActionCard(
+                            onPrintClick = {
+                                onPrintClick(contract.ContractText)
+                            }
+                        )
+                    }
+                }
             }
         }
     }
@@ -137,7 +163,7 @@ fun OrderContractScreen(
 
 @Composable
 private fun OrderContractSummaryCard(
-    contract: OrderContractUiModel,
+    contract: ContractDTO,
     onPrintClick: () -> Unit
 ) {
     BbCard(
@@ -147,15 +173,11 @@ private fun OrderContractSummaryCard(
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(
-                BBSpacing.Space4
-            )
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(
-                    BBSpacing.Space3
-                ),
+                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 OrderContractIconBox(
@@ -166,9 +188,7 @@ private fun OrderContractSummaryCard(
 
                 Column(
                     modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(
-                        BBSpacing.Space1
-                    )
+                    verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                 ) {
                     Text(
                         text = "Mesafeli Satış Sözleşmesi",
@@ -177,7 +197,7 @@ private fun OrderContractSummaryCard(
                     )
 
                     Text(
-                        text = contract.orderCode,
+                        text = contract.OrderKey,
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -185,7 +205,7 @@ private fun OrderContractSummaryCard(
             }
 
             OrderContractNoticeBox(
-                text = "Bu belge sipariş oluşturma anında geçerli olan satış koşulları, alıcı ve satıcı bilgileri ile teslimat hükümlerini içerir."
+                text = "Bu belge, sipariş oluşturulduğu anda geçerli olan sözleşme metnidir."
             )
 
             BbButton(
@@ -199,9 +219,7 @@ private fun OrderContractSummaryCard(
                         imageVector = Icons.Outlined.Print,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onPrimary,
-                        modifier = Modifier.size(
-                            BBIcon.ButtonIcon
-                        )
+                        modifier = Modifier.size(BBIcon.ButtonIcon)
                     )
                 }
             )
@@ -210,48 +228,57 @@ private fun OrderContractSummaryCard(
 }
 
 @Composable
-private fun OrderContractPartiesCard(
-    contract: OrderContractUiModel
-) {
-    BbCard(
+private fun OrderContractInfoGrid(contract: ContractDTO) {
+    Column(
         modifier = Modifier.fillMaxWidth(),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium
+        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
     ) {
-        Column(
+        Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(
-                BBSpacing.Space4
-            )
+            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
-            OrderContractSectionTitle(
-                title = "Taraf Bilgileri",
-                subtitle = "Sipariş sırasında kayıtlı alıcı ve satıcı bilgileri"
+            OrderContractInfoBox(
+                modifier = Modifier.weight(1f),
+                title = "SİPARİŞ",
+                value = contract.OrderKey,
+                icon = Icons.Outlined.Numbers,
+                iconColor = BBColors.Yellow.Yellow800
             )
 
-            OrderContractPartyRow(
-                title = "Alıcı",
-                name = contract.buyerName,
-                description = contract.buyerAddress
+            OrderContractInfoBox(
+                modifier = Modifier.weight(1f),
+                title = "MAĞAZA",
+                value = contract.StoreKey,
+                icon = Icons.Outlined.RequestQuote,
+                iconColor = BBColors.Blue.Blue600
+            )
+        }
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+        ) {
+            OrderContractInfoBox(
+                modifier = Modifier.weight(1f),
+                title = "TARİH",
+                value = contract.InsertedDate.ifBlank { "-" },
+                icon = Icons.Outlined.CalendarMonth,
+                iconColor = BBColors.Blue.Blue600
             )
 
-            HorizontalDivider(
-                color = MaterialTheme.colorScheme.outlineVariant
-            )
-
-            OrderContractPartyRow(
-                title = "Satıcı",
-                name = contract.sellerName,
-                description = contract.sellerAddress
+            OrderContractInfoBox(
+                modifier = Modifier.weight(1f),
+                title = "VERSİYON",
+                value = contract.Version?.toString() ?: "-",
+                icon = Icons.Outlined.ReceiptLong,
+                iconColor = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
 }
 
 @Composable
-private fun OrderContractLegalTextCard(
-    contract: OrderContractUiModel
-) {
+private fun OrderContractLegalTextCard(contractText: String) {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
@@ -263,15 +290,9 @@ private fun OrderContractLegalTextCard(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(
-                        MaterialTheme.colorScheme.surfaceVariant
-                    )
-                    .padding(
-                        BBSpacing.CardPadding
-                    ),
-                verticalArrangement = Arrangement.spacedBy(
-                    BBSpacing.Space1
-                )
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .padding(BBSpacing.CardPadding),
+                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
                     text = "HUKUKİ METİN",
@@ -286,38 +307,23 @@ private fun OrderContractLegalTextCard(
                 )
             }
 
-            Column(
+            Text(
+                text = contractText.ifBlank {
+                    "Sözleşme metni bulunamadı."
+                },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(
-                        MaterialTheme.colorScheme.surface
-                    )
-                    .padding(
-                        BBSpacing.CardPadding
-                    ),
-                verticalArrangement = Arrangement.spacedBy(
-                    BBSpacing.Space5
-                )
-            ) {
-                contract.sections.forEach { section ->
-                    OrderContractLegalSection(
-                        title = section.title,
-                        body = section.body
-                    )
-                }
-
-                OrderContractDateBox(
-                    dateText = "Sözleşme Tarihi: ${contract.contractDate}"
-                )
-            }
+                    .background(MaterialTheme.colorScheme.surface)
+                    .padding(BBSpacing.CardPadding),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 }
 
 @Composable
-private fun OrderContractBottomActionCard(
-    onPrintClick: () -> Unit
-) {
+private fun OrderContractBottomActionCard(onPrintClick: () -> Unit) {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
@@ -325,13 +331,18 @@ private fun OrderContractBottomActionCard(
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(
-                BBSpacing.Space3
-            )
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
-            OrderContractSectionTitle(
-                title = "Belge İşlemleri",
-                subtitle = "Sözleşmeyi görüntüleyebilir veya yazdırabilirsiniz."
+            Text(
+                text = "Belge İşlemleri",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
+            Text(
+                text = "Sözleşme belgesini yazdırabilir veya sistem paylaşım ekranına aktarabilirsiniz.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             BbButton(
@@ -345,19 +356,7 @@ private fun OrderContractBottomActionCard(
                         imageVector = Icons.Outlined.Print,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.size(
-                            BBIcon.ButtonIcon
-                        )
-                    )
-                },
-                trailingIcon = {
-                    Icon(
-                        imageVector = Icons.Outlined.KeyboardArrowRight,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.size(
-                            BBIcon.ButtonIcon
-                        )
+                        modifier = Modifier.size(BBIcon.ButtonIcon)
                     )
                 }
             )
@@ -376,25 +375,19 @@ private fun OrderContractInfoBox(
     Box(
         modifier = modifier
             .background(
-                color = MaterialTheme.colorScheme.surfaceVariant,
+                color = MaterialTheme.colorScheme.surface,
                 shape = BBRadius.LgShape
             )
-            .padding(
-                BBSpacing.CardPaddingCompact
-            )
+            .padding(BBSpacing.CardPaddingCompact)
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(
-                BBSpacing.Space2
-            )
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
                 tint = iconColor,
-                modifier = Modifier.size(
-                    BBIcon.Action
-                )
+                modifier = Modifier.size(BBIcon.Action)
             )
 
             Text(
@@ -413,104 +406,7 @@ private fun OrderContractInfoBox(
 }
 
 @Composable
-private fun OrderContractPartyRow(
-    title: String,
-    name: String,
-    description: String
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(
-            BBSpacing.Space3
-        ),
-        verticalAlignment = Alignment.Top
-    ) {
-        OrderContractIconBox(
-            icon = Icons.Outlined.RequestQuote,
-            backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
-            iconColor = MaterialTheme.colorScheme.onSurface
-        )
-
-        Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(
-                BBSpacing.Space1
-            )
-        ) {
-            Text(
-                text = title.uppercase(),
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-
-            Text(
-                text = name,
-                style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-
-            Text(
-                text = description,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-    }
-}
-
-@Composable
-private fun OrderContractLegalSection(
-    title: String,
-    body: String
-) {
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(
-            BBSpacing.Space2
-        )
-    ) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.onSurface
-        )
-
-        Text(
-            text = body,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-    }
-}
-
-@Composable
-private fun OrderContractSectionTitle(
-    title: String,
-    subtitle: String
-) {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(
-            BBSpacing.Space1
-        )
-    ) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurface
-        )
-
-        Text(
-            text = subtitle,
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-    }
-}
-
-@Composable
-private fun OrderContractNoticeBox(
-    text: String
-) {
+private fun OrderContractNoticeBox(text: String) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -518,37 +414,12 @@ private fun OrderContractNoticeBox(
                 color = MaterialTheme.colorScheme.primaryContainer,
                 shape = BBRadius.LgShape
             )
-            .padding(
-                BBSpacing.CardPaddingCompact
-            )
+            .padding(BBSpacing.CardPaddingCompact)
     ) {
         Text(
             text = text,
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-    }
-}
-
-@Composable
-private fun OrderContractDateBox(
-    dateText: String
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(
-                color = MaterialTheme.colorScheme.primaryContainer,
-                shape = BBRadius.LgShape
-            )
-            .padding(
-                BBSpacing.CardPaddingCompact
-            )
-    ) {
-        Text(
-            text = dateText,
-            style = MaterialTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.onSurface
         )
     }
 }
@@ -561,9 +432,7 @@ private fun OrderContractIconBox(
 ) {
     Box(
         modifier = Modifier
-            .size(
-                BBIcon.BoxMd
-            )
+            .size(BBIcon.BoxMd)
             .background(
                 color = backgroundColor,
                 shape = BBRadius.LgShape
@@ -574,63 +443,66 @@ private fun OrderContractIconBox(
             imageVector = icon,
             contentDescription = null,
             tint = iconColor,
-            modifier = Modifier.size(
-                BBIcon.Action
-            )
+            modifier = Modifier.size(BBIcon.Action)
         )
     }
 }
 
-private fun getDemoOrderContract(
-    orderCode: String,
-    createdDate: String,
-    contractDate: String
-): OrderContractUiModel {
-    return OrderContractUiModel(
-        orderCode = orderCode,
-        createdDate = createdDate,
-        contractDate = contractDate,
-        buyerName = "Murat Erkan",
-        buyerAddress = "İstanbul / Türkiye . Alıcı adresi API bağlandığında gerçek sipariş adresinden beslenecek.",
-        sellerName = "Ortobella",
-        sellerAddress = "Satıcı firma ve mağaza bilgileri API bağlandığında gerçek sipariş satıcısından beslenecek.",
-        sections = listOf(
-            OrderContractSectionUiModel(
-                title = "1 - Sözleşmenin Tarafları ve Konusu",
-                body = "Bu sözleşme, $orderCode numaralı siparişe ilişkin ürün satışı, teslimat, ödeme ve tarafların temel hak ve yükümlülüklerini düzenler."
-            ),
-            OrderContractSectionUiModel(
-                title = "2 - Ürün ve Sipariş Bilgileri",
-                body = "Siparişe konu ürünlerin adı, adedi, satış bedeli, kargo bilgisi ve toplam ödeme tutarı sipariş detay ekranında gösterilen bilgilerden oluşur."
-            ),
-            OrderContractSectionUiModel(
-                title = "3 - Teslimat Koşulları",
-                body = "Teslimat, alıcının sipariş sırasında belirttiği adrese yapılır. Kargo süreci satıcı ve taşıyıcı firma operasyonuna göre güncellenir."
-            ),
-            OrderContractSectionUiModel(
-                title = "4 - Cayma, İade ve İptal",
-                body = "Alıcı, ilgili mevzuat ve platform kuralları çerçevesinde iptal, iade ve cayma haklarını kullanabilir. Ürün niteliğine göre istisnai durumlar oluşabilir."
-            ),
-            OrderContractSectionUiModel(
-                title = "5 - Uyuşmazlıkların Çözümü",
-                body = "Taraflar arasında uyuşmazlık oluşması halinde ilgili mevzuat kapsamında yetkili kurumlara başvurulabilir."
+@Composable
+private fun OrderContractLoadingCard() {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Large
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+        ) {
+            CircularProgressIndicator()
+
+            Text(
+                text = "Sözleşme yükleniyor",
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurface
             )
-        )
-    )
+        }
+    }
 }
 
-private data class OrderContractUiModel(
-    val orderCode: String,
-    val createdDate: String,
-    val contractDate: String,
-    val buyerName: String,
-    val buyerAddress: String,
-    val sellerName: String,
-    val sellerAddress: String,
-    val sections: List<OrderContractSectionUiModel>
-)
+@Composable
+private fun OrderContractMessageCard(
+    title: String,
+    description: String
+) {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Large
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+        ) {
+            OrderContractIconBox(
+                icon = Icons.Outlined.RequestQuote,
+                backgroundColor = MaterialTheme.colorScheme.primaryContainer,
+                iconColor = BBColors.Yellow.Yellow800
+            )
 
-private data class OrderContractSectionUiModel(
-    val title: String,
-    val body: String
-)
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
+            Text(
+                text = description,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}

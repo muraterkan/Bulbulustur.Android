@@ -4,9 +4,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
-import com.bulbulustur.android.Application.Navigation.Routes.OrderRoutes
-import com.bulbulustur.android.Application.Navigation.Routes.StoreRoutes
 import com.bulbulustur.android.Application.Areas.b2c.Views.order.OrderCancelRequestScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.order.OrderContractScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.order.OrderDetailScreen
@@ -14,15 +11,23 @@ import com.bulbulustur.android.Application.Areas.b2c.Views.order.OrderListScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.order.OrderReturnRequestScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.order.OrderReviewCreateScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.order.OrderShipmentTrackingScreen
+import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
+import com.bulbulustur.android.Application.Navigation.Routes.OrderRoutes
+import com.bulbulustur.android.Application.Navigation.Routes.StoreRoutes
 
 fun NavGraphBuilder.orderGraph(
-    navigator: BulbulusturNavigator
-) {
+    navigator: BulbulusturNavigator,
+    memberId: Int,
+    languageId: Int
+){
     composable(OrderRoutes.List) {
         OrderListScreen(
+            memberId = memberId,
             onBackClick = { navigator.back() },
-            onOrderDetailClick = { orderId ->
-                navigator.navController.navigate(OrderRoutes.detail(orderId))
+            onOrderDetailClick = { orderId, orderKey ->
+                navigator.navController.navigate(
+                    OrderRoutes.detail(orderId, orderKey)
+                )
             }
         )
     }
@@ -32,54 +37,70 @@ fun NavGraphBuilder.orderGraph(
         arguments = listOf(
             navArgument(OrderRoutes.ArgOrderId) {
                 type = NavType.IntType
+            },
+            navArgument(OrderRoutes.ArgOrderKey) {
+                type = NavType.StringType
             }
         )
     ) { backStackEntry ->
-        val orderId = backStackEntry.arguments?.getInt(OrderRoutes.ArgOrderId) ?: 0
+        val orderId = backStackEntry.arguments
+            ?.getInt(OrderRoutes.ArgOrderId)
+            ?: 0
+
+        val orderKey = backStackEntry.arguments
+            ?.getString(OrderRoutes.ArgOrderKey)
+            .orEmpty()
 
         OrderDetailScreen(
             orderId = orderId,
-            onBackClick = { navigator.back() },
-            onContractClick = {
+            orderKey = orderKey,
+            onBackClick = {
+                navigator.back()
+            },
+            onContractClick = { storeKey ->
                 navigator.navController.navigate(
                     OrderRoutes.contract(
-                        orderKey = "ORD-F4QO-AFPR-J5EX",
-                        storeKey = "STORE-ORTOBELLA"
+                        orderKey = orderKey,
+                        storeKey = storeKey
                     )
                 )
             },
             onStoreClick = {
-                navigator.navController.navigate(StoreRoutes.StoreDetail)
+                navigator.navController.navigate(
+                    StoreRoutes.StoreDetail
+                )
             },
             onSupportClick = {},
-            onCancelRequestClick = { orderStoreLineId, orderKey ->
+            onCancelRequestClick = { orderStoreLineId, selectedOrderKey ->
                 navigator.navController.navigate(
                     OrderRoutes.cancelRequest(
                         orderStoreLineId = orderStoreLineId,
-                        orderKey = orderKey
+                        orderKey = selectedOrderKey
                     )
                 )
             },
-            onReturnRequestClick = { orderStoreLineId, orderKey ->
+            onReturnRequestClick = { orderStoreLineId, selectedOrderKey ->
                 navigator.navController.navigate(
                     OrderRoutes.returnRequest(
                         orderStoreLineId = orderStoreLineId,
-                        orderKey = orderKey
+                        orderKey = selectedOrderKey
                     )
                 )
             },
-            onReviewCreateClick = { orderStoreLineId, productId, memberKey ->
+            onReviewCreateClick = { orderStoreLineId, productId, productSecureKey ->
                 navigator.navController.navigate(
                     OrderRoutes.reviewCreate(
                         orderStoreLineId = orderStoreLineId,
                         productId = productId,
-                        memberKey = memberKey
+                        productSecureKey = productSecureKey
                     )
                 )
             },
-            onShipmentTrackingClick = { orderStoreLineId ->
+            onShipmentTrackingClick = { cargoTrackingNumber ->
                 navigator.navController.navigate(
-                    OrderRoutes.shipmentTracking(orderStoreLineId)
+                    OrderRoutes.shipmentTracking(
+                        cargoTrackingNumber
+                    )
                 )
             }
         )
@@ -100,9 +121,19 @@ fun NavGraphBuilder.orderGraph(
             ?.getString(OrderRoutes.ArgOrderKey)
             .orEmpty()
 
+        val storeKey = backStackEntry.arguments
+            ?.getString(OrderRoutes.ArgStoreKey)
+            .orEmpty()
+
         OrderContractScreen(
-            orderCode = orderKey.ifBlank { "ORD-F4QO-AFPR-J5EX" },
-            onBackClick = { navigator.back() }
+            orderKey = orderKey,
+            storeKey = storeKey,
+            onBackClick = {
+                navigator.back()
+            },
+            onPrintClick = { contractText ->
+                // Android paylaşım/yazdırma entegrasyonu sonraki teknik fazda bağlanacak.
+            }
         )
     }
 
@@ -116,10 +147,26 @@ fun NavGraphBuilder.orderGraph(
                 type = NavType.StringType
             }
         )
-    ) {
+    ) { backStackEntry ->
+        val orderStoreLineId = backStackEntry.arguments
+            ?.getLong(OrderRoutes.ArgOrderStoreLineId)
+            ?: 0L
+
+        val orderKey = backStackEntry.arguments
+            ?.getString(OrderRoutes.ArgOrderKey)
+            .orEmpty()
+
         OrderCancelRequestScreen(
-            onBackClick = { navigator.back() },
-            onSubmitClick = { navigator.back() }
+            orderStoreLineId = orderStoreLineId,
+            orderKey = orderKey,
+            memberId = memberId,
+            languageId = languageId,
+            onBackClick = {
+                navigator.back()
+            },
+            onSubmitSuccess = {
+                navigator.back()
+            }
         )
     }
 
@@ -149,29 +196,55 @@ fun NavGraphBuilder.orderGraph(
             navArgument(OrderRoutes.ArgProductId) {
                 type = NavType.LongType
             },
-            navArgument(OrderRoutes.ArgMemberKey) {
+            navArgument(OrderRoutes.ArgProductSecureKey) {
                 type = NavType.StringType
             }
         )
-    ) {
+    ) { backStackEntry ->
+        val orderStoreLineId = backStackEntry.arguments
+            ?.getLong(OrderRoutes.ArgOrderStoreLineId)
+            ?: 0L
+
+        val productId = backStackEntry.arguments
+            ?.getLong(OrderRoutes.ArgProductId)
+            ?: 0L
+
+        val productSecureKey = backStackEntry.arguments
+            ?.getString(OrderRoutes.ArgProductSecureKey)
+            .orEmpty()
+
         OrderReviewCreateScreen(
-            onBackClick = { navigator.back() },
-            onSubmitClick = { navigator.back() }
+            orderStoreLineId = orderStoreLineId,
+            productId = productId,
+            productSecureKey = productSecureKey,
+            memberId = memberId,
+            onBackClick = {
+                navigator.back()
+            },
+            onSubmitSuccess = {
+                navigator.back()
+            }
         )
     }
 
     composable(
         route = OrderRoutes.ShipmentTracking,
         arguments = listOf(
-            navArgument(OrderRoutes.ArgOrderStoreLineId) {
-                type = NavType.LongType
+            navArgument(OrderRoutes.ArgCargoTrackingNumber) {
+                type = NavType.IntType
             }
         )
-    ) {
+    ) { backStackEntry ->
+        val cargoTrackingNumber = backStackEntry.arguments
+            ?.getInt(OrderRoutes.ArgCargoTrackingNumber)
+            ?: 0
+
         OrderShipmentTrackingScreen(
-            onBackClick = { navigator.back() }
+            cargoTrackingNumber = cargoTrackingNumber,
+            memberId = memberId,
+            onBackClick = {
+                navigator.back()
+            }
         )
     }
 }
-
-

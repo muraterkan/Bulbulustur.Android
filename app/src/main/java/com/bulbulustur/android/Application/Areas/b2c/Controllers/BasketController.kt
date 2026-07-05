@@ -395,12 +395,22 @@ class BasketController(
                         }
                 )
             }
+
+            if (response.Success) {
+                Summary(memberId = memberId)
+            }
         }
     }
 
     fun MoveToFavorite(
+        memberId: Int,
         basketId: Int
     ) {
+        if (memberId <= 0) {
+            SetAuthenticationError()
+            return
+        }
+
         if (basketId <= 0) {
             _state.update { currentState ->
                 currentState.copy(
@@ -454,6 +464,10 @@ class BasketController(
                             !response.Success
                         }
                 )
+            }
+
+            if (response.Success) {
+                Summary(memberId = memberId)
             }
         }
     }

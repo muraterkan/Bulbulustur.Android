@@ -21,36 +21,48 @@ import androidx.compose.material.icons.outlined.Mail
 import androidx.compose.material.icons.outlined.MarkEmailRead
 import androidx.compose.material.icons.outlined.MarkEmailUnread
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
-import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
+import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBAlpha
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
-import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBAlpha
+import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleMessageDTO
 
 @Composable
 fun MessageInboxScreen(
+    messages: List<WholesaleMessageDTO>,
+    unreadCount: Int,
+    isLoading: Boolean,
+    errorMessage: String?,
+    currentMemberId: Int,
     onBackClick: () -> Unit = {},
-    onMessageClick: (Int) -> Unit = {}
+    onRetryClick: () -> Unit = {},
+    onMessageClick: (Int, Int) -> Unit = { _, _ -> }
 ) {
-    val selectedFilter = remember {
+    var selectedFilter by remember {
         mutableStateOf(MessageFilter.All)
     }
 
-    val messages = getDemoMessages().filterBy(selectedFilter.value)
+    val filteredMessages = remember(messages, selectedFilter) {
+        messages.filterBy(selectedFilter)
+    }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
@@ -75,14 +87,18 @@ fun MessageInboxScreen(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
             item {
-                MessageStatsRow()
+                MessageStatsRow(
+                    totalCount = messages.size,
+                    unreadCount = unreadCount.coerceAtLeast(0),
+                    readCount = (messages.size - unreadCount).coerceAtLeast(0)
+                )
             }
 
             item {
                 MessageFilterChips(
-                    selectedFilter = selectedFilter.value,
+                    selectedFilter = selectedFilter,
                     onFilterClick = { filter ->
-                        selectedFilter.value = filter
+                        selectedFilter = filter
                     }
                 )
             }
@@ -91,23 +107,53 @@ fun MessageInboxScreen(
                 MessageSectionTitle()
             }
 
-            items(
-                items = messages,
-                key = { item -> item.id }
-            ) { message ->
-                MessageCard(
-                    message = message,
-                    onClick = {
-                        onMessageClick(message.id)
+            when {
+                isLoading && messages.isEmpty() -> {
+                    item {
+                        MessageLoadingState()
                     }
-                )
+                }
+
+                !errorMessage.isNullOrBlank() && messages.isEmpty() -> {
+                    item {
+                        MessageErrorState(
+                            message = errorMessage,
+                            onRetryClick = onRetryClick
+                        )
+                    }
+                }
+
+                filteredMessages.isEmpty() -> {
+                    item {
+                        MessageEmptyState()
+                    }
+                }
+
+                else -> {
+                    items(
+                        items = filteredMessages,
+                        key = { item -> item.MessageThreadId }
+                    ) { message ->
+                        MessageCard(
+                            message = message,
+                            currentMemberId = currentMemberId,
+                            onClick = {
+                                onMessageClick(message.MessageThreadId, message.WholesaleMessageId)
+                            }
+                        )
+                    }
+                }
             }
         }
     }
 }
 
 @Composable
-private fun MessageStatsRow() {
+private fun MessageStatsRow(
+    totalCount: Int,
+    unreadCount: Int,
+    readCount: Int
+) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
@@ -115,16 +161,16 @@ private fun MessageStatsRow() {
         MessageStatCard(
             modifier = Modifier.weight(1f),
             icon = Icons.Outlined.Mail,
-            value = "12",
+            value = totalCount.toString(),
             label = "Gelen",
-            color = BBColors.Navy.Navy500,
-            backgroundColor = BBColors.Navy.Navy50
+            color = MaterialTheme.colorScheme.onSurface,
+            backgroundColor = MaterialTheme.colorScheme.surface
         )
 
         MessageStatCard(
             modifier = Modifier.weight(1f),
             icon = Icons.Outlined.MarkEmailUnread,
-            value = "3",
+            value = unreadCount.toString(),
             label = "Yeni",
             color = BBColors.Blue.Blue600,
             backgroundColor = BBColors.Blue.Blue50
@@ -133,7 +179,7 @@ private fun MessageStatsRow() {
         MessageStatCard(
             modifier = Modifier.weight(1f),
             icon = Icons.Outlined.MarkEmailRead,
-            value = "9",
+            value = readCount.toString(),
             label = "Okundu",
             color = BBColors.Green.Green600,
             backgroundColor = BBColors.Green.Green50
@@ -163,10 +209,7 @@ private fun MessageStatCard(
             Box(
                 modifier = Modifier
                     .size(BBIcon.BoxMd)
-                    .background(
-                        color = backgroundColor,
-                        shape = BBRadius.LgShape
-                    ),
+                    .background(backgroundColor, BBRadius.LgShape),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
@@ -204,37 +247,20 @@ private fun MessageFilterChips(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
     ) {
         MessageFilter.entries.forEach { filter ->
-            MessageFilterChip(
-                text = filter.label,
-                selected = selectedFilter == filter,
+            BbCard(
+                variant = if (selectedFilter == filter) BbCardVariant.Default else BbCardVariant.Outlined,
+                padding = BbCardPadding.Small,
                 onClick = {
                     onFilterClick(filter)
                 }
-            )
-        }
-    }
-}
-
-@Composable
-private fun MessageFilterChip(
-    text: String,
-    selected: Boolean,
-    onClick: () -> Unit
-) {
-    BbCard(
-        variant = if (selected) BbCardVariant.Default else BbCardVariant.Outlined,
-        padding = BbCardPadding.Small,
-        onClick = onClick
-    ) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.labelMedium,
-            color = if (selected) {
-                BBColors.Yellow.Yellow800
-            } else {
-                MaterialTheme.colorScheme.onSurfaceVariant
+            ) {
+                Text(
+                    text = filter.label,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = if (selectedFilter == filter) BBColors.Yellow.Yellow800 else MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
-        )
+        }
     }
 }
 
@@ -245,13 +271,13 @@ private fun MessageSectionTitle() {
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
     ) {
         Text(
-            text = "Gelen kutusu",
+            text = "Toptan mesajlar",
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onSurface
         )
 
         Text(
-            text = "Okunmamış ve okunmuş mesajlarınızı konuşma bazlı görüntüleyin.",
+            text = "Toptan ticaret görüşmelerinizi konuşma bazlı görüntüleyin.",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -261,9 +287,13 @@ private fun MessageSectionTitle() {
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun MessageCard(
-    message: MessageInboxUiModel,
+    message: WholesaleMessageDTO,
+    currentMemberId: Int,
     onClick: () -> Unit
 ) {
+    val otherName = message.otherMemberName(currentMemberId)
+    val isCompany = message.CompanyId > 0
+
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
@@ -279,7 +309,10 @@ private fun MessageCard(
                 horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
                 verticalAlignment = Alignment.Top
             ) {
-                MessageAvatarBox(message = message)
+                MessageAvatarBox(
+                    isUnread = !message.IsRead,
+                    isCompany = isCompany
+                )
 
                 Column(
                     modifier = Modifier.weight(1f),
@@ -291,31 +324,24 @@ private fun MessageCard(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = message.senderName,
+                            text = otherName.ifBlank { "Üye" },
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.weight(1f)
                         )
 
-                        MessageStatusBadge(
-                            isUnread = message.isUnread
-                        )
+                        MessageStatusBadge(isUnread = !message.IsRead)
                     }
 
                     Text(
-                        text = message.subject,
-                        style = MaterialTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-
-                    Text(
-                        text = message.preview,
+                        text = message.Body,
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 3
                     )
 
                     Text(
-                        text = message.dateText,
+                        text = message.InsertedDate,
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -333,9 +359,10 @@ private fun MessageCard(
                 horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2),
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
             ) {
-                MessageSmallTag(message.boxLabel)
-                MessageSmallTag(message.commerceMode)
-                MessageSmallTag(message.replyCountText)
+                MessageSmallTag("Gelen Kutusu")
+                MessageSmallTag("Toptan")
+                if (message.IsPriority) MessageSmallTag("Öncelikli")
+                if (message.IsStarred) MessageSmallTag("Yıldızlı")
             }
         }
     }
@@ -343,31 +370,29 @@ private fun MessageCard(
 
 @Composable
 private fun MessageAvatarBox(
-    message: MessageInboxUiModel
+    isUnread: Boolean,
+    isCompany: Boolean
 ) {
     val backgroundColor = when {
-        message.isUnread -> BBColors.Blue.Blue50
-        message.isCompany -> MaterialTheme.colorScheme.primaryContainer
+        isUnread -> BBColors.Blue.Blue50
+        isCompany -> MaterialTheme.colorScheme.primaryContainer
         else -> MaterialTheme.colorScheme.surfaceVariant
     }
 
     val iconColor = when {
-        message.isUnread -> BBColors.Blue.Blue600
-        message.isCompany -> BBColors.Yellow.Yellow800
+        isUnread -> BBColors.Blue.Blue600
+        isCompany -> BBColors.Yellow.Yellow800
         else -> MaterialTheme.colorScheme.onSurfaceVariant
     }
 
     Box(
         modifier = Modifier
             .size(BBIcon.BoxMd)
-            .background(
-                color = backgroundColor,
-                shape = BBRadius.LgShape
-            ),
+            .background(backgroundColor, BBRadius.LgShape),
         contentAlignment = Alignment.Center
     ) {
         Icon(
-            imageVector = if (message.isCompany) Icons.Outlined.Business else Icons.Outlined.Person,
+            imageVector = if (isCompany) Icons.Outlined.Business else Icons.Outlined.Person,
             contentDescription = null,
             tint = iconColor,
             modifier = Modifier.size(BBIcon.Action)
@@ -384,10 +409,7 @@ private fun MessageStatusBadge(
 
     Box(
         modifier = Modifier
-            .background(
-                color = color.copy(alpha = BBAlpha.Overlay),
-                shape = BBRadius.Badge
-            )
+            .background(color.copy(alpha = BBAlpha.Overlay), BBRadius.Badge)
             .padding(
                 horizontal = BBSpacing.BadgePaddingHorizontal,
                 vertical = BBSpacing.BadgePaddingVertical
@@ -403,15 +425,10 @@ private fun MessageStatusBadge(
 }
 
 @Composable
-private fun MessageSmallTag(
-    text: String
-) {
+private fun MessageSmallTag(text: String) {
     Box(
         modifier = Modifier
-            .background(
-                color = MaterialTheme.colorScheme.surfaceVariant,
-                shape = BBRadius.Badge
-            )
+            .background(MaterialTheme.colorScheme.surfaceVariant, BBRadius.Badge)
             .padding(
                 horizontal = BBSpacing.BadgePaddingHorizontal,
                 vertical = BBSpacing.BadgePaddingVertical
@@ -426,79 +443,78 @@ private fun MessageSmallTag(
     }
 }
 
-private fun List<MessageInboxUiModel>.filterBy(
-    filter: MessageFilter
-): List<MessageInboxUiModel> {
-    return when (filter) {
-        MessageFilter.All -> this
-        MessageFilter.Unread -> filter { it.isUnread }
-        MessageFilter.Read -> filter { !it.isUnread }
-        MessageFilter.Wholesale -> filter { it.commerceMode == "Toptan" || it.commerceMode == "RFQ" }
-        MessageFilter.Retail -> filter { it.commerceMode == "Perakende" }
+@Composable
+private fun MessageLoadingState() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(BBSpacing.Space6),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator()
     }
 }
 
-private enum class MessageFilter(
-    val label: String
+@Composable
+private fun MessageErrorState(
+    message: String,
+    onRetryClick: () -> Unit
 ) {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium,
+        onClick = onRetryClick
+    ) {
+        Text(
+            text = "$message\nTekrar denemek için dokunun.",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.error
+        )
+    }
+}
+
+@Composable
+private fun MessageEmptyState() {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
+        Text(
+            text = "Henüz bir toptan mesajınız bulunmuyor.",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+
+private fun List<WholesaleMessageDTO>.filterBy(filter: MessageFilter): List<WholesaleMessageDTO> {
+    return when (filter) {
+        MessageFilter.All -> this
+        MessageFilter.Unread -> filter { !it.IsRead }
+        MessageFilter.Read -> filter { it.IsRead }
+    }
+}
+
+private fun WholesaleMessageDTO.otherMemberName(currentMemberId: Int): String {
+    return if (SenderId == currentMemberId) {
+        RecipientFullName.ifBlank {
+            RecipientName.ifBlank {
+                RecipientSurname
+            }
+        }
+    } else {
+        SenderFullName.ifBlank {
+            SenderName.ifBlank {
+                listOf(SenderName, SenderSurname).filter { it.isNotBlank() }.joinToString(" ")
+            }
+        }
+    }
+}
+
+private enum class MessageFilter(val label: String) {
     All("Tümü"),
     Unread("Okunmamış"),
-    Read("Okundu"),
-    Wholesale("Toptan"),
-    Retail("Perakende")
+    Read("Okundu")
 }
-
-private data class MessageInboxUiModel(
-    val id: Int,
-    val senderName: String,
-    val subject: String,
-    val preview: String,
-    val dateText: String,
-    val boxLabel: String,
-    val commerceMode: String,
-    val replyCountText: String,
-    val isUnread: Boolean,
-    val isCompany: Boolean
-)
-
-private fun getDemoMessages(): List<MessageInboxUiModel> {
-    return listOf(
-        MessageInboxUiModel(
-            id = 1,
-            senderName = "Murat Erkan",
-            subject = "450W paneller için fiyat teklifi",
-            preview = "Selamlar, 450W panellerden 200 adetlik proje için fiyat teklifi rica ediyorum.",
-            dateText = "10.05.2026 13:37",
-            boxLabel = "Gelen Kutusu",
-            commerceMode = "Toptan",
-            replyCountText = "2 yanıt",
-            isUnread = false,
-            isCompany = false
-        ),
-        MessageInboxUiModel(
-            id = 2,
-            senderName = "Anadolu Ambalaj Sanayi",
-            subject = "Numune talebi hakkında",
-            preview = "RFQ talebinize istinaden numune ve fiyat bilgilerini paylaşmak isteriz.",
-            dateText = "11.05.2026 09:20",
-            boxLabel = "Gelen Kutusu",
-            commerceMode = "RFQ",
-            replyCountText = "1 yanıt",
-            isUnread = true,
-            isCompany = true
-        ),
-        MessageInboxUiModel(
-            id = 3,
-            senderName = "Moda Nova",
-            subject = "Sipariş mesajı",
-            preview = "Perakende siparişinizle ilgili kargo ve teslimat bilgileri güncellendi.",
-            dateText = "12.05.2026 16:48",
-            boxLabel = "Gelen Kutusu",
-            commerceMode = "Perakende",
-            replyCountText = "3 yanıt",
-            isUnread = true,
-            isCompany = true
-        )
-    )
-}
-

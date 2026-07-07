@@ -16,7 +16,7 @@ data class WholesaleProductInsertModel(
     val ViewCount: Int = 0,
     val SeoTitle: String = "",
     val SeoDescription: String = "",
-    val ConfirmationStatusId: Int = 0,
+    val ConfirmationTypeId: Int = 0,
     val LeadTimeId: Int = 0,
     val ModelNumber: String = "",
     val CustomizationId: Int = 0,
@@ -26,6 +26,5 @@ data class WholesaleProductInsertModel(
     val OriginId: Int = 0,
     val DimensionsPerUnitId: Int = 0,
     val WeightPerUnitId: Int = 0,
-    val SamplePrice: Double = 0.0,
-    val SecureKey: String = ""
+    val SamplePrice: Double = 0.0
 )

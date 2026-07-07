@@ -41,7 +41,7 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
 
 @Composable
-fun ProductListScreen(
+fun WholesaleProductListScreen(
     onBackClick: () -> Unit = {},
     onSearchClick: (String) -> Unit = {},
     onFavoriteClick: () -> Unit = {},
@@ -457,6 +457,6 @@ private fun getWholesaleProductListItems(): List<WholesaleProductListEntry> {
 @Composable
 private fun ProductListScreenPreview() {
     BbTheme {
-        ProductListScreen()
+        WholesaleProductListScreen()
     }
 }

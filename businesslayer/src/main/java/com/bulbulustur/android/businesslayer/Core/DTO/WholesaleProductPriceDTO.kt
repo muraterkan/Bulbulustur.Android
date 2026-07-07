@@ -11,5 +11,8 @@ data class WholesaleProductPriceDTO(
     val UnitId: Int = 0,
     val Price: Double = 0.0,
     val CurrencyId: Int = 0,
-    val SecureKey: String = ""
+    val SecureKey: String = "",
+    val Prices: String = "",
+    val CurrencySymbol: String = "",
+    val Unit: String = ""
 )

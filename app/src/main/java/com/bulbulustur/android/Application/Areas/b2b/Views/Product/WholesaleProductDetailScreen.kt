@@ -3,6 +3,7 @@
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import coil3.compose.AsyncImage
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -31,7 +32,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Business
 import androidx.compose.material.icons.outlined.Category
-import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.Inventory2
 import androidx.compose.material.icons.outlined.LocalShipping
 import androidx.compose.material.icons.outlined.Paid
@@ -40,6 +40,7 @@ import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.outlined.Tune
 import androidx.compose.material.icons.outlined.Verified
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -65,7 +66,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.bulbulustur.android.R
+import com.bulbulustur.android.Application.Areas.b2b.Controllers.ProductControllerState
+import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleProductDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleProductRelatedDTO
+import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleSearchHeader
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleSearchHeaderLeadingAction
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
@@ -80,6 +85,7 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBLayout
 
 @Composable
 fun WholesaleProductDetailScreen(
+    State: ProductControllerState = ProductControllerState(),
     productId: Int = 1,
     onBackClick: () -> Unit = {},
     onSearchClick: (String) -> Unit = {},
@@ -91,16 +97,74 @@ fun WholesaleProductDetailScreen(
     onCustomizationRequestClick: () -> Unit = {},
     onCompanyClick: (WholesaleProductDetailCompany) -> Unit = {},
     onCompanyProductsClick: () -> Unit = {},
-    onCompanySimilarProductClick: (WholesaleMiniProduct) -> Unit = {},
+    onRelatedProductClick: (WholesaleMiniProduct) -> Unit = {},
     onCompanyBestSellerProductClick: (WholesaleMiniProduct) -> Unit = {},
-    onCompanySimilarProductsClick: () -> Unit = onCompanyProductsClick,
+    onRelatedProductsClick: () -> Unit = {},
     onCompanyBestSellerProductsClick: () -> Unit = onCompanyProductsClick,
     onRelatedCategoryClick: (WholesaleRelatedCategoryChip) -> Unit = {}
 ) {
-    val product = remember(productId) {
-        getWholesaleProductDetail(
-            productId
+    val productDto = State.ProductDetailResult?.Data
+    val relatedProductDtos = State.RelatedProductsResult?.Data.orEmpty()
+    val relatedCategoryDtos = State.RelatedCategories
+
+    val product = remember(productDto, relatedProductDtos, relatedCategoryDtos) {
+        productDto?.ToWholesaleProductDetail(
+            relatedProducts = relatedProductDtos,
+            relatedCategories = relatedCategoryDtos
         )
+    }
+
+
+    
+    val isDetailLoading =
+        State.IsLoading &&
+                State.CurrentAction == "Detail" &&
+                product == null
+
+    val detailErrorMessage =
+        State.ErrorMessage
+            ?.takeIf {
+                it.isNotBlank()
+            }
+
+    val isProductNotFound =
+        !State.IsLoading &&
+                State.ProductDetailResult?.Success == true &&
+                product == null
+
+if (isDetailLoading) {
+        WholesaleProductDetailStateScaffold(
+            onBackClick = onBackClick,
+            onFavoriteClick = onFavoriteClick,
+            onMessageClick = onMessageClick,
+            isLoading = true
+        )
+
+        return
+    }
+
+    if (detailErrorMessage != null) {
+        WholesaleProductDetailStateScaffold(
+            onBackClick = onBackClick,
+            onFavoriteClick = onFavoriteClick,
+            onMessageClick = onMessageClick,
+            title = "Ürün bilgileri alınamadı",
+            description = detailErrorMessage
+        )
+
+        return
+    }
+
+    if (isProductNotFound || product == null) {
+        WholesaleProductDetailStateScaffold(
+            onBackClick = onBackClick,
+            onFavoriteClick = onFavoriteClick,
+            onMessageClick = onMessageClick,
+            title = "Ürün bulunamadı",
+            description = "Bu ürün kaldırılmış veya artık yayında olmayabilir."
+        )
+
+        return
     }
 
     var searchText by remember {
@@ -109,7 +173,10 @@ fun WholesaleProductDetailScreen(
 
     val pagerState = rememberPagerState(
         pageCount = {
-            product.images.size
+            maxOf(
+                1,
+                product.images.size
+            )
         }
     )
 
@@ -150,20 +217,22 @@ fun WholesaleProductDetailScreen(
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
         ) {
-            WholesaleProductDetailGallery(
-                product = product,
-                currentPage = pagerState.currentPage,
-                pagerContent = {
-                    HorizontalPager(
-                        state = pagerState,
-                        modifier = Modifier.fillMaxWidth()
-                    ) { page ->
-                        WholesaleProductDetailImageSlide(
-                            image = product.images[page]
-                        )
+            if (product.images.isNotEmpty()) {
+                WholesaleProductDetailGallery(
+                    product = product,
+                    currentPage = pagerState.currentPage,
+                    pagerContent = {
+                        HorizontalPager(
+                            state = pagerState,
+                            modifier = Modifier.fillMaxWidth()
+                        ) { page ->
+                            WholesaleProductDetailImageSlide(
+                                image = product.images[page]
+                            )
+                        }
                     }
-                }
-            )
+                )
+            }
 
             WholesaleProductTitleCard(
                 product = product
@@ -173,60 +242,84 @@ fun WholesaleProductDetailScreen(
                 product = product
             )
 
-            WholesalePriceBreakdownCard(
-                priceBreaks = product.priceBreaks,
-                onClick = onLastPriceRequestClick
-            )
+            if (product.priceBreaks.isNotEmpty()) {
+                WholesalePriceBreakdownCard(
+                    priceBreaks = product.priceBreaks,
+                    onClick = onLastPriceRequestClick
+                )
+            }
 
-            WholesaleFeatureGridCard(
-                features = product.highlightFeatures
-            )
+            if (product.highlightFeatures.isNotEmpty()) {
+                WholesaleFeatureGridCard(
+                    features = product.highlightFeatures
+                )
+            }
 
-            WholesaleCustomizationOptionsCard(
-                options = product.customizationOptions,
-                onCustomizationRequestClick = onCustomizationRequestClick
-            )
+            if (product.customizationOptions.isNotEmpty()) {
+                WholesaleCustomizationOptionsCard(
+                    options = product.customizationOptions,
+                    onCustomizationRequestClick = onCustomizationRequestClick
+                )
+            }
 
-            WholesaleOrderAndDeliveryCard(
-                product = product
-            )
+            if (
+                product.packagingDescription.isNotBlank() ||
+                product.deliveryDescription.isNotBlank() ||
+                product.deliverySteps.isNotEmpty()
+            ) {
+                WholesaleOrderAndDeliveryCard(
+                    product = product
+                )
+            }
 
             WholesaleSecureTradeCard()
 
-            WholesaleCompanyDeepCard(
-                company = product.company,
-                onCompanyProfileClick = {
-                    onCompanyClick(product.company)
-                },
-                onCompanyProductsClick = onCompanyProductsClick
-            )
+            if (product.company.name.isNotBlank()) {
+                WholesaleCompanyDeepCard(
+                    company = product.company,
+                    onCompanyProfileClick = {
+                        onCompanyClick(product.company)
+                    },
+                    onCompanyProductsClick = onCompanyProductsClick
+                )
+            }
 
-            WholesaleProductDescriptionCard(
-                product = product
-            )
+            if (product.longDescription.isNotBlank()) {
+                WholesaleProductDescriptionCard(
+                    product = product
+                )
+            }
 
-            WholesaleProductInformationCard(
-                properties = product.properties
-            )
+            if (product.properties.isNotEmpty()) {
+                WholesaleProductInformationCard(
+                    properties = product.properties
+                )
+            }
 
-            WholesaleHorizontalProductSection(
-                title = "Bu Firmadan Benzer Ürünler",
-                products = product.companySimilarProducts,
-                onHeaderClick = onCompanySimilarProductsClick,
-                onProductClick = onCompanySimilarProductClick
-            )
+            if (product.relatedProducts.isNotEmpty()) {
+                WholesaleHorizontalProductSection(
+                    title = "Benzer Ürünler",
+                    products = product.relatedProducts,
+                    onHeaderClick = onRelatedProductsClick,
+                    onProductClick = onRelatedProductClick
+                )
+            }
 
-            WholesaleHorizontalProductSection(
-                title = "Bu Firmanın Çok Satanları",
-                products = product.companyBestSellerProducts,
-                onHeaderClick = onCompanyBestSellerProductsClick,
-                onProductClick = onCompanyBestSellerProductClick
-            )
+            if (product.companyBestSellerProducts.isNotEmpty()) {
+                WholesaleHorizontalProductSection(
+                    title = "Bu Firmanın Çok Satanları",
+                    products = product.companyBestSellerProducts,
+                    onHeaderClick = onCompanyBestSellerProductsClick,
+                    onProductClick = onCompanyBestSellerProductClick
+                )
+            }
 
-            WholesaleRelatedCategoryChipsSection(
-                categories = product.relatedCategories,
-                onCategoryClick = onRelatedCategoryClick
-            )
+            if (product.relatedCategories.isNotEmpty()) {
+                WholesaleRelatedCategoryChipsSection(
+                    categories = product.relatedCategories,
+                    onCategoryClick = onRelatedCategoryClick
+                )
+            }
 
             Spacer(
                 modifier = Modifier.height(BBSpacing.Space6)
@@ -237,6 +330,7 @@ fun WholesaleProductDetailScreen(
 
 @Composable
 fun ProductDetailScreen(
+    State: ProductControllerState = ProductControllerState(),
     productId: Int = 1,
     onBackClick: () -> Unit = {},
     onSearchClick: (String) -> Unit = {},
@@ -248,13 +342,14 @@ fun ProductDetailScreen(
     onCustomizationRequestClick: () -> Unit = {},
     onCompanyClick: (WholesaleProductDetailCompany) -> Unit = {},
     onCompanyProductsClick: () -> Unit = {},
-    onCompanySimilarProductClick: (WholesaleMiniProduct) -> Unit = {},
+    onRelatedProductClick: (WholesaleMiniProduct) -> Unit = {},
     onCompanyBestSellerProductClick: (WholesaleMiniProduct) -> Unit = {},
-    onCompanySimilarProductsClick: () -> Unit = onCompanyProductsClick,
+    onRelatedProductsClick: () -> Unit = {},
     onCompanyBestSellerProductsClick: () -> Unit = onCompanyProductsClick,
     onRelatedCategoryClick: (WholesaleRelatedCategoryChip) -> Unit = {}
 ) {
     WholesaleProductDetailScreen(
+        State = State,
         productId = productId,
         onBackClick = onBackClick,
         onSearchClick = onSearchClick,
@@ -266,20 +361,101 @@ fun ProductDetailScreen(
         onCustomizationRequestClick = onCustomizationRequestClick,
         onCompanyClick = onCompanyClick,
         onCompanyProductsClick = onCompanyProductsClick,
-        onCompanySimilarProductClick = onCompanySimilarProductClick,
+        onRelatedProductClick = onRelatedProductClick,
         onCompanyBestSellerProductClick = onCompanyBestSellerProductClick,
-        onCompanySimilarProductsClick = onCompanySimilarProductsClick,
+        onRelatedProductsClick = onRelatedProductsClick,
         onCompanyBestSellerProductsClick = onCompanyBestSellerProductsClick,
         onRelatedCategoryClick = onRelatedCategoryClick
     )
 }
 
 @Composable
-private fun WholesaleProductDetailGallery(
-    product: WholesaleProductDetail,
-    currentPage: Int,
-    pagerContent: @Composable () -> Unit
+private fun WholesaleProductDetailStateScaffold(
+    onBackClick: () -> Unit,
+    onFavoriteClick: () -> Unit,
+    onMessageClick: () -> Unit,
+    isLoading: Boolean = false,
+    title: String = "",
+    description: String = ""
 ) {
+    var searchText by remember {
+        mutableStateOf("")
+    }
+
+    Scaffold(
+        containerColor = BBColors.SurfaceMuted,
+        topBar = {
+            WholesaleSearchHeader(
+                searchText = searchText,
+                onSearchTextChange = {
+                    searchText = it
+                },
+                onMenuClick = {},
+                onFavoriteClick = onFavoriteClick,
+                onMessageClick = onMessageClick,
+                placeholder = "Toptan Ürün, Kategori Veya Firma Ara",
+                onSearchClick = {},
+                onClearClick = {
+                    searchText = ""
+                },
+                leadingAction = WholesaleSearchHeaderLeadingAction.Back,
+                onBackClick = onBackClick
+            )
+        }
+    ) { innerPadding ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(BBColors.SurfaceMuted)
+                .padding(innerPadding),
+            contentAlignment = Alignment.Center
+        ) {
+            if (isLoading) {
+                CircularProgressIndicator(
+                    color = BBColors.Primary
+                )
+            } else {
+                BbCard(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(BBSpacing.PageHorizontal),
+                    variant = BbCardVariant.Outlined,
+                    padding = BbCardPadding.Medium
+                ) {
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Inventory2,
+                            contentDescription = null,
+                            tint = BBColors.TextMuted,
+                            modifier = Modifier.size(BBIcon.BoxLg)
+                        )
+
+                        Text(
+                            text = title,
+                            style = MaterialTheme.typography.titleMedium,
+                            color = BBColors.TextStrong,
+                            fontWeight = FontWeight.Bold
+                        )
+
+                        Text(
+                            text = description,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = BBColors.TextMuted
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun WholesaleProductDetailGallery(product: WholesaleProductDetail, currentPage: Int, pagerContent: @Composable () -> Unit)
+{
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -345,20 +521,33 @@ private fun WholesaleProductDetailImageSlide(
             .background(image.backgroundColor),
         contentAlignment = Alignment.Center
     ) {
-        if (image.drawableResId != null) {
-            Image(
-                painter = painterResource(id = image.drawableResId),
-                contentDescription = image.label,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
-            )
-        } else {
-            Icon(
-                imageVector = Icons.Outlined.Inventory2,
-                contentDescription = image.label,
-                tint = image.foregroundColor,
-                modifier = Modifier.size(BBIcon.BoxXl)
-            )
+        when {
+            image.imageUrl.isNotBlank() -> {
+                AsyncImage(
+                    model = image.imageUrl,
+                    contentDescription = image.label,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Fit
+                )
+            }
+
+            image.drawableResId != null -> {
+                Image(
+                    painter = painterResource(id = image.drawableResId),
+                    contentDescription = image.label,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Fit
+                )
+            }
+
+            else -> {
+                Icon(
+                    imageVector = Icons.Outlined.Inventory2,
+                    contentDescription = image.label,
+                    tint = image.foregroundColor,
+                    modifier = Modifier.size(BBIcon.BoxXl)
+                )
+            }
         }
     }
 }
@@ -408,25 +597,29 @@ private fun WholesaleProductTitleCard(
                 horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
             ) {
                 WholesaleMiniPill(
-                    text = "Toptan Ürün",
+                    text = product.badgeText,
                     icon = Icons.Outlined.Business,
                     containerColor = BBColors.PrimarySoft,
                     contentColor = BBColors.TextStrong
                 )
 
-                WholesaleMiniPill(
-                    text = "Doğrulanmış Firma",
-                    icon = Icons.Outlined.Verified,
-                    containerColor = BBColors.Green.Green50,
-                    contentColor = BBColors.Green.Green700
-                )
+                if (product.company.isVerified) {
+                    WholesaleMiniPill(
+                        text = "Doğrulanmış Firma",
+                        icon = Icons.Outlined.Verified,
+                        containerColor = BBColors.Green.Green50,
+                        contentColor = BBColors.Green.Green700
+                    )
+                }
 
-                WholesaleMiniPill(
-                    text = "Özelleştirilebilir",
-                    icon = Icons.Outlined.Tune,
-                    containerColor = BBColors.Blue.Blue50,
-                    contentColor = BBColors.Blue.Blue700
-                )
+                if (product.customizationOptions.isNotEmpty()) {
+                    WholesaleMiniPill(
+                        text = "Özelleştirilebilir",
+                        icon = Icons.Outlined.Tune,
+                        containerColor = BBColors.Blue.Blue50,
+                        contentColor = BBColors.Blue.Blue700
+                    )
+                }
             }
 
             Text(
@@ -436,48 +629,64 @@ private fun WholesaleProductTitleCard(
                 fontWeight = FontWeight.Bold
             )
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+            if (
+                product.soldCountText.isNotBlank() ||
+                product.company.ratingText.isNotBlank()
             ) {
-                Text(
-                    text = "${product.soldCountText} Satıldı",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = BBColors.TextMuted
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+                ) {
+                    if (product.soldCountText.isNotBlank()) {
+                        Text(
+                            text = "${product.soldCountText} Görüntülenme",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = BBColors.TextMuted
+                        )
+                    }
 
-                Text(
-                    text = "•",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = BBColors.TextMuted
-                )
+                    if (
+                        product.soldCountText.isNotBlank() &&
+                        product.company.ratingText.isNotBlank()
+                    ) {
+                        Text(
+                            text = "•",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = BBColors.TextMuted
+                        )
+                    }
 
-                Icon(
-                    imageVector = Icons.Outlined.Star,
-                    contentDescription = null,
-                    tint = BBColors.Orange.Orange500,
-                    modifier = Modifier.size(BBIcon.SizeSm)
-                )
+                    if (product.company.ratingText.isNotBlank()) {
+                        Icon(
+                            imageVector = Icons.Outlined.Star,
+                            contentDescription = null,
+                            tint = BBColors.Orange.Orange500,
+                            modifier = Modifier.size(BBIcon.SizeSm)
+                        )
 
-                Text(
-                    text = product.company.ratingText,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = BBColors.TextStrong,
-                    fontWeight = FontWeight.Bold
-                )
+                        Text(
+                            text = product.company.ratingText,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = BBColors.TextStrong,
+                            fontWeight = FontWeight.Bold
+                        )
 
-                Text(
-                    text = "Mağaza Puanı",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = BBColors.TextMuted
-                )
+                        Text(
+                            text = "Firma Puanı",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = BBColors.TextMuted
+                        )
+                    }
+                }
             }
 
-            Text(
-                text = product.shortDescription,
-                style = MaterialTheme.typography.bodyMedium,
-                color = BBColors.TextSubtle
-            )
+            if (product.shortDescription.isNotBlank()) {
+                Text(
+                    text = product.shortDescription,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = BBColors.TextSubtle
+                )
+            }
         }
     }
 }
@@ -486,6 +695,34 @@ private fun WholesaleProductTitleCard(
 private fun WholesaleTradeSummaryCard(
     product: WholesaleProductDetail
 ) {
+    val firstRowMetrics = buildList {
+        if (product.priceLabel.isNotBlank()) {
+            add("Fiyat" to product.priceLabel)
+        }
+
+        if (product.minimumOrderLabel.isNotBlank()) {
+            add("Min. Sipariş" to product.minimumOrderLabel)
+        }
+    }
+
+    val secondRowMetrics = buildList {
+        if (product.deliveryTimeLabel.isNotBlank()) {
+            add("Üretim Süresi" to product.deliveryTimeLabel)
+        }
+
+        if (product.originCountry.isNotBlank()) {
+            add("Menşei" to product.originCountry)
+        }
+    }
+
+    if (
+        firstRowMetrics.isEmpty() &&
+        secondRowMetrics.isEmpty() &&
+        product.tradeBenefits.isEmpty()
+    ) {
+        return
+    }
+
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -510,47 +747,55 @@ private fun WholesaleTradeSummaryCard(
                 icon = Icons.Outlined.RequestQuote
             )
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
-            ) {
-                WholesaleSummaryMetric(
-                    "Fiyat",
-                    product.priceLabel,
-                    Modifier.weight(1f)
-                )
-                WholesaleSummaryMetric(
-                    "Min. Sipariş",
-                    product.minimumOrderLabel,
-                    Modifier.weight(1f)
-                )
+            if (firstRowMetrics.isNotEmpty()) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+                ) {
+                    firstRowMetrics.forEach { metric ->
+                        WholesaleSummaryMetric(
+                            metric.first,
+                            metric.second,
+                            Modifier.weight(1f)
+                        )
+                    }
+
+                    repeat(2 - firstRowMetrics.size) {
+                        Spacer(modifier = Modifier.weight(1f))
+                    }
+                }
             }
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
-            ) {
-                WholesaleSummaryMetric(
-                    "Üretim Süresi",
-                    product.deliveryTimeLabel,
-                    Modifier.weight(1f)
-                )
-                WholesaleSummaryMetric(
-                    "Teslimat",
-                    product.deliveryCountryLabel,
-                    Modifier.weight(1f)
-                )
+            if (secondRowMetrics.isNotEmpty()) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+                ) {
+                    secondRowMetrics.forEach { metric ->
+                        WholesaleSummaryMetric(
+                            metric.first,
+                            metric.second,
+                            Modifier.weight(1f)
+                        )
+                    }
+
+                    repeat(2 - secondRowMetrics.size) {
+                        Spacer(modifier = Modifier.weight(1f))
+                    }
+                }
             }
 
-            Row(
-                modifier = Modifier.horizontalScroll(rememberScrollState()),
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
-            ) {
-                product.tradeBenefits.forEach { benefit ->
-                    WholesaleBenefitPill(
-                        text = benefit.text,
-                        icon = benefit.icon
-                    )
+            if (product.tradeBenefits.isNotEmpty()) {
+                Row(
+                    modifier = Modifier.horizontalScroll(rememberScrollState()),
+                    horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+                ) {
+                    product.tradeBenefits.forEach { benefit ->
+                        WholesaleBenefitPill(
+                            text = benefit.text,
+                            icon = benefit.icon
+                        )
+                    }
                 }
             }
         }
@@ -700,10 +945,8 @@ private fun WholesaleFeatureCell(
 }
 
 @Composable
-private fun WholesaleCustomizationOptionsCard(
-    options: List<WholesaleCustomizationOption>,
-    onCustomizationRequestClick: () -> Unit
-) {
+private fun WholesaleCustomizationOptionsCard(options: List<WholesaleCustomizationOption>, onCustomizationRequestClick: () -> Unit)
+{
     BbCard(
         modifier = Modifier.padding(
             start = BBSpacing.PageHorizontal,
@@ -746,6 +989,14 @@ private fun WholesaleCustomizationOptionsCard(
 private fun WholesaleOrderAndDeliveryCard(
     product: WholesaleProductDetail
 ) {
+    if (
+        product.packagingDescription.isBlank() &&
+        product.deliveryDescription.isBlank() &&
+        product.deliverySteps.isEmpty()
+    ) {
+        return
+    }
+
     BbCard(
         modifier = Modifier.padding(
             start = BBSpacing.PageHorizontal,
@@ -763,59 +1014,63 @@ private fun WholesaleOrderAndDeliveryCard(
                 icon = Icons.Outlined.LocalShipping
             )
 
-            Text(
-                text = "Teslimat Adresi: ${product.deliveryCountryLabel}",
-                style = MaterialTheme.typography.titleSmall,
-                color = BBColors.TextStrong,
-                fontWeight = FontWeight.Bold
-            )
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
-            ) {
-                product.deliverySteps.forEach { step ->
-                    Surface(
-                        modifier = Modifier.weight(1f),
-                        shape = BBRadius.LgShape,
-                        color = BBColors.SurfaceSoft,
-                        border = BorderStroke(
-                            width = 1.dp,
-                            color = BBColors.Border
-                        )
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(BBSpacing.Space3),
-                            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+            if (product.deliverySteps.isNotEmpty()) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+                ) {
+                    product.deliverySteps.forEach { step ->
+                        Surface(
+                            modifier = Modifier.weight(1f),
+                            shape = BBRadius.LgShape,
+                            color = BBColors.SurfaceSoft,
+                            border = BorderStroke(
+                                width = 1.dp,
+                                color = BBColors.Border
+                            )
                         ) {
-                            Text(
-                                text = step.quantityLabel,
-                                style = MaterialTheme.typography.labelSmall,
-                                color = BBColors.TextMuted
-                            )
+                            Column(
+                                modifier = Modifier.padding(BBSpacing.Space3),
+                                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+                            ) {
+                                Text(
+                                    text = step.quantityLabel,
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = BBColors.TextMuted
+                                )
 
-                            Text(
-                                text = step.timeLabel,
-                                style = MaterialTheme.typography.titleSmall,
-                                color = BBColors.TextStrong,
-                                fontWeight = FontWeight.Bold
-                            )
+                                Text(
+                                    text = step.timeLabel,
+                                    style = MaterialTheme.typography.titleSmall,
+                                    color = BBColors.TextStrong,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
                         }
                     }
                 }
             }
 
-            WholesaleInfoBlock(
-                title = "Ambalaj ve Sevkiyat",
-                description = product.packagingDescription
-            )
+            if (product.packagingDescription.isNotBlank()) {
+                WholesaleInfoBlock(
+                    title = "Ambalaj ve Sevkiyat",
+                    description = product.packagingDescription
+                )
+            }
 
-            WholesaleDashedDivider()
+            if (
+                product.packagingDescription.isNotBlank() &&
+                product.deliveryDescription.isNotBlank()
+            ) {
+                WholesaleDashedDivider()
+            }
 
-            WholesaleInfoBlock(
-                title = "Teslimat Notu",
-                description = product.deliveryDescription
-            )
+            if (product.deliveryDescription.isNotBlank()) {
+                WholesaleInfoBlock(
+                    title = "Teslimat Notu",
+                    description = product.deliveryDescription
+                )
+            }
         }
     }
 }
@@ -863,6 +1118,10 @@ private fun WholesaleCompanyDeepCard(
     onCompanyProfileClick: () -> Unit,
     onCompanyProductsClick: () -> Unit
 ) {
+    if (company.name.isBlank()) {
+        return
+    }
+
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -901,13 +1160,36 @@ private fun WholesaleCompanyDeepCard(
                         overflow = TextOverflow.Ellipsis
                     )
 
-                    Text(
-                        text = company.description,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = BBColors.TextSubtle,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis
-                    )
+                    if (company.description.isNotBlank()) {
+                        Text(
+                            text = company.description,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = BBColors.TextSubtle,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+
+                    if (company.isVerified) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Verified,
+                                contentDescription = null,
+                                tint = BBColors.Green.Green700,
+                                modifier = Modifier.size(BBIcon.SizeSm)
+                            )
+
+                            Text(
+                                text = "Doğrulanmış Firma",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = BBColors.Green.Green700,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
                 }
 
                 Icon(
@@ -918,56 +1200,58 @@ private fun WholesaleCompanyDeepCard(
                 )
             }
 
-            BbCard(
-                variant = BbCardVariant.Default,
-                padding = BbCardPadding.Medium
-            ) {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+            if (company.metrics.isNotEmpty()) {
+                BbCard(
+                    variant = BbCardVariant.Default,
+                    padding = BbCardPadding.Medium
                 ) {
-                    Text(
-                        text = "Firma Genel Bilgileri",
-                        style = MaterialTheme.typography.titleSmall,
-                        color = BBColors.TextStrong,
-                        fontWeight = FontWeight.Bold
-                    )
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+                    ) {
+                        Text(
+                            text = "Firma Genel Bilgileri",
+                            style = MaterialTheme.typography.titleSmall,
+                            color = BBColors.TextStrong,
+                            fontWeight = FontWeight.Bold
+                        )
 
-                    company.metrics.chunked(3).forEach { rowItems ->
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
-                        ) {
-                            rowItems.forEach { metric ->
-                                WholesaleCompanyMetric(
-                                    title = metric.title,
-                                    value = metric.value,
-                                    modifier = Modifier.weight(1f)
-                                )
-                            }
+                        company.metrics.chunked(3).forEach { rowItems ->
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+                            ) {
+                                rowItems.forEach { metric ->
+                                    WholesaleCompanyMetric(
+                                        title = metric.title,
+                                        value = metric.value,
+                                        modifier = Modifier.weight(1f)
+                                    )
+                                }
 
-                            repeat(3 - rowItems.size) {
-                                Spacer(modifier = Modifier.weight(1f))
+                                repeat(3 - rowItems.size) {
+                                    Spacer(modifier = Modifier.weight(1f))
+                                }
                             }
                         }
                     }
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
-                    ) {
-                        WholesaleOutlineActionButton(
-                            text = "Daha Fazla Ürün Göster",
-                            onClick = onCompanyProductsClick,
-                            modifier = Modifier.weight(1f)
-                        )
-
-                        WholesaleOutlineActionButton(
-                            text = "Firma Profilini Görüntüle",
-                            onClick = onCompanyProfileClick,
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
                 }
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+            ) {
+                WholesaleOutlineActionButton(
+                    text = "Daha Fazla Ürün Göster",
+                    onClick = onCompanyProductsClick,
+                    modifier = Modifier.weight(1f)
+                )
+
+                WholesaleOutlineActionButton(
+                    text = "Firma Profilini Görüntüle",
+                    onClick = onCompanyProfileClick,
+                    modifier = Modifier.weight(1f)
+                )
             }
         }
     }
@@ -1185,20 +1469,33 @@ private fun WholesaleMiniProductCard(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    if (product.drawableResId != null) {
-                        Image(
-                            painter = painterResource(id = product.drawableResId),
-                            contentDescription = product.name,
-                            modifier = Modifier.fillMaxSize(),
-                            contentScale = ContentScale.Crop
-                        )
-                    } else {
-                        Icon(
-                            imageVector = Icons.Outlined.Inventory2,
-                            contentDescription = null,
-                            tint = product.foregroundColor,
-                            modifier = Modifier.size(BBIcon.BoxLg)
-                        )
+                    when {
+                        product.imageUrl.isNotBlank() -> {
+                            AsyncImage(
+                                model = product.imageUrl,
+                                contentDescription = product.name,
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop
+                            )
+                        }
+
+                        product.drawableResId != null -> {
+                            Image(
+                                painter = painterResource(id = product.drawableResId),
+                                contentDescription = product.name,
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop
+                            )
+                        }
+
+                        else -> {
+                            Icon(
+                                imageVector = Icons.Outlined.Inventory2,
+                                contentDescription = null,
+                                tint = product.foregroundColor,
+                                modifier = Modifier.size(BBIcon.BoxLg)
+                            )
+                        }
                     }
                 }
             }
@@ -1801,11 +2098,8 @@ private fun WholesaleDashedDivider() {
 }
 
 @Composable
-private fun WholesaleProductDetailBottomBar(
-    onLastPriceRequestClick: () -> Unit,
-    onSampleRequestClick: () -> Unit,
-    onCustomizationRequestClick: () -> Unit
-) {
+private fun WholesaleProductDetailBottomBar(onLastPriceRequestClick: () -> Unit, onSampleRequestClick: () -> Unit, onCustomizationRequestClick: () -> Unit)
+{
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -1936,7 +2230,7 @@ data class WholesaleProductDetail(
     val deliverySteps: List<WholesaleDeliveryStep>,
     val customizationOptions: List<WholesaleCustomizationOption>,
     val relatedCategories: List<WholesaleRelatedCategoryChip>,
-    val companySimilarProducts: List<WholesaleMiniProduct>,
+    val relatedProducts: List<WholesaleMiniProduct>,
     val companyBestSellerProducts: List<WholesaleMiniProduct>,
     val company: WholesaleProductDetailCompany
 )
@@ -1946,6 +2240,7 @@ data class WholesaleProductImage(
     val label: String,
     val backgroundColor: Color,
     val foregroundColor: Color,
+    val imageUrl: String = "",
     @DrawableRes val drawableResId: Int? = null
 )
 
@@ -2000,6 +2295,7 @@ data class WholesaleMiniProduct(
     val badgeLabel: String,
     val backgroundColor: Color,
     val foregroundColor: Color,
+    val imageUrl: String = "",
     @DrawableRes val drawableResId: Int? = null
 )
 
@@ -2022,115 +2318,399 @@ data class WholesaleProductDetailCompany(
     val metrics: List<WholesaleCompanyMetricItem>
 )
 
-private fun getWholesaleProductDetail(
-    productId: Int
-): WholesaleProductDetail {
+private fun ResolveWholesaleProductImageUrl(imagePath: String): String {
+    val normalizedPath = imagePath.trim()
+
+    if (normalizedPath.isBlank()) {
+        return ""
+    }
+
+    if (
+        normalizedPath.startsWith("http://", ignoreCase = true) ||
+        normalizedPath.startsWith("https://", ignoreCase = true)
+    ) {
+        return normalizedPath
+    }
+
+    val baseUrl = ApiRoutes.B2B_PRODUCT_BASE_URL
+        .substringBefore("/api/")
+        .trimEnd('/')
+
+    return "$baseUrl/${normalizedPath.trimStart('/')}"
+}
+
+private fun WholesaleProductDTO.ToWholesaleProductDetail(relatedProducts: List<WholesaleProductRelatedDTO> = emptyList(), relatedCategories: List<ProductCategoryDTO> = emptyList()): WholesaleProductDetail {
+    val mainPrice = MainPrice
+    val brandData = BrandData
+    val verificationSummary = VerificationSummary
+    val unitText = MinimumOrderUnit.ifBlank { "Adet" }
+
+    val resolvedPriceLabel = when {
+        mainPrice?.Prices?.isNotBlank() == true -> mainPrice.Prices.orEmpty()
+        mainPrice != null && mainPrice.Price > 0 -> mainPrice.Price.ToWholesalePriceText(mainPrice.CurrencySymbol)
+        Price > 0 -> Price.ToWholesalePriceText("")
+        else -> "Teklif İle"
+    }
+
+    val resolvedPriceBreaks = Prices.map { price ->
+        val priceUnit = price.Unit.ifBlank { unitText }
+
+        val quantityLabel = when {
+            price.MinQuantity > 0 && price.MaxQuantity > 0 -> "${price.MinQuantity}-${price.MaxQuantity} $priceUnit"
+            price.MinQuantity > 0 -> "${price.MinQuantity}+ $priceUnit"
+            else -> priceUnit
+        }
+
+        val priceLabel = when {
+            price.Prices.orEmpty().isNotBlank() -> price.Prices.orEmpty()
+            price.Price > 0 -> price.Price.ToWholesalePriceText(price.CurrencySymbol)
+            else -> "Teklif İle"
+        }
+
+        WholesalePriceBreak(
+            quantityLabel = quantityLabel,
+            priceLabel = priceLabel
+        )
+    }
+
+    val resolvedImages = listOf(
+        DefaultPicture,
+        Picture
+    )
+        .map { it.trim() }
+        .filter { it.isNotBlank() }
+        .distinct()
+        .mapIndexed { index, imagePath ->
+            WholesaleProductImage(
+                label = if (index == 0) ProductName.ifBlank { "Ürün" } else "${ProductName.ifBlank { "Ürün" }} ${index + 1}",
+                backgroundColor = BBColors.Surface,
+                foregroundColor = BBColors.TextMuted,
+                imageUrl = ResolveWholesaleProductImageUrl(imagePath)
+            )
+        }
+        .filter { it.imageUrl.isNotBlank() }
+
+    val resolvedRelatedProducts = relatedProducts
+        .filter { it.RelatedWholesaleProductId > 0 }
+        .distinctBy { it.RelatedWholesaleProductId }
+        .map { relatedProduct ->
+            WholesaleMiniProduct(
+                id = relatedProduct.RelatedWholesaleProductId,
+                name = relatedProduct.ProductName,
+                priceLabel = if (relatedProduct.Price > 0) {
+                    relatedProduct.Price.ToWholesalePriceText(relatedProduct.CurrencySymbol)
+                } else {
+                    "Teklif İle"
+                },
+                metaLabel = if (relatedProduct.MinimumOrderQuantity > 0) {
+                    "Minimum ${relatedProduct.MinimumOrderQuantity} Adet"
+                } else {
+                    relatedProduct.CategoryName
+                },
+                badgeLabel = relatedProduct.CategoryName,
+                backgroundColor = BBColors.Surface,
+                foregroundColor = BBColors.TextMuted,
+                imageUrl = ""
+            )
+        }
+
+    val resolvedTradeBenefits = buildList {
+        if (CompanyBusinessTypes.isNotBlank()) {
+            add(
+                WholesaleTradeBenefit(
+                    text = "Kurumsal Alım",
+                    icon = Icons.Outlined.Business
+                )
+            )
+        }
+
+        if (SamplePrice > 0) {
+            add(
+                WholesaleTradeBenefit(
+                    text = "Numune Mevcut",
+                    icon = Icons.Outlined.Inventory2
+                )
+            )
+        }
+
+        if (verificationSummary?.Verifications?.isNotEmpty() == true) {
+            add(
+                WholesaleTradeBenefit(
+                    text = "Doğrulanmış Tedarikçi",
+                    icon = Icons.Outlined.Verified
+                )
+            )
+        }
+
+        if (Customization.isNotBlank()) {
+            add(
+                WholesaleTradeBenefit(
+                    text = "Özelleştirilebilir",
+                    icon = Icons.Outlined.Tune
+                )
+            )
+        }
+    }
+
+    val resolvedHighlightFeatures = buildList {
+        if (Category.isNotBlank()) {
+            add(
+                WholesaleHighlightFeature(
+                    label = "Kategori",
+                    value = Category
+                )
+            )
+        }
+
+        if (brandData?.Brand?.isNotBlank() == true) {
+            add(
+                WholesaleHighlightFeature(
+                    label = "Marka",
+                    value = brandData.Brand
+                )
+            )
+        }
+
+        if (MonthlyProduction > 0) {
+            add(
+                WholesaleHighlightFeature(
+                    label = "Aylık Üretim",
+                    value = MonthlyProduction.toString()
+                )
+            )
+        }
+
+        if (Customization.isNotBlank()) {
+            add(
+                WholesaleHighlightFeature(
+                    label = "Özelleştirme",
+                    value = Customization
+                )
+            )
+        }
+
+        if (Origin.isNotBlank()) {
+            add(
+                WholesaleHighlightFeature(
+                    label = "Menşei",
+                    value = Origin
+                )
+            )
+        }
+
+        if (MinimumOrderQuantity > 0) {
+            add(
+                WholesaleHighlightFeature(
+                    label = "Minimum Sipariş",
+                    value = "$MinimumOrderQuantity $unitText"
+                )
+            )
+        }
+    }
+
+    val resolvedProperties = buildList {
+        if (ModelNumber.isNotBlank()) {
+            add(WholesaleProductProperty("Model No", ModelNumber))
+        }
+
+        if (brandData?.Brand?.isNotBlank() == true) {
+            add(WholesaleProductProperty("Marka Adı", brandData.Brand))
+        }
+
+        if (Origin.isNotBlank()) {
+            add(WholesaleProductProperty("Menşei", Origin))
+        }
+
+        if (HtsCode.isNotBlank()) {
+            add(WholesaleProductProperty("GTIP Kodu", HtsCode))
+        }
+
+        if (WeightPerUnit > 0) {
+            add(
+                WholesaleProductProperty(
+                    name = "Birim Ağırlık",
+                    value = "$WeightPerUnit ${WeightPerUnitType.ifBlank { "Kg" }}"
+                )
+            )
+        }
+
+        if (DimensionsPerUnit.isNotBlank()) {
+            add(
+                WholesaleProductProperty(
+                    name = "Birim Ölçü",
+                    value = "$DimensionsPerUnit $DimensionsPerUnitType".trim()
+                )
+            )
+        }
+
+        if (LeadTime.isNotBlank()) {
+            add(WholesaleProductProperty("Tedarik Süresi", LeadTime))
+        }
+
+        if (PaymentTermsFormatted.isNotBlank()) {
+            add(WholesaleProductProperty("Ödeme Şartı", PaymentTermsFormatted))
+        }
+    }
+
+    val resolvedCustomizationOptions = buildList {
+        if (Customization.isNotBlank()) {
+            add(
+                WholesaleCustomizationOption(
+                    title = "Özelleştirme",
+                    description = Customization
+                )
+            )
+        }
+    }
+
+    val resolvedRelatedCategories = relatedCategories
+        .filter { it.ProductCategoryId > 0 && it.CategoryName.isNotBlank() }
+        .distinctBy { it.ProductCategoryId }
+        .map { category ->
+            WholesaleRelatedCategoryChip(
+                id = category.ProductCategoryId,
+                name = category.CategoryName
+            )
+        }
+
+    val companyMetrics = buildList {
+        if (verificationSummary != null) {
+            if (verificationSummary.VerificationStatus.isNotBlank()) {
+                add(
+                    WholesaleCompanyMetricItem(
+                        title = "Doğrulama Durumu",
+                        value = verificationSummary.VerificationStatus
+                    )
+                )
+            }
+
+            if (verificationSummary.TotalYearsValid > 0) {
+                add(
+                    WholesaleCompanyMetricItem(
+                        title = "Geçerlilik Süresi",
+                        value = "${verificationSummary.TotalYearsValid} Yıl"
+                    )
+                )
+            }
+
+            if (verificationSummary.Verifications.isNotEmpty()) {
+                add(
+                    WholesaleCompanyMetricItem(
+                        title = "Doğrulama Sayısı",
+                        value = verificationSummary.Verifications.size.toString()
+                    )
+                )
+            }
+        }
+
+        if (ViewCount > 0) {
+            add(
+                WholesaleCompanyMetricItem(
+                    title = "Görüntülenme",
+                    value = ViewCount.toString()
+                )
+            )
+        }
+
+        if (MonthlyProduction > 0) {
+            add(
+                WholesaleCompanyMetricItem(
+                    title = "Aylık Üretim",
+                    value = MonthlyProduction.toString()
+                )
+            )
+        }
+
+        if (PaymentTerms.isNotEmpty()) {
+            add(
+                WholesaleCompanyMetricItem(
+                    title = "Ödeme Seçeneği",
+                    value = PaymentTerms.size.toString()
+                )
+            )
+        }
+    }
+
+    val packagingDescription = buildList {
+        if (DimensionsPerUnit.isNotBlank()) {
+            add("Birim ölçü: $DimensionsPerUnit $DimensionsPerUnitType".trim())
+        }
+
+        if (WeightPerUnit > 0) {
+            add("Birim ağırlık: $WeightPerUnit ${WeightPerUnitType.ifBlank { "Kg" }}")
+        }
+    }.joinToString(separator = " • ")
+
     return WholesaleProductDetail(
-        id = productId,
-        name = "BSCI Sertifikalı Özelleştirilebilir Çocuk Sırt Çantası",
+        id = WholesaleProductId,
+        name = ProductName.ifBlank { "Ürün" },
         searchPlaceholder = "Toptan Ürün, Kategori Veya Firma Ara",
-        shortDescription = "Okul, promosyon ve kurumsal alımlar için logo, renk ve ambalaj özelleştirme destekli toptan ürün.",
-        longDescription = "Farklı renk, baskı ve paketleme seçenekleriyle toptan siparişe uygun çocuk sırt çantasıdır. Ürün; okul, anaokulu, promosyon ve kurumsal kampanya ihtiyaçları için planlanabilir. Minimum sipariş, üretim süresi, ambalaj, logo baskısı ve teslimat koşulları teklif sürecinde netleştirilir.",
-        badgeText = "Toptan Kategori",
-        priceLabel = "Teklif İle",
-        minimumOrderLabel = "499 Adet",
-        deliveryTimeLabel = "15-25 Gün",
-        deliveryCountryLabel = "TR",
-        originCountry = "Türkiye",
-        modelNo = "BKJ-90",
-        soldCountText = "120+",
-        packagingDescription = "Paket ve sevkiyat ölçüleri sipariş adetlerine göre firma tarafından teklif sürecinde netleştirilir.",
-        deliveryDescription = "Üretim miktarına, özelleştirme durumuna ve teslimat lokasyonuna göre tahmini termin süresi değişebilir. Kargo ücreti ve teslimat tarihi firma ile kararlaştırılır.",
-        images = listOf(
-            WholesaleProductImage("Ürün 1", BBColors.Surface, BBColors.TextMuted, R.drawable.h3ff3b33d6a1447c898cee6e336867bach),
-            WholesaleProductImage("Ürün 2", BBColors.Surface, BBColors.TextMuted, R.drawable.h3ff3b33d6a1447c898cee6e336867bachvar1),
-            WholesaleProductImage("Ürün 3", BBColors.Surface, BBColors.TextMuted, R.drawable.h3ff3b33d6a1447c898cee6e336867bachvar2),
-            WholesaleProductImage("Ürün 4", BBColors.Surface, BBColors.TextMuted, R.drawable.h3ff3b33d6a1447c898cee6e336867bachvar3)
-        ),
-        priceBreaks = listOf(
-            WholesalePriceBreak("100-499 Adet", "Teklif İle"),
-            WholesalePriceBreak("500-999 Adet", "Son Fiyat"),
-            WholesalePriceBreak("1000+ Adet", "Özel Teklif")
-        ),
-        tradeBenefits = listOf(
-            WholesaleTradeBenefit("Kurumsal Alım", Icons.Outlined.Business),
-            WholesaleTradeBenefit("Numune Mevcut", Icons.Outlined.Inventory2),
-            WholesaleTradeBenefit("Güvenli Ticaret", Icons.Outlined.Security),
-            WholesaleTradeBenefit("Özelleştirilebilir", Icons.Outlined.Tune)
-        ),
-        highlightFeatures = listOf(
-            WholesaleHighlightFeature("Kullanım Alanı", "Okul, Promosyon"),
-            WholesaleHighlightFeature("Malzeme", "Polyester"),
-            WholesaleHighlightFeature("Baskı", "Logo / Grafik"),
-            WholesaleHighlightFeature("Paketleme", "Özel Ambalaj"),
-            WholesaleHighlightFeature("Üretim Tipi", "OEM / ODM"),
-            WholesaleHighlightFeature("Menşei", "Türkiye")
-        ),
-        properties = listOf(
-            WholesaleProductProperty("Model No", "BKJ-90"),
-            WholesaleProductProperty("Marka Adı", "Private Label"),
-            WholesaleProductProperty("Menşei", "Türkiye"),
-            WholesaleProductProperty("GTIP Kodu", "4202.92.91.00"),
-            WholesaleProductProperty("Birim Ağırlık", "0,42 Kg"),
-            WholesaleProductProperty("Birim Ölçü", "31 × 14 × 42 Cm"),
-            WholesaleProductProperty("Tedarik Süresi", "15-25 Gün"),
-            WholesaleProductProperty("Ödeme Şartı", "Teklif Sürecinde Netleşir")
-        ),
-        deliverySteps = listOf(
-            WholesaleDeliveryStep("100+", "15 Gün"),
-            WholesaleDeliveryStep("500+", "20 Gün"),
-            WholesaleDeliveryStep("1000+", "Müzakere")
-        ),
-        customizationOptions = listOf(
-            WholesaleCustomizationOption(
-                title = "Logo / Grafik Tasarım",
-                description = "Ürün üzerine marka logosu, okul amblemi veya kampanya görseli uygulanabilir."
-            ),
-            WholesaleCustomizationOption(
-                title = "Özel Ambalaj",
-                description = "Kutu, poşet, etiket ve sevkiyat paketleme seçenekleri siparişe göre planlanabilir."
-            ),
-            WholesaleCustomizationOption(
-                title = "OEM / ODM Üretim",
-                description = "Renk, ölçü, malzeme ve üretim standardı firma onayına bağlı olarak özelleştirilebilir."
-            )
-        ),
-        relatedCategories = listOf(
-            WholesaleRelatedCategoryChip(1, "Çocuk Çantası"),
-            WholesaleRelatedCategoryChip(2, "Okul Çantası"),
-            WholesaleRelatedCategoryChip(3, "Promosyon Ürünleri"),
-            WholesaleRelatedCategoryChip(4, "Tekstil Aksesuarları"),
-            WholesaleRelatedCategoryChip(5, "Kurumsal Alım")
-        ),
-        companySimilarProducts = listOf(
-            WholesaleMiniProduct(1, "Benzer Ürün 1", "1.129-1.753 TL", "200 Adet MOQ", "Düşük Fiyat", BBColors.Surface, BBColors.TextMuted, R.drawable.h3ff3b33d6a1447c898cee6e336867bach),
-            WholesaleMiniProduct(2, "Benzer Ürün 2", "2.258-3.315 TL", "100 Adet MOQ", "Özel Üretim", BBColors.Surface, BBColors.TextMuted, R.drawable.h3ff3b33d6a1447c898cee6e336867bachvar1),
-            WholesaleMiniProduct(3, "Benzer Ürün 3", "2.690-3.483 TL", "50 Adet MOQ", "Hızlı Teklif", BBColors.Surface, BBColors.TextMuted, R.drawable.h3ff3b33d6a1447c898cee6e336867bachvar2)
-        ),
-        companyBestSellerProducts = listOf(
-            WholesaleMiniProduct(4, "Çok Satan Ürün 1", "1.561-2.066 TL", "10+ Görüntülenme", "Popüler", BBColors.Surface, BBColors.TextMuted, R.drawable.h3ff3b33d6a1447c898cee6e336867bachvar3),
-            WholesaleMiniProduct(5, "Çok Satan Ürün 2", "2.618-3.685 TL", "1 Satıldı", "Yeni", BBColors.Surface, BBColors.TextMuted, R.drawable.h3ff3b33d6a1447c898cee6e336867bach),
-            WholesaleMiniProduct(6, "Çok Satan Ürün 3", "2.883-3.747 TL", "20+ Görüntülenme", "Düşük Fiyat", BBColors.Surface, BBColors.TextMuted, R.drawable.h3ff3b33d6a1447c898cee6e336867bachvar1)
-        ),
+        shortDescription = Description.take(220),
+        longDescription = Description,
+        badgeText = Category.ifBlank { "Toptan Ürün" },
+        priceLabel = resolvedPriceLabel,
+        minimumOrderLabel = if (MinimumOrderQuantity > 0) "$MinimumOrderQuantity $unitText" else "",
+        deliveryTimeLabel = LeadTime,
+        deliveryCountryLabel = "",
+        originCountry = Origin,
+        modelNo = ModelNumber,
+        soldCountText = if (ViewCount > 0) ViewCount.toString() else "",
+        packagingDescription = packagingDescription,
+        deliveryDescription = if (LeadTime.isNotBlank()) "Tahmini üretim ve teslim süresi: $LeadTime" else "",
+        images = resolvedImages,
+        priceBreaks = resolvedPriceBreaks,
+        tradeBenefits = resolvedTradeBenefits,
+        highlightFeatures = resolvedHighlightFeatures,
+        properties = resolvedProperties,
+        deliverySteps = emptyList(),
+        customizationOptions = resolvedCustomizationOptions,
+        relatedCategories = resolvedRelatedCategories,
+        relatedProducts = resolvedRelatedProducts,
+        companyBestSellerProducts = emptyList(),
         company = WholesaleProductDetailCompany(
-            id = 1,
-            name = "Ortobella Comfort",
-            logoText = "OC",
-            description = "Çanta, tekstil ve promosyon ürünleri alanında çalışan doğrulanmış firma.",
-            ratingText = "4.8",
-            productCountText = "120+ Ürün",
-            country = "Türkiye",
-            isVerified = true,
-            metrics = listOf(
-                WholesaleCompanyMetricItem("Zamanında Teslim", "96%"),
-                WholesaleCompanyMetricItem("Çevrim İçi Gelir", "₺10M+"),
-                WholesaleCompanyMetricItem("Yanıt Süresi", "≤8s"),
-                WholesaleCompanyMetricItem("Kuruluş Yılı", "2015"),
-                WholesaleCompanyMetricItem("Tesis Alanı", "22.100m²"),
-                WholesaleCompanyMetricItem("Ürün Sayısı", "120+")
-            )
+            id = CompanyId,
+            name = CompanyName,
+            logoText = CompanyName.ToWholesaleCompanyLogoText(),
+            description = CompanyBusinessTypes,
+            ratingText = if (Rating > 0) Rating.toString() else "",
+            productCountText = "",
+            country = "",
+            isVerified = verificationSummary?.Verifications?.isNotEmpty() == true,
+            metrics = companyMetrics
         )
     )
+}
+
+private fun Double.ToWholesalePriceText(currencySymbol: String): String {
+    val formattedPrice = if (this % 1.0 == 0.0) {
+        toLong().toString()
+    } else {
+        String.format("%.2f", this)
+    }
+
+    return if (currencySymbol.isNotBlank()) {
+        "$formattedPrice $currencySymbol"
+    } else {
+        formattedPrice
+    }
+}
+
+private fun String.ToWholesaleCompanyLogoText(): String {
+    val words = trim()
+        .split(" ")
+        .filter {
+            it.isNotBlank()
+        }
+
+    if (words.isEmpty()) {
+        return "BB"
+    }
+
+    return words
+        .take(2)
+        .joinToString("") {
+            it.take(1).uppercase()
+        }
 }
 
 @Preview(showBackground = true)

@@ -16,7 +16,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.icons.outlined.MailOutline
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Icon
@@ -118,13 +117,6 @@ fun RetailSearchHeader(
                     onClearClick = onClearClick,
                     modifier = Modifier.weight(1f)
                 )
-
-                RetailHeaderActionButton(
-                    icon = Icons.Outlined.MailOutline,
-                    contentDescription = "Mesajlar",
-                    onClick = onMessageClick
-                )
-
                 RetailHeaderActionButton(
                     icon = Icons.Outlined.FavoriteBorder,
                     contentDescription = "Favorilerim",

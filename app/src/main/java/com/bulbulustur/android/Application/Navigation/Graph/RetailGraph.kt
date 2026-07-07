@@ -84,7 +84,7 @@ fun NavGraphBuilder.retailGraph(
                 navigator.navigateToRetailCategories()
             },
             onMessageClick = {
-                navigator.navigateToInbox()
+                Unit
             },
             onBasketClick = {
                 navigator.navigateToRetailBasket()
@@ -119,7 +119,7 @@ fun NavGraphBuilder.retailGraph(
                 )
             },
             onMessageClick = {
-                navigator.navigateToInbox()
+                Unit
             },
             onHomeClick = {
                 navigator.navController.navigate(
@@ -242,7 +242,7 @@ fun NavGraphBuilder.retailGraph(
                 )
             },
             onMessageClick = {
-                navigator.navigateToInbox()
+                Unit
             },
             onModeSwitchClick = {
                 navigator.openModeSheet()
@@ -1226,7 +1226,7 @@ fun NavGraphBuilder.retailGraph(
                 )
             },
             onMessageClick = {
-                navigator.navigateToInbox()
+                Unit
             },
             onHomeClick = {
                 navigator.navController.navigate(

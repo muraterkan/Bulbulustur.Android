@@ -17,8 +17,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.bulbulustur.android.Application.Areas.b2b.Controllers.ProductController
 import com.bulbulustur.android.Application.Controllers.LogonController
-import com.bulbulustur.android.Application.Areas.b2c.Controllers.ProductController
+import com.bulbulustur.android.Application.Areas.b2b.Controllers.ProductController as WholesaleProductController
+import com.bulbulustur.android.Application.Areas.b2c.Controllers.ProductController as RetailProductController
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.ProductQuestionController
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.ProductReviewController
 import com.bulbulustur.android.Application.Datastore.UserPreferenceDataStore
@@ -70,6 +72,7 @@ import com.bulbulustur.android.businesslayer.Core.Repository.MemberLoginActivity
 import com.bulbulustur.android.businesslayer.Core.Repository.MemberCouponRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.ProductFavoriteRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.WholesaleFavoriteRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.WholesaleProductRepository
 import com.bulbulustur.android.businesslayer.Core.Security.SecureTokenStore
 import com.bulbulustur.android.businesslayer.Core.Util.Execute.ExecuteService
 import com.bulbulustur.android.Application.Controllers.SettingsController
@@ -81,6 +84,7 @@ import com.bulbulustur.android.Application.Controllers.AccountController
 import com.bulbulustur.android.businesslayer.Core.Repository.MemberPhoneRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.StatusRepository
 import com.bulbulustur.android.Application.Areas.b2b.Controllers.RfqController
+import com.bulbulustur.android.Application.Controllers.MessageController
 import com.bulbulustur.android.businesslayer.Core.Repository.BuyerRequestRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.SendedOfferRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.SystemDescColorRepository
@@ -92,6 +96,7 @@ import com.bulbulustur.android.businesslayer.Core.Repository.ReturnRequestReposi
 import com.bulbulustur.android.businesslayer.Core.Repository.MemberSubscriptionRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.CompanyRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.StoreRequestRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.WholesaleMessageRepository
 
 @Composable
 fun BulbulusturApp(
@@ -420,23 +425,33 @@ private fun BulbulusturApplicationContent(
             productBrowsingHistoryRepository,
             productCategoryRepository
         ) {
-            ProductController(
-                executeService =
-                    executeService,
-                productRepository =
-                    productRepository,
-                productVariantRepository =
-                    productVariantRepository,
-                productVariantPictureRepository =
-                    productVariantPictureRepository,
-                advertSponsoredRepository =
-                    advertSponsoredRepository,
-                productBrandSectionRepository =
-                    productBrandSectionRepository,
-                productBrowsingHistoryRepository =
-                    productBrowsingHistoryRepository,
-                productCategoryRepository =
-                    productCategoryRepository
+            RetailProductController(
+                executeService = executeService,
+                productRepository = productRepository,
+                productVariantRepository = productVariantRepository,
+                productVariantPictureRepository = productVariantPictureRepository,
+                advertSponsoredRepository = advertSponsoredRepository,
+                productBrandSectionRepository = productBrandSectionRepository,
+                productBrowsingHistoryRepository = productBrowsingHistoryRepository,
+                productCategoryRepository = productCategoryRepository
+            )
+        }
+
+    val wholesaleProductRepository =
+        remember {
+            WholesaleProductRepository()
+        }
+
+    val wholesaleProductController =
+        remember(
+            executeService,
+            wholesaleProductRepository,
+            productCategoryRepository
+        ) {
+            WholesaleProductController(
+                executeService = executeService,
+                wholesaleProductRepository = wholesaleProductRepository,
+                productCategoryRepository = productCategoryRepository
             )
         }
 
@@ -497,6 +512,20 @@ private fun BulbulusturApplicationContent(
                     basketRepository
             )
         }
+
+    val wholesaleMessageRepository = remember {
+        WholesaleMessageRepository()
+    }
+
+    val messageController = remember(
+        executeService,
+        wholesaleMessageRepository
+    ) {
+        MessageController(
+            executeService = executeService,
+            wholesaleMessageRepository = wholesaleMessageRepository
+        )
+    }
 
     val addressCascadeController =
         remember(
@@ -790,8 +819,9 @@ private fun BulbulusturApplicationContent(
         )
 
         messageGraph(
-            navigator =
-                appNavigator
+            navigator = appNavigator,
+            messageController = messageController,
+            sessionState = sessionState
         )
 
         retailGraph(
@@ -814,6 +844,7 @@ private fun BulbulusturApplicationContent(
         wholesaleGraph(
             navigator = appNavigator,
             sessionState = sessionState,
+            productController = wholesaleProductController,
             rfqController = rfqController
         )
 

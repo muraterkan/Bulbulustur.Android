@@ -1,5 +1,6 @@
 package com.bulbulustur.android.Application.Navigation.Graph
 
+import com.bulbulustur.android.Application.Areas.b2b.Controllers.ProductController
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -11,7 +12,7 @@ import com.bulbulustur.android.Application.Areas.b2b.Controllers.RfqController
 import com.bulbulustur.android.Application.Areas.b2b.Views.Category.CategoryDetailScreen as WholesaleCategoryDetailScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Category.WholesaleCategoryHomeScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Home.WholesaleHomeScreen
-import com.bulbulustur.android.Application.Areas.b2b.Views.Product.ProductListScreen as WholesaleProductListScreen
+import com.bulbulustur.android.Application.Areas.b2b.Views.Product.WholesaleProductListScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Product.WholesaleProductDetailScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Rfq.RfqCreateScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Rfq.RfqDetailScreen
@@ -25,12 +26,17 @@ import com.bulbulustur.android.Application.Navigation.Routes.RfqRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.WholesaleRoutes
 import com.bulbulustur.android.Application.Session.UserSessionState
 import com.bulbulustur.android.businesslayer.Core.Enums.EApplicationLanguage
+import coil3.compose.AsyncImage
+import com.bulbulustur.android.Application.Areas.b2b.Controllers.ProductControllerState
+import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleProductDTO
+import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
 
 fun NavGraphBuilder.wholesaleGraph(
     navigator: BulbulusturNavigator,
     sessionState: UserSessionState,
+    productController: ProductController,
     rfqController: RfqController
-) {
+){
     composable(route = WholesaleRoutes.Home) {
         WholesaleHomeScreen(
             onSearchClick = {
@@ -223,18 +229,111 @@ fun NavGraphBuilder.wholesaleGraph(
         arguments = listOf(
             navArgument(WholesaleRoutes.ArgProductId) {
                 type = NavType.IntType
-                defaultValue = 1
+                defaultValue = 0
             }
         )
     ) { backStackEntry ->
         val productId = backStackEntry.arguments
             ?.getInt(WholesaleRoutes.ArgProductId)
-            ?: 1
+            ?: 0
+
+        val productState by productController.State.collectAsState()
+
+        LaunchedEffect(
+            productId,
+            sessionState.Language.Id
+        ) {
+            if (productId <= 0 || sessionState.Language.Id <= 0) {
+                return@LaunchedEffect
+            }
+
+            productController.ClearProductDetail()
+
+            productController.Detail(
+                languageId = sessionState.Language.Id,
+                wholesaleProductId = productId
+            )
+
+            productController.GetProductRelatedsAsync(
+                languageId = sessionState.Language.Id,
+                wholesaleProductId = productId,
+                count = 10
+            )
+        }
+
+        val productCategoryId = productState.ProductDetailResult?.Data?.ProductCategoryId ?: 0
+
+        LaunchedEffect(
+            productCategoryId,
+            sessionState.Language.Id
+        ) {
+            if (productCategoryId <= 0 || sessionState.Language.Id <= 0) {
+                return@LaunchedEffect
+            }
+
+            productController.RelatedCategories(
+                languageId = sessionState.Language.Id,
+                productCategoryId = productCategoryId
+            )
+        }
+
+
+        
 
         WholesaleProductDetailScreen(
+            State = productState,
             productId = productId,
             onBackClick = {
                 navigator.back()
+            },
+            onSearchClick = {
+                navigator.navController.navigate(WholesaleRoutes.Search)
+            },
+            onFavoriteClick = {
+                navigator.navController.navigate(AccountRoutes.Favorites)
+            },
+            onMessageClick = {
+                navigator.navigateToInbox()
+            },
+            onLastPriceRequestClick = {
+                navigator.navController.navigate(RfqRoutes.Create)
+            },
+            onSampleRequestClick = {
+                navigator.navController.navigate(RfqRoutes.Create)
+            },
+            onCustomizationRequestClick = {
+                navigator.navController.navigate(RfqRoutes.Create)
+            },
+            onCompanyClick = {
+                navigator.navController.navigate(CompanyRoutes.CompanyDetail)
+            },
+            onCompanyProductsClick = {
+                navigator.navController.navigate(CompanyRoutes.CompanyProducts)
+            },
+            onRelatedProductClick = { product ->
+                if (product.id > 0) {
+                    navigator.navController.navigate(
+                        WholesaleRoutes.productDetail(product.id)
+                    )
+                }
+            },
+            onCompanyBestSellerProductClick = { product ->
+                if (product.id > 0) {
+                    navigator.navController.navigate(
+                        WholesaleRoutes.productDetail(product.id)
+                    )
+                }
+            },
+            onRelatedProductsClick = {},
+            onCompanyBestSellerProductsClick = {
+                navigator.navController.navigate(CompanyRoutes.CompanyProducts)
+            },
+            onRelatedCategoryClick = { category ->
+                if (category.id > 0) {
+                    navigator.navController.navigate(
+                        WholesaleRoutes.categoryDetail(category.id)
+                    )
+                }
             }
         )
     }

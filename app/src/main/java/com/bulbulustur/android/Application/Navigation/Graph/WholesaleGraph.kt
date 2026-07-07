@@ -35,11 +35,22 @@ import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
 fun NavGraphBuilder.wholesaleGraph(
     navigator: BulbulusturNavigator,
     sessionState: UserSessionState,
+    homeController: HomeController,
     productController: ProductController,
     rfqController: RfqController
 ){
     composable(route = WholesaleRoutes.Home) {
+        val homeState by homeController.State.collectAsState()
+
+        LaunchedEffect(sessionState.Language.Id) {
+            homeController.Load(
+                languageId = sessionState.Language.Id
+            )
+        }
+
         WholesaleHomeScreen(
+            featuredProducts = homeState.FeaturedProducts,
+            specialContents = homeState.SpecialContents,
             onSearchClick = {
                 navigator.navController.navigate(WholesaleRoutes.Search)
             },

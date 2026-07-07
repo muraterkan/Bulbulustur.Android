@@ -62,6 +62,8 @@ import com.bulbulustur.android.businesslayer.Core.Repository.AdvertSponsoredRepo
 import com.bulbulustur.android.businesslayer.Core.Repository.ProductBrandSectionRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.ProductBrowsingHistoryRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.ProductCategoryRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.CampaignRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.ProductHomepageSpecialContentRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.MemberAddressRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.MemberBankAccountRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.MemberAlarmListRepository
@@ -87,6 +89,7 @@ import com.bulbulustur.android.businesslayer.Core.Repository.MemberPhoneReposito
 import com.bulbulustur.android.businesslayer.Core.Repository.StatusRepository
 import com.bulbulustur.android.Application.Areas.b2b.Controllers.RfqController
 import com.bulbulustur.android.Application.Areas.b2b.Controllers.HomeController as WholesaleHomeController
+import com.bulbulustur.android.Application.Areas.b2c.Controllers.HomeController as RetailHomeController
 import com.bulbulustur.android.Application.Controllers.MessageController
 import com.bulbulustur.android.businesslayer.Core.Repository.BuyerRequestRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.SendedOfferRepository
@@ -98,6 +101,7 @@ import com.bulbulustur.android.businesslayer.Core.Repository.SystemDescUnitRepos
 import com.bulbulustur.android.businesslayer.Core.Repository.ReturnRequestRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.MemberSubscriptionRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.CompanyRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.DealsOfTheDayRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.StoreRequestRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.WholesaleMessageRepository
 
@@ -417,6 +421,30 @@ private fun BulbulusturApplicationContent(
 
     val storeRequestRepository = remember { StoreRequestRepository() }
 
+    val campaignRepository = remember {
+        CampaignRepository()
+    }
+
+    val productHomepageSpecialContentRepository = remember {
+        ProductHomepageSpecialContentRepository()
+    }
+
+    val dealsOfTheDayRepository = remember {
+        DealsOfTheDayRepository()
+    }
+
+    val retailHomeController = remember(
+        campaignRepository,
+        dealsOfTheDayRepository,
+        productHomepageSpecialContentRepository
+    ) {
+        RetailHomeController(
+            campaignRepository = campaignRepository,
+            dealsOfTheDayRepository = dealsOfTheDayRepository,
+            productHomepageSpecialContentRepository = productHomepageSpecialContentRepository
+        )
+    }
+
     val productController =
         remember(
             executeService,
@@ -457,6 +485,24 @@ private fun BulbulusturApplicationContent(
                 productCategoryRepository = productCategoryRepository
             )
         }
+
+    val wholesaleHomepageFeaturedProductRepository = remember {
+        WholesaleHomepageFeaturedProductRepository()
+    }
+
+    val wholesaleHomepageSpecialContentRepository = remember {
+        WholesaleHomepageSpecialContentRepository()
+    }
+
+    val wholesaleHomeController = remember(
+        wholesaleHomepageFeaturedProductRepository,
+        wholesaleHomepageSpecialContentRepository
+    ) {
+        WholesaleHomeController(
+            wholesaleHomepageFeaturedProductRepository = wholesaleHomepageFeaturedProductRepository,
+            wholesaleHomepageSpecialContentRepository = wholesaleHomepageSpecialContentRepository
+        )
+    }
 
     val returnRequestRepository = remember {
         ReturnRequestRepository()
@@ -830,6 +876,8 @@ private fun BulbulusturApplicationContent(
         retailGraph(
             navigator =
                 appNavigator,
+            homeController =
+                retailHomeController,
             productController =
                 productController,
             productReviewController =
@@ -847,6 +895,7 @@ private fun BulbulusturApplicationContent(
         wholesaleGraph(
             navigator = appNavigator,
             sessionState = sessionState,
+            homeController = wholesaleHomeController,
             productController = wholesaleProductController,
             rfqController = rfqController
         )

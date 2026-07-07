@@ -1,8 +1,12 @@
 package com.bulbulustur.android.Application.Areas.b2c.Controllers
 
 import androidx.lifecycle.viewModelScope
-import com.bulbulustur.android.businesslayer.Core.Util.Execute.IExecuteService
-import com.bulbulustur.android.businesslayer.Core.Util.Result
+import com.bulbulustur.android.businesslayer.Core.DTO.CampaignDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.DealsOfTheDayDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.ProductHomepageSpecialContentDTO
+import com.bulbulustur.android.businesslayer.Core.Interface.ICampaignRepository
+import com.bulbulustur.android.businesslayer.Core.Interface.IDealsOfTheDayRepository
+import com.bulbulustur.android.businesslayer.Core.Interface.IProductHomepageSpecialContentRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -11,51 +15,42 @@ import kotlinx.coroutines.launch
 
 data class HomeControllerState(
     val IsLoading: Boolean = false,
-    val CurrentAction: String? = null,
-    val LastResult: Result<Any?>? = null,
+    val Campaigns: List<CampaignDTO> = emptyList(),
+    val DealsOfTheDays: List<DealsOfTheDayDTO> = emptyList(),
+    val SpecialContents: List<ProductHomepageSpecialContentDTO> = emptyList(),
     val ErrorMessage: String? = null
 )
 
-sealed interface HomeControllerEvent {
-    data object Refresh : HomeControllerEvent
-    data class Load(val parameters: Map<String, Any?> = emptyMap()) : HomeControllerEvent
-    data class Submit(val body: Any? = null) : HomeControllerEvent
-}
-
 class HomeController(
-    private val executeService: IExecuteService,
-    private val defaultRepository: IB2CDefaultRepository
+    private val campaignRepository: ICampaignRepository,
+    private val dealsOfTheDayRepository: IDealsOfTheDayRepository,
+    private val productHomepageSpecialContentRepository: IProductHomepageSpecialContentRepository
 ) : BaseController() {
 
     private val _state = MutableStateFlow(HomeControllerState())
     val State: StateFlow<HomeControllerState> = _state.asStateFlow()
 
-    fun Index(parameters: Map<String, Any?> = emptyMap()) {
+    fun Load(languageId: Int, campaignCount: Int = 3, dealsOfTheDayCount: Int = 8, specialContentCount: Int = 5) {
         viewModelScope.launch {
             _state.update {
                 it.copy(
                     IsLoading = true,
-                    ErrorMessage = null,
-                    CurrentAction = "Index"
+                    ErrorMessage = null
                 )
             }
 
-            val response = executeService.GetAsync(
-                cacheKey = "b2c.Home.Index." + parameters.toString()
-            ) {
-                defaultRepository.GetAsync(
-                    actionName = "Index",
-                    parameters = parameters
-                )
-            }
+            val campaignsResult = campaignRepository.GetCampaignsAsync(languageId, campaignCount)
+            val dealsOfTheDaysResult = dealsOfTheDayRepository.GetDealsOfTheDaysAsync(languageId, dealsOfTheDayCount)
+            val specialContentsResult = productHomepageSpecialContentRepository.GetHomepageSpecialContentsAsync(languageId, specialContentCount)
 
             _state.update {
                 it.copy(
                     IsLoading = false,
-                    LastResult = response
+                    Campaigns = campaignsResult.Data ?: emptyList(),
+                    DealsOfTheDays = dealsOfTheDaysResult.Data ?: emptyList(),
+                    SpecialContents = specialContentsResult.Data ?: emptyList()
                 )
             }
         }
     }
 }
-

@@ -7,6 +7,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.bulbulustur.android.Application.Areas.b2c.Controllers.HomeController
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.ProductController
 import com.bulbulustur.android.Application.Areas.b2c.Views.Basket.BasketScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.Campaign.CampaignDetailScreen
@@ -35,6 +36,7 @@ import com.bulbulustur.android.Application.Controllers.AccountController
 
 fun NavGraphBuilder.retailGraph(
     navigator: BulbulusturNavigator,
+    homeController: HomeController,
     productController: ProductController,
     productReviewController: ProductReviewController,
     productQuestionController: ProductQuestionController,
@@ -45,7 +47,18 @@ fun NavGraphBuilder.retailGraph(
     composable(
         route = RetailRoutes.Home
     ) {
+        val homeState by homeController.State.collectAsState()
+
+        LaunchedEffect(sessionState.Language.Id) {
+            homeController.Load(
+                languageId = sessionState.Language.Id
+            )
+        }
+
         RetailHomeScreen(
+            campaigns = homeState.Campaigns,
+            dealsOfTheDays = homeState.DealsOfTheDays,
+            specialContents = homeState.SpecialContents,
             onSearchClick = {
                 navigator.navController.navigate(
                     RetailRoutes.Search
@@ -68,6 +81,25 @@ fun NavGraphBuilder.retailGraph(
                  */
                 navigator.navController.navigate(
                     RetailRoutes.ProductList
+                )
+            },
+            onDealClick = { productId, storeId, variantId ->
+                navigator.navController.navigate(
+                    RetailRoutes.productDetail(
+                        productId = productId,
+                        storeId = storeId,
+                        variantId = variantId
+                    )
+                )
+            },
+            onCampaignClick = { campaignId ->
+                navigator.navController.navigate(
+                    RetailRoutes.CampaignDetail
+                )
+            },
+            onCampaignListClick = {
+                navigator.navController.navigate(
+                    RetailRoutes.CampaignList
                 )
             },
             onFavoriteClick = {

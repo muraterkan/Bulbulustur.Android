@@ -164,6 +164,16 @@ fun WholesaleHomeScreen(
             }
 
             item {
+                HomepageSpecialContents(
+                    specialContents = specialContents,
+                    onProductClick = onProductDetailClick,
+                    onRfqClick = {
+                        onRfqCreateClick()
+                    }
+                )
+            }
+
+            item {
                 WholesaleSectionTitle(
                     title = "Tedarik Aksiyonları",
                     description = "Teklif, son fiyat, numune ve özel üretim kanalları."

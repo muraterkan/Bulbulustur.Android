@@ -675,7 +675,7 @@ private fun getRetailCategoryHomeGateways(): List<RetailCategoryHomeGatewayItem>
     return listOf(
         RetailCategoryHomeGatewayItem(
             title = "Ürünler",
-            description = "Bu kategorideki ürünler",
+            description = "Kategori Ürünleri",
             icon = Icons.Outlined.ShoppingBasket,
             backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
             iconColor = MaterialTheme.colorScheme.onSurfaceVariant,

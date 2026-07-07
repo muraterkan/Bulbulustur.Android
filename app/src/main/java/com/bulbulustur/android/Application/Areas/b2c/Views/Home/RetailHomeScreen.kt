@@ -42,6 +42,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.Application.Areas.b2c.Views.Home.Components.B2CHomepageSpecialContents
 import com.bulbulustur.android.Application.Areas.b2c.Views.Home.Components.CampaignBanners
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailBottomNavigation
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailBottomNavigationItem
@@ -58,14 +59,20 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
 import com.bulbulustur.android.businesslayer.Core.DTO.CampaignDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.ProductHomepageSpecialContentDTO
+import com.bulbulustur.android.Application.Areas.b2c.Views.Home.Components.B2CDealsOfTheDay
+import com.bulbulustur.android.businesslayer.Core.DTO.DealsOfTheDayDTO
 
 @Composable
 fun RetailHomeScreen(
     campaigns: List<CampaignDTO> = emptyList(),
+    dealsOfTheDays: List<DealsOfTheDayDTO> = emptyList(),
+    specialContents: List<ProductHomepageSpecialContentDTO> = emptyList(),
     onSearchClick: (String) -> Unit = {},
     onCategoryClick: () -> Unit = {},
     onProductListClick: () -> Unit = {},
-    onProductDetailClick: () -> Unit = {},
+    onProductDetailClick: (Int) -> Unit = {},
+    onDealClick: (productId: Int, storeId: Int, variantId: Int) -> Unit = { _, _, _ -> },
     onCampaignClick: (Int) -> Unit = {},
     onCampaignListClick: () -> Unit = {},
     onFavoriteClick: () -> Unit = {},
@@ -177,6 +184,20 @@ fun RetailHomeScreen(
                     campaigns = campaigns,
                     onCampaignClick = onCampaignClick,
                     onViewAllClick = onCampaignListClick
+                )
+            }
+
+            item {
+                B2CDealsOfTheDay(
+                    dealsOfTheDays = dealsOfTheDays,
+                    onProductClick = onDealClick
+                )
+            }
+
+            item {
+                B2CHomepageSpecialContents(
+                    specialContents = specialContents,
+                    onProductClick = onProductDetailClick
                 )
             }
 

@@ -73,6 +73,8 @@ import com.bulbulustur.android.businesslayer.Core.Repository.MemberCouponReposit
 import com.bulbulustur.android.businesslayer.Core.Repository.ProductFavoriteRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.WholesaleFavoriteRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.WholesaleProductRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.WholesaleHomepageFeaturedProductRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.WholesaleHomepageSpecialContentRepository
 import com.bulbulustur.android.businesslayer.Core.Security.SecureTokenStore
 import com.bulbulustur.android.businesslayer.Core.Util.Execute.ExecuteService
 import com.bulbulustur.android.Application.Controllers.SettingsController
@@ -84,6 +86,7 @@ import com.bulbulustur.android.Application.Controllers.AccountController
 import com.bulbulustur.android.businesslayer.Core.Repository.MemberPhoneRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.StatusRepository
 import com.bulbulustur.android.Application.Areas.b2b.Controllers.RfqController
+import com.bulbulustur.android.Application.Areas.b2b.Controllers.HomeController as WholesaleHomeController
 import com.bulbulustur.android.Application.Controllers.MessageController
 import com.bulbulustur.android.businesslayer.Core.Repository.BuyerRequestRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.SendedOfferRepository

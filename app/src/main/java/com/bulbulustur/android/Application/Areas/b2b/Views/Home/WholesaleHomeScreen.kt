@@ -44,6 +44,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.bulbulustur.android.Application.Areas.b2b.Views.Home.Components.HomepageFeaturedProducts
+import com.bulbulustur.android.Application.Areas.b2b.Views.Home.Components.HomepageSpecialContents
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleBottomNavigation
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleBottomNavigationItem
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleSearchHeader
@@ -59,10 +60,12 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
 import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleHomepageFeaturedProductDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleHomepageSpecialContentDTO
 
 @Composable
 fun WholesaleHomeScreen(
     featuredProducts: List<WholesaleHomepageFeaturedProductDTO> = emptyList(),
+    specialContents: List<WholesaleHomepageSpecialContentDTO> = emptyList(),
     onSearchClick: (String) -> Unit = {},
     onMenuClick: () -> Unit = {},
     onCategoryClick: () -> Unit = {},

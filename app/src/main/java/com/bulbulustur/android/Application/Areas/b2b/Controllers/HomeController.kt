@@ -1,8 +1,10 @@
 package com.bulbulustur.android.Application.Areas.b2b.Controllers
 
 import androidx.lifecycle.viewModelScope
-import com.bulbulustur.android.businesslayer.Core.Util.Execute.IExecuteService
-import com.bulbulustur.android.businesslayer.Core.Util.Result
+import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleHomepageFeaturedProductDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleHomepageSpecialContentDTO
+import com.bulbulustur.android.businesslayer.Core.Interface.IWholesaleHomepageFeaturedProductRepository
+import com.bulbulustur.android.businesslayer.Core.Interface.IWholesaleHomepageSpecialContentRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -11,52 +13,38 @@ import kotlinx.coroutines.launch
 
 data class HomeControllerState(
     val IsLoading: Boolean = false,
-    val CurrentAction: String? = null,
-    val LastResult: Result<Any?>? = null,
+    val FeaturedProducts: List<WholesaleHomepageFeaturedProductDTO> = emptyList(),
+    val SpecialContents: List<WholesaleHomepageSpecialContentDTO> = emptyList(),
     val ErrorMessage: String? = null
 )
 
-sealed interface HomeControllerEvent {
-    data object Refresh : HomeControllerEvent
-    data class Load(val parameters: Map<String, Any?> = emptyMap()) : HomeControllerEvent
-    data class Submit(val body: Any? = null) : HomeControllerEvent
-}
-
 class HomeController(
-    private val executeService: IExecuteService,
-    private val defaultRepository: IB2BDefaultRepository
+    private val wholesaleHomepageFeaturedProductRepository: IWholesaleHomepageFeaturedProductRepository,
+    private val wholesaleHomepageSpecialContentRepository: IWholesaleHomepageSpecialContentRepository
 ) : BaseController() {
 
     private val _state = MutableStateFlow(HomeControllerState())
     val State: StateFlow<HomeControllerState> = _state.asStateFlow()
 
-
-    fun Index(parameters: Map<String, Any?> = emptyMap()) {
+    fun Load(languageId: Int, featuredProductCount: Int = 12, specialContentCount: Int = 6) {
         viewModelScope.launch {
             _state.update {
                 it.copy(
                     IsLoading = true,
-                    ErrorMessage = null,
-                    CurrentAction = "Index"
+                    ErrorMessage = null
                 )
             }
 
-            val response = executeService.GetAsync(
-                cacheKey = "b2b.Home.Index." + parameters.toString()
-            ) {
-                defaultRepository.GetAsync(
-                    actionName = "Index",
-                    parameters = parameters
-                )
-            }
+            val featuredProductsResult = wholesaleHomepageFeaturedProductRepository.GetHomepageFeaturedProductsAsync(featuredProductCount)
+            val specialContentsResult = wholesaleHomepageSpecialContentRepository.GetHomepageSpecialContents(languageId, specialContentCount)
 
             _state.update {
                 it.copy(
                     IsLoading = false,
-                    LastResult = response
+                    FeaturedProducts = featuredProductsResult.Data ?: emptyList(),
+                    SpecialContents = specialContentsResult.Data ?: emptyList()
                 )
             }
         }
     }
 }
-

@@ -1,8 +1,8 @@
-﻿package com.bulbulustur.android.businesslayer.Core.Model.UpdateModels
+package com.bulbulustur.android.businesslayer.Core.Model.UpdateModels
 
 data class CampaignUpdateModel(
     val CampaignId: Int = 0,
-    val EmployeeId: Int = 0,
+    val InsertedBy: Int = 0,
     val InsertedDate: String = "",
     val StatusId: Int = 0,
     val CampaignName: String = "",
@@ -12,7 +12,5 @@ data class CampaignUpdateModel(
     val CampaignEndDate: String = "",
     val Picture: String = "",
     val MaximumProducts: Int = 0,
-    val ProductCategoryId: Int = 0,
-    val SeoTitle: String = "",
-    val SeoDescription: String = ""
+    val ProductCategoryId: Int = 0
 )

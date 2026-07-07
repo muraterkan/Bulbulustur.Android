@@ -1,8 +1,8 @@
-﻿package com.bulbulustur.android.businesslayer.Core.DTO
+package com.bulbulustur.android.businesslayer.Core.DTO
 
 data class CampaignDTO(
     val CampaignId: Int = 0,
-    val EmployeeId: Int = 0,
+    val InsertedBy: Int = 0,
     val InsertedDate: String = "",
     val StatusId: Int = 0,
     val CampaignName: String = "",
@@ -13,6 +13,8 @@ data class CampaignDTO(
     val Picture: String = "",
     val MaximumProducts: Int = 0,
     val ProductCategoryId: Int = 0,
-    val SeoTitle: String = "",
-    val SeoDescription: String = ""
+    val CampaignCondition: String = "",
+    val CategoryName: String = "",
+    val DefaultPicture: String = "",
+    val CampaignProducts: List<CampaignProductDTO> = emptyList()
 )

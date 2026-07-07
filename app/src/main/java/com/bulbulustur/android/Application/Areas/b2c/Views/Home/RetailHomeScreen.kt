@@ -42,9 +42,11 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.Application.Areas.b2c.Views.Home.Components.CampaignBanners
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailBottomNavigation
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailBottomNavigationItem
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeader
+import com.bulbulustur.android.Application.Views.Shared.Components.BbSectionHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
@@ -52,18 +54,20 @@ import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbChip
-import com.bulbulustur.android.Application.Views.Shared.Components.BbSectionHeader
-import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
+import com.bulbulustur.android.businesslayer.Core.DTO.CampaignDTO
 
 @Composable
 fun RetailHomeScreen(
+    campaigns: List<CampaignDTO> = emptyList(),
     onSearchClick: (String) -> Unit = {},
     onCategoryClick: () -> Unit = {},
     onProductListClick: () -> Unit = {},
     onProductDetailClick: () -> Unit = {},
+    onCampaignClick: (Int) -> Unit = {},
+    onCampaignListClick: () -> Unit = {},
     onFavoriteClick: () -> Unit = {},
     onStoreClick: () -> Unit = {},
     onMessageClick: () -> Unit = {},
@@ -169,15 +173,10 @@ fun RetailHomeScreen(
             }
 
             item {
-                BbSectionHeader(
-                    title = "Öne Çıkan Ürünler",
-                    subtitle = "Demo akış, API sonrası gerçek Vitrinlerden beslenecek."
-                )
-            }
-
-            item {
-                RetailHomeProductRow(
-                    onProductDetailClick = onProductDetailClick
+                CampaignBanners(
+                    campaigns = campaigns,
+                    onCampaignClick = onCampaignClick,
+                    onViewAllClick = onCampaignListClick
                 )
             }
 
@@ -239,7 +238,7 @@ private fun RetailHomeHeroCard(
             }
 
             Text(
-                text = "Ürünleri, mağazaları ve Kategori Vitrinlerini Keşfet.",
+                text = "Ürünleri, mağazaları ve kategori vitrinlerini keşfet.",
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
@@ -289,14 +288,12 @@ private fun RetailHomeQuickGatewayRow(
     ) {
         items(
             items = gateways,
-            key = { item ->
-                item.title
-            }
+            key = { item -> item.Title }
         ) { item ->
             RetailHomeGatewayCard(
                 item = item,
                 onClick = {
-                    when (item.target) {
+                    when (item.Target) {
                         RetailHomeGatewayTarget.Menu -> onMenuClick()
                         RetailHomeGatewayTarget.Products -> onProductListClick()
                         RetailHomeGatewayTarget.Stores -> onStoreClick()
@@ -327,27 +324,27 @@ private fun RetailHomeGatewayCard(
                     .width(BBSpacing.Space11)
                     .height(BBSpacing.Space11)
                     .background(
-                        color = item.backgroundColor,
+                        color = item.BackgroundColor,
                         shape = BBRadius.LgShape
                     ),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    imageVector = item.icon,
+                    imageVector = item.Icon,
                     contentDescription = null,
-                    tint = item.iconColor
+                    tint = item.IconColor
                 )
             }
 
             Text(
-                text = item.title,
+                text = item.Title,
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.SemiBold
             )
 
             Text(
-                text = item.description,
+                text = item.Description,
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -422,9 +419,7 @@ private fun RetailHomeCategoryChipRow(
     ) {
         items(
             items = getRetailHomeCategoryNames(),
-            key = { item ->
-                item
-            }
+            key = { item -> item }
         ) { item ->
             BbChip(
                 text = item,
@@ -434,6 +429,7 @@ private fun RetailHomeCategoryChipRow(
         }
     }
 }
+
 @Composable
 private fun RetailHomeShowcaseRow(
     onProductListClick: () -> Unit,
@@ -447,14 +443,12 @@ private fun RetailHomeShowcaseRow(
     ) {
         items(
             items = showcases,
-            key = { item ->
-                item.title
-            }
+            key = { item -> item.Title }
         ) { item ->
             RetailHomeShowcaseCard(
                 item = item,
                 onClick = {
-                    when (item.target) {
+                    when (item.Target) {
                         RetailHomeShowcaseTarget.Products -> onProductListClick()
                         RetailHomeShowcaseTarget.Stores -> onStoreClick()
                         RetailHomeShowcaseTarget.Favorites -> onFavoriteClick()
@@ -464,6 +458,7 @@ private fun RetailHomeShowcaseRow(
         }
     }
 }
+
 @Composable
 private fun RetailHomeShowcaseCard(
     item: RetailHomeShowcaseItem,
@@ -472,7 +467,7 @@ private fun RetailHomeShowcaseCard(
     Surface(
         modifier = Modifier.width(236.dp),
         shape = BBRadius.XlShape,
-        color = item.backgroundColor,
+        color = item.BackgroundColor,
         border = BorderStroke(
             width = 1.dp,
             color = MaterialTheme.colorScheme.outlineVariant
@@ -484,91 +479,22 @@ private fun RetailHomeShowcaseCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             Icon(
-                imageVector = item.icon,
+                imageVector = item.Icon,
                 contentDescription = null,
-                tint = item.iconColor
+                tint = item.IconColor
             )
 
             Text(
-                text = item.title,
+                text = item.Title,
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.SemiBold
             )
 
             Text(
-                text = item.description,
+                text = item.Description,
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-    }
-}
-
-@Composable
-private fun RetailHomeProductRow(
-    onProductDetailClick: () -> Unit
-) {
-    LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
-    ) {
-        items(
-            items = getRetailHomeProducts(),
-            key = { item ->
-                item.title
-            }
-        ) { item ->
-            RetailHomeProductMiniCard(
-                item = item,
-                onClick = onProductDetailClick
-            )
-        }
-    }
-}
-
-@Composable
-private fun RetailHomeProductMiniCard(
-    item: RetailHomeProductItem,
-    onClick: () -> Unit
-) {
-    BbCard(
-        modifier = Modifier.width(176.dp),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium,
-        onClick = onClick
-    ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(118.dp)
-                    .background(
-                        color = item.backgroundColor,
-                        shape = BBRadius.LgShape
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.ShoppingBasket,
-                    contentDescription = null,
-                    tint = item.iconColor
-                )
-            }
-
-            Text(
-                text = item.title,
-                style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.SemiBold
-            )
-
-            Text(
-                text = item.price,
-                style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.Bold
             )
         }
     }
@@ -583,9 +509,7 @@ private fun RetailHomeStoreRow(
     ) {
         items(
             items = getRetailHomeStores(),
-            key = { item ->
-                item.name
-            }
+            key = { item -> item.Name }
         ) { item ->
             RetailHomeStoreCard(
                 item = item,
@@ -631,14 +555,14 @@ private fun RetailHomeStoreCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = item.name,
+                    text = item.Name,
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.SemiBold
                 )
 
                 Text(
-                    text = item.description,
+                    text = item.Description,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -649,12 +573,12 @@ private fun RetailHomeStoreCard(
 
 @Immutable
 private data class RetailHomeGatewayItem(
-    val title: String,
-    val description: String,
-    val icon: ImageVector,
-    val backgroundColor: Color,
-    val iconColor: Color,
-    val target: RetailHomeGatewayTarget
+    val Title: String,
+    val Description: String,
+    val Icon: ImageVector,
+    val BackgroundColor: Color,
+    val IconColor: Color,
+    val Target: RetailHomeGatewayTarget
 )
 
 private enum class RetailHomeGatewayTarget {
@@ -666,12 +590,12 @@ private enum class RetailHomeGatewayTarget {
 
 @Immutable
 private data class RetailHomeShowcaseItem(
-    val title: String,
-    val description: String,
-    val icon: ImageVector,
-    val backgroundColor: Color,
-    val iconColor: Color,
-    val target: RetailHomeShowcaseTarget
+    val Title: String,
+    val Description: String,
+    val Icon: ImageVector,
+    val BackgroundColor: Color,
+    val IconColor: Color,
+    val Target: RetailHomeShowcaseTarget
 )
 
 private enum class RetailHomeShowcaseTarget {
@@ -681,53 +605,45 @@ private enum class RetailHomeShowcaseTarget {
 }
 
 @Immutable
-private data class RetailHomeProductItem(
-    val title: String,
-    val price: String,
-    val backgroundColor: Color,
-    val iconColor: Color
-)
-
-@Immutable
 private data class RetailHomeStoreItem(
-    val name: String,
-    val description: String
+    val Name: String,
+    val Description: String
 )
 
 @Composable
 private fun getRetailHomeGateways(): List<RetailHomeGatewayItem> {
     return listOf(
         RetailHomeGatewayItem(
-            title = "Kategoriler",
-            description = "Ana kategori kapısından başla",
-            icon = Icons.Outlined.Category,
-            backgroundColor = MaterialTheme.colorScheme.primaryContainer,
-            iconColor = MaterialTheme.colorScheme.onPrimaryContainer,
-            target = RetailHomeGatewayTarget.Menu
+            Title = "Kategoriler",
+            Description = "Ana kategori kapısından başla",
+            Icon = Icons.Outlined.Category,
+            BackgroundColor = MaterialTheme.colorScheme.primaryContainer,
+            IconColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            Target = RetailHomeGatewayTarget.Menu
         ),
         RetailHomeGatewayItem(
-            title = "Ürünler",
-            description = "Perakende ürün akışına gir",
-            icon = Icons.Outlined.ShoppingBasket,
-            backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
-            iconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            target = RetailHomeGatewayTarget.Products
+            Title = "Ürünler",
+            Description = "Perakende ürün akışına gir",
+            Icon = Icons.Outlined.ShoppingBasket,
+            BackgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+            IconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            Target = RetailHomeGatewayTarget.Products
         ),
         RetailHomeGatewayItem(
-            title = "Mağazalar",
-            description = "Satıcı ve marka vitrinleri",
-            icon = Icons.Outlined.Storefront,
-            backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
-            iconColor = MaterialTheme.colorScheme.onSecondaryContainer,
-            target = RetailHomeGatewayTarget.Stores
+            Title = "Mağazalar",
+            Description = "Satıcı ve marka vitrinleri",
+            Icon = Icons.Outlined.Storefront,
+            BackgroundColor = MaterialTheme.colorScheme.secondaryContainer,
+            IconColor = MaterialTheme.colorScheme.onSecondaryContainer,
+            Target = RetailHomeGatewayTarget.Stores
         ),
         RetailHomeGatewayItem(
-            title = "Favoriler",
-            description = "Beğendiğin alanlara dön",
-            icon = Icons.Outlined.FavoriteBorder,
-            backgroundColor = MaterialTheme.colorScheme.tertiaryContainer,
-            iconColor = MaterialTheme.colorScheme.onTertiaryContainer,
-            target = RetailHomeGatewayTarget.Favorites
+            Title = "Favoriler",
+            Description = "Beğendiğin alanlara dön",
+            Icon = Icons.Outlined.FavoriteBorder,
+            BackgroundColor = MaterialTheme.colorScheme.tertiaryContainer,
+            IconColor = MaterialTheme.colorScheme.onTertiaryContainer,
+            Target = RetailHomeGatewayTarget.Favorites
         )
     )
 }
@@ -749,65 +665,36 @@ private fun getRetailHomeCategoryNames(): List<String> {
 private fun getRetailHomeShowcases(): List<RetailHomeShowcaseItem> {
     return listOf(
         RetailHomeShowcaseItem(
-            title = "Yeni Gelenler",
-            description = "Bugün eklenen perakende ürünleri keşfet.",
-            icon = Icons.Outlined.NewReleases,
-            backgroundColor = MaterialTheme.colorScheme.primaryContainer,
-            iconColor = MaterialTheme.colorScheme.onPrimaryContainer,
-            target = RetailHomeShowcaseTarget.Products
+            Title = "Yeni Gelenler",
+            Description = "Bugün eklenen perakende ürünleri keşfet.",
+            Icon = Icons.Outlined.NewReleases,
+            BackgroundColor = MaterialTheme.colorScheme.primaryContainer,
+            IconColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            Target = RetailHomeShowcaseTarget.Products
         ),
         RetailHomeShowcaseItem(
-            title = "Kampanya Vitrinleri",
-            description = "Seçili fırsatlar ve dönemsel ürün akışları.",
-            icon = Icons.Outlined.LocalOffer,
-            backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
-            iconColor = MaterialTheme.colorScheme.onSecondaryContainer,
-            target = RetailHomeShowcaseTarget.Products
+            Title = "Kampanya Vitrinleri",
+            Description = "Seçili fırsatlar ve dönemsel ürün akışları.",
+            Icon = Icons.Outlined.LocalOffer,
+            BackgroundColor = MaterialTheme.colorScheme.secondaryContainer,
+            IconColor = MaterialTheme.colorScheme.onSecondaryContainer,
+            Target = RetailHomeShowcaseTarget.Products
         ),
         RetailHomeShowcaseItem(
-            title = "Mağaza Keşfi",
-            description = "Öne çıkan mağaza ve koleksiyonlara göz at.",
-            icon = Icons.Outlined.Storefront,
-            backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
-            iconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            target = RetailHomeShowcaseTarget.Stores
+            Title = "Mağaza Keşfi",
+            Description = "Öne çıkan mağaza ve koleksiyonlara göz at.",
+            Icon = Icons.Outlined.Storefront,
+            BackgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+            IconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            Target = RetailHomeShowcaseTarget.Stores
         ),
         RetailHomeShowcaseItem(
-            title = "Favori Akışı",
-            description = "Beğendiğin ürün ve mağazalara hızlı dönüş.",
-            icon = Icons.Outlined.FavoriteBorder,
-            backgroundColor = MaterialTheme.colorScheme.tertiaryContainer,
-            iconColor = MaterialTheme.colorScheme.onTertiaryContainer,
-            target = RetailHomeShowcaseTarget.Favorites
-        )
-    )
-}
-
-private fun getRetailHomeProducts(): List<RetailHomeProductItem> {
-    return listOf(
-        RetailHomeProductItem(
-            title = "Akıllı ev ürünü",
-            price = "₺749,90",
-            backgroundColor = BBColors.Blue.Blue50,
-            iconColor = BBColors.Blue.Blue700
-        ),
-        RetailHomeProductItem(
-            title = "Mutfak yardımcısı",
-            price = "₺399,90",
-            backgroundColor = BBColors.Green.Green50,
-            iconColor = BBColors.Green.Green700
-        ),
-        RetailHomeProductItem(
-            title = "Yeni sezon çanta",
-            price = "₺1.249,90",
-            backgroundColor = BBColors.Pink.Pink50,
-            iconColor = BBColors.Pink.Pink700
-        ),
-        RetailHomeProductItem(
-            title = "Spor aksesuarı",
-            price = "₺219,90",
-            backgroundColor = BBColors.Purple.Purple50,
-            iconColor = BBColors.Purple.Purple700
+            Title = "Favori Akışı",
+            Description = "Beğendiğin ürün ve mağazalara hızlı dönüş.",
+            Icon = Icons.Outlined.FavoriteBorder,
+            BackgroundColor = MaterialTheme.colorScheme.tertiaryContainer,
+            IconColor = MaterialTheme.colorScheme.onTertiaryContainer,
+            Target = RetailHomeShowcaseTarget.Favorites
         )
     )
 }
@@ -815,16 +702,16 @@ private fun getRetailHomeProducts(): List<RetailHomeProductItem> {
 private fun getRetailHomeStores(): List<RetailHomeStoreItem> {
     return listOf(
         RetailHomeStoreItem(
-            name = "Bulbulustur Store",
-            description = "Seçilmiş ürünler"
+            Name = "Bulbulustur Store",
+            Description = "Seçilmiş ürünler"
         ),
         RetailHomeStoreItem(
-            name = "Ev & Yaşam Pazarı",
-            description = "Ev ihtiyaçları"
+            Name = "Ev & Yaşam Pazarı",
+            Description = "Ev ihtiyaçları"
         ),
         RetailHomeStoreItem(
-            name = "Tekno Vitrin",
-            description = "Teknoloji ürünleri"
+            Name = "Tekno Vitrin",
+            Description = "Teknoloji ürünleri"
         )
     )
 }
@@ -836,5 +723,3 @@ private fun RetailHomeScreenPreview() {
         RetailHomeScreen()
     }
 }
-
-

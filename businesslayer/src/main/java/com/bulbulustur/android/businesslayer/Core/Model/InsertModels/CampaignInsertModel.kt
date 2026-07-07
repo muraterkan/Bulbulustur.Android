@@ -1,7 +1,7 @@
-﻿package com.bulbulustur.android.businesslayer.Core.Model.InsertModels
+package com.bulbulustur.android.businesslayer.Core.Model.InsertModels
 
 data class CampaignInsertModel(
-    val EmployeeId: Int = 0,
+    val InsertedBy: Int = 0,
     val InsertedDate: String = "",
     val StatusId: Int = 0,
     val CampaignName: String = "",
@@ -11,7 +11,5 @@ data class CampaignInsertModel(
     val CampaignEndDate: String = "",
     val Picture: String = "",
     val MaximumProducts: Int = 0,
-    val ProductCategoryId: Int = 0,
-    val SeoTitle: String = "",
-    val SeoDescription: String = ""
+    val ProductCategoryId: Int = 0
 )

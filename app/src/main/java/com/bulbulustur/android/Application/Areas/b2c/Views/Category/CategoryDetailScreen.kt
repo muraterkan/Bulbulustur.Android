@@ -51,10 +51,13 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
+import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryDTO
 
 @Composable
 fun CategoryDetailScreen(
     categoryId: Int = 1,
+    categoryInfo: ProductCategoryDTO? = null,
+    childCategories: List<ProductCategoryDTO> = emptyList(),
     onBackClick: () -> Unit = {},
     onMenuClick: () -> Unit = {},
     onFavoriteClick: () -> Unit = {},
@@ -69,7 +72,9 @@ fun CategoryDetailScreen(
     onSearchClick: (String) -> Unit = {}
 ) {
     val category = getRetailCategoryDetail(
-        categoryId = categoryId
+        categoryId = categoryId,
+        categoryInfo = categoryInfo,
+        childCategories = childCategories
     )
 
     var searchText by remember {
@@ -604,22 +609,36 @@ data class RetailCategoryProductItem(
 
 @Composable
 private fun getRetailCategoryDetail(
-    categoryId: Int
+    categoryId: Int,
+    categoryInfo: ProductCategoryDTO?,
+    childCategories: List<ProductCategoryDTO>
 ): RetailCategoryDetail {
     return RetailCategoryDetail(
-        id = categoryId,
-        name = "Moda",
-        description = "Giyim, ayakkabı, çanta ve aksesuar ürünlerinde seçili mağazaları ve fırsatları keşfedin.",
-        iconText = "MO",
+        id = categoryInfo?.ProductCategoryId ?: categoryId,
+        name = categoryInfo?.CategoryName?.ifBlank { "Kategori" } ?: "Kategori",
+        description = categoryInfo?.Breadcrumb?.ifBlank { "Kategori ürünlerini keşfedin." } ?: "Kategori ürünlerini keşfedin.",
+        iconText = (categoryInfo?.CategoryName?.ifBlank { "KA" } ?: "KA").take(2).uppercase(),
         productCount = 18420,
         storeCount = 624,
         campaignCount = 12,
-        subCategories = listOf(
-            RetailSubCategoryItem(1, "Kadın Giyim", "KG", 5320),
-            RetailSubCategoryItem(2, "Erkek Giyim", "EG", 4210),
-            RetailSubCategoryItem(3, "Ayakkabı", "AY", 3170),
-            RetailSubCategoryItem(4, "Çanta", "ÇA", 1460)
-        ),
+        subCategories =
+            if (childCategories.isNotEmpty()) {
+                childCategories.map { child ->
+                    RetailSubCategoryItem(
+                        id = child.ProductCategoryId,
+                        name = child.CategoryName.ifBlank { "Kategori" },
+                        iconText = child.CategoryName.ifBlank { "KA" }.take(2).uppercase(),
+                        productCount = 0
+                    )
+                }
+            } else {
+                listOf(
+                    RetailSubCategoryItem(1, "Kadın Giyim", "KG", 5320),
+                    RetailSubCategoryItem(2, "Erkek Giyim", "EG", 4210),
+                    RetailSubCategoryItem(3, "Ayakkabı", "AY", 3170),
+                    RetailSubCategoryItem(4, "Çanta", "ÇA", 1460)
+                )
+            },
         campaigns = listOf(
             RetailCategoryCampaignItem(
                 id = 1,

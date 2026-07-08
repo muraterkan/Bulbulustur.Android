@@ -58,6 +58,7 @@ import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbChip
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
+import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryDTO
 
 @Composable
 fun RetailCategoryHomeScreen(
@@ -71,7 +72,8 @@ fun RetailCategoryHomeScreen(
     onBasketClick: () -> Unit = {},
     onAccountClick: () -> Unit = {},
     onProductListClick: () -> Unit = {},
-    onSubCategoryClick: () -> Unit = {},
+    categories: List<ProductCategoryDTO> = emptyList(),
+    onSubCategoryClick: (Int) -> Unit = {},
     onCampaignClick: () -> Unit = {},
     onStoreClick: () -> Unit = {}
 ) {
@@ -79,7 +81,31 @@ fun RetailCategoryHomeScreen(
         mutableStateOf("")
     }
 
-    val subCategories = getRetailCategoryHomeSubCategories()
+    val subCategories =
+        if (categories.isNotEmpty()) {
+            categories.mapIndexed { index, category ->
+                RetailCategoryHomeSubCategoryItem(
+                    id = category.ProductCategoryId,
+                    title = category.CategoryName.ifBlank { "Kategori" },
+                    description = category.Breadcrumb.ifBlank { "Kategori ürünlerini keşfet" },
+                    icon = Icons.Outlined.Category,
+                    backgroundColor = when (index % 4) {
+                        0 -> MaterialTheme.colorScheme.primaryContainer
+                        1 -> MaterialTheme.colorScheme.surfaceVariant
+                        2 -> MaterialTheme.colorScheme.secondaryContainer
+                        else -> MaterialTheme.colorScheme.tertiaryContainer
+                    },
+                    iconColor = when (index % 4) {
+                        0 -> MaterialTheme.colorScheme.onPrimaryContainer
+                        1 -> MaterialTheme.colorScheme.onSurfaceVariant
+                        2 -> MaterialTheme.colorScheme.onSecondaryContainer
+                        else -> MaterialTheme.colorScheme.onTertiaryContainer
+                    }
+                )
+            }
+        } else {
+            getRetailCategoryHomeSubCategories()
+        }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -181,7 +207,9 @@ fun RetailCategoryHomeScreen(
             ) { item ->
                 RetailCategoryHomeSubCategoryCard(
                     item = item,
-                    onClick = onSubCategoryClick
+                    onClick = {
+                        onSubCategoryClick(item.id)
+                    }
                 )
             }
 
@@ -646,6 +674,7 @@ private enum class RetailCategoryHomeGatewayTarget {
 
 @Immutable
 private data class RetailCategoryHomeSubCategoryItem(
+    val id: Int,
     val title: String,
     val description: String,
     val icon: ImageVector,
@@ -704,6 +733,7 @@ private fun getRetailCategoryHomeGateways(): List<RetailCategoryHomeGatewayItem>
 private fun getRetailCategoryHomeSubCategories(): List<RetailCategoryHomeSubCategoryItem> {
     return listOf(
         RetailCategoryHomeSubCategoryItem(
+            id = 1,
             title = "Telefonlar",
             description = "Akıllı telefon ve aksesuarları",
             icon = Icons.Outlined.Category,
@@ -711,6 +741,7 @@ private fun getRetailCategoryHomeSubCategories(): List<RetailCategoryHomeSubCate
             iconColor = MaterialTheme.colorScheme.onPrimaryContainer
         ),
         RetailCategoryHomeSubCategoryItem(
+            id = 2,
             title = "Bilgisayar",
             description = "Notebook, masaüstü ve çevre birimleri",
             icon = Icons.Outlined.Category,
@@ -718,6 +749,7 @@ private fun getRetailCategoryHomeSubCategories(): List<RetailCategoryHomeSubCate
             iconColor = MaterialTheme.colorScheme.onSurfaceVariant
         ),
         RetailCategoryHomeSubCategoryItem(
+            id = 3,
             title = "Akıllı Ev",
             description = "Ev otomasyonu ve güvenlik ürünleri",
             icon = Icons.Outlined.Category,
@@ -725,6 +757,7 @@ private fun getRetailCategoryHomeSubCategories(): List<RetailCategoryHomeSubCate
             iconColor = MaterialTheme.colorScheme.onSecondaryContainer
         ),
         RetailCategoryHomeSubCategoryItem(
+            id = 4,
             title = "Ses ve Görüntü",
             description = "Kulaklık, hoparlör ve medya ürünleri",
             icon = Icons.Outlined.Category,

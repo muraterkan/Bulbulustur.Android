@@ -1,6 +1,8 @@
 package com.bulbulustur.android.Application.Areas.b2c.Controllers
 
 import androidx.lifecycle.viewModelScope
+import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryDTO
+import com.bulbulustur.android.businesslayer.Core.Interface.IProductCategoryRepository
 import com.bulbulustur.android.businesslayer.Core.Util.Execute.IExecuteService
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,105 +14,128 @@ import kotlinx.coroutines.launch
 data class CategoryControllerState(
     val IsLoading: Boolean = false,
     val CurrentAction: String? = null,
-    val LastResult: Result<Any?>? = null,
-    val ErrorMessage: String? = null
-)
+    val ErrorMessage: String? = null,
+    val CategoryResult: Result<ProductCategoryDTO?>? = null,
+    val CategoryListResult: Result<List<ProductCategoryDTO>>? = null,
+    val ChildCategoryListResult: Result<List<ProductCategoryDTO>>? = null
+) {
+    val Category: ProductCategoryDTO?
+        get() = CategoryResult?.Data
 
-sealed interface CategoryControllerEvent {
-    data object Refresh : CategoryControllerEvent
-    data class Load(val parameters: Map<String, Any?> = emptyMap()) : CategoryControllerEvent
-    data class Submit(val body: Any? = null) : CategoryControllerEvent
+    val Categories: List<ProductCategoryDTO>
+        get() = CategoryListResult?.Data.orEmpty()
+
+    val ChildCategories: List<ProductCategoryDTO>
+        get() = ChildCategoryListResult?.Data.orEmpty()
 }
 
 class CategoryController(
     private val executeService: IExecuteService,
-    private val defaultRepository: IB2CDefaultRepository
+    private val productCategoryRepository: IProductCategoryRepository
 ) : BaseController() {
 
     private val _state = MutableStateFlow(CategoryControllerState())
     val State: StateFlow<CategoryControllerState> = _state.asStateFlow()
 
+    fun LoadHome(languageId: Int, count: Int = 30000) {
+        if (languageId <= 0) {
+            SetError("Dil bilgisi bulunamadı.")
+            return
+        }
 
-    fun Index(parameters: Map<String, Any?> = emptyMap()) {
         viewModelScope.launch {
-            _state.update {
-                it.copy(
-                    IsLoading = true,
-                    ErrorMessage = null,
-                    CurrentAction = "Index"
-                )
-            }
+            Start("LoadHome")
 
             val response = executeService.GetAsync(
-                cacheKey = "b2c.Category.Index." + parameters.toString()
+                cacheKey = "b2c.Category.LoadHome.languageId=$languageId.count=$count"
             ) {
-                defaultRepository.GetAsync(
-                    actionName = "Index",
-                    parameters = parameters
+                productCategoryRepository.GetProductCategoryListAsync(
+                    languageId = languageId,
+                    count = count
                 )
             }
 
             _state.update {
                 it.copy(
                     IsLoading = false,
-                    LastResult = response
+                    CurrentAction = null,
+                    CategoryListResult = response,
+                    ErrorMessage = response.takeIf { result -> !result.Success }?.Message
                 )
             }
         }
     }
-    fun Detail(parameters: Map<String, Any?> = emptyMap()) {
+
+    fun LoadDetail(languageId: Int, productCategoryId: Int) {
+        if (languageId <= 0) {
+            SetError("Dil bilgisi bulunamadı.")
+            return
+        }
+
+        if (productCategoryId <= 0) {
+            SetError("Kategori bilgisi bulunamadı.")
+            return
+        }
+
         viewModelScope.launch {
-            _state.update {
-                it.copy(
-                    IsLoading = true,
-                    ErrorMessage = null,
-                    CurrentAction = "Detail"
+            Start("LoadDetail")
+
+            val category = executeService.GetAsync(
+                cacheKey = "b2c.Category.Detail.languageId=$languageId.productCategoryId=$productCategoryId"
+            ) {
+                productCategoryRepository.GetProductCategoryByIdExtendedAsync(
+                    languageId = languageId,
+                    productCategoryId = productCategoryId
                 )
             }
 
-            val response = executeService.GetAsync(
-                cacheKey = "b2c.Category.Detail." + parameters.toString()
+            val childCategories = executeService.GetAsync(
+                cacheKey = "b2c.Category.ChildCategories.languageId=$languageId.productCategoryId=$productCategoryId"
             ) {
-                defaultRepository.GetAsync(
-                    actionName = "Detail",
-                    parameters = parameters
+                productCategoryRepository.GetProductChildCategoriesAsync(
+                    languageId = languageId,
+                    productCategoryId = productCategoryId
                 )
             }
 
             _state.update {
                 it.copy(
                     IsLoading = false,
-                    LastResult = response
+                    CurrentAction = null,
+                    CategoryResult = category,
+                    ChildCategoryListResult = childCategories,
+                    ErrorMessage = listOfNotNull(
+                        category.takeIf { result -> !result.Success }?.Message,
+                        childCategories.takeIf { result -> !result.Success }?.Message
+                    ).firstOrNull()
                 )
             }
         }
     }
-    fun ProductList(parameters: Map<String, Any?> = emptyMap()) {
-        viewModelScope.launch {
-            _state.update {
-                it.copy(
-                    IsLoading = true,
-                    ErrorMessage = null,
-                    CurrentAction = "ProductList"
-                )
-            }
 
-            val response = executeService.GetAsync(
-                cacheKey = "b2c.Category.ProductList." + parameters.toString()
-            ) {
-                defaultRepository.GetAsync(
-                    actionName = "ProductList",
-                    parameters = parameters
-                )
-            }
+    fun Clear() {
+        _state.update {
+            CategoryControllerState()
+        }
+    }
 
-            _state.update {
-                it.copy(
-                    IsLoading = false,
-                    LastResult = response
-                )
-            }
+    private fun Start(action: String) {
+        _state.update {
+            it.copy(
+                IsLoading = true,
+                CurrentAction = action,
+                ErrorMessage = null
+            )
+        }
+    }
+
+    private fun SetError(message: String) {
+        _state.update {
+            it.copy(
+                IsLoading = false,
+                CurrentAction = null,
+                ErrorMessage = message
+            )
         }
     }
 }
-

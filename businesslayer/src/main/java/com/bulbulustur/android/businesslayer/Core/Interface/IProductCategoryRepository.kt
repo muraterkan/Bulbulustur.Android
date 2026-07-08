@@ -7,16 +7,13 @@ import com.bulbulustur.android.businesslayer.Core.Util.Result
 
 interface IProductCategoryRepository {
 
-    suspend fun GetProductCategoryListAsync():
-            Result<List<ProductCategoryDTO>>
+    suspend fun GetProductCategoryListAsync(languageId: Int, count: Int = 30000): Result<List<ProductCategoryDTO>>
 
     suspend fun GetProductCategoryByIdAsync(
         productCategoryId: Int
     ): Result<ProductCategoryUpdateModel?>
 
-    suspend fun GetProductCategoryByIdExtendedAsync(
-        productCategoryId: Int
-    ): Result<ProductCategoryDTO?>
+    suspend fun GetProductCategoryByIdExtendedAsync(languageId: Int, productCategoryId: Int): Result<ProductCategoryDTO?>
 
     suspend fun GetProductChildCategoriesAsync(
         languageId: Int,

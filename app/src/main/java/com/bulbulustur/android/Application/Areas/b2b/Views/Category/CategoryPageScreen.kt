@@ -60,6 +60,7 @@ import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbChip
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
+import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryDTO
 
 @Composable
 fun WholesaleCategoryHomeScreen(
@@ -73,7 +74,8 @@ fun WholesaleCategoryHomeScreen(
     onBasketClick: () -> Unit = {},
     onAccountClick: () -> Unit = {},
     onProductListClick: () -> Unit = {},
-    onSubCategoryClick: () -> Unit = {},
+    categories: List<ProductCategoryDTO> = emptyList(),
+    onSubCategoryClick: (Int) -> Unit = {},
     onCompanyListClick: () -> Unit = {},
     onRfqClick: () -> Unit = {},
     onLastPriceRequestClick: () -> Unit = {},
@@ -84,7 +86,31 @@ fun WholesaleCategoryHomeScreen(
         mutableStateOf("")
     }
 
-    val subCategories = getWholesaleSubCategories()
+    val subCategories =
+        if (categories.isNotEmpty()) {
+            categories.mapIndexed { index, category ->
+                WholesaleCategoryHomeSubCategoryItem(
+                    id = category.ProductCategoryId,
+                    title = category.CategoryName.ifBlank { "Kategori" },
+                    description = category.Breadcrumb.ifBlank { "Toptan kategori ürünlerini keşfet" },
+                    icon = Icons.Outlined.Category,
+                    backgroundColor = when (index % 4) {
+                        0 -> MaterialTheme.colorScheme.primaryContainer
+                        1 -> MaterialTheme.colorScheme.surfaceVariant
+                        2 -> MaterialTheme.colorScheme.secondaryContainer
+                        else -> MaterialTheme.colorScheme.tertiaryContainer
+                    },
+                    iconColor = when (index % 4) {
+                        0 -> MaterialTheme.colorScheme.onPrimaryContainer
+                        1 -> MaterialTheme.colorScheme.onSurfaceVariant
+                        2 -> MaterialTheme.colorScheme.onSecondaryContainer
+                        else -> MaterialTheme.colorScheme.onTertiaryContainer
+                    }
+                )
+            }
+        } else {
+            getWholesaleSubCategories()
+        }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -168,7 +194,9 @@ fun WholesaleCategoryHomeScreen(
             ) { item ->
                 WholesaleSubCategoryCard(
                     item = item,
-                    onClick = onSubCategoryClick
+                    onClick = {
+                        onSubCategoryClick(item.id)
+                    }
                 )
             }
 
@@ -548,6 +576,7 @@ private enum class WholesaleCategoryQuickActionTarget {
 
 @Immutable
 private data class WholesaleCategoryHomeSubCategoryItem(
+    val id: Int,
     val title: String,
     val description: String,
     val icon: ImageVector,
@@ -621,6 +650,7 @@ private fun getWholesaleQuickActions(): List<WholesaleCategoryQuickActionItem> {
 private fun getWholesaleSubCategories(): List<WholesaleCategoryHomeSubCategoryItem> {
     return listOf(
         WholesaleCategoryHomeSubCategoryItem(
+            id = 1,
             title = "Transistörler, Diyotlar ve Tüpler",
             description = "Toptan elektronik bileşen tedariki",
             icon = Icons.Outlined.Category,
@@ -628,6 +658,7 @@ private fun getWholesaleSubCategories(): List<WholesaleCategoryHomeSubCategoryIt
             iconColor = MaterialTheme.colorScheme.onPrimaryContainer
         ),
         WholesaleCategoryHomeSubCategoryItem(
+            id = 2,
             title = "Piller ve Güç Kaynakları",
             description = "Pil, batarya ve güç çözümleri",
             icon = Icons.Outlined.Category,
@@ -635,6 +666,7 @@ private fun getWholesaleSubCategories(): List<WholesaleCategoryHomeSubCategoryIt
             iconColor = MaterialTheme.colorScheme.onSurfaceVariant
         ),
         WholesaleCategoryHomeSubCategoryItem(
+            id = 3,
             title = "Aktif Bileşenler",
             description = "Endüstriyel elektronik parçalar",
             icon = Icons.Outlined.Category,
@@ -642,6 +674,7 @@ private fun getWholesaleSubCategories(): List<WholesaleCategoryHomeSubCategoryIt
             iconColor = MaterialTheme.colorScheme.onSecondaryContainer
         ),
         WholesaleCategoryHomeSubCategoryItem(
+            id = 4,
             title = "Entegre Devreler",
             description = "Çip, modül ve devre ürünleri",
             icon = Icons.Outlined.Category,

@@ -12,97 +12,59 @@ class ProductCategoryRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IProductCategoryRepository {
 
-    override suspend fun GetProductCategoryListAsync():
-            Result<List<ProductCategoryDTO>> {
+    override suspend fun GetProductCategoryListAsync(languageId: Int, count: Int): Result<List<ProductCategoryDTO>> {
         return apiClient.GetAsync(
-            baseUrl =
-                ApiRoutes.PRODUCT_CATEGORY_PRODUCT_CATEGORIES_BASE_URL,
-            method =
-                "GetProductCategories",
-            query =
-                "languageId=1&count=30000"
+            baseUrl = ApiRoutes.PRODUCT_CATEGORY_PRODUCT_CATEGORIES_BASE_URL,
+            method = "GetProductCategories",
+            query = "languageId=$languageId&count=$count"
         )
     }
 
-    override suspend fun GetProductCategoryByIdAsync(
-        productCategoryId: Int
-    ): Result<ProductCategoryUpdateModel?> {
+    override suspend fun GetProductCategoryByIdAsync(productCategoryId: Int): Result<ProductCategoryUpdateModel?> {
         return apiClient.GetAsync(
-            baseUrl =
-                ApiRoutes.PRODUCT_CATEGORY_PRODUCT_CATEGORIES_BASE_URL,
-            method =
-                "GetProductCategoryById",
-            query =
-                "languageId=1" +
-                        "&productCategoryId=$productCategoryId"
+            baseUrl = ApiRoutes.PRODUCT_CATEGORY_PRODUCT_CATEGORIES_BASE_URL,
+            method = "GetProductCategoryById",
+            query = "languageId=1&productCategoryId=$productCategoryId"
         )
     }
 
-    override suspend fun GetProductCategoryByIdExtendedAsync(
-        productCategoryId: Int
-    ): Result<ProductCategoryDTO?> {
+    override suspend fun GetProductCategoryByIdExtendedAsync(languageId: Int, productCategoryId: Int): Result<ProductCategoryDTO?> {
         return apiClient.GetAsync(
-            baseUrl =
-                ApiRoutes.PRODUCT_CATEGORY_PRODUCT_CATEGORIES_BASE_URL,
-            method =
-                "GetProductCategoryByIdExtended",
-            query =
-                "languageId=1" +
-                        "&productCategoryId=$productCategoryId"
+            baseUrl = ApiRoutes.PRODUCT_CATEGORY_PRODUCT_CATEGORIES_BASE_URL,
+            method = "GetProductCategoryByIdExtended",
+            query = "languageId=$languageId&productCategoryId=$productCategoryId"
         )
     }
 
-    override suspend fun GetProductChildCategoriesAsync(
-        languageId: Int,
-        productCategoryId: Int
-    ): Result<List<ProductCategoryDTO>> {
+    override suspend fun GetProductChildCategoriesAsync(languageId: Int, productCategoryId: Int): Result<List<ProductCategoryDTO>> {
         return apiClient.GetAsync(
-            baseUrl =
-                ApiRoutes.PRODUCT_CATEGORY_PRODUCT_CATEGORIES_BASE_URL,
-            method =
-                "GetProductChildCategories",
-            query =
-                "languageId=$languageId" +
-                        "&productCategoryId=$productCategoryId"
+            baseUrl = ApiRoutes.PRODUCT_CATEGORY_PRODUCT_CATEGORIES_BASE_URL,
+            method = "GetProductChildCategories",
+            query = "languageId=$languageId&productCategoryId=$productCategoryId"
         )
     }
 
-    override suspend fun InsertAsync(
-        model: ProductCategoryInsertModel
-    ): Result<Unit> {
+    override suspend fun InsertAsync(model: ProductCategoryInsertModel): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl =
-                ApiRoutes.PRODUCT_CATEGORY_PRODUCT_CATEGORIES_BASE_URL,
-            method =
-                "InsertAsync",
-            data =
-                model
+            baseUrl = ApiRoutes.PRODUCT_CATEGORY_PRODUCT_CATEGORIES_BASE_URL,
+            method = "InsertAsync",
+            data = model
         )
     }
 
-    override suspend fun UpdateAsync(
-        model: ProductCategoryUpdateModel
-    ): Result<Unit> {
+    override suspend fun UpdateAsync(model: ProductCategoryUpdateModel): Result<Unit> {
         return apiClient.PutAsync(
-            baseUrl =
-                ApiRoutes.PRODUCT_CATEGORY_PRODUCT_CATEGORIES_BASE_URL,
-            method =
-                "UpdateAsync",
-            data =
-                model
+            baseUrl = ApiRoutes.PRODUCT_CATEGORY_PRODUCT_CATEGORIES_BASE_URL,
+            method = "UpdateAsync",
+            data = model
         )
     }
 
-    override suspend fun DeleteAsync(
-        productCategoryId: Int
-    ): Result<Unit> {
+    override suspend fun DeleteAsync(productCategoryId: Int): Result<Unit> {
         return apiClient.DeleteAsync(
-            baseUrl =
-                ApiRoutes.PRODUCT_CATEGORY_PRODUCT_CATEGORIES_BASE_URL,
-            method =
-                "DeleteAsync",
-            query =
-                "productCategoryId=$productCategoryId"
+            baseUrl = ApiRoutes.PRODUCT_CATEGORY_PRODUCT_CATEGORIES_BASE_URL,
+            method = "DeleteAsync",
+            query = "productCategoryId=$productCategoryId"
         )
     }
 }

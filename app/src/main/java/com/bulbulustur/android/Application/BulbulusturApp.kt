@@ -876,6 +876,11 @@ private fun BulbulusturApplicationContent(
         retailGraph(
             navigator =
                 appNavigator,
+            categoryController =
+                com.bulbulustur.android.Application.Areas.b2c.Controllers.CategoryController(
+                    executeService = executeService,
+                    productCategoryRepository = productCategoryRepository
+                ),
             homeController =
                 retailHomeController,
             productController =
@@ -895,6 +900,10 @@ private fun BulbulusturApplicationContent(
         wholesaleGraph(
             navigator = appNavigator,
             sessionState = sessionState,
+            categoryController = com.bulbulustur.android.Application.Areas.b2b.Controllers.CategoryController(
+                executeService = executeService,
+                productCategoryRepository = productCategoryRepository
+            ),
             homeController = wholesaleHomeController,
             productController = wholesaleProductController,
             rfqController = rfqController

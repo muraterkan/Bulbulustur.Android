@@ -7,6 +7,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.bulbulustur.android.Application.Areas.b2c.Controllers.CategoryController
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.HomeController
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.ProductController
 import com.bulbulustur.android.Application.Areas.b2c.Views.Basket.BasketScreen
@@ -36,6 +37,7 @@ import com.bulbulustur.android.Application.Controllers.AccountController
 
 fun NavGraphBuilder.retailGraph(
     navigator: BulbulusturNavigator,
+    categoryController: CategoryController,
     homeController: HomeController,
     productController: ProductController,
     productReviewController: ProductReviewController,
@@ -133,6 +135,13 @@ fun NavGraphBuilder.retailGraph(
     composable(
         route = RetailRoutes.CategoryHome
     ) {
+        val categoryState by categoryController.State.collectAsState()
+
+        LaunchedEffect(sessionState.Language.Id) {
+            categoryController.LoadHome(
+                languageId = sessionState.Language.Id
+            )
+        }
         RetailCategoryHomeScreen(
             onBackClick = {
                 navigator.back()
@@ -172,9 +181,10 @@ fun NavGraphBuilder.retailGraph(
                     RetailRoutes.ProductList
                 )
             },
-            onSubCategoryClick = {
+            categories = categoryState.Categories,
+            onSubCategoryClick = { categoryId ->
                 navigator.navController.navigate(
-                    RetailRoutes.CategoryDetail
+                    RetailRoutes.categoryDetail(categoryId)
                 )
             },
             onCampaignClick = {
@@ -191,20 +201,70 @@ fun NavGraphBuilder.retailGraph(
     }
 
     composable(
-        route = RetailRoutes.CategoryDetail
-    ) {
+        route = RetailRoutes.CategoryDetail,
+        arguments = listOf(
+            navArgument(RetailRoutes.ArgCategoryId) {
+                type = NavType.IntType
+            }
+        )
+    ) { backStackEntry ->
+        val categoryState by categoryController.State.collectAsState()
+
+        val categoryId =
+            backStackEntry.arguments
+                ?.getInt(RetailRoutes.ArgCategoryId)
+                ?: return@composable
+
+        LaunchedEffect(sessionState.Language.Id, categoryId) {
+            categoryController.LoadDetail(
+                languageId = sessionState.Language.Id,
+                productCategoryId = categoryId
+            )
+        }
+
         CategoryDetailScreen(
+            categoryId = categoryId,
+            categoryInfo = categoryState.Category,
+            childCategories = categoryState.ChildCategories,
             onBackClick = {
                 navigator.back()
             },
-            onSubCategoryClick = {
+            onMenuClick = {
+                navigator.navigateToRetailCategories()
+            },
+            onFavoriteClick = {
                 navigator.navController.navigate(
-                    RetailRoutes.ProductList
+                    AccountRoutes.Favorites
                 )
+            },
+            onMessageClick = {
+                Unit
+            },
+            onHomeClick = {
+                navigator.navController.navigate(
+                    RetailRoutes.Home
+                )
+            },
+            onModeSwitchClick = {
+                navigator.openModeSheet()
+            },
+            onBasketClick = {
+                navigator.navigateToRetailBasket()
+            },
+            onAccountClick = {
+                navigator.navigateToAccount()
+            },
+            onSubCategoryClick = { subCategory ->
+                if (subCategory.id > 0) {
+                    navigator.navController.navigate(
+                        RetailRoutes.categoryDetail(subCategory.id)
+                    )
+                }
             },
             onProductClick = {
                 /*
-                 * CategoryDetailScreen henüz detail kimliklerini taşımıyor.
+                 * RetailCategoryProductItem şu an StoreId / VariantId taşımıyor.
+                 * ProductList'e yönlendiriyoruz.
                  */
                 navigator.navController.navigate(
                     RetailRoutes.ProductList
@@ -704,12 +764,8 @@ fun NavGraphBuilder.retailGraph(
                 } else if (
                     page.ProductCategoryId > 0
                 ) {
-                    /*
-                     * Retail kategori route'u henüz categoryId taşımıyor.
-                     * Şimdilik mevcut kategori detay ekranına gidiyoruz.
-                     */
                     navigator.navController.navigate(
-                        RetailRoutes.CategoryDetail
+                        RetailRoutes.categoryDetail(page.ProductCategoryId)
                     )
                 }
             },
@@ -732,12 +788,11 @@ fun NavGraphBuilder.retailGraph(
                 }
             },
             onRelatedCategoryClick = {
-                /*
-                 * RetailRoutes.CategoryDetail henüz categoryId taşımıyor.
-                 */
-                navigator.navController.navigate(
-                    RetailRoutes.CategoryDetail
-                )
+                if (productCategoryId > 0) {
+                    navigator.navController.navigate(
+                        RetailRoutes.categoryDetail(productCategoryId)
+                    )
+                }
             },
             onStoreClick = {
                 navigator.navController.navigate(
@@ -1284,7 +1339,7 @@ fun NavGraphBuilder.retailGraph(
             },
             onCategoryClick = {
                 navigator.navController.navigate(
-                    RetailRoutes.CategoryDetail
+                    RetailRoutes.categoryDetail(1)
                 )
             },
             onStoreClick = {

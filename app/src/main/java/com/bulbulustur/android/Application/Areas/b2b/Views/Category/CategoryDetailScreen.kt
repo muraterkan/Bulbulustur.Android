@@ -43,10 +43,13 @@ import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbChip
 import com.bulbulustur.android.Application.Views.Shared.Components.BbSectionHeader
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
+import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryDTO
 
 @Composable
 fun CategoryDetailScreen(
     categoryId: Int = 1,
+    categoryInfo: ProductCategoryDTO? = null,
+    childCategories: List<ProductCategoryDTO> = emptyList(),
     onBackClick: () -> Unit = {},
     onSubCategoryClick: (Int) -> Unit = {},
     onProductListClick: (Int) -> Unit = {},
@@ -55,9 +58,11 @@ fun CategoryDetailScreen(
     onPopularProductGroupClick: (Int, String) -> Unit = { _, _ -> },
     onSearchClick: (String) -> Unit = {}
 ) {
-    val category = remember(categoryId) {
+    val category = remember(categoryId, categoryInfo, childCategories) {
         getWholesaleCategoryDetail(
-            categoryId
+            categoryId = categoryId,
+            categoryInfo = categoryInfo,
+            childCategories = childCategories
         )
     }
 
@@ -488,16 +493,33 @@ data class WholesaleSubCategoryItem(
     val icon: ImageVector
 )
 
-private fun getWholesaleCategoryDetail(categoryId: Int): WholesaleCategoryDetail {
+private fun getWholesaleCategoryDetail(
+    categoryId: Int,
+    categoryInfo: ProductCategoryDTO?,
+    childCategories: List<ProductCategoryDTO>
+): WholesaleCategoryDetail {
     return WholesaleCategoryDetail(
-        categoryId = categoryId,
-        name = "Ambalaj ve Paketleme",
-        description = "Koli, kutu, poşet, etiket, streç film ve endüstriyel ambalaj ürünleri için toptan kategori merkezi.",
+        categoryId = categoryInfo?.ProductCategoryId ?: categoryId,
+        name = categoryInfo?.CategoryName?.ifBlank { "Kategori" } ?: "Kategori",
+        description = categoryInfo?.Breadcrumb?.ifBlank { "Toptan kategori ürünlerini keşfedin." } ?: "Toptan kategori ürünlerini keşfedin.",
         productCount = 128,
         companyCount = 42,
         rfqCount = 17,
         icon = Icons.Outlined.Category,
-        subCategories = getWholesaleSubCategories(),
+        subCategories =
+            if (childCategories.isNotEmpty()) {
+                childCategories.map { child ->
+                    WholesaleSubCategoryItem(
+                        categoryId = child.ProductCategoryId,
+                        name = child.CategoryName.ifBlank { "Kategori" },
+                        description = child.Breadcrumb.ifBlank { "Toptan alt kategori ürünlerini keşfet." },
+                        productCount = 0,
+                        icon = Icons.Outlined.Category
+                    )
+                }
+            } else {
+                getWholesaleSubCategories()
+            },
         popularProductGroups = getWholesalePopularProductGroups()
     )
 }

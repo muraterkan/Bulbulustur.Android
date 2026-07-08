@@ -1,5 +1,6 @@
 package com.bulbulustur.android.Application.Navigation.Graph
 
+import com.bulbulustur.android.Application.Areas.b2b.Controllers.CategoryController
 import com.bulbulustur.android.Application.Areas.b2b.Controllers.HomeController
 import com.bulbulustur.android.Application.Areas.b2b.Controllers.ProductController
 import androidx.compose.runtime.LaunchedEffect
@@ -35,6 +36,7 @@ import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
 fun NavGraphBuilder.wholesaleGraph(
     navigator: BulbulusturNavigator,
     sessionState: UserSessionState,
+    categoryController: CategoryController,
     homeController: HomeController,
     productController: ProductController,
     rfqController: RfqController
@@ -99,6 +101,13 @@ fun NavGraphBuilder.wholesaleGraph(
     }
 
     composable(route = WholesaleRoutes.CategoryHome) {
+        val categoryState by categoryController.State.collectAsState()
+
+        LaunchedEffect(sessionState.Language.Id) {
+            categoryController.LoadHome(
+                languageId = sessionState.Language.Id
+            )
+        }
         WholesaleCategoryHomeScreen(
             onBackClick = {
                 navigator.back()
@@ -163,12 +172,23 @@ fun NavGraphBuilder.wholesaleGraph(
             }
         )
     ) { backStackEntry ->
+        val categoryState by categoryController.State.collectAsState()
+
         val categoryId = backStackEntry.arguments
             ?.getInt(WholesaleRoutes.ArgCategoryId)
             ?: return@composable
 
+        LaunchedEffect(sessionState.Language.Id, categoryId) {
+            categoryController.LoadDetail(
+                languageId = sessionState.Language.Id,
+                productCategoryId = categoryId
+            )
+        }
+
         WholesaleCategoryDetailScreen(
             categoryId = categoryId,
+            categoryInfo = categoryState.Category,
+            childCategories = categoryState.ChildCategories,
             onBackClick = {
                 navigator.back()
             },

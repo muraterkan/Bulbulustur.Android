@@ -24,7 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import com.bulbulustur.android.R
+import com.bulbulustur.android.Application.Areas.b2b.Controllers.ProductControllerState
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleBottomNavigation
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleBottomNavigationItem
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleProductCard
@@ -39,9 +39,12 @@ import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbChip
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
+import com.bulbulustur.android.R
+import com.bulbulustur.android.businesslayer.Core.DTO.B2BProductData
 
 @Composable
 fun WholesaleProductListScreen(
+    State: ProductControllerState = ProductControllerState(),
     onBackClick: () -> Unit = {},
     onSearchClick: (String) -> Unit = {},
     onFavoriteClick: () -> Unit = {},
@@ -55,19 +58,17 @@ fun WholesaleProductListScreen(
     onProductFavoriteClick: (Int) -> Unit = {},
     onRfqClick: (Int) -> Unit = {}
 ) {
-    val products = remember {
-        getWholesaleProductListItems()
+    val products = remember(State.ProductListData?.Products2?.Items) {
+        State.ProductListData?.Products2?.Items.orEmpty().map { product ->
+            product.ToWholesaleProductListEntry()
+        }
     }
 
-    val categoryFilters = remember {
-        listOf(
-            "Tümü",
-            "Ambalaj",
-            "Makine",
-            "Elektronik",
-            "Tekstil",
-            "Gıda"
-        )
+    val categoryFilters = remember(products) {
+        listOf("Tümü") + products
+            .map { product -> product.Card.Category }
+            .filter { category -> category.isNotBlank() }
+            .distinct()
     }
 
     val sortFilters = remember {
@@ -105,18 +106,9 @@ fun WholesaleProductListScreen(
             products
         } else {
             products.filter { product ->
-                product.Card.Title.contains(
-                    other = searchText,
-                    ignoreCase = true
-                ) ||
-                        product.Card.Category.contains(
-                            other = searchText,
-                            ignoreCase = true
-                        ) ||
-                        product.Card.SupplierText.contains(
-                            other = searchText,
-                            ignoreCase = true
-                        )
+                product.Card.Title.contains(other = searchText, ignoreCase = true) ||
+                        product.Card.Category.contains(other = searchText, ignoreCase = true) ||
+                        product.Card.SupplierText.contains(other = searchText, ignoreCase = true)
             }
         }
 
@@ -368,88 +360,34 @@ private data class WholesaleProductListEntry(
     val HasFastQuote: Boolean
 )
 
-private fun getWholesaleProductListItems(): List<WholesaleProductListEntry> {
-    return listOf(
-        WholesaleProductListEntry(
-            Card = WholesaleProductCardModel(
-                Id = 1,
-                Title = "Endüstriyel karton koli seti",
-                Category = "Ambalaj",
-                PriceText = "₺12,40 / adet",
-                MoqText = "Min. 1.000 adet",
-                SupplierText = "Anadolu Ambalaj",
-                BadgeText = "Toptan",
-                ImageResId = R.drawable.h3ff3b33d6a1447c898cee6e336867bach,
-                IsFavorite = false
-            ),
-            MinimumOrderValue = 1000,
-            IsNew = false,
-            HasFastQuote = true
+private fun B2BProductData.ToWholesaleProductListEntry(): WholesaleProductListEntry {
+    val priceText = if (Price > 0.0) {
+        "₺$Price"
+    } else {
+        "Teklif iste"
+    }
+
+    val moqText = if (MinimumOrderQuantity > 0) {
+        "Min. $MinimumOrderQuantity $MinimumOrderUnit"
+    } else {
+        "Min. sipariş bilgisi yok"
+    }
+
+    return WholesaleProductListEntry(
+        Card = WholesaleProductCardModel(
+            Id = WholesaleProductId,
+            Title = ProductName,
+            Category = CategoryName,
+            PriceText = priceText,
+            MoqText = moqText,
+            SupplierText = CompanyName,
+            BadgeText = "Toptan",
+            ImageResId = R.drawable.h3ff3b33d6a1447c898cee6e336867bach,
+            IsFavorite = false
         ),
-        WholesaleProductListEntry(
-            Card = WholesaleProductCardModel(
-                Id = 2,
-                Title = "Paslanmaz makine yedek parçası",
-                Category = "Makine",
-                PriceText = "Teklif iste",
-                MoqText = "Min. 50 adet",
-                SupplierText = "Delta Makine",
-                BadgeText = "RFQ",
-                ImageResId = R.drawable.h3ff3b33d6a1447c898cee6e336867bachvar1,
-                IsFavorite = false
-            ),
-            MinimumOrderValue = 50,
-            IsNew = false,
-            HasFastQuote = true
-        ),
-        WholesaleProductListEntry(
-            Card = WholesaleProductCardModel(
-                Id = 3,
-                Title = "Elektronik güç modülü",
-                Category = "Elektronik",
-                PriceText = "₺84,90 / adet",
-                MoqText = "Min. 250 adet",
-                SupplierText = "Tekno Bileşen",
-                BadgeText = "Yeni",
-                ImageResId = R.drawable.h3ff3b33d6a1447c898cee6e336867bachvar2,
-                IsFavorite = false
-            ),
-            MinimumOrderValue = 250,
-            IsNew = true,
-            HasFastQuote = false
-        ),
-        WholesaleProductListEntry(
-            Card = WholesaleProductCardModel(
-                Id = 4,
-                Title = "Toptan pamuklu kumaş rulosu",
-                Category = "Tekstil",
-                PriceText = "₺68,00 / metre",
-                MoqText = "Min. 500 metre",
-                SupplierText = "Mira Tekstil",
-                BadgeText = "Toptan",
-                ImageResId = R.drawable.h3ff3b33d6a1447c898cee6e336867bachvar3,
-                IsFavorite = false
-            ),
-            MinimumOrderValue = 500,
-            IsNew = false,
-            HasFastQuote = true
-        ),
-        WholesaleProductListEntry(
-            Card = WholesaleProductCardModel(
-                Id = 5,
-                Title = "Gıda ambalaj poşeti",
-                Category = "Gıda",
-                PriceText = "₺0,92 / adet",
-                MoqText = "Min. 5.000 adet",
-                SupplierText = "Ege Paket",
-                BadgeText = "Popüler",
-                ImageResId = R.drawable.h3ff3b33d6a1447c898cee6e336867bach,
-                IsFavorite = false
-            ),
-            MinimumOrderValue = 5000,
-            IsNew = false,
-            HasFastQuote = true
-        )
+        MinimumOrderValue = MinimumOrderQuantity,
+        IsNew = false,
+        HasFastQuote = true
     )
 }
 

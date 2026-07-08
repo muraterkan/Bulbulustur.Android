@@ -16,6 +16,9 @@ object RetailRoutes {
     const val ArgVariantId =
         "variantId"
 
+    const val ArgCategoryId =
+        "categoryId"
+
     const val Home =
         "retail/home"
 
@@ -23,10 +26,18 @@ object RetailRoutes {
         "retail/category-home"
 
     const val CategoryDetail =
-        "retail/category-detail"
+        "retail/category-detail/{$ArgCategoryId}"
+
+    fun categoryDetail(categoryId: Int): String {
+        return "retail/category-detail/$categoryId"
+    }
 
     const val ProductList =
-        "retail/product-list"
+        "retail/product-list?$ArgCategoryId={$ArgCategoryId}"
+
+    fun productList(categoryId: Int = 0): String {
+        return "retail/product-list?$ArgCategoryId=$categoryId"
+    }
 
     const val ProductDetail =
         "retail/product-detail/{$ArgProductId}/{$ArgStoreId}/{$ArgVariantId}"
@@ -99,7 +110,11 @@ object WholesaleRoutes {
     const val CategoryDetail =
         "wholesale/category-detail/{$ArgCategoryId}"
 
-    const val ProductList = "wholesale/product-list"
+    const val ProductList = "wholesale/product-list?$ArgCategoryId={$ArgCategoryId}"
+
+    fun productList(categoryId: Int = 0): String {
+        return "wholesale/product-list?$ArgCategoryId=$categoryId"
+    }
 
     const val ProductDetail =
         "wholesale/product-detail"

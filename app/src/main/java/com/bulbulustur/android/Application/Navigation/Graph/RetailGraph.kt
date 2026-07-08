@@ -262,12 +262,8 @@ fun NavGraphBuilder.retailGraph(
                 }
             },
             onProductClick = {
-                /*
-                 * RetailCategoryProductItem şu an StoreId / VariantId taşımıyor.
-                 * ProductList'e yönlendiriyoruz.
-                 */
                 navigator.navController.navigate(
-                    RetailRoutes.ProductList
+                    RetailRoutes.productList(categoryId)
                 )
             },
             onCampaignClick = {
@@ -277,15 +273,22 @@ fun NavGraphBuilder.retailGraph(
             },
             onSearchClick = {
                 navigator.navController.navigate(
-                    RetailRoutes.ProductList
+                    RetailRoutes.productList(categoryId)
                 )
             }
         )
     }
 
     composable(
-        route = RetailRoutes.ProductList
-    ) {
+        route = RetailRoutes.ProductList,
+        arguments = listOf(
+            navArgument(RetailRoutes.ArgCategoryId) {
+                type = NavType.IntType
+                defaultValue = 0
+            }
+        )
+    ) { backStackEntry ->
+        val productCategoryId = backStackEntry.arguments?.getInt(RetailRoutes.ArgCategoryId) ?: 0
         val productState by
         productController.State.collectAsState()
 
@@ -298,6 +301,10 @@ fun NavGraphBuilder.retailGraph(
         RetailProductListScreen(
             State =
                 productState,
+            languageId =
+                sessionState.Language.Id,
+            productCategoryId =
+                productCategoryId,
             OnLoadProducts = {
                     filters,
                     page,

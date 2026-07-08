@@ -47,6 +47,8 @@ import java.util.Locale
 @Composable
 fun ProductListScreen(
     State: ProductControllerState = ProductControllerState(),
+    languageId: Int = 1,
+    productCategoryId: Int = 0,
     OnLoadProducts: (
         filters: B2CProductFilterDTO,
         page: Int,
@@ -84,15 +86,17 @@ fun ProductListScreen(
     }
 
     val initialFilters =
-        remember {
+        remember(languageId, productCategoryId) {
             B2CProductFilterDTO(
-                LanguageId = 1,
+                ProductCategoryId = productCategoryId,
+                LanguageId = languageId,
                 SortOrder = "Name_Desc"
             )
         }
 
     LaunchedEffect(
-        Unit
+        languageId,
+        productCategoryId
     ) {
         OnLoadProducts(
             initialFilters,

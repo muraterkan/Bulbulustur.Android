@@ -299,9 +299,12 @@ class RfqController(
             }
 
             val productCategories = executeService.GetAsync(
-                cacheKey = "b2b.Rfq.ProductCategories"
+                cacheKey = "b2b.Rfq.ProductCategories.$languageId"
             ) {
-                productCategoryRepository.GetProductCategoryListAsync()
+                productCategoryRepository.GetProductCategoryListAsync(
+                    languageId = languageId,
+                    count = 30000
+                )
             }
 
             val units = executeService.GetAsync(

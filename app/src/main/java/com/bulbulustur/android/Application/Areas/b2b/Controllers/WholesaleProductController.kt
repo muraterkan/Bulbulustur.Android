@@ -1,6 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2b.Controllers
 
 import androidx.lifecycle.viewModelScope
+import com.bulbulustur.android.businesslayer.Core.DTO.B2BProductDataDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleProductDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleProductRelatedDTO
@@ -17,6 +18,7 @@ import kotlinx.coroutines.launch
 data class ProductControllerState(
     val IsLoading: Boolean = false,
     val CurrentAction: String? = null,
+    val ProductListResult: Result<B2BProductDataDTO>? = null,
     val ProductDetailResult: Result<WholesaleProductDTO?>? = null,
     val RelatedProductsResult: Result<List<WholesaleProductRelatedDTO>>? = null,
     val RelatedCategoriesResult: Result<List<ProductCategoryDTO>>? = null,
@@ -24,6 +26,9 @@ data class ProductControllerState(
     val RelatedProductsErrorMessage: String? = null,
     val RelatedCategoriesErrorMessage: String? = null
 ) {
+    val ProductListData: B2BProductDataDTO?
+        get() = ProductListResult?.Data
+
     val RelatedCategories: List<ProductCategoryDTO>
         get() = RelatedCategoriesResult?.Data.orEmpty()
 }
@@ -37,12 +42,54 @@ class ProductController(
     private val _state = MutableStateFlow(ProductControllerState())
     val State: StateFlow<ProductControllerState> = _state.asStateFlow()
 
+    fun List(languageId: Int, productCategoryId: Int = 0, page: Int = 1, pageSize: Int = 50, sortOrder: String = "Name_Desc", brandIds: String = "") {
+        if (languageId <= 0) {
+            _state.update {
+                it.copy(
+                    IsLoading = false,
+                    CurrentAction = "List",
+                    ProductListResult = null,
+                    ErrorMessage = null
+                )
+            }
+
+            return
+        }
+
+        viewModelScope.launch {
+            StartLoading("List")
+
+            val response = executeService.GetAsync(
+                cacheKey = "b2b.Product.GetProductDataAsync.languageId=$languageId.productCategoryId=$productCategoryId.page=$page.pageSize=$pageSize.sortOrder=$sortOrder.brandIds=$brandIds"
+            ) {
+                wholesaleProductRepository.GetProductDataAsync(
+                    languageId = languageId,
+                    productCategoryId = productCategoryId,
+                    page = page,
+                    pageSize = pageSize,
+                    sortOrder = sortOrder,
+                    brandIds = brandIds
+                )
+            }
+
+            _state.update {
+                it.copy(
+                    IsLoading = false,
+                    CurrentAction = "List",
+                    ProductListResult = response,
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+        }
+    }
+
     fun Detail(languageId: Int, wholesaleProductId: Int) {
         if (languageId <= 0 || wholesaleProductId <= 0) {
             _state.update {
                 it.copy(
                     IsLoading = false,
                     CurrentAction = "Detail",
+                    ProductListResult = null,
                     ProductDetailResult = null,
                     ErrorMessage = null
                 )
@@ -142,6 +189,7 @@ class ProductController(
             it.copy(
                 IsLoading = false,
                 CurrentAction = null,
+                ProductListResult = null,
                 ProductDetailResult = null,
                 RelatedProductsResult = null,
                 RelatedCategoriesResult = null,

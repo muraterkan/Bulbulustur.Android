@@ -63,7 +63,7 @@ fun NavGraphBuilder.wholesaleGraph(
                 navigator.navigateToWholesaleCategories()
             },
             onProductListClick = {
-                navigator.navController.navigate(WholesaleRoutes.ProductList)
+                navigator.navController.navigate(WholesaleRoutes.productList())
             },
             onProductDetailClick = { productId ->
                 navigator.navController.navigate(
@@ -139,11 +139,11 @@ fun NavGraphBuilder.wholesaleGraph(
                 navigator.navigateToAccount()
             },
             onProductListClick = {
-                navigator.navController.navigate(WholesaleRoutes.ProductList)
+                navigator.navController.navigate(WholesaleRoutes.productList())
             },
-            onSubCategoryClick = {
+            onSubCategoryClick = { subCategoryId ->
                 navigator.navController.navigate(
-                    WholesaleRoutes.categoryDetail(categoryId = 1)
+                    WholesaleRoutes.categoryDetail(categoryId = subCategoryId)
                 )
             },
             onCompanyListClick = {
@@ -198,7 +198,7 @@ fun NavGraphBuilder.wholesaleGraph(
                 )
             },
             onProductListClick = {
-                navigator.navController.navigate(WholesaleRoutes.ProductList)
+                navigator.navController.navigate(WholesaleRoutes.productList(categoryId))
             },
             onCompanyListClick = {
                 navigator.navController.navigate(CompanyRoutes.CompanyList)
@@ -207,13 +207,29 @@ fun NavGraphBuilder.wholesaleGraph(
                 navigator.navController.navigate(RfqRoutes.Create)
             },
             onPopularProductGroupClick = { _, _ ->
-                navigator.navController.navigate(WholesaleRoutes.ProductList)
+                navigator.navController.navigate(WholesaleRoutes.productList(categoryId))
             }
         )
     }
 
-    composable(route = WholesaleRoutes.ProductList) {
+    composable(
+        route = WholesaleRoutes.ProductList,
+        arguments = listOf(
+            navArgument(WholesaleRoutes.ArgCategoryId) {
+                type = NavType.IntType
+                defaultValue = 0
+            }
+        )
+    ) { backStackEntry ->
+        val productCategoryId = backStackEntry.arguments?.getInt(WholesaleRoutes.ArgCategoryId) ?: 0
+        val productState by productController.State.collectAsState()
+
+        LaunchedEffect(sessionState.Language.Id, productCategoryId) {
+            productController.List(languageId = sessionState.Language.Id, productCategoryId = productCategoryId, page = 1, pageSize = 50)
+        }
+
         WholesaleProductListScreen(
+            State = productState,
             onBackClick = {
                 navigator.back()
             },
@@ -396,7 +412,7 @@ fun NavGraphBuilder.wholesaleGraph(
                 navigator.back()
             },
             onDiscoverWholesaleClick = {
-                navigator.navController.navigate(WholesaleRoutes.ProductList)
+                navigator.navController.navigate(WholesaleRoutes.productList())
             },
             onOffersClick = { buyerRequestKey ->
                 navigator.navController.navigate(

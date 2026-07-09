@@ -141,14 +141,13 @@ object WholesaleRoutes {
     const val QuotationRequests = "wholesale/rfq/list"
     const val RfqCreate = "wholesale/rfq/create"
 
-    const val LastPriceRequest =
-        "wholesale/last-price-request/{}"
+    const val LastPriceRequest = "wholesale/last-price-request/{productId}"
 
     const val SampleRequest =
-        "wholesale/sample-request/{}"
+        "wholesale/sample-request/{productId}"
 
     const val CustomizationRequest =
-        "wholesale/customization-request/{}"
+        "wholesale/customization-request/{productId}"
 
     fun categoryDetail(categoryId: Int): String {
         return "wholesale/category-detail/$categoryId"
@@ -159,15 +158,15 @@ object WholesaleRoutes {
     }
 
     fun lastPriceRequest(productId: Int): String {
-        return "wholesale/last-price-request/"
+        return "wholesale/last-price-request/$productId"
     }
 
     fun sampleRequest(productId: Int): String {
-        return "wholesale/sample-request/"
+        return "wholesale/sample-request/$productId"
     }
 
     fun customizationRequest(productId: Int): String {
-        return "wholesale/customization-request/"
+        return "wholesale/customization-request/$productId"
     }
 }
 

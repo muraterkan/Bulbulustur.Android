@@ -57,11 +57,18 @@ object RetailRoutes {
     const val OtherSellerList =
         "retail/other-seller-list"
 
+    const val DealsOfTheDayList =
+        "retail/deals-of-the-day-list"
+
     const val CampaignList =
         "retail/campaign-list"
 
     const val CampaignDetail =
-        "retail/campaign-detail"
+        "retail/campaign-detail/{campaignId}"
+
+    fun campaignDetail(campaignId: Int): String {
+        return "retail/campaign-detail/$campaignId"
+    }
 
     fun productDetail(productId: Int, storeId: Int, variantId: Int): String {
         return "retail/product-detail/$productId/$storeId/$variantId"
@@ -90,12 +97,18 @@ object StoreRoutes {
     const val StoreDetail =
         "store/detail/{$ArgStoreId}"
 
-    const val StoreProductList = "store/product-list"
+    const val StoreProductList =
+        "store/product-list/{$ArgStoreId}"
+
     const val StoreOnboardingInfo = "b2c/store/onboarding-info"
     const val StoreLanding = "store/landing"
 
     fun storeDetail(storeId: Int): String {
         return "store/detail/$storeId"
+    }
+
+    fun storeProductList(storeId: Int): String {
+        return "store/product-list/$storeId"
     }
 }
 

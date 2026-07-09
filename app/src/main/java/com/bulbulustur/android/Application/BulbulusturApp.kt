@@ -18,11 +18,19 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.bulbulustur.android.Application.Areas.b2b.Controllers.ProductController
-import com.bulbulustur.android.Application.Controllers.LogonController
 import com.bulbulustur.android.Application.Areas.b2b.Controllers.ProductController as WholesaleProductController
+import com.bulbulustur.android.Application.Areas.b2c.Controllers.BasketController
+import com.bulbulustur.android.Application.Areas.b2c.Controllers.CampaignController
+import com.bulbulustur.android.Application.Areas.b2c.Controllers.HomeController as RetailHomeController
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.ProductController as RetailProductController
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.ProductQuestionController
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.ProductReviewController
+import com.bulbulustur.android.Application.Areas.b2b.Controllers.HomeController as WholesaleHomeController
+import com.bulbulustur.android.Application.Areas.b2b.Controllers.RfqController
+import com.bulbulustur.android.Application.Controllers.AccountController
+import com.bulbulustur.android.Application.Controllers.LogonController
+import com.bulbulustur.android.Application.Controllers.MessageController
+import com.bulbulustur.android.Application.Controllers.SettingsController
 import com.bulbulustur.android.Application.Datastore.UserPreferenceDataStore
 import com.bulbulustur.android.Application.Localization.BBLocalizationProvider
 import com.bulbulustur.android.Application.Localization.LocalizationManager
@@ -49,175 +57,119 @@ import com.bulbulustur.android.businesslayer.Core.Repository.AddressCountryDepar
 import com.bulbulustur.android.businesslayer.Core.Repository.AddressCountryRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.AddressCountryStateRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.AddressDistrictRepository
-import com.bulbulustur.android.businesslayer.Core.Repository.AuthenticationRepository
-import com.bulbulustur.android.businesslayer.Core.Repository.LocalizationRepository
-import com.bulbulustur.android.businesslayer.Core.Repository.MemberRepository
-import com.bulbulustur.android.businesslayer.Core.Repository.MemberTempRepository
-import com.bulbulustur.android.businesslayer.Core.Repository.ProductRepository
-import com.bulbulustur.android.businesslayer.Core.Repository.ProductVariantPictureRepository
-import com.bulbulustur.android.businesslayer.Core.Repository.ProductVariantRepository
-import com.bulbulustur.android.businesslayer.Core.Repository.ProductCustomerQuestionRepository
-import com.bulbulustur.android.businesslayer.Core.Repository.ReviewRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.AdvertSponsoredRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.AuthenticationRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.BasketRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.BuyerRequestRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.CampaignRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.CompanyRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.DealsOfTheDayRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.LocalizationRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.MemberAddressRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.MemberAgreementRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.MemberAlarmListRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.MemberBankAccountRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.MemberCouponRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.MemberFollowedCompanyRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.MemberFollowedStoreRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.StoreRepository
+import com.bulbulustur.android.Application.Areas.b2c.Controllers.StoreController
+import com.bulbulustur.android.businesslayer.Core.Repository.MemberLoginActivityRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.MemberPhoneRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.MemberRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.MemberSubscriptionRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.MemberTempRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.ProductBrandSectionRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.ProductBrowsingHistoryRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.ProductCategoryRepository
-import com.bulbulustur.android.businesslayer.Core.Repository.CampaignRepository
-import com.bulbulustur.android.businesslayer.Core.Repository.ProductHomepageSpecialContentRepository
-import com.bulbulustur.android.businesslayer.Core.Repository.MemberAddressRepository
-import com.bulbulustur.android.businesslayer.Core.Repository.MemberBankAccountRepository
-import com.bulbulustur.android.businesslayer.Core.Repository.MemberAlarmListRepository
-import com.bulbulustur.android.businesslayer.Core.Repository.MemberFollowedCompanyRepository
-import com.bulbulustur.android.businesslayer.Core.Repository.MemberFollowedStoreRepository
-import com.bulbulustur.android.businesslayer.Core.Repository.MemberAgreementRepository
-import com.bulbulustur.android.businesslayer.Core.Repository.MemberLoginActivityRepository
-import com.bulbulustur.android.businesslayer.Core.Repository.MemberCouponRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.ProductCustomerQuestionRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.ProductFavoriteRepository
-import com.bulbulustur.android.businesslayer.Core.Repository.WholesaleFavoriteRepository
-import com.bulbulustur.android.businesslayer.Core.Repository.WholesaleProductRepository
-import com.bulbulustur.android.businesslayer.Core.Repository.WholesaleHomepageFeaturedProductRepository
-import com.bulbulustur.android.businesslayer.Core.Repository.WholesaleHomepageSpecialContentRepository
-import com.bulbulustur.android.businesslayer.Core.Security.SecureTokenStore
-import com.bulbulustur.android.businesslayer.Core.Util.Execute.ExecuteService
-import com.bulbulustur.android.Application.Controllers.SettingsController
+import com.bulbulustur.android.businesslayer.Core.Repository.ProductHomepageSpecialContentRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.ProductRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.ProductVariantPictureRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.ProductVariantRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.ReturnRequestRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.ReviewRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.SendedOfferRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.StatusRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.StoreRequestRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.SystemDescColorRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.SystemDescCurrencyRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.SystemDescLanguageRepository
-import com.bulbulustur.android.Application.Areas.b2c.Controllers.BasketController
-import com.bulbulustur.android.businesslayer.Core.Repository.BasketRepository
-import com.bulbulustur.android.Application.Controllers.AccountController
-import com.bulbulustur.android.businesslayer.Core.Repository.MemberPhoneRepository
-import com.bulbulustur.android.businesslayer.Core.Repository.StatusRepository
-import com.bulbulustur.android.Application.Areas.b2b.Controllers.RfqController
-import com.bulbulustur.android.Application.Areas.b2b.Controllers.HomeController as WholesaleHomeController
-import com.bulbulustur.android.Application.Areas.b2c.Controllers.HomeController as RetailHomeController
-import com.bulbulustur.android.Application.Controllers.MessageController
-import com.bulbulustur.android.businesslayer.Core.Repository.BuyerRequestRepository
-import com.bulbulustur.android.businesslayer.Core.Repository.SendedOfferRepository
-import com.bulbulustur.android.businesslayer.Core.Repository.SystemDescColorRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.SystemDescMaterialTypeRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.SystemDescPaymentTermRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.SystemDescTradeTermRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.SystemDescUnitRepository
-import com.bulbulustur.android.businesslayer.Core.Repository.ReturnRequestRepository
-import com.bulbulustur.android.businesslayer.Core.Repository.MemberSubscriptionRepository
-import com.bulbulustur.android.businesslayer.Core.Repository.CompanyRepository
-import com.bulbulustur.android.businesslayer.Core.Repository.DealsOfTheDayRepository
-import com.bulbulustur.android.businesslayer.Core.Repository.StoreRequestRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.WholesaleFavoriteRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.WholesaleHomepageFeaturedProductRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.WholesaleHomepageSpecialContentRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.WholesaleMessageRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.WholesaleProductRepository
+import com.bulbulustur.android.businesslayer.Core.Security.SecureTokenStore
+import com.bulbulustur.android.businesslayer.Core.Util.Execute.ExecuteService
+import com.bulbulustur.android.Application.Areas.b2c.Controllers.DealsOfTheDayController
+
 
 @Composable
 fun BulbulusturApp(
     appLinkUrl: String? = null,
     onAppLinkConsumed: () -> Unit = {}
 ) {
-    val context =
-        LocalContext.current
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
 
-    val coroutineScope =
-        rememberCoroutineScope()
+    val userPreferenceDataStore = remember(context) {
+        UserPreferenceDataStore(context = context.applicationContext)
+    }
 
-    val userPreferenceDataStore =
-        remember(
-            context
-        ) {
-            UserPreferenceDataStore(
-                context =
-                    context.applicationContext
-            )
-        }
+    val secureTokenStore = remember(context) {
+        SecureTokenStore(context = context.applicationContext)
+    }
 
-    val secureTokenStore =
-        remember(
-            context
-        ) {
-            SecureTokenStore(
-                context =
-                    context.applicationContext
-            )
-        }
+    val userSessionManager = remember(userPreferenceDataStore, secureTokenStore, coroutineScope) {
+        UserSessionManager(
+            userPreferenceDataStore = userPreferenceDataStore,
+            secureTokenStore = secureTokenStore,
+            coroutineScope = coroutineScope
+        )
+    }
 
-    val userSessionManager =
-        remember(
-            userPreferenceDataStore,
-            secureTokenStore,
-            coroutineScope
-        ) {
-            UserSessionManager(
-                userPreferenceDataStore =
-                    userPreferenceDataStore,
-                secureTokenStore =
-                    secureTokenStore,
-                coroutineScope =
-                    coroutineScope
-            )
-        }
+    val localizationRepository = remember {
+        LocalizationRepository()
+    }
 
-    val localizationRepository =
-        remember {
-            LocalizationRepository()
-        }
+    val localizationManager = remember(localizationRepository, coroutineScope) {
+        LocalizationManager(
+            localizationRepository = localizationRepository,
+            coroutineScope = coroutineScope
+        )
+    }
 
-    val localizationManager =
-        remember(
-            localizationRepository,
-            coroutineScope
-        ) {
-            LocalizationManager(
-                localizationRepository =
-                    localizationRepository,
-                coroutineScope =
-                    coroutineScope
-            )
-        }
+    val sessionState by userSessionManager.State.collectAsState()
+    val localizationState by localizationManager.State.collectAsState()
 
-    val sessionState by
-    userSessionManager.State.collectAsState()
-
-    val localizationState by
-    localizationManager.State.collectAsState()
-
-    LaunchedEffect(
-        sessionState.IsInitialized,
-        sessionState.Language
-    ) {
-        if (
-            sessionState.IsInitialized
-        ) {
-            localizationManager.Load(
-                language =
-                    sessionState.Language
-            )
+    LaunchedEffect(sessionState.IsInitialized, sessionState.Language) {
+        if (sessionState.IsInitialized) {
+            localizationManager.Load(language = sessionState.Language)
         }
     }
 
     BbTheme(
-        themeMode =
-            sessionState.ThemeMode
+        themeMode = sessionState.ThemeMode
     ) {
         BBLocalizationProvider(
-            state =
-                localizationState
+            state = localizationState
         ) {
             Surface(
-                modifier =
-                    Modifier.fillMaxSize(),
-                color =
-                    MaterialTheme.colorScheme.background
+                modifier = Modifier.fillMaxSize(),
+                color = MaterialTheme.colorScheme.background
             ) {
-                if (
-                    sessionState.IsInitialized &&
-                    localizationState.IsInitialized &&
-                    !sessionState.IsAuthenticationInitializing
-                ) {
+                if (sessionState.IsInitialized && localizationState.IsInitialized && !sessionState.IsAuthenticationInitializing) {
                     BulbulusturApplicationContent(
-                        sessionState =
-                            sessionState,
-                        userSessionManager =
-                            userSessionManager,
-                        appLinkUrl =
-                            appLinkUrl,
-                        onAppLinkConsumed =
-                            onAppLinkConsumed
+                        sessionState = sessionState,
+                        userSessionManager = userSessionManager,
+                        appLinkUrl = appLinkUrl,
+                        onAppLinkConsumed = onAppLinkConsumed
                     )
                 }
             }
@@ -232,20 +184,15 @@ private fun BulbulusturApplicationContent(
     appLinkUrl: String?,
     onAppLinkConsumed: () -> Unit
 ) {
-    val navController =
-        rememberNavController()
+    val navController = rememberNavController()
 
-    var showBuyerModeSheet by
-    remember {
-        mutableStateOf(
-            false
-        )
+    var showBuyerModeSheet by remember {
+        mutableStateOf(false)
     }
 
-    val executeService =
-        remember {
-            ExecuteService()
-        }
+    val executeService = remember {
+        ExecuteService()
+    }
 
     val systemDescUnitRepository = remember {
         SystemDescUnitRepository()
@@ -267,10 +214,9 @@ private fun BulbulusturApplicationContent(
         SystemDescTradeTermRepository()
     }
 
-    val authenticationRepository =
-        remember {
-            AuthenticationRepository()
-        }
+    val authenticationRepository = remember {
+        AuthenticationRepository()
+    }
 
     val memberSubscriptionRepository = remember {
         MemberSubscriptionRepository()
@@ -280,49 +226,41 @@ private fun BulbulusturApplicationContent(
         CompanyRepository()
     }
 
-    val memberTempRepository =
-        remember {
-            MemberTempRepository()
-        }
+    val memberTempRepository = remember {
+        MemberTempRepository()
+    }
 
-    val systemDescLanguageRepository =
-        remember {
-            SystemDescLanguageRepository()
-        }
-    val systemDescCurrencyRepository =
-        remember {
-            SystemDescCurrencyRepository()
-        }
+    val systemDescLanguageRepository = remember {
+        SystemDescLanguageRepository()
+    }
 
-    val addressCountryRepository =
-        remember {
-            AddressCountryRepository()
-        }
+    val systemDescCurrencyRepository = remember {
+        SystemDescCurrencyRepository()
+    }
 
-    val addressCityRepository =
-        remember {
-            AddressCityRepository()
-        }
+    val addressCountryRepository = remember {
+        AddressCountryRepository()
+    }
 
-    val addressCountryStateRepository =
-        remember {
-            AddressCountryStateRepository()
-        }
+    val addressCityRepository = remember {
+        AddressCityRepository()
+    }
 
-    val addressCountryDepartmentRepository =
-        remember {
-            AddressCountryDepartmentRepository()
-        }
+    val addressCountryStateRepository = remember {
+        AddressCountryStateRepository()
+    }
 
-    val addressDistrictRepository =
-        remember {
-            AddressDistrictRepository()
-        }
+    val addressCountryDepartmentRepository = remember {
+        AddressCountryDepartmentRepository()
+    }
 
-    val memberRepository =
-        remember {
-            MemberRepository()
-        }
+    val addressDistrictRepository = remember {
+        AddressDistrictRepository()
+    }
+
+    val memberRepository = remember {
+        MemberRepository()
+    }
 
     val buyerRequestRepository = remember {
         BuyerRequestRepository()
@@ -352,6 +290,14 @@ private fun BulbulusturApplicationContent(
         MemberFollowedStoreRepository()
     }
 
+    val storeRepository = remember {
+        StoreRepository()
+    }
+
+    val storeController = remember(storeRepository) {
+        StoreController(storeRepository = storeRepository)
+    }
+
     val memberAgreementRepository = remember {
         MemberAgreementRepository()
     }
@@ -372,57 +318,52 @@ private fun BulbulusturApplicationContent(
         WholesaleFavoriteRepository()
     }
 
-
-
-
     val memberPhoneRepository = remember {
         MemberPhoneRepository()
     }
 
+    val productRepository = remember {
+        ProductRepository()
+    }
 
-    val productRepository =
-        remember {
-            ProductRepository()
-        }
+    val productVariantRepository = remember {
+        ProductVariantRepository()
+    }
 
-    val productVariantRepository =
-        remember {
-            ProductVariantRepository()
-        }
+    val productVariantPictureRepository = remember {
+        ProductVariantPictureRepository()
+    }
 
-    val productVariantPictureRepository =
-        remember {
-            ProductVariantPictureRepository()
-        }
-
-    val advertSponsoredRepository =
-        remember {
-            AdvertSponsoredRepository()
-        }
+    val advertSponsoredRepository = remember {
+        AdvertSponsoredRepository()
+    }
 
     val statusRepository = remember {
         StatusRepository()
     }
 
-    val productBrandSectionRepository =
-        remember {
-            ProductBrandSectionRepository()
-        }
+    val productBrandSectionRepository = remember {
+        ProductBrandSectionRepository()
+    }
 
-    val productBrowsingHistoryRepository =
-        remember {
-            ProductBrowsingHistoryRepository()
-        }
+    val productBrowsingHistoryRepository = remember {
+        ProductBrowsingHistoryRepository()
+    }
 
-    val productCategoryRepository =
-        remember {
-            ProductCategoryRepository()
-        }
+    val productCategoryRepository = remember {
+        ProductCategoryRepository()
+    }
 
-    val storeRequestRepository = remember { StoreRequestRepository() }
+    val storeRequestRepository = remember {
+        StoreRequestRepository()
+    }
 
     val campaignRepository = remember {
         CampaignRepository()
+    }
+
+    val campaignController = remember(campaignRepository) {
+        CampaignController(campaignRepository = campaignRepository)
     }
 
     val productHomepageSpecialContentRepository = remember {
@@ -433,11 +374,11 @@ private fun BulbulusturApplicationContent(
         DealsOfTheDayRepository()
     }
 
-    val retailHomeController = remember(
-        campaignRepository,
-        dealsOfTheDayRepository,
-        productHomepageSpecialContentRepository
-    ) {
+    val dealsOfTheDayController = remember(dealsOfTheDayRepository) {
+        DealsOfTheDayController(dealsOfTheDayRepository = dealsOfTheDayRepository)
+    }
+
+    val retailHomeController = remember(campaignRepository, dealsOfTheDayRepository, productHomepageSpecialContentRepository) {
         RetailHomeController(
             campaignRepository = campaignRepository,
             dealsOfTheDayRepository = dealsOfTheDayRepository,
@@ -445,46 +386,39 @@ private fun BulbulusturApplicationContent(
         )
     }
 
-    val productController =
-        remember(
-            executeService,
-            productRepository,
-            productVariantRepository,
-            productVariantPictureRepository,
-            advertSponsoredRepository,
-            productBrandSectionRepository,
-            productBrowsingHistoryRepository,
-            productCategoryRepository
-        ) {
-            RetailProductController(
-                executeService = executeService,
-                productRepository = productRepository,
-                productVariantRepository = productVariantRepository,
-                productVariantPictureRepository = productVariantPictureRepository,
-                advertSponsoredRepository = advertSponsoredRepository,
-                productBrandSectionRepository = productBrandSectionRepository,
-                productBrowsingHistoryRepository = productBrowsingHistoryRepository,
-                productCategoryRepository = productCategoryRepository
-            )
-        }
+    val productController = remember(
+        executeService,
+        productRepository,
+        productVariantRepository,
+        productVariantPictureRepository,
+        advertSponsoredRepository,
+        productBrandSectionRepository,
+        productBrowsingHistoryRepository,
+        productCategoryRepository
+    ) {
+        RetailProductController(
+            executeService = executeService,
+            productRepository = productRepository,
+            productVariantRepository = productVariantRepository,
+            productVariantPictureRepository = productVariantPictureRepository,
+            advertSponsoredRepository = advertSponsoredRepository,
+            productBrandSectionRepository = productBrandSectionRepository,
+            productBrowsingHistoryRepository = productBrowsingHistoryRepository,
+            productCategoryRepository = productCategoryRepository
+        )
+    }
 
-    val wholesaleProductRepository =
-        remember {
-            WholesaleProductRepository()
-        }
+    val wholesaleProductRepository = remember {
+        WholesaleProductRepository()
+    }
 
-    val wholesaleProductController =
-        remember(
-            executeService,
-            wholesaleProductRepository,
-            productCategoryRepository
-        ) {
-            WholesaleProductController(
-                executeService = executeService,
-                wholesaleProductRepository = wholesaleProductRepository,
-                productCategoryRepository = productCategoryRepository
-            )
-        }
+    val wholesaleProductController = remember(executeService, wholesaleProductRepository, productCategoryRepository) {
+        WholesaleProductController(
+            executeService = executeService,
+            wholesaleProductRepository = wholesaleProductRepository,
+            productCategoryRepository = productCategoryRepository
+        )
+    }
 
     val wholesaleHomepageFeaturedProductRepository = remember {
         WholesaleHomepageFeaturedProductRepository()
@@ -494,10 +428,7 @@ private fun BulbulusturApplicationContent(
         WholesaleHomepageSpecialContentRepository()
     }
 
-    val wholesaleHomeController = remember(
-        wholesaleHomepageFeaturedProductRepository,
-        wholesaleHomepageSpecialContentRepository
-    ) {
+    val wholesaleHomeController = remember(wholesaleHomepageFeaturedProductRepository, wholesaleHomepageSpecialContentRepository) {
         WholesaleHomeController(
             wholesaleHomepageFeaturedProductRepository = wholesaleHomepageFeaturedProductRepository,
             wholesaleHomepageSpecialContentRepository = wholesaleHomepageSpecialContentRepository
@@ -508,126 +439,87 @@ private fun BulbulusturApplicationContent(
         ReturnRequestRepository()
     }
 
-    val reviewRepository =
-        remember {
-            ReviewRepository()
-        }
+    val reviewRepository = remember {
+        ReviewRepository()
+    }
 
-    val productReviewController =
-        remember(
-            executeService,
-            reviewRepository
-        ) {
-            ProductReviewController(
-                executeService =
-                    executeService,
-                reviewRepository =
-                    reviewRepository
-            )
-        }
+    val productReviewController = remember(executeService, reviewRepository) {
+        ProductReviewController(
+            executeService = executeService,
+            reviewRepository = reviewRepository
+        )
+    }
 
-    val productCustomerQuestionRepository =
-        remember {
-            ProductCustomerQuestionRepository()
-        }
+    val productCustomerQuestionRepository = remember {
+        ProductCustomerQuestionRepository()
+    }
 
-    val productQuestionController =
-        remember(
-            executeService,
-            productCustomerQuestionRepository
-        ) {
-            ProductQuestionController(
-                executeService =
-                    executeService,
-                productCustomerQuestionRepository =
-                    productCustomerQuestionRepository
-            )
-        }
+    val productQuestionController = remember(executeService, productCustomerQuestionRepository) {
+        ProductQuestionController(
+            executeService = executeService,
+            productCustomerQuestionRepository = productCustomerQuestionRepository
+        )
+    }
 
-    val basketRepository =
-        remember {
-            BasketRepository()
-        }
+    val basketRepository = remember {
+        BasketRepository()
+    }
 
-    val basketController =
-        remember(
-            executeService,
-            basketRepository
-        ) {
-            BasketController(
-                executeService =
-                    executeService,
-                basketRepository =
-                    basketRepository
-            )
-        }
+    val basketController = remember(executeService, basketRepository) {
+        BasketController(
+            executeService = executeService,
+            basketRepository = basketRepository
+        )
+    }
 
     val wholesaleMessageRepository = remember {
         WholesaleMessageRepository()
     }
 
-    val messageController = remember(
-        executeService,
-        wholesaleMessageRepository
-    ) {
+    val messageController = remember(executeService, wholesaleMessageRepository) {
         MessageController(
             executeService = executeService,
             wholesaleMessageRepository = wholesaleMessageRepository
         )
     }
 
-    val addressCascadeController =
-        remember(
-            executeService,
-            addressCountryRepository,
-            addressCountryStateRepository,
-            addressCountryDepartmentRepository,
-            addressCityRepository,
-            addressDistrictRepository
-        ) {
-            AddressCascadeController(
-                executeService =
-                    executeService,
-                addressCountryRepository =
-                    addressCountryRepository,
-                addressCountryStateRepository =
-                    addressCountryStateRepository,
-                addressCountryDepartmentRepository =
-                    addressCountryDepartmentRepository,
-                addressCityRepository =
-                    addressCityRepository,
-                addressDistrictRepository =
-                    addressDistrictRepository
-            )
-        }
+    val addressCascadeController = remember(
+        executeService,
+        addressCountryRepository,
+        addressCountryStateRepository,
+        addressCountryDepartmentRepository,
+        addressCityRepository,
+        addressDistrictRepository
+    ) {
+        AddressCascadeController(
+            executeService = executeService,
+            addressCountryRepository = addressCountryRepository,
+            addressCountryStateRepository = addressCountryStateRepository,
+            addressCountryDepartmentRepository = addressCountryDepartmentRepository,
+            addressCityRepository = addressCityRepository,
+            addressDistrictRepository = addressDistrictRepository
+        )
+    }
 
-    val logonController =
-        remember(
-            executeService,
-            authenticationRepository,
-            memberTempRepository,
-            memberRepository,
-            addressCountryRepository,
-            addressCityRepository,
-            userSessionManager
-        ) {
-            LogonController(
-                executeService =
-                    executeService,
-                authenticationRepository =
-                    authenticationRepository,
-                memberTempRepository =
-                    memberTempRepository,
-                memberRepository =
-                    memberRepository,
-                addressCountryRepository =
-                    addressCountryRepository,
-                addressCityRepository =
-                    addressCityRepository,
-                userSessionManager =
-                    userSessionManager
-            )
-        }
+    val logonController = remember(
+        executeService,
+        authenticationRepository,
+        memberTempRepository,
+        memberRepository,
+        addressCountryRepository,
+        addressCityRepository,
+        userSessionManager
+    ) {
+        LogonController(
+            executeService = executeService,
+            authenticationRepository = authenticationRepository,
+            memberTempRepository = memberTempRepository,
+            memberRepository = memberRepository,
+            addressCountryRepository = addressCountryRepository,
+            addressCityRepository = addressCityRepository,
+            userSessionManager = userSessionManager
+        )
+    }
 
     val accountController = remember(
         executeService,
@@ -699,12 +591,7 @@ private fun BulbulusturApplicationContent(
         )
     }
 
-    val settingsController = remember(
-        executeService,
-        systemDescLanguageRepository,
-        addressCountryRepository,
-        systemDescCurrencyRepository
-    ) {
+    val settingsController = remember(executeService, systemDescLanguageRepository, addressCountryRepository, systemDescCurrencyRepository) {
         SettingsController(
             executeService = executeService,
             systemDescLanguageRepository = systemDescLanguageRepository,
@@ -714,130 +601,67 @@ private fun BulbulusturApplicationContent(
         )
     }
 
-    val currentBackStackEntry by
-    navController.currentBackStackEntryAsState()
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = currentBackStackEntry?.destination?.route
 
-    val currentRoute =
-        currentBackStackEntry
-            ?.destination
-            ?.route
+    val currentBuyerMode = when {
+        currentRoute?.startsWith("wholesale/") == true -> EBuyerMode.Wholesale
+        else -> EBuyerMode.Retail
+    }
 
-    val currentBuyerMode =
-        when {
-            currentRoute
-                ?.startsWith(
-                    "wholesale/"
-                ) == true -> {
-                EBuyerMode.Wholesale
+    val appNavigator = remember(navController) {
+        BulbulusturNavigator(
+            navController = navController,
+            openBuyerModeSheet = {
+                showBuyerModeSheet = true
+            },
+            closeBuyerModeSheet = {
+                showBuyerModeSheet = false
             }
+        )
+    }
 
-            else -> {
-                EBuyerMode.Retail
-            }
-        }
+    LaunchedEffect(appLinkUrl) {
+        val incomingUrl = appLinkUrl ?: return@LaunchedEffect
 
-    val appNavigator =
-        remember(
-            navController
-        ) {
-            BulbulusturNavigator(
-                navController =
-                    navController,
-                openBuyerModeSheet = {
-                    showBuyerModeSheet =
-                        true
-                },
-                closeBuyerModeSheet = {
-                    showBuyerModeSheet =
-                        false
-                }
-            )
-        }
+        val uri = runCatching {
+            Uri.parse(incomingUrl)
+        }.getOrNull()
 
-    LaunchedEffect(
-        appLinkUrl
-    ) {
-        val incomingUrl =
-            appLinkUrl
-                ?: return@LaunchedEffect
-
-        val uri =
-            runCatching {
-                Uri.parse(
-                    incomingUrl
-                )
-            }.getOrNull()
-
-        val isSupportedAppLink =
-            uri?.scheme.equals(
-                "https",
-                ignoreCase =
-                    true
-            ) &&
-                    uri?.host.equals(
-                        "www.bulbulustur.com",
-                        ignoreCase =
-                            true
-                    )
+        val isSupportedAppLink = uri?.scheme.equals("https", ignoreCase = true) &&
+                uri?.host.equals("www.bulbulustur.com", ignoreCase = true)
 
         if (!isSupportedAppLink) {
             onAppLinkConsumed()
-
             return@LaunchedEffect
         }
 
-        val activationCode =
-            uri
-                ?.getQueryParameter(
-                    "uuid"
-                )
-                ?.trim()
-                .orEmpty()
+        val activationCode = uri?.getQueryParameter("uuid")?.trim().orEmpty()
 
         if (activationCode.isBlank()) {
-            navController.navigate(
-                LogonRoutes.Expired
-            ) {
-                launchSingleTop =
-                    true
+            navController.navigate(LogonRoutes.Expired) {
+                launchSingleTop = true
             }
 
             onAppLinkConsumed()
-
             return@LaunchedEffect
         }
 
-        when (
-            uri?.path
-                ?.lowercase()
-        ) {
+        when (uri?.path?.lowercase()) {
             "/logon/register" -> {
-                navController.navigate(
-                    LogonRoutes.CreateRegisterActivationRoute(
-                        activationCode =
-                            activationCode
-                    )
-                ) {
-                    launchSingleTop =
-                        true
+                navController.navigate(LogonRoutes.CreateRegisterActivationRoute(activationCode = activationCode)) {
+                    launchSingleTop = true
                 }
             }
 
             "/logon/setnewpassword" -> {
-                navController.navigate(
-                    LogonRoutes.CreateSetNewPasswordRoute(
-                        activationCode =
-                            activationCode
-                    )
-                ) {
-                    launchSingleTop =
-                        true
+                navController.navigate(LogonRoutes.CreateSetNewPasswordRoute(activationCode = activationCode)) {
+                    launchSingleTop = true
                 }
             }
 
             else -> {
                 onAppLinkConsumed()
-
                 return@LaunchedEffect
             }
         }
@@ -846,25 +670,18 @@ private fun BulbulusturApplicationContent(
     }
 
     NavHost(
-        navController =
-            navController,
-        startDestination =
-            SplashRoutes.ModeSelection
+        navController = navController,
+        startDestination = SplashRoutes.ModeSelection
     ) {
         splashGraph(
-            navigator =
-                appNavigator
+            navigator = appNavigator
         )
 
         logonGraph(
-            navController =
-                navController,
-            sessionState =
-                sessionState,
-            logonController =
-                logonController,
-            addressCascadeController =
-                addressCascadeController
+            navController = navController,
+            sessionState = sessionState,
+            logonController = logonController,
+            addressCascadeController = addressCascadeController
         )
 
         messageGraph(
@@ -874,27 +691,21 @@ private fun BulbulusturApplicationContent(
         )
 
         retailGraph(
-            navigator =
-                appNavigator,
-            categoryController =
-                com.bulbulustur.android.Application.Areas.b2c.Controllers.CategoryController(
-                    executeService = executeService,
-                    productCategoryRepository = productCategoryRepository
-                ),
-            homeController =
-                retailHomeController,
-            productController =
-                productController,
-            productReviewController =
-                productReviewController,
-            productQuestionController =
-                productQuestionController,
-            accountController =
-                accountController,
-            basketController =
-                basketController,
-            sessionState =
-                sessionState
+            navigator = appNavigator,
+            categoryController = com.bulbulustur.android.Application.Areas.b2c.Controllers.CategoryController(
+                executeService = executeService,
+                productCategoryRepository = productCategoryRepository
+            ),
+            homeController = retailHomeController,
+            campaignController = campaignController,
+            dealsOfTheDayController = dealsOfTheDayController,
+            productController = productController,
+            productReviewController = productReviewController,
+            productQuestionController = productQuestionController,
+            storeController = storeController,
+            accountController = accountController,
+            basketController = basketController,
+            sessionState = sessionState
         )
 
         wholesaleGraph(
@@ -910,8 +721,7 @@ private fun BulbulusturApplicationContent(
         )
 
         companyGraph(
-            navigator =
-                appNavigator
+            navigator = appNavigator
         )
 
         orderGraph(
@@ -937,27 +747,20 @@ private fun BulbulusturApplicationContent(
         )
     }
 
-    if (
-        showBuyerModeSheet
-    ) {
+    if (showBuyerModeSheet) {
         BuyerModeSheet(
-            currentMode =
-                currentBuyerMode,
+            currentMode = currentBuyerMode,
             onDismissRequest = {
-                showBuyerModeSheet =
-                    false
+                showBuyerModeSheet = false
             },
             onRetailClick = {
-                appNavigator
-                    .navigateToRetailHome()
+                appNavigator.navigateToRetailHome()
             },
             onWholesaleClick = {
-                appNavigator
-                    .navigateToWholesaleHome()
+                appNavigator.navigateToWholesaleHome()
             },
             onRfqClick = {
-                appNavigator
-                    .navigateToWholesaleRfqCreate()
+                appNavigator.navigateToWholesaleRfqCreate()
             }
         )
     }

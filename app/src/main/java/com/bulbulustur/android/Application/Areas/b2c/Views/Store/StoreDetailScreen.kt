@@ -45,29 +45,33 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
-import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
-import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
+import com.bulbulustur.android.businesslayer.Core.DTO.StoreDTO
 
 @Composable
 fun StoreDetailScreen(
     storeId: Int = 1,
+    storeDetail: StoreDTO? = null,
+    isLoading: Boolean = false,
+    errorMessage: String? = null,
     onBackClick: () -> Unit = {},
     onProductClick: (RetailStoreProductItem) -> Unit = {},
     onCategoryClick: (String) -> Unit = {},
     onFollowClick: (RetailStoreDetail) -> Unit = {},
     onStoreListClick: () -> Unit = {},
+    onStoreProductListClick: () -> Unit = {},
     onAddToBasketClick: (RetailStoreProductItem) -> Unit = {},
     onFavoriteClick: (RetailStoreProductItem) -> Unit = {}
 ) {
-    val store = remember(storeId) {
-        getRetailStoreDetail(storeId)
+    val store = remember(storeId, storeDetail) {
+        storeDetail?.ToRetailStoreDetail() ?: getRetailStoreDetail(storeId)
     }
 
     var selectedCategory by remember {
@@ -120,6 +124,24 @@ fun StoreDetailScreen(
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
+            if (isLoading && storeDetail == null) {
+                item {
+                    StoreDetailStatusCard(
+                        title = "Mağaza bilgileri yükleniyor",
+                        description = "Mağaza bilgileri sunucudan alınıyor."
+                    )
+                }
+            }
+
+            if (!errorMessage.isNullOrBlank() && storeDetail == null) {
+                item {
+                    StoreDetailStatusCard(
+                        title = "Mağaza bilgileri alınamadı",
+                        description = errorMessage
+                    )
+                }
+            }
+
             item {
                 StoreDetailHero(
                     store = store
@@ -139,20 +161,28 @@ fun StoreDetailScreen(
             }
 
             item {
+                StoreProductsCallout(
+                    onClick = onStoreProductListClick
+                )
+            }
+
+            item {
                 StoreOtherStoresCard(
                     onStoreListClick = onStoreListClick
                 )
             }
 
-            item {
-                StoreCategoryFilterSection(
-                    categories = store.categories,
-                    selectedCategory = selectedCategory,
-                    onCategoryChange = {
-                        selectedCategory = it
-                        onCategoryClick(it)
-                    }
-                )
+            if (store.categories.isNotEmpty()) {
+                item {
+                    StoreCategoryFilterSection(
+                        categories = store.categories,
+                        selectedCategory = selectedCategory,
+                        onCategoryChange = {
+                            selectedCategory = it
+                            onCategoryClick(it)
+                        }
+                    )
+                }
             }
 
             item {
@@ -162,23 +192,165 @@ fun StoreDetailScreen(
                 )
             }
 
-            items(
-                items = filteredProducts,
-                key = { product -> product.id }
-            ) { product ->
-                StoreProductCard(
-                    product = product,
-                    onProductClick = {
-                        onProductClick(product)
-                    },
-                    onAddToBasketClick = {
-                        onAddToBasketClick(product)
-                    },
-                    onFavoriteClick = {
-                        onFavoriteClick(product)
-                    }
+            if (filteredProducts.isEmpty()) {
+                item {
+                    StoreDetailEmptyProductCard(
+                        onStoreProductListClick = onStoreProductListClick
+                    )
+                }
+            } else {
+                items(
+                    items = filteredProducts,
+                    key = { product -> product.id }
+                ) { product ->
+                    StoreProductCard(
+                        product = product,
+                        onProductClick = {
+                            onProductClick(product)
+                        },
+                        onAddToBasketClick = {
+                            onAddToBasketClick(product)
+                        },
+                        onFavoriteClick = {
+                            onFavoriteClick(product)
+                        }
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun StoreDetailStatusCard(
+    title: String,
+    description: String
+) {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+        ) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurface,
+                fontWeight = FontWeight.Bold
+            )
+
+            Text(
+                text = description,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+@Composable
+private fun StoreProductsCallout(
+    onClick: () -> Unit
+) {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium,
+        onClick = onClick
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+            ) {
+                Text(
+                    text = "Mağazanın Tüm Ürünleri",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Text(
+                    text = "Bu mağazaya ait gerçek ürün listesini görüntüle.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
+
+            Icon(
+                imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.size(BBIcon.SizeMd)
+            )
+        }
+    }
+}
+
+@Composable
+private fun StoreDetailEmptyProductCard(
+    onStoreProductListClick: () -> Unit
+) {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium,
+        onClick = onStoreProductListClick
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+        ) {
+            Surface(
+                modifier = Modifier.size(BBIcon.BoxMd),
+                shape = BBRadius.LgShape,
+                color = MaterialTheme.colorScheme.primaryContainer
+            ) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Storefront,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                        modifier = Modifier.size(BBIcon.SizeMd)
+                    )
+                }
+            }
+
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+            ) {
+                Text(
+                    text = "Ürün listesi ayrı ekranda",
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Text(
+                    text = "Gerçek mağaza ürünlerini listelemek için dokunun.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            Icon(
+                imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.size(BBIcon.SizeMd)
+            )
         }
     }
 }
@@ -516,7 +688,7 @@ private fun StoreOtherStoresCard(
                 )
 
                 Text(
-                    text = "Bulbulustury'daki diğer perakende mağazalarını Keşfedin.",
+                    text = "Bulbulustur'daki diğer perakende mağazalarını keşfedin.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -545,7 +717,7 @@ private fun StoreCategoryFilterSection(
     ) {
         StoreDetailSectionTitle(
             title = "Ürün Kategorileri",
-            description = "Mağaza kategorilerine göre ürünleri Keşfedin."
+            description = "Mağaza kategorilerine göre ürünleri keşfedin."
         )
 
         FlowRow(
@@ -779,7 +951,9 @@ private fun StoreSmallActionButton(
                 modifier = Modifier.size(BBIcon.SizeSm)
             )
 
-            Spacer(modifier = Modifier.width(BBSpacing.Space1))
+            Spacer(
+                modifier = Modifier.width(BBSpacing.Space1)
+            )
 
             Text(
                 text = text,
@@ -840,6 +1014,34 @@ data class RetailStoreProductItem(
     val imageText: String
 )
 
+private fun StoreDTO.ToRetailStoreDetail(): RetailStoreDetail {
+    val resolvedName = StoreName.ifBlank {
+        "Mağaza"
+    }
+
+    return RetailStoreDetail(
+        id = StoreId,
+        name = resolvedName,
+        logoText = resolvedName.take(2).uppercase(),
+        shortDescription = StoreDescription.ifBlank {
+            "Mağaza vitrini"
+        },
+        description = StoreDescription.ifBlank {
+            "Bu mağazaya ait ürünleri ve mağaza bilgilerini inceleyebilirsiniz."
+        },
+        productCount = ReviewNumber,
+        ratingText = if (Rating > 0.0) Rating.toString() else "-",
+        cargoText = if (DefaultEstimatedShippingTime > 0) {
+            "${DefaultEstimatedShippingTime} gün"
+        } else {
+            "Standart"
+        },
+        isVerified = CompanyId > 0 || StoreKey.isNotBlank(),
+        categories = listOf("Tümü"),
+        products = emptyList()
+    )
+}
+
 private fun getRetailStoreDetail(
     storeId: Int
 ): RetailStoreDetail {
@@ -848,7 +1050,7 @@ private fun getRetailStoreDetail(
         name = "Ortobella Store",
         logoText = "OS",
         shortDescription = "Ayakkabı ve günlük moda ürünleri",
-        description = "Ortobella Store, seçili ayakkabı ve günlük kullanım Ürünlerini perakende alışveriş akışında sunan doğrulanmış mağaza Vitrinidir.",
+        description = "Ortobella Store, seçili ayakkabı ve günlük kullanım ürünlerini perakende alışveriş akışında sunan doğrulanmış mağaza vitrinidir.",
         productCount = 248,
         ratingText = "4.8",
         cargoText = "Hızlı",
@@ -912,4 +1114,3 @@ private fun StoreDetailScreenPreview() {
         StoreDetailScreen()
     }
 }
-

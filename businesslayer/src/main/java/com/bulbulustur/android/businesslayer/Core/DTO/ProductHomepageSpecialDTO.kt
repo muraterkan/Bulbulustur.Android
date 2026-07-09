@@ -8,6 +8,7 @@ data class ProductHomepageSpecialDTO(
     val ProductHomepageSpecialGroupId: Int = 0,
     val ProductId: Int = 0,
     val ProductName: String = "",
+    val StoreId: Int = 0,
     val VariantId: Int = 0,
     val DefaultPicture: String = ""
 )

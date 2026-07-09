@@ -38,7 +38,7 @@ import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
 @Composable
 fun B2CHomepageSpecialContents(
     specialContents: List<ProductHomepageSpecialContentDTO>,
-    onProductClick: (Int) -> Unit
+    onProductClick: (productId: Int, storeId: Int, variantId: Int) -> Unit
 ) {
     if (specialContents.isEmpty()) {
         return
@@ -102,7 +102,7 @@ fun B2CHomepageSpecialContents(
                 B2CHomepageSpecialProductCard(
                     product = product,
                     onClick = {
-                        onProductClick(product.ProductId)
+                        onProductClick(product.ProductId, product.StoreId, product.VariantId)
                     }
                 )
             }

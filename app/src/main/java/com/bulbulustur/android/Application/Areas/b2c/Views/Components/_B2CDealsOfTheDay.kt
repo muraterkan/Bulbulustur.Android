@@ -35,7 +35,8 @@ import java.util.Locale
 @Composable
 fun B2CDealsOfTheDay(
     dealsOfTheDays: List<DealsOfTheDayDTO>,
-    onProductClick: (productId: Int, storeId: Int, variantId: Int) -> Unit
+    onProductClick: (productId: Int, storeId: Int, variantId: Int) -> Unit,
+    onViewAllClick: () -> Unit = {}
 ) {
     if (dealsOfTheDays.isEmpty()) {
         return
@@ -45,20 +46,39 @@ fun B2CDealsOfTheDay(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
     ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.Top
         ) {
-            Text(
-                text = "Öne Çıkan Fırsatlar",
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.Bold
-            )
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+            ) {
+                Text(
+                    text = "Öne Çıkan Fırsatlar",
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Text(
+                    text = "Sınırlı süreli fiyatları ve seçilmiş ürünleri keşfedin.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
 
             Text(
-                text = "Sınırlı süreli fiyatları ve seçilmiş ürünleri keşfedin.",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                modifier = Modifier
+                    .padding(start = BBSpacing.Space3)
+                    .clickable {
+                        onViewAllClick()
+                    },
+                text = "Tümünü Gör",
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.SemiBold
             )
         }
 
@@ -182,39 +202,17 @@ private fun FormatDealPrice(
     currencySymbol: String
 ): String {
     val formatter = NumberFormat.getNumberInstance(
-        Locale.forLanguageTag("tr-TR")
-    ).apply {
-        minimumFractionDigits = 2
-        maximumFractionDigits = 2
-    }
+        Locale("tr", "TR")
+    )
 
-    return "${formatter.format(price)} $currencySymbol".trim()
+    formatter.minimumFractionDigits = 2
+    formatter.maximumFractionDigits = 2
+
+    return "${currencySymbol.ifBlank { "₺" }}${formatter.format(price)}"
 }
 
-private fun ResolveB2CDealImageUrl(imagePath: String): String {
-    val normalizedPath = imagePath.trim()
-
-    if (normalizedPath.isBlank()) {
-        return ""
-    }
-
-    if (
-        normalizedPath.startsWith(
-            "http://",
-            ignoreCase = true
-        ) ||
-        normalizedPath.startsWith(
-            "https://",
-            ignoreCase = true
-        )
-    ) {
-        return normalizedPath
-    }
-
-    val baseUrl =
-        ApiRoutes.B2C_PRODUCT_BASE_URL
-            .substringBefore("/api/")
-            .trimEnd('/')
-
-    return "$baseUrl/${normalizedPath.trimStart('/')}"
+private fun ResolveB2CDealImageUrl(
+    picture: String
+): String {
+    return ""
 }

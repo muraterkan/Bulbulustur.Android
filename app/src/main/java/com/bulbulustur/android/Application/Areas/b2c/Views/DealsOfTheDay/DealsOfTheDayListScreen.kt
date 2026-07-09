@@ -1,4 +1,4 @@
-package com.bulbulustur.android.Application.Areas.b2c.Views.Campaign
+package com.bulbulustur.android.Application.Areas.b2c.Views.DealsOfTheDay
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,14 +16,9 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -32,33 +26,17 @@ import androidx.compose.ui.unit.dp
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbIconBox
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbIconBoxSize
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
-import com.bulbulustur.android.businesslayer.Core.DTO.CampaignDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.DealsOfTheDayDTO
+import java.util.Locale
 
 @Composable
-fun CampaignListScreen(
-    campaigns: List<CampaignDTO>,
+fun DealsOfTheDayListScreen(
+    dealsOfTheDays: List<DealsOfTheDayDTO>,
     isLoading: Boolean = false,
     errorMessage: String? = null,
     onBackClick: () -> Unit = {},
-    onCampaignClick: (CampaignDTO) -> Unit = {},
-    onSearchSubmit: (String) -> Unit = {}
+    onProductClick: (DealsOfTheDayDTO) -> Unit = {}
 ) {
-    var searchText by remember {
-        mutableStateOf("")
-    }
-
-    val filteredCampaigns = remember(searchText, campaigns) {
-        if (searchText.isBlank()) {
-            campaigns
-        } else {
-            campaigns.filter { campaign ->
-                campaign.CampaignName.contains(searchText, ignoreCase = true) ||
-                        campaign.Description.contains(searchText, ignoreCase = true) ||
-                        campaign.CategoryName.contains(searchText, ignoreCase = true)
-            }
-        }
-    }
-
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
@@ -74,69 +52,50 @@ fun CampaignListScreen(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
             item {
-                CampaignListTopBar(
+                DealsTopBar(
                     onBackClick = onBackClick
                 )
             }
 
             item {
-                CampaignListHero(
-                    campaignCount = campaigns.size
-                )
-            }
-
-            item {
-                CampaignSearchBox(
-                    searchText = searchText,
-                    onSearchTextChange = {
-                        searchText = it
-                    },
-                    onSearchSubmit = {
-                        onSearchSubmit(searchText)
-                    }
-                )
-            }
-
-            item {
-                CampaignSectionTitle(
-                    title = "Aktif kampanyalar",
-                    description = "Perakende alışverişte öne çıkan fırsatları keşfet."
+                DealsHero(
+                    count = dealsOfTheDays.size
                 )
             }
 
             if (isLoading) {
                 item {
-                    CampaignListInfoCard(
-                        title = "Kampanyalar yükleniyor",
-                        description = "Aktif kampanyalar getiriliyor.",
+                    DealsInfoCard(
+                        title = "Fırsatlar yükleniyor",
+                        description = "Bugünün fırsatları getiriliyor.",
                         showProgress = true
                     )
                 }
-            } else if (!errorMessage.isNullOrBlank() && campaigns.isEmpty()) {
+            } else if (!errorMessage.isNullOrBlank() && dealsOfTheDays.isEmpty()) {
                 item {
-                    CampaignListInfoCard(
-                        title = "Kampanyalar alınamadı",
+                    DealsInfoCard(
+                        title = "Fırsatlar alınamadı",
                         description = errorMessage
                     )
                 }
-            } else if (filteredCampaigns.isEmpty()) {
+            } else if (dealsOfTheDays.isEmpty()) {
                 item {
-                    CampaignListInfoCard(
-                        title = "Kampanya bulunamadı",
-                        description = "Arama kriterine uygun kampanya yok."
+                    DealsInfoCard(
+                        title = "Fırsat bulunamadı",
+                        description = "Şu anda listelenecek fırsat yok."
                     )
                 }
             } else {
                 items(
-                    items = filteredCampaigns,
-                    key = { campaign ->
-                        campaign.CampaignId
+                    items = dealsOfTheDays,
+                    key = { deal ->
+                        deal.DealsOfTheDayId
                     }
-                ) { campaign ->
-                    CampaignListCard(
-                        campaign = campaign,
+                ) { deal ->
+                    DealListCard(
+                        deal = deal,
                         onClick = {
-                            onCampaignClick(campaign)
+                            onProductClick(deal)
                         }
                     )
                 }
@@ -146,7 +105,7 @@ fun CampaignListScreen(
 }
 
 @Composable
-private fun CampaignListTopBar(
+private fun DealsTopBar(
     onBackClick: () -> Unit
 ) {
     Row(
@@ -174,14 +133,14 @@ private fun CampaignListTopBar(
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = "Kampanyalar",
+                text = "Öne Çıkan Fırsatlar",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onBackground
             )
 
             Text(
-                text = "Fırsat, vitrin ve sezon kampanyaları.",
+                text = "Bugünün seçilmiş perakende fırsatları.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -190,8 +149,8 @@ private fun CampaignListTopBar(
 }
 
 @Composable
-private fun CampaignListHero(
-    campaignCount: Int
+private fun DealsHero(
+    count: Int
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -205,90 +164,28 @@ private fun CampaignListHero(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(18.dp)
+                .padding(18.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             Text(
-                text = "Bugünün perakende fırsatları",
+                text = "Sınırlı süreli fiyatlar",
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onPrimaryContainer
             )
 
-            Spacer(modifier = Modifier.height(6.dp))
-
             Text(
-                text = "Seçili mağazalar, kategori vitrinleri ve kampanya ürünleri burada toplanır.",
+                text = "$count fırsat listeleniyor.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onPrimaryContainer
             )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Text(
-                text = "$campaignCount aktif kampanya",
-                style = MaterialTheme.typography.labelLarge,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
-            )
         }
     }
 }
 
 @Composable
-private fun CampaignSearchBox(
-    searchText: String,
-    onSearchTextChange: (String) -> Unit,
-    onSearchSubmit: () -> Unit
-) {
-    OutlinedTextField(
-        modifier = Modifier.fillMaxWidth(),
-        value = searchText,
-        onValueChange = onSearchTextChange,
-        singleLine = true,
-        placeholder = {
-            Text(text = "Kampanya ara")
-        },
-        trailingIcon = {
-            Text(
-                modifier = Modifier
-                    .clickable {
-                        onSearchSubmit()
-                    }
-                    .padding(horizontal = 12.dp),
-                text = "Ara",
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.primary
-            )
-        }
-    )
-}
-
-@Composable
-private fun CampaignSectionTitle(
-    title: String,
-    description: String
-) {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onBackground
-        )
-
-        Text(
-            text = description,
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-    }
-}
-
-@Composable
-private fun CampaignListCard(
-    campaign: CampaignDTO,
+private fun DealListCard(
+    deal: DealsOfTheDayDTO,
     onClick: () -> Unit
 ) {
     Card(
@@ -311,38 +208,53 @@ private fun CampaignListCard(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(
-                text = campaign.CampaignName.ifBlank { "Kampanya" },
+                text = deal.ProductName.ifBlank { "Ürün" },
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
-            if (campaign.Description.isNotBlank()) {
+            if (deal.Store.isNotBlank()) {
                 Text(
-                    text = campaign.Description,
-                    style = MaterialTheme.typography.bodyMedium,
+                    text = deal.Store,
+                    style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                CampaignMetaText(
-                    text = campaign.CategoryName.ifBlank { "Genel" }
-                )
+                Column {
+                    Text(
+                        text = deal.CategoryName.ifBlank { "Kategori yok" },
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
 
-                CampaignMetaText(
-                    text = "${campaign.CampaignStartDate.take(10)} - ${campaign.CampaignEndDate.take(10)}"
+                    if (deal.Brand.isNotBlank()) {
+                        Text(
+                            text = deal.Brand,
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+
+                Text(
+                    text = formatDealPrice(deal),
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
 
-            if (campaign.CampaignProducts.isNotEmpty()) {
+            if (deal.Rating > 0.0 || deal.ReviewNumber > 0) {
                 Text(
-                    text = "${campaign.CampaignProducts.size} ürün kampanyada",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.primary
+                    text = "Puan ${String.format(Locale.US, "%.1f", deal.Rating)} • ${deal.ReviewNumber} yorum",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -350,18 +262,7 @@ private fun CampaignListCard(
 }
 
 @Composable
-private fun CampaignMetaText(
-    text: String
-) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.labelSmall,
-        color = MaterialTheme.colorScheme.onSurfaceVariant
-    )
-}
-
-@Composable
-private fun CampaignListInfoCard(
+private fun DealsInfoCard(
     title: String,
     description: String,
     showProgress: Boolean = false
@@ -399,4 +300,20 @@ private fun CampaignListInfoCard(
             }
         }
     }
+}
+
+private fun formatDealPrice(
+    deal: DealsOfTheDayDTO
+): String {
+    val price = if (deal.CampaignPrice > 0.0) {
+        deal.CampaignPrice
+    } else {
+        deal.Price
+    }
+
+    val symbol = deal.CurrencySymbol.ifBlank {
+        "₺"
+    }
+
+    return symbol + String.format(Locale.US, "%.2f", price)
 }

@@ -71,8 +71,9 @@ fun RetailHomeScreen(
     onSearchClick: (String) -> Unit = {},
     onCategoryClick: () -> Unit = {},
     onProductListClick: () -> Unit = {},
-    onProductDetailClick: (Int) -> Unit = {},
+    onProductDetailClick: (productId: Int, storeId: Int, variantId: Int) -> Unit = { _, _, _ -> },
     onDealClick: (productId: Int, storeId: Int, variantId: Int) -> Unit = { _, _, _ -> },
+    onDealsOfTheDayListClick: () -> Unit = {},
     onCampaignClick: (Int) -> Unit = {},
     onCampaignListClick: () -> Unit = {},
     onFavoriteClick: () -> Unit = {},
@@ -190,7 +191,8 @@ fun RetailHomeScreen(
             item {
                 B2CDealsOfTheDay(
                     dealsOfTheDays = dealsOfTheDays,
-                    onProductClick = onDealClick
+                    onProductClick = onDealClick,
+                    onViewAllClick = onDealsOfTheDayListClick
                 )
             }
 

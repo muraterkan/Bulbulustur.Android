@@ -16,16 +16,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
-import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Storefront
 import androidx.compose.material.icons.outlined.Verified
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -41,51 +40,90 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
-import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
+import com.bulbulustur.android.businesslayer.Core.DTO.StoreDTO
+import java.util.Locale
 
 @Composable
 fun StoreListScreen(
+    stores: List<StoreDTO> = emptyList(),
+    isLoading: Boolean = false,
+    errorMessage: String? = null,
     onBackClick: () -> Unit = {},
-    onStoreClick: (StoreListItem) -> Unit = {},
+    onStoreClick: (Int) -> Unit = {},
     onSellerInfoClick: () -> Unit = {},
     onHowItWorksClick: () -> Unit = onSellerInfoClick
 ) {
-    val stores = remember { getStoreListItems() }
-
-    val alphabetFilters = remember {
-        listOf("Tümü", "0-9", "A", "B", "C", "D", "E", "F", "G", "H", "I", "İ", "K", "M", "O", "P", "S", "T", "U", "V", "Z")
+    val items = remember(stores) {
+        stores.map { store ->
+            store.ToStoreListItem()
+        }
     }
 
-    var searchText by remember { mutableStateOf("") }
-    var selectedAlphabetFilter by remember { mutableStateOf("Tümü") }
+    val alphabetFilters = remember {
+        listOf(
+            "Tümü",
+            "0-9",
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I",
+            "İ",
+            "K",
+            "M",
+            "O",
+            "P",
+            "S",
+            "T",
+            "U",
+            "V",
+            "Z"
+        )
+    }
 
-    val filteredStores = remember(searchText, selectedAlphabetFilter, stores) {
+    var searchText by remember {
+        mutableStateOf("")
+    }
+
+    var selectedAlphabetFilter by remember {
+        mutableStateOf("Tümü")
+    }
+
+    val filteredStores = remember(searchText, selectedAlphabetFilter, items) {
         val searchFilteredStores = if (searchText.isBlank()) {
-            stores
+            items
         } else {
-            stores.filter {
-                it.name.contains(searchText, ignoreCase = true) ||
-                        it.description.contains(searchText, ignoreCase = true) ||
-                        it.categoryName.contains(searchText, ignoreCase = true)
+            items.filter { store ->
+                store.name.contains(searchText, ignoreCase = true) ||
+                        store.description.contains(searchText, ignoreCase = true) ||
+                        store.categoryName.contains(searchText, ignoreCase = true)
             }
         }
 
         when (selectedAlphabetFilter) {
             "Tümü" -> searchFilteredStores
-            "0-9" -> searchFilteredStores.filter { it.name.firstOrNull()?.isDigit() == true }
-            else -> searchFilteredStores.filter { it.name.startsWith(selectedAlphabetFilter, ignoreCase = true) }
+            "0-9" -> searchFilteredStores.filter { store ->
+                store.name.firstOrNull()?.isDigit() == true
+            }
+            else -> searchFilteredStores.filter { store ->
+                store.name.startsWith(selectedAlphabetFilter, ignoreCase = true)
+            }
         }
     }
 
@@ -128,7 +166,9 @@ fun StoreListScreen(
             item {
                 StoreListSearchCard(
                     searchText = searchText,
-                    onSearchTextChange = { searchText = it }
+                    onSearchTextChange = {
+                        searchText = it
+                    }
                 )
             }
 
@@ -136,7 +176,9 @@ fun StoreListScreen(
                 StoreAlphabetFilterRow(
                     filters = alphabetFilters,
                     selectedFilter = selectedAlphabetFilter,
-                    onFilterClick = { selectedAlphabetFilter = it }
+                    onFilterClick = {
+                        selectedAlphabetFilter = it
+                    }
                 )
             }
 
@@ -147,27 +189,49 @@ fun StoreListScreen(
                 )
             }
 
-            if (filteredStores.isEmpty()) {
-                item {
-                    StoreListEmptyState(
-                        onSellerInfoClick = onSellerInfoClick
-                    )
-                }
-            } else {
-                items(
-                    items = filteredStores,
-                    key = { store -> store.id }
-                ) { store ->
-                    StoreListCard(
-                        store = store,
-                        onClick = { onStoreClick(store) }
-                    )
+            when {
+                isLoading && items.isEmpty() -> {
+                    item {
+                        StoreListLoadingState()
+                    }
                 }
 
-                item {
-                    StoreListSellerInfoBanner(
-                        onSellerInfoClick = onSellerInfoClick
-                    )
+                !errorMessage.isNullOrBlank() && items.isEmpty() -> {
+                    item {
+                        StoreListErrorState(
+                            message = errorMessage
+                        )
+                    }
+                }
+
+                filteredStores.isEmpty() -> {
+                    item {
+                        StoreListEmptyState(
+                            onSellerInfoClick = onSellerInfoClick
+                        )
+                    }
+                }
+
+                else -> {
+                    items(
+                        items = filteredStores,
+                        key = { store ->
+                            store.id
+                        }
+                    ) { store ->
+                        StoreListCard(
+                            store = store,
+                            onClick = {
+                                onStoreClick(store.id)
+                            }
+                        )
+                    }
+
+                    item {
+                        StoreListSellerInfoBanner(
+                            onSellerInfoClick = onSellerInfoClick
+                        )
+                    }
                 }
             }
         }
@@ -181,36 +245,31 @@ private fun StoreListHeaderActionButton(
     onClick: () -> Unit
 ) {
     Surface(
-        modifier = Modifier
-            .height(BBSpacing.Space10)
-            .clip(BBRadius.PillShape)
-            .clickable { onClick() },
+        modifier = Modifier.clickable {
+            onClick()
+        },
         shape = BBRadius.PillShape,
-        color = MaterialTheme.colorScheme.primary,
-        border = BorderStroke(
-            width = BBSpacing.Divider,
-            color = MaterialTheme.colorScheme.primary
-        )
+        color = MaterialTheme.colorScheme.primary
     ) {
         Row(
             modifier = Modifier.padding(
                 horizontal = BBSpacing.Space3,
-                vertical = BBSpacing.Space1
+                vertical = BBSpacing.Space2
             ),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space1),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurface,
+                tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.size(BBIcon.SizeSm)
             )
 
             Text(
                 text = text,
                 style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = MaterialTheme.colorScheme.onPrimary,
                 fontWeight = FontWeight.Bold
             )
         }
@@ -227,107 +286,32 @@ private fun StoreListHeroCard(
         padding = BbCardPadding.Large
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
-            StoreListStatusPill(text = "Mağaza Rehberi")
-
-            Text(
-                text = "Bulbulustur Mağazalarını Keşfet",
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
+            StoreListStatusPill(
+                text = "Bulbulustur Mağazaları"
             )
 
             Text(
-                text = "Doğrulanmış satıcıları, favori mağazaları ve mağaza vitrinlerindeki ürünleri tek yerden inceleyin.",
+                text = "Güvenilir mağazaları keşfedin",
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onSurface,
+                fontWeight = FontWeight.Bold
+            )
+
+            Text(
+                text = "Perakende alışveriş için ürün, mağaza puanı ve mağaza detaylarını tek akışta inceleyin.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
-            StoreListSecondaryButton(
-                text = "Satıcı Başvurusu Nasıl Çalışır?",
+            StoreListPrimaryButton(
+                text = "Nasıl Çalışır?",
+                icon = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
                 modifier = Modifier.fillMaxWidth(),
                 onClick = onHowItWorksClick
             )
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
-            ) {
-                StoreListHeroMiniCard(
-                    modifier = Modifier.weight(1f),
-                    title = "Güvenilir Satıcılar",
-                    subtitle = "Doğrulanmış mağaza vitrinlerini inceleyin.",
-                    icon = Icons.Outlined.Verified
-                )
-
-                StoreListHeroMiniCard(
-                    modifier = Modifier.weight(1f),
-                    title = "Favori Mağazalar",
-                    subtitle = "Beğendiğiniz mağazaları takip edin.",
-                    icon = Icons.Outlined.FavoriteBorder
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun StoreListHeroMiniCard(
-    modifier: Modifier = Modifier,
-    title: String,
-    subtitle: String,
-    icon: ImageVector
-) {
-    Surface(
-        modifier = modifier,
-        shape = BBRadius.XlShape,
-        color = MaterialTheme.colorScheme.surfaceVariant,
-        border = BorderStroke(
-            width = BBSpacing.Divider,
-            color = MaterialTheme.colorScheme.outlineVariant
-        )
-    ) {
-        Row(
-            modifier = Modifier.padding(BBSpacing.Space3),
-            verticalAlignment = Alignment.Top,
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
-        ) {
-            Surface(
-                modifier = Modifier.size(BBIcon.BoxMd),
-                shape = BBRadius.LgShape,
-                color = MaterialTheme.colorScheme.primaryContainer
-            ) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = icon,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.size(BBIcon.SizeMd)
-                    )
-                }
-            }
-
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
-            ) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-
-                Text(
-                    text = subtitle,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
         }
     }
 }
@@ -337,47 +321,33 @@ private fun StoreListSearchCard(
     searchText: String,
     onSearchTextChange: (String) -> Unit
 ) {
-    Surface(
+    BbCard(
         modifier = Modifier.fillMaxWidth(),
-        shape = BBRadius.XlShape,
-        color = MaterialTheme.colorScheme.surface,
-        border = BorderStroke(
-            width = BBSpacing.Divider,
-            color = MaterialTheme.colorScheme.outlineVariant
-        )
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
     ) {
         OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
             value = searchText,
             onValueChange = onSearchTextChange,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(BBSpacing.Space2),
             singleLine = true,
+            placeholder = {
+                Text(
+                    text = "Mağaza adı, açıklama veya kategori ara"
+                )
+            },
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Outlined.Search,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    contentDescription = null
                 )
             },
-            placeholder = {
-                Text(
-                    text = "Mağaza, kategori veya ürün ara",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            },
-            shape = BBRadius.Input,
+            shape = BBRadius.LgShape,
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = MaterialTheme.colorScheme.primary,
                 unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
-                focusedLabelColor = MaterialTheme.colorScheme.onSurface,
-                unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
                 focusedContainerColor = MaterialTheme.colorScheme.surface,
-                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-                cursorColor = MaterialTheme.colorScheme.primary
+                unfocusedContainerColor = MaterialTheme.colorScheme.surface
             )
         )
     }
@@ -396,42 +366,41 @@ private fun StoreAlphabetFilterRow(
         horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
     ) {
         filters.forEach { filter ->
-            StoreAlphabetChip(
-                text = filter,
-                selected = selectedFilter == filter,
-                onClick = { onFilterClick(filter) }
-            )
+            Surface(
+                modifier = Modifier.clickable {
+                    onFilterClick(filter)
+                },
+                shape = BBRadius.PillShape,
+                color = if (selectedFilter == filter) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    MaterialTheme.colorScheme.surface
+                },
+                border = BorderStroke(
+                    width = 1.dp,
+                    color = if (selectedFilter == filter) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        MaterialTheme.colorScheme.outlineVariant
+                    }
+                )
+            ) {
+                Text(
+                    modifier = Modifier.padding(
+                        horizontal = BBSpacing.Space3,
+                        vertical = BBSpacing.Space2
+                    ),
+                    text = filter,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = if (selectedFilter == filter) {
+                        MaterialTheme.colorScheme.onPrimary
+                    } else {
+                        MaterialTheme.colorScheme.onSurface
+                    },
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
         }
-    }
-}
-
-@Composable
-private fun StoreAlphabetChip(
-    text: String,
-    selected: Boolean,
-    onClick: () -> Unit
-) {
-    Surface(
-        modifier = Modifier
-            .clip(BBRadius.PillShape)
-            .clickable { onClick() },
-        shape = BBRadius.PillShape,
-        color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface,
-        border = BorderStroke(
-            width = BBSpacing.Divider,
-            color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant
-        )
-    ) {
-        Text(
-            text = text,
-            modifier = Modifier.padding(
-                horizontal = BBSpacing.Space3,
-                vertical = BBSpacing.Space2
-            ),
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurface,
-            fontWeight = FontWeight.Bold
-        )
     }
 }
 
@@ -441,21 +410,20 @@ private fun StoreListResultHeader(
     selectedFilter: String
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
     ) {
         Text(
-            text = "Mağaza Listesi",
+            text = "$storeCount mağaza listeleniyor",
             style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurface
+            color = MaterialTheme.colorScheme.onSurface,
+            fontWeight = FontWeight.Bold
         )
 
         Text(
             text = if (selectedFilter == "Tümü") {
-                "$storeCount mağaza listeleniyor"
+                "Tüm mağazalar gösteriliyor."
             } else {
-                "$selectedFilter filtresinde $storeCount mağaza"
+                "$selectedFilter filtresi uygulanıyor."
             },
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -475,20 +443,18 @@ private fun StoreListCard(
         onClick = onClick
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Surface(
-                    modifier = Modifier.size(BBIcon.Box2Xl),
+                    modifier = Modifier.size(BBIcon.BoxLg),
                     shape = BBRadius.XlShape,
-                    color = MaterialTheme.colorScheme.primaryContainer,
-                    border = BorderStroke(
-                        width = BBSpacing.Divider,
-                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.35f)
-                    )
+                    color = MaterialTheme.colorScheme.primaryContainer
                 ) {
                     Box(
                         modifier = Modifier.fillMaxSize(),
@@ -497,8 +463,8 @@ private fun StoreListCard(
                         Text(
                             text = store.logoText,
                             style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            fontWeight = FontWeight.Bold
                         )
                     }
                 }
@@ -508,19 +474,24 @@ private fun StoreListCard(
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                 ) {
                     Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+                        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
                             text = store.name,
                             style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onSurface,
+                            fontWeight = FontWeight.Bold,
                             maxLines = 1
                         )
 
                         if (store.isVerified) {
-                            StoreListMiniBadge(text = "Doğrulanmış")
+                            Icon(
+                                imageVector = Icons.Outlined.Verified,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(BBIcon.SizeSm)
+                            )
                         }
                     }
 
@@ -544,9 +515,9 @@ private fun StoreListCard(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
             ) {
-                StoreListMetaPill(text = "${store.productCount} Ürün")
                 StoreListMetaPill(text = store.ratingText)
                 StoreListMetaPill(text = store.categoryName)
+                StoreListMetaPill(text = store.cargoText)
             }
 
             StoreListPrimaryButton(
@@ -554,6 +525,61 @@ private fun StoreListCard(
                 icon = Icons.Outlined.Storefront,
                 modifier = Modifier.fillMaxWidth(),
                 onClick = onClick
+            )
+        }
+    }
+}
+
+@Composable
+private fun StoreListLoadingState() {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Large
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+        ) {
+            CircularProgressIndicator()
+
+            Text(
+                text = "Mağazalar yükleniyor...",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+@Composable
+private fun StoreListErrorState(
+    message: String
+) {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Large
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+        ) {
+            StoreListStatusPill(text = "Hata")
+
+            Text(
+                text = "Mağazalar alınamadı",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
+            Text(
+                text = message,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -573,28 +599,6 @@ private fun StoreListEmptyState(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
-            Surface(
-                modifier = Modifier.size(BBIcon.BoxLg),
-                shape = BBRadius.XlShape,
-                color = MaterialTheme.colorScheme.surfaceVariant,
-                border = BorderStroke(
-                    width = BBSpacing.Divider,
-                    color = MaterialTheme.colorScheme.outlineVariant
-                )
-            ) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "∅",
-                        style = MaterialTheme.typography.headlineMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
-            }
-
             StoreListStatusPill(text = "Mağaza Bulunamadı")
 
             Text(
@@ -647,7 +651,7 @@ private fun StoreListSellerInfoBanner(
                     Icon(
                         imageVector = Icons.Outlined.Storefront,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurface,
+                        tint = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier.size(BBIcon.SizeMd)
                     )
                 }
@@ -682,81 +686,47 @@ private fun StoreListSellerInfoBanner(
 }
 
 @Composable
-private fun StoreListStatusPill(text: String) {
+private fun StoreListStatusPill(
+    text: String
+) {
     Surface(
         shape = BBRadius.PillShape,
-        color = MaterialTheme.colorScheme.primaryContainer,
-        border = BorderStroke(
-            width = BBSpacing.Divider,
-            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.35f)
-        )
+        color = MaterialTheme.colorScheme.primaryContainer
     ) {
         Text(
-            text = text,
             modifier = Modifier.padding(
                 horizontal = BBSpacing.Space3,
                 vertical = BBSpacing.Space1
             ),
+            text = text,
             style = MaterialTheme.typography.labelSmall,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurface
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
+            fontWeight = FontWeight.Bold
         )
     }
 }
 
 @Composable
-private fun StoreListMiniBadge(text: String) {
-    Surface(
-        shape = BBRadius.PillShape,
-        color = MaterialTheme.colorScheme.primaryContainer,
-        border = BorderStroke(
-            width = BBSpacing.Divider,
-            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.35f)
-        )
-    ) {
-        Row(
-            modifier = Modifier.padding(
-                horizontal = BBSpacing.Space2,
-                vertical = BBSpacing.Space1
-            ),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
-        ) {
-            Icon(
-                imageVector = Icons.Outlined.Verified,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(BBIcon.Size2Xs)
-            )
-
-            Text(
-                text = text,
-                style = MaterialTheme.typography.labelSmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-        }
-    }
-}
-
-@Composable
-private fun StoreListMetaPill(text: String) {
+private fun StoreListMetaPill(
+    text: String
+) {
     Surface(
         shape = BBRadius.PillShape,
         color = MaterialTheme.colorScheme.surfaceVariant,
         border = BorderStroke(
-            width = BBSpacing.Divider,
+            width = 1.dp,
             color = MaterialTheme.colorScheme.outlineVariant
         )
     ) {
         Text(
-            text = text,
             modifier = Modifier.padding(
-                horizontal = BBSpacing.Space3,
+                horizontal = BBSpacing.Space2,
                 vertical = BBSpacing.Space1
             ),
+            text = text,
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            fontWeight = FontWeight.SemiBold
         )
     }
 }
@@ -769,130 +739,83 @@ private fun StoreListPrimaryButton(
     onClick: () -> Unit
 ) {
     Surface(
-        modifier = modifier
-            .height(BBSpacing.Space11)
-            .clip(BBRadius.PillShape)
-            .clickable { onClick() },
-        shape = BBRadius.PillShape,
-        color = MaterialTheme.colorScheme.primary,
-        border = BorderStroke(
-            width = BBSpacing.Divider,
-            color = MaterialTheme.colorScheme.primary
-        )
+        modifier = modifier.clickable {
+            onClick()
+        },
+        shape = BBRadius.LgShape,
+        color = MaterialTheme.colorScheme.primary
     ) {
         Row(
-            modifier = Modifier.padding(
-                horizontal = BBSpacing.Space3,
-                vertical = BBSpacing.Space1
-            ),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    horizontal = BBSpacing.Space4,
+                    vertical = BBSpacing.Space3
+                ),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.size(BBIcon.SizeSm)
+                tint = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier.size(BBIcon.SizeMd)
             )
 
-            Spacer(modifier = Modifier.width(BBSpacing.Space1))
+            Spacer(
+                modifier = Modifier.size(BBSpacing.Space2)
+            )
 
             Text(
                 text = text,
-                style = MaterialTheme.typography.labelMedium,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-        }
-    }
-}
-
-@Composable
-private fun StoreListSecondaryButton(
-    text: String,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit
-) {
-    Surface(
-        modifier = modifier
-            .height(BBSpacing.Space11)
-            .clip(BBRadius.PillShape)
-            .clickable { onClick() },
-        shape = BBRadius.PillShape,
-        color = MaterialTheme.colorScheme.surfaceVariant,
-        border = BorderStroke(
-            width = BBSpacing.Divider,
-            color = MaterialTheme.colorScheme.outlineVariant
-        )
-    ) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = text,
-                style = MaterialTheme.typography.labelMedium,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onPrimary,
+                fontWeight = FontWeight.Bold
             )
         }
     }
 }
 
 @Immutable
-data class StoreListItem(
+private data class StoreListItem(
     val id: Int,
     val name: String,
-    val description: String,
     val logoText: String,
+    val description: String,
     val categoryName: String,
-    val productCount: Int,
     val ratingText: String,
+    val cargoText: String,
     val isVerified: Boolean
 )
 
-private fun getStoreListItems(): List<StoreListItem> {
-    return listOf(
-        StoreListItem(
-            id = 1,
-            name = "Ortobella Comfort",
-            description = "Ayakkabı ve günlük konfor ürünleri mağazası.",
-            logoText = "OC",
-            categoryName = "Ayakkabı",
-            productCount = 48,
-            ratingText = "★ 4.8",
-            isVerified = true
-        ),
-        StoreListItem(
-            id = 2,
-            name = "Moda Nova",
-            description = "Giyim, basic ürünler ve sezonluk parçalar.",
-            logoText = "MN",
-            categoryName = "Giyim",
-            productCount = 124,
-            ratingText = "★ 4.6",
-            isVerified = true
-        ),
-        StoreListItem(
-            id = 3,
-            name = "Urban Touch",
-            description = "Çanta, aksesuar ve şehir yaşamı ürünleri.",
-            logoText = "UT",
-            categoryName = "Aksesuar",
-            productCount = 72,
-            ratingText = "★ 4.5",
-            isVerified = false
-        ),
-        StoreListItem(
-            id = 4,
-            name = "Casa Liva",
-            description = "Ev, yaşam ve mutfak düzenleyici ürünleri.",
-            logoText = "CL",
-            categoryName = "Ev & Yaşam",
-            productCount = 96,
-            ratingText = "★ 4.7",
-            isVerified = true
-        )
+private fun StoreDTO.ToStoreListItem(): StoreListItem {
+    val resolvedName = StoreName.ifBlank {
+        "Mağaza"
+    }
+
+    return StoreListItem(
+        id = StoreId,
+        name = resolvedName,
+        logoText = resolvedName.take(2).uppercase(),
+        description = StoreDescription.ifBlank {
+            "Mağaza vitrini"
+        },
+        categoryName = if (CompanyId > 0) {
+            "Kurumsal Mağaza"
+        } else {
+            "Perakende Mağaza"
+        },
+        ratingText = if (Rating > 0.0) {
+            String.format(Locale.US, "%.1f", Rating)
+        } else {
+            "-"
+        },
+        cargoText = if (DefaultEstimatedShippingTime > 0) {
+            "${DefaultEstimatedShippingTime} gün"
+        } else {
+            "Standart"
+        },
+        isVerified = StoreKey.isNotBlank() || CompanyId > 0
     )
 }
 

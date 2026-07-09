@@ -8,14 +8,17 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.CategoryController
+import com.bulbulustur.android.Application.Areas.b2c.Controllers.CampaignController
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.HomeController
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.ProductController
+import com.bulbulustur.android.Application.Areas.b2c.Controllers.StoreController
 import com.bulbulustur.android.Application.Areas.b2c.Views.Basket.BasketScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.Campaign.CampaignDetailScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.Campaign.CampaignListScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.Category.CategoryDetailScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.Category.RetailCategoryHomeScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.Home.RetailHomeScreen
+import com.bulbulustur.android.Application.Areas.b2c.Views.DealsOfTheDay.DealsOfTheDayListScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.Product.ProductDetailScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.Product.ProductListScreen as RetailProductListScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.Store.StoreDetailScreen
@@ -27,6 +30,7 @@ import com.bulbulustur.android.Application.Navigation.Routes.BasketRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.RetailRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.StoreRoutes
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.BasketController
+import com.bulbulustur.android.Application.Areas.b2c.Controllers.DealsOfTheDayController
 import com.bulbulustur.android.Application.Session.UserSessionState
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.ProductQuestionController
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.ProductReviewController
@@ -34,14 +38,19 @@ import com.bulbulustur.android.Application.Areas.b2c.Views.Product.ProductQuesti
 import com.bulbulustur.android.Application.Areas.b2c.Views.Product.ProductReviewScreen
 import com.bulbulustur.android.Application.Navigation.Routes.LogonRoutes
 import com.bulbulustur.android.Application.Controllers.AccountController
+import com.bulbulustur.android.Application.Areas.b2c.Views.Store.StoreProductListScreen
+import com.bulbulustur.android.businesslayer.Core.DTO.B2CProductFilterDTO
 
 fun NavGraphBuilder.retailGraph(
     navigator: BulbulusturNavigator,
     categoryController: CategoryController,
     homeController: HomeController,
+    campaignController: CampaignController,
+    dealsOfTheDayController: DealsOfTheDayController,
     productController: ProductController,
     productReviewController: ProductReviewController,
     productQuestionController: ProductQuestionController,
+    storeController: StoreController,
     accountController: AccountController,
     basketController: BasketController,
     sessionState: UserSessionState
@@ -76,14 +85,20 @@ fun NavGraphBuilder.retailGraph(
                     RetailRoutes.ProductList
                 )
             },
-            onProductDetailClick = {
-                /*
-                 * RetailHomeScreen henüz ProductId, StoreId ve VariantId
-                 * taşımadığı için detail route doğrudan açılamaz.
-                 */
-                navigator.navController.navigate(
-                    RetailRoutes.ProductList
-                )
+            onProductDetailClick = { productId, storeId, variantId ->
+                if (productId > 0 && storeId > 0 && variantId > 0) {
+                    navigator.navController.navigate(
+                        RetailRoutes.productDetail(
+                            productId = productId,
+                            storeId = storeId,
+                            variantId = variantId
+                        )
+                    )
+                } else {
+                    navigator.navController.navigate(
+                        RetailRoutes.ProductList
+                    )
+                }
             },
             onDealClick = { productId, storeId, variantId ->
                 navigator.navController.navigate(
@@ -94,9 +109,14 @@ fun NavGraphBuilder.retailGraph(
                     )
                 )
             },
+            onDealsOfTheDayListClick = {
+                navigator.navController.navigate(
+                    RetailRoutes.DealsOfTheDayList
+                )
+            },
             onCampaignClick = { campaignId ->
                 navigator.navController.navigate(
-                    RetailRoutes.CampaignDetail
+                    RetailRoutes.campaignDetail(campaignId)
                 )
             },
             onCampaignListClick = {
@@ -111,7 +131,7 @@ fun NavGraphBuilder.retailGraph(
             },
             onStoreClick = {
                 navigator.navController.navigate(
-                    StoreRoutes.StoreDetail
+                    StoreRoutes.StoreList
                 )
             },
             onMenuClick = {
@@ -802,9 +822,11 @@ fun NavGraphBuilder.retailGraph(
                 }
             },
             onStoreClick = {
-                navigator.navController.navigate(
-                    StoreRoutes.StoreDetail
-                )
+                if (storeId > 0) {
+                    navigator.navController.navigate(
+                        StoreRoutes.storeDetail(storeId)
+                    )
+                }
             }
         )
     }
@@ -1056,13 +1078,22 @@ fun NavGraphBuilder.retailGraph(
     composable(
         route = StoreRoutes.StoreList
     ) {
+        val storeState by storeController.State.collectAsState()
+
+        LaunchedEffect(Unit) {
+            storeController.LoadList()
+        }
+
         StoreListScreen(
+            stores = storeState.Stores,
+            isLoading = storeState.IsLoading,
+            errorMessage = storeState.ErrorMessage,
             onBackClick = {
                 navigator.back()
             },
-            onStoreClick = {
+            onStoreClick = { storeId ->
                 navigator.navController.navigate(
-                    StoreRoutes.StoreDetail
+                    StoreRoutes.storeDetail(storeId)
                 )
             },
             onSellerInfoClick = {
@@ -1100,10 +1131,74 @@ fun NavGraphBuilder.retailGraph(
             ?.getInt(StoreRoutes.ArgStoreId)
             ?: 0
 
+        val storeState by storeController.State.collectAsState()
+
+        LaunchedEffect(storeId) {
+            storeController.LoadDetail(storeId = storeId)
+        }
+
         StoreDetailScreen(
             storeId = storeId,
+            storeDetail = storeState.StoreDetail,
+            isLoading = storeState.IsLoading,
+            errorMessage = storeState.ErrorMessage,
             onBackClick = {
                 navigator.back()
+            },
+            onProductClick = { product ->
+                navigator.navController.navigate(
+                    RetailRoutes.productDetail(
+                        productId = product.id,
+                        storeId = storeId,
+                        variantId = 0
+                    )
+                )
+            },
+            onStoreProductListClick = {
+                navigator.navController.navigate(
+                    StoreRoutes.storeProductList(storeId)
+                )
+            }
+        )
+    }
+
+    composable(
+        route = StoreRoutes.StoreProductList,
+        arguments = listOf(
+            navArgument(StoreRoutes.ArgStoreId) {
+                type = NavType.IntType
+            }
+        )
+    ) { backStackEntry ->
+        val storeId = backStackEntry.arguments
+            ?.getInt(StoreRoutes.ArgStoreId)
+            ?: 0
+
+        val productState by productController.State.collectAsState()
+
+        StoreProductListScreen(
+            State = productState,
+            languageId = sessionState.Language.Id,
+            storeId = storeId,
+            OnLoadProducts = { filters, page, pageSize ->
+                productController.StoreProductList(
+                    storeId = storeId,
+                    filters = filters,
+                    page = page,
+                    pageSize = pageSize
+                )
+            },
+            onBackClick = {
+                navigator.back()
+            },
+            onProductClick = { productId, productStoreId, variantId ->
+                navigator.navController.navigate(
+                    RetailRoutes.productDetail(
+                        productId = productId,
+                        storeId = productStoreId,
+                        variantId = variantId
+                    )
+                )
             }
         )
     }
@@ -1285,24 +1380,74 @@ fun NavGraphBuilder.retailGraph(
     }
 
     composable(
-        route = RetailRoutes.CampaignList
+        route = RetailRoutes.DealsOfTheDayList
     ) {
-        CampaignListScreen(
+        val dealsState by dealsOfTheDayController.State.collectAsState()
+
+        LaunchedEffect(sessionState.Language.Id) {
+            dealsOfTheDayController.Load(languageId = sessionState.Language.Id)
+        }
+
+        DealsOfTheDayListScreen(
+            dealsOfTheDays = dealsState.DealsOfTheDays,
+            isLoading = dealsState.IsLoading,
+            errorMessage = dealsState.ErrorMessage,
             onBackClick = {
                 navigator.back()
             },
-            onCampaignClick = {
+            onProductClick = { deal ->
                 navigator.navController.navigate(
-                    RetailRoutes.CampaignDetail
+                    RetailRoutes.productDetail(deal.ProductId, deal.StoreId, deal.VariantId)
                 )
             }
         )
     }
 
     composable(
-        route = RetailRoutes.CampaignDetail
+        route = RetailRoutes.CampaignList
     ) {
+        val campaignState by campaignController.State.collectAsState()
+
+        LaunchedEffect(sessionState.Language.Id) {
+            campaignController.LoadCampaigns(languageId = sessionState.Language.Id)
+        }
+
+        CampaignListScreen(
+            campaigns = campaignState.Campaigns,
+            isLoading = campaignState.IsLoading,
+            errorMessage = campaignState.ErrorMessage,
+            onBackClick = {
+                navigator.back()
+            },
+            onCampaignClick = { campaign ->
+                navigator.navController.navigate(
+                    RetailRoutes.campaignDetail(campaign.CampaignId)
+                )
+            }
+        )
+    }
+
+    composable(
+        route = RetailRoutes.CampaignDetail,
+        arguments = listOf(
+            navArgument("campaignId") {
+                type = NavType.IntType
+            }
+        )
+    ) { backStackEntry ->
+        val campaignId = backStackEntry.arguments?.getInt("campaignId") ?: 0
+        val campaignState by campaignController.State.collectAsState()
+
+        LaunchedEffect(sessionState.Language.Id, campaignId) {
+            if (campaignId > 0) {
+                campaignController.LoadCampaignDetail(languageId = sessionState.Language.Id, campaignId = campaignId)
+            }
+        }
+
         CampaignDetailScreen(
+            campaign = campaignState.Campaign,
+            isLoading = campaignState.IsLoading,
+            errorMessage = campaignState.ErrorMessage,
             onBackClick = {
                 navigator.back()
             },
@@ -1336,22 +1481,19 @@ fun NavGraphBuilder.retailGraph(
             onAccountClick = {
                 navigator.navigateToAccount()
             },
-            onProductClick = {
-                /*
-                 * CampaignDetailScreen henüz detail kimliklerini taşımıyor.
-                 */
+            onProductClick = { product ->
                 navigator.navController.navigate(
-                    RetailRoutes.ProductList
+                    RetailRoutes.productDetail(product.ProductId, product.StoreId, product.VariantId)
                 )
             },
-            onCategoryClick = {
+            onCategoryClick = { categoryId ->
                 navigator.navController.navigate(
-                    RetailRoutes.categoryDetail(1)
+                    RetailRoutes.categoryDetail(categoryId)
                 )
             },
-            onStoreClick = {
+            onStoreClick = { storeId ->
                 navigator.navController.navigate(
-                    StoreRoutes.StoreDetail
+                    StoreRoutes.storeDetail(storeId)
                 )
             }
         )

@@ -14,7 +14,7 @@ class ProductLowPriceReportRepository(
 
     override suspend fun GetProductLowPriceReportListAsync(): Result<List<ProductLowPriceReportDTO>> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            baseUrl = ApiRoutes.B2C_PRODUCT_LOW_PRICE_REPORT_BASE_URL,
             method = "GetProductLowPriceReportListAsync"
         )
     }
@@ -23,7 +23,7 @@ class ProductLowPriceReportRepository(
         productLowPriceReportId: Int
     ): Result<ProductLowPriceReportUpdateModel?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            baseUrl = ApiRoutes.B2C_PRODUCT_LOW_PRICE_REPORT_BASE_URL,
             method = "GetProductLowPriceReportByIdAsync",
             query = "productLowPriceReportId=$productLowPriceReportId"
         )
@@ -33,7 +33,7 @@ class ProductLowPriceReportRepository(
         productLowPriceReportId: Int
     ): Result<ProductLowPriceReportDTO?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            baseUrl = ApiRoutes.B2C_PRODUCT_LOW_PRICE_REPORT_BASE_URL,
             method = "GetProductLowPriceReportByIdExtendedAsync",
             query = "productLowPriceReportId=$productLowPriceReportId"
         )
@@ -43,7 +43,7 @@ class ProductLowPriceReportRepository(
         model: ProductLowPriceReportInsertModel
     ): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            baseUrl = ApiRoutes.B2C_PRODUCT_LOW_PRICE_REPORT_BASE_URL,
             method = "InsertAsync",
             data = model
         )
@@ -53,7 +53,7 @@ class ProductLowPriceReportRepository(
         model: ProductLowPriceReportUpdateModel
     ): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            baseUrl = ApiRoutes.B2C_PRODUCT_LOW_PRICE_REPORT_BASE_URL,
             method = "UpdateAsync",
             data = model
         )
@@ -63,7 +63,7 @@ class ProductLowPriceReportRepository(
         productLowPriceReportId: Int
     ): Result<Unit> {
         return apiClient.DeleteAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            baseUrl = ApiRoutes.B2C_PRODUCT_LOW_PRICE_REPORT_BASE_URL,
             method = "DeleteAsync",
             query = "productLowPriceReportId=$productLowPriceReportId"
         )

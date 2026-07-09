@@ -112,6 +112,8 @@ import com.bulbulustur.android.businesslayer.Core.Repository.WholesaleProductRep
 import com.bulbulustur.android.businesslayer.Core.Security.SecureTokenStore
 import com.bulbulustur.android.businesslayer.Core.Util.Execute.ExecuteService
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.DealsOfTheDayController
+import com.bulbulustur.android.businesslayer.Core.Repository.ProductComplaintRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.ProductLowPriceReportRepository
 
 
 @Composable
@@ -402,6 +404,14 @@ private fun BulbulusturApplicationContent(
         )
     }
 
+    val productComplaintRepository = remember {
+        ProductComplaintRepository()
+    }
+
+    val productLowPriceReportRepository = remember {
+        ProductLowPriceReportRepository()
+    }
+
     val productController = remember(
         executeService,
         productRepository,
@@ -410,7 +420,9 @@ private fun BulbulusturApplicationContent(
         advertSponsoredRepository,
         productBrandSectionRepository,
         productBrowsingHistoryRepository,
-        productCategoryRepository
+        productCategoryRepository,
+        productComplaintRepository,
+        productLowPriceReportRepository
     ) {
         RetailProductController(
             executeService = executeService,
@@ -420,7 +432,10 @@ private fun BulbulusturApplicationContent(
             advertSponsoredRepository = advertSponsoredRepository,
             productBrandSectionRepository = productBrandSectionRepository,
             productBrowsingHistoryRepository = productBrowsingHistoryRepository,
-            productCategoryRepository = productCategoryRepository
+            productCategoryRepository = productCategoryRepository,
+            productComplaintRepository = productComplaintRepository,
+            productLowPriceReportRepository = productLowPriceReportRepository
+
         )
     }
 

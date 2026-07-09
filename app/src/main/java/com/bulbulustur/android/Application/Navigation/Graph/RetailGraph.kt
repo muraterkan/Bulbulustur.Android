@@ -40,6 +40,9 @@ import com.bulbulustur.android.Application.Navigation.Routes.LogonRoutes
 import com.bulbulustur.android.Application.Controllers.AccountController
 import com.bulbulustur.android.Application.Areas.b2c.Views.Store.StoreProductListScreen
 import com.bulbulustur.android.businesslayer.Core.DTO.B2CProductFilterDTO
+import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.MemberAlarmListInsertModel
+import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.ProductComplaintInsertModel
+import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.ProductLowPriceReportInsertModel
 
 fun NavGraphBuilder.retailGraph(
     navigator: BulbulusturNavigator,

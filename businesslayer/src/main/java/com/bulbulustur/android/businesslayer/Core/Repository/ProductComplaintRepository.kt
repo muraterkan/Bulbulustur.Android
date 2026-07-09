@@ -14,7 +14,7 @@ class ProductComplaintRepository(
 
     override suspend fun GetProductComplaintListAsync(): Result<List<ProductComplaintDTO>> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_PRODUCT_COMPLAINT_BASE_URL,
             method = "GetProductComplaintListAsync"
         )
     }
@@ -23,7 +23,7 @@ class ProductComplaintRepository(
         productComplaintId: Int
     ): Result<ProductComplaintUpdateModel?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_PRODUCT_COMPLAINT_BASE_URL,
             method = "GetProductComplaintByIdAsync",
             query = "productComplaintId=$productComplaintId"
         )
@@ -33,7 +33,7 @@ class ProductComplaintRepository(
         productComplaintId: Int
     ): Result<ProductComplaintDTO?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_PRODUCT_COMPLAINT_BASE_URL,
             method = "GetProductComplaintByIdExtendedAsync",
             query = "productComplaintId=$productComplaintId"
         )
@@ -43,7 +43,7 @@ class ProductComplaintRepository(
         model: ProductComplaintInsertModel
     ): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_PRODUCT_COMPLAINT_BASE_URL,
             method = "InsertAsync",
             data = model
         )
@@ -53,7 +53,7 @@ class ProductComplaintRepository(
         model: ProductComplaintUpdateModel
     ): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_PRODUCT_COMPLAINT_BASE_URL,
             method = "UpdateAsync",
             data = model
         )
@@ -63,7 +63,7 @@ class ProductComplaintRepository(
         productComplaintId: Int
     ): Result<Unit> {
         return apiClient.DeleteAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_PRODUCT_COMPLAINT_BASE_URL,
             method = "DeleteAsync",
             query = "productComplaintId=$productComplaintId"
         )

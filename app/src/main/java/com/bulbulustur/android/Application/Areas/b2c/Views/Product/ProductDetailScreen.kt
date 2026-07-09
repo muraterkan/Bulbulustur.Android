@@ -132,7 +132,9 @@ fun ProductDetailScreen(
     onRelatedCategoryClick: (RetailRelatedCategoryChip) -> Unit = {},
     onLowerPriceClick: () -> Unit = {},
     onReportAbuseClick: () -> Unit = {},
-    onReturnPolicyClick: () -> Unit = {}
+    onReturnPolicyClick: () -> Unit = {},
+    onLowerPriceSubmit: (String, String, String) -> Unit = { _, _, _ -> },
+    onReportAbuseSubmit: (Int, String) -> Unit = { _, _ -> }
 ) {
     val productDto =
         State.ProductDetailResult
@@ -785,8 +787,17 @@ fun ProductDetailScreen(
                     onStoreClick(
                         product.store
                     )
+                },
+                onLowerPriceSubmit = { competitorName, competitorUrl, competitorPrice ->
+                    activeSheet = null
+                    onLowerPriceSubmit(competitorName, competitorUrl, competitorPrice)
+                },
+                onReportAbuseSubmit = { complaintTypeId, description ->
+                    activeSheet = null
+                    onReportAbuseSubmit(complaintTypeId, description)
                 }
             )
+
         }
     }
 }
@@ -2522,7 +2533,9 @@ private fun RetailProductDetailSheetContent(
     sheet: RetailProductDetailSheet,
     product: RetailProductDetail,
     onCloseClick: () -> Unit,
-    onStoreClick: () -> Unit
+    onStoreClick: () -> Unit,
+    onLowerPriceSubmit: (String, String, String) -> Unit,
+    onReportAbuseSubmit: (Int, String) -> Unit
 ) {
     when (sheet) {
         RetailProductDetailSheet.SizeGuide -> {
@@ -2534,14 +2547,16 @@ private fun RetailProductDetailSheetContent(
         RetailProductDetailSheet.LowerPrice -> {
             RetailLowerPriceSheet(
                 product = product,
-                onCloseClick = onCloseClick
+                onCloseClick = onCloseClick,
+                onSubmit = onLowerPriceSubmit
             )
         }
 
         RetailProductDetailSheet.ReportAbuse -> {
             RetailReportAbuseSheet(
                 product = product,
-                onCloseClick = onCloseClick
+                onCloseClick = onCloseClick,
+                onSubmit = onReportAbuseSubmit
             )
         }
 
@@ -2725,7 +2740,8 @@ private fun RetailReturnPolicySheet(
 @Composable
 private fun RetailLowerPriceSheet(
     product: RetailProductDetail,
-    onCloseClick: () -> Unit
+    onCloseClick: () -> Unit,
+    onSubmit: (String, String, String) -> Unit
 ) {
     var competitorName by remember {
         mutableStateOf("")
@@ -2804,7 +2820,8 @@ private fun RetailLowerPriceSheet(
 @Composable
 private fun RetailReportAbuseSheet(
     product: RetailProductDetail,
-    onCloseClick: () -> Unit
+    onCloseClick: () -> Unit,
+    onSubmit: (Int, String) -> Unit
 ) {
     val reasons = listOf(
         "Yanıltıcı Bilgi",

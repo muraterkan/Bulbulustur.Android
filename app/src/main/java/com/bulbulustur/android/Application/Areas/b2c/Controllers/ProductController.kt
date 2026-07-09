@@ -14,10 +14,14 @@ import com.bulbulustur.android.businesslayer.Core.Interface.IAdvertSponsoredRepo
 import com.bulbulustur.android.businesslayer.Core.Interface.IProductBrandSectionRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IProductBrowsingHistoryRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IProductCategoryRepository
+import com.bulbulustur.android.businesslayer.Core.Interface.IProductComplaintRepository
+import com.bulbulustur.android.businesslayer.Core.Interface.IProductLowPriceReportRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IProductRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IProductVariantPictureRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IProductVariantRepository
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.ProductBrowsingHistoryInsertModel
+import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.ProductComplaintInsertModel
+import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.ProductLowPriceReportInsertModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.ProductUpdateModel
 import com.bulbulustur.android.businesslayer.Core.Util.Execute.IExecuteService
 import com.bulbulustur.android.businesslayer.Core.Util.PaginatedList
@@ -49,6 +53,8 @@ data class ProductControllerState(
     val ProductBrowsingHistoryResult:
     Result<PaginatedList<ProductBrowsingHistoryDTO>>? = null,
     val InsertProductBrowsingHistoryResult: Result<Unit>? = null,
+    val ProductComplaintInsertResult: Result<Unit>? = null,
+    val ProductLowPriceReportInsertResult: Result<Unit>? = null,
     val RelatedCategoriesResult: Result<List<ProductCategoryDTO>>? = null,
 
     val ErrorMessage: String? = null
@@ -252,6 +258,9 @@ class ProductController(
     private val productBrandSectionRepository: IProductBrandSectionRepository,
     private val productBrowsingHistoryRepository: IProductBrowsingHistoryRepository,
     private val productCategoryRepository: IProductCategoryRepository
+    ,
+    private val productComplaintRepository: IProductComplaintRepository,
+    private val productLowPriceReportRepository: IProductLowPriceReportRepository
 ) : BaseController() {
 
     private val _state =

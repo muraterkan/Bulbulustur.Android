@@ -12,7 +12,7 @@ object ApiRoutes {
         "37.60.239.76"
 
     private const val GLOBALIZATION_SERVER_HOST =
-        "77.92.144.197"
+        "37.60.239.76"
 
     /*
      * ApiClient tarafından kullanılan varsayılan adres.
@@ -100,7 +100,7 @@ object ApiRoutes {
     // -------------------------------------------------------------------------
 
     const val AUTHENTICATION_BASE_URL =
-        "https://authentication.bulbulustur.com/api/Auth/"
+        "http://37.60.239.76:30135/api/Auth/"
 
     // -------------------------------------------------------------------------
     // Globalization API - 30215

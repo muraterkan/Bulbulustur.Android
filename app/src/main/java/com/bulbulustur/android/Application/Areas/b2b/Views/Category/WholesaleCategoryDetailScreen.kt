@@ -46,7 +46,7 @@ import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryDTO
 
 @Composable
-fun CategoryDetailScreen(
+fun WholesaleCategoryDetailScreen(
     categoryId: Int = 1,
     categoryInfo: ProductCategoryDTO? = null,
     childCategories: List<ProductCategoryDTO> = emptyList(),
@@ -573,7 +573,7 @@ private fun getWholesalePopularProductGroups(): List<String> {
 @Composable
 private fun CategoryDetailScreenPreview() {
     BbTheme {
-        CategoryDetailScreen()
+        WholesaleCategoryDetailScreen()
     }
 }
 

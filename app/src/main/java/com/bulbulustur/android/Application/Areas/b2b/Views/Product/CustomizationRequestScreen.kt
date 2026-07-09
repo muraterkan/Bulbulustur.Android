@@ -46,7 +46,12 @@ fun CustomizationRequestScreen(
     productName: String = "Square Silver Starlight Chain Shirt Collar Anti-Blood Brooch",
     companyName: String = "Anadolu Tedarik",
     onBackClick: () -> Unit = {},
-    onSendClick: () -> Unit = {}
+    onSendClick: (
+        detail: String,
+        colorMaterial: String,
+        sizeTechnical: String,
+        packageLogo: String
+    ) -> Unit = { _, _, _, _ -> }
 ) {
     val detail = remember {
         mutableStateOf("")
@@ -173,7 +178,14 @@ fun CustomizationRequestScreen(
 
             item {
                 CustomizationSendCard(
-                    onSendClick = onSendClick
+                    onSendClick = {
+                        onSendClick(
+                            detail.value,
+                            colorMaterial.value,
+                            sizeTechnical.value,
+                            packageLogo.value
+                        )
+                    }
                 )
             }
 

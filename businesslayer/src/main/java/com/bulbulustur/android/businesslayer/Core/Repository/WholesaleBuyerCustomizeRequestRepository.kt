@@ -12,60 +12,51 @@ class WholesaleBuyerCustomizeRequestRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IWholesaleBuyerCustomizeRequestRepository {
 
-    override suspend fun GetWholesaleBuyerCustomizeRequestListAsync(): Result<List<WholesaleBuyerCustomizeRequestDTO>> {
+    override suspend fun GetWholesaleBuyerCustomizeRequestListAsync(wholesaleProductId: Int, count: Int): Result<List<WholesaleBuyerCustomizeRequestDTO>> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetWholesaleBuyerCustomizeRequestListAsync"
+            baseUrl = ApiRoutes.BUYER_REQUEST_BASE_URL,
+            method = "GetBuyerCustomizeRequestsAsync",
+            query = "wholesaleProductId=$wholesaleProductId&count=$count"
         )
     }
 
-    override suspend fun GetWholesaleBuyerCustomizeRequestByIdAsync(
-        wholesaleBuyerCustomizeRequestId: Int
-    ): Result<WholesaleBuyerCustomizeRequestUpdateModel?> {
+    override suspend fun GetWholesaleBuyerCustomizeRequestByIdAsync(wholesaleBuyerCustomizeRequestId: Int): Result<WholesaleBuyerCustomizeRequestUpdateModel?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetWholesaleBuyerCustomizeRequestByIdAsync",
+            baseUrl = ApiRoutes.BUYER_REQUEST_BASE_URL,
+            method = "GetBuyerCustomizeRequestByIdAsync",
             query = "wholesaleBuyerCustomizeRequestId=$wholesaleBuyerCustomizeRequestId"
         )
     }
 
-    override suspend fun GetWholesaleBuyerCustomizeRequestByIdExtendedAsync(
-        wholesaleBuyerCustomizeRequestId: Int
-    ): Result<WholesaleBuyerCustomizeRequestDTO?> {
+    override suspend fun GetWholesaleBuyerCustomizeRequestByIdExtendedAsync(languageId: Int, wholesaleBuyerCustomizeRequestId: Int): Result<WholesaleBuyerCustomizeRequestDTO?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetWholesaleBuyerCustomizeRequestByIdExtendedAsync",
-            query = "wholesaleBuyerCustomizeRequestId=$wholesaleBuyerCustomizeRequestId"
+            baseUrl = ApiRoutes.BUYER_REQUEST_BASE_URL,
+            method = "GetBuyerCustomizeRequestByIdExtendedAsync",
+            query = "languageId=$languageId&wholesaleBuyerCustomizeRequestId=$wholesaleBuyerCustomizeRequestId"
         )
     }
 
-    override suspend fun InsertAsync(
-        model: WholesaleBuyerCustomizeRequestInsertModel
-    ): Result<Unit> {
+    override suspend fun InsertAsync(languageId: Int, model: WholesaleBuyerCustomizeRequestInsertModel): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "InsertAsync",
+            baseUrl = ApiRoutes.BUYER_REQUEST_BASE_URL,
+            method = "BuyerCustomizeRequestInsertAsync?languageId=$languageId",
             data = model
         )
     }
 
-    override suspend fun UpdateAsync(
-        model: WholesaleBuyerCustomizeRequestUpdateModel
-    ): Result<Unit> {
+    override suspend fun UpdateAsync(model: WholesaleBuyerCustomizeRequestUpdateModel): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "UpdateAsync",
+            baseUrl = ApiRoutes.BUYER_REQUEST_BASE_URL,
+            method = "BuyerCustomizeRequestUpdateAsync",
             data = model
         )
     }
 
-    override suspend fun DeleteAsync(
-        wholesaleBuyerCustomizeRequestId: Int
-    ): Result<Unit> {
-        return apiClient.DeleteAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "DeleteAsync",
-            query = "wholesaleBuyerCustomizeRequestId=$wholesaleBuyerCustomizeRequestId"
+    override suspend fun DeleteAsync(wholesaleBuyerCustomizeRequestId: Int): Result<Unit> {
+        return apiClient.PostAsync(
+            baseUrl = ApiRoutes.BUYER_REQUEST_BASE_URL,
+            method = "BuyerCustomizeRequestDeleteAsync",
+            data = wholesaleBuyerCustomizeRequestId
         )
     }
 }

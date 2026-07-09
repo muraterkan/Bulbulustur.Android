@@ -45,7 +45,10 @@ fun SampleRequestScreen(
     productName: String = "Square Silver Starlight Chain Shirt Collar Anti-Blood Brooch",
     companyName: String = "Anadolu Tedarik",
     onBackClick: () -> Unit = {},
-    onSendClick: () -> Unit = {}
+    onSendClick: (
+        quantity: String,
+        detail: String
+    ) -> Unit = { _, _ -> }
 ) {
     val quantity = remember {
         mutableStateOf("1")
@@ -125,7 +128,12 @@ fun SampleRequestScreen(
 
             item {
                 SampleRequestSendCard(
-                    onSendClick = onSendClick
+                    onSendClick = {
+                        onSendClick(
+                            quantity.value,
+                            detail.value
+                        )
+                    }
                 )
             }
 

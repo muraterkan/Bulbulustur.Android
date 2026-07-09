@@ -11,11 +11,15 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.bulbulustur.android.Application.Areas.b2b.Controllers.RfqController
-import com.bulbulustur.android.Application.Areas.b2b.Views.Category.CategoryDetailScreen as WholesaleCategoryDetailScreen
+import com.bulbulustur.android.Application.Areas.b2b.Controllers.WholesaleBuyerRequestController
+import com.bulbulustur.android.Application.Areas.b2b.Views.Category.WholesaleCategoryDetailScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Category.WholesaleCategoryHomeScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Home.WholesaleHomeScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Product.WholesaleProductListScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Product.WholesaleProductDetailScreen
+import com.bulbulustur.android.Application.Areas.b2b.Views.Product.LastPriceRequestScreen
+import com.bulbulustur.android.Application.Areas.b2b.Views.Product.SampleRequestScreen
+import com.bulbulustur.android.Application.Areas.b2b.Views.Product.CustomizationRequestScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Rfq.RfqCreateScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Rfq.RfqDetailScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Rfq.RfqListScreen
@@ -28,6 +32,9 @@ import com.bulbulustur.android.Application.Navigation.Routes.RfqRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.WholesaleRoutes
 import com.bulbulustur.android.Application.Session.UserSessionState
 import com.bulbulustur.android.businesslayer.Core.Enums.EApplicationLanguage
+import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.WholesaleBuyerCustomizeRequestInsertModel
+import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.WholesaleBuyerLastPriceRequestInsertModel
+import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.WholesaleBuyerSampleRequestInsertModel
 import coil3.compose.AsyncImage
 import com.bulbulustur.android.Application.Areas.b2b.Controllers.ProductControllerState
 import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleProductDTO
@@ -39,7 +46,8 @@ fun NavGraphBuilder.wholesaleGraph(
     categoryController: CategoryController,
     homeController: HomeController,
     productController: ProductController,
-    rfqController: RfqController
+    rfqController: RfqController,
+    wholesaleBuyerRequestController: WholesaleBuyerRequestController
 ){
     composable(route = WholesaleRoutes.Home) {
         val homeState by homeController.State.collectAsState()
@@ -380,6 +388,160 @@ fun NavGraphBuilder.wholesaleGraph(
                 if (category.id > 0) {
                     navigator.navController.navigate(
                         WholesaleRoutes.categoryDetail(category.id)
+                    )
+                }
+            }
+        )
+    }
+
+    composable(
+        route = WholesaleRoutes.LastPriceRequest,
+        arguments = listOf(
+            navArgument(WholesaleRoutes.ArgProductId) { type = NavType.IntType }
+        )
+    ) { backStackEntry ->
+        val productState by productController.State.collectAsState()
+        val requestState by wholesaleBuyerRequestController.State.collectAsState()
+        val requestProductId = backStackEntry.arguments?.getInt(WholesaleRoutes.ArgProductId) ?: 0
+        LaunchedEffect(requestProductId, sessionState.Language.Id) {
+            if (requestProductId > 0) {
+                productController.Detail(
+                    languageId = sessionState.Language.Id,
+                    wholesaleProductId = requestProductId
+                )
+            }
+        }
+        val product = productState.ProductDetailResult?.Data
+
+        LastPriceRequestScreen(
+            productId = requestProductId,
+            productName = product?.ProductName?.takeIf { it.isNotBlank() } ?: "Ürün",
+            companyName = product?.CompanyName?.takeIf { it.isNotBlank() } ?: "Tedarikçi",
+            currentPriceLabel = product?.Price?.takeIf { it > 0.0 }?.let { "" } ?: "",
+            onBackClick = { navigator.back() },
+            onSendClick = { quantity, targetPrice, paymentTerm, deliveryTarget, detail ->
+                val selectedProduct = product
+                if (selectedProduct != null) {
+                    wholesaleBuyerRequestController.InsertLastPriceRequest(
+                        languageId = sessionState.Language.Id,
+                        model = WholesaleBuyerLastPriceRequestInsertModel(
+                            InsertedBy = sessionState.MemberId,
+                            CompanyId = selectedProduct.CompanyId,
+                            WholesaleProductId = requestProductId,
+                            ProductName = selectedProduct.ProductName,
+                            Description = detail,
+                            CategoryId = selectedProduct.ProductCategoryId,
+                            UnitPriceRequested = targetPrice.replace(",", ".").toDoubleOrNull(),
+                            CurrencyId = selectedProduct.Prices.firstOrNull()?.CurrencyId ?: 0,
+                            EstimatedOrderQuantity = quantity.replace(",", ".").toDoubleOrNull() ?: 0.0,
+                            UnitId = selectedProduct.Prices.firstOrNull()?.UnitId ?: 0,
+                            CargoTarget = deliveryTarget
+                        ),
+                        onSuccess = {
+                            navigator.back()
+                        }
+                    )
+                }
+            }
+        )
+    }
+
+    composable(
+        route = WholesaleRoutes.SampleRequest,
+        arguments = listOf(
+            navArgument(WholesaleRoutes.ArgProductId) { type = NavType.IntType }
+        )
+    ) { backStackEntry ->
+        val productState by productController.State.collectAsState()
+        val requestState by wholesaleBuyerRequestController.State.collectAsState()
+        val requestProductId = backStackEntry.arguments?.getInt(WholesaleRoutes.ArgProductId) ?: 0
+        LaunchedEffect(requestProductId, sessionState.Language.Id) {
+            if (requestProductId > 0) {
+                productController.Detail(
+                    languageId = sessionState.Language.Id,
+                    wholesaleProductId = requestProductId
+                )
+            }
+        }
+        val product = productState.ProductDetailResult?.Data
+
+        SampleRequestScreen(
+            productId = requestProductId,
+            productName = product?.ProductName?.takeIf { it.isNotBlank() } ?: "Ürün",
+            companyName = product?.CompanyName?.takeIf { it.isNotBlank() } ?: "Tedarikçi",
+            onBackClick = { navigator.back() },
+            onSendClick = { quantity, detail ->
+                val selectedProduct = product
+                if (selectedProduct != null) {
+                    wholesaleBuyerRequestController.InsertSampleRequest(
+                        languageId = sessionState.Language.Id,
+                        model = WholesaleBuyerSampleRequestInsertModel(
+                            InsertedBy = sessionState.MemberId,
+                            CompanyId = selectedProduct.CompanyId,
+                            WholesaleProductId = requestProductId,
+                            ProductName = selectedProduct.ProductName,
+                            Description = detail,
+                            UnitId = selectedProduct.Prices.firstOrNull()?.UnitId ?: 0,
+                            SamplePrice = selectedProduct.SamplePrice,
+                            CurrencyId = selectedProduct.Prices.firstOrNull()?.CurrencyId ?: 0,
+                            Quantity = quantity.toIntOrNull() ?: 1
+                        ),
+                        onSuccess = {
+                            navigator.back()
+                        }
+                    )
+                }
+            }
+        )
+    }
+
+    composable(
+        route = WholesaleRoutes.CustomizationRequest,
+        arguments = listOf(
+            navArgument(WholesaleRoutes.ArgProductId) { type = NavType.IntType }
+        )
+    ) { backStackEntry ->
+        val productState by productController.State.collectAsState()
+        val requestState by wholesaleBuyerRequestController.State.collectAsState()
+        val requestProductId = backStackEntry.arguments?.getInt(WholesaleRoutes.ArgProductId) ?: 0
+        LaunchedEffect(requestProductId, sessionState.Language.Id) {
+            if (requestProductId > 0) {
+                productController.Detail(
+                    languageId = sessionState.Language.Id,
+                    wholesaleProductId = requestProductId
+                )
+            }
+        }
+        val product = productState.ProductDetailResult?.Data
+
+        CustomizationRequestScreen(
+            productId = requestProductId,
+            productName = product?.ProductName?.takeIf { it.isNotBlank() } ?: "Ürün",
+            companyName = product?.CompanyName?.takeIf { it.isNotBlank() } ?: "Tedarikçi",
+            onBackClick = { navigator.back() },
+            onSendClick = { detail, colorMaterial, sizeTechnical, packageLogo ->
+                val selectedProduct = product
+                if (selectedProduct != null) {
+                    val combinedDescription = listOf(
+                        detail.takeIf { it.isNotBlank() },
+                        colorMaterial.takeIf { it.isNotBlank() }?.let { "Renk / Malzeme: $it" },
+                        sizeTechnical.takeIf { it.isNotBlank() }?.let { "Ölçü / Teknik Detay: $it" },
+                        packageLogo.takeIf { it.isNotBlank() }?.let { "Ambalaj / Logo: $it" }
+                    ).filterNotNull().joinToString("\n\n")
+
+                    wholesaleBuyerRequestController.InsertCustomizeRequest(
+                        languageId = sessionState.Language.Id,
+                        model = WholesaleBuyerCustomizeRequestInsertModel(
+                            InsertedBy = sessionState.MemberId,
+                            CompanyId = selectedProduct.CompanyId,
+                            WholesaleProductId = requestProductId,
+                            ProductName = selectedProduct.ProductName,
+                            Description = combinedDescription,
+                            SendOtherSeller = 0
+                        ),
+                        onSuccess = {
+                            navigator.back()
+                        }
                     )
                 }
             }

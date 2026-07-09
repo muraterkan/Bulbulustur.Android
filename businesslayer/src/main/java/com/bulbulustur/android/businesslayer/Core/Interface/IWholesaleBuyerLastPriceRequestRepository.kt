@@ -4,44 +4,12 @@ import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleBuyerLastPriceReq
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.WholesaleBuyerLastPriceRequestInsertModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.WholesaleBuyerLastPriceRequestUpdateModel
 import com.bulbulustur.android.businesslayer.Core.Util.Result
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
 
 interface IWholesaleBuyerLastPriceRequestRepository {
-
-    @GET("api/WholesaleBuyerLastPriceRequest/GetWholesaleBuyerLastPriceRequestListAsync")
-    suspend fun GetWholesaleBuyerLastPriceRequestListAsync():
-            Result<List<WholesaleBuyerLastPriceRequestDTO>>
-
-    @GET("api/WholesaleBuyerLastPriceRequest/GetWholesaleBuyerLastPriceRequestByIdAsync")
-    suspend fun GetWholesaleBuyerLastPriceRequestByIdAsync(
-        @Query("wholesaleBuyerLastPriceRequestId")
-        wholesaleBuyerLastPriceRequestId: Int
-    ): Result<WholesaleBuyerLastPriceRequestUpdateModel?>
-
-    @GET("api/WholesaleBuyerLastPriceRequest/GetWholesaleBuyerLastPriceRequestByIdExtendedAsync")
-    suspend fun GetWholesaleBuyerLastPriceRequestByIdExtendedAsync(
-        @Query("wholesaleBuyerLastPriceRequestId")
-        wholesaleBuyerLastPriceRequestId: Int
-    ): Result<WholesaleBuyerLastPriceRequestDTO?>
-
-    @POST("api/WholesaleBuyerLastPriceRequest/InsertAsync")
-    suspend fun InsertAsync(
-        @Body
-        model: WholesaleBuyerLastPriceRequestInsertModel
-    ): Result<Unit>
-
-    @POST("api/WholesaleBuyerLastPriceRequest/UpdateAsync")
-    suspend fun UpdateAsync(
-        @Body
-        model: WholesaleBuyerLastPriceRequestUpdateModel
-    ): Result<Unit>
-
-    @POST("api/WholesaleBuyerLastPriceRequest/DeleteAsync")
-    suspend fun DeleteAsync(
-        @Query("wholesaleBuyerLastPriceRequestId")
-        wholesaleBuyerLastPriceRequestId: Int
-    ): Result<Unit>
+    suspend fun GetWholesaleBuyerLastPriceRequestListAsync(wholesaleProductId: Int, count: Int = 100): Result<List<WholesaleBuyerLastPriceRequestDTO>>
+    suspend fun GetWholesaleBuyerLastPriceRequestByIdAsync(wholesaleBuyerLastPriceRequestId: Int): Result<WholesaleBuyerLastPriceRequestUpdateModel?>
+    suspend fun GetWholesaleBuyerLastPriceRequestByIdExtendedAsync(languageId: Int, wholesaleBuyerLastPriceRequestId: Int): Result<WholesaleBuyerLastPriceRequestDTO?>
+    suspend fun InsertAsync(languageId: Int, model: WholesaleBuyerLastPriceRequestInsertModel): Result<Unit>
+    suspend fun UpdateAsync(model: WholesaleBuyerLastPriceRequestUpdateModel): Result<Unit>
+    suspend fun DeleteAsync(wholesaleBuyerLastPriceRequestId: Int): Result<Unit>
 }

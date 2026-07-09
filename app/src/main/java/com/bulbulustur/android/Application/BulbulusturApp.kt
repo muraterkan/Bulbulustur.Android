@@ -27,6 +27,7 @@ import com.bulbulustur.android.Application.Areas.b2c.Controllers.ProductQuestion
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.ProductReviewController
 import com.bulbulustur.android.Application.Areas.b2b.Controllers.HomeController as WholesaleHomeController
 import com.bulbulustur.android.Application.Areas.b2b.Controllers.RfqController
+import com.bulbulustur.android.Application.Areas.b2b.Controllers.WholesaleBuyerRequestController
 import com.bulbulustur.android.Application.Controllers.AccountController
 import com.bulbulustur.android.Application.Controllers.LogonController
 import com.bulbulustur.android.Application.Controllers.MessageController
@@ -61,6 +62,9 @@ import com.bulbulustur.android.businesslayer.Core.Repository.AdvertSponsoredRepo
 import com.bulbulustur.android.businesslayer.Core.Repository.AuthenticationRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.BasketRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.BuyerRequestRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.WholesaleBuyerCustomizeRequestRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.WholesaleBuyerLastPriceRequestRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.WholesaleBuyerSampleRequestRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.CampaignRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.CompanyRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.DealsOfTheDayRepository
@@ -264,6 +268,18 @@ private fun BulbulusturApplicationContent(
 
     val buyerRequestRepository = remember {
         BuyerRequestRepository()
+    }
+
+    val wholesaleBuyerLastPriceRequestRepository = remember {
+        WholesaleBuyerLastPriceRequestRepository()
+    }
+
+    val wholesaleBuyerSampleRequestRepository = remember {
+        WholesaleBuyerSampleRequestRepository()
+    }
+
+    val wholesaleBuyerCustomizeRequestRepository = remember {
+        WholesaleBuyerCustomizeRequestRepository()
     }
 
     val sendedOfferRepository = remember {
@@ -521,6 +537,20 @@ private fun BulbulusturApplicationContent(
         )
     }
 
+    val wholesaleBuyerRequestController = remember(
+        executeService,
+        wholesaleBuyerLastPriceRequestRepository,
+        wholesaleBuyerSampleRequestRepository,
+        wholesaleBuyerCustomizeRequestRepository
+    ) {
+        WholesaleBuyerRequestController(
+            executeService = executeService,
+            lastPriceRequestRepository = wholesaleBuyerLastPriceRequestRepository,
+            sampleRequestRepository = wholesaleBuyerSampleRequestRepository,
+            customizeRequestRepository = wholesaleBuyerCustomizeRequestRepository
+        )
+    }
+
     val accountController = remember(
         executeService,
         memberRepository,
@@ -717,7 +747,8 @@ private fun BulbulusturApplicationContent(
             ),
             homeController = wholesaleHomeController,
             productController = wholesaleProductController,
-            rfqController = rfqController
+            rfqController = rfqController,
+            wholesaleBuyerRequestController = wholesaleBuyerRequestController
         )
 
         companyGraph(

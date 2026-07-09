@@ -48,7 +48,13 @@ fun LastPriceRequestScreen(
     companyName: String = "Anadolu Tedarik",
     currentPriceLabel: String = "20 $",
     onBackClick: () -> Unit = {},
-    onSendClick: () -> Unit = {}
+    onSendClick: (
+        quantity: String,
+        targetPrice: String,
+        paymentTerm: String,
+        deliveryTarget: String,
+        detail: String
+    ) -> Unit = { _, _, _, _, _ -> }
 ) {
     val quantity = remember {
         mutableStateOf("")
@@ -192,13 +198,19 @@ fun LastPriceRequestScreen(
             item {
                 LastPriceHintCard()
             }
-
             item {
                 LastPriceSendCard(
-                    onSendClick = onSendClick
+                    onSendClick = {
+                        onSendClick(
+                            quantity.value,
+                            targetPrice.value,
+                            paymentTerm.value,
+                            deliveryTarget.value,
+                            detail.value
+                        )
+                    }
                 )
             }
-
             item {
                 Spacer(modifier = Modifier.height(BBSpacing.Space4))
             }

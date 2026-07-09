@@ -180,10 +180,26 @@ fun NavGraphBuilder.orderGraph(
                 type = NavType.StringType
             }
         )
-    ) {
+    ) { backStackEntry ->
+        val orderStoreLineId = backStackEntry.arguments
+            ?.getLong(OrderRoutes.ArgOrderStoreLineId)
+            ?: 0L
+
+        val orderKey = backStackEntry.arguments
+            ?.getString(OrderRoutes.ArgOrderKey)
+            .orEmpty()
+
         OrderReturnRequestScreen(
-            onBackClick = { navigator.back() },
-            onSubmitClick = { navigator.back() }
+            orderStoreLineId = orderStoreLineId,
+            orderKey = orderKey,
+            memberId = memberId,
+            languageId = languageId,
+            onBackClick = {
+                navigator.back()
+            },
+            onSubmitSuccess = {
+                navigator.back()
+            }
         )
     }
 

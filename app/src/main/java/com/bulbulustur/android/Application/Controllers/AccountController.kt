@@ -22,6 +22,7 @@ import com.bulbulustur.android.businesslayer.Core.Interface.IMemberFollowedStore
 import com.bulbulustur.android.businesslayer.Core.Interface.IMemberLoginActivityRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IMemberRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IProductFavoriteRepository
+import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.ProductFavoriteInsertModel
 import com.bulbulustur.android.businesslayer.Core.Interface.IWholesaleFavoriteRepository
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.MemberAddressInsertModel
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.MemberAlarmListInsertModel
@@ -1347,6 +1348,31 @@ class AccountController(
                     WholesaleFavoriteListResult = response,
                     ErrorMessage = response.Message.takeIf { !response.Success }
                 )
+            }
+        }
+    }
+
+    fun InsertProductFavorite(memberId: Int, model: ProductFavoriteInsertModel, onSuccess: (() -> Unit)? = null) {
+        if (memberId <= 0) {
+            SetError("Oturum bilgisi bulunamadı.")
+            return
+        }
+
+        viewModelScope.launch {
+            SetLoading("InsertProductFavorite")
+
+            val result = productFavoriteRepository.InsertProductFavoriteAsync(memberId, model)
+
+            _state.update { currentState ->
+                currentState.copy(
+                    IsLoading = false,
+                    CurrentAction = "InsertProductFavorite",
+                    ErrorMessage = result.Message.takeIf { !result.Success }
+                )
+            }
+
+            if (result.Success) {
+                onSuccess?.invoke()
             }
         }
     }

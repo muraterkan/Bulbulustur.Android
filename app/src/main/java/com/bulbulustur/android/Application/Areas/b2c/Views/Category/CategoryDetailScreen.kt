@@ -69,6 +69,7 @@ fun CategoryDetailScreen(
     onSubCategoryClick: (RetailSubCategoryItem) -> Unit = {},
     onProductClick: (RetailCategoryProductItem) -> Unit = {},
     onCampaignClick: (RetailCategoryCampaignItem) -> Unit = {},
+    onQuickFilterClick: (String) -> Unit = {},
     onSearchClick: (String) -> Unit = {}
 ) {
     val category = getRetailCategoryDetail(
@@ -152,7 +153,10 @@ fun CategoryDetailScreen(
             }
 
             item {
-                CategoryQuickFilterSection(filters = category.quickFilters)
+                CategoryQuickFilterSection(
+                    filters = category.quickFilters,
+                    onQuickFilterClick = onQuickFilterClick
+                )
             }
 
             item {
@@ -435,7 +439,8 @@ private fun CategoryCampaignCard(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun CategoryQuickFilterSection(
-    filters: List<String>
+    filters: List<String>,
+    onQuickFilterClick: (String) -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -454,7 +459,9 @@ private fun CategoryQuickFilterSection(
         ) {
             filters.forEach { filter ->
                 AssistChip(
-                    onClick = {},
+                    onClick = {
+                        onQuickFilterClick(filter)
+                    },
                     label = {
                         Text(text = filter)
                     }

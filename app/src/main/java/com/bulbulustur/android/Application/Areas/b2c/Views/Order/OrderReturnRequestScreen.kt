@@ -15,10 +15,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AssignmentReturn
 import androidx.compose.material.icons.outlined.CheckCircle
-import androidx.compose.material.icons.outlined.RequestQuote
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.RadioButtonUnchecked
+import androidx.compose.material.icons.outlined.RequestQuote
 import androidx.compose.material.icons.outlined.Send
 import androidx.compose.material.icons.outlined.VerifiedUser
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -26,7 +28,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -34,6 +38,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bulbulustur.android.Application.Areas.b2c.Controllers.OrderController
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
@@ -45,28 +52,39 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
+import com.bulbulustur.android.businesslayer.Core.DTO.ReturnRequestDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.SystemDescReturnRequestReasonDTO
 
 @Composable
 fun OrderReturnRequestScreen(
+    orderStoreLineId: Long,
+    orderKey: String,
+    memberId: Int,
+    languageId: Int,
     onBackClick: () -> Unit = {},
-    onSubmitClick: () -> Unit = {}
+    onSubmitSuccess: () -> Unit = {},
+    controller: OrderController = viewModel()
 ) {
-    val reasons = remember {
-        listOf(
-            "Ürün beklentimi karşılamadı",
-            "Yanlış ürün gönderildi",
-            "Ürün hasarlı veya kusurlu geldi",
-            "Eksik ürün veya parça var",
-            "Diğer"
-        )
-    }
+    val state by controller.State.collectAsStateWithLifecycle()
 
-    var selectedReason by remember {
-        mutableStateOf(reasons.first())
+    var selectedReasonId by remember {
+        mutableIntStateOf(0)
     }
 
     var description by remember {
         mutableStateOf("")
+    }
+
+    LaunchedEffect(Unit) {
+        controller.ResetReturnRequestResult()
+        controller.GetReturnRequestReasonsAsync()
+    }
+
+    LaunchedEffect(state.IsReturnRequestCompleted) {
+        if (state.IsReturnRequestCompleted) {
+            controller.ResetReturnRequestResult()
+            onSubmitSuccess()
+        }
     }
 
     Scaffold(
@@ -97,44 +115,135 @@ fun OrderReturnRequestScreen(
             )
         ) {
             item {
-                OrderReturnIntroCard()
+                OrderReturnIntroCard(
+                    orderKey = orderKey,
+                    orderStoreLineId = orderStoreLineId
+                )
             }
 
-            item {
-                OrderReturnReasonCard(
-                    reasons = reasons,
-                    selectedReason = selectedReason,
-                    onReasonClick = { reason ->
-                        selectedReason = reason
+            when {
+                orderStoreLineId <= 0L || orderKey.isBlank() -> {
+                    item {
+                        OrderReturnMessageCard(
+                            title = "Sipariş bilgisi eksik",
+                            description = "İade talebi için sipariş satırı veya sipariş anahtarı bulunamadı."
+                        )
                     }
-                )
-            }
+                }
 
-            item {
-                OrderReturnDescriptionCard(
-                    description = description,
-                    onDescriptionChange = { value ->
-                        description = value
+                memberId <= 0 -> {
+                    item {
+                        OrderReturnMessageCard(
+                            title = "Oturum bilgisi bulunamadı",
+                            description = "İade talebi oluşturmak için hesabınıza giriş yapmanız gerekiyor."
+                        )
                     }
-                )
-            }
+                }
 
-            item {
-                OrderReturnProcessCard()
-            }
+                state.IsLoading &&
+                        state.CurrentAction == "GetReturnRequestReasonsAsync" &&
+                        state.ReturnRequestReasons.isEmpty() -> {
+                    item {
+                        OrderReturnLoadingCard(
+                            text = "İade nedenleri yükleniyor"
+                        )
+                    }
+                }
 
-            item {
-                OrderReturnActionCard(
-                    onBackClick = onBackClick,
-                    onSubmitClick = onSubmitClick
-                )
+                state.ErrorMessage != null &&
+                        state.ReturnRequestReasons.isEmpty() &&
+                        state.CurrentAction == "GetReturnRequestReasonsAsync" -> {
+                    item {
+                        OrderReturnMessageCard(
+                            title = "İade nedenleri alınamadı",
+                            description = state.ErrorMessage.orEmpty()
+                        )
+                    }
+                }
+
+                state.ReturnRequestReasons.isEmpty() -> {
+                    item {
+                        OrderReturnMessageCard(
+                            title = "İade nedeni bulunamadı",
+                            description = "İade talebi için kullanılabilir neden kaydı bulunamadı."
+                        )
+                    }
+                }
+
+                else -> {
+                    item {
+                        OrderReturnReasonCard(
+                            reasons = state.ReturnRequestReasons,
+                            selectedReasonId = selectedReasonId,
+                            onReasonClick = { reasonId ->
+                                selectedReasonId = reasonId
+                            }
+                        )
+                    }
+
+                    item {
+                        OrderReturnDescriptionCard(
+                            description = description,
+                            onDescriptionChange = { value ->
+                                description = value
+                            }
+                        )
+                    }
+
+                    item {
+                        OrderReturnProcessCard()
+                    }
+
+                    state.ErrorMessage
+                        ?.takeIf {
+                            state.CurrentAction == "InsertReturnRequestAsync"
+                        }
+                        ?.let { errorMessage ->
+                            item {
+                                OrderReturnMessageCard(
+                                    title = "Talep gönderilemedi",
+                                    description = errorMessage
+                                )
+                            }
+                        }
+
+                    item {
+                        OrderReturnActionCard(
+                            isLoading = state.IsLoading &&
+                                    state.CurrentAction == "InsertReturnRequestAsync",
+                            isEnabled = selectedReasonId > 0 &&
+                                    description.isNotBlank() &&
+                                    orderStoreLineId > 0 &&
+                                    orderKey.isNotBlank() &&
+                                    memberId > 0,
+                            onBackClick = onBackClick,
+                            onSubmitClick = {
+                                controller.InsertReturnRequestAsync(
+                                    languageId = languageId,
+                                    memberId = memberId,
+                                    returnRequest = ReturnRequestDTO(
+                                        InsertedBy = memberId,
+                                        MemberId = memberId,
+                                        OrderStoreLineId = orderStoreLineId.toInt(),
+                                        OrderKey = orderKey,
+                                        ReturnRequestReasonId = selectedReasonId,
+                                        Description = description.trim()
+                                    )
+                                )
+                            }
+                        )
+                    }
+                }
             }
         }
     }
 }
 
 @Composable
-private fun OrderReturnIntroCard() {
+private fun OrderReturnIntroCard(
+    orderKey: String,
+    orderStoreLineId: Long
+) {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
@@ -170,6 +279,14 @@ private fun OrderReturnIntroCard() {
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+
+                if (orderKey.isNotBlank() || orderStoreLineId > 0L) {
+                    Text(
+                        text = "Sipariş: $orderKey • Satır: $orderStoreLineId",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
         }
     }
@@ -177,9 +294,9 @@ private fun OrderReturnIntroCard() {
 
 @Composable
 private fun OrderReturnReasonCard(
-    reasons: List<String>,
-    selectedReason: String,
-    onReasonClick: (String) -> Unit
+    reasons: List<SystemDescReturnRequestReasonDTO>,
+    selectedReasonId: Int,
+    onReasonClick: (Int) -> Unit
 ) {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
@@ -205,10 +322,10 @@ private fun OrderReturnReasonCard(
             ) {
                 reasons.forEach { reason ->
                     OrderReturnReasonRow(
-                        text = reason,
-                        selected = reason == selectedReason,
+                        text = reason.Content,
+                        selected = reason.SystemDescReturnRequestReasonId == selectedReasonId,
                         onClick = {
-                            onReasonClick(reason)
+                            onReasonClick(reason.SystemDescReturnRequestReasonId)
                         }
                     )
                 }
@@ -262,7 +379,7 @@ private fun OrderReturnReasonRow(
             )
 
             Text(
-                text = text,
+                text = text.ifBlank { "İade nedeni" },
                 modifier = Modifier.weight(1f),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface
@@ -289,7 +406,7 @@ private fun OrderReturnDescriptionCard(
         ) {
             OrderReturnSectionTitle(
                 title = "Açıklama",
-                subtitle = "İsterseniz iade talebinizle ilgili ek bilgi yazabilirsiniz."
+                subtitle = "İade talebinizin gönderilebilmesi için kısa bir açıklama yazın."
             )
 
             OutlinedTextField(
@@ -357,7 +474,86 @@ private fun OrderReturnProcessCard() {
 }
 
 @Composable
+private fun OrderReturnLoadingCard(
+    text: String
+) {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space3
+            ),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            CircularProgressIndicator(
+                modifier = Modifier.size(
+                    BBIcon.Action
+                ),
+                strokeWidth = BBSpacing.Space1
+            )
+
+            Text(
+                text = text,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+@Composable
+private fun OrderReturnMessageCard(
+    title: String,
+    description: String
+) {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space3
+            ),
+            verticalAlignment = Alignment.Top
+        ) {
+            OrderReturnIconBox(
+                icon = Icons.Outlined.Info,
+                backgroundColor = BBColors.Orange.Orange50,
+                iconColor = BBColors.Orange.Orange600
+            )
+
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space1
+                )
+            ) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+
+                Text(
+                    text = description,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+    }
+}
+
+@Composable
 private fun OrderReturnActionCard(
+    isLoading: Boolean,
+    isEnabled: Boolean,
     onBackClick: () -> Unit,
     onSubmitClick: () -> Unit
 ) {
@@ -378,6 +574,8 @@ private fun OrderReturnActionCard(
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Primary,
                 size = BbButtonSize.Medium,
+                enabled = isEnabled,
+                isLoading = isLoading,
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Outlined.Send,

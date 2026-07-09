@@ -42,6 +42,7 @@ import com.bulbulustur.android.Application.Areas.b2c.Views.Store.StoreProductLis
 import com.bulbulustur.android.businesslayer.Core.DTO.B2CProductFilterDTO
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.MemberAlarmListInsertModel
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.ProductComplaintInsertModel
+import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.ProductFavoriteInsertModel
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.ProductLowPriceReportInsertModel
 
 fun NavGraphBuilder.retailGraph(
@@ -289,9 +290,16 @@ fun NavGraphBuilder.retailGraph(
                     RetailRoutes.productList(categoryId)
                 )
             },
-            onCampaignClick = {
+            onCampaignClick = { campaign ->
+                if (campaign.id > 0) {
+                    navigator.navController.navigate(
+                        RetailRoutes.campaignDetail(campaign.id)
+                    )
+                }
+            },
+            onQuickFilterClick = {
                 navigator.navController.navigate(
-                    RetailRoutes.CampaignDetail
+                    RetailRoutes.productList(categoryId)
                 )
             },
             onSearchClick = {
@@ -391,11 +399,37 @@ fun NavGraphBuilder.retailGraph(
                     )
                 )
             },
-            onProductFavoriteClick = {
-                Unit
+            onProductFavoriteClick = { product ->
+                if (!sessionState.IsAuthenticated || sessionState.MemberId <= 0) {
+                    navigator.navController.navigate(LogonRoutes.Logon)
+                } else {
+                    accountController.InsertProductFavorite(
+                        memberId = sessionState.MemberId,
+                        model = ProductFavoriteInsertModel(
+                            InsertedBy = sessionState.MemberId,
+                            StoreId = product.StoreId,
+                            ProductId = product.ProductId,
+                            VariantId = product.VariantId
+                        ),
+                        onSuccess = {
+                            accountController.GetProductFavorites(memberId = sessionState.MemberId)
+                        }
+                    )
+                }
             },
-            onAddToBasketClick = {
-                navigator.navigateToRetailBasket()
+            onAddToBasketClick = { priceId ->
+                if (!sessionState.IsAuthenticated || sessionState.MemberId <= 0) {
+                    navigator.navController.navigate(LogonRoutes.Logon)
+                } else {
+                    basketController.AddToBasket(
+                        memberId = sessionState.MemberId,
+                        priceId = priceId,
+                        quantity = 1,
+                        onSuccess = {
+                            basketController.Refresh(memberId = sessionState.MemberId)
+                        }
+                    )
+                }
             }
         )
     }
@@ -1068,12 +1102,26 @@ fun NavGraphBuilder.retailGraph(
                     LogonRoutes.Logon
                 )
             },
-            onInsertQuestion = {
-                /*
-                 * MemberId henüz session contract'ında bulunmuyor.
-                 * Backend JWT claim düzeltmesinden sonra burada
-                 * productQuestionController.Insert(...) çağrılacak.
-                 */
+            onInsertQuestion = { question ->
+                if (!sessionState.IsAuthenticated || sessionState.MemberId <= 0) {
+                    navigator.navController.navigate(LogonRoutes.Logon)
+                } else {
+                    productQuestionController.Insert(
+                        languageId = sessionState.Language.Id,
+                        memberId = sessionState.MemberId,
+                        storeId = storeId,
+                        productId = productId,
+                        //variantId = variantId,
+                        productSecureKey = product?.ProductSecureKey.orEmpty(),
+                        question = question,
+                        onSuccess = {
+                            productQuestionController.List(
+                                productId = productId,
+                                count = 100
+                            )
+                        }
+                    )
+                }
             }
         )
     }

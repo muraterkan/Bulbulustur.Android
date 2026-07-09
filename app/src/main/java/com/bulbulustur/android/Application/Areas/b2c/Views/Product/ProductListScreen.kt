@@ -68,7 +68,7 @@ fun ProductListScreen(
         storeId: Int,
         variantId: Int
     ) -> Unit = { _, _, _ -> },
-    onProductFavoriteClick: (Int) -> Unit = {},
+    onProductFavoriteClick: (B2CProductData) -> Unit = {},
     onAddToBasketClick: (Int) -> Unit = {}
 ) {
     var searchText by remember {
@@ -398,12 +398,12 @@ fun ProductListScreen(
                                         }
 
                                     onProductFavoriteClick(
-                                        product.ProductId
+                                        product
                                     )
                                 },
                                 onAddToBasketClick = {
                                     onAddToBasketClick(
-                                        product.ProductId
+                                        product.ProductVariantPriceId
                                     )
                                 }
                             )

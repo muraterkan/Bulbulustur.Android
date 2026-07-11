@@ -719,7 +719,10 @@ private fun BulbulusturApplicationContent(
         startDestination = SplashRoutes.ModeSelection
     ) {
         splashGraph(
-            navigator = appNavigator
+            navigator = appNavigator,
+            sessionState = sessionState,
+            settingsController = settingsController,
+            userSessionManager = userSessionManager
         )
 
         logonGraph(

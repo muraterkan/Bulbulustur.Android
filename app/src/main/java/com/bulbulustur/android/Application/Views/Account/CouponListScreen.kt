@@ -135,8 +135,8 @@ fun CouponListScreen(
 private fun CouponCard(coupon: MemberCouponDTO) {
     val status = coupon.ResolveCouponStatus()
     val usageText = coupon.ResolveUsageText()
-    val expireDate = coupon.LastUsingDate.ToCouponDateText()
-    val code = coupon.CouponCode.ifBlank { "Kupon" }
+    val expireDate = coupon.LastUsingDate.orEmpty().ToCouponDateText()
+    val code = coupon.CouponCode.orEmpty().ifBlank { "Kupon" }
 
     BbCard(
         modifier = Modifier.fillMaxWidth(),
@@ -186,9 +186,9 @@ private fun CouponCard(coupon: MemberCouponDTO) {
                     )
                 }
 
-                if (coupon.Descripion.isNotBlank()) {
+                if (coupon.Descripion.orEmpty().isNotBlank()) {
                     CouponDescriptionBox(
-                        description = coupon.Descripion
+                        description = coupon.Descripion.orEmpty()
                     )
                 }
 
@@ -516,11 +516,11 @@ private fun CouponEmptyState(modifier: Modifier) {
 }
 
 private fun MemberCouponDTO.ResolveCouponStatus(): CouponStatus {
-    if (Used == 1 || OrderId.isNotBlank()) {
+    if (Used == 1 || OrderId.orEmpty().isNotBlank()) {
         return CouponStatus.Used
     }
 
-    val lastUsingDate = LastUsingDate.ToCouponLocalDate()
+    val lastUsingDate = LastUsingDate.orEmpty().ToCouponLocalDate()
 
     if (lastUsingDate != null && lastUsingDate.isBefore(LocalDate.now())) {
         return CouponStatus.Expired
@@ -530,8 +530,8 @@ private fun MemberCouponDTO.ResolveCouponStatus(): CouponStatus {
 }
 
 private fun MemberCouponDTO.ResolveUsageText(): String {
-    val usedDate = UsedDate.ToCouponDateText()
-    val orderId = OrderId.trim()
+    val usedDate = UsedDate.orEmpty().ToCouponDateText()
+    val orderId = OrderId.orEmpty().trim()
 
     return when {
         usedDate != "-" && orderId.isNotBlank() -> "$usedDate / $orderId"

@@ -91,8 +91,10 @@ fun WholesaleCategoryHomeScreen(
             categories.mapIndexed { index, category ->
                 WholesaleCategoryHomeSubCategoryItem(
                     id = category.ProductCategoryId,
-                    title = category.CategoryName.ifBlank { "Kategori" },
-                    description = category.Breadcrumb.ifBlank { "Toptan kategori ürünlerini keşfet" },
+                    title = category.CategoryName.orEmpty().ifBlank { "Kategori" },
+                    description = category.Breadcrumb.orEmpty().ifBlank {
+                        "Toptan kategori ürünlerini keşfet"
+                    },
                     icon = Icons.Outlined.Category,
                     backgroundColor = when (index % 4) {
                         0 -> MaterialTheme.colorScheme.primaryContainer
@@ -202,7 +204,7 @@ fun WholesaleCategoryHomeScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Toptan Kategori akışı",
+                    title = "Toptan Kategori Akışı",
                     subtitle = "Ürün, tedarikçi ve teklif kanallarına hızlı geç."
                 )
             }
@@ -217,8 +219,8 @@ fun WholesaleCategoryHomeScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Popüler ticaret Aramaları",
-                    subtitle = "Bu sektörde sık kullanılan arama başlıkları"
+                    title = "Popüler Ticaret Aramaları",
+                    subtitle = "Bu sektörde sık kullanılan arama başlıkları."
                 )
             }
 
@@ -246,12 +248,15 @@ private fun WholesaleCategoryHeroCard(
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = BBRadius.XlShape,
-        color = MaterialTheme.colorScheme.inverseSurface
+        color = MaterialTheme.colorScheme.surface,
+        border = BorderStroke(
+            width = BBSpacing.BorderThin,
+            color = MaterialTheme.colorScheme.outlineVariant
+        )
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.inverseSurface)
                 .padding(BBSpacing.Space5),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
@@ -262,13 +267,13 @@ private fun WholesaleCategoryHeroCard(
                 Icon(
                     imageVector = Icons.Outlined.Factory,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.inversePrimary
+                    tint = MaterialTheme.colorScheme.primary
                 )
 
                 Text(
                     text = "Toptan Kategori",
                     style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.inversePrimary,
+                    color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.SemiBold
                 )
             }
@@ -276,14 +281,14 @@ private fun WholesaleCategoryHeroCard(
             Text(
                 text = "Elektronik Parçalar",
                 style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.inverseOnSurface,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
                 text = "Alt sektörleri incele, doğrulanmış tedarikçilere ulaş ve seçili kategori için teklif akışını başlat.",
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.inverseOnSurface.copy(alpha = 0.78f)
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Row(

@@ -81,7 +81,7 @@ fun SystemStatusScreen(
 
             overview == null -> {
                 SystemStatusErrorContent(
-                    message = errorMessage ?: "Sistem durumu alınamadı.",
+                    message = "Sistem durumu şu anda alınamıyor. Lütfen biraz sonra tekrar deneyin.",
                     onRetryClick = onRetryClick,
                     modifier = Modifier
                         .fillMaxSize()

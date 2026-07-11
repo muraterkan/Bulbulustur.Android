@@ -128,7 +128,7 @@ fun RequestDetailScreen(
                         RequestDetailReasonCard(request = request)
                     }
 
-                    if (request.Description.isNotBlank()) {
+                    if (!request.Description.isNullOrBlank()) {
                         item {
                             RequestDetailDescriptionCard(request = request)
                         }
@@ -139,7 +139,7 @@ fun RequestDetailScreen(
                     }
 
                     item {
-                        RequestDetailPhotosCard(pictures = request.Pictures)
+                        RequestDetailPhotosCard(pictures = request.Pictures.orEmpty())
                     }
 
                     if (request.StoreId > 0) {
@@ -204,9 +204,7 @@ private fun RequestDetailSummaryCard(request: ReturnRequestDTO) {
             }
 
             RequestDetailStatusBadge(
-                text = request.ReturnRequestStatus.ifBlank {
-                    GetReturnRequestDetailStatusFallback(request.ReturnRequestStatusId)
-                },
+                text = request.ReturnRequestStatus?.takeIf { it.isNotBlank() } ?: GetReturnRequestDetailStatusFallback(request.ReturnRequestStatusId),
                 statusId = request.ReturnRequestStatusId
             )
         }
@@ -248,7 +246,7 @@ private fun RequestDetailProductCard(
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                 ) {
                     Text(
-                        text = request.ProductName.ifBlank { "-" },
+                        text = request.ProductName.OrDash(),
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -289,7 +287,7 @@ private fun RequestDetailProductCard(
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                 ) {
                     Text(
-                        text = request.StoreName.ifBlank { "-" },
+                        text = request.StoreName.OrDash(),
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -322,7 +320,7 @@ private fun RequestDetailReasonCard(request: ReturnRequestDTO) {
         icon = Icons.Outlined.ReceiptLong,
         iconColor = BBColors.Orange.Orange600,
         title = "Talep Nedeni",
-        value = request.ReturnRequestType.ifBlank { "-" }
+        value = request.ReturnRequestType.OrDash()
     )
 }
 
@@ -343,7 +341,7 @@ private fun RequestDetailDescriptionCard(request: ReturnRequestDTO) {
             )
 
             Text(
-                text = request.Description,
+                text = request.Description.orEmpty(),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -369,14 +367,14 @@ private fun RequestDetailPropertiesCard(request: ReturnRequestDTO) {
 
             RequestDetailPropertyRow(
                 title = "Renk",
-                value = request.Color.ifBlank { "-" }
+                value = request.Color.OrDash()
             )
 
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
             RequestDetailPropertyRow(
                 title = "Beden",
-                value = request.Size.ifBlank { "-" }
+                value = request.Size.OrDash()
             )
 
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
@@ -767,6 +765,8 @@ private fun RequestDetailNotFoundState(modifier: Modifier = Modifier) {
     }
 }
 
+private fun String?.OrDash(): String = this?.takeIf { it.isNotBlank() } ?: "-"
+
 private fun GetReturnRequestDetailStatusFallback(statusId: Int): String {
     return when (statusId) {
         1 -> "Talep Alındı"
@@ -778,8 +778,8 @@ private fun GetReturnRequestDetailStatusFallback(statusId: Int): String {
     }
 }
 
-private fun FormatReturnRequestDetailDate(value: String): String {
-    if (value.isBlank() || value.startsWith("0001-01-01")) {
+private fun FormatReturnRequestDetailDate(value: String?): String {
+    if (value.isNullOrBlank() || value.startsWith("0001-01-01")) {
         return "-"
     }
 
@@ -799,11 +799,11 @@ private fun FormatReturnRequestDetailDate(value: String): String {
 
 private fun FormatReturnRequestPrice(
     price: Double,
-    currency: String
+    currency: String?
 ): String {
     val symbols = DecimalFormatSymbols(Locale("tr", "TR"))
     val formatter = DecimalFormat("#,##0.00", symbols)
-    val currencyText = currency.ifBlank { "₺" }
+    val currencyText = currency?.takeIf { it.isNotBlank() } ?: "₺"
 
     return "${formatter.format(price)} $currencyText"
 }

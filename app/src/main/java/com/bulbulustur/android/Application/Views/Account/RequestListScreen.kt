@@ -166,7 +166,7 @@ private fun RequestCard(
                     RequestInfoBox(
                         modifier = Modifier.weight(1f),
                         title = "Satıcı",
-                        value = request.StoreName.ifBlank { "-" },
+                        value = request.StoreName.OrDash(),
                         icon = Icons.Outlined.Storefront,
                         iconColor = BBColors.Blue.Blue600
                     )
@@ -174,7 +174,7 @@ private fun RequestCard(
                     RequestInfoBox(
                         modifier = Modifier.weight(1f),
                         title = "Talep Nedeni",
-                        value = request.ReturnRequestType.ifBlank { "-" },
+                        value = request.ReturnRequestType.OrDash(),
                         icon = Icons.Outlined.ReceiptLong,
                         iconColor = BBColors.Orange.Orange600
                     )
@@ -183,20 +183,20 @@ private fun RequestCard(
                 RequestInfoBox(
                     modifier = Modifier.fillMaxWidth(),
                     title = "Ürün",
-                    value = request.ProductName.ifBlank { "-" },
+                    value = request.ProductName.OrDash(),
                     icon = Icons.Outlined.Inventory2,
                     iconColor = BBColors.Yellow.Yellow800,
                     highlighted = true
                 )
 
-                if (request.Description.isNotBlank()) {
+                if (!request.Description.isNullOrBlank()) {
                     RequestDescriptionBox(
-                        description = request.Description
+                        description = request.Description.orEmpty()
                     )
                 }
 
                 RequestPhotoBox(
-                    photoCount = request.Pictures.size
+                    photoCount = request.Pictures.orEmpty().size
                 )
 
                 BbButton(
@@ -271,9 +271,7 @@ private fun RequestCardHeader(request: ReturnRequestDTO) {
         }
 
         RequestStatusBadge(
-            statusText = request.ReturnRequestStatus.ifBlank {
-                GetReturnRequestStatusFallback(request.ReturnRequestStatusId)
-            },
+            statusText = request.ReturnRequestStatus?.takeIf { it.isNotBlank() } ?: GetReturnRequestStatusFallback(request.ReturnRequestStatusId),
             statusId = request.ReturnRequestStatusId
         )
     }
@@ -573,6 +571,8 @@ private fun RequestEmptyState(onOrderListClick: () -> Unit) {
     }
 }
 
+private fun String?.OrDash(): String = this?.takeIf { it.isNotBlank() } ?: "-"
+
 private fun GetReturnRequestStatusFallback(statusId: Int): String {
     return when (statusId) {
         1 -> "Talep Alındı"
@@ -584,8 +584,8 @@ private fun GetReturnRequestStatusFallback(statusId: Int): String {
     }
 }
 
-private fun FormatReturnRequestDate(value: String): String {
-    if (value.isBlank() || value.startsWith("0001-01-01")) {
+private fun FormatReturnRequestDate(value: String?): String {
+    if (value.isNullOrBlank() || value.startsWith("0001-01-01")) {
         return "-"
     }
 

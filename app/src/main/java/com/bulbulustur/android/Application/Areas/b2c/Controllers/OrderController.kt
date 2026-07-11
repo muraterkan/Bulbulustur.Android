@@ -245,7 +245,7 @@ class OrderController(
             return
         }
 
-        if (returnRequest.Description.isBlank()) {
+        if (returnRequest.Description.isNullOrBlank()) {
             SetError("İade açıklaması zorunludur.")
             return
         }

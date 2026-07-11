@@ -1,6 +1,5 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Product
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -74,7 +73,6 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
@@ -892,22 +890,6 @@ private fun RetailProductDetailImageSlide(
                 )
             }
 
-            image.drawableResId != null -> {
-                Image(
-                    painter =
-                        painterResource(
-                            id =
-                                image.drawableResId
-                        ),
-                    contentDescription =
-                        image.label,
-                    modifier =
-                        Modifier.fillMaxSize(),
-                    contentScale =
-                        ContentScale.Fit
-                )
-            }
-
             else -> {
                 Text(
                     text =
@@ -1256,22 +1238,6 @@ private fun RetailProductColorChoice(
                         AsyncImage(
                             model =
                                 previewImage.imageUrl,
-                            contentDescription =
-                                colorVariant.name,
-                            modifier =
-                                Modifier.fillMaxSize(),
-                            contentScale =
-                                ContentScale.Fit
-                        )
-                    }
-
-                    previewImage?.drawableResId != null -> {
-                        Image(
-                            painter =
-                                painterResource(
-                                    id =
-                                        previewImage.drawableResId
-                                ),
                             contentDescription =
                                 colorVariant.name,
                             modifier =
@@ -1878,21 +1844,12 @@ private fun RetailSellerProductMiniCard(
                     .background(MaterialTheme.colorScheme.surfaceVariant),
                 contentAlignment = Alignment.Center
             ) {
-                if (product.drawableResId != null) {
-                    Image(
-                        painter = painterResource(id = product.drawableResId),
-                        contentDescription = product.name,
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
-                } else {
-                    Text(
-                        text = product.imageLabel,
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
+                Text(
+                    text = product.imageLabel,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    fontWeight = FontWeight.Bold
+                )
             }
 
             Text(
@@ -3365,8 +3322,7 @@ data class RetailProductImage(
     val label: String,
     val backgroundColor: Color,
     val foregroundColor: Color,
-    val imageUrl: String = "",
-    @DrawableRes val drawableResId: Int? = null
+    val imageUrl: String = ""
 )
 
 @Immutable
@@ -3404,8 +3360,7 @@ data class RetailSellerProductItem(
     val id: Int,
     val name: String,
     val priceText: String,
-    val imageLabel: String,
-    @DrawableRes val drawableResId: Int? = null
+    val imageLabel: String
 )
 
 @Immutable
@@ -3979,20 +3934,7 @@ private fun ProductDTO.ToRetailProductDetail(
                                                 foregroundColor =
                                                     BBColors.Gray.Gray500,
                                                 imageUrl =
-                                                    resolvedPictureUrl,
-                                                drawableResId =
-                                                    if (
-                                                        resolvedPictureUrl.isBlank()
-                                                    ) {
-                                                        fallbackProduct
-                                                            .colorVariants
-                                                            .firstOrNull()
-                                                            ?.images
-                                                            ?.firstOrNull()
-                                                            ?.drawableResId
-                                                    } else {
-                                                        null
-                                                    }
+                                                    resolvedPictureUrl
                                             )
                                         )
                                     }
@@ -4088,12 +4030,7 @@ private fun getRetailProductDetail(
             id = index,
             name = "Ortobella Günlük Sneaker Modeli $index",
             priceText = "₺${799 + index * 20},90",
-            imageLabel = "P$index",
-            drawableResId = if (index <= 4) {
-                R.drawable.h3ff3b33d6a1447c898cee6e336867bach
-            } else {
-                null
-            }
+            imageLabel = "P$index"
         )
     }
 
@@ -4125,20 +4062,17 @@ private fun getRetailProductDetail(
                     RetailProductImage(
                         label = "Beyaz 1",
                         backgroundColor = BBColors.White,
-                        foregroundColor = BBColors.Gray.Gray500,
-                        drawableResId = R.drawable.h3ff3b33d6a1447c898cee6e336867bach
+                        foregroundColor = BBColors.Gray.Gray500
                     ),
                     RetailProductImage(
                         label = "Beyaz 2",
                         backgroundColor = BBColors.White,
-                        foregroundColor = BBColors.Gray.Gray500,
-                        drawableResId = R.drawable.h3ff3b33d6a1447c898cee6e336867bach
+                        foregroundColor = BBColors.Gray.Gray500
                     ),
                     RetailProductImage(
                         label = "Beyaz 3",
                         backgroundColor = BBColors.White,
-                        foregroundColor = BBColors.Gray.Gray500,
-                        drawableResId = R.drawable.h3ff3b33d6a1447c898cee6e336867bach
+                        foregroundColor = BBColors.Gray.Gray500
                     )
                 )
             ),

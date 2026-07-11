@@ -45,18 +45,6 @@ fun AppearanceSettingsScreen(
 ) {
     val themes = appearanceThemeOptions()
 
-    val pageBackground = Brush.verticalGradient(
-        colors = listOf(
-            MaterialTheme.colorScheme.primaryContainer.copy(
-                alpha = BBAlpha.DisabledContainer
-            ),
-            MaterialTheme.colorScheme.surfaceVariant.copy(
-                alpha = 0.85f
-            ),
-            MaterialTheme.colorScheme.surfaceVariant
-        )
-    )
-
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
@@ -69,7 +57,7 @@ fun AppearanceSettingsScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(pageBackground)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding),
             contentPadding = PaddingValues(
                 start = BBSpacing.PageHorizontal,

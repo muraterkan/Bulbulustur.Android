@@ -975,11 +975,8 @@ fun NavGraphBuilder.accountGraph(
             company = accountState.Company,
             storeRequest = accountState.StoreRequest,
             subscription = accountState.MemberSubscriptions.firstOrNull(),
-            isLoading = accountState.IsLoading && (
-                    accountState.CurrentAction == "GetAccountCompany" ||
-                            accountState.CurrentAction == "GetMemberSubscriptions" ||
-                            accountState.CurrentAction == "GetAccountStoreRequestStatus"
-                    ),
+            isLoading = accountState.CompanyResult == null ||
+                    (accountState.IsLoading && accountState.CurrentAction == "GetAccountCompany"),
             errorMessage = accountState.CompanyResult?.takeIf { !it.Success }?.Message
                 ?: accountState.StoreRequestResult?.takeIf { !it.Success }?.Message,
             onBackClick = { navigator.back() },

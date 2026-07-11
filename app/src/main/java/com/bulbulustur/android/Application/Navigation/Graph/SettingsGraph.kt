@@ -133,8 +133,8 @@ fun NavGraphBuilder.settingsGraph(
             errorMessage = settingsState.LanguageResult
                 ?.takeIf { !it.Success }
                 ?.Message,
-            onLanguageSelected = { selectedLanguage ->
-                when (selectedLanguage.SystemDescLanguageId) {
+            onLanguageSelected = { selectedLanguageId ->
+                when (selectedLanguageId) {
                     1 -> userSessionManager.SetLanguage(
                         EApplicationLanguage.Turkish
                     )

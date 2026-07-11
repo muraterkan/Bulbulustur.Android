@@ -410,7 +410,7 @@ private fun WholesaleFavoriteCard(
                         )
 
                         Text(
-                            text = favorite.MemberName.ifBlank { "Toptan satıcı" },
+                            text = favorite.MemberName.orEmpty().ifBlank { "Toptan satıcı" },
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             maxLines = 1,
@@ -419,7 +419,7 @@ private fun WholesaleFavoriteCard(
                     }
 
                     Text(
-                        text = favorite.ProductName.ifBlank { "Toptan Ürün #${favorite.WholesaleProductId}" },
+                        text = favorite.ProductName.orEmpty().ifBlank { "Toptan Ürün #${favorite.WholesaleProductId}" },
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurface,
                         maxLines = 2,

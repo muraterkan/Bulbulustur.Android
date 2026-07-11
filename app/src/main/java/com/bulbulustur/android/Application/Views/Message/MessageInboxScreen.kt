@@ -498,19 +498,23 @@ private fun List<WholesaleMessageDTO>.filterBy(filter: MessageFilter): List<Whol
 }
 
 private fun WholesaleMessageDTO.otherMemberName(currentMemberId: Int): String {
-    return if (SenderId == currentMemberId) {
-        RecipientFullName.ifBlank {
-            RecipientName.ifBlank {
-                RecipientSurname
-            }
+    val resolvedName = if (SenderId == currentMemberId) {
+        RecipientFullName.orEmpty().ifBlank {
+            listOf(RecipientName, RecipientSurname)
+                .map { it.orEmpty() }
+                .filter { it.isNotBlank() }
+                .joinToString(" ")
         }
     } else {
-        SenderFullName.ifBlank {
-            SenderName.ifBlank {
-                listOf(SenderName, SenderSurname).filter { it.isNotBlank() }.joinToString(" ")
-            }
+        SenderFullName.orEmpty().ifBlank {
+            listOf(SenderName, SenderSurname)
+                .map { it.orEmpty() }
+                .filter { it.isNotBlank() }
+                .joinToString(" ")
         }
     }
+
+    return resolvedName.ifBlank { "Kullanıcı" }
 }
 
 private enum class MessageFilter(val label: String) {

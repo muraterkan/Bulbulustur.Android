@@ -54,13 +54,6 @@ fun QuestionAnswerScreen(
     onRetryClick: () -> Unit = {},
     onProductClick: (productId: Int, storeId: Int, variantId: Int) -> Unit = { _, _, _ -> }
 ) {
-    val pageBackground = Brush.verticalGradient(
-        colors = listOf(
-            MaterialTheme.colorScheme.primaryContainer.copy(alpha = BBAlpha.DisabledLabel),
-            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.80f),
-            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.95f)
-        )
-    )
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -76,6 +69,7 @@ fun QuestionAnswerScreen(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
                         .padding(innerPadding),
                     contentAlignment = Alignment.Center
                 ) {
@@ -109,7 +103,6 @@ fun QuestionAnswerScreen(
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(pageBackground)
                         .padding(innerPadding),
                     contentPadding = PaddingValues(
                         start = BBSpacing.PageHorizontal,

@@ -211,15 +211,20 @@ private fun SubscriptionEmptyState() {
 }
 
 private fun MemberSubscriptionDTO.GetSubscriptionTitle(): String {
-    if (Subscription.isNotBlank()) return Subscription
-    if (SubscriptionTypeName.isNotBlank() && SubscriptionPlanTypeName.isNotBlank()) return "$SubscriptionTypeName / $SubscriptionPlanTypeName"
-    if (SubscriptionTypeName.isNotBlank()) return SubscriptionTypeName
-    if (SubscriptionPlanTypeName.isNotBlank()) return SubscriptionPlanTypeName
+    val subscription = Subscription
+    val typeName = SubscriptionTypeName
+    val planTypeName = SubscriptionPlanTypeName
+
+    if (!subscription.isNullOrBlank()) return subscription
+    if (!typeName.isNullOrBlank() && !planTypeName.isNullOrBlank()) return "$typeName / $planTypeName"
+    if (!typeName.isNullOrBlank()) return typeName
+    if (!planTypeName.isNullOrBlank()) return planTypeName
+
     return "Abonelik"
 }
 
 private fun MemberSubscriptionDTO.GetPriceText(): String {
-    val symbol = CurrencySymbol.ifBlank { "₺" }
+    val symbol = CurrencySymbol?.takeIf { it.isNotBlank() } ?: "₺"
     return "${String.format(Locale("tr", "TR"), "%.2f", PlanPrice)} $symbol"
 }
 
@@ -228,12 +233,12 @@ private fun MemberSubscriptionDTO.IsActiveSubscription(): Boolean {
     return !endDate.isBefore(LocalDate.now())
 }
 
-private fun String.ToSubscriptionDateText(): String {
-    val date = ToSubscriptionLocalDate() ?: return ifBlank { "-" }
+private fun String?.ToSubscriptionDateText(): String {
+    val date = ToSubscriptionLocalDate() ?: return this?.takeIf { it.isNotBlank() } ?: "-"
     return date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale("tr", "TR")))
 }
 
-private fun String.ToSubscriptionLocalDate(): LocalDate? {
-    if (isBlank()) return null
+private fun String?.ToSubscriptionLocalDate(): LocalDate? {
+    if (isNullOrBlank()) return null
     return runCatching { LocalDate.parse(substringBefore("T")) }.getOrNull()
 }

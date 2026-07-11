@@ -127,11 +127,11 @@ private fun B2CDealOfTheDayCard(
             ) {
                 AsyncImage(
                     model = ResolveB2CDealImageUrl(
-                        deal.DefaultPicture.ifBlank {
+                        deal.DefaultPicture.orEmpty().ifBlank {
                             deal.Picture
                         }
                     ),
-                    contentDescription = deal.ProductName,
+                    contentDescription = deal.ProductName.orEmpty().ifBlank { "Ürün" },
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(BBRadius.LgShape),
@@ -144,16 +144,16 @@ private fun B2CDealOfTheDayCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
             ) {
                 Text(
-                    text = deal.ProductName,
+                    text = deal.ProductName.orEmpty().ifBlank { "Ürün" },
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.SemiBold,
                     maxLines = 2
                 )
 
-                if (deal.Store.isNotBlank()) {
+                if (deal.Store.orEmpty().isNotBlank()) {
                     Text(
-                        text = deal.Store,
+                        text = deal.Store.orEmpty(),
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 1
@@ -208,7 +208,7 @@ private fun FormatDealPrice(
     formatter.minimumFractionDigits = 2
     formatter.maximumFractionDigits = 2
 
-    return "${currencySymbol.ifBlank { "₺" }}${formatter.format(price)}"
+    return "${currencySymbol.orEmpty().ifBlank { "₺" }}${formatter.format(price)}"
 }
 
 private fun ResolveB2CDealImageUrl(

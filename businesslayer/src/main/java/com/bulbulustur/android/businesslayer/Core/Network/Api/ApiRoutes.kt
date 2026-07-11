@@ -87,7 +87,7 @@ object ApiRoutes {
         "http://$APPLICATION_SERVER_HOST:30225/api/"
 
     const val STATUS_BASE_URL =
-        "http://$APPLICATION_SERVER_HOST:30230/api/status/"
+        "https://status.bulbulustur.com/api/status/"
 
     const val B2B_BASE_URL =
         "http://$APPLICATION_SERVER_HOST:30235/api/"

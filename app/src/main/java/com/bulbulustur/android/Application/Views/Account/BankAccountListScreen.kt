@@ -263,7 +263,7 @@ private fun BankAccountCardHeader(item: MemberBankAccountDTO) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.primaryContainer)
+            .background(MaterialTheme.colorScheme.surfaceVariant)
             .padding(BBSpacing.CardPadding),
         horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
         verticalAlignment = Alignment.CenterVertically
@@ -344,7 +344,7 @@ private fun BankAccountWarningBox() {
         modifier = Modifier
             .fillMaxWidth()
             .background(
-                color = BBColors.Orange.Orange50,
+                color = MaterialTheme.colorScheme.errorContainer,
                 shape = BBRadius.LgShape
             )
             .padding(BBSpacing.CardPaddingCompact)
@@ -356,7 +356,7 @@ private fun BankAccountWarningBox() {
             Icon(
                 imageVector = Icons.Outlined.Warning,
                 contentDescription = null,
-                tint = BBColors.Orange.Orange700,
+                tint = MaterialTheme.colorScheme.onErrorContainer,
                 modifier = Modifier.size(BBIcon.Ui)
             )
 
@@ -367,7 +367,7 @@ private fun BankAccountWarningBox() {
                 Text(
                     text = "Geri Ödeme İçin Doğru IBAN Bilgisi Kullanılır.",
                     style = MaterialTheme.typography.labelLarge,
-                    color = BBColors.Orange.Orange700
+                    color = MaterialTheme.colorScheme.onErrorContainer
                 )
 
                 Text(
@@ -498,7 +498,7 @@ private fun BankAccountIconBox(
         modifier = Modifier
             .size(BBIcon.BoxLg)
             .background(
-                color = MaterialTheme.colorScheme.primaryContainer,
+                color = MaterialTheme.colorScheme.surfaceVariant,
                 shape = BBRadius.LgShape
             ),
         contentAlignment = Alignment.Center
@@ -519,7 +519,7 @@ private fun BankAccountIconBox(
             Icon(
                 imageVector = Icons.Outlined.AccountBalance,
                 contentDescription = null,
-                tint = BBColors.Yellow.Yellow800,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.size(BBIcon.Section)
             )
         }

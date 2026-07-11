@@ -386,7 +386,7 @@ private fun BasketCouponCard(
                 Text(
                     text = "Kupon ve İndirimler",
                     style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = MaterialTheme.colorScheme.surface,
                     fontWeight = FontWeight.Bold
                 )
 
@@ -829,7 +829,7 @@ private fun BasketCheckoutBar(
     onCheckoutClick: () -> Unit
 ) {
     Surface(
-        color = MaterialTheme.colorScheme.onSurface,
+        color = MaterialTheme.colorScheme.surface,
         tonalElevation = BBSpacing.Space1,
         shadowElevation = BBSpacing.Space2
     ) {
@@ -850,7 +850,7 @@ private fun BasketCheckoutBar(
                 Text(
                     text = "Toplam",
                     style = MaterialTheme.typography.labelSmall,
-                    color = BBColors.White.copy(alpha = BBAlpha.Muted)
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
                 Text(
@@ -878,7 +878,7 @@ private fun BasketCheckoutBar(
                     text = "Siparişi Tamamla",
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             }
         }

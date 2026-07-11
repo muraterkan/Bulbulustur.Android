@@ -57,13 +57,6 @@ fun AccountSecurityScreen(
     onLoginActivitiesClick: () -> Unit = {},
     onCommunicationPreferencesClick: () -> Unit = {}
 ) {
-    val pageBackground = Brush.verticalGradient(
-        colors = listOf(
-            MaterialTheme.colorScheme.primaryContainer.copy(alpha = BBAlpha.DisabledLabel),
-            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.80f),
-            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.95f)
-        )
-    )
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -77,7 +70,7 @@ fun AccountSecurityScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(pageBackground)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding),
             contentPadding = PaddingValues(
                 start = BBSpacing.PageHorizontal,

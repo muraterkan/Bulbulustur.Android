@@ -154,7 +154,7 @@ object WholesaleRoutes {
     }
 
     fun productDetail(productId: Int): String {
-        return "?="
+        return "$ProductDetail?$ArgProductId=$productId"
     }
 
     fun lastPriceRequest(productId: Int): String {

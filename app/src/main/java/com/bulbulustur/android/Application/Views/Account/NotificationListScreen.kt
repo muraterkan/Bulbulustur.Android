@@ -36,19 +36,11 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BbTypography
-import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBAlpha
 
 @Composable
 fun NotificationListScreen(
     onBackClick: () -> Unit = {}
 ) {
-    val pageBackground = Brush.verticalGradient(
-        colors = listOf(
-            MaterialTheme.colorScheme.primaryContainer.copy(alpha = BBAlpha.DisabledLabel),
-            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.80f),
-            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.95f)
-        )
-    )
 
     val notifications = getDemoNotifications()
 
@@ -64,7 +56,7 @@ fun NotificationListScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(pageBackground)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding),
             contentPadding = PaddingValues(
                 start = BBSpacing.PageHorizontal,

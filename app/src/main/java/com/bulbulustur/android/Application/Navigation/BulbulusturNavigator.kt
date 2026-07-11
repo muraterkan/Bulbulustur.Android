@@ -7,6 +7,7 @@ import com.bulbulustur.android.Application.Navigation.Routes.MessageRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.RetailRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.SplashRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.WholesaleRoutes
+import com.bulbulustur.android.Application.Navigation.Routes.RfqRoutes
 
 class BulbulusturNavigator(
     val navController: NavHostController,
@@ -56,7 +57,7 @@ class BulbulusturNavigator(
     }
 
     fun navigateToWholesaleOffers() {
-        navController.navigate(WholesaleRoutes.QuotationRequests) {
+        navController.navigate(RfqRoutes.List) {
             launchSingleTop = true
         }
     }

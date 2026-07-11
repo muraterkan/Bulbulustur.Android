@@ -103,13 +103,13 @@ fun CompanyInfoScreen(
                             CompanyInfoRow("Adres", company.Address.OrDash())
                             CompanyDivider()
                             CompanyInfoRow("Ülke", company.CountryName.OrDash())
-                            if (company.CountryState.isNotBlank()) {
+                            if (company.CountryState.orEmpty().isNotBlank()) {
                                 CompanyDivider()
-                                CompanyInfoRow("Eyalet / Bölge", company.CountryState)
+                                CompanyInfoRow("Eyalet / Bölge", company.CountryState.orEmpty())
                             }
-                            if (company.CountryDepartment.isNotBlank()) {
+                            if (company.CountryDepartment.orEmpty().isNotBlank()) {
                                 CompanyDivider()
-                                CompanyInfoRow("Departman", company.CountryDepartment)
+                                CompanyInfoRow("Departman", company.CountryDepartment.orEmpty())
                             }
                             CompanyDivider()
                             CompanyInfoRow("Şehir", company.CityName.OrDash())
@@ -150,7 +150,7 @@ fun CompanyInfoScreen(
 
 @Composable
 private fun CompanyHeroCard(company: CompanyDTO) {
-    Box(modifier = Modifier.fillMaxWidth().background(color = MaterialTheme.colorScheme.inverseSurface, shape = BBRadius.XlShape).padding(BBSpacing.CardPadding)) {
+    Box(modifier = Modifier.fillMaxWidth().background(color = MaterialTheme.colorScheme.surface, shape = BBRadius.XlShape).padding(BBSpacing.CardPadding)) {
         Column(verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)) {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3), verticalAlignment = Alignment.CenterVertically) {
                 Box(modifier = Modifier.size(BBIcon.BoxXl).background(color = MaterialTheme.colorScheme.primary, shape = BBRadius.XlShape), contentAlignment = Alignment.Center) {
@@ -158,8 +158,8 @@ private fun CompanyHeroCard(company: CompanyDTO) {
                 }
                 Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)) {
                     Text(text = "Kurumsal Hesap", style = BbTypography.labelSmall, color = MaterialTheme.colorScheme.primary)
-                    Text(text = company.CompanyName.OrDash(), style = BbTypography.titleLarge, color = MaterialTheme.colorScheme.inverseOnSurface)
-                    Text(text = company.CompanyType.OrDash(), style = BbTypography.bodySmall, color = MaterialTheme.colorScheme.inverseOnSurface.copy(alpha = BBAlpha.Muted))
+                    Text(text = company.CompanyName.OrDash(), style = BbTypography.titleLarge, color = MaterialTheme.colorScheme.onSurface)
+                    Text(text = company.CompanyType.OrDash(), style = BbTypography.bodySmall, color = MaterialTheme.colorScheme.onSurface.copy(alpha = BBAlpha.Muted))
                 }
             }
             Row(horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2), verticalAlignment = Alignment.CenterVertically) {
@@ -173,12 +173,12 @@ private fun CompanyHeroCard(company: CompanyDTO) {
 @Composable
 private fun CompanyHeroBadge(text: String, icon: ImageVector) {
     Row(
-        modifier = Modifier.background(color = MaterialTheme.colorScheme.inverseOnSurface.copy(alpha = BBAlpha.Overlay), shape = BBRadius.Badge).padding(horizontal = BBSpacing.Space3, vertical = BBSpacing.Space2),
+        modifier = Modifier.background(color = MaterialTheme.colorScheme.onSurface.copy(alpha = BBAlpha.Overlay), shape = BBRadius.Badge).padding(horizontal = BBSpacing.Space3, vertical = BBSpacing.Space2),
         horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space1),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(imageVector = icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(BBIcon.Size2Xs))
-        Text(text = text, style = BbTypography.labelSmall, color = MaterialTheme.colorScheme.inverseOnSurface)
+        Text(text = text, style = BbTypography.labelSmall, color = MaterialTheme.colorScheme.onSurface)
     }
 }
 
@@ -190,7 +190,7 @@ private fun CompanyStatsGrid(company: CompanyDTO, subscription: MemberSubscripti
             CompanyStatCard(modifier = Modifier.weight(1f), icon = Icons.Outlined.HomeWork, label = "Kuruluş Yılı", value = company.YearEstablished.OrDash())
         }
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)) {
-            CompanyStatCard(modifier = Modifier.weight(1f), icon = Icons.Outlined.LocationOn, label = "Ülke / Şehir", value = listOf(company.CountryName, company.CityName).filter { it.isNotBlank() }.joinToString(" / ").ifBlank { "-" })
+            CompanyStatCard(modifier = Modifier.weight(1f), icon = Icons.Outlined.LocationOn, label = "Ülke / Şehir", value = listOf(company.CountryName.orEmpty(), company.CityName.orEmpty()).filter { it.isNotBlank() }.joinToString(" / ").ifBlank { "-" })
             CompanyStatCard(modifier = Modifier.weight(1f), icon = Icons.Outlined.Verified, label = "Profil Durumu", value = if (company.StatusId > 0) "Aktif" else "Pasif")
         }
     }
@@ -315,10 +315,16 @@ private fun String.OrDash(): String = ifBlank { "-" }
 
 private fun MemberSubscriptionDTO?.GetSubscriptionTitle(): String {
     if (this == null) return "-"
-    if (Subscription.isNotBlank()) return Subscription
-    if (SubscriptionTypeName.isNotBlank() && SubscriptionPlanTypeName.isNotBlank()) return "$SubscriptionTypeName / $SubscriptionPlanTypeName"
-    if (SubscriptionTypeName.isNotBlank()) return SubscriptionTypeName
-    if (SubscriptionPlanTypeName.isNotBlank()) return SubscriptionPlanTypeName
+
+    val subscription = Subscription
+    val typeName = SubscriptionTypeName
+    val planTypeName = SubscriptionPlanTypeName
+
+    if (!subscription.isNullOrBlank()) return subscription
+    if (!typeName.isNullOrBlank() && !planTypeName.isNullOrBlank()) return "$typeName / $planTypeName"
+    if (!typeName.isNullOrBlank()) return typeName
+    if (!planTypeName.isNullOrBlank()) return planTypeName
+
     return "-"
 }
 

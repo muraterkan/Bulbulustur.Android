@@ -2377,12 +2377,12 @@ private fun WholesaleProductDTO.ToWholesaleProductDetail(relatedProducts: List<W
         DefaultPicture,
         Picture
     )
-        .map { it.trim() }
+        .map { it.orEmpty().trim() }
         .filter { it.isNotBlank() }
         .distinct()
         .mapIndexed { index, imagePath ->
             WholesaleProductImage(
-                label = if (index == 0) ProductName.ifBlank { "Ürün" } else "${ProductName.ifBlank { "Ürün" }} ${index + 1}",
+                label = if (index == 0) ProductName.orEmpty().ifBlank { "Ürün" } else "${ProductName.orEmpty().ifBlank { "Ürün" }} ${index + 1}",
                 backgroundColor = BBColors.Surface,
                 foregroundColor = BBColors.TextMuted,
                 imageUrl = ResolveWholesaleProductImageUrl(imagePath)
@@ -2453,7 +2453,7 @@ private fun WholesaleProductDTO.ToWholesaleProductDetail(relatedProducts: List<W
     }
 
     val resolvedHighlightFeatures = buildList {
-        if (Category.isNotBlank()) {
+        if (Category.orEmpty().isNotBlank()) {
             add(
                 WholesaleHighlightFeature(
                     label = "Kategori",
@@ -2643,11 +2643,11 @@ private fun WholesaleProductDTO.ToWholesaleProductDetail(relatedProducts: List<W
 
     return WholesaleProductDetail(
         id = WholesaleProductId,
-        name = ProductName.ifBlank { "Ürün" },
+        name = ProductName.orEmpty().ifBlank { "Ürün" },
         searchPlaceholder = "Toptan Ürün, Kategori Veya Firma Ara",
         shortDescription = Description.take(220),
         longDescription = Description,
-        badgeText = Category.ifBlank { "Toptan Ürün" },
+        badgeText = Category.orEmpty().ifBlank { "Toptan Ürün" },
         priceLabel = resolvedPriceLabel,
         minimumOrderLabel = if (MinimumOrderQuantity > 0) "$MinimumOrderQuantity $unitText" else "",
         deliveryTimeLabel = LeadTime,

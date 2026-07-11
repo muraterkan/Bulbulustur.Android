@@ -180,7 +180,7 @@ private fun CompanyB2BStatusIntroCard(active: Boolean) {
 private fun CompanyB2BActiveSummaryCard(company: CompanyDTO, subscription: MemberSubscriptionDTO?) {
     Box(
         modifier = Modifier.fillMaxWidth().background(
-            color = MaterialTheme.colorScheme.inverseSurface,
+            color = MaterialTheme.colorScheme.surface,
             shape = BBRadius.XlShape
         ).padding(BBSpacing.CardPadding)
     ) {
@@ -208,13 +208,13 @@ private fun CompanyB2BActiveSummaryCard(company: CompanyDTO, subscription: Membe
                     Text(
                         text = company.CompanyName.ifBlank { "-" },
                         style = BbTypography.titleMedium,
-                        color = MaterialTheme.colorScheme.inverseOnSurface
+                        color = MaterialTheme.colorScheme.onSurface
                     )
 
                     Text(
                         text = subscription.GetSubscriptionTitle(),
                         style = BbTypography.bodySmall,
-                        color = MaterialTheme.colorScheme.inverseOnSurface.copy(alpha = BBAlpha.Muted)
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = BBAlpha.Muted)
                     )
                 }
             }
@@ -241,7 +241,7 @@ private fun CompanyB2BActiveSummaryCard(company: CompanyDTO, subscription: Membe
 private fun CompanyB2BStatusPill(text: String, icon: ImageVector) {
     Row(
         modifier = Modifier.background(
-            color = MaterialTheme.colorScheme.inverseOnSurface.copy(alpha = BBAlpha.Overlay),
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = BBAlpha.Overlay),
             shape = BBRadius.Badge
         ).padding(horizontal = BBSpacing.Space2, vertical = BBSpacing.Space1),
         horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space1),
@@ -257,7 +257,7 @@ private fun CompanyB2BStatusPill(text: String, icon: ImageVector) {
         Text(
             text = text,
             style = BbTypography.labelSmall,
-            color = MaterialTheme.colorScheme.inverseOnSurface
+            color = MaterialTheme.colorScheme.onSurface
         )
     }
 }
@@ -509,9 +509,15 @@ private fun CompanyB2BStatusDivider() {
 
 private fun MemberSubscriptionDTO?.GetSubscriptionTitle(): String {
     if (this == null) return "-"
-    if (Subscription.isNotBlank()) return Subscription
-    if (SubscriptionTypeName.isNotBlank() && SubscriptionPlanTypeName.isNotBlank()) return "$SubscriptionTypeName / $SubscriptionPlanTypeName"
-    if (SubscriptionTypeName.isNotBlank()) return SubscriptionTypeName
-    if (SubscriptionPlanTypeName.isNotBlank()) return SubscriptionPlanTypeName
+
+    val subscription = Subscription
+    val typeName = SubscriptionTypeName
+    val planTypeName = SubscriptionPlanTypeName
+
+    if (!subscription.isNullOrBlank()) return subscription
+    if (!typeName.isNullOrBlank() && !planTypeName.isNullOrBlank()) return "$typeName / $planTypeName"
+    if (!typeName.isNullOrBlank()) return typeName
+    if (!planTypeName.isNullOrBlank()) return planTypeName
+
     return "-"
 }

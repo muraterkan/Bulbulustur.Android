@@ -128,7 +128,7 @@ fun RetailHomeScreen(
                 start = BBSpacing.PageHorizontal,
                 top = innerPadding.calculateTopPadding() + BBSpacing.PageTopCompact,
                 end = BBSpacing.PageHorizontal,
-                bottom = innerPadding.calculateBottomPadding() + BBSpacing.PageBottom
+                bottom = innerPadding.calculateBottomPadding() + BBSpacing.PageBottomCompact
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.SectionGapCompact)
         ) {
@@ -213,12 +213,6 @@ fun RetailHomeScreen(
             item {
                 RetailHomeStoreRow(
                     onStoreClick = onStoreClick
-                )
-            }
-
-            item {
-                Spacer(
-                    modifier = Modifier.height(BBSpacing.Space4)
                 )
             }
         }

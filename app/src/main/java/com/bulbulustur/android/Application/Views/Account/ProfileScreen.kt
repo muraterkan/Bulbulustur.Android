@@ -28,6 +28,7 @@ import androidx.compose.material.icons.outlined.PermIdentity
 import androidx.compose.material.icons.outlined.PhoneIphone
 import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material.icons.outlined.Verified
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -42,7 +43,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
@@ -158,14 +158,6 @@ fun ProfileScreen(
         )
     }
 
-    val pageBackground = Brush.verticalGradient(
-        colors = listOf(
-            MaterialTheme.colorScheme.primaryContainer.copy(alpha = BBAlpha.DisabledLabel),
-            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.80f),
-            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.95f)
-        )
-    )
-
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
@@ -181,7 +173,7 @@ fun ProfileScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(pageBackground)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding),
             contentPadding = PaddingValues(
                 start = BBSpacing.PageHorizontal,
@@ -191,76 +183,154 @@ fun ProfileScreen(
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
-            item {
-                ProfileHeroCard(
-                    fullName = fullName,
-                    accountCode = accountCode,
-                    email = email,
-                    hasProfilePhoto = hasProfilePhoto,
-                    onProfilePhotoClick = {
-                        showProfilePhotoSheet = true
+            when {
+                isLoading || (member == null && errorMessage.isNullOrBlank()) -> {
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(BBSpacing.Space6),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator(
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
                     }
-                )
-            }
-
-            item {
-                ProfileCompletionCard(
-                    progress = profileCompletion,
-                    percentText = "%${(profileCompletion * 100).toInt()}"
-                )
-            }
-
-            item {
-                ProfileInfoSection(
-                    title = "Temel Bilgiler",
-                    description = "Hesabınızın görünen temel bilgileri.",
-                    icon = Icons.Outlined.PermIdentity
-                ) {
-                    ProfileInfoRow("Hesap ID", accountCode, Icons.Outlined.Badge, onEditClick)
-                    ProfileDashedDivider()
-                    ProfileInfoRow("Ad Soyad", fullName, Icons.Outlined.PermIdentity, onEditClick)
-                    ProfileDashedDivider()
-                    ProfileInfoRow("Cinsiyet", genderText, Icons.Outlined.Man, onEditClick)
-                    ProfileDashedDivider()
-                    ProfileInfoRow("Ülke / Şehir", locationText, Icons.Outlined.LocationOn, onEditClick)
                 }
-            }
 
-            item {
-                ProfileInfoSection(
-                    title = "Doğrulama",
-                    description = "Güvenlik ve hesap doğrulama bilgileri.",
-                    icon = Icons.Outlined.Security
-                ) {
-                    ProfileInfoRow("E-Posta", email, Icons.Outlined.Email, onEmailClick)
-                    ProfileDashedDivider()
-                    ProfileInfoRow("Telefonlarım", "Telefon bilgilerini yönetin", Icons.Outlined.PhoneIphone, onPhonesClick)
-                    ProfileDashedDivider()
-                    ProfileInfoRow("E-Posta Doğrulama", activationText, Icons.Outlined.Verified, onEmailClick)
+                !errorMessage.isNullOrBlank() -> {
+                    item {
+                        ProfileErrorCard(
+                            message = errorMessage
+                        )
+                    }
                 }
-            }
 
-            item {
-                ProfileInfoSection(
-                    title = "Kurumsal Bağlantı",
-                    description = "Şirket ve B2B görünürlük bağlantılarınız.",
-                    icon = Icons.Outlined.Business
-                ) {
-                    ProfileInfoRow(
-                        title = "Şirket Bilgileri",
-                        value = "Türkiye Global Ticaret Limited Şirketi",
-                        icon = Icons.Outlined.Business,
-                        onClick = onCompanyInfoClick
-                    )
+                member == null -> {
+                    item {
+                        ProfileNotFoundCard()
+                    }
+                }
 
-                    ProfileDashedDivider()
+                else -> {
+                    item {
+                        ProfileHeroCard(
+                            fullName = fullName,
+                            accountCode = accountCode,
+                            email = email,
+                            hasProfilePhoto = hasProfilePhoto,
+                            onProfilePhotoClick = {
+                                showProfilePhotoSheet = true
+                            }
+                        )
+                    }
 
-                    ProfileInfoRow(
-                        title = "B2B Index",
-                        value = "Aktif",
-                        icon = Icons.Outlined.Verified,
-                        onClick = onB2BStatusClick
-                    )
+                    item {
+                        ProfileCompletionCard(
+                            progress = profileCompletion,
+                            percentText = "%${(profileCompletion * 100).toInt()}"
+                        )
+                    }
+
+                    item {
+                        ProfileInfoSection(
+                            title = "Temel Bilgiler",
+                            description = "Hesabınızın görünen temel bilgileri.",
+                            icon = Icons.Outlined.PermIdentity
+                        ) {
+                            ProfileInfoRow(
+                                title = "Hesap ID",
+                                value = accountCode,
+                                icon = Icons.Outlined.Badge,
+                                onClick = onEditClick
+                            )
+
+                            ProfileDashedDivider()
+
+                            ProfileInfoRow(
+                                title = "Ad Soyad",
+                                value = fullName,
+                                icon = Icons.Outlined.PermIdentity,
+                                onClick = onEditClick
+                            )
+
+                            ProfileDashedDivider()
+
+                            ProfileInfoRow(
+                                title = "Cinsiyet",
+                                value = genderText,
+                                icon = Icons.Outlined.Man,
+                                onClick = onEditClick
+                            )
+
+                            ProfileDashedDivider()
+
+                            ProfileInfoRow(
+                                title = "Ülke / Şehir",
+                                value = locationText,
+                                icon = Icons.Outlined.LocationOn,
+                                onClick = onEditClick
+                            )
+                        }
+                    }
+
+                    item {
+                        ProfileInfoSection(
+                            title = "Doğrulama",
+                            description = "Güvenlik ve hesap doğrulama bilgileri.",
+                            icon = Icons.Outlined.Security
+                        ) {
+                            ProfileInfoRow(
+                                title = "E-Posta",
+                                value = email,
+                                icon = Icons.Outlined.Email,
+                                onClick = onEmailClick
+                            )
+
+                            ProfileDashedDivider()
+
+                            ProfileInfoRow(
+                                title = "Telefonlarım",
+                                value = "Telefon bilgilerini yönetin",
+                                icon = Icons.Outlined.PhoneIphone,
+                                onClick = onPhonesClick
+                            )
+
+                            ProfileDashedDivider()
+
+                            ProfileInfoRow(
+                                title = "E-Posta Doğrulama",
+                                value = activationText,
+                                icon = Icons.Outlined.Verified,
+                                onClick = onEmailClick
+                            )
+                        }
+                    }
+
+                    item {
+                        ProfileInfoSection(
+                            title = "Kurumsal Bağlantı",
+                            description = "Şirket ve B2B görünürlük bağlantılarınız.",
+                            icon = Icons.Outlined.Business
+                        ) {
+                            ProfileInfoRow(
+                                title = "Şirket Bilgileri",
+                                value = "Türkiye Global Ticaret Limited Şirketi",
+                                icon = Icons.Outlined.Business,
+                                onClick = onCompanyInfoClick
+                            )
+
+                            ProfileDashedDivider()
+
+                            ProfileInfoRow(
+                                title = "B2B Index",
+                                value = "Aktif",
+                                icon = Icons.Outlined.Verified,
+                                onClick = onB2BStatusClick
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -275,14 +345,10 @@ private fun ProfileHeroCard(
     hasProfilePhoto: Boolean,
     onProfilePhotoClick: () -> Unit
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(
-                color = MaterialTheme.colorScheme.inverseSurface,
-                shape = BBRadius.XlShape
-            )
-            .padding(BBSpacing.CardPadding)
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -299,21 +365,15 @@ private fun ProfileHeroCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Profil Bilgileri",
-                    style = BbTypography.labelSmall,
-                    color = MaterialTheme.colorScheme.primary
-                )
-
-                Text(
                     text = fullName,
                     style = BbTypography.titleLarge,
-                    color = MaterialTheme.colorScheme.inverseOnSurface
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
                     text = "$accountCode · $email",
                     style = BbTypography.bodySmall,
-                    color = MaterialTheme.colorScheme.inverseOnSurface.copy(alpha = BBAlpha.Muted)
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -326,11 +386,11 @@ private fun ProfileAvatarBox(
     onClick: () -> Unit
 ) {
     Box(
-        modifier = Modifier.size(BBIcon.Box2Xl),
+        modifier = Modifier.size(BBIcon.BoxXl),
         contentAlignment = Alignment.Center
     ) {
         BbCard(
-            modifier = Modifier.size(BBIcon.Box2Xl),
+            modifier = Modifier.size(BBIcon.BoxXl),
             variant = BbCardVariant.Default,
             padding = BbCardPadding.None,
             onClick = onClick
@@ -339,25 +399,21 @@ private fun ProfileAvatarBox(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(
-                        color = MaterialTheme.colorScheme.primary,
+                        color = MaterialTheme.colorScheme.surfaceVariant,
                         shape = BBRadius.XlShape
                     ),
                 contentAlignment = Alignment.Center
             ) {
-                if (hasProfilePhoto) {
-                    Icon(
-                        imageVector = Icons.Outlined.PermIdentity,
-                        contentDescription = "Profil fotoğrafı",
-                        tint = MaterialTheme.colorScheme.onPrimary,
-                        modifier = Modifier.size(BBIcon.Size3Xl)
-                    )
-                } else {
-                    Text(
-                        text = "ME",
-                        style = BbTypography.titleLarge,
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
-                }
+                Icon(
+                    imageVector = Icons.Outlined.PermIdentity,
+                    contentDescription = if (hasProfilePhoto) {
+                        "Profil fotoğrafı"
+                    } else {
+                        "Profil fotoğrafı ekle"
+                    },
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(BBIcon.Section)
+                )
             }
         }
 
@@ -590,6 +646,38 @@ private fun ProfileInfoRow(
 }
 
 @Composable
+private fun ProfileErrorCard(
+    message: String
+) {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
+        Text(
+            text = message,
+            style = BbTypography.bodySmall,
+            color = MaterialTheme.colorScheme.error
+        )
+    }
+}
+
+@Composable
+private fun ProfileNotFoundCard() {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
+        Text(
+            text = "Profil bilgisi bulunamadı",
+            style = BbTypography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+
+@Composable
 private fun ProfileDashedDivider() {
     val dividerColor = MaterialTheme.colorScheme.outlineVariant
 
@@ -600,7 +688,10 @@ private fun ProfileDashedDivider() {
                 start = BBSpacing.Space4,
                 end = BBSpacing.Space4
             )
-            .size(height = 1.dp, width = BBSpacing.BorderThin)
+            .size(
+                height = 1.dp,
+                width = BBSpacing.BorderThin
+            )
     ) {
         drawLine(
             color = dividerColor,

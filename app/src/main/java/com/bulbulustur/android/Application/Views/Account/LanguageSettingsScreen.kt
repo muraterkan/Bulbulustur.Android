@@ -13,7 +13,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CheckCircle
-import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -22,6 +21,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import coil3.compose.AsyncImage
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
@@ -32,15 +33,21 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BbTypography
 import com.bulbulustur.android.businesslayer.Core.DTO.SystemDescLanguageDTO
 
+private const val LANGUAGE_SETTINGS_TURKISH_FLAG = "file:///android_asset/flags/turkey.svg"
+private const val LANGUAGE_SETTINGS_ENGLISH_FLAG = "file:///android_asset/flags/uk.svg"
+private const val LANGUAGE_SETTINGS_FALLBACK_FLAG = "file:///android_asset/flags/flag.svg"
+
 @Composable
 fun LanguageSettingsScreen(
     languages: List<SystemDescLanguageDTO>,
     selectedLanguageId: Int,
     isLoading: Boolean,
     errorMessage: String?,
-    onLanguageSelected: (SystemDescLanguageDTO) -> Unit,
+    onLanguageSelected: (Int) -> Unit,
     onBackClick: () -> Unit = {}
 ) {
+    val visibleLanguages = ResolveLanguageSettingsItems(languages)
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.background,
@@ -67,43 +74,24 @@ fun LanguageSettingsScreen(
                 LanguageIntroCard()
             }
 
-            when {
-                isLoading -> {
-                    item {
-                        SettingsLoadingCard("Diller yükleniyor...")
-                    }
+            if (isLoading && languages.isEmpty()) {
+                item {
+                    SettingsLoadingCard("Diller yükleniyor...")
                 }
-
-                !errorMessage.isNullOrBlank() -> {
-                    item {
-                        SettingsErrorCard(errorMessage)
-                    }
-                }
-
-                languages.isEmpty() -> {
-                    item {
-                        SettingsErrorCard("Kullanılabilir dil bulunamadı.")
-                    }
-                }
-
-                else -> {
-                    items(
-                        items = languages.filter {
-                            it.SystemDescLanguageId == 1 ||
-                                    it.SystemDescLanguageId == 2
-                        },
-                        key = { it.SystemDescLanguageId }
-                    ) { language ->
-                        LanguageRow(
-                            item = language,
-                            isSelected = language.SystemDescLanguageId == selectedLanguageId,
-                            onClick = {
-                                if (language.SystemDescLanguageId != selectedLanguageId) {
-                                    onLanguageSelected(language)
-                                }
+            } else {
+                items(
+                    items = visibleLanguages,
+                    key = { it.id }
+                ) { language ->
+                    LanguageRow(
+                        item = language,
+                        isSelected = language.id == selectedLanguageId,
+                        onClick = {
+                            if (language.id != selectedLanguageId) {
+                                onLanguageSelected(language.id)
                             }
-                        )
-                    }
+                        }
+                    )
                 }
             }
         }
@@ -127,7 +115,7 @@ private fun LanguageIntroCard() {
 
 @Composable
 private fun LanguageRow(
-    item: SystemDescLanguageDTO,
+    item: LanguageSettingsItem,
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
@@ -151,11 +139,11 @@ private fun LanguageRow(
                     ),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    imageVector = Icons.Outlined.Language,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.size(BBIcon.SizeLg)
+                AsyncImage(
+                    model = item.flagAssetPath,
+                    contentDescription = item.title,
+                    modifier = Modifier.size(BBIcon.SizeLg),
+                    contentScale = ContentScale.Fit
                 )
             }
 
@@ -164,13 +152,13 @@ private fun LanguageRow(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = item.Content,
+                    text = item.title,
                     style = BbTypography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = item.LanguageIsoCode.uppercase(),
+                    text = item.code.uppercase(),
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -214,17 +202,63 @@ private fun SettingsLoadingCard(message: String) {
     }
 }
 
-@Composable
-private fun SettingsErrorCard(message: String) {
-    BbCard(
-        modifier = Modifier.fillMaxWidth(),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium
-    ) {
-        Text(
-            text = message,
-            style = BbTypography.bodySmall,
-            color = MaterialTheme.colorScheme.error
-        )
+private fun ResolveLanguageSettingsItems(
+    languages: List<SystemDescLanguageDTO>
+): List<LanguageSettingsItem> {
+    return languages
+        .filter {
+            it.SystemDescLanguageId == 1 ||
+                    it.SystemDescLanguageId == 2
+        }
+        .map {
+            LanguageSettingsItem(
+                id = it.SystemDescLanguageId,
+                title = it.Content.ifBlank {
+                    when (it.SystemDescLanguageId) {
+                        2 -> "English"
+                        else -> "Türkçe"
+                    }
+                },
+                code = it.LanguageIsoCode.ifBlank {
+                    when (it.SystemDescLanguageId) {
+                        2 -> "en"
+                        else -> "tr"
+                    }
+                },
+                flagAssetPath = ResolveLanguageSettingsFlagPath(it.SystemDescLanguageId)
+            )
+        }
+        .ifEmpty {
+            listOf(
+                LanguageSettingsItem(
+                    id = 1,
+                    title = "Türkçe",
+                    code = "tr",
+                    flagAssetPath = LANGUAGE_SETTINGS_TURKISH_FLAG
+                ),
+                LanguageSettingsItem(
+                    id = 2,
+                    title = "English",
+                    code = "en",
+                    flagAssetPath = LANGUAGE_SETTINGS_ENGLISH_FLAG
+                )
+            )
+        }
+}
+
+private fun ResolveLanguageSettingsFlagPath(
+    languageId: Int
+): String {
+    return when (languageId) {
+        1 -> LANGUAGE_SETTINGS_TURKISH_FLAG
+        2 -> LANGUAGE_SETTINGS_ENGLISH_FLAG
+        else -> LANGUAGE_SETTINGS_FALLBACK_FLAG
     }
 }
+
+private data class LanguageSettingsItem(
+    val id: Int,
+    val title: String,
+    val code: String,
+    val flagAssetPath: String
+)

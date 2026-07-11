@@ -152,7 +152,7 @@ private fun FollowedStoreCard(
                 FollowStatusBadge()
 
                 Text(
-                    text = store.Store.ifBlank {
+                    text = store.Store.orEmpty().ifBlank {
                         "Mağaza #${store.StoreId}"
                     },
                     style = MaterialTheme.typography.titleSmall,
@@ -429,10 +429,10 @@ private fun MemberFollowedStoreDTO.storeLogoText(): String {
 
 private fun MemberFollowedStoreDTO.followedStoreDescription(): String {
     return when {
-        Company.isNotBlank() ->
+        Company.orEmpty().isNotBlank() ->
             Company
 
-        FollowedStoresType.isNotBlank() ->
+        FollowedStoresType.orEmpty().isNotBlank() ->
             FollowedStoresType
 
         else ->

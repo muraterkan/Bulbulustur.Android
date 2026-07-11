@@ -41,6 +41,8 @@ fun CurrencySettingsScreen(
     onCurrencySelected: (SystemDescCurrencyDTO) -> Unit,
     onBackClick: () -> Unit = {}
 ) {
+    val visibleCurrencies = ResolveCurrencySettingsItems(currencies)
+
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
@@ -66,48 +68,32 @@ fun CurrencySettingsScreen(
                 CurrencyIntroCard()
             }
 
-            when {
-                isLoading -> {
-                    item {
-                        CurrencyLoadingCard()
-                    }
+            if (isLoading && currencies.isEmpty()) {
+                item {
+                    CurrencyLoadingCard()
                 }
+            } else {
+                items(
+                    items = visibleCurrencies,
+                    key = { it.SystemDescCurrencyId }
+                ) { currency ->
+                    val isSelected =
+                        currency.SystemDescCurrencyId == selectedCurrencyId ||
+                                (
+                                        selectedCurrencyId == 0 &&
+                                                currency.IsoCode.equals(
+                                                    selectedCurrencyCode,
+                                                    ignoreCase = true
+                                                )
+                                        )
 
-                !errorMessage.isNullOrBlank() -> {
-                    item {
-                        CurrencyErrorCard(errorMessage)
-                    }
-                }
-
-                currencies.isEmpty() -> {
-                    item {
-                        CurrencyErrorCard("Kullanılabilir para birimi bulunamadı.")
-                    }
-                }
-
-                else -> {
-                    items(
-                        items = currencies,
-                        key = { it.SystemDescCurrencyId }
-                    ) { currency ->
-                        val isSelected =
-                            currency.SystemDescCurrencyId == selectedCurrencyId ||
-                                    (
-                                            selectedCurrencyId == 0 &&
-                                                    currency.IsoCode.equals(
-                                                        selectedCurrencyCode,
-                                                        ignoreCase = true
-                                                    )
-                                            )
-
-                        CurrencyRow(
-                            item = currency,
-                            isSelected = isSelected,
-                            onClick = {
-                                onCurrencySelected(currency)
-                            }
-                        )
-                    }
+                    CurrencyRow(
+                        item = currency,
+                        isSelected = isSelected,
+                        onClick = {
+                            onCurrencySelected(currency)
+                        }
+                    )
                 }
             }
         }
@@ -157,7 +143,7 @@ private fun CurrencyRow(
             ) {
                 Text(
                     text = item.CurrencySymbol.ifBlank {
-                        item.IsoCode.take(1)
+                        item.IsoCode.take(1).uppercase()
                     },
                     style = BbTypography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
@@ -169,13 +155,15 @@ private fun CurrencyRow(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = item.IsoCode,
+                    text = item.IsoCode.ifBlank { "CUR" },
                     style = BbTypography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = item.Content,
+                    text = item.Content.ifBlank {
+                        CurrencyFallbackName(item.IsoCode)
+                    },
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -206,28 +194,60 @@ private fun CurrencyLoadingCard() {
         ) {
             CircularProgressIndicator(
                 modifier = Modifier.size(BBIcon.SizeLg),
-                strokeWidth = BBSpacing.Space1 / 2
+                strokeWidth = BBSpacing.Space1 / 2,
+                color = MaterialTheme.colorScheme.primary
             )
 
             Text(
                 text = "Para birimleri yükleniyor...",
-                style = BbTypography.bodyMedium
+                style = BbTypography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
 }
 
-@Composable
-private fun CurrencyErrorCard(message: String) {
-    BbCard(
-        modifier = Modifier.fillMaxWidth(),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium
-    ) {
-        Text(
-            text = message,
-            style = BbTypography.bodySmall,
-            color = MaterialTheme.colorScheme.error
+private fun ResolveCurrencySettingsItems(
+    currencies: List<SystemDescCurrencyDTO>
+): List<SystemDescCurrencyDTO> {
+    return currencies.ifEmpty {
+        listOf(
+            SystemDescCurrencyDTO(
+                SystemDescCurrencyId = 1,
+                IsoCode = "TRY",
+                CurrencySymbol = "₺",
+                Content = "Türk Lirası"
+            ),
+            SystemDescCurrencyDTO(
+                SystemDescCurrencyId = 2,
+                IsoCode = "USD",
+                CurrencySymbol = "$",
+                Content = "US Dollar"
+            ),
+            SystemDescCurrencyDTO(
+                SystemDescCurrencyId = 3,
+                IsoCode = "EUR",
+                CurrencySymbol = "€",
+                Content = "Euro"
+            ),
+            SystemDescCurrencyDTO(
+                SystemDescCurrencyId = 4,
+                IsoCode = "GBP",
+                CurrencySymbol = "£",
+                Content = "Pound Sterling"
+            )
         )
+    }
+}
+
+private fun CurrencyFallbackName(
+    isoCode: String
+): String {
+    return when (isoCode.uppercase()) {
+        "TRY" -> "Türk Lirası"
+        "USD" -> "US Dollar"
+        "EUR" -> "Euro"
+        "GBP" -> "Pound Sterling"
+        else -> "Para birimi"
     }
 }

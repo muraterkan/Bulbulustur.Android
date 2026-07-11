@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -33,7 +34,6 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductHomepageSpecialContentDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductHomepageSpecialDTO
-import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
 
 @Composable
 fun B2CHomepageSpecialContents(
@@ -48,7 +48,9 @@ fun B2CHomepageSpecialContents(
         mutableIntStateOf(0)
     }
 
-    val selectedGroup = specialContents.getOrNull(selectedGroupIndex) ?: specialContents.first()
+    val selectedGroup =
+        specialContents.getOrNull(selectedGroupIndex)
+            ?: specialContents.first()
 
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -73,16 +75,22 @@ fun B2CHomepageSpecialContents(
 
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2),
-            contentPadding = PaddingValues(end = BBSpacing.PageHorizontal)
+            contentPadding = PaddingValues(
+                end = BBSpacing.PageHorizontal
+            )
         ) {
             items(
                 count = specialContents.size,
-                key = { index -> specialContents[index].ProductSpecialGroupId }
+                key = { index ->
+                    specialContents[index].ProductSpecialGroupId
+                }
             ) { index ->
                 val group = specialContents[index]
 
                 BbChip(
-                    text = group.GroupName.ifBlank { "Ürün Vitrini" },
+                    text = group.GroupName.ifBlank {
+                        "Ürün Vitrini"
+                    },
                     selected = selectedGroupIndex == index,
                     onClick = {
                         selectedGroupIndex = index
@@ -93,16 +101,24 @@ fun B2CHomepageSpecialContents(
 
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
-            contentPadding = PaddingValues(end = BBSpacing.PageHorizontal)
+            contentPadding = PaddingValues(
+                end = BBSpacing.PageHorizontal
+            )
         ) {
             items(
                 items = selectedGroup.Products,
-                key = { product -> product.ProductHomepageSpecialId }
+                key = { product ->
+                    product.ProductHomepageSpecialId
+                }
             ) { product ->
                 B2CHomepageSpecialProductCard(
                     product = product,
                     onClick = {
-                        onProductClick(product.ProductId, product.StoreId, product.VariantId)
+                        onProductClick(
+                            product.ProductId,
+                            product.StoreId,
+                            product.VariantId
+                        )
                     }
                 )
             }
@@ -115,6 +131,11 @@ private fun B2CHomepageSpecialProductCard(
     product: ProductHomepageSpecialDTO,
     onClick: () -> Unit
 ) {
+    val imageUrl =
+        ResolveB2CHomepageSpecialImageUrl(
+            imagePath = product.DefaultPicture
+        )
+
     BbCard(
         modifier = Modifier
             .width(BBSpacing.Space24 + BBSpacing.Space20)
@@ -130,14 +151,26 @@ private fun B2CHomepageSpecialProductCard(
                     .background(MaterialTheme.colorScheme.surfaceVariant),
                 contentAlignment = Alignment.Center
             ) {
-                AsyncImage(
-                    model = ResolveB2CHomepageSpecialImageUrl(product.DefaultPicture),
-                    contentDescription = product.ProductName,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(BBRadius.LgShape),
-                    contentScale = ContentScale.Crop
-                )
+                if (imageUrl.isNotBlank()) {
+                    AsyncImage(
+                        model = imageUrl,
+                        contentDescription = product.ProductName,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clip(BBRadius.LgShape),
+                        contentScale = ContentScale.Crop
+                    )
+                } else {
+                    Text(
+                        text = product.ProductName
+                            .ifBlank { "Ürün" }
+                            .take(2)
+                            .uppercase(),
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
 
             Column(
@@ -145,7 +178,9 @@ private fun B2CHomepageSpecialProductCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = product.ProductName,
+                    text = product.ProductName.ifBlank {
+                        "Ürün"
+                    },
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.SemiBold,
@@ -163,18 +198,70 @@ private fun B2CHomepageSpecialProductCard(
     }
 }
 
-private fun ResolveB2CHomepageSpecialImageUrl(imagePath: String): String {
-    val normalizedPath = imagePath.trim()
+private fun ResolveB2CHomepageSpecialImageUrl(
+    imagePath: String
+): String {
+    val normalizedPath =
+        imagePath
+            .trim()
+            .replace("\\", "/")
+            .replace("{", "")
+            .replace("}", "")
 
     if (normalizedPath.isBlank()) {
         return ""
     }
 
-    if (normalizedPath.startsWith("http://", ignoreCase = true) || normalizedPath.startsWith("https://", ignoreCase = true)) {
+    if (
+        normalizedPath.startsWith(
+            "http://",
+            ignoreCase = true
+        ) ||
+        normalizedPath.startsWith(
+            "https://",
+            ignoreCase = true
+        )
+    ) {
         return normalizedPath
     }
 
-    val baseUrl = ApiRoutes.B2C_PRODUCT_BASE_URL.substringBefore("/api/").trimEnd('/')
+    val publicBaseUrl =
+        "https://www.bulbulustur.com"
 
-    return "$baseUrl/${normalizedPath.trimStart('/')}"
+    val productImageBaseUrl =
+        "$publicBaseUrl/UploadedFiles/B2C/Products"
+
+    return when {
+        normalizedPath.startsWith(
+            "/UploadedFiles/",
+            ignoreCase = true
+        ) -> {
+            "$publicBaseUrl$normalizedPath"
+        }
+
+        normalizedPath.startsWith(
+            "UploadedFiles/",
+            ignoreCase = true
+        ) -> {
+            "$publicBaseUrl/$normalizedPath"
+        }
+
+        normalizedPath.startsWith(
+            "/B2C/Products/",
+            ignoreCase = true
+        ) -> {
+            "$publicBaseUrl/UploadedFiles$normalizedPath"
+        }
+
+        normalizedPath.startsWith(
+            "B2C/Products/",
+            ignoreCase = true
+        ) -> {
+            "$publicBaseUrl/UploadedFiles/$normalizedPath"
+        }
+
+        else -> {
+            "$productImageBaseUrl/${normalizedPath.trimStart('/')}"
+        }
+    }
 }

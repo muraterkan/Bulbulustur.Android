@@ -5,13 +5,14 @@ import com.bulbulustur.android.businesslayer.Core.Interface.IReviewRepository
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.ReviewInsertModel
 import com.bulbulustur.android.businesslayer.Core.Network.ApiClient
 import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
+import com.bulbulustur.android.businesslayer.Core.Util.PaginatedList
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
 class ReviewRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IReviewRepository {
 
-    override suspend fun GetReviewsAsync(sourceType: String, sourceId: Int, variantId: Int, page: Int, pageSize: Int): Result<List<ReviewDTO>> {
+    override suspend fun GetReviewsAsync(sourceType: String, sourceId: Int, variantId: Int, page: Int, pageSize: Int): Result<PaginatedList<ReviewDTO>> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.COMMERCE_SUPPORT_REVIEW_BASE_URL,
             method = "GetReviewsAsync",

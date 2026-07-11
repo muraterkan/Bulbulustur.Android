@@ -114,7 +114,7 @@ fun ProductReviewScreen(
         topBar = {
             BbInnerPageHeader(
                 title =
-                    "Ürün Yorumları",
+                    "Ürün Değerlendirmeleri",
                 onBackClick =
                     onBackClick
             )
@@ -220,7 +220,7 @@ fun ProductReviewScreen(
                     item {
                         ProductReviewSectionTitle(
                             title =
-                                "Müşteri yorumları",
+                                "Müşteri Değerlendirmeleri",
                             description =
                                 "${filteredReviews.size} değerlendirme gösteriliyor."
                         )
@@ -518,10 +518,8 @@ private fun ProductReviewFilterSection(
             )
     ) {
         ProductReviewSectionTitle(
-            title =
-                "Puan Filtresi",
-            description =
-                "Değerlendirmeleri verilen puana göre filtreleyin."
+            title = "Puan Filtresi",
+            description = "Değerlendirmeleri verilen puana göre filtreleyin."
         )
 
         FlowRow(
@@ -938,7 +936,7 @@ private fun List<ReviewDTO>.ToReviewSummary():
 
 private fun ReviewDTO.ResolveCustomerName(): String {
     return Fullname
-        .takeIf {
+        ?.takeIf {
             it.isNotBlank()
         }
         ?: listOf(
@@ -949,8 +947,7 @@ private fun ReviewDTO.ResolveCustomerName(): String {
                 it.isNotBlank()
             }
             .joinToString(
-                separator =
-                    " "
+                separator = " "
             )
             .takeIf {
                 it.isNotBlank()

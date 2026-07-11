@@ -132,17 +132,5 @@ private fun WholesaleHomepageSpecialDTO.ToWholesaleProductCardModel(isFavorite: 
 }
 
 private fun ResolveWholesaleHomepageSpecialImageUrl(imagePath: String): String {
-    val normalizedPath = imagePath.trim()
-
-    if (normalizedPath.isBlank()) {
-        return ""
-    }
-
-    if (normalizedPath.startsWith("http://", ignoreCase = true) || normalizedPath.startsWith("https://", ignoreCase = true)) {
-        return normalizedPath
-    }
-
-    val baseUrl = ApiRoutes.B2B_PRODUCT_BASE_URL.substringBefore("/api/").trimEnd('/')
-
-    return "$baseUrl/${normalizedPath.trimStart('/')}"
+    return ApiRoutes.B2B_TEST_PRODUCT_IMAGE_URL
 }

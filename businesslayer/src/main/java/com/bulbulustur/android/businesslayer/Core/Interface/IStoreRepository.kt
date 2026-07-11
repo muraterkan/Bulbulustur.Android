@@ -3,6 +3,7 @@ package com.bulbulustur.android.businesslayer.Core.Interface
 import com.bulbulustur.android.businesslayer.Core.DTO.StoreDTO
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.StoreInsertModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.StoreUpdateModel
+import com.bulbulustur.android.businesslayer.Core.Util.PaginatedList
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -11,9 +12,11 @@ import retrofit2.http.Query
 
 interface IStoreRepository {
 
-    @GET("api/Store/GetStoreListAsync")
-    suspend fun GetStoreListAsync():
-            Result<List<StoreDTO>>
+    @GET("api/Store/GetStoresAsync")
+    suspend fun GetStoresAsync(
+        @Query("page") page: Int = 1,
+        @Query("pageSize") pageSize: Int = 100
+    ): Result<PaginatedList<StoreDTO>>
 
     @GET("api/Store/GetStoreByIdAsync")
     suspend fun GetStoreByIdAsync(

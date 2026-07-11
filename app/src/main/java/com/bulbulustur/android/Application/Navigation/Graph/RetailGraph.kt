@@ -20,6 +20,7 @@ import com.bulbulustur.android.Application.Areas.b2c.Views.Category.RetailCatego
 import com.bulbulustur.android.Application.Areas.b2c.Views.Home.RetailHomeScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.DealsOfTheDay.DealsOfTheDayListScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.Product.ProductDetailScreen
+import com.bulbulustur.android.Application.Areas.b2c.Views.Product.OtherSellerListScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.Product.ProductListScreen as RetailProductListScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.Store.StoreDetailScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.Store.StoreListScreen
@@ -728,6 +729,18 @@ fun NavGraphBuilder.retailGraph(
                     )
                 )
             },
+            onOtherSellerClick = {
+                navigator.navController.navigate(
+                    RetailRoutes.otherSellerList(
+                        productId =
+                            productId,
+                        storeId =
+                            storeId,
+                        variantId =
+                            variantId
+                    )
+                )
+            },
             onSizeVariantChange = { selectedVariantId ->
                 productController.SelectedVariant(
                     languageId =
@@ -867,6 +880,63 @@ fun NavGraphBuilder.retailGraph(
             }
         )
     }
+    composable(
+        route =
+            RetailRoutes.OtherSellerList,
+        arguments =
+            listOf(
+                navArgument(RetailRoutes.ArgProductId) {
+                    type = NavType.IntType
+                },
+                navArgument(RetailRoutes.ArgStoreId) {
+                    type = NavType.IntType
+                },
+                navArgument(RetailRoutes.ArgVariantId) {
+                    type = NavType.IntType
+                }
+            )
+    ) { backStackEntry ->
+        val productId =
+            backStackEntry.arguments
+                ?.getInt(RetailRoutes.ArgProductId)
+                ?: 0
+
+        val storeId =
+            backStackEntry.arguments
+                ?.getInt(RetailRoutes.ArgStoreId)
+                ?: 0
+
+        val variantId =
+            backStackEntry.arguments
+                ?.getInt(RetailRoutes.ArgVariantId)
+                ?: 0
+
+        LaunchedEffect(
+            productId,
+            storeId,
+            variantId
+        ) {
+            productController.OtherSellerList(
+                languageId =
+                    sessionState.Language.Id,
+                productId =
+                    productId,
+                variantId =
+                    variantId,
+                storeId =
+                    storeId
+            )
+        }
+
+        OtherSellerListScreen(
+            productId =
+                productId,
+            onBackClick = {
+                navigator.back()
+            }
+        )
+    }
+
 
     composable(
         route =
@@ -1208,6 +1278,11 @@ fun NavGraphBuilder.retailGraph(
             onStoreProductListClick = {
                 navigator.navController.navigate(
                     StoreRoutes.storeProductList(storeId)
+                )
+            },
+            onStoreListClick = {
+                navigator.navController.navigate(
+                    StoreRoutes.StoreList
                 )
             }
         )

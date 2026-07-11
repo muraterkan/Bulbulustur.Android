@@ -45,6 +45,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
@@ -994,6 +995,7 @@ data class RetailStoreDetail(
     val id: Int,
     val name: String,
     val logoText: String,
+    val logoUrl: String,
     val shortDescription: String,
     val description: String,
     val productCount: Int,
@@ -1023,6 +1025,7 @@ private fun StoreDTO.ToRetailStoreDetail(): RetailStoreDetail {
         id = StoreId,
         name = resolvedName,
         logoText = resolvedName.take(2).uppercase(),
+        logoUrl = ResolveStoreLogoUrl(Picture),
         shortDescription = StoreDescription.ifBlank {
             "Mağaza vitrini"
         },
@@ -1049,6 +1052,7 @@ private fun getRetailStoreDetail(
         id = storeId,
         name = "Ortobella Store",
         logoText = "OS",
+        logoUrl = "",
         shortDescription = "Ayakkabı ve günlük moda ürünleri",
         description = "Ortobella Store, seçili ayakkabı ve günlük kullanım ürünlerini perakende alışveriş akışında sunan doğrulanmış mağaza vitrinidir.",
         productCount = 248,
@@ -1105,6 +1109,31 @@ private fun getRetailStoreDetail(
             )
         )
     )
+}
+
+private fun ResolveStoreLogoUrl(picture: String): String {
+    val normalizedPicture =
+        picture.trim()
+
+    if (normalizedPicture.isBlank()) {
+        return ""
+    }
+
+    if (
+        normalizedPicture.startsWith(
+            "http://",
+            ignoreCase = true
+        ) ||
+        normalizedPicture.startsWith(
+            "https://",
+            ignoreCase = true
+        )
+    ) {
+        return normalizedPicture
+    }
+
+    return "https://www.bulbulustur.com/UploadedFiles/B2C/Stores/" +
+            normalizedPicture.trimStart('/')
 }
 
 @Preview(showBackground = true)

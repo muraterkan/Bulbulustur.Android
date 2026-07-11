@@ -3,11 +3,15 @@ package com.bulbulustur.android.Application.Areas.b2c.Views.Store
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -174,8 +178,10 @@ fun StoreProductListScreen(
                 )
 
                 BbSectionHeader(
-                    title = "Mağaza Ürünleri",
-                    subtitle = "Bu mağazaya ait ürünleri inceleyin."
+                    modifier = Modifier.padding(
+                        horizontal = BBSpacing.PageHorizontal
+                    ),
+                    title = "Mağaza Ürünleri"
                 )
 
                 StoreProductListHorizontalFilters(
@@ -187,10 +193,20 @@ fun StoreProductListScreen(
                 )
 
                 StoreProductListResultHeader(
+                    modifier = Modifier.padding(
+                        horizontal = BBSpacing.PageHorizontal
+                    ),
                     productCount = State.StoreProductListData
                         ?.Products2
                         ?.TotalItemCount
                         ?: filteredProducts.size
+                )
+
+                HorizontalDivider(
+                    modifier = Modifier.padding(
+                        horizontal = BBSpacing.PageHorizontal
+                    ),
+                    color = MaterialTheme.colorScheme.outlineVariant
                 )
             }
 
@@ -215,7 +231,7 @@ fun StoreProductListScreen(
                     BbProductGrid(
                         contentPadding = PaddingValues(
                             start = BBSpacing.PageHorizontal,
-                            top = BBSpacing.Space3,
+                            top = BBSpacing.Space4,
                             end = BBSpacing.PageHorizontal,
                             bottom = BBSpacing.PageBottom
                         ),
@@ -297,28 +313,35 @@ private fun StoreProductListHorizontalFilters(
 
 @Composable
 private fun StoreProductListResultHeader(
+    modifier: Modifier = Modifier,
     productCount: Int
 ) {
-    Column(
-        modifier = Modifier,
-        verticalArrangement = Arrangement.spacedBy(
-            BBSpacing.Space1
-        )
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            modifier = Modifier,
-            text = "$productCount ürün listeleniyor",
+            text = "${FormatStoreProductCount(productCount)} ürün",
             style = MaterialTheme.typography.titleSmall,
             color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.SemiBold
         )
 
         Text(
-            text = "Ürün kartına dokunarak detay sayfasına geçebilirsiniz.",
-            style = MaterialTheme.typography.bodySmall,
+            text = "Mağaza ürünleri",
+            style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
+}
+
+private fun FormatStoreProductCount(
+    count: Int
+): String {
+    return NumberFormat.getIntegerInstance(
+        Locale("tr", "TR")
+    ).format(count)
 }
 
 @Composable
@@ -415,13 +438,13 @@ private fun B2CProductData.ToStoreProductCardModel(
             currencySymbol = CurrencySymbol
         ),
         OldPriceText = "",
-        BadgeText = CategoryName,
+        BadgeText = CategoryName.orEmpty(),
         RatingText = "",
         CargoText = "",
         IsFavorite = isFavorite
     )
 }
-
+/*
 private fun ResolveStoreProductImageUrl(
     picture: String
 ): String {
@@ -443,6 +466,13 @@ private fun ResolveStoreProductImageUrl(
         .trimEnd('/')
 
     return "$serverBaseUrl/${normalizedPicture.trimStart('/')}"
+}
+*/
+
+private fun ResolveStoreProductImageUrl(
+    picture: String
+): String {
+    return ApiRoutes.B2C_TEST_PRODUCT_IMAGE_URL
 }
 
 private fun FormatStoreProductPrice(

@@ -3,6 +3,7 @@ package com.bulbulustur.android.Application.Areas.b2c.Controllers
 import androidx.lifecycle.viewModelScope
 import com.bulbulustur.android.businesslayer.Core.DTO.StoreDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.IStoreRepository
+import com.bulbulustur.android.businesslayer.Core.Util.PaginatedList
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,12 +14,12 @@ import kotlinx.coroutines.launch
 data class StoreControllerState(
     val IsLoading: Boolean = false,
     val CurrentAction: String? = null,
-    val StoreListResult: Result<List<StoreDTO>>? = null,
+    val StoreListResult: Result<PaginatedList<StoreDTO>>? = null,
     val StoreDetailResult: Result<StoreDTO?>? = null,
     val ErrorMessage: String? = null
 ) {
     val Stores: List<StoreDTO>
-        get() = StoreListResult?.Data.orEmpty()
+        get() = StoreListResult?.Data?.Items.orEmpty()
 
     val StoreDetail: StoreDTO?
         get() = StoreDetailResult?.Data
@@ -41,7 +42,10 @@ class StoreController(
                 )
             }
 
-            val response = storeRepository.GetStoreListAsync()
+            val response = storeRepository.GetStoresAsync(
+                page = 1,
+                pageSize = 100
+            )
 
             _state.update {
                 it.copy(

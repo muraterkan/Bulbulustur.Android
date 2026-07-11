@@ -139,7 +139,7 @@ private fun UsagePurposeIntroCard() {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Bulbulustury'u En Çok Hangi Amaçla Kullanıyorsunuz?",
+                    text = "Bulbulustur'u En Çok Hangi Amaçla Kullanıyorsunuz?",
                     style = BbTypography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )

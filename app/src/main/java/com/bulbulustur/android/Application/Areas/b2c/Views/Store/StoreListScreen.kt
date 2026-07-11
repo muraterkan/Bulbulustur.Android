@@ -294,7 +294,7 @@ private fun StoreListHeroCard(
             )
 
             Text(
-                text = "Güvenilir mağazaları keşfedin",
+                text = "Güvenilir Mağazaları Keşfedin",
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
@@ -815,7 +815,7 @@ private fun StoreDTO.ToStoreListItem(): StoreListItem {
         } else {
             "Standart"
         },
-        isVerified = StoreKey.isNotBlank() || CompanyId > 0
+        isVerified = !StoreKey.isNullOrBlank() || CompanyId > 0
     )
 }
 

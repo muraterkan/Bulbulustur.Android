@@ -697,6 +697,11 @@ fun ProductDetailScreen(
             RetailProductDetailQuickActions(
                 product =
                     product,
+                otherSellerCount =
+                    State.OtherStorePricesResult
+                        ?.Data
+                        ?.size
+                        ?: 0,
                 onOtherSellerClick =
                     onOtherSellerClick,
                 onQuestionClick =
@@ -707,6 +712,7 @@ fun ProductDetailScreen(
                 description =
                     product.description
             )
+            /*
 
             _B2CSponsoredAdverts(
                 Adverts =
@@ -714,6 +720,7 @@ fun ProductDetailScreen(
                 onAdvertClick =
                     onSponsoredAdvertClick
             )
+            */
 
             _FromBrands(
                 Sections =
@@ -747,7 +754,7 @@ fun ProductDetailScreen(
             Spacer(
                 modifier =
                     Modifier.height(
-                        BBSpacing.Space16
+                        BBSpacing.Space4
                     )
             )
         }
@@ -1116,7 +1123,7 @@ private fun RetailProductDetailVariantCard(
                         )
 
                         Text(
-                            text = "Beden Rehberi",
+                            text = "Ölçü Rehberi",
                             style = MaterialTheme.typography.labelMedium,
                             color = BBColors.Success,
                             fontWeight = FontWeight.Bold
@@ -2172,6 +2179,7 @@ private fun RetailProductDetailStoreCard(
 @Composable
 private fun RetailProductDetailQuickActions(
     product: RetailProductDetail,
+    otherSellerCount: Int,
     onOtherSellerClick: () -> Unit,
     onQuestionClick: () -> Unit
 ) {
@@ -2185,13 +2193,21 @@ private fun RetailProductDetailQuickActions(
     ) {
         RetailProductDetailActionRow(
             title = "Diğer Satıcılar",
-            subtitle = "${product.otherSellerCount} Satıcı daha bu ürünü sunuyor",
+            subtitle = if (otherSellerCount > 0) {
+                "$otherSellerCount Satıcı daha bu ürünü sunuyor"
+            } else {
+                "Diğer satıcı seçeneklerini görüntüle"
+            },
             onClick = onOtherSellerClick
         )
 
         RetailProductDetailActionRow(
             title = "Soru & Cevap",
-            subtitle = "${product.questionCount} Ürün sorusu",
+            subtitle = if (product.questionCount > 0) {
+                "${product.questionCount} Ürün sorusu"
+            } else {
+                "Ürün sorularını ve cevaplarını görüntüle"
+            },
             onClick = onQuestionClick
         )
     }
@@ -3382,40 +3398,7 @@ data class RetailRelatedCategoryChip(
 private fun ResolveRetailProductImageUrl(
     imagePath: String
 ): String {
-    val normalizedPath =
-        imagePath.trim()
-
-    if (
-        normalizedPath.isBlank()
-    ) {
-        return ""
-    }
-
-    if (
-        normalizedPath.startsWith(
-            "http://",
-            ignoreCase =
-                true
-        ) ||
-        normalizedPath.startsWith(
-            "https://",
-            ignoreCase =
-                true
-        )
-    ) {
-        return normalizedPath
-    }
-
-    val baseUrl =
-        ApiRoutes.B2C_BASE_URL
-            .substringBefore(
-                "/api/"
-            )
-            .trimEnd(
-                '/'
-            )
-
-    return "$baseUrl/${normalizedPath.trimStart('/')}"
+    return ApiRoutes.B2C_TEST_PRODUCT_IMAGE_URL
 }
 
 private fun ProductDTO.ToRetailProductDetail(
@@ -3442,11 +3425,11 @@ private fun ProductDTO.ToRetailProductDetail(
                 ColorId =
                     ColorId,
                 Color =
-                    Color,
+                    Color.orEmpty(),
                 SizeId =
                     SizeId,
                 Size =
-                    Size,
+                    Size.orEmpty(),
                 StoreId =
                     StoreId,
                 Store =
@@ -3460,9 +3443,9 @@ private fun ProductDTO.ToRetailProductDetail(
                 Stock =
                     Stock,
                 DefaultPicture =
-                    DefaultPicture,
+                    DefaultPicture.orEmpty(),
                 Picture =
-                    Picture,
+                    Picture.orEmpty(),
                 Rating =
                     StoreRating
             )
@@ -3710,7 +3693,7 @@ private fun ProductDTO.ToRetailProductDetail(
             .takeIf {
                 it.isNotBlank()
             }
-            ?: Color.takeIf {
+            ?: Color.orEmpty().takeIf {
                 it.isNotBlank()
             }
             ?: "Standart"
@@ -3816,10 +3799,11 @@ private fun ProductDTO.ToRetailProductDetail(
 
     val resolvedPicture =
         DefaultPicture
+            .orEmpty()
             .takeIf {
                 it.isNotBlank()
             }
-            ?: Picture
+            ?: Picture.orEmpty()
 
     val resolvedPictureUrl =
         ResolveRetailProductImageUrl(

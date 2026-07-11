@@ -665,47 +665,7 @@ private fun B2CProductData.ToProductCardModel(
 private fun ResolveProductImageUrl(
     picture: String
 ): String {
-    val normalizedPicture =
-        picture.trim()
-
-    if (
-        normalizedPicture.isBlank()
-    ) {
-        return ""
-    }
-
-    if (
-        normalizedPicture.startsWith(
-            "http://",
-            ignoreCase = true
-        ) ||
-        normalizedPicture.startsWith(
-            "https://",
-            ignoreCase = true
-        )
-    ) {
-        return normalizedPicture
-    }
-
-    val serverBaseUrl =
-        ApiRoutes.B2C_BASE_URL
-            .substringBefore(
-                "/api/"
-            )
-            .trimEnd(
-                '/'
-            )
-
-    return if (
-        normalizedPicture.startsWith(
-            "/"
-        )
-    ) {
-        serverBaseUrl +
-                normalizedPicture
-    } else {
-        "$serverBaseUrl/$normalizedPicture"
-    }
+    return ApiRoutes.B2C_TEST_PRODUCT_IMAGE_URL
 }
 
 private fun FormatProductPrice(

@@ -71,7 +71,7 @@ class ProductVariantRepository(
         storeId: Int
     ): Result<List<ProductVariantDTO>> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.B2C_PRODUCT_VARIANT_BASE_URL,
+            baseUrl = ApiRoutes.B2C_PRODUCT_BASE_URL,
             method = "GetOtherStorePriceAsync",
             query =
                 "languageId=$languageId" +

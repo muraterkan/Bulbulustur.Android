@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.bulbulustur.android.businesslayer.Core.DTO.ReviewDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.IReviewRepository
 import com.bulbulustur.android.businesslayer.Core.Util.Execute.IExecuteService
+import com.bulbulustur.android.businesslayer.Core.Util.PaginatedList
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +17,7 @@ data class ProductReviewControllerState(
     val CurrentAction: String? = null,
 
     val Reviews: List<ReviewDTO> = emptyList(),
-    val ReviewsResult: Result<List<ReviewDTO>>? = null,
+    val ReviewsResult: Result<PaginatedList<ReviewDTO>>? = null,
 
     val SourceType: String = "PRODUCT",
     val SourceId: Int = 0,
@@ -177,6 +178,7 @@ class ProductReviewController(
 
             val incomingReviews =
                 response.Data
+                    ?.Items
                     ?: emptyList()
 
             _state.update { currentState ->
@@ -223,8 +225,7 @@ class ProductReviewController(
                         pageSize,
                     HasNextPage =
                         response.Success &&
-                                incomingReviews.size >=
-                                pageSize,
+                                response.Data?.HasNextPage == true,
                     ErrorMessage =
                         if (response.Success) {
                             null

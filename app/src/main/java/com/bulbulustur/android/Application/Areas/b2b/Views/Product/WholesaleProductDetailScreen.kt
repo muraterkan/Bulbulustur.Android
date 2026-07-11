@@ -2319,24 +2319,7 @@ data class WholesaleProductDetailCompany(
 )
 
 private fun ResolveWholesaleProductImageUrl(imagePath: String): String {
-    val normalizedPath = imagePath.trim()
-
-    if (normalizedPath.isBlank()) {
-        return ""
-    }
-
-    if (
-        normalizedPath.startsWith("http://", ignoreCase = true) ||
-        normalizedPath.startsWith("https://", ignoreCase = true)
-    ) {
-        return normalizedPath
-    }
-
-    val baseUrl = ApiRoutes.B2B_PRODUCT_BASE_URL
-        .substringBefore("/api/")
-        .trimEnd('/')
-
-    return "$baseUrl/${normalizedPath.trimStart('/')}"
+    return ApiRoutes.B2B_TEST_PRODUCT_IMAGE_URL
 }
 
 private fun WholesaleProductDTO.ToWholesaleProductDetail(relatedProducts: List<WholesaleProductRelatedDTO> = emptyList(), relatedCategories: List<ProductCategoryDTO> = emptyList()): WholesaleProductDetail {

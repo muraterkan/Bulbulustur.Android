@@ -6,16 +6,21 @@ import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.StoreInsert
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.StoreUpdateModel
 import com.bulbulustur.android.businesslayer.Core.Network.ApiClient
 import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
+import com.bulbulustur.android.businesslayer.Core.Util.PaginatedList
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
 class StoreRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IStoreRepository {
 
-    override suspend fun GetStoreListAsync(): Result<List<StoreDTO>> {
+    override suspend fun GetStoresAsync(
+        page: Int,
+        pageSize: Int
+    ): Result<PaginatedList<StoreDTO>> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetStoreListAsync"
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_STORE_BASE_URL,
+            method = "GetStoresAsync",
+            query = "page=$page&pageSize=$pageSize"
         )
     }
 
@@ -33,7 +38,7 @@ class StoreRepository(
         storeId: Int
     ): Result<StoreDTO?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_STORE_BASE_URL,
             method = "GetStoreByIdExtendedAsync",
             query = "storeId=$storeId"
         )

@@ -372,7 +372,7 @@ private fun getLegalPolicyGroups(): List<LegalPolicyGroup> {
                 LegalPolicyItem(
                     url = LegalPolicyUrls.Review,
                     title = "Değerlendirme Politikası",
-                    description = "Ürün yorumları ve değerlendirme süreçleri.",
+                    description = "Ürün Değerlendirme Süreçleri.",
                     icon = Icons.Outlined.VerifiedUser
                 ),
                 LegalPolicyItem(

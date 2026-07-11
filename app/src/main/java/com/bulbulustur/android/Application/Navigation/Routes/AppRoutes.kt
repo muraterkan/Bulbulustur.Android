@@ -55,7 +55,7 @@ object RetailRoutes {
         "retail/product-question/{$ArgProductId}/{$ArgStoreId}/{$ArgVariantId}"
 
     const val OtherSellerList =
-        "retail/other-seller-list"
+        "retail/other-seller-list/{$ArgProductId}/{$ArgStoreId}/{$ArgVariantId}"
 
     const val DealsOfTheDayList =
         "retail/deals-of-the-day-list"
@@ -80,6 +80,10 @@ object RetailRoutes {
 
     fun productQuestion(productId: Int, storeId: Int, variantId: Int): String {
         return "retail/product-question/$productId/$storeId/$variantId"
+    }
+
+    fun otherSellerList(productId: Int, storeId: Int, variantId: Int): String {
+        return "retail/other-seller-list/$productId/$storeId/$variantId"
     }
 }
 

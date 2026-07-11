@@ -106,7 +106,7 @@ fun SellerLandingScreen(
             item {
                 SellerLandingSectionTitle(
                     title = selectedTab,
-                    description = "Bulbulustury'da satışa başlamak isteyen Mağazalar için kısa bilgiler."
+                    description = "Bulbulustur'da satışa başlamak isteyen Mağazalar için kısa bilgiler."
                 )
             }
 
@@ -157,7 +157,7 @@ private fun SellerLandingTopBar(
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = "Bulbulustury'da satış yap",
+                text = "Bulbulustur'da Satış Yap",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onBackground
@@ -193,7 +193,7 @@ private fun SellerLandingHero(
                 .padding(18.dp)
         ) {
             Text(
-                text = "Ürünlerini Bulbulustury'da Vitrine çıkar",
+                text = "Ürünlerini Bulbulustur'da Vitrine Çıkar",
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onPrimaryContainer

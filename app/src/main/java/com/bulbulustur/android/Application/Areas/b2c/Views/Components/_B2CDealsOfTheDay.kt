@@ -214,5 +214,5 @@ private fun FormatDealPrice(
 private fun ResolveB2CDealImageUrl(
     picture: String
 ): String {
-    return ""
+    return ApiRoutes.B2C_TEST_PRODUCT_IMAGE_URL
 }

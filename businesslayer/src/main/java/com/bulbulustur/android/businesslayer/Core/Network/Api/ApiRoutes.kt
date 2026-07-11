@@ -68,6 +68,9 @@ object ApiRoutes {
     const val COMMERCE_SUPPORT_BASE_URL =
         "http://$APPLICATION_SERVER_HOST:30185/api/"
 
+    const val COMMERCE_SUPPORT_STORE_BASE_URL =
+        "http://$APPLICATION_SERVER_HOST:30185/api/Store/"
+
     const val SUPPORT_BASE_URL =
         "http://$APPLICATION_SERVER_HOST:30190/api/"
 
@@ -232,6 +235,9 @@ object ApiRoutes {
     // B2C API - 30240
     // -------------------------------------------------------------------------
 
+    const val B2C_TEST_PRODUCT_IMAGE_URL =
+        "https://www.bulbulustur.com/UploadedFiles/B2C/Products/2025_11/a7f0b0b8-0071-463a-b20b-fdb47cb7fcee.jpg"
+
     const val B2C_PRODUCT_BASE_URL =
         "http://$APPLICATION_SERVER_HOST:30240/api/Product/"
 
@@ -253,6 +259,9 @@ object ApiRoutes {
     // -------------------------------------------------------------------------
     // B2B API - 30235
     // -------------------------------------------------------------------------
+
+    const val B2B_TEST_PRODUCT_IMAGE_URL =
+        "https://www.bulbulustur.com/UploadedFiles/B2B/Products/2024_1/e444e272-842e-4c0a-b3fe-f68d4c569ff2.jpg"
 
     const val B2B_PRODUCT_BASE_URL =
         "http://$APPLICATION_SERVER_HOST:30235/api/Product/"
@@ -303,12 +312,8 @@ object ApiRoutes {
     const val COMMERCE_SUPPORT_REVIEW_BASE_URL =
         "http://$APPLICATION_SERVER_HOST:30185/api/Review/"
 
-    const val COMMERCE_SUPPORT_STORE_BASE_URL =
-        "http://$APPLICATION_SERVER_HOST:30185/api/Store/"
-
     const val COMMERCE_SUPPORT_PRODUCT_COMPLAINT_BASE_URL =
         "http://$APPLICATION_SERVER_HOST:30185/api/ProductComplaint/"
-
 
     const val B2C_PRODUCT_LOW_PRICE_REPORT_BASE_URL =
         "http://$APPLICATION_SERVER_HOST:30240/api/ProductLowPriceReport/"

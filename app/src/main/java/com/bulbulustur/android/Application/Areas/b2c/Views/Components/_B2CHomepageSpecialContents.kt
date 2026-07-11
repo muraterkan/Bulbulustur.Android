@@ -34,6 +34,7 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductHomepageSpecialContentDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductHomepageSpecialDTO
+import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
 
 @Composable
 fun B2CHomepageSpecialContents(
@@ -131,10 +132,7 @@ private fun B2CHomepageSpecialProductCard(
     product: ProductHomepageSpecialDTO,
     onClick: () -> Unit
 ) {
-    val imageUrl =
-        ResolveB2CHomepageSpecialImageUrl(
-            imagePath = product.DefaultPicture
-        )
+    val imageUrl = ApiRoutes.B2C_TEST_PRODUCT_IMAGE_URL
 
     BbCard(
         modifier = Modifier

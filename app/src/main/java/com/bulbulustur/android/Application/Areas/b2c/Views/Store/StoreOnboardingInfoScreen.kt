@@ -111,7 +111,7 @@ fun StoreOnboardingInfoScreen(
 
             item {
                 SellerOnboardingPrimaryButton(
-                    text = "Weby'de Devam Et",
+                    text = "Web Sitemizden Devam Et",
                     icon = Icons.AutoMirrored.Outlined.OpenInNew,
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
@@ -155,7 +155,7 @@ private fun SellerOnboardingHeroCard(
             }
 
             Text(
-                text = "Bulbulustury'da Satıcı Olun",
+                text = "Bulbulustur'da Satıcı Olun",
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -168,7 +168,7 @@ private fun SellerOnboardingHeroCard(
             )
 
             SellerOnboardingPrimaryButton(
-                text = "Weby'de Devam Et",
+                text = "Web Sitemizden Devam Et",
                 icon = Icons.AutoMirrored.Outlined.OpenInNew,
                 modifier = Modifier.fillMaxWidth(),
                 onClick = onContinueWebClick

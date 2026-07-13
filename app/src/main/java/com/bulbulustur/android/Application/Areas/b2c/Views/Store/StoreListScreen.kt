@@ -333,7 +333,7 @@ private fun StoreListSearchCard(
             singleLine = true,
             placeholder = {
                 Text(
-                    text = "Mağaza adı, açıklama veya kategori ara"
+                    text = "Mağaza Adı Ara..."
                 )
             },
             leadingIcon = {

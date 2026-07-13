@@ -49,6 +49,9 @@ fun NavGraphBuilder.splashGraph(
             },
             onWholesaleClick = {
                 navigator.navigateFromModeSelectionToWholesale()
+            },
+            onRfqClick = {
+                navigator.navigateToWholesaleRfqCreate()
             }
         )
     }

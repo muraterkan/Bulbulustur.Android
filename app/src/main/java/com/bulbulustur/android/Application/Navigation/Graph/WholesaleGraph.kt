@@ -71,7 +71,7 @@ fun NavGraphBuilder.wholesaleGraph(
                 navigator.navigateToWholesaleCategories()
             },
             onProductListClick = {
-                navigator.navController.navigate(WholesaleRoutes.productList())
+                navigator.navigateToWholesaleCategories()
             },
             onProductDetailClick = { productId ->
                 navigator.navController.navigate(
@@ -117,6 +117,9 @@ fun NavGraphBuilder.wholesaleGraph(
             )
         }
         WholesaleCategoryHomeScreen(
+            isLoading = categoryState.IsLoading,
+            errorMessage = categoryState.ErrorMessage,
+            categories = categoryState.Categories,
             onBackClick = {
                 navigator.back()
             },
@@ -195,8 +198,9 @@ fun NavGraphBuilder.wholesaleGraph(
 
         WholesaleCategoryDetailScreen(
             categoryId = categoryId,
+            isLoading = categoryState.IsLoading,
+            errorMessage = categoryState.ErrorMessage,
             categoryInfo = categoryState.Category,
-            childCategories = categoryState.ChildCategories,
             onBackClick = {
                 navigator.back()
             },
@@ -352,14 +356,27 @@ fun NavGraphBuilder.wholesaleGraph(
                 navigator.navigateToInbox()
             },
             onLastPriceRequestClick = {
-                navigator.navController.navigate(RfqRoutes.Create)
+                if (productId > 0) {
+                    navigator.navController.navigate(
+                        WholesaleRoutes.lastPriceRequest(productId)
+                    )
+                }
             },
             onSampleRequestClick = {
-                navigator.navController.navigate(RfqRoutes.Create)
+                if (productId > 0) {
+                    navigator.navController.navigate(
+                        WholesaleRoutes.sampleRequest(productId)
+                    )
+                }
             },
             onCustomizationRequestClick = {
-                navigator.navController.navigate(RfqRoutes.Create)
+                if (productId > 0) {
+                    navigator.navController.navigate(
+                        WholesaleRoutes.customizationRequest(productId)
+                    )
+                }
             },
+
             onCompanyClick = {
                 navigator.navController.navigate(CompanyRoutes.CompanyDetail)
             },
@@ -655,6 +672,7 @@ fun NavGraphBuilder.wholesaleGraph(
                 ?: rfqState.BuyerRequestInsertResult
                     ?.takeIf { !it.Success }
                     ?.Message,
+            onCategorySearch = rfqController::SearchProductCategories,
             onBackClick = {
                 navigator.back()
             },

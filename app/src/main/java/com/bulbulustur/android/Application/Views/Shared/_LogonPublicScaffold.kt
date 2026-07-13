@@ -1,17 +1,14 @@
 package com.bulbulustur.android.Application.Views.Shared
 
-import com.bulbulustur.android.Application.Config.LegalPolicyUrls
-
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.Image
-import androidx.compose.ui.unit.Dp
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
@@ -19,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -28,14 +26,13 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.Language
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -57,47 +54,76 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.bulbulustur.android.R
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
+import coil3.compose.AsyncImage
+import com.bulbulustur.android.Application.Config.LegalPolicyUrls
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
+import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBLayout
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
-import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBLayout
+import com.bulbulustur.android.Application.wwwroot.DesignTokens.BbTypography
+import com.bulbulustur.android.R
+import com.bulbulustur.android.businesslayer.Core.DTO.SystemDescLanguageDTO
+
+private const val LOGON_PUBLIC_TURKISH_FLAG =
+    "file:///android_asset/flags/turkey.svg"
+
+private const val LOGON_PUBLIC_ENGLISH_FLAG =
+    "file:///android_asset/flags/uk.svg"
+
+private const val LOGON_PUBLIC_FALLBACK_FLAG =
+    "file:///android_asset/flags/flag.svg"
 
 @Immutable
 data class LogonPublicLanguage(
+    val id: Int,
     val code: String,
-    val label: String
-)
-
-private val logonPublicLanguages = listOf(
-    LogonPublicLanguage(
-        code = "tr",
-        label = "Türkçe"
-    ),
-    LogonPublicLanguage(
-        code = "en",
-        label = "English"
-    )
+    val label: String,
+    val flagAssetPath: String
 )
 
 @Composable
 fun LogonPublicScaffold(
     modifier: Modifier = Modifier,
-    selectedLanguageCode: String = "tr",
+    languages: List<SystemDescLanguageDTO> = emptyList(),
+    selectedLanguageId: Int = 1,
+    isLanguageLoading: Boolean = false,
+    languageErrorMessage: String? = null,
+    selectedLanguageCode: String = if (selectedLanguageId == 2) "en" else "tr",
     horizontalPadding: Dp = BBSpacing.Space7,
     headerTopSpace: Dp = BBSpacing.Space8,
-    headerBottomSpace: Dp = BBSpacing.Space12,
+    headerBottomSpace: Dp = BBSpacing.Space8,
+    onLanguageIdSelected: (Int) -> Unit = {},
     onLanguageSelected: (LogonPublicLanguage) -> Unit = {},
     footer: @Composable ColumnScope.() -> Unit = {
-        LogonPublicDefaultFooter()
+        LogonPublicLegalFooter(
+            selectedLanguageId = selectedLanguageId
+        )
     },
     content: @Composable ColumnScope.() -> Unit
-){
-    val selectedLanguage = logonPublicLanguages.firstOrNull {
-        it.code == selectedLanguageCode
-    } ?: logonPublicLanguages.first()
+) {
+    val resolvedSelectedLanguageId =
+        when {
+            selectedLanguageId == 1 ||
+                    selectedLanguageId == 2 -> {
+                selectedLanguageId
+            }
+
+            selectedLanguageCode.equals(
+                other = "en",
+                ignoreCase = true
+            ) -> {
+                2
+            }
+
+            else -> {
+                1
+            }
+        }
 
     Box(
         modifier = modifier
@@ -108,131 +134,431 @@ fun LogonPublicScaffold(
             .imePadding()
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = horizontalPadding),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier.fillMaxSize()
         ) {
-            Spacer(modifier = Modifier.height(headerTopSpace))
+            Column(
+                modifier = Modifier
+                    .weight(1f, fill = true)
+                    .verticalScroll(
+                        rememberScrollState()
+                    ),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            horizontal = horizontalPadding
+                        ),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Spacer(
+                        modifier = Modifier.height(
+                            headerTopSpace
+                        )
+                    )
 
-            LogonPublicHeader(
-                selectedLanguage = selectedLanguage,
-                languages = logonPublicLanguages,
-                onLanguageSelected = onLanguageSelected
-            )
+                    LogonPublicHeader(
+                        languages = languages,
+                        selectedLanguageId =
+                            resolvedSelectedLanguageId,
+                        isLanguageLoading =
+                            isLanguageLoading,
+                        languageErrorMessage =
+                            languageErrorMessage,
+                        onLanguageSelected = { languageId ->
+                            val selectedLanguage =
+                                resolveLogonPublicLanguage(
+                                    languages = languages,
+                                    languageId = languageId
+                                )
 
-            Spacer(modifier = Modifier.height(headerBottomSpace))
+                            onLanguageIdSelected(
+                                languageId
+                            )
+
+                            onLanguageSelected(
+                                selectedLanguage
+                            )
+                        }
+                    )
+
+                    Spacer(
+                        modifier = Modifier.height(
+                            headerBottomSpace
+                        )
+                    )
+                }
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            horizontal = horizontalPadding
+                        ),
+                    horizontalAlignment = Alignment.Start,
+                    content = content
+                )
+            }
 
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.Start,
-                content = content
+                content = footer
             )
-
-            Spacer(modifier = Modifier.height(BBSpacing.Space12))
-
-            footer()
-
-            Spacer(modifier = Modifier.height(BBSpacing.PageBottom))
         }
     }
 }
 
 @Composable
-private fun LogonPublicHeader(
-    selectedLanguage: LogonPublicLanguage,
-    languages: List<LogonPublicLanguage>,
-    onLanguageSelected: (LogonPublicLanguage) -> Unit
+fun LogonPublicHeader(
+    languages: List<SystemDescLanguageDTO> = emptyList(),
+    selectedLanguageId: Int = 1,
+    isLanguageLoading: Boolean = false,
+    languageErrorMessage: String? = null,
+    modifier: Modifier = Modifier,
+    onLanguageSelected: (Int) -> Unit = {}
 ) {
-    var expanded by remember {
+    var isLanguageDialogVisible by remember {
         mutableStateOf(false)
     }
 
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.logo_black),
-            contentDescription = "Bulbulustur",
-            modifier = Modifier
-                .width(BBLayout.LogoWidthMedium)
-                .height(42.dp),
-            contentScale = ContentScale.Fit
+    val selectedLanguage =
+        resolveLogonPublicLanguage(
+            languages = languages,
+            languageId = selectedLanguageId
         )
 
-        Spacer(modifier = Modifier.weight(1f))
-
-        Box {
-            Surface(
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .height(
+                    BBLayout.LogoHeightLarge -
+                            BBSpacing.Space2
+                ),
+            contentAlignment = Alignment.CenterStart
+        ) {
+            Image(
+                painter = painterResource(
+                    id = R.drawable.logo_black
+                ),
+                contentDescription = "Bulbulustur",
                 modifier = Modifier
-                    .defaultMinSize(minHeight = 42.dp)
-                    .clickable {
-                        expanded = true
-                    },
-                shape = BBRadius.Button,
-                color = MaterialTheme.colorScheme.surface,
-                border = BorderStroke(
-                    width = 1.dp,
-                    color = MaterialTheme.colorScheme.outlineVariant
-                )
-            ) {
-                Row(
-                    modifier = Modifier.padding(
-                        horizontal = BBSpacing.Space3,
-                        vertical = BBSpacing.Space2
+                    .width(
+                        BBLayout.LogoWidthLarge -
+                                BBSpacing.Space8
+                    )
+                    .height(
+                        BBLayout.LogoHeightLarge -
+                                BBSpacing.Space2
                     ),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+                contentScale = ContentScale.Fit
+            )
+        }
+
+        Surface(
+            modifier = Modifier
+                .defaultMinSize(
+                    minHeight = BBIcon.BoxLg
+                )
+                .clickable {
+                    isLanguageDialogVisible = true
+                },
+            shape = BBRadius.XlShape,
+            color = MaterialTheme.colorScheme.surface,
+            border = BorderStroke(
+                width = BBSpacing.Divider,
+                color = BBColors.Yellow.Yellow400
+            )
+        ) {
+            Row(
+                modifier = Modifier.padding(
+                    horizontal = BBSpacing.Space4,
+                    vertical = BBSpacing.Space2
+                ),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement =
+                    Arrangement.spacedBy(
+                        BBSpacing.Space2
+                    )
+            ) {
+                AsyncImage(
+                    model =
+                        selectedLanguage.flagAssetPath,
+                    contentDescription =
+                        selectedLanguage.label,
+                    modifier = Modifier.size(
+                        BBIcon.SizeMd
+                    ),
+                    contentScale = ContentScale.Fit
+                )
+
+                Text(
+                    text = selectedLanguage.label,
+                    style = BbTypography.labelLarge,
+                    fontWeight = FontWeight.Bold,
+                    color =
+                        MaterialTheme.colorScheme.onSurface
+                )
+
+                Icon(
+                    imageVector =
+                        Icons.Outlined.KeyboardArrowDown,
+                    contentDescription = null,
+                    tint =
+                        MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.size(
+                        BBIcon.SizeMd
+                    )
+                )
+            }
+        }
+    }
+
+    if (isLanguageDialogVisible) {
+        LogonPublicLanguageDialog(
+            languages = languages,
+            selectedLanguageId =
+                selectedLanguageId,
+            isLoading = isLanguageLoading,
+            errorMessage = languageErrorMessage,
+            onDismissRequest = {
+                isLanguageDialogVisible = false
+            },
+            onLanguageSelected = { languageId ->
+                onLanguageSelected(languageId)
+                isLanguageDialogVisible = false
+            }
+        )
+    }
+}
+
+@Composable
+private fun LogonPublicLanguageDialog(
+    languages: List<SystemDescLanguageDTO>,
+    selectedLanguageId: Int,
+    isLoading: Boolean,
+    errorMessage: String?,
+    onDismissRequest: () -> Unit,
+    onLanguageSelected: (Int) -> Unit
+) {
+    val visibleLanguages =
+        resolveLogonPublicLanguages(
+            languages
+        )
+
+    Dialog(
+        onDismissRequest = onDismissRequest,
+        properties = DialogProperties(
+            usePlatformDefaultWidth = false
+        )
+    ) {
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    BBSpacing.PageHorizontal
+                ),
+            shape = BBRadius.XxlShape,
+            color = MaterialTheme.colorScheme.surface,
+            border = BorderStroke(
+                width = BBSpacing.Divider,
+                color =
+                    MaterialTheme.colorScheme.outlineVariant
+            )
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        BBSpacing.Space5
+                    ),
+                horizontalAlignment =
+                    Alignment.CenterHorizontally,
+                verticalArrangement =
+                    Arrangement.spacedBy(
+                        BBSpacing.Space4
+                    )
+            ) {
+                Text(
+                    text = "Dil Seçimi",
+                    style = BbTypography.titleLarge,
+                    color =
+                        MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.ExtraBold,
+                    textAlign = TextAlign.Center
+                )
+
+                Text(
+                    text = "Uygulamada kullanmak istediğiniz dili seçin.",
+                    style = BbTypography.bodySmall,
+                    color =
+                        MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center
+                )
+
+                when {
+                    isLoading &&
+                            languages.isEmpty() -> {
+                        Row(
+                            modifier =
+                                Modifier.fillMaxWidth(),
+                            verticalAlignment =
+                                Alignment.CenterVertically,
+                            horizontalArrangement =
+                                Arrangement.spacedBy(
+                                    BBSpacing.Space3
+                                )
+                        ) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(
+                                    BBIcon.SizeLg
+                                )
+                            )
+
+                            Text(
+                                text = "Diller yükleniyor...",
+                                style =
+                                    BbTypography.bodyMedium,
+                                color =
+                                    MaterialTheme.colorScheme
+                                        .onSurfaceVariant
+                            )
+                        }
+                    }
+
+                    !errorMessage.isNullOrBlank() &&
+                            languages.isEmpty() -> {
+                        Text(
+                            modifier =
+                                Modifier.fillMaxWidth(),
+                            text = errorMessage,
+                            style = BbTypography.bodySmall,
+                            color =
+                                MaterialTheme.colorScheme.error,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                }
+
+                visibleLanguages.forEach { language ->
+                    LogonPublicLanguageRow(
+                        language = language,
+                        isSelected =
+                            language.id ==
+                                    selectedLanguageId,
+                        onClick = {
+                            onLanguageSelected(
+                                language.id
+                            )
+                        }
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun LogonPublicLanguageRow(
+    language: LogonPublicLanguage,
+    isSelected: Boolean,
+    onClick: () -> Unit
+) {
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                onClick()
+            },
+        shape = BBRadius.XlShape,
+        color = if (isSelected) {
+            BBColors.Yellow.Yellow100
+        } else {
+            MaterialTheme.colorScheme.surface
+        },
+        border = BorderStroke(
+            width = BBSpacing.Divider,
+            color = if (isSelected) {
+                BBColors.Yellow.Yellow400
+            } else {
+                MaterialTheme.colorScheme.outlineVariant
+            }
+        )
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    BBSpacing.Space4
+                ),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement =
+                Arrangement.spacedBy(
+                    BBSpacing.Space3
+                )
+        ) {
+            Surface(
+                shape = BBRadius.PillShape,
+                color =
+                    MaterialTheme.colorScheme.surfaceVariant
+            ) {
+                Box(
+                    modifier = Modifier.size(
+                        BBIcon.BoxLg
+                    ),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Language,
-                        contentDescription = null,
-                        tint = BBColors.Black,
-                        modifier = Modifier.size(BBIcon.SizeMd)
-                    )
-
-                    Text(
-                        text = selectedLanguage.label,
-                        style = MaterialTheme.typography.labelLarge,
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-
-                    Icon(
-                        imageVector = Icons.Outlined.KeyboardArrowDown,
-                        contentDescription = null,
-                        tint = BBColors.Black,
-                        modifier = Modifier.size(BBIcon.SizeMd)
+                    AsyncImage(
+                        model =
+                            language.flagAssetPath,
+                        contentDescription =
+                            language.label,
+                        modifier = Modifier.size(
+                            BBIcon.SizeLg
+                        ),
+                        contentScale =
+                            ContentScale.Fit
                     )
                 }
             }
 
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = {
-                    expanded = false
-                }
-            ) {
-                languages.forEach { language ->
-                    DropdownMenuItem(
-                        text = {
-                            Text(
-                                text = language.label,
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                        },
-                        onClick = {
-                            expanded = false
-                            onLanguageSelected(language)
-                        },
-                        colors = MenuDefaults.itemColors(
-                            textColor = MaterialTheme.colorScheme.onSurface
-                        )
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement =
+                    Arrangement.spacedBy(
+                        BBSpacing.Space1
                     )
-                }
+            ) {
+                Text(
+                    text = language.label,
+                    style = BbTypography.titleSmall,
+                    color =
+                        MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Text(
+                    text = language.code.uppercase(),
+                    style = BbTypography.bodySmall,
+                    color =
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            if (isSelected) {
+                Icon(
+                    imageVector =
+                        Icons.Outlined.CheckCircle,
+                    contentDescription = "Seçili dil",
+                    tint = BBColors.Yellow.Yellow500,
+                    modifier = Modifier.size(
+                        BBIcon.SizeLg
+                    )
+                )
             }
         }
     }
@@ -249,36 +575,53 @@ fun LogonPublicPageTitle(
         modifier = modifier.fillMaxWidth()
     ) {
         Surface(
-            color = MaterialTheme.colorScheme.primaryContainer,
+            color =
+                MaterialTheme.colorScheme.primaryContainer,
             shape = BBRadius.Badge
         ) {
             Text(
                 modifier = Modifier.padding(
-                    horizontal = BBSpacing.BadgePaddingHorizontal,
-                    vertical = BBSpacing.BadgePaddingVertical
+                    horizontal =
+                        BBSpacing.BadgePaddingHorizontal,
+                    vertical =
+                        BBSpacing.BadgePaddingVertical
                 ),
                 text = eyebrow,
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurface,
+                style =
+                    MaterialTheme.typography.labelMedium,
+                color =
+                    MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.SemiBold
             )
         }
 
-        Spacer(modifier = Modifier.height(BBSpacing.Space5))
+        Spacer(
+            modifier = Modifier.height(
+                BBSpacing.Space5
+            )
+        )
 
         Text(
             text = title,
-            style = MaterialTheme.typography.headlineSmall,
+            style =
+                MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurface
+            color =
+                MaterialTheme.colorScheme.onSurface
         )
 
-        Spacer(modifier = Modifier.height(BBSpacing.Space2))
+        Spacer(
+            modifier = Modifier.height(
+                BBSpacing.Space2
+            )
+        )
 
         Text(
             text = description,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            style =
+                MaterialTheme.typography.bodyMedium,
+            color =
+                MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -299,15 +642,18 @@ fun LogonPublicFieldLabel(
 
                 withStyle(
                     style = SpanStyle(
-                        color = MaterialTheme.colorScheme.error
+                        color =
+                            MaterialTheme.colorScheme.error
                     )
                 ) {
                     append("*")
                 }
             }
         },
-        style = MaterialTheme.typography.labelLarge,
-        color = MaterialTheme.colorScheme.onSurface
+        style =
+            MaterialTheme.typography.labelLarge,
+        color =
+            MaterialTheme.colorScheme.onSurface
     )
 }
 
@@ -318,13 +664,17 @@ fun LogonPublicTextField(
     modifier: Modifier = Modifier,
     placeholder: String = "",
     trailingContent: @Composable (() -> Unit)? = null,
-    visualTransformation: VisualTransformation = VisualTransformation.None,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default
+    visualTransformation: VisualTransformation =
+        VisualTransformation.None,
+    keyboardOptions: KeyboardOptions =
+        KeyboardOptions.Default
 ) {
     TextField(
         modifier = modifier
             .fillMaxWidth()
-            .defaultMinSize(minHeight = BBSpacing.Space14),
+            .defaultMinSize(
+                minHeight = BBSpacing.Space14
+            ),
         value = value,
         onValueChange = onValueChange,
         singleLine = true,
@@ -332,28 +682,49 @@ fun LogonPublicTextField(
             if (placeholder.isNotBlank()) {
                 Text(
                     text = placeholder,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    style =
+                        MaterialTheme.typography.bodyMedium,
+                    color =
+                        MaterialTheme.colorScheme
+                            .onSurfaceVariant
                 )
             }
         },
         trailingIcon = trailingContent,
-        visualTransformation = visualTransformation,
+        visualTransformation =
+            visualTransformation,
         keyboardOptions = keyboardOptions,
         colors = TextFieldDefaults.colors(
-            focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-            disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-            focusedIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
-            unfocusedIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
-            disabledIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
-            cursorColor = MaterialTheme.colorScheme.primary,
-            focusedTextColor = MaterialTheme.colorScheme.onSurface,
-            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
-            focusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            focusedTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            unfocusedTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant
+            focusedContainerColor =
+                MaterialTheme.colorScheme.surfaceVariant,
+            unfocusedContainerColor =
+                MaterialTheme.colorScheme.surfaceVariant,
+            disabledContainerColor =
+                MaterialTheme.colorScheme.surfaceVariant,
+            focusedIndicatorColor =
+                MaterialTheme.colorScheme.outlineVariant,
+            unfocusedIndicatorColor =
+                MaterialTheme.colorScheme.outlineVariant,
+            disabledIndicatorColor =
+                MaterialTheme.colorScheme.outlineVariant,
+            cursorColor =
+                MaterialTheme.colorScheme.primary,
+            focusedTextColor =
+                MaterialTheme.colorScheme.onSurface,
+            unfocusedTextColor =
+                MaterialTheme.colorScheme.onSurface,
+            focusedPlaceholderColor =
+                MaterialTheme.colorScheme
+                    .onSurfaceVariant,
+            unfocusedPlaceholderColor =
+                MaterialTheme.colorScheme
+                    .onSurfaceVariant,
+            focusedTrailingIconColor =
+                MaterialTheme.colorScheme
+                    .onSurfaceVariant,
+            unfocusedTrailingIconColor =
+                MaterialTheme.colorScheme
+                    .onSurfaceVariant
         ),
         shape = BBRadius.Input
     )
@@ -366,108 +737,337 @@ fun LogonDividerWithText(
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment =
+            Alignment.CenterVertically
     ) {
         HorizontalDivider(
             modifier = Modifier.weight(1f),
-            color = MaterialTheme.colorScheme.outlineVariant
+            color =
+                MaterialTheme.colorScheme.outlineVariant
         )
 
         Text(
-            modifier = Modifier.padding(horizontal = BBSpacing.Space4),
+            modifier = Modifier.padding(
+                horizontal = BBSpacing.Space4
+            ),
             text = text,
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            style =
+                MaterialTheme.typography.bodySmall,
+            color =
+                MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         HorizontalDivider(
             modifier = Modifier.weight(1f),
-            color = MaterialTheme.colorScheme.outlineVariant
+            color =
+                MaterialTheme.colorScheme.outlineVariant
         )
     }
 }
 
 @Composable
-fun LogonPublicDefaultFooter(
-    modifier: Modifier = Modifier
-) {
-    Text(
-        modifier = modifier.fillMaxWidth(),
-        text = "© 2026 Bulbulustur - Tüm hakları saklıdır",
-        style = MaterialTheme.typography.bodySmall,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-        textAlign = TextAlign.Center
-    )
-}
-
-@Composable
-fun LogonPublicRegisterLegalFooter(
+fun LogonPublicLegalFooter(
+    selectedLanguageId: Int = 1,
     modifier: Modifier = Modifier,
     termsUrl: String = LegalPolicyUrls.Terms,
     privacyUrl: String = LegalPolicyUrls.Privacy
 ) {
     val uriHandler = LocalUriHandler.current
 
-    val text = buildAnnotatedString {
-        append("Hesap oluşturduğunuzda, Bulbulustur'un ")
+    val legalText =
+        buildAnnotatedString {
+            if (selectedLanguageId == 2) {
+                append(
+                    "By creating an account, you acknowledge that you have read and accepted Bulbulustur's "
+                )
 
-        pushStringAnnotation(
-            tag = "terms",
-            annotation = termsUrl
-        )
-        withStyle(
-            style = SpanStyle(
-                color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.Bold
-            )
-        ) {
-            append("Kullanım Koşullarını")
+                pushStringAnnotation(
+                    tag = "terms",
+                    annotation = termsUrl
+                )
+
+                withStyle(
+                    style = SpanStyle(
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.Bold
+                    )
+                ) {
+                    append("Terms of Use")
+                }
+
+                pop()
+
+                append(" and ")
+
+                pushStringAnnotation(
+                    tag = "privacy",
+                    annotation = privacyUrl
+                )
+
+                withStyle(
+                    style = SpanStyle(
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.Bold
+                    )
+                ) {
+                    append("Privacy Policy")
+                }
+
+                pop()
+
+                append(".")
+            } else {
+                append(
+                    "Hesap oluşturduğunuzda, Bulbulustur'un "
+                )
+
+                pushStringAnnotation(
+                    tag = "terms",
+                    annotation = termsUrl
+                )
+
+                withStyle(
+                    style = SpanStyle(
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.Bold
+                    )
+                ) {
+                    append("Kullanım Koşullarını")
+                }
+
+                pop()
+
+                append(" ve ")
+
+                pushStringAnnotation(
+                    tag = "privacy",
+                    annotation = privacyUrl
+                )
+
+                withStyle(
+                    style = SpanStyle(
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.Bold
+                    )
+                ) {
+                    append("Gizlilik Politikasını")
+                }
+
+                pop()
+
+                append(
+                    " okumuş ve kabul etmiş olursunuz."
+                )
+            }
         }
-        pop()
 
-        append(" ve ")
-
-        pushStringAnnotation(
-            tag = "privacy",
-            annotation = privacyUrl
-        )
-        withStyle(
-            style = SpanStyle(
-                color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.Bold
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(
+                MaterialTheme.colorScheme.surface
             )
-        ) {
-            append("Gizlilik Politikasını")
-        }
-        pop()
+            .padding(
+                start = BBSpacing.PageHorizontal,
+                top = BBSpacing.Space6,
+                end = BBSpacing.PageHorizontal,
+                bottom = BBSpacing.Space4
+            ),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(
+            BBSpacing.Space3
+        )
+    ) {
+        LogonPublicDottedDivider()
 
-        append(" okumuş ve kabul etmiş olursunuz.")
-    }
+        ClickableText(
+            modifier = Modifier.fillMaxWidth(),
+            text = legalText,
+            style = BbTypography.bodySmall.copy(
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center
+            ),
+            onClick = { offset ->
+                legalText.getStringAnnotations(
+                    tag = "terms",
+                    start = offset,
+                    end = offset
+                ).firstOrNull()?.let {
+                    uriHandler.openUri(it.item)
+                }
 
-    ClickableText(
-        modifier = modifier.fillMaxWidth(),
-        text = text,
-        style = MaterialTheme.typography.bodySmall.copy(
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                legalText.getStringAnnotations(
+                    tag = "privacy",
+                    start = offset,
+                    end = offset
+                ).firstOrNull()?.let {
+                    uriHandler.openUri(it.item)
+                }
+            }
+        )
+
+        Text(
+            text = if (selectedLanguageId == 2) {
+                "© 2026 Bulbulustur - All rights reserved"
+            } else {
+                "© 2026 Bulbulustur - Tüm hakları saklıdır"
+            },
+            style = MaterialTheme.typography.labelSmall,
+            color = BBColors.Ink.Ink900,
             textAlign = TextAlign.Center
-        ),
-        onClick = { offset ->
-            text.getStringAnnotations(
-                tag = "terms",
-                start = offset,
-                end = offset
-            ).firstOrNull()?.let { annotation ->
-                uriHandler.openUri(annotation.item)
-            }
+        )
+    }
+}
 
-            text.getStringAnnotations(
-                tag = "privacy",
-                start = offset,
-                end = offset
-            ).firstOrNull()?.let { annotation ->
-                uriHandler.openUri(annotation.item)
-            }
+@Composable
+private fun LogonPublicDottedDivider() {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement =
+            Arrangement.spacedBy(
+                BBSpacing.Space1
+            )
+    ) {
+        repeat(24) {
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(
+                        BBSpacing.Divider
+                    )
+                    .background(
+                        MaterialTheme.colorScheme
+                            .outlineVariant,
+                        shape = BBRadius.PillShape
+                    )
+            )
         }
+    }
+}
+
+@Composable
+fun LogonPublicDefaultFooter(
+    modifier: Modifier = Modifier,
+    selectedLanguageId: Int = 1
+) {
+    LogonPublicLegalFooter(
+        selectedLanguageId =
+            selectedLanguageId,
+        modifier = modifier
     )
 }
 
+@Composable
+fun LogonPublicRegisterLegalFooter(
+    modifier: Modifier = Modifier,
+    selectedLanguageId: Int = 1,
+    termsUrl: String = LegalPolicyUrls.Terms,
+    privacyUrl: String = LegalPolicyUrls.Privacy
+) {
+    LogonPublicLegalFooter(
+        selectedLanguageId =
+            selectedLanguageId,
+        modifier = modifier,
+        termsUrl = termsUrl,
+        privacyUrl = privacyUrl
+    )
+}
+
+private fun resolveLogonPublicLanguages(
+    languages: List<SystemDescLanguageDTO>
+): List<LogonPublicLanguage> {
+    return languages
+        .filter {
+            it.SystemDescLanguageId == 1 ||
+                    it.SystemDescLanguageId == 2
+        }
+        .map {
+            LogonPublicLanguage(
+                id =
+                    it.SystemDescLanguageId,
+                label =
+                    it.Content
+                        ?.takeIf { value ->
+                            value.isNotBlank()
+                        }
+                        ?: if (
+                            it.SystemDescLanguageId == 2
+                        ) {
+                            "English"
+                        } else {
+                            "Türkçe"
+                        },
+                code =
+                    it.LanguageIsoCode
+                        ?.takeIf { value ->
+                            value.isNotBlank()
+                        }
+                        ?: if (
+                            it.SystemDescLanguageId == 2
+                        ) {
+                            "en"
+                        } else {
+                            "tr"
+                        },
+                flagAssetPath =
+                    resolveLogonPublicFlagPath(
+                        it.SystemDescLanguageId
+                    )
+            )
+        }
+        .distinctBy {
+            it.id
+        }
+        .sortedBy {
+            it.id
+        }
+        .ifEmpty {
+            logonPublicFallbackLanguages()
+        }
+}
+
+private fun resolveLogonPublicLanguage(
+    languages: List<SystemDescLanguageDTO>,
+    languageId: Int
+): LogonPublicLanguage {
+    val visibleLanguages =
+        resolveLogonPublicLanguages(
+            languages
+        )
+
+    return visibleLanguages.firstOrNull {
+        it.id == languageId
+    } ?: visibleLanguages.firstOrNull {
+        it.id == 1
+    } ?: logonPublicFallbackLanguages().first()
+}
+
+private fun logonPublicFallbackLanguages():
+        List<LogonPublicLanguage> {
+    return listOf(
+        LogonPublicLanguage(
+            id = 1,
+            code = "tr",
+            label = "Türkçe",
+            flagAssetPath =
+                LOGON_PUBLIC_TURKISH_FLAG
+        ),
+        LogonPublicLanguage(
+            id = 2,
+            code = "en",
+            label = "English",
+            flagAssetPath =
+                LOGON_PUBLIC_ENGLISH_FLAG
+        )
+    )
+}
+
+private fun resolveLogonPublicFlagPath(
+    languageId: Int
+): String {
+    return when (languageId) {
+        1 -> LOGON_PUBLIC_TURKISH_FLAG
+        2 -> LOGON_PUBLIC_ENGLISH_FLAG
+        else -> LOGON_PUBLIC_FALLBACK_FLAG
+    }
+}

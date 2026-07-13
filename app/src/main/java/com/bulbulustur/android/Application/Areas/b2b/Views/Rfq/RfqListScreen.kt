@@ -70,7 +70,7 @@ fun RfqListScreen(
                 title = "Fiyat Teklifi İstekleri",
                 onBackClick = onBackClick,
                 actionIcon = Icons.Outlined.Add,
-                actionContentDescription = "Teklif İste",
+                actionContentDescription = "Teklif Al",
                 onActionClick = onCreateRfqClick
             )
         },
@@ -169,7 +169,7 @@ private fun RfqCreateActionCard(onCreateRfqClick: () -> Unit) {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Yeni Teklif İste",
+                    text = "Yeni Teklif Al",
                     style = BbTypography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -223,7 +223,7 @@ private fun RfqRequestCard(
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
                 ) {
                     Text(
-                        text = item.ProductName.ifBlank { "Teklif İsteği" },
+                        text = item.ProductName.ifBlank { "Teklif Alği" },
                         style = BbTypography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -439,7 +439,7 @@ private fun RfqEmptyState(onDiscoverWholesaleClick: () -> Unit) {
             RfqIconBox()
 
             Text(
-                text = "Teklif İsteği Bulunamadı",
+                text = "Teklif Alği Bulunamadı",
                 style = BbTypography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )

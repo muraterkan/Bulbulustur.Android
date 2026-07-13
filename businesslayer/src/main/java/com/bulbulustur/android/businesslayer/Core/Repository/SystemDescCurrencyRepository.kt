@@ -12,7 +12,10 @@ class SystemDescCurrencyRepository(
     private val apiClient: ApiClient = ApiClient
 ) : ISystemDescCurrencyRepository {
 
-    override suspend fun GetSystemDescCurrenciesAsync(languageId: Int, count: Int): Result<List<SystemDescCurrencyDTO>> {
+    override suspend fun GetSystemDescCurrenciesAsync(
+        languageId: Int,
+        count: Int
+    ): Result<List<SystemDescCurrencyDTO>> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
             method = "MasterData/GetSystemDescCurrenciesAsync",
@@ -20,7 +23,9 @@ class SystemDescCurrencyRepository(
         )
     }
 
-    override suspend fun GetSystemDescCurrencyByIdAsync(systemDescCurrencyId: Int): Result<SystemDescCurrencyUpdateModel?> {
+    override suspend fun GetSystemDescCurrencyByIdAsync(
+        systemDescCurrencyId: Int
+    ): Result<SystemDescCurrencyUpdateModel?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
             method = "SystemDescCurrency/GetSystemDescCurrencyByIdAsync",
@@ -39,7 +44,9 @@ class SystemDescCurrencyRepository(
         )
     }
 
-    override suspend fun InsertAsync(model: SystemDescCurrencyInsertModel): Result<Unit> {
+    override suspend fun InsertAsync(
+        model: SystemDescCurrencyInsertModel
+    ): Result<Unit> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
             method = "SystemDescCurrency/SystemDescCurrencyInsertAsync",
@@ -47,7 +54,9 @@ class SystemDescCurrencyRepository(
         )
     }
 
-    override suspend fun UpdateAsync(model: SystemDescCurrencyUpdateModel): Result<Unit> {
+    override suspend fun UpdateAsync(
+        model: SystemDescCurrencyUpdateModel
+    ): Result<Unit> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
             method = "SystemDescCurrency/SystemDescCurrencyUpdateAsync",
@@ -55,7 +64,9 @@ class SystemDescCurrencyRepository(
         )
     }
 
-    override suspend fun DeleteAsync(systemDescCurrencyId: Int): Result<Unit> {
+    override suspend fun DeleteAsync(
+        systemDescCurrencyId: Int
+    ): Result<Unit> {
         return apiClient.DeleteAsync(
             baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
             method = "SystemDescCurrency/SystemDescCurrencyDelete",

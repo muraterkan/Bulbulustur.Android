@@ -62,7 +62,19 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.em
+import androidx.core.text.HtmlCompat
+import android.graphics.Typeface
+import android.text.style.RelativeSizeSpan
+import android.text.style.StrikethroughSpan
+import android.text.style.StyleSpan
+import android.text.style.UnderlineSpan
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -71,6 +83,8 @@ import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleProductDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleProductRelatedDTO
 import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
+import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleProductCard
+import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleProductCardModel
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleSearchHeader
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleSearchHeaderLeadingAction
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
@@ -682,9 +696,11 @@ private fun WholesaleProductTitleCard(
 
             if (product.shortDescription.isNotBlank()) {
                 Text(
-                    text = product.shortDescription,
+                    text = product.shortDescription.ToWholesaleHtmlAnnotatedString(),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = BBColors.TextSubtle
+                    color = BBColors.TextSubtle,
+                    maxLines = 6,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
         }
@@ -1279,7 +1295,7 @@ private fun WholesaleProductDescriptionCard(
             )
 
             Text(
-                text = product.longDescription,
+                text = product.longDescription.ToWholesaleHtmlAnnotatedString(),
                 style = MaterialTheme.typography.bodyMedium,
                 color = BBColors.TextSubtle
             )
@@ -1416,17 +1432,32 @@ private fun WholesaleHorizontalProductSection(
                         product.id
                     }
                 ) { item ->
-                    WholesaleMiniProductCard(
-                        product = item,
+                    WholesaleProductCard(
+                        product = item.ToWholesaleProductCardModel(),
+                        modifier = Modifier.width(260.dp),
                         onClick = {
                             onProductClick(item)
                         },
-                        modifier = Modifier.width(212.dp)
+                        onRfqClick = {
+                            onProductClick(item)
+                        }
                     )
                 }
             }
         }
     }
+}
+
+private fun WholesaleMiniProduct.ToWholesaleProductCardModel(): WholesaleProductCardModel {
+    return WholesaleProductCardModel(
+        Id = id,
+        Title = name,
+        Category = badgeLabel,
+        PriceText = priceLabel,
+        MoqText = metaLabel,
+        BadgeText = "Benzer Ürün",
+        ImageUrl = imageUrl
+    )
 }
 
 @Composable
@@ -2138,7 +2169,7 @@ private fun WholesaleProductDetailBottomBar(onLastPriceRequestClick: () -> Unit,
             )
 
             WholesaleBottomActionButton(
-                text = "Teklif Al",
+                text = "Son Fiyat",
                 onClick = onLastPriceRequestClick,
                 modifier = Modifier.weight(1.05f),
                 containerColor = BBColors.Primary,
@@ -2319,7 +2350,7 @@ data class WholesaleProductDetailCompany(
 )
 
 private fun ResolveWholesaleProductImageUrl(imagePath: String): String {
-    return ApiRoutes.B2B_TEST_PRODUCT_IMAGE_URL
+    return ApiRoutes.B2C_TEST_PRODUCT_IMAGE_URL
 }
 
 private fun WholesaleProductDTO.ToWholesaleProductDetail(relatedProducts: List<WholesaleProductRelatedDTO> = emptyList(), relatedCategories: List<ProductCategoryDTO> = emptyList()): WholesaleProductDetail {
@@ -2379,7 +2410,9 @@ private fun WholesaleProductDTO.ToWholesaleProductDetail(relatedProducts: List<W
         .map { relatedProduct ->
             WholesaleMiniProduct(
                 id = relatedProduct.RelatedWholesaleProductId,
-                name = relatedProduct.ProductName,
+                name = relatedProduct.ProductName.orEmpty().ifBlank {
+                    "Toptan Ürün"
+                },
                 priceLabel = if (relatedProduct.Price > 0) {
                     relatedProduct.Price.ToWholesalePriceText(relatedProduct.CurrencySymbol)
                 } else {
@@ -2388,9 +2421,9 @@ private fun WholesaleProductDTO.ToWholesaleProductDetail(relatedProducts: List<W
                 metaLabel = if (relatedProduct.MinimumOrderQuantity > 0) {
                     "Minimum ${relatedProduct.MinimumOrderQuantity} Adet"
                 } else {
-                    relatedProduct.CategoryName
+                    relatedProduct.CategoryName.orEmpty()
                 },
-                badgeLabel = relatedProduct.CategoryName,
+                badgeLabel = relatedProduct.CategoryName.orEmpty(),
                 backgroundColor = BBColors.Surface,
                 foregroundColor = BBColors.TextMuted,
                 imageUrl = ""
@@ -2576,11 +2609,13 @@ private fun WholesaleProductDTO.ToWholesaleProductDetail(relatedProducts: List<W
                 )
             }
 
-            if (verificationSummary.Verifications.isNotEmpty()) {
+            val verifications = verificationSummary.Verifications.orEmpty()
+
+            if (verifications.isNotEmpty()) {
                 add(
                     WholesaleCompanyMetricItem(
                         title = "Doğrulama Sayısı",
-                        value = verificationSummary.Verifications.size.toString()
+                        value = verifications.size.toString()
                     )
                 )
             }
@@ -2604,42 +2639,61 @@ private fun WholesaleProductDTO.ToWholesaleProductDetail(relatedProducts: List<W
             )
         }
 
-        if (PaymentTerms.isNotEmpty()) {
+        val paymentTerms = PaymentTerms.orEmpty()
+
+        if (paymentTerms.isNotEmpty()) {
             add(
                 WholesaleCompanyMetricItem(
                     title = "Ödeme Seçeneği",
-                    value = PaymentTerms.size.toString()
+                    value = paymentTerms.size.toString()
                 )
             )
         }
     }
 
     val packagingDescription = buildList {
-        if (DimensionsPerUnit.isNotBlank()) {
-            add("Birim ölçü: $DimensionsPerUnit $DimensionsPerUnitType".trim())
+        val dimensionsPerUnit = DimensionsPerUnit.orEmpty()
+        val dimensionsPerUnitType = DimensionsPerUnitType.orEmpty()
+        val weightPerUnitType = WeightPerUnitType.orEmpty().ifBlank { "Kg" }
+
+        if (dimensionsPerUnit.isNotBlank()) {
+            add(
+                "Birim ölçü: $dimensionsPerUnit $dimensionsPerUnitType".trim()
+            )
         }
 
         if (WeightPerUnit > 0) {
-            add("Birim ağırlık: $WeightPerUnit ${WeightPerUnitType.ifBlank { "Kg" }}")
+            add(
+                "Birim ağırlık: $WeightPerUnit $weightPerUnitType"
+            )
         }
     }.joinToString(separator = " • ")
+
+    val description = Description.orEmpty()
+    val leadTime = LeadTime.orEmpty()
+    val origin = Origin.orEmpty()
+    val modelNumber = ModelNumber.orEmpty()
 
     return WholesaleProductDetail(
         id = WholesaleProductId,
         name = ProductName.orEmpty().ifBlank { "Ürün" },
         searchPlaceholder = "Toptan Ürün, Kategori Veya Firma Ara",
-        shortDescription = Description.take(220),
-        longDescription = Description,
+        shortDescription = description,
+        longDescription = description,
         badgeText = Category.orEmpty().ifBlank { "Toptan Ürün" },
         priceLabel = resolvedPriceLabel,
         minimumOrderLabel = if (MinimumOrderQuantity > 0) "$MinimumOrderQuantity $unitText" else "",
-        deliveryTimeLabel = LeadTime,
+        deliveryTimeLabel = leadTime,
         deliveryCountryLabel = "",
-        originCountry = Origin,
-        modelNo = ModelNumber,
+        originCountry = origin,
+        modelNo = modelNumber,
         soldCountText = if (ViewCount > 0) ViewCount.toString() else "",
         packagingDescription = packagingDescription,
-        deliveryDescription = if (LeadTime.isNotBlank()) "Tahmini üretim ve teslim süresi: $LeadTime" else "",
+        deliveryDescription = if (leadTime.isNotBlank()) {
+            "Tahmini üretim ve teslim süresi: $leadTime"
+        } else {
+            ""
+        },
         images = resolvedImages,
         priceBreaks = resolvedPriceBreaks,
         tradeBenefits = resolvedTradeBenefits,
@@ -2663,6 +2717,96 @@ private fun WholesaleProductDTO.ToWholesaleProductDetail(relatedProducts: List<W
         )
     )
 }
+private fun String.ToWholesaleHtmlAnnotatedString(): AnnotatedString {
+    if (isBlank()) {
+        return AnnotatedString("")
+    }
+
+    val spanned = HtmlCompat.fromHtml(
+        this,
+        HtmlCompat.FROM_HTML_MODE_LEGACY
+    )
+
+    return buildAnnotatedString {
+        append(spanned.toString())
+
+        spanned.getSpans(0, spanned.length, Any::class.java).forEach { span ->
+            val start = spanned.getSpanStart(span).coerceAtLeast(0)
+            val end = spanned.getSpanEnd(span).coerceAtMost(spanned.length)
+
+            if (start >= end) {
+                return@forEach
+            }
+
+            when (span) {
+                is StyleSpan -> {
+                    when (span.style) {
+                        Typeface.BOLD -> {
+                            addStyle(
+                                style = SpanStyle(
+                                    fontWeight = FontWeight.Bold
+                                ),
+                                start = start,
+                                end = end
+                            )
+                        }
+
+                        Typeface.ITALIC -> {
+                            addStyle(
+                                style = SpanStyle(
+                                    fontStyle = FontStyle.Italic
+                                ),
+                                start = start,
+                                end = end
+                            )
+                        }
+
+                        Typeface.BOLD_ITALIC -> {
+                            addStyle(
+                                style = SpanStyle(
+                                    fontWeight = FontWeight.Bold,
+                                    fontStyle = FontStyle.Italic
+                                ),
+                                start = start,
+                                end = end
+                            )
+                        }
+                    }
+                }
+
+                is RelativeSizeSpan -> {
+                    addStyle(
+                        style = SpanStyle(
+                            fontSize = span.sizeChange.em
+                        ),
+                        start = start,
+                        end = end
+                    )
+                }
+
+                is UnderlineSpan -> {
+                    addStyle(
+                        style = SpanStyle(
+                            textDecoration = TextDecoration.Underline
+                        ),
+                        start = start,
+                        end = end
+                    )
+                }
+
+                is StrikethroughSpan -> {
+                    addStyle(
+                        style = SpanStyle(
+                            textDecoration = TextDecoration.LineThrough
+                        ),
+                        start = start,
+                        end = end
+                    )
+                }
+            }
+        }
+    }
+}
 
 private fun Double.ToWholesalePriceText(currencySymbol: String): String {
     val formattedPrice = if (this % 1.0 == 0.0) {
@@ -2678,21 +2822,23 @@ private fun Double.ToWholesalePriceText(currencySymbol: String): String {
     }
 }
 
-private fun String.ToWholesaleCompanyLogoText(): String {
-    val words = trim()
-        .split(" ")
-        .filter {
-            it.isNotBlank()
-        }
+private fun String?.ToWholesaleCompanyLogoText(): String {
+    val normalizedValue = orEmpty().trim()
 
-    if (words.isEmpty()) {
+    if (normalizedValue.isBlank()) {
         return "BB"
     }
 
-    return words
+    return normalizedValue
+        .split(" ")
+        .filter { it.isNotBlank() }
         .take(2)
-        .joinToString("") {
-            it.take(1).uppercase()
+        .mapNotNull { part ->
+            part.firstOrNull()?.uppercaseChar()
+        }
+        .joinToString("")
+        .ifBlank {
+            "BB"
         }
 }
 

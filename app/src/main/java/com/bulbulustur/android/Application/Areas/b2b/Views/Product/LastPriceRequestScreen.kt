@@ -240,7 +240,7 @@ private fun LastPriceRequestHeader(
                 )
 
                 Text(
-                    text = "Son Fiyat Talebi",
+                    text = "Son Fiyat",
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.SemiBold

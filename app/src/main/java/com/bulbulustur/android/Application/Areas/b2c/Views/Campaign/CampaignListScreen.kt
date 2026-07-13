@@ -1,23 +1,32 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Campaign
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowForward
+import androidx.compose.material.icons.outlined.LocalOffer
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,12 +36,24 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbIconBox
-import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbIconBoxSize
+import coil3.compose.AsyncImage
+import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeader
+import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeaderLeadingAction
+import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
+import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
+import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
+import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.businesslayer.Core.DTO.CampaignDTO
+import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
+
+private const val DEFAULT_CAMPAIGN_PICTURE_PATH =
+    "/UploadedFiles/B2C/Campaigns/campaign-banner.jpg"
 
 @Composable
 fun CampaignListScreen(
@@ -47,38 +68,72 @@ fun CampaignListScreen(
         mutableStateOf("")
     }
 
-    val filteredCampaigns = remember(searchText, campaigns) {
+    val filteredCampaigns = remember(
+        searchText,
+        campaigns
+    ) {
         if (searchText.isBlank()) {
             campaigns
         } else {
             campaigns.filter { campaign ->
-                campaign.CampaignName.contains(searchText, ignoreCase = true) ||
-                        campaign.Description.contains(searchText, ignoreCase = true) ||
-                        campaign.CategoryName.contains(searchText, ignoreCase = true)
+                campaign.CampaignName.orEmpty().contains(
+                    other = searchText,
+                    ignoreCase = true
+                ) ||
+                        campaign.Description.orEmpty().contains(
+                            other = searchText,
+                            ignoreCase = true
+                        ) ||
+                        campaign.CategoryName.orEmpty().contains(
+                            other = searchText,
+                            ignoreCase = true
+                        )
             }
         }
     }
 
-    Surface(
+    val campaignRows = remember(filteredCampaigns) {
+        filteredCampaigns.chunked(2)
+    }
+
+    Scaffold(
         modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            RetailSearchHeader(
+                searchText = searchText,
+                onSearchTextChange = {
+                    searchText = it
+                },
+                placeholder = "Kampanya ara",
+                onSearchClick = {
+                    onSearchSubmit(searchText)
+                },
+                onClearClick = {
+                    searchText = ""
+                },
+                onMenuClick = {},
+                onFavoriteClick = {},
+                leadingAction =
+                    RetailSearchHeaderLeadingAction.Back,
+                onBackClick = onBackClick
+            )
+        }
+    ) { innerPadding ->
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(
-                start = 16.dp,
-                top = 14.dp,
-                end = 16.dp,
-                bottom = 28.dp
+                start = BBSpacing.PageHorizontal,
+                top = innerPadding.calculateTopPadding() +
+                        BBSpacing.PageTopCompact,
+                end = BBSpacing.PageHorizontal,
+                bottom = innerPadding.calculateBottomPadding() +
+                        BBSpacing.PageBottom
             ),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.SectionGapCompact
+            )
         ) {
-            item {
-                CampaignListTopBar(
-                    onBackClick = onBackClick
-                )
-            }
-
             item {
                 CampaignListHero(
                     campaignCount = campaigns.size
@@ -86,105 +141,65 @@ fun CampaignListScreen(
             }
 
             item {
-                CampaignSearchBox(
-                    searchText = searchText,
-                    onSearchTextChange = {
-                        searchText = it
-                    },
-                    onSearchSubmit = {
-                        onSearchSubmit(searchText)
-                    }
-                )
-            }
-
-            item {
                 CampaignSectionTitle(
-                    title = "Aktif kampanyalar",
-                    description = "Perakende alışverişte öne çıkan fırsatları keşfet."
+                    title = "Tüm Kampanyalar",
+                    description = "Bulbulustur içinde öne çıkan kampanya alanlarını ve avantajlı alışveriş fırsatlarını görüntüle."
                 )
             }
 
-            if (isLoading) {
-                item {
-                    CampaignListInfoCard(
-                        title = "Kampanyalar yükleniyor",
-                        description = "Aktif kampanyalar getiriliyor.",
-                        showProgress = true
-                    )
-                }
-            } else if (!errorMessage.isNullOrBlank() && campaigns.isEmpty()) {
-                item {
-                    CampaignListInfoCard(
-                        title = "Kampanyalar alınamadı",
-                        description = errorMessage
-                    )
-                }
-            } else if (filteredCampaigns.isEmpty()) {
-                item {
-                    CampaignListInfoCard(
-                        title = "Kampanya bulunamadı",
-                        description = "Arama kriterine uygun kampanya yok."
-                    )
-                }
-            } else {
-                items(
-                    items = filteredCampaigns,
-                    key = { campaign ->
-                        campaign.CampaignId
+            when {
+                isLoading -> {
+                    item {
+                        CampaignListInfoCard(
+                            title = "Kampanyalar yükleniyor",
+                            description = "Aktif kampanyalar getiriliyor.",
+                            showProgress = true
+                        )
                     }
-                ) { campaign ->
-                    CampaignListCard(
-                        campaign = campaign,
-                        onClick = {
-                            onCampaignClick(campaign)
+                }
+
+                !errorMessage.isNullOrBlank() &&
+                        campaigns.isEmpty() -> {
+                    item {
+                        CampaignListInfoCard(
+                            title = "Kampanyalar alınamadı",
+                            description = errorMessage
+                        )
+                    }
+                }
+
+                filteredCampaigns.isEmpty() -> {
+                    item {
+                        CampaignListInfoCard(
+                            title = "Kampanya bulunamadı",
+                            description = if (searchText.isBlank()) {
+                                "Gösterilecek aktif kampanya bulunmuyor."
+                            } else {
+                                "Arama kriterine uygun kampanya bulunamadı."
+                            }
+                        )
+                    }
+                }
+
+                else -> {
+                    itemsIndexed(
+                        items = campaignRows,
+                        key = { rowIndex, row ->
+                            val rowKey = row.joinToString("-") {
+                                it.CampaignId.toString()
+                            }
+
+                            "campaign-row-$rowIndex-$rowKey"
                         }
-                    )
+                    ) { rowIndex, rowCampaigns ->
+                        CampaignGridRow(
+                            rowIndex = rowIndex,
+                            campaigns = rowCampaigns,
+                            onCampaignClick = onCampaignClick
+                        )
+                    }
                 }
             }
-        }
-    }
-}
-
-@Composable
-private fun CampaignListTopBar(
-    onBackClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        BbIconBox(
-            modifier = Modifier.clickable {
-                onBackClick()
-            },
-            size = BbIconBoxSize.Medium,
-            backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
-            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
-        ) {
-            Text(
-                text = "‹",
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-
-        Spacer(modifier = Modifier.width(12.dp))
-
-        Column(
-            modifier = Modifier.weight(1f)
-        ) {
-            Text(
-                text = "Kampanyalar",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-
-            Text(
-                text = "Fırsat, vitrin ve sezon kampanyaları.",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
         }
     }
 }
@@ -195,8 +210,10 @@ private fun CampaignListHero(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
+        shape = BBRadius.XlShape,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
+            containerColor =
+                MaterialTheme.colorScheme.primaryContainer
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 0.dp
@@ -205,62 +222,39 @@ private fun CampaignListHero(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(18.dp)
+                .padding(BBSpacing.Space5),
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space2
+            )
         ) {
+            CampaignLabel(
+                text = "Güncel Kampanyalar"
+            )
+
             Text(
-                text = "Bugünün perakende fırsatları",
+                text = "Alışveriş Fırsatlarını Keşfet",
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
+                color =
+                    MaterialTheme.colorScheme.onPrimaryContainer
             )
-
-            Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "Seçili mağazalar, kategori vitrinleri ve kampanya ürünleri burada toplanır.",
+                text = "Seçili kampanyaları, avantajlı ürün gruplarını ve fırsat alanlarını tek yerden incele.",
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
+                color =
+                    MaterialTheme.colorScheme.onPrimaryContainer
             )
-
-            Spacer(modifier = Modifier.height(12.dp))
 
             Text(
                 text = "$campaignCount aktif kampanya",
                 style = MaterialTheme.typography.labelLarge,
                 fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
+                color =
+                    MaterialTheme.colorScheme.onPrimaryContainer
             )
         }
     }
-}
-
-@Composable
-private fun CampaignSearchBox(
-    searchText: String,
-    onSearchTextChange: (String) -> Unit,
-    onSearchSubmit: () -> Unit
-) {
-    OutlinedTextField(
-        modifier = Modifier.fillMaxWidth(),
-        value = searchText,
-        onValueChange = onSearchTextChange,
-        singleLine = true,
-        placeholder = {
-            Text(text = "Kampanya ara")
-        },
-        trailingIcon = {
-            Text(
-                modifier = Modifier
-                    .clickable {
-                        onSearchSubmit()
-                    }
-                    .padding(horizontal = 12.dp),
-                text = "Ara",
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.primary
-            )
-        }
-    )
 }
 
 @Composable
@@ -269,11 +263,20 @@ private fun CampaignSectionTitle(
     description: String
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(4.dp)
+        verticalArrangement = Arrangement.spacedBy(
+            BBSpacing.Space1
+        )
     ) {
         Text(
+            text = "GÜNCEL KAMPANYALAR",
+            style = MaterialTheme.typography.labelSmall,
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
+        Text(
             text = title,
-            style = MaterialTheme.typography.titleMedium,
+            style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onBackground
         )
@@ -281,68 +284,188 @@ private fun CampaignSectionTitle(
         Text(
             text = description,
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color =
+                MaterialTheme.colorScheme.onSurfaceVariant
         )
+    }
+}
+
+@Composable
+private fun CampaignGridRow(
+    rowIndex: Int,
+    campaigns: List<CampaignDTO>,
+    onCampaignClick: (CampaignDTO) -> Unit
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(
+            BBSpacing.Space3
+        ),
+        verticalAlignment = Alignment.Top
+    ) {
+        campaigns.forEachIndexed { columnIndex, campaign ->
+            CampaignListCard(
+                campaign = campaign,
+                modifier = Modifier.weight(1f),
+                onClick = {
+                    if (campaign.CampaignId > 0) {
+                        onCampaignClick(campaign)
+                    }
+                }
+            )
+        }
+
+        if (campaigns.size == 1) {
+            Spacer(
+                modifier = Modifier.weight(1f)
+            )
+        }
     }
 }
 
 @Composable
 private fun CampaignListCard(
     campaign: CampaignDTO,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
+    val campaignName =
+        campaign.CampaignName
+            ?.takeIf { it.isNotBlank() }
+            ?: "Kampanya"
+
+    val description =
+        campaign.Description
+            ?.takeIf { it.isNotBlank() }
+            ?: "Avantajlı kampanya fırsatlarını keşfet."
+
+    val campaignCondition =
+        campaign.CampaignCondition
+            ?.takeIf { it.isNotBlank() }
+            ?: "Süreli kampanya"
+
+    val campaignPicture =
+        campaign.Picture
+            ?.takeIf { it.isNotBlank() }
+            ?: campaign.DefaultPicture
+                ?.takeIf { it.isNotBlank() }
+            ?: DEFAULT_CAMPAIGN_PICTURE_PATH
+
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
+        modifier = modifier
+            .clickable(
+                enabled = campaign.CampaignId > 0
+            ) {
                 onClick()
             },
+        shape = BBRadius.XlShape,
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
+        ),
+        border = BorderStroke(
+            width = 1.dp,
+            color = MaterialTheme.colorScheme.outlineVariant
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 0.dp
         )
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Text(
-                text = campaign.CampaignName.ifBlank { "Kampanya" },
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-
-            if (campaign.Description.isNotBlank()) {
-                Text(
-                    text = campaign.Description,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        start = BBSpacing.Space3,
+                        top = BBSpacing.Space3,
+                        end = BBSpacing.Space3
+                    )
             ) {
-                CampaignMetaText(
-                    text = campaign.CategoryName.ifBlank { "Genel" }
+                AsyncImage(
+                    model = resolveCampaignImageUrl(
+                        campaignPicture
+                    ),
+                    contentDescription = campaignName,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(1f)
+                        .clip(BBRadius.LgShape)
+                        .background(
+                            MaterialTheme.colorScheme.surfaceVariant
+                        ),
+                    contentScale = ContentScale.Crop
                 )
 
-                CampaignMetaText(
-                    text = "${campaign.CampaignStartDate.take(10)} - ${campaign.CampaignEndDate.take(10)}"
+                CampaignBadge(
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .padding(BBSpacing.Space2)
                 )
             }
 
-            if (campaign.CampaignProducts.isNotEmpty()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(BBSpacing.Space3),
+                verticalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space2
+                )
+            ) {
                 Text(
-                    text = "${campaign.CampaignProducts.size} ürün kampanyada",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.primary
+                    text = "Kampanya",
+                    style = MaterialTheme.typography.labelSmall,
+                    color =
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                )
+
+                Text(
+                    text = campaignName,
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    minLines = 2,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+                Text(
+                    text = description,
+                    style = MaterialTheme.typography.bodySmall,
+                    color =
+                        MaterialTheme.colorScheme.onSurfaceVariant,
+                    minLines = 3,
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+                CampaignConditionChip(
+                    text = campaignCondition
+                )
+
+                Surface(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(1.dp),
+                    color =
+                        MaterialTheme.colorScheme.outlineVariant
+                ) {}
+
+                BbButton(
+                    text = "Detayları Gör",
+                    modifier = Modifier.fillMaxWidth(),
+                    variant = BbButtonVariant.Primary,
+                    size = BbButtonSize.Small,
+                    enabled = campaign.CampaignId > 0,
+                    trailingIcon = {
+                        Icon(
+                            modifier = Modifier.size(18.dp),
+                            imageVector =
+                                Icons.AutoMirrored.Outlined.ArrowForward,
+                            contentDescription = null
+                        )
+                    },
+                    onClick = onClick
                 )
             }
         }
@@ -350,14 +473,103 @@ private fun CampaignListCard(
 }
 
 @Composable
-private fun CampaignMetaText(
+private fun CampaignBadge(
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        modifier = modifier,
+        shape = RoundedCornerShape(999.dp),
+        color = MaterialTheme.colorScheme.error
+    ) {
+        Row(
+            modifier = Modifier.padding(
+                horizontal = BBSpacing.Space2,
+                vertical = BBSpacing.Space1
+            ),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space1
+            )
+        ) {
+            Icon(
+                modifier = Modifier.size(14.dp),
+                imageVector = Icons.Outlined.LocalOffer,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onError
+            )
+
+            Text(
+                text = "Kampanya",
+                style = MaterialTheme.typography.labelSmall,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onError
+            )
+        }
+    }
+}
+
+@Composable
+private fun CampaignConditionChip(
     text: String
 ) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.labelSmall,
-        color = MaterialTheme.colorScheme.onSurfaceVariant
-    )
+    Surface(
+        shape = RoundedCornerShape(999.dp),
+        color = MaterialTheme.colorScheme.surfaceVariant,
+        border = BorderStroke(
+            width = 1.dp,
+            color = MaterialTheme.colorScheme.outlineVariant
+        )
+    ) {
+        Text(
+            modifier = Modifier.padding(
+                horizontal = BBSpacing.Space2,
+                vertical = BBSpacing.Space1
+            ),
+            text = text,
+            style = MaterialTheme.typography.labelSmall,
+            color =
+                MaterialTheme.colorScheme.onSurfaceVariant,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+    }
+}
+
+@Composable
+private fun CampaignLabel(
+    text: String
+) {
+    Surface(
+        shape = RoundedCornerShape(999.dp),
+        color = MaterialTheme.colorScheme.surface.copy(
+            alpha = 0.72f
+        )
+    ) {
+        Row(
+            modifier = Modifier.padding(
+                horizontal = BBSpacing.Space2,
+                vertical = BBSpacing.Space1
+            ),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space1
+            )
+        ) {
+            Icon(
+                modifier = Modifier.size(14.dp),
+                imageVector = Icons.Outlined.LocalOffer,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary
+            )
+
+            Text(
+                text = text,
+                style = MaterialTheme.typography.labelSmall,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        }
+    }
 }
 
 @Composable
@@ -368,35 +580,76 @@ private fun CampaignListInfoCard(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
+        shape = BBRadius.XlShape,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
+            containerColor =
+                MaterialTheme.colorScheme.surfaceVariant
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 0.dp
         )
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(BBSpacing.Space4),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+            horizontalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space3
+            )
         ) {
             if (showProgress) {
                 CircularProgressIndicator()
             }
 
-            Column {
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space1
+                )
+            ) {
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color =
+                        MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
                 Text(
                     text = description,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color =
+                        MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
     }
+}
+
+private fun resolveCampaignImageUrl(
+    picture: String
+): String {
+    val normalizedPicture =
+        picture.trim()
+
+    if (
+        normalizedPicture.startsWith("http://") ||
+        normalizedPicture.startsWith("https://")
+    ) {
+        return normalizedPicture
+    }
+
+    val applicationOrigin =
+        ApiRoutes.B2C_TEST_PRODUCT_IMAGE_URL
+            .substringBefore("/UploadedFiles/")
+
+    val relativePath =
+        normalizedPicture
+            .ifBlank {
+                DEFAULT_CAMPAIGN_PICTURE_PATH
+            }
+            .trimStart('/')
+
+    return "$applicationOrigin/$relativePath"
 }

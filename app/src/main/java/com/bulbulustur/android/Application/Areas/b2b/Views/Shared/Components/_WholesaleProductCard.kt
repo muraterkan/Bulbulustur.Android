@@ -37,6 +37,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
@@ -149,7 +150,7 @@ fun WholesaleProductCard(
                 }
 
                 BbButton(
-                    text = "Teklif İste",
+                    text = "Teklif Al",
                     onClick = onRfqClick,
                     modifier = Modifier.fillMaxWidth(),
                     variant = BbButtonVariant.Primary,
@@ -224,9 +225,14 @@ private fun WholesaleProductCardMedia(
         when {
             imageUrl.isNotBlank() -> {
                 AsyncImage(
-                    model = imageUrl,
+                    model = ImageRequest.Builder(context)
+                        .data(imageUrl)
+                        .build(),
                     contentDescription = productTitle,
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(1f)
+                        .clip(imageShape),
                     contentScale = ContentScale.Crop
                 )
             }

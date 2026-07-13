@@ -213,19 +213,21 @@ private fun ResolveLanguageSettingsItems(
         .map {
             LanguageSettingsItem(
                 id = it.SystemDescLanguageId,
-                title = it.Content.ifBlank {
-                    when (it.SystemDescLanguageId) {
+                title = it.Content
+                    ?.takeIf { value -> value.isNotBlank() }
+                    ?: when (it.SystemDescLanguageId) {
                         2 -> "English"
                         else -> "Türkçe"
-                    }
-                },
-                code = it.LanguageIsoCode.ifBlank {
-                    when (it.SystemDescLanguageId) {
+                    },
+                code = it.LanguageIsoCode
+                    ?.takeIf { value -> value.isNotBlank() }
+                    ?: when (it.SystemDescLanguageId) {
                         2 -> "en"
                         else -> "tr"
-                    }
-                },
-                flagAssetPath = ResolveLanguageSettingsFlagPath(it.SystemDescLanguageId)
+                    },
+                flagAssetPath = ResolveLanguageSettingsFlagPath(
+                    it.SystemDescLanguageId
+                )
             )
         }
         .ifEmpty {

@@ -9,6 +9,8 @@ interface IProductCategoryRepository {
 
     suspend fun GetProductCategoryListAsync(languageId: Int, count: Int = 30000): Result<List<ProductCategoryDTO>>
 
+    suspend fun GetCachedProductCategoriesAsync(languageId: Int): Result<List<ProductCategoryDTO>>
+
     suspend fun GetProductCategoryByIdAsync(
         productCategoryId: Int
     ): Result<ProductCategoryUpdateModel?>

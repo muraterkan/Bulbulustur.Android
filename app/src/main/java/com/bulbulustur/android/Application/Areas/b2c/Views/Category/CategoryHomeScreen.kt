@@ -86,8 +86,8 @@ fun RetailCategoryHomeScreen(
             categories.mapIndexed { index, category ->
                 RetailCategoryHomeSubCategoryItem(
                     id = category.ProductCategoryId,
-                    title = category.CategoryName.ifBlank { "Kategori" },
-                    description = category.Breadcrumb.ifBlank { "Kategori ürünlerini keşfet" },
+                    title = category.CategoryName?.takeIf { it.isNotBlank() } ?: "Kategori",
+                    description = category.Breadcrumb?.takeIf { it.isNotBlank() } ?: "Kategori ürünlerini keşfet",
                     icon = Icons.Outlined.Category,
                     backgroundColor = when (index % 4) {
                         0 -> MaterialTheme.colorScheme.primaryContainer

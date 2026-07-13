@@ -240,7 +240,7 @@ private fun WholesaleMenuQuickActions(
         )
 
         WholesaleMenuQuickActionCard(
-            title = "Teklif İste",
+            title = "Teklif Al",
             icon = {
                 Icon(
                     imageVector = Icons.Rounded.Description,

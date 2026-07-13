@@ -152,25 +152,7 @@ private fun WholesaleHomepageFeaturedProductDTO.ToWholesaleProductCardModel(
     )
 }
 
-private fun ResolveWholesaleHomepageFeaturedProductImageUrl(
-    imagePath: String
-): String {
-    val normalizedPath = imagePath.trim()
-
-    if (normalizedPath.isBlank()) {
-        return ""
-    }
-
-    if (
-        normalizedPath.startsWith("http://", ignoreCase = true) ||
-        normalizedPath.startsWith("https://", ignoreCase = true)
-    ) {
-        return normalizedPath
-    }
-
-    val baseUrl = ApiRoutes.B2B_PRODUCT_BASE_URL
-        .substringBefore("/api/")
-        .trimEnd('/')
-
-    return "$baseUrl/${normalizedPath.trimStart('/')}"
+private fun ResolveWholesaleHomepageFeaturedProductImageUrl(imagePath: String):
+String {
+    return ApiRoutes.B2C_TEST_PRODUCT_IMAGE_URL
 }

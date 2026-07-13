@@ -27,6 +27,7 @@ import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.ShoppingBasket
 import androidx.compose.material.icons.outlined.Tune
 import androidx.compose.material.icons.outlined.Verified
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -56,7 +57,6 @@ import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
-import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbChip
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
@@ -64,6 +64,8 @@ import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryDTO
 
 @Composable
 fun WholesaleCategoryHomeScreen(
+    isLoading: Boolean = false,
+    errorMessage: String? = null,
     onBackClick: () -> Unit = {},
     onSearchClick: (String) -> Unit = {},
     onMenuClick: () -> Unit = {},
@@ -86,32 +88,33 @@ fun WholesaleCategoryHomeScreen(
         mutableStateOf("")
     }
 
-    val subCategories =
-        if (categories.isNotEmpty()) {
-            categories.mapIndexed { index, category ->
-                WholesaleCategoryHomeSubCategoryItem(
-                    id = category.ProductCategoryId,
-                    title = category.CategoryName.orEmpty().ifBlank { "Kategori" },
-                    description = category.Breadcrumb.orEmpty().ifBlank {
-                        "Toptan kategori ürünlerini keşfet"
-                    },
-                    icon = Icons.Outlined.Category,
-                    backgroundColor = when (index % 4) {
-                        0 -> MaterialTheme.colorScheme.primaryContainer
-                        1 -> MaterialTheme.colorScheme.surfaceVariant
-                        2 -> MaterialTheme.colorScheme.secondaryContainer
-                        else -> MaterialTheme.colorScheme.tertiaryContainer
-                    },
-                    iconColor = when (index % 4) {
-                        0 -> MaterialTheme.colorScheme.onPrimaryContainer
-                        1 -> MaterialTheme.colorScheme.onSurfaceVariant
-                        2 -> MaterialTheme.colorScheme.onSecondaryContainer
-                        else -> MaterialTheme.colorScheme.onTertiaryContainer
-                    }
-                )
-            }
-        } else {
-            getWholesaleSubCategories()
+    val categoryItems = categories
+        .filter { category ->
+            category.ProductCategoryId > 0
+        }
+        .mapIndexed { index, category ->
+            WholesaleCategoryHomeItem(
+                id = category.ProductCategoryId,
+                title = category.CategoryName.ifBlank {
+                    "Kategori"
+                },
+                description = category.Breadcrumb.ifBlank {
+                    "Toptan kategori ürünlerini keşfet"
+                },
+                icon = Icons.Outlined.Category,
+                backgroundColor = when (index % 4) {
+                    0 -> MaterialTheme.colorScheme.primaryContainer
+                    1 -> MaterialTheme.colorScheme.surfaceVariant
+                    2 -> MaterialTheme.colorScheme.secondaryContainer
+                    else -> MaterialTheme.colorScheme.tertiaryContainer
+                },
+                iconColor = when (index % 4) {
+                    0 -> MaterialTheme.colorScheme.onPrimaryContainer
+                    1 -> MaterialTheme.colorScheme.onSurfaceVariant
+                    2 -> MaterialTheme.colorScheme.onSecondaryContainer
+                    else -> MaterialTheme.colorScheme.onTertiaryContainer
+                }
+            )
         }
 
     Scaffold(
@@ -161,7 +164,9 @@ fun WholesaleCategoryHomeScreen(
                 end = BBSpacing.PageHorizontal,
                 bottom = innerPadding.calculateBottomPadding() + BBSpacing.PageBottom
             ),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.SectionGapCompact)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.SectionGapCompact
+            )
         ) {
             item {
                 WholesaleCategoryHeroCard(
@@ -183,28 +188,52 @@ fun WholesaleCategoryHomeScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Alt Kategoriler",
-                    subtitle = "Bu sektör içindeki alt kırılımları incele."
+                    title = "Toptan Kategoriler",
+                    subtitle = "Ürün gruplarını ve alt kategori yapılarını incele."
                 )
             }
 
-            items(
-                items = subCategories,
-                key = { item ->
-                    item.title
-                }
-            ) { item ->
-                WholesaleSubCategoryCard(
-                    item = item,
-                    onClick = {
-                        onSubCategoryClick(item.id)
+            when {
+                isLoading -> {
+                    item {
+                        WholesaleCategoryLoadingState()
                     }
-                )
+                }
+
+                !errorMessage.isNullOrBlank() -> {
+                    item {
+                        WholesaleCategoryErrorState(
+                            message = errorMessage
+                        )
+                    }
+                }
+
+                categoryItems.isEmpty() -> {
+                    item {
+                        WholesaleCategoryEmptyState()
+                    }
+                }
+
+                else -> {
+                    items(
+                        items = categoryItems,
+                        key = { item ->
+                            item.id
+                        }
+                    ) { item ->
+                        WholesaleCategoryItemCard(
+                            item = item,
+                            onClick = {
+                                onSubCategoryClick(item.id)
+                            }
+                        )
+                    }
+                }
             }
 
             item {
                 BbSectionHeader(
-                    title = "Toptan Kategori Akışı",
+                    title = "Toptan Ticaret Akışı",
                     subtitle = "Ürün, tedarikçi ve teklif kanallarına hızlı geç."
                 )
             }
@@ -218,23 +247,87 @@ fun WholesaleCategoryHomeScreen(
             }
 
             item {
-                BbSectionHeader(
-                    title = "Popüler Ticaret Aramaları",
-                    subtitle = "Bu sektörde sık kullanılan arama başlıkları."
-                )
-            }
-
-            item {
-                WholesalePopularSearchChipRow(
-                    onProductListClick = onProductListClick
-                )
-            }
-
-            item {
                 Spacer(
                     modifier = Modifier.height(BBSpacing.Space4)
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun WholesaleCategoryLoadingState() {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Large
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            CircularProgressIndicator()
+        }
+    }
+}
+
+@Composable
+private fun WholesaleCategoryErrorState(
+    message: String
+) {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Large
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space2
+            )
+        ) {
+            Text(
+                text = "Kategoriler yüklenemedi",
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.error,
+                fontWeight = FontWeight.SemiBold
+            )
+
+            Text(
+                text = message,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+@Composable
+private fun WholesaleCategoryEmptyState() {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Large
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space2
+            ),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Category,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+
+            Text(
+                text = "Gösterilecek toptan kategori bulunamadı.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 }
@@ -258,11 +351,15 @@ private fun WholesaleCategoryHeroCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(BBSpacing.Space5),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space4
+            )
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+                horizontalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space2
+                )
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Factory,
@@ -271,7 +368,7 @@ private fun WholesaleCategoryHeroCard(
                 )
 
                 Text(
-                    text = "Toptan Kategori",
+                    text = "Toptan Ticaret",
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.SemiBold
@@ -279,21 +376,23 @@ private fun WholesaleCategoryHeroCard(
             }
 
             Text(
-                text = "Elektronik Parçalar",
+                text = "Toptan ürün kategorilerini keşfet",
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
-                text = "Alt sektörleri incele, doğrulanmış tedarikçilere ulaş ve seçili kategori için teklif akışını başlat.",
+                text = "Ürün gruplarını incele, tedarikçilere ulaş ve teklif süreçlerini başlat.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+                horizontalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space2
+                )
             ) {
                 BbButton(
                     text = "Ürünleri Gör",
@@ -304,7 +403,7 @@ private fun WholesaleCategoryHeroCard(
                 )
 
                 BbButton(
-                    text = "Teklif İste",
+                    text = "Teklif Al",
                     onClick = onRfqClick,
                     modifier = Modifier.weight(1f),
                     variant = BbButtonVariant.Light,
@@ -334,23 +433,34 @@ private fun WholesaleCategoryQuickActionRow(
     val quickActions = getWholesaleQuickActions()
 
     LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+        horizontalArrangement = Arrangement.spacedBy(
+            BBSpacing.Space3
+        )
     ) {
         items(
             items = quickActions,
             key = { item ->
-                item.title
+                item.target
             }
         ) { item ->
             WholesaleCategoryQuickActionCard(
                 item = item,
                 onClick = {
                     when (item.target) {
-                        WholesaleCategoryQuickActionTarget.Companies -> onCompanyListClick()
-                        WholesaleCategoryQuickActionTarget.Rfq -> onRfqClick()
-                        WholesaleCategoryQuickActionTarget.LastPrice -> onLastPriceRequestClick()
-                        WholesaleCategoryQuickActionTarget.Sample -> onSampleRequestClick()
-                        WholesaleCategoryQuickActionTarget.Customization -> onCustomizationRequestClick()
+                        WholesaleCategoryQuickActionTarget.Companies ->
+                            onCompanyListClick()
+
+                        WholesaleCategoryQuickActionTarget.Rfq ->
+                            onRfqClick()
+
+                        WholesaleCategoryQuickActionTarget.LastPrice ->
+                            onLastPriceRequestClick()
+
+                        WholesaleCategoryQuickActionTarget.Sample ->
+                            onSampleRequestClick()
+
+                        WholesaleCategoryQuickActionTarget.Customization ->
+                            onCustomizationRequestClick()
                     }
                 }
             )
@@ -370,7 +480,9 @@ private fun WholesaleCategoryQuickActionCard(
         onClick = onClick
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space2
+            )
         ) {
             Box(
                 modifier = Modifier
@@ -406,8 +518,8 @@ private fun WholesaleCategoryQuickActionCard(
 }
 
 @Composable
-private fun WholesaleSubCategoryCard(
-    item: WholesaleCategoryHomeSubCategoryItem,
+private fun WholesaleCategoryItemCard(
+    item: WholesaleCategoryHomeItem,
     onClick: () -> Unit
 ) {
     BbCard(
@@ -419,7 +531,9 @@ private fun WholesaleSubCategoryCard(
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+            horizontalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space3
+            )
         ) {
             Box(
                 modifier = Modifier
@@ -440,7 +554,9 @@ private fun WholesaleSubCategoryCard(
 
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+                verticalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space1
+                )
             ) {
                 Text(
                     text = item.title,
@@ -474,21 +590,28 @@ private fun WholesaleCategoryShowcaseRow(
     val showcases = getWholesaleCategoryShowcases()
 
     LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+        horizontalArrangement = Arrangement.spacedBy(
+            BBSpacing.Space3
+        )
     ) {
         items(
             items = showcases,
             key = { item ->
-                item.title
+                item.target
             }
         ) { item ->
             WholesaleCategoryShowcaseCard(
                 item = item,
                 onClick = {
                     when (item.target) {
-                        WholesaleCategoryShowcaseTarget.Products -> onProductListClick()
-                        WholesaleCategoryShowcaseTarget.Companies -> onCompanyListClick()
-                        WholesaleCategoryShowcaseTarget.Rfq -> onRfqClick()
+                        WholesaleCategoryShowcaseTarget.Products ->
+                            onProductListClick()
+
+                        WholesaleCategoryShowcaseTarget.Companies ->
+                            onCompanyListClick()
+
+                        WholesaleCategoryShowcaseTarget.Rfq ->
+                            onRfqClick()
                     }
                 }
             )
@@ -512,8 +635,12 @@ private fun WholesaleCategoryShowcaseCard(
         onClick = onClick
     ) {
         Column(
-            modifier = Modifier.padding(BBSpacing.Space4),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+            modifier = Modifier.padding(
+                BBSpacing.Space4
+            ),
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space3
+            )
         ) {
             Icon(
                 imageVector = item.icon,
@@ -532,30 +659,6 @@ private fun WholesaleCategoryShowcaseCard(
                 text = item.description,
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-    }
-}
-
-@Composable
-private fun WholesalePopularSearchChipRow(
-    onProductListClick: () -> Unit
-) {
-    val popularSearches = getWholesalePopularSearches()
-
-    LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
-    ) {
-        items(
-            items = popularSearches,
-            key = { item ->
-                item
-            }
-        ) { item ->
-            BbChip(
-                text = item,
-                selected = false,
-                onClick = onProductListClick
             )
         }
     }
@@ -580,7 +683,7 @@ private enum class WholesaleCategoryQuickActionTarget {
 }
 
 @Immutable
-private data class WholesaleCategoryHomeSubCategoryItem(
+private data class WholesaleCategoryHomeItem(
     val id: Int,
     val title: String,
     val description: String,
@@ -610,14 +713,14 @@ private fun getWholesaleQuickActions(): List<WholesaleCategoryQuickActionItem> {
     return listOf(
         WholesaleCategoryQuickActionItem(
             title = "Tedarikçiler",
-            description = "Bu sektördeki firmalar",
+            description = "Toptan satış yapan firmalar",
             icon = Icons.Outlined.Business,
             backgroundColor = MaterialTheme.colorScheme.primaryContainer,
             iconColor = MaterialTheme.colorScheme.onPrimaryContainer,
             target = WholesaleCategoryQuickActionTarget.Companies
         ),
         WholesaleCategoryQuickActionItem(
-            title = "Teklif İste",
+            title = "Teklif Al",
             description = "İhtiyacını firmalara ilet",
             icon = Icons.Outlined.RequestQuote,
             backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
@@ -634,7 +737,7 @@ private fun getWholesaleQuickActions(): List<WholesaleCategoryQuickActionItem> {
         ),
         WholesaleCategoryQuickActionItem(
             title = "Numune",
-            description = "Sipariş öncesi örnek",
+            description = "Sipariş öncesi numune iste",
             icon = Icons.Outlined.LocalShipping,
             backgroundColor = MaterialTheme.colorScheme.tertiaryContainer,
             iconColor = MaterialTheme.colorScheme.onTertiaryContainer,
@@ -652,57 +755,19 @@ private fun getWholesaleQuickActions(): List<WholesaleCategoryQuickActionItem> {
 }
 
 @Composable
-private fun getWholesaleSubCategories(): List<WholesaleCategoryHomeSubCategoryItem> {
-    return listOf(
-        WholesaleCategoryHomeSubCategoryItem(
-            id = 1,
-            title = "Transistörler, Diyotlar ve Tüpler",
-            description = "Toptan elektronik bileşen tedariki",
-            icon = Icons.Outlined.Category,
-            backgroundColor = MaterialTheme.colorScheme.primaryContainer,
-            iconColor = MaterialTheme.colorScheme.onPrimaryContainer
-        ),
-        WholesaleCategoryHomeSubCategoryItem(
-            id = 2,
-            title = "Piller ve Güç Kaynakları",
-            description = "Pil, batarya ve güç çözümleri",
-            icon = Icons.Outlined.Category,
-            backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
-            iconColor = MaterialTheme.colorScheme.onSurfaceVariant
-        ),
-        WholesaleCategoryHomeSubCategoryItem(
-            id = 3,
-            title = "Aktif Bileşenler",
-            description = "Endüstriyel elektronik parçalar",
-            icon = Icons.Outlined.Category,
-            backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
-            iconColor = MaterialTheme.colorScheme.onSecondaryContainer
-        ),
-        WholesaleCategoryHomeSubCategoryItem(
-            id = 4,
-            title = "Entegre Devreler",
-            description = "Çip, modül ve devre ürünleri",
-            icon = Icons.Outlined.Category,
-            backgroundColor = MaterialTheme.colorScheme.tertiaryContainer,
-            iconColor = MaterialTheme.colorScheme.onTertiaryContainer
-        )
-    )
-}
-
-@Composable
 private fun getWholesaleCategoryShowcases(): List<WholesaleCategoryShowcaseItem> {
     return listOf(
         WholesaleCategoryShowcaseItem(
             title = "Toptan Ürünler",
-            description = "Bu kategori içindeki ürün gruplarına geç.",
+            description = "Yayınlanan toptan ürünleri listele.",
             icon = Icons.Outlined.ShoppingBasket,
             backgroundColor = MaterialTheme.colorScheme.primaryContainer,
             iconColor = MaterialTheme.colorScheme.onPrimaryContainer,
             target = WholesaleCategoryShowcaseTarget.Products
         ),
         WholesaleCategoryShowcaseItem(
-            title = "Doğrulanmış Tedarikçiler",
-            description = "Bu kategoride satış yapan firmalara ulaş.",
+            title = "Tedarikçiler",
+            description = "Toptan satış yapan firmalara ulaş.",
             icon = Icons.Outlined.Verified,
             backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
             iconColor = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -710,25 +775,12 @@ private fun getWholesaleCategoryShowcases(): List<WholesaleCategoryShowcaseItem>
         ),
         WholesaleCategoryShowcaseItem(
             title = "Teklif Topla",
-            description = "Kategori bazlı RFQ talebi oluştur.",
+            description = "İhtiyacın için teklif talebi oluştur.",
             icon = Icons.Outlined.RequestQuote,
             backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
             iconColor = MaterialTheme.colorScheme.onSecondaryContainer,
             target = WholesaleCategoryShowcaseTarget.Rfq
         )
-    )
-}
-
-private fun getWholesalePopularSearches(): List<String> {
-    return listOf(
-        "LED sürücü",
-        "Güç kaynağı",
-        "Sensör",
-        "Konnektör",
-        "PCB",
-        "Röle",
-        "Transistör",
-        "Endüstriyel modül"
     )
 }
 

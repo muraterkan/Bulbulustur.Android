@@ -12,10 +12,14 @@ class SystemDescPaymentTermRepository(
     private val apiClient: ApiClient = ApiClient
 ) : ISystemDescPaymentTermRepository {
 
-    override suspend fun GetSystemDescPaymentTermListAsync(): Result<List<SystemDescPaymentTermDTO>> {
+    override suspend fun GetSystemDescPaymentTermsAsync(
+        languageId: Int,
+        count: Int
+    ): Result<List<SystemDescPaymentTermDTO>> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetSystemDescPaymentTermListAsync"
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "MasterData/GetSystemDescPaymentTermsAsync",
+            query = "languageId=$languageId&count=$count"
         )
     }
 

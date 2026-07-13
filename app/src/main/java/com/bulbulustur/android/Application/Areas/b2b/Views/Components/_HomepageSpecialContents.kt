@@ -132,5 +132,5 @@ private fun WholesaleHomepageSpecialDTO.ToWholesaleProductCardModel(isFavorite: 
 }
 
 private fun ResolveWholesaleHomepageSpecialImageUrl(imagePath: String): String {
-    return ApiRoutes.B2B_TEST_PRODUCT_IMAGE_URL
+    return ApiRoutes.B2C_TEST_PRODUCT_IMAGE_URL
 }

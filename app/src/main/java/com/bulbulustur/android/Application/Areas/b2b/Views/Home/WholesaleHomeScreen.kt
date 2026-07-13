@@ -237,7 +237,7 @@ private fun WholesaleHeroCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 BbButton(
-                    text = "Teklif İste",
+                    text = "Teklif Talebi",
                     onClick = onRfqCreateClick,
                     modifier = Modifier.weight(1f),
                     variant = BbButtonVariant.Primary,
@@ -252,7 +252,7 @@ private fun WholesaleHeroCard(
                 )
 
                 BbButton(
-                    text = "Ürünler",
+                    text = "Kategoriler",
                     onClick = onProductListClick,
                     modifier = Modifier.weight(1f),
                     variant = BbButtonVariant.Outline,
@@ -470,7 +470,7 @@ private fun wholesaleActionItems(
             OnClick = onRfqListClick
         ),
         WholesaleHomeActionItem(
-            Title = "Teklif İste",
+            Title = "Teklif Al",
             Description = "Yeni teklif iste",
             Icon = Icons.Outlined.LocalOffer,
             Tint = BBColors.Orange.Orange700,

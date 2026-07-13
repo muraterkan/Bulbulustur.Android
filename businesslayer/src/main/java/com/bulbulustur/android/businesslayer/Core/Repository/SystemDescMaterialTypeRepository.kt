@@ -12,10 +12,14 @@ class SystemDescMaterialTypeRepository(
     private val apiClient: ApiClient = ApiClient
 ) : ISystemDescMaterialTypeRepository {
 
-    override suspend fun GetSystemDescMaterialTypeListAsync(): Result<List<SystemDescMaterialTypeDTO>> {
+    override suspend fun GetSystemDescMaterialTypesAsync(
+        languageId: Int,
+        count: Int
+    ): Result<List<SystemDescMaterialTypeDTO>> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetSystemDescMaterialTypeListAsync"
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "MasterData/GetSystemDescMaterialTypesAsync",
+            query = "languageId=$languageId&count=$count"
         )
     }
 

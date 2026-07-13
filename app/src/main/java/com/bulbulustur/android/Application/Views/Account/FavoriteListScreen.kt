@@ -461,7 +461,7 @@ private fun WholesaleFavoriteCard(
                 )
 
                 BbButton(
-                    text = "Teklif İste",
+                    text = "Teklif Al",
                     onClick = {
                         onRequestQuoteClick(favorite.WholesaleProductId)
                     },

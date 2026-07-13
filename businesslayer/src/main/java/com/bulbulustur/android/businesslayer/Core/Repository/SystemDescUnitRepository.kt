@@ -12,10 +12,14 @@ class SystemDescUnitRepository(
     private val apiClient: ApiClient = ApiClient
 ) : ISystemDescUnitRepository {
 
-    override suspend fun GetSystemDescUnitListAsync(): Result<List<SystemDescUnitDTO>> {
+    override suspend fun GetSystemDescUnitsAsync(
+        languageId: Int,
+        count: Int
+    ): Result<List<SystemDescUnitDTO>> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetSystemDescUnitListAsync"
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "MasterData/GetSystemDescUnitsAsync",
+            query = "languageId=$languageId&count=$count"
         )
     }
 

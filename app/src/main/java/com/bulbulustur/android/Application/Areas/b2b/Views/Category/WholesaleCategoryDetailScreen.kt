@@ -2,11 +2,10 @@ package com.bulbulustur.android.Application.Areas.b2b.Views.Category
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,39 +14,36 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Business
 import androidx.compose.material.icons.outlined.Category
 import androidx.compose.material.icons.outlined.ChevronRight
-import androidx.compose.material.icons.outlined.Factory
 import androidx.compose.material.icons.outlined.Inventory2
 import androidx.compose.material.icons.outlined.RequestQuote
-import androidx.compose.material.icons.outlined.Verified
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.bulbulustur.android.Application.Views.Shared.Components.BbSectionHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
-import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbChip
-import com.bulbulustur.android.Application.Views.Shared.Components.BbSectionHeader
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryDTO
 
 @Composable
 fun WholesaleCategoryDetailScreen(
-    categoryId: Int = 1,
+    categoryId: Int = 0,
+    isLoading: Boolean = false,
+    errorMessage: String? = null,
     categoryInfo: ProductCategoryDTO? = null,
     childCategories: List<ProductCategoryDTO> = emptyList(),
     onBackClick: () -> Unit = {},
@@ -58,108 +54,221 @@ fun WholesaleCategoryDetailScreen(
     onPopularProductGroupClick: (Int, String) -> Unit = { _, _ -> },
     onSearchClick: (String) -> Unit = {}
 ) {
-    val category = remember(categoryId, categoryInfo, childCategories) {
-        getWholesaleCategoryDetail(
+    val category = remember(
+        categoryId,
+        categoryInfo,
+        childCategories
+    ) {
+        createWholesaleCategoryDetail(
             categoryId = categoryId,
             categoryInfo = categoryInfo,
             childCategories = childCategories
         )
     }
 
-    var searchText by remember {
-        mutableStateOf("")
-    }
-
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background
     ) { innerPadding ->
         LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxSize(),
             contentPadding = PaddingValues(
                 start = BBSpacing.PageHorizontal,
-                top = innerPadding.calculateTopPadding() + BBSpacing.PageTopCompact,
+                top = innerPadding.calculateTopPadding() +
+                        BBSpacing.PageTopCompact,
                 end = BBSpacing.PageHorizontal,
-                bottom = innerPadding.calculateBottomPadding() + BBSpacing.PageBottom
+                bottom = innerPadding.calculateBottomPadding() +
+                        BBSpacing.PageBottom
             ),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.SectionGapCompact)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.SectionGapCompact
+            )
         ) {
-            item {
-                WholesaleCategoryDetailHeader(
-                    category = category
-                )
-            }
-
-            item {
-
-            }
-
-            item {
-                WholesaleCategoryDetailActions(
-                    categoryId = category.categoryId,
-                    onProductListClick = onProductListClick,
-                    onCompanyListClick = onCompanyListClick,
-                    onRfqCreateClick = onRfqCreateClick
-                )
-            }
-
-            item {
-                BbSectionHeader(
-                    title = "Alt Kategoriler",
-                    subtitle = "Bu sektör altındaki ana ürün grupları"
-                )
-            }
-
-            items(
-                items = category.subCategories,
-                key = { subCategory ->
-                    subCategory.categoryId
+            when {
+                isLoading -> {
+                    item {
+                        WholesaleCategoryDetailLoadingState()
+                    }
                 }
-            ) { subCategory ->
-                WholesaleSubCategoryCard(
-                    subCategory = subCategory,
-                    onClick = {
-                        onSubCategoryClick(subCategory.categoryId)
+
+                !errorMessage.isNullOrBlank() -> {
+                    item {
+                        WholesaleCategoryDetailErrorState(
+                            message = errorMessage
+                        )
                     }
-                )
-            }
+                }
 
-            item {
-                BbSectionHeader(
-                    title = "Popüler ürün grupları",
-                    subtitle = "API sonrası gerçek talep ve liste verileriyle beslenecek"
-                )
-            }
-
-            item {
-                WholesalePopularProductGroups(
-                    productGroups = category.popularProductGroups,
-                    onProductListClick = {
-                        onProductListClick(category.categoryId)
+                categoryInfo == null -> {
+                    item {
+                        WholesaleCategoryDetailEmptyState()
                     }
-                )
-            }
+                }
 
-            item {
-                BbSectionHeader(
-                    title = "Sektör özeti",
-                    subtitle = "Dummy Toptan Kategori istatistikleri"
-                )
-            }
+                else -> {
+                    item {
+                        WholesaleCategoryDetailHeader(
+                            category = category
+                        )
+                    }
 
-            item {
-                WholesaleCategoryStats(
-                    category = category
-                )
-            }
+                    item {
+                        WholesaleCategoryDetailActions(
+                            categoryId = category.categoryId,
+                            onProductListClick = onProductListClick,
+                            onCompanyListClick = onCompanyListClick,
+                            onRfqCreateClick = onRfqCreateClick
+                        )
+                    }
 
-            item {
-                Spacer(modifier = Modifier.height(BBSpacing.Space4))
+                    item {
+                        BbSectionHeader(
+                            title = "Alt Kategoriler",
+                            subtitle = "Bu kategoriye bağlı ürün gruplarını incele."
+                        )
+                    }
+
+                    if (category.subCategories.isEmpty()) {
+                        item {
+                            WholesaleChildCategoryEmptyState()
+                        }
+                    } else {
+                        items(
+                            items = category.subCategories,
+                            key = { subCategory ->
+                                subCategory.categoryId
+                            }
+                        ) { subCategory ->
+                            WholesaleSubCategoryCard(
+                                subCategory = subCategory,
+                                onClick = {
+                                    onSubCategoryClick(
+                                        subCategory.categoryId
+                                    )
+                                }
+                            )
+                        }
+                    }
+
+                    item {
+                        Spacer(
+                            modifier = Modifier.height(
+                                BBSpacing.Space4
+                            )
+                        )
+                    }
+                }
             }
         }
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun WholesaleCategoryDetailLoadingState() {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Large
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            CircularProgressIndicator()
+        }
+    }
+}
+
+@Composable
+private fun WholesaleCategoryDetailErrorState(
+    message: String
+) {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Large
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space2
+            )
+        ) {
+            Text(
+                text = "Kategori bilgisi yüklenemedi",
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.error,
+                fontWeight = FontWeight.SemiBold
+            )
+
+            Text(
+                text = message,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+@Composable
+private fun WholesaleCategoryDetailEmptyState() {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Large
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space2
+            )
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Category,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+
+            Text(
+                text = "Kategori bilgisi bulunamadı.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+@Composable
+private fun WholesaleChildCategoryEmptyState() {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Large
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space2
+            )
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Category,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+
+            Text(
+                text = "Bu kategoriye bağlı alt kategori bulunamadı.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
 @Composable
 private fun WholesaleCategoryDetailHeader(
     category: WholesaleCategoryDetail
@@ -171,7 +280,9 @@ private fun WholesaleCategoryDetailHeader(
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space4
+            )
         ) {
             WholesaleCategoryIconTitleRow(
                 icon = category.icon,
@@ -185,33 +296,11 @@ private fun WholesaleCategoryDetailHeader(
                 color = MaterialTheme.colorScheme.onSurface
             )
 
-            Text(
-                text = category.description,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-
-            FlowRow(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.ChipGap),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.ChipGap)
-            ) {
-                BbChip(
-                    text = "${category.productCount} ürün grubu",
-                    selected = false,
-                    onClick = {}
-                )
-
-                BbChip(
-                    text = "${category.companyCount} firma",
-                    selected = false,
-                    onClick = {}
-                )
-
-                BbChip(
-                    text = "${category.rfqCount} teklif talebi",
-                    selected = false,
-                    onClick = {}
+            if (category.description.isNotBlank()) {
+                Text(
+                    text = category.description,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -227,15 +316,19 @@ private fun WholesaleCategoryDetailActions(
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGapCompact)
+        verticalArrangement = Arrangement.spacedBy(
+            BBSpacing.CardGapCompact
+        )
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.CardGapCompact)
+            horizontalArrangement = Arrangement.spacedBy(
+                BBSpacing.CardGapCompact
+            )
         ) {
             WholesaleCategoryActionCard(
                 title = "Ürünleri Gör",
-                description = "Toptan liste",
+                description = "Kategori ürünleri",
                 icon = Icons.Outlined.Inventory2,
                 modifier = Modifier.weight(1f),
                 onClick = {
@@ -245,7 +338,7 @@ private fun WholesaleCategoryDetailActions(
 
             WholesaleCategoryActionCard(
                 title = "Firmalar",
-                description = "Firma Vitrinleri",
+                description = "Tedarikçi firmalar",
                 icon = Icons.Outlined.Business,
                 modifier = Modifier.weight(1f),
                 onClick = {
@@ -289,7 +382,9 @@ private fun WholesaleCategoryActionCard(
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space2
+            )
         ) {
             Icon(
                 imageVector = icon,
@@ -327,7 +422,9 @@ private fun WholesaleSubCategoryCard(
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+            horizontalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space3
+            )
         ) {
             Icon(
                 imageVector = subCategory.icon,
@@ -337,7 +434,9 @@ private fun WholesaleSubCategoryCard(
 
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+                verticalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space1
+                )
             ) {
                 Text(
                     text = subCategory.name,
@@ -346,104 +445,19 @@ private fun WholesaleSubCategoryCard(
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
-                Text(
-                    text = subCategory.description,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-
-                Text(
-                    text = "${subCategory.productCount} ürün grubu",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                if (subCategory.description.isNotBlank()) {
+                    Text(
+                        text = subCategory.description,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
 
             Icon(
                 imageVector = Icons.Outlined.ChevronRight,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-private fun WholesalePopularProductGroups(
-    productGroups: List<String>,
-    onProductListClick: () -> Unit
-) {
-    FlowRow(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(BBSpacing.ChipGap),
-        verticalArrangement = Arrangement.spacedBy(BBSpacing.ChipGap)
-    ) {
-        productGroups.forEach { productGroup ->
-            BbChip(
-                text = productGroup,
-                selected = false,
-                onClick = onProductListClick
-            )
-        }
-    }
-}
-
-@Composable
-private fun WholesaleCategoryStats(
-    category: WholesaleCategoryDetail
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(BBSpacing.CardGapCompact)
-    ) {
-        WholesaleCategoryStatCard(
-            title = "Ürün",
-            value = category.productCount.toString(),
-            modifier = Modifier.weight(1f)
-        )
-
-        WholesaleCategoryStatCard(
-            title = "Firma",
-            value = category.companyCount.toString(),
-            modifier = Modifier.weight(1f)
-        )
-
-        WholesaleCategoryStatCard(
-            title = "RFQ",
-            value = category.rfqCount.toString(),
-            modifier = Modifier.weight(1f)
-        )
-    }
-}
-
-@Composable
-private fun WholesaleCategoryStatCard(
-    title: String,
-    value: String,
-    modifier: Modifier = Modifier
-) {
-    BbCard(
-        modifier = modifier,
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium
-    ) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = value,
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-
-            Text(
-                text = title,
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -456,7 +470,9 @@ private fun WholesaleCategoryIconTitleRow(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(BBSpacing.IconTextGap)
+        horizontalArrangement = Arrangement.spacedBy(
+            BBSpacing.IconTextGap
+        )
     ) {
         Icon(
             imageVector = icon,
@@ -477,103 +493,81 @@ data class WholesaleCategoryDetail(
     val categoryId: Int,
     val name: String,
     val description: String,
-    val productCount: Int,
-    val companyCount: Int,
-    val rfqCount: Int,
     val icon: ImageVector,
-    val subCategories: List<WholesaleSubCategoryItem>,
-    val popularProductGroups: List<String>
+    val subCategories: List<WholesaleSubCategoryItem>
 )
 
 data class WholesaleSubCategoryItem(
     val categoryId: Int,
     val name: String,
     val description: String,
-    val productCount: Int,
     val icon: ImageVector
 )
 
-private fun getWholesaleCategoryDetail(
+private fun createWholesaleCategoryDetail(
     categoryId: Int,
     categoryInfo: ProductCategoryDTO?,
     childCategories: List<ProductCategoryDTO>
 ): WholesaleCategoryDetail {
     return WholesaleCategoryDetail(
-        categoryId = categoryInfo?.ProductCategoryId ?: categoryId,
-        name = categoryInfo?.CategoryName?.ifBlank { "Kategori" } ?: "Kategori",
-        description = categoryInfo?.Breadcrumb?.ifBlank { "Toptan kategori ürünlerini keşfedin." } ?: "Toptan kategori ürünlerini keşfedin.",
-        productCount = 128,
-        companyCount = 42,
-        rfqCount = 17,
-        icon = Icons.Outlined.Category,
-        subCategories =
-            if (childCategories.isNotEmpty()) {
-                childCategories.map { child ->
-                    WholesaleSubCategoryItem(
-                        categoryId = child.ProductCategoryId,
-                        name = child.CategoryName.ifBlank { "Kategori" },
-                        description = child.Breadcrumb.ifBlank { "Toptan alt kategori ürünlerini keşfet." },
-                        productCount = 0,
-                        icon = Icons.Outlined.Category
-                    )
-                }
-            } else {
-                getWholesaleSubCategories()
+        categoryId = categoryInfo
+            ?.ProductCategoryId
+            ?.takeIf { id ->
+                id > 0
+            }
+            ?: categoryId,
+        name = categoryInfo
+            ?.CategoryName
+            .orEmpty()
+            .ifBlank {
+                "Kategori"
             },
-        popularProductGroups = getWholesalePopularProductGroups()
-    )
-}
-
-private fun getWholesaleSubCategories(): List<WholesaleSubCategoryItem> {
-    return listOf(
-        WholesaleSubCategoryItem(
-            categoryId = 101,
-            name = "Koli ve Kutu",
-            description = "E-ticaret, sanayi ve depolama için koli çeşitleri.",
-            productCount = 36,
-            icon = Icons.Outlined.Inventory2
-        ),
-        WholesaleSubCategoryItem(
-            categoryId = 102,
-            name = "Poşet ve Çanta",
-            description = "Mağaza, kargo ve üretim süreçleri için poşet çözümleri.",
-            productCount = 28,
-            icon = Icons.Outlined.Business
-        ),
-        WholesaleSubCategoryItem(
-            categoryId = 103,
-            name = "Etiket ve Barkod",
-            description = "Ürün, depo, sevkiyat ve fiyat etiketi çözümleri.",
-            productCount = 21,
-            icon = Icons.Outlined.Verified
-        ),
-        WholesaleSubCategoryItem(
-            categoryId = 104,
-            name = "Streç ve Koruyucu Ambalaj",
-            description = "Paletleme, sarma ve taşıma güvenliği için ürünler.",
-            productCount = 43,
-            icon = Icons.Outlined.Factory
-        )
-    )
-}
-
-private fun getWholesalePopularProductGroups(): List<String> {
-    return listOf(
-        "E-ticaret kolisi",
-        "Baskılı poşet",
-        "Kargo etiketi",
-        "Streç film",
-        "Köpük ambalaj",
-        "Barkod etiketi",
-        "Kilitli poşet"
+        description = categoryInfo
+            ?.Breadcrumb
+            .orEmpty()
+            .ifBlank {
+                categoryInfo
+                    ?.CategoryName
+                    .orEmpty()
+            },
+        icon = Icons.Outlined.Category,
+        subCategories = childCategories
+            .filter { child ->
+                child.ProductCategoryId > 0
+            }
+            .map { child ->
+                WholesaleSubCategoryItem(
+                    categoryId = child.ProductCategoryId,
+                    name = child.CategoryName.ifBlank {
+                        "Kategori"
+                    },
+                    description = child.Breadcrumb.ifBlank {
+                        child.CategoryName
+                    },
+                    icon = Icons.Outlined.Category
+                )
+            }
     )
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun CategoryDetailScreenPreview() {
+private fun WholesaleCategoryDetailScreenPreview() {
     BbTheme {
-        WholesaleCategoryDetailScreen()
+        WholesaleCategoryDetailScreen(
+            categoryId = 1,
+            categoryInfo = ProductCategoryDTO(
+                ProductCategoryId = 1,
+                CategoryName = "Elektronik",
+                Breadcrumb = "Elektronik ürünleri"
+            ),
+            childCategories = listOf(
+                ProductCategoryDTO(
+                    ProductCategoryId = 2,
+                    CategoryName = "Elektronik Bileşenler",
+                    Breadcrumb = "Elektronik > Elektronik Bileşenler"
+                )
+            )
+        )
     }
 }
-

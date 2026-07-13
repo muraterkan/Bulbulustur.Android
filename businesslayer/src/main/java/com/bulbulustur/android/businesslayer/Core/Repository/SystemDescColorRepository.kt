@@ -12,10 +12,14 @@ class SystemDescColorRepository(
     private val apiClient: ApiClient = ApiClient
 ) : ISystemDescColorRepository {
 
-    override suspend fun GetSystemDescColorListAsync(): Result<List<SystemDescColorDTO>> {
+    override suspend fun GetSystemDescColorsAsync(
+        languageId: Int,
+        count: Int
+    ): Result<List<SystemDescColorDTO>> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetSystemDescColorListAsync"
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "MasterData/GetSystemDescColorsAsync",
+            query = "languageId=$languageId&count=$count"
         )
     }
 

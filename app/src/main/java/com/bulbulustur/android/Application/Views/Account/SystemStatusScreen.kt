@@ -340,9 +340,11 @@ private fun SystemStatusIncidentCard(
 
 @Composable
 private fun SystemStatusIncidentRow(incident: StatusIncidentDTO) {
-    val statusText = incident.IncidentStateName.ifBlank {
-        incident.SeverityName
-    }
+    val statusText = incident.IncidentStateName
+        ?.takeIf { it.isNotBlank() }
+        ?: incident.SeverityName
+            ?.takeIf { it.isNotBlank() }
+        ?: "Bilinmiyor"
 
     val statusColors = systemStatusColors(statusText)
 

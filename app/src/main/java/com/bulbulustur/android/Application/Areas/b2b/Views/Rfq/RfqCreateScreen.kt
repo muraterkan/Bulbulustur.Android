@@ -32,6 +32,7 @@ import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
+import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCategorySearchSelectInput
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbSelectInput
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbSelectOption
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbTextInput
@@ -65,6 +66,7 @@ fun RfqCreateScreen(
     initialProductName: String = "",
     onBackClick: () -> Unit = {},
     onRetryOptionsClick: () -> Unit = {},
+    onCategorySearch: (String) -> Unit = {},
     onSendClick: (BuyerRequestInsertModel) -> Unit = {}
 ) {
     var productName by remember { mutableStateOf(initialProductName) }
@@ -178,7 +180,7 @@ fun RfqCreateScreen(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "Teklif İste",
+                title = "Teklif Talebi",
                 onBackClick = onBackClick
             )
         }
@@ -207,7 +209,7 @@ fun RfqCreateScreen(
                         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
                     ) {
                         Text(
-                            text = "Yeni Fiyat Teklifi İsteği",
+                            text = "Teklif Talebi Oluştur",
                             style = BbTypography.titleMedium,
                             color = MaterialTheme.colorScheme.onSurface
                         )
@@ -279,16 +281,25 @@ fun RfqCreateScreen(
                         enabled = !isSubmitting
                     )
 
-                    BbSelectInput(
+                    BbCategorySearchSelectInput(
                         selectedValue = categoryId,
                         onValueChange = {
                             categoryId = it
                             validationMessage = null
                         },
+                        onSearchTextChange = onCategorySearch,
                         options = categoryOptions,
                         label = "Kategori",
-                        placeholder = if (isOptionsLoading) "Kategoriler yükleniyor..." else "Kategori seçiniz",
-                        enabled = !isOptionsLoading && !isSubmitting && categoryOptions.isNotEmpty()
+                        placeholder = if (isOptionsLoading) {
+                            "Kategoriler yükleniyor..."
+                        } else {
+                            "Kategori seçiniz"
+                        },
+                        searchPlaceholder = "Kategori ara",
+                        maximumVisibleOptionCount = 50,
+                        enabled = !isOptionsLoading &&
+                                !isSubmitting &&
+                                categoryOptions.isNotEmpty()
                     )
 
                     BbTextarea(
@@ -435,7 +446,7 @@ fun RfqCreateScreen(
                 }
             }
 
-            val visibleError = validationMessage ?: errorMessage
+            val visibleError = validationMessage ?: errorMessage?.takeIf { hasAllOptions }
 
             if (!visibleError.isNullOrBlank()) {
                 item {
@@ -455,7 +466,7 @@ fun RfqCreateScreen(
 
             item {
                 BbButton(
-                    text = "Teklif İsteğini Gönder",
+                    text = "Teklif Talebini Gönder",
                     onClick = {
                         val selectedCategory = productCategories.firstOrNull {
                             it.ProductCategoryId == categoryId.toIntOrNull()

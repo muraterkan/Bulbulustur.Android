@@ -174,7 +174,7 @@ private fun RfqDetailSummaryCard(
                     )
 
                     Text(
-                        text = buyerRequest.ProductName.ifBlank { "Teklif İsteği" },
+                        text = buyerRequest.ProductName.ifBlank { "Teklif Alği" },
                         style = BbTypography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -188,7 +188,7 @@ private fun RfqDetailSummaryCard(
             }
 
             BbButton(
-                text = "Yeni Teklif İste",
+                text = "Yeni Teklif Al",
                 onClick = onCreateRfqClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Light,

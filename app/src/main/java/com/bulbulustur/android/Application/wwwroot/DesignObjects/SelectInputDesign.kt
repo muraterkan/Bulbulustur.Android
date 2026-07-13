@@ -219,3 +219,229 @@ private fun BbSelectSupportText(
         )
     }
 }
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun BbSearchableSelectInput(
+    selectedValue: String,
+    options: List<BbSelectOption>,
+    onValueChange: (String) -> Unit,
+    label: String,
+    modifier: Modifier = Modifier,
+    placeholder: String = "Seçiniz",
+    searchPlaceholder: String = "Ara...",
+    helperText: String? = null,
+    errorText: String? = null,
+    enabled: Boolean = true,
+    maximumVisibleOptionCount: Int = 50
+) {
+    var isExpanded by remember {
+        mutableStateOf(false)
+    }
+
+    var searchText by remember {
+        mutableStateOf("")
+    }
+
+    val selectedText =
+        options
+            .firstOrNull { option ->
+                option.value == selectedValue
+            }
+            ?.text
+            .orEmpty()
+
+    val visibleOptions =
+        remember(
+            options,
+            searchText,
+            maximumVisibleOptionCount
+        ) {
+            val normalizedSearch =
+                searchText.trim()
+
+            options
+                .asSequence()
+                .filter { option ->
+                    normalizedSearch.isBlank() ||
+                            option.text.contains(
+                                other = normalizedSearch,
+                                ignoreCase = true
+                            )
+                }
+                .take(
+                    maximumVisibleOptionCount
+                        .coerceAtLeast(1)
+                )
+                .toList()
+        }
+
+    Column(
+        modifier =
+            modifier.fillMaxWidth()
+    ) {
+        ExposedDropdownMenuBox(
+            expanded =
+                isExpanded,
+            onExpandedChange = {
+                if (enabled) {
+                    isExpanded =
+                        !isExpanded
+
+                    if (!isExpanded) {
+                        searchText =
+                            ""
+                    }
+                }
+            },
+            modifier =
+                Modifier.fillMaxWidth()
+        ) {
+            OutlinedTextField(
+                value =
+                    selectedText,
+                onValueChange = {
+                },
+                modifier =
+                    Modifier
+                        .menuAnchor()
+                        .fillMaxWidth()
+                        .defaultMinSize(
+                            minHeight =
+                                BBSpacing.Space14
+                        ),
+                enabled =
+                    enabled,
+                readOnly =
+                    true,
+                label = {
+                    Text(
+                        text =
+                            label
+                    )
+                },
+                placeholder = {
+                    Text(
+                        text =
+                            placeholder
+                    )
+                },
+                trailingIcon = {
+                    Icon(
+                        imageVector =
+                            if (isExpanded) {
+                                Icons.Outlined.ArrowDropUp
+                            } else {
+                                Icons.Outlined.ArrowDropDown
+                            },
+                        contentDescription =
+                            if (isExpanded) {
+                                "Listeyi kapat"
+                            } else {
+                                "Listeyi aç"
+                            },
+                        tint =
+                            MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier =
+                            Modifier.defaultMinSize(
+                                minWidth =
+                                    BBIcon.SizeMd,
+                                minHeight =
+                                    BBIcon.SizeMd
+                            )
+                    )
+                },
+                isError =
+                    errorText != null,
+                shape =
+                    BBRadius.Input,
+                colors =
+                    ExposedDropdownMenuDefaults.outlinedTextFieldColors()
+            )
+
+            ExposedDropdownMenu(
+                expanded =
+                    isExpanded,
+                onDismissRequest = {
+                    isExpanded =
+                        false
+
+                    searchText =
+                        ""
+                },
+                modifier =
+                    Modifier.fillMaxWidth()
+            ) {
+                OutlinedTextField(
+                    value =
+                        searchText,
+                    onValueChange = {
+                        searchText =
+                            it
+                    },
+                    modifier =
+                        Modifier.fillMaxWidth(),
+                    singleLine =
+                        true,
+                    placeholder = {
+                        Text(
+                            text =
+                                searchPlaceholder
+                        )
+                    },
+                    shape =
+                        BBRadius.Input
+                )
+
+                if (visibleOptions.isEmpty()) {
+                    DropdownMenuItem(
+                        text = {
+                            Text(
+                                text =
+                                    "Sonuç bulunamadı.",
+                                style =
+                                    MaterialTheme.typography.bodyMedium,
+                                color =
+                                    MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        },
+                        onClick = {
+                        },
+                        enabled =
+                            false
+                    )
+                } else {
+                    visibleOptions.forEach { option ->
+                        DropdownMenuItem(
+                            text = {
+                                Text(
+                                    text =
+                                        option.text,
+                                    style =
+                                        MaterialTheme.typography.bodyMedium
+                                )
+                            },
+                            onClick = {
+                                onValueChange(
+                                    option.value
+                                )
+
+                                searchText =
+                                    ""
+
+                                isExpanded =
+                                    false
+                            }
+                        )
+                    }
+                }
+            }
+        }
+
+        BbSelectSupportText(
+            helperText =
+                helperText,
+            errorText =
+                errorText
+        )
+    }
+}

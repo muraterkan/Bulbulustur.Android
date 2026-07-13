@@ -226,7 +226,7 @@ fun WholesaleProductListScreen(
 
             BbSectionHeader(
                 title = if (selectedCategory == "Tümü") {
-                    "Tüm toptan ürünler"
+                    "Tüm Toptan ürünler"
                 } else {
                     selectedCategory
                 },

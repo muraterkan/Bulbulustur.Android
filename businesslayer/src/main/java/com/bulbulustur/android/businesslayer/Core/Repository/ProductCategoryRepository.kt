@@ -20,6 +20,14 @@ class ProductCategoryRepository(
         )
     }
 
+    override suspend fun GetCachedProductCategoriesAsync(languageId: Int): Result<List<ProductCategoryDTO>> {
+        return apiClient.GetAsync(
+            baseUrl = ApiRoutes.PRODUCT_CATEGORY_PRODUCT_CATEGORIES_BASE_URL,
+            method = "GetCachedProductCategories",
+            query = "languageId=$languageId"
+        )
+    }
+
     override suspend fun GetProductCategoryByIdAsync(productCategoryId: Int): Result<ProductCategoryUpdateModel?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.PRODUCT_CATEGORY_PRODUCT_CATEGORIES_BASE_URL,

@@ -8,11 +8,10 @@ import com.bulbulustur.android.businesslayer.Core.Network.ApiClient
 import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
-class AddressCountryDepartmentRepository(
-    private val apiClient: ApiClient = ApiClient
-) : IAddressCountryDepartmentRepository {
+class AddressCountryDepartmentRepository(private val apiClient: ApiClient = ApiClient) : IAddressCountryDepartmentRepository
+{
 
-    override suspend fun GetCountryDepartmentsAsync(
+    override suspend fun GetAddressCountryDepartmentsAsync(
         countryId: Int,
         countryStateId: Int,
         count: Int
@@ -21,7 +20,7 @@ class AddressCountryDepartmentRepository(
             baseUrl =
                 ApiRoutes.GLOBALIZATION_BASE_URL,
             method =
-                "AddressCountryDepartment/GetCountryDepartmentsAsync",
+                "AddressCountryDepartment/GetAddressCountryDepartmentsAsync",
             query =
                 buildString {
                     append("countryId=$countryId")
@@ -34,7 +33,7 @@ class AddressCountryDepartmentRepository(
     override suspend fun GetAddressCountryDepartmentListAsync():
             Result<List<AddressCountryDepartmentDTO>> {
 
-        return GetCountryDepartmentsAsync(
+        return GetAddressCountryDepartmentsAsync(
             countryId =
                 1,
             countryStateId =

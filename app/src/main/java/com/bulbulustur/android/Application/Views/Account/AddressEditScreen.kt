@@ -64,7 +64,7 @@ fun AddressEditScreen(
     var addressTitle by remember { mutableStateOf("") }
     var isDefault by remember { mutableStateOf(false) }
 
-    LaunchedEffect(address?.AddressKey) {
+    LaunchedEffect(address) {
         val currentAddress = address ?: return@LaunchedEffect
 
         name = currentAddress.Name

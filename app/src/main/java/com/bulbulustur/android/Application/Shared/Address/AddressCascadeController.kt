@@ -36,158 +36,111 @@ class AddressCascadeController(
     val State: StateFlow<AddressCascadeState> =
         _state.asStateFlow()
 
-    fun OnEvent(
-        event: AddressCascadeEvent
-    ) {
+    fun OnEvent(event: AddressCascadeEvent) {
         when (event) {
-            is AddressCascadeEvent.LoadCountries -> {
-                LoadCountries(
-                    languageId =
-                        event.LanguageId
-                )
-            }
+            is AddressCascadeEvent.LoadCountries -> LoadCountries(event.LanguageId)
 
             is AddressCascadeEvent.SelectCountry -> {
                 SelectCountry(
-                    countryId =
-                        event.CountryId,
-                    languageId =
-                        event.LanguageId
+                    countryId = event.CountryId,
+                    languageId = event.LanguageId
                 )
             }
 
             is AddressCascadeEvent.SelectCountryState -> {
                 SelectCountryState(
-                    countryStateId =
-                        event.CountryStateId,
-                    languageId =
-                        event.LanguageId
+                    countryStateId = event.CountryStateId,
+                    languageId = event.LanguageId
                 )
             }
 
             is AddressCascadeEvent.SelectCountryDepartment -> {
                 SelectCountryDepartment(
-                    countryDepartmentId =
-                        event.CountryDepartmentId,
-                    languageId =
-                        event.LanguageId
+                    countryDepartmentId = event.CountryDepartmentId,
+                    languageId = event.LanguageId
                 )
             }
 
             is AddressCascadeEvent.SelectCity -> {
                 SelectCity(
-                    cityId =
-                        event.CityId,
-                    languageId =
-                        event.LanguageId
+                    cityId = event.CityId,
+                    languageId = event.LanguageId
                 )
             }
 
             is AddressCascadeEvent.SelectDistrict -> {
-                SelectDistrict(
-                    districtId =
-                        event.DistrictId
-                )
+                SelectDistrict(event.DistrictId)
             }
 
             is AddressCascadeEvent.SetInitialSelection -> {
                 SetInitialSelection(
-                    selection =
-                        event.Selection,
-                    languageId =
-                        event.LanguageId
+                    selection = event.Selection,
+                    languageId = event.LanguageId
                 )
             }
 
-            AddressCascadeEvent.Clear -> {
-                Clear()
-            }
-
-            AddressCascadeEvent.ClearErrors -> {
-                ClearErrors()
-            }
+            AddressCascadeEvent.Clear -> Clear()
+            AddressCascadeEvent.ClearErrors -> ClearErrors()
         }
     }
 
-    fun LoadCountries(
-        languageId: Int
-    ) {
+    fun LoadCountries(languageId: Int) {
         viewModelScope.launch {
-            LoadCountriesInternal(
-                languageId =
-                    languageId
-            )
+            LoadCountriesInternal(languageId)
         }
     }
 
-    fun SelectCountry(
-        countryId: Int,
-        languageId: Int
-    ) {
+    fun SelectCountry(countryId: Int, languageId: Int) {
         viewModelScope.launch {
             SelectCountryInternal(
-                countryId =
-                    countryId,
-                languageId =
-                    languageId
+                countryId = countryId,
+                languageId = languageId
             )
         }
     }
 
-    fun SelectCountryState(
-        countryStateId: Int,
-        languageId: Int
-    ) {
+    fun SelectCountryState(countryStateId: Int, languageId: Int) {
         viewModelScope.launch {
             SelectCountryStateInternal(
-                countryStateId =
-                    countryStateId,
-                languageId =
-                    languageId
+                countryStateId = countryStateId,
+                languageId = languageId
             )
         }
     }
 
-    fun SelectCountryDepartment(
-        countryDepartmentId: Int?,
-        languageId: Int
-    ) {
+    fun SelectCountryDepartment(countryDepartmentId: Int?, languageId: Int) {
         viewModelScope.launch {
             SelectCountryDepartmentInternal(
-                countryDepartmentId =
-                    countryDepartmentId,
-                languageId =
-                    languageId
+                countryDepartmentId = countryDepartmentId,
+                languageId = languageId
             )
         }
     }
 
-    fun SelectCity(
-        cityId: Int,
-        languageId: Int
-    ) {
+    fun SelectCity(cityId: Int, languageId: Int) {
         viewModelScope.launch {
             SelectCityInternal(
-                cityId =
-                    cityId,
-                languageId =
-                    languageId
+                cityId = cityId,
+                languageId = languageId
             )
         }
     }
 
-    fun SelectDistrict(
-        districtId: Int?
-    ) {
+    fun SelectDistrict(districtId: Int?) {
+        val normalizedDistrictId =
+            districtId?.takeIf {
+                    selectedDistrictId ->
+                _state.value.Districts.any {
+                    it.AddressDistrictId == selectedDistrictId
+                }
+            }
+
         _state.update {
             it.copy(
                 Selection =
                     it.Selection.copy(
                         DistrictId =
-                            districtId
-                                ?.takeIf { value ->
-                                    value > 0
-                                }
+                            normalizedDistrictId
                     ),
                 DistrictError =
                     null
@@ -195,18 +148,12 @@ class AddressCascadeController(
         }
     }
 
-    fun SetInitialSelection(
-        selection: AddressCascadeSelection,
-        languageId: Int
-    ) {
+    fun SetInitialSelection(selection: AddressCascadeSelection, languageId: Int) {
         viewModelScope.launch {
             val normalizedSelection =
                 selection.Normalize()
 
-            LoadCountriesInternal(
-                languageId =
-                    languageId
-            )
+            LoadCountriesInternal(languageId)
 
             if (!normalizedSelection.HasCountry) {
                 _state.update {
@@ -220,12 +167,9 @@ class AddressCascadeController(
             }
 
             SelectCountryInternal(
-                countryId =
-                    normalizedSelection.CountryId,
-                languageId =
-                    languageId,
-                initialSelection =
-                    normalizedSelection
+                countryId = normalizedSelection.CountryId,
+                languageId = languageId,
+                initialSelection = normalizedSelection
             )
 
             _state.update {
@@ -252,9 +196,7 @@ class AddressCascadeController(
         return _state.value.Selection
     }
 
-    private suspend fun LoadCountriesInternal(
-        languageId: Int
-    ): List<AddressCountryDTO> {
+    private suspend fun LoadCountriesInternal(languageId: Int): List<AddressCountryDTO> {
         _state.update {
             it.copy(
                 IsCountriesLoading =
@@ -270,16 +212,27 @@ class AddressCascadeController(
                     "AddressCascade.Countries.Language.$languageId.Count.$COUNTRY_COUNT"
             ) {
                 addressCountryRepository.GetAddressCountriesAsync(
-                    languageId =
-                        languageId,
-                    count =
-                        COUNTRY_COUNT
+                    languageId = languageId,
+                    count = COUNTRY_COUNT
                 )
             }
 
-        val countries: List<AddressCountryDTO> =
+        val countries =
             if (response.Success) {
-                response.Data.orEmpty()
+                response.Data
+                    .orEmpty()
+                    .filter {
+                        it.AddressCountryId > 0 &&
+                                it.Content.isNotBlank()
+                    }
+                    .sortedWith(
+                        compareBy<AddressCountryDTO> {
+                            it.DisplayOrder
+                                ?: Int.MAX_VALUE
+                        }.thenBy {
+                            it.Content
+                        }
+                    )
             } else {
                 emptyList()
             }
@@ -291,11 +244,16 @@ class AddressCascadeController(
                 IsCountriesLoading =
                     false,
                 CountryError =
-                    if (response.Success) {
-                        null
-                    } else {
-                        response.Message
-                            ?: DEFAULT_COUNTRY_ERROR
+                    when {
+                        !response.Success ->
+                            response.Message
+                                ?: DEFAULT_COUNTRY_ERROR
+
+                        countries.isEmpty() ->
+                            "Ülke verisi bulunamadı."
+
+                        else ->
+                            null
                     }
             )
         }
@@ -316,6 +274,22 @@ class AddressCascadeController(
             return
         }
 
+        val selectedCountryExists =
+            _state.value.Countries.any {
+                it.AddressCountryId == countryId
+            }
+
+        if (!selectedCountryExists) {
+            _state.update {
+                it.ClearCountrySelection().copy(
+                    CountryError =
+                        "Seçilen ülke bulunamadı."
+                )
+            }
+
+            return
+        }
+
         _state.update {
             it.ClearAfterCountry(
                 countryId =
@@ -330,34 +304,14 @@ class AddressCascadeController(
             )
 
         if (countryStates.isEmpty()) {
-            LoadCitiesInternal(
-                languageId =
-                    languageId,
-                countryId =
-                    countryId,
-                countryStateId =
-                    0,
-                countryDepartmentId =
-                    null
+            LoadCitiesByCountryInternal(
+                countryId = countryId
             )
 
-            val initialCityId =
-                initialSelection
-                    ?.CityId
-                    ?.takeIf {
-                        it > 0
-                    }
-
-            if (initialCityId != null) {
-                SelectCityInternal(
-                    cityId =
-                        initialCityId,
-                    languageId =
-                        languageId,
-                    initialDistrictId =
-                        initialSelection.DistrictId
-                )
-            }
+            SelectInitialCityIfAvailable(
+                initialSelection = initialSelection,
+                languageId = languageId
+            )
 
             return
         }
@@ -365,25 +319,28 @@ class AddressCascadeController(
         val initialCountryStateId =
             initialSelection
                 ?.CountryStateId
-                ?.takeIf {
-                    it > 0
+                ?.takeIf { countryStateId ->
+                    countryStates.any {
+                        it.AddressCountryStateId == countryStateId
+                    }
                 }
 
-        if (initialCountryStateId != null) {
+        val targetCountryStateId =
+            initialCountryStateId
+                ?: countryStates
+                    .singleOrNull()
+                    ?.AddressCountryStateId
+
+        if (targetCountryStateId != null) {
             SelectCountryStateInternal(
-                countryStateId =
-                    initialCountryStateId,
-                languageId =
-                    languageId,
-                initialSelection =
-                    initialSelection
+                countryStateId = targetCountryStateId,
+                languageId = languageId,
+                initialSelection = initialSelection
             )
         }
     }
 
-    private suspend fun LoadCountryStatesInternal(
-        countryId: Int
-    ): List<AddressCountryStateDTO> {
+    private suspend fun LoadCountryStatesInternal(countryId: Int): List<AddressCountryStateDTO> {
         _state.update {
             it.copy(
                 IsCountryStatesLoading =
@@ -398,20 +355,21 @@ class AddressCascadeController(
                 cacheKey =
                     "AddressCascade.CountryStates.Country.$countryId.Count.$ITEM_COUNT"
             ) {
-                addressCountryStateRepository.GetCountryStatesAsync(
-                    countryId =
-                        countryId,
-                    count =
-                        ITEM_COUNT
+                addressCountryStateRepository.GetAddressCountryStatesAsync(
+                    countryId = countryId,
+                    count = ITEM_COUNT
                 )
             }
 
-        val countryStates: List<AddressCountryStateDTO> =
+        val countryStates =
             if (response.Success) {
                 response.Data
                     .orEmpty()
-                    .filter { countryState ->
-                        countryState.HasAdministration
+                    .filter {
+                        it.AddressCountryStateId > 0 &&
+                                it.CountryId == countryId &&
+                                it.StateName.isNotBlank() &&
+                                it.HasAdministration
                     }
                     .sortedWith(
                         compareBy<AddressCountryStateDTO> {
@@ -452,14 +410,31 @@ class AddressCascadeController(
         val currentCountryId =
             _state.value.Selection.CountryId
 
-        if (
-            currentCountryId <= 0 ||
-            countryStateId <= 0
-        ) {
+        if (currentCountryId <= 0 || countryStateId <= 0) {
             _state.update {
                 it.ClearAfterCountryState(
                     countryStateId =
                         0
+                )
+            }
+
+            return
+        }
+
+        val selectedCountryStateExists =
+            _state.value.CountryStates.any {
+                it.AddressCountryStateId == countryStateId &&
+                        it.CountryId == currentCountryId
+            }
+
+        if (!selectedCountryStateExists) {
+            _state.update {
+                it.ClearAfterCountryState(
+                    countryStateId =
+                        0
+                ).copy(
+                    CountryStateError =
+                        "Seçilen state veya bölge bu ülkeye ait değil."
                 )
             }
 
@@ -475,41 +450,22 @@ class AddressCascadeController(
 
         val countryDepartments =
             LoadCountryDepartmentsInternal(
-                countryId =
-                    currentCountryId,
-                countryStateId =
-                    countryStateId
+                countryId = currentCountryId,
+                countryStateId = countryStateId
             )
 
         if (countryDepartments.isEmpty()) {
             LoadCitiesInternal(
-                languageId =
-                    languageId,
-                countryId =
-                    currentCountryId,
-                countryStateId =
-                    countryStateId,
-                countryDepartmentId =
-                    null
+                languageId = languageId,
+                countryId = currentCountryId,
+                countryStateId = countryStateId,
+                countryDepartmentId = null
             )
 
-            val initialCityId =
-                initialSelection
-                    ?.CityId
-                    ?.takeIf {
-                        it > 0
-                    }
-
-            if (initialCityId != null) {
-                SelectCityInternal(
-                    cityId =
-                        initialCityId,
-                    languageId =
-                        languageId,
-                    initialDistrictId =
-                        initialSelection.DistrictId
-                )
-            }
+            SelectInitialCityIfAvailable(
+                initialSelection = initialSelection,
+                languageId = languageId
+            )
 
             return
         }
@@ -517,18 +473,23 @@ class AddressCascadeController(
         val initialCountryDepartmentId =
             initialSelection
                 ?.CountryDepartmentId
-                ?.takeIf {
-                    it > 0
+                ?.takeIf { departmentId ->
+                    countryDepartments.any {
+                        it.AddressCountryDepartmentId == departmentId
+                    }
                 }
 
-        if (initialCountryDepartmentId != null) {
+        val targetCountryDepartmentId =
+            initialCountryDepartmentId
+                ?: countryDepartments
+                    .singleOrNull()
+                    ?.AddressCountryDepartmentId
+
+        if (targetCountryDepartmentId != null) {
             SelectCountryDepartmentInternal(
-                countryDepartmentId =
-                    initialCountryDepartmentId,
-                languageId =
-                    languageId,
-                initialSelection =
-                    initialSelection
+                countryDepartmentId = targetCountryDepartmentId,
+                languageId = languageId,
+                initialSelection = initialSelection
             )
         }
     }
@@ -556,19 +517,26 @@ class AddressCascadeController(
                         append(".Count.$ITEM_COUNT")
                     }
             ) {
-                addressCountryDepartmentRepository.GetCountryDepartmentsAsync(
-                    countryId =
-                        countryId,
-                    countryStateId =
-                        countryStateId,
-                    count =
-                        ITEM_COUNT
+                addressCountryDepartmentRepository.GetAddressCountryDepartmentsAsync(
+                    countryId = countryId,
+                    countryStateId = countryStateId,
+                    count = ITEM_COUNT
                 )
             }
 
-        val countryDepartments: List<AddressCountryDepartmentDTO> =
+        val countryDepartments =
             if (response.Success) {
-                response.Data.orEmpty()
+                response.Data
+                    .orEmpty()
+                    .filter {
+                        it.AddressCountryDepartmentId > 0 &&
+                                it.CountryId == countryId &&
+                                it.StateId == countryStateId &&
+                                it.DepartmentName.isNotBlank()
+                    }
+                    .sortedBy {
+                        it.DepartmentName
+                    }
             } else {
                 emptyList()
             }
@@ -600,11 +568,34 @@ class AddressCascadeController(
         val currentSelection =
             _state.value.Selection
 
+        if (!currentSelection.HasCountry || !currentSelection.HasCountryState) {
+            return
+        }
+
         val normalizedCountryDepartmentId =
             countryDepartmentId
-                ?.takeIf {
-                    it > 0
+                ?.takeIf { departmentId ->
+                    _state.value.CountryDepartments.any {
+                        it.AddressCountryDepartmentId == departmentId &&
+                                it.CountryId == currentSelection.CountryId &&
+                                it.StateId == currentSelection.CountryStateId
+                    }
                 }
+
+        if (
+            countryDepartmentId != null &&
+            countryDepartmentId > 0 &&
+            normalizedCountryDepartmentId == null
+        ) {
+            _state.update {
+                it.copy(
+                    CountryDepartmentError =
+                        "Seçilen departman bu state veya bölgeye ait değil."
+                )
+            }
+
+            return
+        }
 
         _state.update {
             it.ClearAfterCountryDepartment(
@@ -613,38 +604,84 @@ class AddressCascadeController(
             )
         }
 
-        if (currentSelection.CountryId <= 0) {
-            return
-        }
-
         LoadCitiesInternal(
-            languageId =
-                languageId,
-            countryId =
-                currentSelection.CountryId,
-            countryStateId =
-                currentSelection.CountryStateId,
-            countryDepartmentId =
-                normalizedCountryDepartmentId
+            languageId = languageId,
+            countryId = currentSelection.CountryId,
+            countryStateId = currentSelection.CountryStateId,
+            countryDepartmentId = normalizedCountryDepartmentId
         )
 
-        val initialCityId =
-            initialSelection
-                ?.CityId
-                ?.takeIf {
-                    it > 0
-                }
+        SelectInitialCityIfAvailable(
+            initialSelection = initialSelection,
+            languageId = languageId
+        )
+    }
+    private suspend fun LoadCitiesByCountryInternal(
+        countryId: Int
+    ): List<AddressCityDTO> {
+        if (countryId <= 0) {
+            return emptyList()
+        }
 
-        if (initialCityId != null) {
-            SelectCityInternal(
-                cityId =
-                    initialCityId,
-                languageId =
-                    languageId,
-                initialDistrictId =
-                    initialSelection.DistrictId
+        _state.update {
+            it.copy(
+                IsCitiesLoading = true,
+                CityError = null,
+                Cities = emptyList(),
+                Districts = emptyList()
             )
         }
+
+        val response =
+            executeService.GetAsync(
+                cacheKey =
+                    "AddressCascade.Cities.Country.$countryId.Count.$ITEM_COUNT"
+            ) {
+                addressCityRepository.GetAddressCitiesAsync(
+                    countryId = countryId,
+                    count = ITEM_COUNT
+                )
+            }
+
+        val cities =
+            if (response.Success) {
+                response.Data
+                    .orEmpty()
+                    .filter {
+                        it.AddressCityId > 0 &&
+                                it.CountryId == countryId &&
+                                it.Content.isNotBlank()
+                    }
+                    .sortedWith(
+                        compareBy<AddressCityDTO> {
+                            it.DisplayOrder ?: Int.MAX_VALUE
+                        }.thenBy {
+                            it.Content
+                        }
+                    )
+            } else {
+                emptyList()
+            }
+
+        _state.update {
+            it.copy(
+                Cities = cities,
+                IsCitiesLoading = false,
+                CityError =
+                    when {
+                        !response.Success ->
+                            response.Message ?: DEFAULT_CITY_ERROR
+
+                        cities.isEmpty() ->
+                            "Bu ülke için şehir bulunamadı."
+
+                        else ->
+                            null
+                    }
+            )
+        }
+
+        return cities
     }
 
     private suspend fun LoadCitiesInternal(
@@ -653,12 +690,27 @@ class AddressCascadeController(
         countryStateId: Int,
         countryDepartmentId: Int?
     ): List<AddressCityDTO> {
+        if (countryId <= 0 || countryStateId <= 0) {
+            _state.update {
+                it.copy(
+                    Cities =
+                        emptyList(),
+                    Districts =
+                        emptyList(),
+                    CityError =
+                        "Şehir yüklemek için ülke ve state seçilmelidir."
+                )
+            }
+
+            return emptyList()
+        }
+
         _state.update {
             it.copy(
                 IsCitiesLoading =
                     true,
                 CityError =
-                    "Seçilen şehir bulunamadı.",
+                    null,
                 Cities =
                     emptyList(),
                 Districts =
@@ -679,22 +731,36 @@ class AddressCascadeController(
                     }
             ) {
                 addressCityRepository.GetAddressCitiesAsync(
-                    languageId =
-                        languageId,
-                    countryId =
-                        countryId,
-                    countryStateId =
-                        countryStateId,
-                    countryDepartmentId =
-                        countryDepartmentId,
-                    count =
-                        ITEM_COUNT
+                    languageId = languageId,
+                    countryId = countryId,
+                    countryStateId = countryStateId,
+                    countryDepartmentId = countryDepartmentId,
+                    count = ITEM_COUNT
                 )
             }
 
-        val cities: List<AddressCityDTO> =
+        val cities =
             if (response.Success) {
-                response.Data.orEmpty()
+                response.Data
+                    .orEmpty()
+                    .filter {
+                        it.AddressCityId > 0 &&
+                                it.CountryId == countryId &&
+                                it.CountryStateId == countryStateId &&
+                                (
+                                        countryDepartmentId == null ||
+                                                it.CountryDepartmentId == countryDepartmentId
+                                        ) &&
+                                it.Content.isNotBlank()
+                    }
+                    .sortedWith(
+                        compareBy<AddressCityDTO> {
+                            it.DisplayOrder
+                                ?: Int.MAX_VALUE
+                        }.thenBy {
+                            it.Content
+                        }
+                    )
             } else {
                 emptyList()
             }
@@ -706,16 +772,42 @@ class AddressCascadeController(
                 IsCitiesLoading =
                     false,
                 CityError =
-                    if (response.Success) {
-                        null
-                    } else {
-                        response.Message
-                            ?: DEFAULT_CITY_ERROR
+                    when {
+                        !response.Success ->
+                            response.Message
+                                ?: DEFAULT_CITY_ERROR
+
+                        cities.isEmpty() ->
+                            "Seçilen coğrafi zincir için şehir bulunamadı."
+
+                        else ->
+                            null
                     }
             )
         }
 
         return cities
+    }
+
+    private suspend fun SelectInitialCityIfAvailable(
+        initialSelection: AddressCascadeSelection?,
+        languageId: Int
+    ) {
+        val initialCityId =
+            initialSelection
+                ?.CityId
+                ?.takeIf { cityId ->
+                    _state.value.Cities.any {
+                        it.AddressCityId == cityId
+                    }
+                }
+                ?: return
+
+        SelectCityInternal(
+            cityId = initialCityId,
+            languageId = languageId,
+            initialDistrictId = initialSelection.DistrictId
+        )
     }
 
     private suspend fun SelectCityInternal(
@@ -724,106 +816,90 @@ class AddressCascadeController(
         initialDistrictId: Int? = null
     ) {
         if (cityId <= 0) {
-            _state.update { currentState ->
-                currentState.copy(
-                    Districts =
-                        emptyList(),
-                    Selection =
-                        currentState.Selection.copy(
-                            CityId =
-                                0,
-                            DistrictId =
-                                null
-                        ),
-                    IsDistrictsLoading =
-                        false,
-                    DistrictError =
-                        null
+            _state.update {
+                it.ClearAfterCity(
+                    cityId =
+                        0
                 )
             }
 
             return
-        }
-
-        val selectedCity =
-            _state.value.Cities.firstOrNull { city ->
-                city.AddressCityId == cityId
-            }
-
-        if (selectedCity == null) {
-            _state.update { currentState ->
-                currentState.copy(
-                    Districts =
-                        emptyList(),
-                    Selection =
-                        currentState.Selection.copy(
-                            CityId =
-                                0,
-                            DistrictId =
-                                null
-                        ),
-                    IsDistrictsLoading =
-                        false,
-                    DistrictError =
-                        null
-                )
-            }
-
-            return
-        }
-
-        _state.update { currentState ->
-            currentState.copy(
-                Districts =
-                    emptyList(),
-                Selection =
-                    currentState.Selection.copy(
-                        CountryStateId =
-                            selectedCity.CountryStateId
-                                .takeIf {
-                                    it > 0
-                                }
-                                ?: currentState.Selection.CountryStateId,
-                        CountryDepartmentId =
-                            selectedCity.CountryDepartmentId
-                                ?.takeIf {
-                                    it > 0
-                                }
-                                ?: currentState.Selection.CountryDepartmentId,
-                        CityId =
-                            selectedCity.AddressCityId,
-                        DistrictId =
-                            null
-                    ),
-                IsDistrictsLoading =
-                    false,
-                DistrictError =
-                    null
-            )
         }
 
         val currentSelection =
             _state.value.Selection
 
-        if (!currentSelection.IsTurkey) {
+        val selectedCity =
+            _state.value.Cities.firstOrNull {
+                it.AddressCityId == cityId &&
+                        it.CountryId == currentSelection.CountryId &&
+                        (
+                                !currentSelection.HasCountryState ||
+                                        it.CountryStateId == currentSelection.CountryStateId
+                                ) &&
+                        (
+                                currentSelection.CountryDepartmentId == null ||
+                                        it.CountryDepartmentId == currentSelection.CountryDepartmentId
+                                )
+            }
+
+        if (selectedCity == null) {
+            _state.update {
+                it.ClearAfterCity(
+                    cityId =
+                        0
+                ).copy(
+                    CityError =
+                        "Seçilen şehir mevcut coğrafi zincire ait değil."
+                )
+            }
+
             return
         }
 
+        _state.update {
+            it.ClearAfterCity(
+                cityId =
+                    selectedCity.AddressCityId
+            ).copy(
+                Selection =
+                    it.Selection.copy(
+                        CountryId =
+                            selectedCity.CountryId,
+                        CountryStateId =
+                            selectedCity.CountryStateId,
+                        CountryDepartmentId =
+                            selectedCity.CountryDepartmentId
+                                ?.takeIf {
+                                        value ->
+                                    value > 0
+                                },
+                        CityId =
+                            selectedCity.AddressCityId,
+                        DistrictId =
+                            null
+                    ),
+                CityError =
+                    null
+            )
+        }
+
+        val selectedLocation =
+            _state.value.Selection
+
         LoadDistrictsInternal(
-            countryId =
-                currentSelection.CountryId,
-            countryStateId =
-                currentSelection.CountryStateId,
-            countryDepartmentId =
-                currentSelection.CountryDepartmentId,
-            cityId =
-                currentSelection.CityId
+            countryId = selectedLocation.CountryId,
+            countryStateId = selectedLocation.CountryStateId,
+            countryDepartmentId = selectedLocation.CountryDepartmentId,
+            cityId = selectedLocation.CityId
         )
 
         val normalizedInitialDistrictId =
             initialDistrictId
-                ?.takeIf {
-                    it > 0
+                ?.takeIf { districtId ->
+                    _state.value.Districts.any {
+                        it.AddressDistrictId == districtId
+                    }
                 }
 
         if (normalizedInitialDistrictId != null) {
@@ -864,22 +940,27 @@ class AddressCascadeController(
                     }
             ) {
                 addressDistrictRepository.GetAddressDistrictsAsync(
-                    countryId =
-                        countryId,
-                    countryStateId =
-                        countryStateId,
-                    countryDepartmentId =
-                        countryDepartmentId,
-                    cityId =
-                        cityId,
-                    count =
-                        ITEM_COUNT
+                    countryId = countryId,
+                    countryStateId = countryStateId,
+                    countryDepartmentId = countryDepartmentId,
+                    cityId = cityId,
+                    count = ITEM_COUNT
                 )
             }
 
-        val districts: List<AddressDistrictDTO> =
+        val districts =
             if (response.Success) {
-                response.Data.orEmpty()
+                response.Data
+                    .orEmpty()
+                    .filter {
+                        it.AddressDistrictId > 0 &&
+                                it.CountryId == countryId &&
+                                it.CityId == cityId &&
+                                !it.Content.isNullOrBlank()
+                    }
+                    .sortedBy {
+                        it.Content
+                    }
             } else {
                 emptyList()
             }

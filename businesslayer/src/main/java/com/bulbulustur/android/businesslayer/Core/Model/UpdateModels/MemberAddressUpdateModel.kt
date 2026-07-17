@@ -17,8 +17,8 @@ data class MemberAddressUpdateModel(
     val DistrictId: Int? = null,
     val PostCode: String = "",
     val Address: String = "",
-    val InitLatitude: String = "",
-    val InitLongitude: String = "",
+    val InitLatitude: String? = null,
+    val InitLongitude: String? = null,
     val Phone: String = "",
     val IsDefault: Boolean = false,
     val AddressKey: String = ""

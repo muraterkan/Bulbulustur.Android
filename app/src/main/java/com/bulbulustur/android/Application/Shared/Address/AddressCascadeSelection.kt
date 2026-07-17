@@ -30,17 +30,18 @@ data class AddressCascadeSelection(
             DistrictId != null &&
                     DistrictId > 0
 
-    val IsTurkey: Boolean
-        get() =
-            CountryId == TURKEY_COUNTRY_ID
-
     val IsLocationSelected: Boolean
         get() =
             HasCountry &&
+                    HasCountryState &&
                     HasCity
 
     fun Normalize(): AddressCascadeSelection {
         return copy(
+            CountryId =
+                CountryId.coerceAtLeast(
+                    0
+                ),
             CountryStateId =
                 CountryStateId.coerceAtLeast(
                     0
@@ -63,9 +64,6 @@ data class AddressCascadeSelection(
     }
 
     companion object {
-
-        const val TURKEY_COUNTRY_ID: Int =
-            209
 
         val Empty =
             AddressCascadeSelection()

@@ -12,93 +12,51 @@ class AddressCountryStateRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IAddressCountryStateRepository {
 
-    override suspend fun GetCountryStatesAsync(
-        countryId: Int,
-        count: Int
-    ): Result<List<AddressCountryStateDTO>> {
+    override suspend fun GetAddressCountryStatesAsync(countryId: Int, count: Int): Result<List<AddressCountryStateDTO>> {
         return apiClient.GetAsync(
-            baseUrl =
-                ApiRoutes.GLOBALIZATION_BASE_URL,
-            method =
-                "AddressCountryState/GetCountryStatesAsync",
-            query =
-                "countryId=$countryId&count=$count"
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "AddressCountryState/GetAddressCountryStatesAsync",
+            query = "countryId=$countryId&count=$count"
         )
     }
 
-    override suspend fun GetAddressCountryStateListAsync():
-            Result<List<AddressCountryStateDTO>> {
-
-        return GetCountryStatesAsync(
-            countryId =
-                1,
-            count =
-                100
-        )
-    }
-
-    override suspend fun GetAddressCountryStateByIdAsync(
-        addressCountryStateId: Int
-    ): Result<AddressCountryStateUpdateModel?> {
+    override suspend fun GetAddressCountryStateByIdAsync(addressCountryStateId: Int): Result<AddressCountryStateUpdateModel?> {
         return apiClient.GetAsync(
-            baseUrl =
-                ApiRoutes.GLOBALIZATION_BASE_URL,
-            method =
-                "AddressCountryState/GetAddressCountryStateByIdAsync",
-            query =
-                "addressCountryStateId=$addressCountryStateId"
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "AddressCountryState/GetAddressCountryStateByIdAsync",
+            query = "addressCountryStateId=$addressCountryStateId"
         )
     }
 
-    override suspend fun GetAddressCountryStateByIdExtendedAsync(
-        addressCountryStateId: Int
-    ): Result<AddressCountryStateDTO?> {
+    override suspend fun GetAddressCountryStateByIdExtendedAsync(addressCountryStateId: Int): Result<AddressCountryStateDTO?> {
         return apiClient.GetAsync(
-            baseUrl =
-                ApiRoutes.GLOBALIZATION_BASE_URL,
-            method =
-                "AddressCountryState/GetAddressCountryStateByIdExtendedAsync",
-            query =
-                "addressCountryStateId=$addressCountryStateId"
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "AddressCountryState/GetAddressCountryStateByIdExtendedAsync",
+            query = "addressCountryStateId=$addressCountryStateId"
         )
     }
 
-    override suspend fun InsertAsync(
-        model: AddressCountryStateInsertModel
-    ): Result<Unit> {
+    override suspend fun InsertAsync(model: AddressCountryStateInsertModel): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl =
-                ApiRoutes.GLOBALIZATION_BASE_URL,
-            method =
-                "AddressCountryState/AddressCountryStateInsertAsync",
-            data =
-                model
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "AddressCountryState/AddressCountryStateInsertAsync",
+            data = model
         )
     }
 
-    override suspend fun UpdateAsync(
-        model: AddressCountryStateUpdateModel
-    ): Result<Unit> {
+    override suspend fun UpdateAsync(model: AddressCountryStateUpdateModel): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl =
-                ApiRoutes.GLOBALIZATION_BASE_URL,
-            method =
-                "AddressCountryState/AddressCountryStateUpdateAsync",
-            data =
-                model
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "AddressCountryState/AddressCountryStateUpdateAsync",
+            data = model
         )
     }
 
-    override suspend fun DeleteAsync(
-        addressCountryStateId: Int
-    ): Result<Unit> {
+    override suspend fun DeleteAsync(addressCountryStateId: Int): Result<Unit> {
         return apiClient.DeleteAsync(
-            baseUrl =
-                ApiRoutes.GLOBALIZATION_BASE_URL,
-            method =
-                "AddressCountryState/AddressCountryStateDelete",
-            query =
-                "addressCountryStateId=$addressCountryStateId"
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "AddressCountryState/AddressCountryStateDelete",
+            query = "addressCountryStateId=$addressCountryStateId"
         )
     }
 }

@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowDropDown
 import androidx.compose.material.icons.outlined.ArrowDropUp
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -22,6 +24,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.window.PopupProperties
+import java.util.Locale
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
@@ -257,16 +261,13 @@ fun BbSearchableSelectInput(
             maximumVisibleOptionCount
         ) {
             val normalizedSearch =
-                searchText.trim()
+                searchText.NormalizeBbSearchText()
 
             options
                 .asSequence()
                 .filter { option ->
                     normalizedSearch.isBlank() ||
-                            option.text.contains(
-                                other = normalizedSearch,
-                                ignoreCase = true
-                            )
+                            option.text.NormalizeBbSearchText().contains(normalizedSearch)
                 }
                 .take(
                     maximumVisibleOptionCount
@@ -358,7 +359,7 @@ fun BbSearchableSelectInput(
                     ExposedDropdownMenuDefaults.outlinedTextFieldColors()
             )
 
-            ExposedDropdownMenu(
+            DropdownMenu(
                 expanded =
                     isExpanded,
                 onDismissRequest = {
@@ -369,7 +370,11 @@ fun BbSearchableSelectInput(
                         ""
                 },
                 modifier =
-                    Modifier.fillMaxWidth()
+                    Modifier.fillMaxWidth(),
+                properties =
+                    PopupProperties(
+                        focusable = true
+                    )
             ) {
                 OutlinedTextField(
                     value =
@@ -444,4 +449,15 @@ fun BbSearchableSelectInput(
                 errorText
         )
     }
+}
+
+private fun String.NormalizeBbSearchText(): String {
+    return trim()
+        .lowercase(Locale.forLanguageTag("tr-TR"))
+        .replace('ı', 'i')
+        .replace('ş', 's')
+        .replace('ğ', 'g')
+        .replace('ü', 'u')
+        .replace('ö', 'o')
+        .replace('ç', 'c')
 }

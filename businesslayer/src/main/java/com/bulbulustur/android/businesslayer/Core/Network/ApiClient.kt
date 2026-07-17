@@ -1,5 +1,6 @@
 package com.bulbulustur.android.businesslayer.Core.Network
 
+import android.util.Log
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -294,6 +295,11 @@ object ApiClient {
                 ?.string()
                 .orEmpty()
 
+        Log.d(
+            "ApiClientRaw",
+            "code=${response.code()} successful=${response.isSuccessful} body=$json"
+        )
+
         if (json.isBlank()) {
             return if (response.isSuccessful) {
                 Result(
@@ -350,6 +356,7 @@ object ApiClient {
                 Exception = exception.message
             )
         }
+
     }
 
     @PublishedApi

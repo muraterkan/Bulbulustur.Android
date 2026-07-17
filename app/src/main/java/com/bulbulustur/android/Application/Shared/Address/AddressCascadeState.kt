@@ -97,21 +97,33 @@ data class AddressCascadeState(
 
     val ShouldShowCountryState: Boolean
         get() =
-            HasCountryStates ||
-                    IsCountryStatesLoading
+            IsCountryStatesLoading ||
+                    CountryStates.size > 1
 
     val ShouldShowCountryDepartment: Boolean
         get() =
-            HasCountryDepartments ||
-                    IsCountryDepartmentsLoading
+            IsCountryDepartmentsLoading ||
+                    CountryDepartments.isNotEmpty()
 
     val ShouldShowDistrict: Boolean
         get() =
-            Selection.IsTurkey &&
+            IsDistrictsLoading ||
+                    HasDistricts
+
+    val CanSelectCity: Boolean
+        get() =
+            Selection.HasCountry &&
+                    HasCities &&
+                    !IsCountryStatesLoading &&
+                    !IsCountryDepartmentsLoading &&
+                    !IsCitiesLoading &&
                     (
-                            HasDistricts ||
-                                    IsDistrictsLoading ||
-                                    Selection.HasCity
+                            CountryStates.isEmpty() ||
+                                    Selection.HasCountryState
+                            ) &&
+                    (
+                            CountryDepartments.isEmpty() ||
+                                    Selection.HasCountryDepartment
                             )
 
     val IsLoading: Boolean
@@ -132,11 +144,7 @@ data class AddressCascadeState(
 
     val IsValid: Boolean
         get() =
-            Selection.IsLocationSelected &&
-                    (
-                            !Selection.IsTurkey ||
-                                    Selection.HasDistrict
-                            )
+            Selection.IsLocationSelected
 
     fun ClearCountrySelection(): AddressCascadeState {
         return copy(

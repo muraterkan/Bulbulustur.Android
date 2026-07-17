@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbSelectInput
+import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCategorySearchSelectInput
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbSelectOption
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 
@@ -20,9 +20,9 @@ fun AddressCascadeFields(
     countryLabel: String = "Ülke",
     countryPlaceholder: String = "Ülke seçiniz",
     countryStateLabel: String = "Eyalet / Bölge",
-    countryStatePlaceholder: String = "Bölge seçiniz",
-    countryDepartmentLabel: String = "İl (Département)",
-    countryDepartmentPlaceholder: String = "İl (Département) seçiniz",
+    countryStatePlaceholder: String = "Eyalet veya bölge seçiniz",
+    countryDepartmentLabel: String = "Departman",
+    countryDepartmentPlaceholder: String = "Departman seçiniz",
     cityLabel: String = "Şehir",
     cityPlaceholder: String = "Şehir seçiniz",
     districtLabel: String = "İlçe",
@@ -75,24 +75,23 @@ fun AddressCascadeFields(
         }
 
     val districtOptions =
-        state.Districts
-            .mapNotNull { district ->
-                val districtName =
-                    district.Content
-                        ?.trim()
-                        .orEmpty()
+        state.Districts.mapNotNull { district ->
+            val districtName =
+                district.Content
+                    ?.trim()
+                    .orEmpty()
 
-                if (districtName.isBlank()) {
-                    null
-                } else {
-                    BbSelectOption(
-                        value =
-                            district.AddressDistrictId.toString(),
-                        text =
-                            districtName
-                    )
-                }
+            if (districtName.isBlank()) {
+                null
+            } else {
+                BbSelectOption(
+                    value =
+                        district.AddressDistrictId.toString(),
+                    text =
+                        districtName
+                )
             }
+        }
 
     Column(
         modifier =
@@ -102,7 +101,7 @@ fun AddressCascadeFields(
                 BBSpacing.Space4
             )
     ) {
-        BbSelectInput(
+        BbCategorySearchSelectInput(
             selectedValue =
                 state.SelectedCountryId
                     .takeIf {
@@ -126,19 +125,21 @@ fun AddressCascadeFields(
                 } else {
                     countryPlaceholder
                 },
-            helperText =
-                null,
+            searchPlaceholder =
+                "Ülke ara...",
             errorText =
                 countryErrorText
                     ?: state.CountryError,
             enabled =
                 enabled &&
                         !state.IsCountriesLoading &&
-                        countryOptions.isNotEmpty()
+                        countryOptions.isNotEmpty(),
+            maximumVisibleOptionCount =
+                50
         )
 
         if (state.ShouldShowCountryState) {
-            BbSelectInput(
+            BbCategorySearchSelectInput(
                 selectedValue =
                     state.SelectedCountryStateId
                         .takeIf {
@@ -158,12 +159,12 @@ fun AddressCascadeFields(
                     countryStateLabel,
                 placeholder =
                     if (state.IsCountryStatesLoading) {
-                        "Bölgeler yükleniyor..."
+                        "Eyalet veya bölgeler yükleniyor..."
                     } else {
                         countryStatePlaceholder
                     },
-                helperText =
-                    null,
+                searchPlaceholder =
+                    "Eyalet veya bölge ara...",
                 errorText =
                     countryStateErrorText
                         ?: state.CountryStateError,
@@ -171,12 +172,14 @@ fun AddressCascadeFields(
                     enabled &&
                             state.SelectedCountryId > 0 &&
                             !state.IsCountryStatesLoading &&
-                            countryStateOptions.isNotEmpty()
+                            countryStateOptions.isNotEmpty(),
+                maximumVisibleOptionCount =
+                    50
             )
         }
 
         if (state.ShouldShowCountryDepartment) {
-            BbSelectInput(
+            BbCategorySearchSelectInput(
                 selectedValue =
                     state.SelectedCountryDepartmentId
                         ?.takeIf {
@@ -195,12 +198,12 @@ fun AddressCascadeFields(
                     countryDepartmentLabel,
                 placeholder =
                     if (state.IsCountryDepartmentsLoading) {
-                        "İller yükleniyor..."
+                        "Departmanlar yükleniyor..."
                     } else {
                         countryDepartmentPlaceholder
                     },
-                helperText =
-                    null,
+                searchPlaceholder =
+                    "Departman ara...",
                 errorText =
                     countryDepartmentErrorText
                         ?: state.CountryDepartmentError,
@@ -208,11 +211,13 @@ fun AddressCascadeFields(
                     enabled &&
                             state.SelectedCountryStateId > 0 &&
                             !state.IsCountryDepartmentsLoading &&
-                            countryDepartmentOptions.isNotEmpty()
+                            countryDepartmentOptions.isNotEmpty(),
+                maximumVisibleOptionCount =
+                    50
             )
         }
 
-        BbSelectInput(
+        BbCategorySearchSelectInput(
             selectedValue =
                 state.SelectedCityId
                     .takeIf {
@@ -236,20 +241,22 @@ fun AddressCascadeFields(
                 } else {
                     cityPlaceholder
                 },
-            helperText =
-                null,
+            searchPlaceholder =
+                "Şehir ara...",
             errorText =
                 cityErrorText
                     ?: state.CityError,
             enabled =
                 enabled &&
-                        state.SelectedCountryId > 0 &&
+                        state.CanSelectCity &&
                         !state.IsCitiesLoading &&
-                        cityOptions.isNotEmpty()
+                        cityOptions.isNotEmpty(),
+            maximumVisibleOptionCount =
+                50
         )
 
         if (state.ShouldShowDistrict) {
-            BbSelectInput(
+            BbCategorySearchSelectInput(
                 selectedValue =
                     state.SelectedDistrictId
                         ?.takeIf {
@@ -272,8 +279,8 @@ fun AddressCascadeFields(
                     } else {
                         districtPlaceholder
                     },
-                helperText =
-                    null,
+                searchPlaceholder =
+                    "İlçe ara...",
                 errorText =
                     districtErrorText
                         ?: state.DistrictError,
@@ -281,7 +288,9 @@ fun AddressCascadeFields(
                     enabled &&
                             state.SelectedCityId > 0 &&
                             !state.IsDistrictsLoading &&
-                            districtOptions.isNotEmpty()
+                            districtOptions.isNotEmpty(),
+                maximumVisibleOptionCount =
+                    50
             )
         }
     }

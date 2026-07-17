@@ -1,5 +1,6 @@
 package com.bulbulustur.android.Application.Controllers
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberAddressDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberAgreementDTO
@@ -346,9 +347,15 @@ class AccountController(
                 )
             }
 
+
+
             val response = executeService.PostAsync(operationType = "Account.ContactPreference.Update") {
                 memberRepository.SetContactPreferenceAsync(model)
             }
+            Log.d(
+                "CommunicationTest",
+                "POST result success=${response.Success} message=${response.Message} exception=${response.Exception}"
+            )
 
             _state.update {
                 it.copy(

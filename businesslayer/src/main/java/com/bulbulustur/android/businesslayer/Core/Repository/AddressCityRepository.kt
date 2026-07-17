@@ -25,9 +25,7 @@ class AddressCityRepository(
             method =
                 "AddressCity/GetAddressCitiesAsync",
             query =
-                buildString {
-                    append("languageId=$languageId")
-                    append("&countryId=$countryId")
+                buildString {                    append("&countryId=$countryId")
                     append("&countryStateId=$countryStateId")
 
                     countryDepartmentId?.let {
@@ -39,21 +37,11 @@ class AddressCityRepository(
         )
     }
 
-    override suspend fun GetAddressCitiesAsync(
-        countryId: Int,
-        count: Int
-    ): Result<List<AddressCityDTO>> {
-        return GetAddressCitiesAsync(
-            languageId =
-                1,
-            countryId =
-                countryId,
-            countryStateId =
-                0,
-            countryDepartmentId =
-                null,
-            count =
-                count
+    override suspend fun GetAddressCitiesAsync(countryId: Int, count: Int): Result<List<AddressCityDTO>> {
+        return apiClient.GetAsync(
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "AddressCity/GetAddressCitiesByCountryAsync",
+            query = "countryId=$countryId&count=$count"
         )
     }
 

@@ -17,7 +17,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.bulbulustur.android.Application.Areas.b2b.Controllers.ProductController
 import com.bulbulustur.android.Application.Areas.b2b.Controllers.ProductController as WholesaleProductController
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.BasketController
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.CampaignController
@@ -537,8 +536,6 @@ private fun BulbulusturApplicationContent(
         authenticationRepository,
         memberTempRepository,
         memberRepository,
-        addressCountryRepository,
-        addressCityRepository,
         userSessionManager
     ) {
         LogonController(
@@ -546,8 +543,6 @@ private fun BulbulusturApplicationContent(
             authenticationRepository = authenticationRepository,
             memberTempRepository = memberTempRepository,
             memberRepository = memberRepository,
-            addressCountryRepository = addressCountryRepository,
-            addressCityRepository = addressCityRepository,
             userSessionManager = userSessionManager
         )
     }

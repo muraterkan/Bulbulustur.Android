@@ -3,11 +3,7 @@ package com.bulbulustur.android.Application.Controllers
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.bulbulustur.android.Application.Session.UserSessionManager
-import com.bulbulustur.android.businesslayer.Core.DTO.AddressCityDTO
-import com.bulbulustur.android.businesslayer.Core.DTO.AddressCountryDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberTempDTO
-import com.bulbulustur.android.businesslayer.Core.Interface.IAddressCityRepository
-import com.bulbulustur.android.businesslayer.Core.Interface.IAddressCountryRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IAuthenticationRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IMemberRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IMemberTempRepository
@@ -53,19 +49,7 @@ data class LogonControllerState(
 
     val IsRegisterSuccessful: Boolean = false,
     val RegisteredMember: MemberInsertModel? = null,
-    val RegisteredEmail: String = "",
-
-    val Countries: List<AddressCountryDTO> = emptyList(),
-    val Cities: List<AddressCityDTO> = emptyList(),
-
-    val SelectedCountryId: Int = 0,
-    val SelectedCityId: Int = 0,
-
-    val IsCountriesLoading: Boolean = false,
-    val IsCitiesLoading: Boolean = false,
-
-    val CountryError: String? = null,
-    val CityError: String? = null
+    val RegisteredEmail: String = ""
 ) {
 
     val IsLoggingOut: Boolean
@@ -117,8 +101,6 @@ class LogonController(
     private val authenticationRepository: IAuthenticationRepository,
     private val memberTempRepository: IMemberTempRepository,
     private val memberRepository: IMemberRepository,
-    private val addressCountryRepository: IAddressCountryRepository,
-    private val addressCityRepository: IAddressCityRepository,
     private val userSessionManager: UserSessionManager
 ) : BaseController() {
 
@@ -675,248 +657,6 @@ class LogonController(
                 IsRegisterSuccessful =
                     false,
                 RegisteredMember =
-                    null
-            )
-        }
-    }
-
-    fun LoadCountries(
-        languageId: Int
-    ) {
-        if (_state.value.IsCountriesLoading) {
-            return
-        }
-
-        viewModelScope.launch {
-            _state.update { currentState ->
-                currentState.copy(
-                    IsCountriesLoading =
-                        true,
-                    CountryError =
-                        null
-                )
-            }
-
-            val response =
-                executeService.GetAsync(
-                    cacheKey =
-                        ""
-                ) {
-                    addressCountryRepository.GetAddressCountriesAsync(
-                        languageId =
-                            languageId,
-                        count =
-                            300
-                    )
-                }
-
-            val countries =
-                response.Data
-                    .orEmpty()
-                    .sortedWith(
-                        compareBy<AddressCountryDTO> {
-                            it.DisplayOrder
-                                ?: Int.MAX_VALUE
-                        }.thenBy {
-                            it.Content
-                        }
-                    )
-
-            if (!response.Success) {
-                _state.update { currentState ->
-                    currentState.copy(
-                        Countries =
-                            emptyList(),
-                        SelectedCountryId =
-                            0,
-                        Cities =
-                            emptyList(),
-                        SelectedCityId =
-                            0,
-                        IsCountriesLoading =
-                            false,
-                        CountryError =
-                            response.Message.ifBlank {
-                                "Ülke listesi alınamadı."
-                            }
-                    )
-                }
-
-                return@launch
-            }
-
-            _state.update { currentState ->
-                currentState.copy(
-                    Countries =
-                        countries,
-                    IsCountriesLoading =
-                        false,
-                    CountryError =
-                        if (countries.isEmpty()) {
-                            "Ülke verisi bulunamadı."
-                        } else {
-                            null
-                        }
-                )
-            }
-        }
-    }
-
-    fun SelectCountry(
-        countryId: Int
-    ) {
-        if (countryId <= 0) {
-            _state.update { currentState ->
-                currentState.copy(
-                    SelectedCountryId =
-                        0,
-                    SelectedCityId =
-                        0,
-                    Cities =
-                        emptyList(),
-                    CityError =
-                        null
-                )
-            }
-
-            return
-        }
-
-        if (_state.value.SelectedCountryId == countryId) {
-            return
-        }
-
-        _state.update { currentState ->
-            currentState.copy(
-                SelectedCountryId =
-                    countryId,
-                SelectedCityId =
-                    0,
-                Cities =
-                    emptyList(),
-                CityError =
-                    null
-            )
-        }
-
-        LoadCities(
-            countryId =
-                countryId
-        )
-    }
-
-    fun LoadCities(
-        countryId: Int
-    ) {
-        if (
-            countryId <= 0 ||
-            _state.value.IsCitiesLoading
-        ) {
-            return
-        }
-
-        viewModelScope.launch {
-            _state.update { currentState ->
-                currentState.copy(
-                    IsCitiesLoading =
-                        true,
-                    CityError =
-                        null
-                )
-            }
-
-            val response =
-                executeService.GetAsync(
-                    cacheKey =
-                        ""
-                ) {
-                    addressCityRepository.GetAddressCitiesAsync(
-                        countryId =
-                            countryId,
-                        count =
-                            10000
-                    )
-                }
-
-            val cities =
-                response.Data
-                    .orEmpty()
-                    .sortedWith(
-                        compareBy<AddressCityDTO> {
-                            it.DisplayOrder
-                                ?: Int.MAX_VALUE
-                        }.thenBy {
-                            it.Content
-                        }
-                    )
-
-            if (_state.value.SelectedCountryId != countryId) {
-                _state.update { currentState ->
-                    currentState.copy(
-                        IsCitiesLoading =
-                            false
-                    )
-                }
-
-                return@launch
-            }
-
-            if (!response.Success) {
-                _state.update { currentState ->
-                    currentState.copy(
-                        Cities =
-                            emptyList(),
-                        SelectedCityId =
-                            0,
-                        IsCitiesLoading =
-                            false,
-                        CityError =
-                            response.Message.ifBlank {
-                                "Şehir listesi alınamadı."
-                            }
-                    )
-                }
-
-                return@launch
-            }
-
-            _state.update { currentState ->
-                currentState.copy(
-                    Cities =
-                        cities,
-                    SelectedCityId =
-                        0,
-                    IsCitiesLoading =
-                        false,
-                    CityError =
-                        if (cities.isEmpty()) {
-                            "Bu ülke için şehir verisi bulunamadı."
-                        } else {
-                            null
-                        }
-                )
-            }
-        }
-    }
-
-    fun SelectCity(
-        cityId: Int
-    ) {
-        val cityBelongsToSelectedCountry =
-            _state.value.Cities.any { city ->
-                city.AddressCityId == cityId &&
-                        city.CountryId == _state.value.SelectedCountryId
-            }
-
-        _state.update { currentState ->
-            currentState.copy(
-                SelectedCityId =
-                    if (cityBelongsToSelectedCountry) {
-                        cityId
-                    } else {
-                        0
-                    },
-                CityError =
                     null
             )
         }

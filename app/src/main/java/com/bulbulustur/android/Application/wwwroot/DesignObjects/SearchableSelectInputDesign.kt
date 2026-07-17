@@ -42,11 +42,13 @@ fun BbCategorySearchSelectInput(
     selectedValue: String,
     options: List<BbSelectOption>,
     onValueChange: (String) -> Unit,
-    onSearchTextChange: (String) -> Unit,
+    onSearchTextChange: (String) -> Unit = {},
     label: String,
     modifier: Modifier = Modifier,
     placeholder: String = "Seçiniz",
     searchPlaceholder: String = "Ara...",
+    helperText: String? = null,
+    errorText: String? = null,
     enabled: Boolean = true,
     maximumVisibleOptionCount: Int = 50
 ) {
@@ -137,6 +139,8 @@ fun BbCategorySearchSelectInput(
                         "Listeyi aç"
                 )
             },
+            isError =
+                errorText != null,
             shape =
                 BBRadius.Input
         )

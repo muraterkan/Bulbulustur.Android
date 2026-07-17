@@ -258,7 +258,13 @@ fun NavGraphBuilder.settingsGraph(
                     memberId = sessionState.MemberId,
                     emailPreference = if (emailAllowed) 1 else 0,
                     smsPreference = if (smsAllowed) 1 else 0,
-                    phonePreference = if (phoneAllowed) 1 else 0
+                    phonePreference = if (phoneAllowed) 1 else 0,
+                    onSuccess = {
+                        accountController.GetMember(
+                            languageId = languageId,
+                            memberId = sessionState.MemberId
+                        )
+                    }
                 )
             }
         )

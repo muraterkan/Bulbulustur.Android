@@ -16,7 +16,7 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 
 enum class AccountSecurityMenuItem {
     LoginActivities,
-    ChangePassword,
+    ChangePasswordAsync,
     ChangeEmail,
     DeactivateAccount
 }
@@ -25,7 +25,7 @@ enum class AccountSecurityMenuItem {
 fun AccountSecurityBottomMenu(
     selectedItem: AccountSecurityMenuItem,
     onLoginActivitiesClick: () -> Unit,
-    onChangePasswordClick: () -> Unit,
+    onChangePasswordAsyncClick: () -> Unit,
     onChangeEmailClick: () -> Unit,
     onDeactivateAccountClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -61,8 +61,8 @@ fun AccountSecurityBottomMenu(
             AccountSecurityBottomMenuRow(
                 title = "Şifre Değiştir",
                 description = "Hesabın için yeni ve güçlü bir şifre belirle.",
-                selected = selectedItem == AccountSecurityMenuItem.ChangePassword,
-                onClick = onChangePasswordClick
+                selected = selectedItem == AccountSecurityMenuItem.ChangePasswordAsync,
+                onClick = onChangePasswordAsyncClick
             )
 
             AccountSecurityBottomMenuRow(

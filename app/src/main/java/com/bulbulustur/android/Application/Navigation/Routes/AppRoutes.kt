@@ -241,6 +241,10 @@ object AccountRoutes {
     const val Security = "account/security"
     const val ProfileInfo = "account/profile-info"
     const val ProfileEdit = "account/profile/edit"
+    const val ProfileGender = "account/profile/gender"
+    const val ProfileBirthDate = "account/profile/birth-date"
+    const val ProfileAddress = "account/profile/address"
+    const val ProfileTckn = "account/profile/tckn"
 
     const val EmailChange = "account/security/email"
     const val PasswordChange = "account/security/password"

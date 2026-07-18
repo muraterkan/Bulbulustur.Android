@@ -68,6 +68,9 @@ fun ProfileScreen(
     errorMessage: String? = null,
     onBackClick: () -> Unit = {},
     onEditClick: () -> Unit = {},
+    onGenderClick: () -> Unit = {},
+    onBirthDateClick: () -> Unit = {},
+    onAddressClick: () -> Unit = {},
     onPhonesClick: () -> Unit = {},
     onEmailClick: () -> Unit = {},
     onCompanyInfoClick: () -> Unit = {},
@@ -115,6 +118,13 @@ fun ProfileScreen(
         ?.GenderId
         ?.takeIf { it > 0 }
         ?.toString()
+        ?: "Belirtilmemiş"
+
+    val birthDateText = member
+        ?.BirthDate
+        ?.trim()
+        ?.take(10)
+        ?.takeIf { it.isNotBlank() }
         ?: "Belirtilmemiş"
 
     val activationText = when (member?.Activation) {
@@ -261,7 +271,16 @@ fun ProfileScreen(
                                 title = "Cinsiyet",
                                 value = genderText,
                                 icon = Icons.Outlined.Man,
-                                onClick = onEditClick
+                                onClick = onGenderClick
+                            )
+
+                            ProfileDashedDivider()
+
+                            ProfileInfoRow(
+                                title = "Doğum Tarihi",
+                                value = birthDateText,
+                                icon = Icons.Outlined.Badge,
+                                onClick = onBirthDateClick
                             )
 
                             ProfileDashedDivider()
@@ -270,7 +289,7 @@ fun ProfileScreen(
                                 title = "Ülke / Şehir",
                                 value = locationText,
                                 icon = Icons.Outlined.LocationOn,
-                                onClick = onEditClick
+                                onClick = onAddressClick
                             )
                         }
                     }

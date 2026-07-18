@@ -1,75 +1,40 @@
 package com.bulbulustur.android.Application.Views.Account
 
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.PathEffect
-import androidx.compose.ui.unit.dp
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
-import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
-import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
-import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
-import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
-import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdateModel
+import com.bulbulustur.android.businesslayer.Core.DTO.MemberPreferenceDTO
 
 @Composable
 fun CommunicationPreferenceScreen(
-    member: MemberUpdateModel?,
-    isLoading: Boolean,
-    isSaving: Boolean,
-    errorMessage: String?,
-    isSaved: Boolean,
+    preferences: List<MemberPreferenceDTO>,
+    isLoading: Boolean = false,
+    errorMessage: String? = null,
     onBackClick: () -> Unit = {},
-    onSaveClick: (
-        emailAllowed: Boolean,
-        smsAllowed: Boolean,
-        phoneAllowed: Boolean
-    ) -> Unit = { _, _, _ -> }
+    onPreferenceChanged: (MemberPreferenceDTO, Boolean) -> Unit = { _, _ -> },
+    onRetryClick: () -> Unit = {}
 ) {
-    val emailAllowedState = remember {
-        mutableStateOf(false)
-    }
-
-    val smsAllowedState = remember {
-        mutableStateOf(false)
-    }
-
-    val phoneAllowedState = remember {
-        mutableStateOf(false)
-    }
-
-    LaunchedEffect(member) {
-        emailAllowedState.value = member?.ContactPreferenceEmail == 1
-        smsAllowedState.value = member?.ContactPreferenceSms == 1
-        phoneAllowedState.value = member?.ContactPreferencePhone == 1
-    }
-
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
@@ -79,77 +44,121 @@ fun CommunicationPreferenceScreen(
             )
         }
     ) { innerPadding ->
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
-                .padding(innerPadding)
-                .verticalScroll(rememberScrollState())
-                .padding(
-                    PaddingValues(
-                        start = BBSpacing.PageHorizontal,
-                        top = BBSpacing.PageTopCompact,
-                        end = BBSpacing.PageHorizontal,
-                        bottom = BBSpacing.PageBottom
-                    )
-                ),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.SectionGap)
+                .padding(innerPadding),
+            contentPadding = PaddingValues(
+                start = BBSpacing.PageHorizontal,
+                top = BBSpacing.PageTopCompact,
+                end = BBSpacing.PageHorizontal,
+                bottom = BBSpacing.PageBottom
+            ),
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
-            CommunicationDescriptionCard()
+            item {
+                BbCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    variant = BbCardVariant.Outlined,
+                    padding = BbCardPadding.Medium
+                ) {
+                    Text(
+                        text = "E-posta, SMS ve telefon iletişim tercihlerinizi buradan yönetebilirsiniz.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
 
             when {
-                isLoading -> {
-                    CommunicationLoadingCard()
+                isLoading && preferences.isEmpty() -> {
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(BBSpacing.Space6),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
+                        }
+                    }
                 }
 
-                member == null -> {
-                    CommunicationErrorCard(
-                        message = errorMessage
-                            ?: "İletişim tercihleri yüklenemedi."
-                    )
+                !errorMessage.isNullOrBlank() && preferences.isEmpty() -> {
+                    item {
+                        BbCard(
+                            modifier = Modifier.fillMaxWidth(),
+                            variant = BbCardVariant.Outlined,
+                            padding = BbCardPadding.Medium,
+                            onClick = onRetryClick
+                        ) {
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+                            ) {
+                                Text(
+                                    text = "Tercihler yüklenemedi",
+                                    style = MaterialTheme.typography.titleSmall,
+                                    color = MaterialTheme.colorScheme.error
+                                )
+
+                                Text(
+                                    text = errorMessage,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+
+                                Text(
+                                    text = "Tekrar denemek için dokunun.",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                        }
+                    }
+                }
+
+                preferences.isEmpty() -> {
+                    item {
+                        BbCard(
+                            modifier = Modifier.fillMaxWidth(),
+                            variant = BbCardVariant.Outlined,
+                            padding = BbCardPadding.Medium
+                        ) {
+                            Text(
+                                text = "Tanımlı iletişim tercihi bulunamadı.",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
                 }
 
                 else -> {
-                    CommunicationPreferenceCard(
-                        emailAllowed = emailAllowedState.value,
-                        smsAllowed = smsAllowedState.value,
-                        phoneAllowed = phoneAllowedState.value,
-                        enabled = !isSaving,
-                        onEmailAllowedChange = { value ->
-                            emailAllowedState.value = value
-                        },
-                        onSmsAllowedChange = { value ->
-                            smsAllowedState.value = value
-                        },
-                        onPhoneAllowedChange = { value ->
-                            phoneAllowedState.value = value
+                    items(
+                        items = preferences,
+                        key = { preference ->
+                            preference.PreferenceTypeId
                         }
-                    )
-
-                    if (!errorMessage.isNullOrBlank()) {
-                        CommunicationErrorCard(
-                            message = errorMessage
+                    ) { preference ->
+                        CommunicationPreferenceRow(
+                            preference = preference,
+                            enabled = !isLoading,
+                            onCheckedChange = { checked ->
+                                onPreferenceChanged(preference, checked)
+                            }
                         )
                     }
+                }
+            }
 
-                    if (isSaved) {
-                        CommunicationSuccessCard()
-                    }
-
-                    BbButton(
-                        text = "Tercihleri Kaydet",
-                        onClick = {
-                            onSaveClick(
-                                emailAllowedState.value,
-                                smsAllowedState.value,
-                                phoneAllowedState.value
-                            )
-                        },
-                        modifier = Modifier.fillMaxWidth(),
-                        variant = BbButtonVariant.Primary,
-                        size = BbButtonSize.Medium,
-                        enabled = !isSaving,
-                        isLoading = isSaving
+            if (!errorMessage.isNullOrBlank() && preferences.isNotEmpty()) {
+                item {
+                    Text(
+                        text = errorMessage,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.error
                     )
                 }
             }
@@ -158,121 +167,11 @@ fun CommunicationPreferenceScreen(
 }
 
 @Composable
-private fun CommunicationDescriptionCard() {
-    BbCard(
-        modifier = Modifier.fillMaxWidth(),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium
-    ) {
-        Text(
-            text = "E-posta, SMS ve telefon tercihlerinizi buradan yönetebilirsiniz. Zorunlu hesap, güvenlik ve sipariş bildirimleri yasal süreçler kapsamında ayrıca gönderilebilir.",
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-    }
-}
-
-@Composable
-private fun CommunicationPreferenceCard(
-    emailAllowed: Boolean,
-    smsAllowed: Boolean,
-    phoneAllowed: Boolean,
-    enabled: Boolean,
-    onEmailAllowedChange: (Boolean) -> Unit,
-    onSmsAllowedChange: (Boolean) -> Unit,
-    onPhoneAllowedChange: (Boolean) -> Unit
-) {
-    BbCard(
-        modifier = Modifier.fillMaxWidth(),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.None
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.surface)
-        ) {
-            CommunicationPreferenceRow(
-                title = "E-Posta Bildirimleri",
-                description = "Sipariş, kampanya ve hesap bilgilendirmeleri e-posta ile gönderilebilir.",
-                checked = emailAllowed,
-                enabled = enabled,
-                onCheckedChange = onEmailAllowedChange
-            )
-
-            CommunicationDashedDivider()
-
-            CommunicationPreferenceRow(
-                title = "SMS Bildirimleri",
-                description = "Kısa bilgilendirme ve doğrulama mesajları SMS ile gönderilebilir.",
-                checked = smsAllowed,
-                enabled = enabled,
-                onCheckedChange = onSmsAllowedChange
-            )
-
-            CommunicationDashedDivider()
-
-            CommunicationPreferenceRow(
-                title = "Telefon Araması",
-                description = "Gerekli durumlarda hesabınızla ilgili telefonla iletişim kurulabilir.",
-                checked = phoneAllowed,
-                enabled = enabled,
-                onCheckedChange = onPhoneAllowedChange
-            )
-        }
-    }
-}
-
-@Composable
 private fun CommunicationPreferenceRow(
-    title: String,
-    description: String,
-    checked: Boolean,
+    preference: MemberPreferenceDTO,
     enabled: Boolean,
     onCheckedChange: (Boolean) -> Unit
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(BBSpacing.CardPadding),
-        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
-        ) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-
-            Text(
-                text = description,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-
-        Switch(
-            checked = checked,
-            enabled = enabled,
-            onCheckedChange = onCheckedChange,
-            colors = SwitchDefaults.colors(
-                checkedThumbColor = BBColors.White,
-                checkedTrackColor = MaterialTheme.colorScheme.primary,
-                checkedBorderColor = MaterialTheme.colorScheme.primary,
-                uncheckedThumbColor = MaterialTheme.colorScheme.surface,
-                uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant,
-                uncheckedBorderColor = MaterialTheme.colorScheme.outline
-            )
-        )
-    }
-}
-
-@Composable
-private fun CommunicationLoadingCard() {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
@@ -280,81 +179,37 @@ private fun CommunicationLoadingCard() {
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space4),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            CircularProgressIndicator(
-                modifier = Modifier.size(24.dp),
-                strokeWidth = 2.dp,
-                color = MaterialTheme.colorScheme.primary
-            )
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+            ) {
+                Text(
+                    text = preference.PreferenceName.ifBlank {
+                        "İletişim tercihi"
+                    },
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
 
-            Text(
-                text = "İletişim tercihleri yükleniyor...",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                preference.PreferenceDescription
+                    ?.takeIf { it.isNotBlank() }
+                    ?.let { description ->
+                        Text(
+                            text = description,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+            }
+
+            Switch(
+                checked = preference.PreferenceValue,
+                onCheckedChange = onCheckedChange,
+                enabled = enabled
             )
         }
-    }
-}
-
-@Composable
-private fun CommunicationErrorCard(
-    message: String
-) {
-    BbCard(
-        modifier = Modifier.fillMaxWidth(),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium
-    ) {
-        Text(
-            text = message,
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.error
-        )
-    }
-}
-
-@Composable
-private fun CommunicationSuccessCard() {
-    BbCard(
-        modifier = Modifier.fillMaxWidth(),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium
-    ) {
-        Text(
-            text = "İletişim tercihleriniz kaydedildi.",
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.primary
-        )
-    }
-}
-
-@Composable
-private fun CommunicationDashedDivider() {
-    val dividerColor = MaterialTheme.colorScheme.outlineVariant
-
-    Canvas(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(
-                start = BBSpacing.CardPadding,
-                end = BBSpacing.CardPadding
-            )
-            .size(
-                width = 1.dp,
-                height = 1.dp
-            )
-    ) {
-        drawLine(
-            color = dividerColor,
-            start = Offset(0f, 0f),
-            end = Offset(size.width, 0f),
-            strokeWidth = 1.dp.toPx(),
-            pathEffect = PathEffect.dashPathEffect(
-                intervals = floatArrayOf(8f, 8f),
-                phase = 0f
-            )
-        )
     }
 }

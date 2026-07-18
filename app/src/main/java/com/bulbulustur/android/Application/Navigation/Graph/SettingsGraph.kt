@@ -15,8 +15,8 @@ import com.bulbulustur.android.Application.Session.UserSessionState
 import com.bulbulustur.android.Application.Views.Account.AboutThisAppScreen
 import com.bulbulustur.android.Application.Views.Account.AccountSettingsScreen
 import com.bulbulustur.android.Application.Views.Account.AppearanceSettingsScreen
-import com.bulbulustur.android.Application.Views.Account.CommunicationPreferenceScreen
 import com.bulbulustur.android.Application.Views.Account.CurrencySettingsScreen
+import com.bulbulustur.android.Application.Views.Account.CommunicationPreferenceScreen
 import com.bulbulustur.android.Application.Views.Account.LanguageSettingsScreen
 import com.bulbulustur.android.Application.Views.Account.LegalPoliciesScreen
 import com.bulbulustur.android.Application.Views.Account.RegionSettingsScreen
@@ -68,11 +68,7 @@ fun NavGraphBuilder.settingsGraph(
                     SettingsRoutes.LegalPolicies
                 )
             },
-            onPermissionsClick = {
-                navigator.navController.navigate(
-                    SettingsRoutes.Communication
-                )
-            },
+            onPermissionsClick = {},
             onHelpCenterClick = {
                 uriHandler.openUri(LegalPolicyUrls.HelpCenter)
             },
@@ -109,6 +105,53 @@ fun NavGraphBuilder.settingsGraph(
             onAboutThisAppClick = {
                 navigator.navController.navigate(
                     SettingsRoutes.AboutThisApp
+                )
+            }
+        )
+    }
+
+    composable(SettingsRoutes.Communication) {
+        val accountState by accountController.State.collectAsState()
+
+        val languageId = when (sessionState.Language) {
+            EApplicationLanguage.Turkish -> 1
+            EApplicationLanguage.English -> 2
+        }
+
+        LaunchedEffect(languageId, sessionState.MemberId) {
+            accountController.GetAccountPreferences(
+                languageId = languageId,
+                memberId = sessionState.MemberId
+            )
+        }
+
+        CommunicationPreferenceScreen(
+            preferences = accountState.Preferences,
+            isLoading = accountState.IsLoading && (
+                    accountState.CurrentAction == "GetAccountPreferences" ||
+                            accountState.CurrentAction == "SaveAccountPreference"
+                    ),
+            errorMessage = accountState.ErrorMessage,
+            onBackClick = {
+                navigator.back()
+            },
+            onPreferenceChanged = { preference, preferenceValue ->
+                accountController.SaveAccountPreference(
+                    memberId = sessionState.MemberId,
+                    preference = preference,
+                    preferenceValue = preferenceValue,
+                    onSuccess = {
+                        accountController.GetAccountPreferences(
+                            languageId = languageId,
+                            memberId = sessionState.MemberId
+                        )
+                    }
+                )
+            },
+            onRetryClick = {
+                accountController.GetAccountPreferences(
+                    languageId = languageId,
+                    memberId = sessionState.MemberId
                 )
             }
         )
@@ -224,48 +267,6 @@ fun NavGraphBuilder.settingsGraph(
             },
             onBackClick = {
                 navigator.back()
-            }
-        )
-    }
-
-    composable(SettingsRoutes.Communication) {
-        val accountState by accountController.State.collectAsState()
-
-        val languageId = when (sessionState.Language) {
-            EApplicationLanguage.Turkish -> 1
-            EApplicationLanguage.English -> 2
-        }
-
-        LaunchedEffect(languageId, sessionState.MemberId) {
-            accountController.GetMember(
-                languageId = languageId,
-                memberId = sessionState.MemberId
-            )
-        }
-
-        CommunicationPreferenceScreen(
-            member = accountState.MemberUpdateResult?.Data,
-            isLoading = accountState.IsLoading &&
-                    accountState.CurrentAction == "GetMember",
-            isSaving = accountState.IsContactPreferenceSaving,
-            errorMessage = accountState.ErrorMessage,
-            isSaved = accountState.IsContactPreferenceSaved,
-            onBackClick = {
-                navigator.back()
-            },
-            onSaveClick = { emailAllowed, smsAllowed, phoneAllowed ->
-                accountController.SetContactPreference(
-                    memberId = sessionState.MemberId,
-                    emailPreference = if (emailAllowed) 1 else 0,
-                    smsPreference = if (smsAllowed) 1 else 0,
-                    phonePreference = if (phoneAllowed) 1 else 0,
-                    onSuccess = {
-                        accountController.GetMember(
-                            languageId = languageId,
-                            memberId = sessionState.MemberId
-                        )
-                    }
-                )
             }
         )
     }

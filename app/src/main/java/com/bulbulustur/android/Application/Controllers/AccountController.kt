@@ -8,9 +8,11 @@ import com.bulbulustur.android.businesslayer.Core.DTO.MemberAlarmListDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberBankAccountDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberCouponDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.SystemDescGenderDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberFollowedCompanyDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberFollowedStoreDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberLoginActivityDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.MemberPreferenceDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductFavoriteDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleFavoriteDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.IMemberAddressRepository
@@ -21,7 +23,9 @@ import com.bulbulustur.android.businesslayer.Core.Interface.IMemberCouponReposit
 import com.bulbulustur.android.businesslayer.Core.Interface.IMemberFollowedCompanyRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IMemberFollowedStoreRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IMemberLoginActivityRepository
+import com.bulbulustur.android.businesslayer.Core.Interface.IMemberPreferenceRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IMemberRepository
+import com.bulbulustur.android.businesslayer.Core.Interface.ISystemDescGenderRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IProductFavoriteRepository
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.ProductFavoriteInsertModel
 import com.bulbulustur.android.businesslayer.Core.Interface.IWholesaleFavoriteRepository
@@ -30,10 +34,16 @@ import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.MemberAlarm
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.MemberBankAccountInsertModel
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.MemberFollowedCompanyInsertModel
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.MemberFollowedStoreInsertModel
+import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.MemberPreferenceInsertModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberAddressUpdateModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberBankAccountUpdateModel
+import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberPreferenceUpdateModel
+import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdateAddressModel
+import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdateBirthDateModel
+import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdateGenderModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdateModel
-import com.bulbulustur.android.businesslayer.Core.Model.ChangePasswordModel
+import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdateTcknModel
+import com.bulbulustur.android.businesslayer.Core.Model.ChangePasswordAsyncModel
 import com.bulbulustur.android.businesslayer.Core.Util.Execute.IExecuteService
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberPhoneDTO
@@ -63,8 +73,6 @@ import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.CompanyUpda
 
 data class AccountControllerState(
     val IsLoading: Boolean = false,
-    val IsContactPreferenceSaving: Boolean = false,
-    val IsContactPreferenceSaved: Boolean = false,
     val CurrentAction: String? = null,
     val MemberResult: Result<MemberDTO?>? = null,
     val MemberUpdateResult: Result<MemberUpdateModel?>? = null,
@@ -93,13 +101,15 @@ data class AccountControllerState(
     val ProductFavoriteListResult: Result<List<ProductFavoriteDTO>>? = null,
     val WholesaleFavoriteListResult: Result<List<WholesaleFavoriteDTO>>? = null,
     val ProductFavoriteMoveToBasketResult: Result<Unit>? = null,
-    val ContactPreferenceResult: Result<Unit>? = null,
     val ChangeMailResult: Result<ChangeMailModel>? = null,
     val IsChangeMailRequestSent: Boolean = false,
     val ChangeMailMessage: String? = null,
     val PasswordChangeResult: Result<Unit>? = null,
     val IsPasswordChanged: Boolean = false,
     val PasswordChangeMessage: String? = null,
+    val GenderListResult: Result<List<SystemDescGenderDTO>>? = null,
+    val PreferenceListResult: Result<List<MemberPreferenceDTO>>? = null,
+    val PreferenceSaveResult: Result<Unit>? = null,
     val ErrorMessage: String? = null,
     val PhoneListResult: Result<List<MemberPhoneDTO>>? = null,
     val PhoneDetailResult: Result<MemberPhoneDTO?>? = null,
@@ -160,6 +170,12 @@ data class AccountControllerState(
     val WholesaleFavorites: List<WholesaleFavoriteDTO>
         get() = WholesaleFavoriteListResult?.Data.orEmpty()
 
+    val Genders: List<SystemDescGenderDTO>
+        get() = GenderListResult?.Data.orEmpty()
+
+    val Preferences: List<MemberPreferenceDTO>
+        get() = PreferenceListResult?.Data.orEmpty()
+
     val Phones: List<MemberPhoneDTO>
         get() = PhoneListResult?.Data.orEmpty()
 
@@ -188,6 +204,7 @@ data class AccountControllerState(
 class AccountController(
     private val executeService: IExecuteService,
     private val memberRepository: IMemberRepository,
+    private val systemDescGenderRepository: ISystemDescGenderRepository,
     private val memberAddressRepository: IMemberAddressRepository,
     private val memberBankAccountRepository: IMemberBankAccountRepository,
     private val memberAlarmListRepository: IMemberAlarmListRepository,
@@ -195,6 +212,7 @@ class AccountController(
     private val memberFollowedStoreRepository: IMemberFollowedStoreRepository,
     private val memberAgreementRepository: IMemberAgreementRepository,
     private val memberLoginActivityRepository: IMemberLoginActivityRepository,
+    private val memberPreferenceRepository: IMemberPreferenceRepository,
     private val memberCouponRepository: IMemberCouponRepository,
     private val productFavoriteRepository: IProductFavoriteRepository,
     private val wholesaleFavoriteRepository: IWholesaleFavoriteRepository,
@@ -294,7 +312,6 @@ class AccountController(
 
             Complete {
                 copy(
-                    MemberUpdateResult = response,
                     ErrorMessage = response.Message.takeIf { !response.Success }
                 )
             }
@@ -312,56 +329,168 @@ class AccountController(
             }
 
             Complete {
-                copy(ErrorMessage = response.Message.takeIf { !response.Success })
+                copy(
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
             }
 
             if (response.Success) onSuccess?.invoke()
         }
     }
 
-    fun SetContactPreference(
-        memberId: Int,
-        emailPreference: Int,
-        smsPreference: Int,
-        phonePreference: Int,
-        onSuccess: (() -> Unit)? = null
-    ) {
-        if (!ValidateMember(memberId)) return
-        if (_state.value.IsContactPreferenceSaving) return
+    fun GetGenders() {
+        viewModelScope.launch {
+            SetLoading("GetGenders")
 
-        val model = MemberUpdateModel(
-            MemberId = memberId,
-            ContactPreferenceEmail = emailPreference,
-            ContactPreferenceSms = smsPreference,
-            ContactPreferencePhone = phonePreference
-        )
+            val response = executeService.GetAsync(cacheKey = "") {
+                systemDescGenderRepository.GetSystemDescGenderListAsync()
+            }
+
+            Complete {
+                copy(
+                    GenderListResult = response,
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+        }
+    }
+
+    fun UpdateMemberGender(model: MemberUpdateGenderModel, onSuccess: (() -> Unit)? = null) {
+        if (!ValidateMember(model.MemberId)) return
 
         viewModelScope.launch {
-            _state.update {
-                it.copy(
-                    IsContactPreferenceSaving = true,
-                    IsContactPreferenceSaved = false,
-                    CurrentAction = "SetContactPreference",
-                    ContactPreferenceResult = null,
-                    ErrorMessage = null
+            SetLoading("UpdateMemberGender")
+
+            val response = executeService.PostAsync(operationType = "Account.Member.Gender.Update") {
+                memberRepository.MemberUpdateGenderAsync(model)
+            }
+
+            Complete {
+                copy(
+                    ErrorMessage = response.Message.takeIf { !response.Success }
                 )
             }
 
+            if (response.Success) onSuccess?.invoke()
+        }
+    }
 
+    fun UpdateMemberBirthDate(model: MemberUpdateBirthDateModel, onSuccess: (() -> Unit)? = null) {
+        if (!ValidateMember(model.MemberId)) return
 
-            val response = executeService.PostAsync(operationType = "Account.ContactPreference.Update") {
-                memberRepository.SetContactPreferenceAsync(model)
+        viewModelScope.launch {
+            SetLoading("UpdateMemberBirthDate")
+
+            val response = executeService.PostAsync(operationType = "Account.Member.BirthDate.Update") {
+                memberRepository.MemberUpdateBirthDateAsync(model)
             }
-            Log.d(
-                "CommunicationTest",
-                "POST result success=${response.Success} message=${response.Message} exception=${response.Exception}"
-            )
 
-            _state.update {
-                it.copy(
-                    IsContactPreferenceSaving = false,
-                    IsContactPreferenceSaved = response.Success,
-                    ContactPreferenceResult = response,
+            Complete {
+                copy(
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+
+            if (response.Success) onSuccess?.invoke()
+        }
+    }
+
+    fun UpdateMemberAddress(model: MemberUpdateAddressModel, onSuccess: (() -> Unit)? = null) {
+        if (!ValidateMember(model.MemberId)) return
+
+        viewModelScope.launch {
+            SetLoading("UpdateMemberAddress")
+
+            val response = executeService.PostAsync(operationType = "Account.Member.Address.Update") {
+                memberRepository.MemberUpdateAddressAsync(model)
+            }
+
+            Complete {
+                copy(
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+
+            if (response.Success) onSuccess?.invoke()
+        }
+    }
+
+    fun UpdateMemberTckn(model: MemberUpdateTcknModel, onSuccess: (() -> Unit)? = null) {
+        if (!ValidateMember(model.MemberId)) return
+
+        viewModelScope.launch {
+            SetLoading("UpdateMemberTckn")
+
+            val response = executeService.PostAsync(operationType = "Account.Member.Tckn.Update") {
+                memberRepository.MemberUpdateTcknAsync(model)
+            }
+
+            Complete {
+                copy(
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+
+            if (response.Success) onSuccess?.invoke()
+        }
+    }
+
+    fun GetAccountPreferences(languageId: Int, memberId: Int, count: Int = 100) {
+        if (!ValidateMember(memberId)) return
+
+        viewModelScope.launch {
+            SetLoading("GetAccountPreferences")
+
+            val response = executeService.GetAsync(cacheKey = "") {
+                memberPreferenceRepository.GetAccountPreferencesAsync(
+                    languageId = languageId,
+                    memberId = memberId,
+                    count = count
+                )
+            }
+
+            Complete {
+                copy(
+                    PreferenceListResult = response,
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+        }
+    }
+
+    fun SaveAccountPreference(memberId: Int, preference: MemberPreferenceDTO, preferenceValue: Boolean, onSuccess: (() -> Unit)? = null) {
+        if (!ValidateMember(memberId)) return
+        if (!ValidateId(preference.PreferenceTypeId, "Tercih tipi bulunamadı.")) return
+
+        viewModelScope.launch {
+            SetLoading("SaveAccountPreference")
+
+            val response = executeService.PostAsync(operationType = "Account.Preference.Save") {
+                if (preference.MemberPreferenceId > 0) {
+                    memberPreferenceRepository.UpdateAccountPreferenceAsync(
+                        memberId = memberId,
+                        model = MemberPreferenceUpdateModel(
+                            MemberPreferenceId = preference.MemberPreferenceId,
+                            MemberId = memberId,
+                            PreferenceTypeId = preference.PreferenceTypeId,
+                            PreferenceValue = preferenceValue
+                        )
+                    )
+                } else {
+                    memberPreferenceRepository.InsertAccountPreferenceAsync(
+                        memberId = memberId,
+                        model = MemberPreferenceInsertModel(
+                            MemberId = memberId,
+                            PreferenceTypeId = preference.PreferenceTypeId,
+                            PreferenceValue = preferenceValue
+                        )
+                    )
+                }
+            }
+
+            Complete {
+                copy(
+                    PreferenceSaveResult = response,
                     ErrorMessage = response.Message.takeIf { !response.Success }
                 )
             }
@@ -522,7 +651,7 @@ class AccountController(
         }
     }
 
-    fun ChangePassword(languageId: Int, model: ChangePasswordModel, onSuccess: (() -> Unit)? = null) {
+    fun ChangePasswordAsync(languageId: Int, model: ChangePasswordAsyncModel, onSuccess: (() -> Unit)? = null) {
         if (!ValidateMember(model.MemberId)) return
 
         if (model.ActivePassword.isBlank()) {
@@ -541,7 +670,7 @@ class AccountController(
         }
 
         viewModelScope.launch {
-            SetLoading("ChangePassword")
+            SetLoading("ChangePasswordAsync")
 
             val response = executeService.PostAsync(operationType = "Account.Password.Change") {
                 memberRepository.ChangePasswordAsync(languageId, model)

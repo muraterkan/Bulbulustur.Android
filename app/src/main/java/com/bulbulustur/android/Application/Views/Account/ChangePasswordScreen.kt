@@ -38,7 +38,7 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 
 @Composable
-fun ChangePasswordScreen(
+fun ChangePasswordAsyncScreen(
     isLoading: Boolean = false,
     errorMessage: String? = null,
     successMessage: String? = null,
@@ -114,7 +114,7 @@ fun ChangePasswordScreen(
                 ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.SectionGap)
         ) {
-            ChangePasswordIntroCard()
+            ChangePasswordAsyncIntroCard()
 
             BbCard(
                 modifier = Modifier.fillMaxWidth(),
@@ -207,7 +207,7 @@ fun ChangePasswordScreen(
 }
 
 @Composable
-private fun ChangePasswordIntroCard() {
+private fun ChangePasswordAsyncIntroCard() {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,

@@ -39,7 +39,7 @@ import com.bulbulustur.android.Application.Views.Account.BankAccountCreateScreen
 import com.bulbulustur.android.Application.Views.Account.BankAccountEditScreen
 import com.bulbulustur.android.Application.Views.Account.BankAccountListScreen
 import com.bulbulustur.android.Application.Views.Account.ChangeEmailScreen
-import com.bulbulustur.android.Application.Views.Account.ChangePasswordScreen
+import com.bulbulustur.android.Application.Views.Account.ChangePasswordAsyncScreen
 import com.bulbulustur.android.Application.Views.Account.CompanyB2BIndexScreen
 import com.bulbulustur.android.Application.Views.Account.CompanyB2BStatusScreen
 import com.bulbulustur.android.Application.Views.Account.CompanyInfoEditScreen
@@ -52,8 +52,12 @@ import com.bulbulustur.android.Application.Views.Account.NotificationListScreen
 import com.bulbulustur.android.Application.Views.Account.PhoneCreateScreen
 import com.bulbulustur.android.Application.Views.Account.PhoneListScreen
 import com.bulbulustur.android.Application.Views.Account.PhoneVerifyScreen
+import com.bulbulustur.android.Application.Views.Account.ProfileAddressScreen
+import com.bulbulustur.android.Application.Views.Account.ProfileBirthDateScreen
 import com.bulbulustur.android.Application.Views.Account.ProfileEditScreen
+import com.bulbulustur.android.Application.Views.Account.ProfileGenderScreen
 import com.bulbulustur.android.Application.Views.Account.ProfileScreen
+import com.bulbulustur.android.Application.Views.Account.ProfileTcknScreen
 import com.bulbulustur.android.Application.Views.Account.RequestDetailScreen
 import com.bulbulustur.android.Application.Views.Account.RequestListScreen
 import com.bulbulustur.android.Application.Views.Account.ReviewEditScreen
@@ -65,9 +69,13 @@ import com.bulbulustur.android.Application.Views.Preference.UsagePurposeScreen
 import com.bulbulustur.android.Application.Views.Question.QuestionAnswerScreen
 import com.bulbulustur.android.businesslayer.Core.Enums.EApplicationLanguage
 import com.bulbulustur.android.businesslayer.Core.Model.ChangeMailModel
-import com.bulbulustur.android.businesslayer.Core.Model.ChangePasswordModel
+import com.bulbulustur.android.businesslayer.Core.Model.ChangePasswordAsyncModel
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.MemberBankAccountInsertModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberBankAccountUpdateModel
+import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdateAddressModel
+import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdateBirthDateModel
+import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdateGenderModel
+import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdateTcknModel
 
 fun NavGraphBuilder.accountGraph(
     navigator: BulbulusturNavigator,
@@ -274,9 +282,9 @@ fun NavGraphBuilder.accountGraph(
             accountController.ResetPasswordChangeState()
         }
 
-        ChangePasswordScreen(
+        ChangePasswordAsyncScreen(
             isLoading = accountState.IsLoading &&
-                    accountState.CurrentAction == "ChangePassword",
+                    accountState.CurrentAction == "ChangePasswordAsync",
             errorMessage = accountState.PasswordChangeResult
                 ?.takeIf { !it.Success }
                 ?.Message,
@@ -285,9 +293,9 @@ fun NavGraphBuilder.accountGraph(
                 navigator.back()
             },
             onSaveClick = { oldPassword, newPassword, newPasswordAgain ->
-                accountController.ChangePassword(
+                accountController.ChangePasswordAsync(
                     languageId = languageId,
-                    model = ChangePasswordModel(
+                    model = ChangePasswordAsyncModel(
                         MemberId = sessionState.MemberId,
                         ActivePassword = oldPassword,
                         NewPassword = newPassword,
@@ -340,30 +348,6 @@ fun NavGraphBuilder.accountGraph(
             )
         }
 
-        LaunchedEffect(
-            member?.MemberId,
-            member?.CountryId,
-            member?.CountryStateId,
-            member?.CountryDepartmentId,
-            member?.CityId,
-            member?.DistrictId
-        ) {
-            if (member == null) return@LaunchedEffect
-
-            addressCascadeController.OnEvent(
-                AddressCascadeEvent.SetInitialSelection(
-                    Selection = AddressCascadeSelection(
-                        CountryId = member.CountryId,
-                        CountryStateId = member.CountryStateId,
-                        CountryDepartmentId = member.CountryDepartmentId,
-                        CityId = member.CityId,
-                        DistrictId = member.DistrictId
-                    ),
-                    LanguageId = languageId
-                )
-            )
-        }
-
         ProfileScreen(
             member = member,
             addressCascadeState = addressCascadeState,
@@ -377,6 +361,12 @@ fun NavGraphBuilder.accountGraph(
             },
             onEditClick = {
                 navigator.navController.navigate(AccountRoutes.ProfileEdit)
+            },
+            onGenderClick = {
+                navigator.navController.navigate(AccountRoutes.ProfileGender)
+            },
+            onBirthDateClick = {
+                navigator.navController.navigate(AccountRoutes.ProfileBirthDate)
             },
             onPhonesClick = {
                 navigator.navController.navigate(AccountRoutes.PhoneList)
@@ -393,7 +383,93 @@ fun NavGraphBuilder.accountGraph(
         )
     }
 
-    composable(route = AccountRoutes.ProfileEdit) {
+    composable(route = AccountRoutes.ProfileGender) {
+        val accountState by accountController.State.collectAsState()
+
+        LaunchedEffect(sessionState.MemberId) {
+            if (accountState.Member == null) {
+                accountController.GetAccount(
+                    languageId = sessionState.Language.Id,
+                    memberId = sessionState.MemberId
+                )
+            }
+
+            accountController.GetGenders()
+        }
+
+        ProfileGenderScreen(
+            genders = accountState.Genders,
+            currentGenderId = accountState.Member?.GenderId ?: 0,
+            isLoading = accountState.IsLoading && (
+                    accountState.CurrentAction == "GetGenders" ||
+                            accountState.CurrentAction == "GetAccount" ||
+                            accountState.CurrentAction == "UpdateMemberGender"
+                    ),
+            errorMessage = accountState.ErrorMessage,
+            onBackClick = {
+                navigator.back()
+            },
+            onSaveClick = { genderId ->
+                accountController.UpdateMemberGender(
+                    model = MemberUpdateGenderModel(
+                        MemberId = sessionState.MemberId,
+                        GenderId = genderId
+                    ),
+                    onSuccess = {
+                        accountController.GetAccount(
+                            languageId = sessionState.Language.Id,
+                            memberId = sessionState.MemberId
+                        )
+
+                        navigator.back()
+                    }
+                )
+            }
+        )
+    }
+
+    composable(route = AccountRoutes.ProfileBirthDate) {
+        val accountState by accountController.State.collectAsState()
+
+        LaunchedEffect(sessionState.MemberId) {
+            if (accountState.Member == null) {
+                accountController.GetAccount(
+                    languageId = sessionState.Language.Id,
+                    memberId = sessionState.MemberId
+                )
+            }
+        }
+
+        ProfileBirthDateScreen(
+            currentBirthDate = accountState.Member?.BirthDate,
+            isLoading = accountState.IsLoading && (
+                    accountState.CurrentAction == "GetAccount" ||
+                            accountState.CurrentAction == "UpdateMemberBirthDate"
+                    ),
+            errorMessage = accountState.ErrorMessage,
+            onBackClick = {
+                navigator.back()
+            },
+            onSaveClick = { birthDate ->
+                accountController.UpdateMemberBirthDate(
+                    model = MemberUpdateBirthDateModel(
+                        MemberId = sessionState.MemberId,
+                        BirthDate = birthDate
+                    ),
+                    onSuccess = {
+                        accountController.GetAccount(
+                            languageId = sessionState.Language.Id,
+                            memberId = sessionState.MemberId
+                        )
+
+                        navigator.back()
+                    }
+                )
+            }
+        )
+    }
+
+    composable(route = AccountRoutes.ProfileAddress) {
         val accountState by accountController.State.collectAsState()
         val addressCascadeState by addressCascadeController.State.collectAsState()
 
@@ -402,15 +478,17 @@ fun NavGraphBuilder.accountGraph(
             EApplicationLanguage.English -> 2
         }
 
-        val member = accountState.MemberUpdateResult?.Data
+        val member = accountState.Member
 
         LaunchedEffect(sessionState.MemberId) {
             addressCascadeController.OnEvent(AddressCascadeEvent.Clear)
 
-            accountController.GetMember(
-                languageId = languageId,
-                memberId = sessionState.MemberId
-            )
+            if (member == null) {
+                accountController.GetAccount(
+                    languageId = languageId,
+                    memberId = sessionState.MemberId
+                )
+            }
         }
 
         LaunchedEffect(
@@ -421,30 +499,31 @@ fun NavGraphBuilder.accountGraph(
             member?.CityId,
             member?.DistrictId
         ) {
-            if (member == null) return@LaunchedEffect
+            val currentMember = member ?: return@LaunchedEffect
 
             addressCascadeController.OnEvent(
                 AddressCascadeEvent.SetInitialSelection(
                     Selection = AddressCascadeSelection(
-                        CountryId = member.CountryId,
-                        CountryStateId = member.CountryStateId,
-                        CountryDepartmentId = member.CountryDepartmentId,
-                        CityId = member.CityId,
-                        DistrictId = member.DistrictId
+                        CountryId = currentMember.CountryId,
+                        CountryStateId = currentMember.CountryStateId,
+                        CountryDepartmentId = currentMember.CountryDepartmentId,
+                        CityId = currentMember.CityId,
+                        DistrictId = currentMember.DistrictId
                     ),
                     LanguageId = languageId
                 )
             )
         }
 
-        ProfileEditScreen(
-            member = member,
+        ProfileAddressScreen(
+            memberId = sessionState.MemberId,
             addressCascadeState = addressCascadeState,
             isLoading = accountState.IsLoading && (
-                    accountState.CurrentAction == "GetMember" ||
-                            accountState.CurrentAction == "UpdateMember"
+                    accountState.CurrentAction == "GetAccount" ||
+                            accountState.CurrentAction == "UpdateMemberAddress"
                     ),
-            errorMessage = accountState.ErrorMessage,
+            errorMessage = accountState.ErrorMessage
+                ?: addressCascadeState.ErrorMessage,
             onBackClick = {
                 addressCascadeController.OnEvent(AddressCascadeEvent.Clear)
                 navigator.back()
@@ -483,27 +562,111 @@ fun NavGraphBuilder.accountGraph(
             },
             onDistrictSelected = { districtId ->
                 addressCascadeController.OnEvent(
-                    AddressCascadeEvent.SelectDistrict(DistrictId = districtId)
+                    AddressCascadeEvent.SelectDistrict(
+                        DistrictId = districtId
+                    )
                 )
             },
-            onSaveClick = { name, surname, profession, birthDate ->
+            onSaveClick = { model ->
+                accountController.UpdateMemberAddress(
+                    model = model,
+                    onSuccess = {
+                        accountController.GetAccount(
+                            languageId = languageId,
+                            memberId = sessionState.MemberId
+                        )
+
+                        addressCascadeController.OnEvent(AddressCascadeEvent.Clear)
+                        navigator.back()
+                    }
+                )
+            }
+        )
+    }
+
+    composable(route = AccountRoutes.ProfileTckn) {
+        val accountState by accountController.State.collectAsState()
+
+        val languageId = when (sessionState.Language) {
+            EApplicationLanguage.Turkish -> 1
+            EApplicationLanguage.English -> 2
+        }
+
+        LaunchedEffect(sessionState.MemberId) {
+            if (accountState.Member == null) {
+                accountController.GetAccount(
+                    languageId = languageId,
+                    memberId = sessionState.MemberId
+                )
+            }
+        }
+
+        ProfileTcknScreen(
+            currentTckn = accountState.Member?.Tckn,
+            isLoading = accountState.IsLoading && (
+                    accountState.CurrentAction == "GetAccount" ||
+                            accountState.CurrentAction == "UpdateMemberTckn"
+                    ),
+            errorMessage = accountState.ErrorMessage,
+            onBackClick = {
+                navigator.back()
+            },
+            onSaveClick = { tckn ->
+                accountController.UpdateMemberTckn(
+                    model = MemberUpdateTcknModel(
+                        MemberId = sessionState.MemberId,
+                        Tckn = tckn
+                    ),
+                    onSuccess = {
+                        accountController.GetAccount(
+                            languageId = languageId,
+                            memberId = sessionState.MemberId
+                        )
+
+                        navigator.back()
+                    }
+                )
+            }
+        )
+    }
+
+    composable(route = AccountRoutes.ProfileEdit) {
+        val accountState by accountController.State.collectAsState()
+
+        val languageId = when (sessionState.Language) {
+            EApplicationLanguage.Turkish -> 1
+            EApplicationLanguage.English -> 2
+        }
+
+        val member = accountState.MemberUpdateResult?.Data
+
+        LaunchedEffect(sessionState.MemberId) {
+            accountController.GetMember(
+                languageId = languageId,
+                memberId = sessionState.MemberId
+            )
+        }
+
+        ProfileEditScreen(
+            member = member,
+            isLoading = accountState.IsLoading && (
+                    accountState.CurrentAction == "GetMember" ||
+                            accountState.CurrentAction == "UpdateMember"
+                    ),
+            errorMessage = accountState.ErrorMessage,
+            onBackClick = {
+                navigator.back()
+            },
+            onSaveClick = { name, surname, profession ->
                 val currentMember = member ?: return@ProfileEditScreen
-                val selection = addressCascadeState.Selection
 
                 accountController.UpdateMember(
                     model = currentMember.copy(
                         Name = name.trim(),
                         Surname = surname.trim(),
-                        Profession = profession.trim(),
-                        BirthDate = birthDate.trim().ifBlank { null },
-                        CountryId = selection.CountryId,
-                        CountryStateId = selection.CountryStateId,
-                        CountryDepartmentId = selection.CountryDepartmentId,
-                        CityId = selection.CityId,
-                        DistrictId = selection.DistrictId
+                        Profession = profession.trim()
                     ),
                     onSuccess = {
-                        addressCascadeController.OnEvent(AddressCascadeEvent.Clear)
                         navigator.back()
                     }
                 )

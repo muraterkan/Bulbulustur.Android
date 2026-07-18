@@ -37,21 +37,16 @@ import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdat
 @Composable
 fun ProfileEditScreen(
     member: MemberUpdateModel?,
-    addressCascadeState: AddressCascadeState,
+
     isLoading: Boolean = false,
     errorMessage: String? = null,
     onBackClick: () -> Unit = {},
-    onCountrySelected: (Int) -> Unit = {},
-    onCountryStateSelected: (Int) -> Unit = {},
-    onCountryDepartmentSelected: (Int?) -> Unit = {},
-    onCitySelected: (Int) -> Unit = {},
-    onDistrictSelected: (Int?) -> Unit = {},
+
     onSaveClick: (
         name: String,
         surname: String,
-        profession: String,
-        birthDate: String
-    ) -> Unit = { _, _, _, _ -> }
+        profession: String
+    ) -> Unit = { _, _, _ -> }
 ) {
     val nameState = remember {
         mutableStateOf("")
@@ -65,23 +60,19 @@ fun ProfileEditScreen(
         mutableStateOf("")
     }
 
-    val birthDateState = remember {
-        mutableStateOf("")
-    }
-
     LaunchedEffect(member?.MemberId) {
         val currentMember = member ?: return@LaunchedEffect
 
         nameState.value = currentMember.Name
         surnameState.value = currentMember.Surname
         professionState.value = currentMember.Profession
-        birthDateState.value = currentMember.BirthDate.orEmpty()
+
     }
 
     val canSubmit = member != null &&
             nameState.value.isNotBlank() &&
             surnameState.value.isNotBlank() &&
-            addressCascadeState.IsValid &&
+
             !isLoading
 
     Scaffold(
@@ -122,7 +113,7 @@ fun ProfileEditScreen(
                 ) {
                     ProfileEditSectionHeader(
                         title = "Kişisel Bilgiler",
-                        description = "Ad, soyad, meslek ve doğum tarihi bilgilerinizi güncelleyin."
+                        description = "Ad, soyad ve meslek bilgilerinizi güncelleyin."
                     )
 
                     ProfileEditTextField(
@@ -154,46 +145,8 @@ fun ProfileEditScreen(
                         placeholder = "Mesleğiniz",
                         enabled = !isLoading
                     )
-
-                    ProfileEditTextField(
-                        value = birthDateState.value,
-                        onValueChange = {
-                            birthDateState.value = it
-                        },
-                        label = "Doğum Günü",
-                        placeholder = "gg.aa.yyyy",
-                        keyboardType = KeyboardType.Number,
-                        enabled = !isLoading
-                    )
                 }
             }
-
-            BbCard(
-                modifier = Modifier.fillMaxWidth(),
-                variant = BbCardVariant.Outlined,
-                padding = BbCardPadding.Medium
-            ) {
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
-                ) {
-                    ProfileEditSectionHeader(
-                        title = "Konum Bilgileri",
-                        description = "Ülke, şehir ve varsa bölge veya ilçe bilgilerinizi düzenleyin."
-                    )
-
-                    AddressCascadeFields(
-                        state = addressCascadeState,
-                        onCountrySelected = onCountrySelected,
-                        onCountryStateSelected = onCountryStateSelected,
-                        onCountryDepartmentSelected = onCountryDepartmentSelected,
-                        onCitySelected = onCitySelected,
-                        onDistrictSelected = onDistrictSelected,
-                        enabled = !isLoading
-                    )
-                }
-            }
-
             errorMessage
                 ?.takeIf { it.isNotBlank() }
                 ?.let { message ->
@@ -210,8 +163,7 @@ fun ProfileEditScreen(
                     onSaveClick(
                         nameState.value,
                         surnameState.value,
-                        professionState.value,
-                        birthDateState.value
+                        professionState.value
                     )
                 },
                 modifier = Modifier.fillMaxWidth(),
@@ -232,7 +184,7 @@ private fun ProfileEditIntroCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Hesabınıza ait kişisel ve konum bilgilerini buradan güncelleyebilirsiniz.",
+            text = "Ad, soyad ve meslek bilgilerinizi buradan güncelleyebilirsiniz.",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

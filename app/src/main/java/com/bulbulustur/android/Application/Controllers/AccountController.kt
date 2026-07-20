@@ -1,6 +1,5 @@
 package com.bulbulustur.android.Application.Controllers
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberAddressDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberAgreementDTO
@@ -8,7 +7,6 @@ import com.bulbulustur.android.businesslayer.Core.DTO.MemberAlarmListDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberBankAccountDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberCouponDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberDTO
-import com.bulbulustur.android.businesslayer.Core.DTO.SystemDescGenderDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberFollowedCompanyDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberFollowedStoreDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberLoginActivityDTO
@@ -25,7 +23,6 @@ import com.bulbulustur.android.businesslayer.Core.Interface.IMemberFollowedStore
 import com.bulbulustur.android.businesslayer.Core.Interface.IMemberLoginActivityRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IMemberPreferenceRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IMemberRepository
-import com.bulbulustur.android.businesslayer.Core.Interface.ISystemDescGenderRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IProductFavoriteRepository
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.ProductFavoriteInsertModel
 import com.bulbulustur.android.businesslayer.Core.Interface.IWholesaleFavoriteRepository
@@ -38,10 +35,6 @@ import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.MemberPrefe
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberAddressUpdateModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberBankAccountUpdateModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberPreferenceUpdateModel
-import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdateAddressModel
-import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdateBirthDateModel
-import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdateGenderModel
-import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdateModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdateTcknModel
 import com.bulbulustur.android.businesslayer.Core.Model.ChangePasswordAsyncModel
 import com.bulbulustur.android.businesslayer.Core.Util.Execute.IExecuteService
@@ -75,7 +68,6 @@ data class AccountControllerState(
     val IsLoading: Boolean = false,
     val CurrentAction: String? = null,
     val MemberResult: Result<MemberDTO?>? = null,
-    val MemberUpdateResult: Result<MemberUpdateModel?>? = null,
     val AddressListResult: Result<List<MemberAddressDTO>>? = null,
     val AddressDetailResult: Result<MemberAddressUpdateModel?>? = null,
     val AddressInsertResult: Result<Unit>? = null,
@@ -107,7 +99,6 @@ data class AccountControllerState(
     val PasswordChangeResult: Result<Unit>? = null,
     val IsPasswordChanged: Boolean = false,
     val PasswordChangeMessage: String? = null,
-    val GenderListResult: Result<List<SystemDescGenderDTO>>? = null,
     val PreferenceListResult: Result<List<MemberPreferenceDTO>>? = null,
     val PreferenceSaveResult: Result<Unit>? = null,
     val ErrorMessage: String? = null,
@@ -170,9 +161,6 @@ data class AccountControllerState(
     val WholesaleFavorites: List<WholesaleFavoriteDTO>
         get() = WholesaleFavoriteListResult?.Data.orEmpty()
 
-    val Genders: List<SystemDescGenderDTO>
-        get() = GenderListResult?.Data.orEmpty()
-
     val Preferences: List<MemberPreferenceDTO>
         get() = PreferenceListResult?.Data.orEmpty()
 
@@ -204,7 +192,6 @@ data class AccountControllerState(
 class AccountController(
     private val executeService: IExecuteService,
     private val memberRepository: IMemberRepository,
-    private val systemDescGenderRepository: ISystemDescGenderRepository,
     private val memberAddressRepository: IMemberAddressRepository,
     private val memberBankAccountRepository: IMemberBankAccountRepository,
     private val memberAlarmListRepository: IMemberAlarmListRepository,
@@ -222,8 +209,7 @@ class AccountController(
     private val reviewRepository: IReviewRepository,
     private val memberSubscriptionRepository: IMemberSubscriptionRepository,
     private val companyRepository: ICompanyRepository,
-    private val storeRequestRepository: IStoreRequestRepository,
-
+    private val storeRequestRepository: IStoreRequestRepository
 ) : BaseController() {
 
     private val _state = MutableStateFlow(AccountControllerState())
@@ -297,121 +283,6 @@ class AccountController(
                     ErrorMessage = response.Message.takeIf { !response.Success }
                 )
             }
-        }
-    }
-
-    fun GetMember(languageId: Int, memberId: Int) {
-        if (!ValidateMember(memberId)) return
-
-        viewModelScope.launch {
-            SetLoading("GetMember")
-
-            val response = executeService.GetAsync(cacheKey = "") {
-                memberRepository.GetMemberByIdAsync(languageId, memberId)
-            }
-
-            Complete {
-                copy(
-                    ErrorMessage = response.Message.takeIf { !response.Success }
-                )
-            }
-        }
-    }
-
-    fun UpdateMember(model: MemberUpdateModel, onSuccess: (() -> Unit)? = null) {
-        if (!ValidateMember(model.MemberId)) return
-
-        viewModelScope.launch {
-            SetLoading("UpdateMember")
-
-            val response = executeService.PostAsync(operationType = "Account.Member.Update") {
-                memberRepository.UpdateAsync(model)
-            }
-
-            Complete {
-                copy(
-                    ErrorMessage = response.Message.takeIf { !response.Success }
-                )
-            }
-
-            if (response.Success) onSuccess?.invoke()
-        }
-    }
-
-    fun GetGenders() {
-        viewModelScope.launch {
-            SetLoading("GetGenders")
-
-            val response = executeService.GetAsync(cacheKey = "") {
-                systemDescGenderRepository.GetSystemDescGenderListAsync()
-            }
-
-            Complete {
-                copy(
-                    GenderListResult = response,
-                    ErrorMessage = response.Message.takeIf { !response.Success }
-                )
-            }
-        }
-    }
-
-    fun UpdateMemberGender(model: MemberUpdateGenderModel, onSuccess: (() -> Unit)? = null) {
-        if (!ValidateMember(model.MemberId)) return
-
-        viewModelScope.launch {
-            SetLoading("UpdateMemberGender")
-
-            val response = executeService.PostAsync(operationType = "Account.Member.Gender.Update") {
-                memberRepository.MemberUpdateGenderAsync(model)
-            }
-
-            Complete {
-                copy(
-                    ErrorMessage = response.Message.takeIf { !response.Success }
-                )
-            }
-
-            if (response.Success) onSuccess?.invoke()
-        }
-    }
-
-    fun UpdateMemberBirthDate(model: MemberUpdateBirthDateModel, onSuccess: (() -> Unit)? = null) {
-        if (!ValidateMember(model.MemberId)) return
-
-        viewModelScope.launch {
-            SetLoading("UpdateMemberBirthDate")
-
-            val response = executeService.PostAsync(operationType = "Account.Member.BirthDate.Update") {
-                memberRepository.MemberUpdateBirthDateAsync(model)
-            }
-
-            Complete {
-                copy(
-                    ErrorMessage = response.Message.takeIf { !response.Success }
-                )
-            }
-
-            if (response.Success) onSuccess?.invoke()
-        }
-    }
-
-    fun UpdateMemberAddress(model: MemberUpdateAddressModel, onSuccess: (() -> Unit)? = null) {
-        if (!ValidateMember(model.MemberId)) return
-
-        viewModelScope.launch {
-            SetLoading("UpdateMemberAddress")
-
-            val response = executeService.PostAsync(operationType = "Account.Member.Address.Update") {
-                memberRepository.MemberUpdateAddressAsync(model)
-            }
-
-            Complete {
-                copy(
-                    ErrorMessage = response.Message.takeIf { !response.Success }
-                )
-            }
-
-            if (response.Success) onSuccess?.invoke()
         }
     }
 
@@ -1314,8 +1185,6 @@ class AccountController(
             }
         }
     }
-
-
 
     fun GetReturnRequest(languageId: Int, memberId: Int, returnRequestId: Int) {
         if (!ValidateMember(memberId)) return

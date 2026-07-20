@@ -1,8 +1,6 @@
 package com.bulbulustur.android.Application.Views.Account
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -11,437 +9,278 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AccountBalance
 import androidx.compose.material.icons.outlined.Badge
 import androidx.compose.material.icons.outlined.Business
 import androidx.compose.material.icons.outlined.ChevronRight
-import androidx.compose.material.icons.outlined.CreditCard
-import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.icons.outlined.HelpOutline
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.LocalOffer
+import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.LocationOn
-import androidx.compose.material.icons.outlined.MailOutline
-import androidx.compose.material.icons.outlined.ProductionQuantityLimits
-import androidx.compose.material.icons.outlined.QuestionAnswer
-import androidx.compose.material.icons.outlined.RequestQuote
-import androidx.compose.material.icons.outlined.Reviews
-import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material.icons.outlined.Storefront
-import androidx.compose.material.icons.outlined.SupportAgent
-import androidx.compose.material.icons.outlined.Tune
-import androidx.compose.material.icons.outlined.Wallet
+import androidx.compose.material.icons.outlined.Man
+import androidx.compose.material.icons.outlined.PermIdentity
+import androidx.compose.material.icons.outlined.PhoneIphone
+import androidx.compose.material.icons.outlined.Security
+import androidx.compose.material.icons.outlined.Verified
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+
 import androidx.compose.material3.MaterialTheme
+
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.remember
-import androidx.compose.material.icons.outlined.Logout
+
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailBottomNavigation
-import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailBottomNavigationItem
+import com.bulbulustur.android.Application.Shared.Address.AddressCascadeState
+import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
-import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBAlpha
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
-import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBLayout
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BbTypography
-import com.bulbulustur.android.R
+import com.bulbulustur.android.businesslayer.Core.DTO.MemberDTO
 
 @Composable
 fun AccountScreen(
-    isLogoutLoading: Boolean = false,
-    onSecurityClick: () -> Unit = {},
+    member: MemberDTO?,
+    addressCascadeState: AddressCascadeState,
+    isLoading: Boolean = false,
+    errorMessage: String? = null,
+    onBackClick: () -> Unit = {},
     onProfileClick: () -> Unit = {},
+    onEditClick: () -> Unit = {},
+    onGenderClick: () -> Unit = {},
+    onBirthDateClick: () -> Unit = {},
     onAddressClick: () -> Unit = {},
-    onNotificationClick: () -> Unit = {},
+    onPhonesClick: () -> Unit = {},
+    onEmailClick: () -> Unit = {},
     onCompanyInfoClick: () -> Unit = {},
-    onFollowedStoresClick: () -> Unit = {},
-    onQuotationRequestsClick: () -> Unit = {},
-    onOrdersClick: () -> Unit = {},
-    onFavoritesClick: () -> Unit = {},
-    onReviewsClick: () -> Unit = {},
-    onCouponsClick: () -> Unit = {},
-    onRequestsClick: () -> Unit = {},
-    onSubscriptionsClick: () -> Unit = {},
-    onBankAccountsClick: () -> Unit = {},
-    onWalletBalanceClick: () -> Unit = {},
-    onSettingsClick: () -> Unit = {},
-    onMessagesClick: () -> Unit = {},
-    onSupportClick: () -> Unit = {},
-    onLogoutClick: () -> Unit = {},
-    onQuestionsClick: () -> Unit = {},
-    onUsagePurposeClick: () -> Unit = {},
-
-    onHomeClick: () -> Unit = {},
-    onMenuClick: () -> Unit = {},
-    onModeSwitchClick: () -> Unit = {},
-    onBasketClick: () -> Unit = {}
+    onB2BStatusClick: () -> Unit = {}
 ) {
-    val useProfilePhoto = true
-
-    val accountData = remember {
-        AccountHomeData(
-            userName = "Murat Erkan",
-            profileSubtitle = "Profili Görüntüle veya Düzenle",
-            initials = "ME",
-            profileId = "ID: 54108878",
-            city = "İstanbul",
-            orderCount = "0",
-            favoriteCount = "0",
-            quotationCount = "2"
-        )
+    val fullName = listOfNotNull(
+        member?.Name?.trim()?.takeIf { it.isNotBlank() },
+        member?.Surname?.trim()?.takeIf { it.isNotBlank() }
+    ).joinToString(" ").ifBlank {
+        "Hesap Bilgisi Bulunamadı"
     }
 
-    val pageBackgroundColor = MaterialTheme.colorScheme.surfaceVariant
+    val email = member?.Email.orEmpty().ifBlank {
+        "E-posta bilgisi bulunamadı"
+    }
+
+    val countryName = addressCascadeState.Countries
+        .firstOrNull {
+            it.AddressCountryId == member?.CountryId
+        }
+        ?.Content
+        .orEmpty()
+
+    val cityName = addressCascadeState.Cities
+        .firstOrNull {
+            it.AddressCityId == member?.CityId
+        }
+        ?.Content
+        .orEmpty()
+
+    val locationText = listOf(countryName, cityName)
+        .filter { it.isNotBlank() }
+        .joinToString(" / ")
+        .ifBlank {
+            "Konum bilgisi bulunamadı"
+        }
+
+    val genderText = member
+        ?.GenderId
+        ?.takeIf { it > 0 }
+        ?.toString()
+        ?: "Belirtilmemiş"
+
+    val birthDateText = member
+        ?.BirthDate
+        ?.trim()
+        ?.take(10)
+        ?.takeIf { it.isNotBlank() }
+        ?: "Belirtilmemiş"
+
+    val activationText = when (member?.Activation) {
+        true -> "Doğrulanmış"
+        false -> "Doğrulanmamış"
+        null -> "Bilinmiyor"
+    }
 
     Scaffold(
-        containerColor = pageBackgroundColor,
-        bottomBar = {
-            RetailBottomNavigation(
-                selectedItem = RetailBottomNavigationItem.Account,
-                onItemClick = { selectedItem ->
-                    when (selectedItem) {
-                        RetailBottomNavigationItem.Home -> onHomeClick()
-                        RetailBottomNavigationItem.Menu -> onMenuClick()
-                        RetailBottomNavigationItem.ModeSwitch -> onModeSwitchClick()
-                        RetailBottomNavigationItem.Basket -> onBasketClick()
-                        RetailBottomNavigationItem.Account -> Unit
-                    }
-                }
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Hesabım",
+                onBackClick = onBackClick
             )
         }
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(pageBackgroundColor)
-                .statusBarsPadding()
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding),
             contentPadding = PaddingValues(
                 start = BBSpacing.PageHorizontal,
-                top = BBSpacing.Space2,
+                top = BBSpacing.PageTopCompact,
                 end = BBSpacing.PageHorizontal,
-                bottom = BBSpacing.Space5
+                bottom = BBSpacing.PageBottom
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
-            item {
-                AccountProfileHero(
-                    data = accountData,
-                    useProfilePhoto = useProfilePhoto,
-                    onProfileClick = onProfileClick,
-                    onMessagesClick = onMessagesClick,
-                    onSettingsClick = onSettingsClick
-                )
-            }
-
-            item {
-                AccountStatsStrip(
-                    orderCount = accountData.orderCount,
-                    favoriteCount = accountData.favoriteCount,
-                    quotationCount = accountData.quotationCount,
-                    onOrdersClick = onOrdersClick,
-                    onFavoritesClick = onFavoritesClick,
-                    onQuotationRequestsClick = onQuotationRequestsClick
-                )
-            }
-
-            item {
-                AccountPrimaryActions(
-                    onQuotationRequestsClick = onQuotationRequestsClick,
-                    onCompanyInfoClick = onCompanyInfoClick
-                )
-            }
-
-            item {
-                AccountMenuSection(
-                    title = "Hesap İşlemleri"
-                ) {
-                    AccountMenuRow(
-                        title = "Siparişlerim",
-                        description = "Geçmiş ve aktif siparişlerini görüntüle.",
-                        icon = Icons.Outlined.ProductionQuantityLimits,
-                        onClick = onOrdersClick
-                    )
-
-                    AccountDashedDivider()
-
-                    AccountMenuRow(
-                        title = "Favorilerim",
-                        description = "Perakende ve toptan favorilerini yönet.",
-                        icon = Icons.Outlined.FavoriteBorder,
-                        onClick = onFavoritesClick
-                    )
-
-                    AccountDashedDivider()
-
-                    AccountMenuRow(
-                        title = "Fiyat Teklifi İstekleri",
-                        description = "Toptan teklif ve RFQ süreçlerini takip et.",
-                        icon = Icons.Outlined.RequestQuote,
-                        onClick = onQuotationRequestsClick
-                    )
-
-                    AccountDashedDivider()
-
-                    AccountMenuRow(
-                        title = "Adreslerim",
-                        description = "Teslimat ve fatura adreslerini düzenle.",
-                        icon = Icons.Outlined.Home,
-                        onClick = onAddressClick
-                    )
-
-                    AccountDashedDivider()
-
-                    AccountMenuRow(
-                        title = "Banka Hesaplarım",
-                        description = "IBAN ve banka hesap bilgilerini yönet.",
-                        icon = Icons.Outlined.AccountBalance,
-                        onClick = onBankAccountsClick
-                    )
-                }
-            }
-
-            item {
-                AccountMenuSection(
-                    title = "Ticari Profil"
-                ) {
-                    AccountMenuRow(
-                        title = "Şirket Bilgileri",
-                        description = "Firma ve ticari hesap bilgilerini yönet.",
-                        icon = Icons.Outlined.Business,
-                        onClick = onCompanyInfoClick
-                    )
-
-                    AccountDashedDivider()
-
-                    AccountMenuRow(
-                        title = "Takip Ettiğim Mağazalar",
-                        description = "Takip ettiğin mağaza ve firmaları görüntüle.",
-                        icon = Icons.Outlined.Storefront,
-                        onClick = onFollowedStoresClick
-                    )
-
-                    AccountDashedDivider()
-
-                    AccountMenuRow(
-                        title = "Kullanım Amacı",
-                        description = "Toptan, perakende veya karma kullanım tercihini düzenle.",
-                        icon = Icons.Outlined.Tune,
-                        onClick = onUsagePurposeClick
-                    )
-                }
-            }
-
-            item {
-                AccountMenuSection(
-                    title = "Alışveriş ve Etkileşim"
-                ) {
-                    AccountMenuRow(
-                        title = "Soru ve Cevaplarım",
-                        description = "Sorularını ve satıcı cevaplarını görüntüle.",
-                        icon = Icons.Outlined.QuestionAnswer,
-                        onClick = onQuestionsClick
-                    )
-
-                    AccountDashedDivider()
-
-                    AccountMenuRow(
-                        title = "Değerlendirmelerim",
-                        description = "Yorum ve değerlendirmelerini görüntüle.",
-                        icon = Icons.Outlined.Reviews,
-                        onClick = onReviewsClick
-                    )
-
-                    AccountDashedDivider()
-
-                    AccountMenuRow(
-                        title = "Kuponlarım",
-                        description = "Tanımlı kampanya ve kuponlarını incele.",
-                        icon = Icons.Outlined.LocalOffer,
-                        onClick = onCouponsClick
-                    )
-
-                    AccountDashedDivider()
-
-                    AccountMenuRow(
-                        title = "Taleplerim",
-                        description = "İade, destek ve işlem taleplerini takip et.",
-                        icon = Icons.Outlined.HelpOutline,
-                        onClick = onRequestsClick
-                    )
-                }
-            }
-
-            item {
-                AccountMenuSection(
-                    title = "Finansal"
-                ) {
-                    AccountMenuRow(
-                        title = "Abonelikler",
-                        description = "Paket ve üyelik süreçlerini görüntüle.",
-                        icon = Icons.Outlined.CreditCard,
-                        onClick = onSubscriptionsClick
-                    )
-
-                    AccountDashedDivider()
-
-                    AccountMenuRow(
-                        title = "Cüzdan ve Bakiye",
-                        description = "Bakiye, ödeme ve finansal hareketlerini incele.",
-                        icon = Icons.Outlined.Wallet,
-                        onClick = onWalletBalanceClick
-                    )
-                }
-            }
-
-            item {
-                AccountSupportAndSettingsGroup(
-                    onSupportClick = onSupportClick,
-                    onSettingsClick = onSettingsClick
-                )
-            }
-
-            item {
-                AccountLogoutSection(
-                    onLogoutClick = onLogoutClick,
-                    isLogoutLoading = isLogoutLoading
-                )
-            }
-
-            item {
-                AccountUsagePurposeDarkCard(
-                    onClick = onUsagePurposeClick
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun AccountProfileHero(
-    data: AccountHomeData,
-    useProfilePhoto: Boolean,
-    onProfileClick: () -> Unit,
-    onMessagesClick: () -> Unit,
-    onSettingsClick: () -> Unit
-) {
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = BBSpacing.Space2),
-            horizontalArrangement = Arrangement.End,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            AccountTopIconButton(
-                icon = Icons.Outlined.MailOutline,
-                onClick = onMessagesClick
-            )
-
-            Spacer(
-                modifier = Modifier.width(BBSpacing.Space3)
-            )
-
-            AccountTopIconButton(
-                icon = Icons.Outlined.Settings,
-                onClick = onSettingsClick
-            )
-        }
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable {
-                    onProfileClick()
-                },
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
-        ) {
-            AccountAvatar(
-                useProfilePhoto = useProfilePhoto,
-                initials = data.initials,
-                onClick = onProfileClick
-            )
-
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
-            ) {
-                Text(
-                    text = data.userName,
-                    style = BbTypography.headlineSmall,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center
-                )
-
-                Row(
-                    modifier = Modifier.clickable {
-                        onProfileClick()
-                    },
-                    horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space1),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = data.profileSubtitle,
-                        style = BbTypography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        textAlign = TextAlign.Center
-                    )
-
-                    Icon(
-                        imageVector = Icons.Outlined.ChevronRight,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.size(BBIcon.SizeSm)
-                    )
+            when {
+                isLoading || (member == null && errorMessage.isNullOrBlank()) -> {
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(BBSpacing.Space6),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator(
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                    }
                 }
 
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    AccountProfileChip(
-                        icon = Icons.Outlined.Badge,
-                        text = data.profileId
-                    )
+                !errorMessage.isNullOrBlank() -> {
+                    item {
+                        ProfileErrorCard(
+                            message = errorMessage
+                        )
+                    }
+                }
 
-                    AccountProfileChip(
-                        icon = Icons.Outlined.LocationOn,
-                        text = data.city
-                    )
+                member == null -> {
+                    item {
+                        ProfileNotFoundCard()
+                    }
+                }
+
+                else -> {
+                    item {
+                        ProfileHeroCard(
+                            fullName = fullName,
+                            onClick = onProfileClick
+                        )
+                    }
+
+                    item {
+                        ProfileInfoSection(
+                            title = "Temel Bilgiler",
+                            description = "Hesabınızın görünen temel bilgileri.",
+                            icon = Icons.Outlined.PermIdentity
+                        ) {
+
+                            ProfileDashedDivider()
+
+                            ProfileInfoRow(
+                                title = "Ad Soyad",
+                                value = fullName,
+                                icon = Icons.Outlined.PermIdentity,
+                                onClick = onEditClick
+                            )
+
+                            ProfileDashedDivider()
+
+                            ProfileInfoRow(
+                                title = "Cinsiyet",
+                                value = genderText,
+                                icon = Icons.Outlined.Man,
+                                onClick = onGenderClick
+                            )
+
+                            ProfileDashedDivider()
+
+                            ProfileInfoRow(
+                                title = "Doğum Tarihi",
+                                value = birthDateText,
+                                icon = Icons.Outlined.Badge,
+                                onClick = onBirthDateClick
+                            )
+
+                            ProfileDashedDivider()
+
+                            ProfileInfoRow(
+                                title = "Ülke / Şehir",
+                                value = locationText,
+                                icon = Icons.Outlined.LocationOn,
+                                onClick = onAddressClick
+                            )
+                        }
+                    }
+
+                    item {
+                        ProfileInfoSection(
+                            title = "Doğrulama",
+                            description = "Güvenlik ve hesap doğrulama bilgileri.",
+                            icon = Icons.Outlined.Security
+                        ) {
+                            ProfileInfoRow(
+                                title = "E-Posta",
+                                value = email,
+                                icon = Icons.Outlined.Email,
+                                onClick = onEmailClick
+                            )
+
+                            ProfileDashedDivider()
+
+                            ProfileInfoRow(
+                                title = "Telefonlarım",
+                                value = "Telefon bilgilerini yönetin",
+                                icon = Icons.Outlined.PhoneIphone,
+                                onClick = onPhonesClick
+                            )
+
+                            ProfileDashedDivider()
+
+                            ProfileInfoRow(
+                                title = "E-Posta Doğrulama",
+                                value = activationText,
+                                icon = Icons.Outlined.Verified,
+                                onClick = onEmailClick
+                            )
+                        }
+                    }
+
+                    item {
+                        ProfileInfoSection(
+                            title = "Kurumsal Bağlantı",
+                            description = "Şirket ve B2B görünürlük bağlantılarınız.",
+                            icon = Icons.Outlined.Business
+                        ) {
+                            ProfileInfoRow(
+                                title = "Şirket Bilgileri",
+                                value = "Türkiye Global Ticaret Limited Şirketi",
+                                icon = Icons.Outlined.Business,
+                                onClick = onCompanyInfoClick
+                            )
+
+                            ProfileDashedDivider()
+
+                            ProfileInfoRow(
+                                title = "B2B Index",
+                                value = "Aktif",
+                                icon = Icons.Outlined.Verified,
+                                onClick = onB2BStatusClick
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -449,360 +288,34 @@ private fun AccountProfileHero(
 }
 
 @Composable
-private fun AccountAvatar(
-    useProfilePhoto: Boolean,
-    initials: String,
+private fun ProfileHeroCard(
+    fullName: String,
     onClick: () -> Unit
-) {
-    Box(
-        modifier = Modifier
-            .size(BBLayout.AccountAvatarSize)
-            .background(
-                color = MaterialTheme.colorScheme.primary,
-                shape = BBRadius.IconBoxSoft
-            )
-            .padding(BBSpacing.Space1)
-            .clickable {
-                onClick()
-            },
-        contentAlignment = Alignment.Center
-    ) {
-        if (useProfilePhoto) {
-            Image(
-                painter = painterResource(id = R.drawable.murat_erkan),
-                contentDescription = "Profil fotoğrafı",
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clip(BBRadius.IconBoxSoft),
-                contentScale = ContentScale.Crop
-            )
-        } else {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(
-                        color = MaterialTheme.colorScheme.primaryContainer,
-                        shape = BBRadius.IconBoxSoft
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = initials,
-                    style = BbTypography.titleLarge,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun AccountProfileChip(
-    icon: ImageVector,
-    text: String
-) {
-    Surface(
-        shape = BBRadius.PillShape,
-        color = MaterialTheme.colorScheme.surface,
-        border = BorderStroke(
-            width = BBSpacing.BorderThin,
-            color = MaterialTheme.colorScheme.outlineVariant
-        )
-    ) {
-        Row(
-            modifier = Modifier.padding(
-                horizontal = BBSpacing.Space2,
-                vertical = BBSpacing.Space1
-            ),
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space1),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(BBIcon.SizeSm)
-            )
-
-            Text(
-                text = text,
-                style = BbTypography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                fontWeight = FontWeight.SemiBold
-            )
-        }
-    }
-}
-
-@Composable
-private fun AccountTopIconButton(
-    icon: ImageVector,
-    onClick: () -> Unit
-) {
-    Box(
-        modifier = Modifier
-            .size(BBSpacing.Space11)
-            .clickable {
-                onClick()
-            },
-        contentAlignment = Alignment.Center
-    ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.size(30.dp)
-        )
-    }
-}
-
-@Composable
-private fun AccountStatsStrip(
-    orderCount: String,
-    favoriteCount: String,
-    quotationCount: String,
-    onOrdersClick: () -> Unit,
-    onFavoritesClick: () -> Unit,
-    onQuotationRequestsClick: () -> Unit
 ) {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
-        variant = BbCardVariant.Default,
-        padding = BbCardPadding.Medium
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium,
+        onClick = onClick
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            AccountProfileStat(
-                modifier = Modifier.weight(1f),
-                value = orderCount,
-                label = "Sipariş",
-                onClick = onOrdersClick
-            )
-
-            AccountVerticalDivider()
-
-            AccountProfileStat(
-                modifier = Modifier.weight(1f),
-                value = favoriteCount,
-                label = "Favori",
-                onClick = onFavoritesClick
-            )
-
-            AccountVerticalDivider()
-
-            AccountProfileStat(
-                modifier = Modifier.weight(1f),
-                value = quotationCount,
-                label = "Teklif",
-                onClick = onQuotationRequestsClick
-            )
-        }
-    }
-}
-
-@Composable
-private fun AccountProfileStat(
-    modifier: Modifier,
-    value: String,
-    label: String,
-    onClick: () -> Unit
-) {
-    Column(
-        modifier = modifier
-            .clickable {
-                onClick()
-            }
-            .padding(vertical = BBSpacing.Space1),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
-    ) {
-        Text(
-            text = value,
-            style = BbTypography.titleLarge,
-            color = MaterialTheme.colorScheme.onSurface,
-            fontWeight = FontWeight.Bold
-        )
-
-        Text(
-            text = label,
-            style = BbTypography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-    }
-}
-
-@Composable
-private fun AccountVerticalDivider() {
-    Box(
-        modifier = Modifier
-            .width(BBSpacing.BorderThin)
-            .height(BBSpacing.Space9)
-            .background(MaterialTheme.colorScheme.outlineVariant)
-    )
-}
-
-@Composable
-private fun AccountPrimaryActions(
-    onQuotationRequestsClick: () -> Unit,
-    onCompanyInfoClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
-    ) {
-        AccountPrimaryActionCard(
-            modifier = Modifier.weight(1f),
-            title = "Toptan Teklif Al",
-            description = "Özel fiyat iste.",
-            icon = Icons.Outlined.RequestQuote,
-            accent = AccountActionAccent.Primary,
-            onClick = onQuotationRequestsClick
-        )
-
-        AccountPrimaryActionCard(
-            modifier = Modifier.weight(1f),
-            title = "Şirketini Kaydet",
-            description = "Ticari profilini güçlendir.",
-            icon = Icons.Outlined.Business,
-            accent = AccountActionAccent.Secondary,
-            onClick = onCompanyInfoClick
-        )
-    }
-}
-
-@Composable
-private fun AccountPrimaryActionCard(
-    modifier: Modifier,
-    title: String,
-    description: String,
-    icon: ImageVector,
-    accent: AccountActionAccent,
-    onClick: () -> Unit
-) {
-    val containerColor = when (accent) {
-        AccountActionAccent.Primary -> MaterialTheme.colorScheme.primaryContainer
-        AccountActionAccent.Secondary -> MaterialTheme.colorScheme.secondaryContainer
-    }
-
-    val contentColor = when (accent) {
-        AccountActionAccent.Primary -> MaterialTheme.colorScheme.onPrimaryContainer
-        AccountActionAccent.Secondary -> MaterialTheme.colorScheme.onSecondaryContainer
-    }
-
-    Surface(
-        modifier = modifier
-            .height(BBLayout.ProductCardWidthSmall)
-            .clickable {
-                onClick()
-            },
-        shape = BBRadius.XlShape,
-        color = containerColor,
-        border = BorderStroke(
-            width = BBSpacing.BorderThin,
-            color = MaterialTheme.colorScheme.outlineVariant
-        )
-    ) {
-        Column(
-            modifier = Modifier.padding(BBSpacing.Space3),
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.Top
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(BBIcon.BoxLg)
-                        .background(
-                            color = contentColor.copy(alpha = BBAlpha.Overlay),
-                            shape = BBRadius.LgShape
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = icon,
-                        contentDescription = null,
-                        tint = contentColor,
-                        modifier = Modifier.size(BBIcon.Section)
-                    )
-                }
-
-                Box(
-                    modifier = Modifier
-                        .size(BBIcon.BoxSm)
-                        .background(
-                            color = MaterialTheme.colorScheme.surface.copy(
-                                alpha = BBAlpha.OverlayHeavy
-                            ),
-                            shape = BBRadius.LgShape
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.ChevronRight,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.size(BBIcon.SizeSm)
-                    )
-                }
-            }
-
-            Column(
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
-            ) {
-                Text(
-                    text = title,
-                    style = BbTypography.titleMedium,
-                    color = contentColor,
-                    fontWeight = FontWeight.Bold
-                )
-
-                Text(
-                    text = description,
-                    style = BbTypography.bodySmall,
-                    color = contentColor.copy(alpha = BBAlpha.Muted)
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun AccountUsagePurposeDarkCard(
-    onClick: () -> Unit
-) {
-    Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-                onClick()
-            },
-        shape = BBRadius.XlShape,
-        color = MaterialTheme.colorScheme.inverseSurface
-    ) {
-        Row(
-            modifier = Modifier.padding(BBSpacing.CardPadding),
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space4),
+            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
                 modifier = Modifier
-                    .size(BBIcon.BoxLg)
+                    .size(BBIcon.BoxXl)
                     .background(
-                        color = MaterialTheme.colorScheme.inversePrimary,
-                        shape = BBRadius.LgShape
+                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        shape = BBRadius.XlShape
                     ),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    imageVector = Icons.Outlined.Tune,
+                    imageVector = Icons.Outlined.PermIdentity,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.inverseSurface,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.size(BBIcon.Section)
                 )
             }
@@ -812,18 +325,15 @@ private fun AccountUsagePurposeDarkCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Bulbulustur'u Hangi Amaçla Kullanıyorsun?",
-                    style = BbTypography.titleMedium,
-                    color = MaterialTheme.colorScheme.inverseOnSurface,
-                    fontWeight = FontWeight.Bold
+                    text = fullName,
+                    style = BbTypography.titleLarge,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = "Toptan, perakende veya her ikisi için deneyimini kişiselleştirelim.",
+                    text = "Profili görüntüle ve düzenle",
                     style = BbTypography.bodySmall,
-                    color = MaterialTheme.colorScheme.inverseOnSurface.copy(
-                        alpha = BBAlpha.Muted
-                    )
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
@@ -831,50 +341,80 @@ private fun AccountUsagePurposeDarkCard(
                 modifier = Modifier
                     .size(BBIcon.BoxSm)
                     .background(
-                        color = MaterialTheme.colorScheme.inverseOnSurface.copy(
-                            alpha = BBAlpha.Overlay
-                        ),
-                        shape = BBRadius.LgShape
+                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        shape = BBRadius.PillShape
                     ),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = Icons.Outlined.ChevronRight,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.inverseOnSurface,
+                    contentDescription = "Profile git",
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.size(BBIcon.SizeSm)
                 )
             }
         }
     }
 }
-
 @Composable
-private fun AccountMenuSection(
+private fun ProfileInfoSection(
     title: String,
+    description: String,
+    icon: ImageVector,
     content: @Composable ColumnScope.() -> Unit
 ) {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.None
     ) {
-        Text(
-            text = title,
-            style = BbTypography.titleSmall,
-            color = MaterialTheme.colorScheme.onSurface,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(horizontal = BBSpacing.Space1)
-        )
-
-        BbCard(
-            modifier = Modifier.fillMaxWidth(),
-            variant = BbCardVariant.Outlined,
-            padding = BbCardPadding.None
+        Column(
+            modifier = Modifier.background(MaterialTheme.colorScheme.surface)
         ) {
-            Column(
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.surface)
+                    .padding(BBSpacing.CardPadding),
+                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+                verticalAlignment = Alignment.CenterVertically
             ) {
+                Box(
+                    modifier = Modifier
+                        .size(BBIcon.BoxMd)
+                        .background(
+                            color = MaterialTheme.colorScheme.primaryContainer,
+                            shape = BBRadius.LgShape
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                        modifier = Modifier.size(BBIcon.Ui)
+                    )
+                }
+
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+                ) {
+                    Text(
+                        text = title,
+                        style = BbTypography.titleSmall,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+
+                    Text(
+                        text = description,
+                        style = BbTypography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+
+            ProfileDashedDivider()
+
+            Column {
                 content()
             }
         }
@@ -882,68 +422,39 @@ private fun AccountMenuSection(
 }
 
 @Composable
-private fun AccountMenuRow(
+private fun ProfileInfoRow(
     title: String,
-    description: String,
+    value: String,
     icon: ImageVector,
-    enabled: Boolean = true,
-    isDanger: Boolean = false,
     onClick: () -> Unit
 ) {
-    val iconContainerColor =
-        if (isDanger) {
-            MaterialTheme.colorScheme.errorContainer
-        } else {
-            MaterialTheme.colorScheme.surfaceVariant
-        }
-
-    val iconColor =
-        if (isDanger) {
-            MaterialTheme.colorScheme.error
-        } else {
-            MaterialTheme.colorScheme.onSurface
-        }
-
-    val titleColor =
-        if (isDanger) {
-            MaterialTheme.colorScheme.error
-        } else {
-            MaterialTheme.colorScheme.onSurface
-        }
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(
-                enabled = enabled
-            ) {
+            .clickable {
                 onClick()
             }
-            .padding(
-                start = BBSpacing.Space4,
-                top = BBSpacing.Space4,
-                end = BBSpacing.Space4,
-                bottom = BBSpacing.Space4
-            ),
-        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space4),
+            .padding(BBSpacing.CardPadding),
+        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
             modifier = Modifier
                 .size(BBIcon.BoxMd)
                 .background(
-                    color = iconContainerColor,
-                    shape = BBRadius.LgShape
+                    color = MaterialTheme.colorScheme.surfaceVariant,
+                    shape = BBRadius.PillShape
                 ),
             contentAlignment = Alignment.Center
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = iconColor,
+                tint = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.size(BBIcon.Ui)
             )
         }
+
 
         Column(
             modifier = Modifier.weight(1f),
@@ -951,109 +462,83 @@ private fun AccountMenuRow(
         ) {
             Text(
                 text = title,
-                style = BbTypography.titleSmall,
-                color = titleColor,
-                fontWeight = FontWeight.SemiBold
+                style = BbTypography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Text(
-                text = description,
-                style = BbTypography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                text = value,
+                style = BbTypography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
 
-        AccountChevron()
+        Box(
+            modifier = Modifier
+                .size(BBIcon.BoxSm)
+                .background(
+                    color = MaterialTheme.colorScheme.surfaceVariant,
+                    shape = BBRadius.PillShape
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.ChevronRight,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.size(BBIcon.SizeSm)
+            )
+        }
     }
 }
 
 @Composable
-private fun AccountSupportAndSettingsGroup(
-    onSupportClick: () -> Unit,
-    onSettingsClick: () -> Unit
+private fun ProfileErrorCard(
+    message: String
 ) {
-    AccountMenuSection(
-        title = "Destek ve Ayarlar"
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
     ) {
-        AccountMenuRow(
-            title = "Yardıma mı İhtiyacın Var?",
-            description = "Destek merkezi, sipariş, iade ve hesap yardımına ulaş.",
-            icon = Icons.Outlined.SupportAgent,
-            onClick = onSupportClick
-        )
-
-        AccountDashedDivider()
-
-        AccountMenuRow(
-            title = "Uygulama Ayarları",
-            description = "Dil, görünüm, bildirim ve uygulama tercihleri.",
-            icon = Icons.Outlined.Settings,
-            onClick = onSettingsClick
+        Text(
+            text = message,
+            style = BbTypography.bodySmall,
+            color = MaterialTheme.colorScheme.error
         )
     }
 }
 
 @Composable
-private fun AccountLogoutSection(
-    onLogoutClick: () -> Unit,
-    isLogoutLoading: Boolean
-) {
-    AccountMenuSection(
-        title = "Oturum"
+private fun ProfileNotFoundCard() {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
     ) {
-        AccountMenuRow(
-            title =
-                if (isLogoutLoading) {
-                    "Çıkış Yapılıyor"
-                } else {
-                    "Çıkış Yap"
-                },
-            description =
-                if (isLogoutLoading) {
-                    "Oturumunuz güvenli şekilde kapatılıyor."
-                } else {
-                    "Bu cihazdaki Bulbulustur oturumunu kapat."
-                },
-            icon = Icons.Outlined.Logout,
-            enabled = !isLogoutLoading,
-            isDanger = true,
-            onClick = onLogoutClick
+        Text(
+            text = "Profil bilgisi bulunamadı",
+            style = BbTypography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
 
 @Composable
-private fun AccountChevron() {
-    Box(
-        modifier = Modifier
-            .size(BBIcon.BoxSm)
-            .background(
-                color = MaterialTheme.colorScheme.surfaceVariant,
-                shape = BBRadius.LgShape
-            ),
-        contentAlignment = Alignment.Center
-    ) {
-        Icon(
-            imageVector = Icons.Outlined.ChevronRight,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.size(BBIcon.SizeSm)
-        )
-    }
-}
-
-@Composable
-private fun AccountDashedDivider() {
+private fun ProfileDashedDivider() {
     val dividerColor = MaterialTheme.colorScheme.outlineVariant
 
     Canvas(
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                start = BBSpacing.Space16,
+                start = BBSpacing.Space4,
                 end = BBSpacing.Space4
             )
-            .height(BBSpacing.BorderThin)
+            .size(
+                height = 1.dp,
+                width = BBSpacing.BorderThin
+            )
     ) {
         drawLine(
             color = dividerColor,
@@ -1066,21 +551,4 @@ private fun AccountDashedDivider() {
             )
         )
     }
-}
-
-@Immutable
-private data class AccountHomeData(
-    val userName: String,
-    val profileSubtitle: String,
-    val initials: String,
-    val profileId: String,
-    val city: String,
-    val orderCount: String,
-    val favoriteCount: String,
-    val quotationCount: String
-)
-
-private enum class AccountActionAccent {
-    Primary,
-    Secondary
 }

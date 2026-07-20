@@ -12,10 +12,14 @@ class SystemDescMaritalStatusRepository(
     private val apiClient: ApiClient = ApiClient
 ) : ISystemDescMaritalStatusRepository {
 
-    override suspend fun GetSystemDescMaritalStatusListAsync(): Result<List<SystemDescMaritalStatusDTO>> {
+    override suspend fun GetSystemDescMaritalStatusListAsync(
+        languageId: Int,
+        count: Int
+    ): Result<List<SystemDescMaritalStatusDTO>> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetSystemDescMaritalStatusListAsync"
+            baseUrl = ApiRoutes.GLOBALIZATION_MASTER_DATA_BASE_URL,
+            method = "GetSystemDescMaritalStatussAsync",
+            query = "languageId=$languageId&count=$count"
         )
     }
 

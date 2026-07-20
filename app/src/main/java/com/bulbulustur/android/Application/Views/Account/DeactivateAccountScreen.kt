@@ -38,7 +38,7 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 
 @Composable
-fun DeactivateAccountScreen(
+fun DeactivateDashboardScreen(
     isLoading: Boolean = false,
     errorMessage: String? = null,
     successMessage: String? = null,

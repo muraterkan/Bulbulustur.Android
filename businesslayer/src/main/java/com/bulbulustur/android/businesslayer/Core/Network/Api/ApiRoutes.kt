@@ -83,6 +83,9 @@ object ApiRoutes {
     const val GLOBALIZATION_BASE_URL =
         "http://$GLOBALIZATION_SERVER_HOST:30215/api/"
 
+    const val GLOBALIZATION_MASTER_DATA_BASE_URL =
+        "http://$GLOBALIZATION_SERVER_HOST:30215/api/MasterData/"
+
     const val MAIL_BASE_URL =
         "http://$APPLICATION_SERVER_HOST:30220/api/"
 
@@ -122,6 +125,16 @@ object ApiRoutes {
      */
     const val MEMBER_BASE_URL =
         "http://$APPLICATION_SERVER_HOST:30180/api/Member/"
+
+    // -------------------------------------------------------------------------
+    // Pure API - 30501
+    // -------------------------------------------------------------------------
+
+    const val PURE_API_BASE_URL =
+        "http://$APPLICATION_SERVER_HOST:30500/api/"
+
+    const val PURE_MEMBER_BASE_URL =
+        "http://$APPLICATION_SERVER_HOST:30500/api/Member/"
 
 // -------------------------------------------------------------------------
 // Support API - 30190
@@ -317,4 +330,7 @@ object ApiRoutes {
 
     const val B2C_PRODUCT_LOW_PRICE_REPORT_BASE_URL =
         "http://$APPLICATION_SERVER_HOST:30240/api/ProductLowPriceReport/"
+
+    const val PURE_ANNOUNCEMENT_BASE_URL =
+        "http://$APPLICATION_SERVER_HOST:30500/api/Announcement/"
 }

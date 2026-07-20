@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 
 @Composable
-fun AccountScreenContainer(
+fun DashboardScreenContainer(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(
         start = BBSpacing.PageHorizontal,

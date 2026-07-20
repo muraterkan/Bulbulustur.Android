@@ -1,7 +1,7 @@
-[35mapp/src/main/java/com/bulbulustur/android/features/account/AccountScreen.kt[m[36m:[m[32m509[m[36m:[m            width = [1;31m1.dp[m,
-[35mapp/src/main/java/com/bulbulustur/android/features/account/AccountScreen.kt[m[36m:[m[32m555[m[36m:[m            modifier = Modifier.size([1;31m30.dp[m)
-[35mapp/src/main/java/com/bulbulustur/android/features/account/AccountScreen.kt[m[36m:[m[32m715[m[36m:[m            width = [1;31m1.dp[m,
-[35mapp/src/main/java/com/bulbulustur/android/features/account/AccountScreen.kt[m[36m:[m[32m1012[m[36m:[m            strokeWidth = [1;31m1.dp[m.toPx(),
+[35mapp/src/main/java/com/bulbulustur/android/features/account/DashboardScreen.kt[m[36m:[m[32m509[m[36m:[m            width = [1;31m1.dp[m,
+[35mapp/src/main/java/com/bulbulustur/android/features/account/DashboardScreen.kt[m[36m:[m[32m555[m[36m:[m            modifier = Modifier.size([1;31m30.dp[m)
+[35mapp/src/main/java/com/bulbulustur/android/features/account/DashboardScreen.kt[m[36m:[m[32m715[m[36m:[m            width = [1;31m1.dp[m,
+[35mapp/src/main/java/com/bulbulustur/android/features/account/DashboardScreen.kt[m[36m:[m[32m1012[m[36m:[m            strokeWidth = [1;31m1.dp[m.toPx(),
 [35mapp/src/main/java/com/bulbulustur/android/features/account/AccountSecurityScreen.kt[m[36m:[m[32m393[m[36m:[m            .size(height = [1;31m1.dp[m, width = BbSpacing.BorderThin)
 [35mapp/src/main/java/com/bulbulustur/android/features/account/AccountSecurityScreen.kt[m[36m:[m[32m399[m[36m:[m            strokeWidth = [1;31m1.dp[m.toPx(),
 [35mapp/src/main/java/com/bulbulustur/android/features/account/CommunicationPreferenceScreen.kt[m[36m:[m[32m261[m[36m:[m                width = [1;31m1.dp[m,

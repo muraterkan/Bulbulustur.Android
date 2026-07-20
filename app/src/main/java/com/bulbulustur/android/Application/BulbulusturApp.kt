@@ -32,6 +32,7 @@ import com.bulbulustur.android.Application.Areas.b2c.Controllers.StoreController
 import com.bulbulustur.android.Application.Controllers.AccountController
 import com.bulbulustur.android.Application.Controllers.LogonController
 import com.bulbulustur.android.Application.Controllers.MessageController
+import com.bulbulustur.android.Application.Controllers.ProfileController
 import com.bulbulustur.android.Application.Controllers.SettingsController
 import com.bulbulustur.android.Application.Datastore.UserPreferenceDataStore
 import com.bulbulustur.android.Application.Localization.BBLocalizationProvider
@@ -42,6 +43,7 @@ import com.bulbulustur.android.Application.Navigation.Graph.companyGraph
 import com.bulbulustur.android.Application.Navigation.Graph.logonGraph
 import com.bulbulustur.android.Application.Navigation.Graph.messageGraph
 import com.bulbulustur.android.Application.Navigation.Graph.orderGraph
+import com.bulbulustur.android.Application.Navigation.Graph.profileGraph
 import com.bulbulustur.android.Application.Navigation.Graph.retailGraph
 import com.bulbulustur.android.Application.Navigation.Graph.settingsGraph
 import com.bulbulustur.android.Application.Navigation.Graph.splashGraph
@@ -596,6 +598,18 @@ private fun BulbulusturApplicationContent(
         )
     }
 
+    val profileController = remember(
+        executeService,
+        memberRepository,
+        systemDescGenderRepository
+    ) {
+        ProfileController(
+            executeService = executeService,
+            memberRepository = memberRepository,
+            systemDescGenderRepository = systemDescGenderRepository
+        )
+    }
+
     val accountController = remember(
         executeService,
         systemDescGenderRepository,
@@ -620,7 +634,6 @@ private fun BulbulusturApplicationContent(
     ) {
         AccountController(
             executeService = executeService,
-            systemDescGenderRepository = systemDescGenderRepository,
             memberRepository = memberRepository,
             memberAddressRepository = memberAddressRepository,
             memberBankAccountRepository = memberBankAccountRepository,
@@ -833,6 +846,13 @@ private fun BulbulusturApplicationContent(
             sessionState = sessionState,
             logonController = logonController,
             accountController = accountController,
+            addressCascadeController = addressCascadeController
+        )
+
+        profileGraph(
+            navigator = appNavigator,
+            sessionState = sessionState,
+            profileController = profileController,
             addressCascadeController = addressCascadeController
         )
 

@@ -238,12 +238,10 @@ object OrderRoutes {
 object AccountRoutes {
     const val AccountHome = "account"
 
+    const val Account = "account/index"
+
     const val Security = "account/security"
-    const val ProfileInfo = "account/profile-info"
-    const val ProfileEdit = "account/profile/edit"
-    const val ProfileGender = "account/profile/gender"
-    const val ProfileBirthDate = "account/profile/birth-date"
-    const val ProfileAddress = "account/profile/address"
+
     const val ProfileTckn = "account/profile/tckn"
 
     const val EmailChange = "account/security/email"
@@ -301,6 +299,47 @@ object AccountRoutes {
         return "account/subscriptions/detail/$memberSubscriptionId"
     }
     const val WalletBalance = "account/wallet-balance"
+}
+
+object ProfileRoutes {
+    const val ProfileInfo = "profile"
+    const val ProfileEdit = "profile/edit"
+    const val ProfileGender = "profile/gender"
+    const val ProfileBirthDate = "profile/birth-date"
+    const val ProfileAddress = "profile/address"
+    
+    
+    const val ProfileBio = "profile/summary/bio"
+    const val ProfileCouple = "profile/summary/couple"
+const val ProfilePrivateInformation = "profile/private-information"
+    const val ProfileBreastSize = "profile/private-information/breast-size"
+    const val ProfilePenisSize = "profile/private-information/penis-size"
+
+    const val ProfileBodyHair = "profile/appearance/body-hair"
+    const val ProfilePubicHair = "profile/appearance/pubic-hair"
+    const val ProfileArmpitHairPreference = "profile/appearance/armpit-hair-preference"
+    const val ProfileBodyHairPreference = "profile/appearance/body-hair-preference"
+
+    const val ProfileEducation = "profile/education-work/education"
+    const val ProfileProfession = "profile/education-work/profession"
+    const val ProfileJobTitle = "profile/education-work/job-title"
+
+    const val ProfileMaritalStatus = "profile/relationship/marital-status"
+    const val ProfileRelationshipType = "profile/relationship/relationship-type"
+    const val ProfileChildrenPreference = "profile/relationship/children-preference"
+
+    const val ProfileDietType = "profile/lifestyle/diet-type"
+    const val ProfileExerciseHabit = "profile/lifestyle/exercise-habit"
+    const val ProfileAlcoholHabit = "profile/lifestyle/alcohol-habit"
+    const val ProfileSmokingHabit = "profile/lifestyle/smoking-habit"
+    const val ProfileReligion = "profile/lifestyle/religion"
+
+    const val ProfileHeight = "profile/physical/height"
+    const val ProfileWeight = "profile/physical/weight"
+    const val ProfileBodyType = "profile/physical/body-type"
+    const val ProfileSkinTone = "profile/physical/skin-tone"
+    const val ProfilePiercing = "profile/physical/piercing"
+    const val ProfileTattoo = "profile/physical/tattoo"
 }
 
 object BankAccountRoutes {

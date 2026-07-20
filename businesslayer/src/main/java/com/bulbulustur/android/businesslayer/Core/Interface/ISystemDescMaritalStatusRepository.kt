@@ -12,8 +12,10 @@ import retrofit2.http.Query
 interface ISystemDescMaritalStatusRepository {
 
     @GET("api/SystemDescMaritalStatus/GetSystemDescMaritalStatusListAsync")
-    suspend fun GetSystemDescMaritalStatusListAsync():
-            Result<List<SystemDescMaritalStatusDTO>>
+    suspend fun GetSystemDescMaritalStatusListAsync(
+        languageId: Int,
+        count: Int
+    ): Result<List<SystemDescMaritalStatusDTO>>
 
     @GET("api/SystemDescMaritalStatus/GetSystemDescMaritalStatusByIdAsync")
     suspend fun GetSystemDescMaritalStatusByIdAsync(

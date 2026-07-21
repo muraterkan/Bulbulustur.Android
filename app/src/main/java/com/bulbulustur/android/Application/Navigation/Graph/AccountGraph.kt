@@ -12,6 +12,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.compose.runtime.DisposableEffect
 import com.bulbulustur.android.Application.Config.LegalPolicyUrls
+import com.bulbulustur.android.Application.Areas.b2c.Controllers.BasketController
 import com.bulbulustur.android.Application.Controllers.AccountController
 import com.bulbulustur.android.Application.Controllers.LogonController
 import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
@@ -76,6 +77,7 @@ fun NavGraphBuilder.accountGraph(
     sessionState: UserSessionState,
     logonController: LogonController,
     accountController: AccountController,
+    basketController: BasketController,
     addressCascadeController: AddressCascadeController
 ) {
     composable(route = AccountRoutes.AccountHome) {
@@ -1203,6 +1205,10 @@ fun NavGraphBuilder.accountGraph(
                     memberId = sessionState.MemberId,
                     favoriteId = favoriteId,
                     onSuccess = {
+                        basketController.Refresh(
+                            memberId = sessionState.MemberId
+                        )
+
                         accountController.GetProductFavorites(
                             memberId = sessionState.MemberId
                         )

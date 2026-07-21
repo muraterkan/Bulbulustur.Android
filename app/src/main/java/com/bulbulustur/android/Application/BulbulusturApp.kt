@@ -846,6 +846,7 @@ private fun BulbulusturApplicationContent(
             sessionState = sessionState,
             logonController = logonController,
             accountController = accountController,
+            basketController = basketController,
             addressCascadeController = addressCascadeController
         )
 

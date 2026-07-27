@@ -10,6 +10,7 @@ import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdat
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdateBirthDateModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdateGenderModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdateModel
+import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdateProfessionModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdateTcknModel
 import com.bulbulustur.android.businesslayer.Core.Network.ApiClient
 import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
@@ -97,6 +98,14 @@ class MemberRepository(
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.MEMBER_BASE_URL,
             method = "MemberUpdateTcknAsync",
+            data = model
+        )
+    }
+
+    override suspend fun MemberUpdateProfessionAsync(model: MemberUpdateProfessionModel): Result<MemberUpdateProfessionModel> {
+        return apiClient.PostAsync(
+            baseUrl = ApiRoutes.MEMBER_BASE_URL,
+            method = "MemberUpdateProfessionAsync",
             data = model
         )
     }

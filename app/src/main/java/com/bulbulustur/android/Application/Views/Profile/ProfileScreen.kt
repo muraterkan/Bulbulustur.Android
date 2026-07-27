@@ -1,4 +1,21 @@
 package com.bulbulustur.android.Application.Views.Profile
+import androidx.compose.material3.Surface
+import com.bulbulustur.android.R
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.Image
+import coil3.compose.AsyncImage
+
+
+
+
+
+
+
+
+
+
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -37,6 +54,7 @@ import androidx.compose.material.icons.outlined.SmokingRooms
 import androidx.compose.material.icons.outlined.Spa
 import androidx.compose.material.icons.outlined.StarBorder
 import androidx.compose.material.icons.outlined.WorkOutline
+import androidx.compose.material.icons.outlined.Translate
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -61,20 +79,23 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BbTypography
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberProfileDTO
+import com.bulbulustur.android.businesslayer.Core.Network.MemberPictureUrlResolver
 
 @Suppress("UNUSED_PARAMETER")
 @Composable
 fun ProfileScreen(
     member: MemberDTO?,
     memberProfile: MemberProfileDTO?,
+    memberPicture: String = "",
     displayValues: ProfileDisplayValues = ProfileDisplayValues(),
+    languagesSummary: String = "Belirtilmemiş",
     addressCascadeState: AddressCascadeState,
     isLoading: Boolean = false,
     errorMessage: String? = null,
     onBackClick: () -> Unit = {},
     onEditClick: () -> Unit = {},
     onBioClick: () -> Unit = {},
-    onCoupleClick: () -> Unit = {},
+    onLanguagesClick: () -> Unit = {},
     onPhysicalClick: () -> Unit = {},
     onHeightClick: () -> Unit = {},
     onWeightClick: () -> Unit = {},
@@ -127,17 +148,18 @@ fun ProfileScreen(
         ?.takeIf { it.isNotBlank() }
         ?: unspecified
 
+    val memberPictureUrl =
+        MemberPictureUrlResolver.Resolve(
+            member?.Picture
+                ?.takeIf { it.isNotBlank() }
+                ?: memberPicture
+        )
+
     val bio = memberProfile
         ?.Bio
         ?.trim()
         ?.takeIf { it.isNotBlank() }
         ?: unspecified
-
-    val profileType = when (memberProfile?.IsCouple) {
-        true -> "Çift Profili"
-        false -> "Bireysel"
-        null -> unspecified
-    }
 
     val height = memberProfile
         ?.Height
@@ -221,12 +243,14 @@ fun ProfileScreen(
 
                 else -> {
                     item {
-                        ProfileHeroCard(
+                        
+        ProfileHeroCard(
                             fullName = fullName,
                             profession = profession,
-                            score = memberProfile?.Score ?: 0,
+                            pictureUrl = memberPictureUrl,
                             onClick = onEditClick
                         )
+    
                     }
 
                     item {
@@ -246,15 +270,15 @@ fun ProfileScreen(
 
                     item {
                         ProfileSectionCard(
-                            title = "Arkadaşlık Ayarları",
-                            description = "Profil kullanım biçiminizi ve eşleşme tercihlerinizi yönetin.",
-                            icon = Icons.Outlined.SettingsSuggest
+                            title = "Diller",
+                            description = "Konuştuğunuz dilleri ve seviyelerini yönetin.",
+                            icon = Icons.Outlined.Translate
                         ) {
                             ProfileFieldRow(
-                                title = "Profil Türü",
-                                value = profileType,
-                                icon = Icons.Outlined.PeopleAlt,
-                                onClick = onCoupleClick
+                                title = "Dillerim",
+                                value = languagesSummary,
+                                icon = Icons.Outlined.Translate,
+                                onClick = onLanguagesClick
                             )
                         }
                     }
@@ -529,7 +553,7 @@ private fun Boolean?.toDisplayText(
 private fun ProfileHeroCard(
     fullName: String,
     profession: String,
-    score: Int,
+    pictureUrl: String,
     onClick: () -> Unit
 ) {
     BbCard(
@@ -549,15 +573,25 @@ private fun ProfileHeroCard(
                     .background(
                         color = MaterialTheme.colorScheme.primaryContainer,
                         shape = BBRadius.XlShape
-                    ),
+                    )
+                    .clip(BBRadius.XlShape),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    imageVector = Icons.Outlined.Person,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                    modifier = Modifier.size(BBIcon.Section)
-                )
+                if (pictureUrl.isNotBlank()) {
+                    AsyncImage(
+                        model = pictureUrl,
+                        contentDescription = "Profil fotoğrafı",
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
+                } else {
+                    Icon(
+                        imageVector = Icons.Outlined.Person,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                        modifier = Modifier.size(BBIcon.Section)
+                    )
+                }
             }
 
             Column(
@@ -574,12 +608,6 @@ private fun ProfileHeroCard(
                 Text(
                     text = profession,
                     style = BbTypography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-
-                Text(
-                    text = "Profil puanı: $score",
-                    style = BbTypography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }

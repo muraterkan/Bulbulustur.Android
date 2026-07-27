@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Profile
 
+import com.bulbulustur.android.Application.Views.Profile.Components.BbProfileStickySaveBar
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -66,28 +68,15 @@ fun ProfileBioScreen(
                 onBackClick = onBackClick
             )
         },
+        
         bottomBar = {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.surface)
-                    .padding(
-                        start = BBSpacing.PageHorizontal,
-                        top = BBSpacing.Space3,
-                        end = BBSpacing.PageHorizontal,
-                        bottom = BBSpacing.Space4
-                    )
-            ) {
-                BbButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = "Kaydet",
-                    variant = BbButtonVariant.Primary,
-                    enabled = canSave,
-                    isLoading = isLoading,
-                    onClick = onSaveClick
-                )
-            }
+            BbProfileStickySaveBar(
+                enabled = canSave,
+                isSaving = isLoading,
+                onClick = onSaveClick
+            )
         }
+    
     ) { innerPadding ->
         Column(
             modifier = Modifier

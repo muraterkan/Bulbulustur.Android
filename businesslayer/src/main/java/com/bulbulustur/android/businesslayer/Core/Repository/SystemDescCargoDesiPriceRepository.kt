@@ -12,10 +12,13 @@ class SystemDescCargoDesiPriceRepository(
     private val apiClient: ApiClient = ApiClient
 ) : ISystemDescCargoDesiPriceRepository {
 
-    override suspend fun GetSystemDescCargoDesiPriceListAsync(): Result<List<SystemDescCargoDesiPriceDTO>> {
+    override suspend fun GetSystemDescCargoDesiPricesAsync(
+        count: Int
+    ): Result<List<SystemDescCargoDesiPriceDTO>> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetSystemDescCargoDesiPriceListAsync"
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "GetSystemDescCargoDesiPricesAsync",
+            query = "count=$count"
         )
     }
 
@@ -23,7 +26,7 @@ class SystemDescCargoDesiPriceRepository(
         systemDescCargoDesiPriceId: Int
     ): Result<SystemDescCargoDesiPriceUpdateModel?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
             method = "GetSystemDescCargoDesiPriceByIdAsync",
             query = "systemDescCargoDesiPriceId=$systemDescCargoDesiPriceId"
         )
@@ -33,7 +36,7 @@ class SystemDescCargoDesiPriceRepository(
         systemDescCargoDesiPriceId: Int
     ): Result<SystemDescCargoDesiPriceDTO?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
             method = "GetSystemDescCargoDesiPriceByIdExtendedAsync",
             query = "systemDescCargoDesiPriceId=$systemDescCargoDesiPriceId"
         )
@@ -43,8 +46,8 @@ class SystemDescCargoDesiPriceRepository(
         model: SystemDescCargoDesiPriceInsertModel
     ): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "InsertAsync",
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "InsertSystemDescCargoDesiPriceAsync",
             data = model
         )
     }
@@ -53,8 +56,8 @@ class SystemDescCargoDesiPriceRepository(
         model: SystemDescCargoDesiPriceUpdateModel
     ): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "UpdateAsync",
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "UpdateSystemDescCargoDesiPriceAsync",
             data = model
         )
     }
@@ -63,8 +66,8 @@ class SystemDescCargoDesiPriceRepository(
         systemDescCargoDesiPriceId: Int
     ): Result<Unit> {
         return apiClient.DeleteAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "DeleteAsync",
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "DeleteSystemDescCargoDesiPriceAsync",
             query = "systemDescCargoDesiPriceId=$systemDescCargoDesiPriceId"
         )
     }

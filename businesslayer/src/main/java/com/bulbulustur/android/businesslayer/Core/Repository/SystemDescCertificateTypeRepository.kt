@@ -12,10 +12,13 @@ class SystemDescCertificateTypeRepository(
     private val apiClient: ApiClient = ApiClient
 ) : ISystemDescCertificateTypeRepository {
 
-    override suspend fun GetSystemDescCertificateTypeListAsync(): Result<List<SystemDescCertificateTypeDTO>> {
+    override suspend fun GetSystemDescCertificateTypesAsync(
+        count: Int
+    ): Result<List<SystemDescCertificateTypeDTO>> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetSystemDescCertificateTypeListAsync"
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "GetSystemDescCertificateTypesAsync",
+            query = "count=$count"
         )
     }
 
@@ -23,7 +26,7 @@ class SystemDescCertificateTypeRepository(
         systemDescCertificateTypeId: Int
     ): Result<SystemDescCertificateTypeUpdateModel?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
             method = "GetSystemDescCertificateTypeByIdAsync",
             query = "systemDescCertificateTypeId=$systemDescCertificateTypeId"
         )
@@ -33,7 +36,7 @@ class SystemDescCertificateTypeRepository(
         systemDescCertificateTypeId: Int
     ): Result<SystemDescCertificateTypeDTO?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
             method = "GetSystemDescCertificateTypeByIdExtendedAsync",
             query = "systemDescCertificateTypeId=$systemDescCertificateTypeId"
         )
@@ -43,8 +46,8 @@ class SystemDescCertificateTypeRepository(
         model: SystemDescCertificateTypeInsertModel
     ): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "InsertAsync",
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "InsertSystemDescCertificateTypeAsync",
             data = model
         )
     }
@@ -53,8 +56,8 @@ class SystemDescCertificateTypeRepository(
         model: SystemDescCertificateTypeUpdateModel
     ): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "UpdateAsync",
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "UpdateSystemDescCertificateTypeAsync",
             data = model
         )
     }
@@ -63,8 +66,8 @@ class SystemDescCertificateTypeRepository(
         systemDescCertificateTypeId: Int
     ): Result<Unit> {
         return apiClient.DeleteAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "DeleteAsync",
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "DeleteSystemDescCertificateTypeAsync",
             query = "systemDescCertificateTypeId=$systemDescCertificateTypeId"
         )
     }

@@ -1,0 +1,265 @@
+package com.bulbulustur.android.Application.Views.Profile
+
+import com.bulbulustur.android.Application.Views.Profile.Components.BbProfileHeroCard
+
+import com.bulbulustur.android.Application.Views.Profile.Components.BbProfileStickySaveBar
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.ChevronRight
+import androidx.compose.material.icons.outlined.Language
+import androidx.compose.material.icons.outlined.Translate
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
+import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
+import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
+import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
+import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
+import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
+import com.bulbulustur.android.businesslayer.Core.DTO.MemberLanguageDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.SystemDescLanguageLevelDTO
+
+@Composable
+fun ProfileLanguageListScreen(
+    languages: List<MemberLanguageDTO>,
+    languageLevels: List<SystemDescLanguageLevelDTO>,
+    isLoading: Boolean = false,
+    errorMessage: String? = null,
+    onBackClick: () -> Unit,
+    onAddClick: () -> Unit,
+    onLanguageClick: (MemberLanguageDTO) -> Unit
+) {
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            BbInnerPageHeader(
+                title = "Dillerim",
+                onBackClick = onBackClick
+            )
+        },
+        
+        bottomBar = {
+            BbProfileStickySaveBar(
+                text = "Dil Ekle",
+                onClick = onAddClick
+            )
+        }
+    
+    ) { innerPadding ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .padding(innerPadding),
+            contentPadding = PaddingValues(
+                start = BBSpacing.PageHorizontal,
+                top = BBSpacing.PageTopCompact,
+                end = BBSpacing.PageHorizontal,
+                bottom = BBSpacing.PageBottom
+            ),
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
+        ) {
+            item {
+                BbCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    variant = BbCardVariant.Outlined,
+                    padding = BbCardPadding.Medium
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Translate,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(BBIcon.SizeLg)
+                        )
+
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+                        ) {
+                            Text(
+                                text = "Konuştuğun Diller",
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.onSurface,
+                                fontWeight = FontWeight.Bold
+                            )
+
+                            Text(
+                                text = "Her dil için konuşma seviyeni ayrı ayrı belirleyebilirsin.",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                }
+            }
+
+            when {
+                isLoading && languages.isEmpty() -> {
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(BBSpacing.Space8),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator(
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                    }
+                }
+
+                !errorMessage.isNullOrBlank() -> {
+                    item {
+                        BbCard(
+                            modifier = Modifier.fillMaxWidth(),
+                            variant = BbCardVariant.Outlined,
+                            padding = BbCardPadding.Medium
+                        ) {
+                            Text(
+                                text = errorMessage,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+                    }
+                }
+
+                languages.isEmpty() -> {
+                    item {
+                        BbCard(
+                            modifier = Modifier.fillMaxWidth(),
+                            variant = BbCardVariant.Outlined,
+                            padding = BbCardPadding.Large
+                        ) {
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Language,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    modifier = Modifier.size(BBIcon.Size3Xl)
+                                )
+
+                                Text(
+                                    text = "Henüz dil eklenmedi",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                    fontWeight = FontWeight.Bold
+                                )
+
+                                Text(
+                                    text = "Profiline konuştuğun ilk dili ekleyerek başlayabilirsin.",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+                    }
+                }
+
+                else -> {
+                    items(
+                        items = languages,
+                        key = { it.MemberLanguageId }
+                    ) { language ->
+                        val levelContent = languageLevels
+                            .firstOrNull {
+                                it.SystemDescLanguageLevelId ==
+                                    language.LanguageLevelId
+                            }
+                            ?.Content
+                            ?.trim()
+                            ?.takeIf { it.isNotBlank() }
+                            ?: "Seviye belirtilmemiş"
+
+                        BbCard(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    onLanguageClick(language)
+                                },
+                            variant = BbCardVariant.Outlined,
+                            padding = BbCardPadding.Medium
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Box(
+                                    modifier = Modifier.size(BBIcon.BoxLg),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Outlined.Language,
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colorScheme.primary,
+                                        modifier = Modifier.size(BBIcon.SizeLg)
+                                    )
+                                }
+
+                                Column(
+                                    modifier = Modifier.weight(1f),
+                                    verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+                                ) {
+                                    Text(
+                                        text = language.Language
+                                            .trim()
+                                            .ifBlank { "Dil bilgisi bulunamadı" },
+                                        style = MaterialTheme.typography.titleSmall,
+                                        color = MaterialTheme.colorScheme.onSurface,
+                                        fontWeight = FontWeight.Bold
+                                    )
+
+                                    Text(
+                                        text = levelContent,
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+
+                                Icon(
+                                    imageVector = Icons.Outlined.ChevronRight,
+                                    contentDescription = "Düzenle",
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    modifier = Modifier.size(BBIcon.SizeMd)
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

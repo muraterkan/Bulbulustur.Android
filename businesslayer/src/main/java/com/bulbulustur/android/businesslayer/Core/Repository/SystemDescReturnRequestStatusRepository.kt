@@ -12,10 +12,13 @@ class SystemDescReturnRequestStatusRepository(
     private val apiClient: ApiClient = ApiClient
 ) : ISystemDescReturnRequestStatusRepository {
 
-    override suspend fun GetSystemDescReturnRequestStatusListAsync(): Result<List<SystemDescReturnRequestStatusDTO>> {
+    override suspend fun GetSystemDescReturnRequestStatusesAsync(
+        count: Int
+    ): Result<List<SystemDescReturnRequestStatusDTO>> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetSystemDescReturnRequestStatusListAsync"
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "GetSystemDescReturnRequestStatusesAsync",
+            query = "count=$count"
         )
     }
 
@@ -23,7 +26,7 @@ class SystemDescReturnRequestStatusRepository(
         systemDescReturnRequestStatusId: Int
     ): Result<SystemDescReturnRequestStatusUpdateModel?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
             method = "GetSystemDescReturnRequestStatusByIdAsync",
             query = "systemDescReturnRequestStatusId=$systemDescReturnRequestStatusId"
         )
@@ -33,7 +36,7 @@ class SystemDescReturnRequestStatusRepository(
         systemDescReturnRequestStatusId: Int
     ): Result<SystemDescReturnRequestStatusDTO?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
             method = "GetSystemDescReturnRequestStatusByIdExtendedAsync",
             query = "systemDescReturnRequestStatusId=$systemDescReturnRequestStatusId"
         )
@@ -43,8 +46,8 @@ class SystemDescReturnRequestStatusRepository(
         model: SystemDescReturnRequestStatusInsertModel
     ): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "InsertAsync",
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "InsertSystemDescReturnRequestStatusAsync",
             data = model
         )
     }
@@ -53,8 +56,8 @@ class SystemDescReturnRequestStatusRepository(
         model: SystemDescReturnRequestStatusUpdateModel
     ): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "UpdateAsync",
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "UpdateSystemDescReturnRequestStatusAsync",
             data = model
         )
     }
@@ -63,8 +66,8 @@ class SystemDescReturnRequestStatusRepository(
         systemDescReturnRequestStatusId: Int
     ): Result<Unit> {
         return apiClient.DeleteAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "DeleteAsync",
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "DeleteSystemDescReturnRequestStatusAsync",
             query = "systemDescReturnRequestStatusId=$systemDescReturnRequestStatusId"
         )
     }

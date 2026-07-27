@@ -22,6 +22,7 @@ import com.bulbulustur.android.Application.Views.Account.AccountEditScreen
 import com.bulbulustur.android.Application.Views.Account.AccountGenderScreen
 import com.bulbulustur.android.Application.Views.Profile.*
 import com.bulbulustur.android.businesslayer.Core.Enums.EApplicationLanguage
+import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.MemberLanguageInsertModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.*
 
 fun NavGraphBuilder.profileGraph(
@@ -176,6 +177,7 @@ fun NavGraphBuilder.profileGraph(
             profileController.GetEducations(languageId)
             profileController.GetBodyHairs(languageId)
             profileController.GetPubicHairs(languageId)
+            profileController.GetMemberLanguages(sessionState.MemberId)
         }
 
         LaunchedEffect(member?.MemberId, member?.CountryId, member?.CountryStateId, member?.CountryDepartmentId, member?.CityId, member?.DistrictId) {
@@ -194,10 +196,18 @@ fun NavGraphBuilder.profileGraph(
             )
         }
 
+        val languagesSummary = profileState.MemberLanguages
+            .map { it.Language.trim() }
+            .filter { it.isNotBlank() }
+            .joinToString(", ")
+            .ifBlank { "Belirtilmemiş" }
+
         ProfileScreen(
             member = member,
             memberProfile = memberProfile,
+            memberPicture = sessionState.MemberPicture,
             displayValues = displayValues,
+            languagesSummary = languagesSummary,
             addressCascadeState = addressCascadeState,
             isLoading = profileState.IsLoading && (profileState.CurrentAction == "GetProfile" || profileState.CurrentAction == "GetMemberProfile"),
             errorMessage = profileState.ErrorMessage ?: addressCascadeState.ErrorMessage,
@@ -206,8 +216,14 @@ fun NavGraphBuilder.profileGraph(
                 navigator.back()
             },
             onBioClick = { navigator.navController.navigate(ProfileRoutes.ProfileBio) },
-            onCoupleClick = { navigator.navController.navigate(ProfileRoutes.ProfileCouple) },
-            onEditClick = { navigator.navController.navigate(ProfileRoutes.ProfileEdit) },
+            onLanguagesClick = { navigator.navController.navigate(ProfileRoutes.ProfileLanguages) },
+            
+        onEditClick = {
+            navigator.navController.navigate(
+                ProfileRoutes.ProfileCompletion
+            )
+        }
+    ,
             onHeightClick = { navigator.navController.navigate(ProfileRoutes.ProfileHeight) },
             onWeightClick = { navigator.navController.navigate(ProfileRoutes.ProfileWeight) },
             onBodyTypeClick = { navigator.navController.navigate(ProfileRoutes.ProfileBodyType) },
@@ -241,6 +257,160 @@ fun NavGraphBuilder.profileGraph(
         )
     }
 
+
+    composable(route = ProfileRoutes.ProfileCompletion) {
+        val profileState by profileController.State.collectAsState()
+        val languageId = ResolveLanguageId(sessionState)
+        val member = profileState.Member
+        val memberProfile = profileState.MemberProfile
+
+        LaunchedEffect(languageId, sessionState.MemberId) {
+            if (profileState.Member == null) {
+                profileController.GetProfile(
+                    languageId,
+                    sessionState.MemberId
+                )
+            }
+
+            if (profileState.MemberProfile == null) {
+                profileController.GetMemberProfile(
+                    sessionState.MemberId
+                )
+            }
+
+            profileController.GetMemberLanguages(
+                sessionState.MemberId
+            )
+        }
+
+        val completionItems = listOf(
+            ProfileCompletionItem(
+                Title = "Ad ve soyad",
+                IsCompleted =
+                    !member?.Name.isNullOrBlank() &&
+                    !member?.Surname.isNullOrBlank()
+            ),
+            ProfileCompletionItem(
+                Title = "Meslek",
+                IsCompleted = !member?.Profession.isNullOrBlank()
+            ),
+            ProfileCompletionItem(
+                Title = "Hakkımda",
+                IsCompleted = !memberProfile?.Bio.isNullOrBlank()
+            ),
+            ProfileCompletionItem(
+                Title = "Boy",
+                IsCompleted = (memberProfile?.Height ?: 0) > 0
+            ),
+            ProfileCompletionItem(
+                Title = "Kilo",
+                IsCompleted = (memberProfile?.Weight ?: 0) > 0
+            ),
+            ProfileCompletionItem(
+                Title = "Vücut tipi",
+                IsCompleted = memberProfile?.BodyTypeId != null
+            ),
+            ProfileCompletionItem(
+                Title = "Ten rengi",
+                IsCompleted = memberProfile?.SkinToneId != null
+            ),
+            ProfileCompletionItem(
+                Title = "Yaşam tarzı",
+                IsCompleted =
+                    memberProfile?.DietTypeId != null &&
+                    memberProfile?.ExerciseHabitId != null &&
+                    memberProfile?.SmokingHabitId != null
+            ),
+            ProfileCompletionItem(
+                Title = "İlişki bilgileri",
+                IsCompleted =
+                    memberProfile?.MaritalStatusId != null &&
+                    memberProfile?.RelationshipTypeId != null
+            ),
+            ProfileCompletionItem(
+                Title = "Diller",
+                IsCompleted = profileState.MemberLanguages.isNotEmpty()
+            )
+        )
+
+        ProfileCompletionScreen(
+            score = memberProfile?.Score ?: 0,
+            items = completionItems,
+            isLoading = profileState.IsLoading &&
+                (
+                    profileState.CurrentAction == "GetProfile" ||
+                    profileState.CurrentAction == "GetMemberProfile" ||
+                    profileState.CurrentAction == "GetMemberLanguages"
+                ),
+            errorMessage = profileState.ErrorMessage,
+            onBackClick = {
+                navigator.back()
+            }
+        )
+    }
+
+    composable(route = ProfileRoutes.ProfileLanguages) {
+        
+        val profileState by profileController.State.collectAsState()
+        val languageId = ResolveLanguageId(sessionState)
+        
+    LaunchedEffect(languageId, sessionState.MemberId) {
+                profileController.ClearError()
+                profileController.GetMemberLanguages(sessionState.MemberId)
+                profileController.GetLanguageLevels(languageId)
+            }
+    
+
+        ProfileLanguageListScreen(
+            languages = profileState.MemberLanguages,
+            languageLevels = profileState.LanguageLevels,
+            isLoading = profileState.IsLoading &&
+                (profileState.CurrentAction == "GetMemberLanguages" ||
+                    profileState.CurrentAction == "GetLanguageLevels"),
+            errorMessage = profileState.ErrorMessage,
+            onBackClick = { navigator.back() },
+            onAddClick = { navigator.navController.navigate(ProfileRoutes.ProfileLanguagesCreate) },
+            onLanguageClick = {}
+        )
+    }
+
+    composable(route = ProfileRoutes.ProfileLanguagesCreate) {
+        val profileState by profileController.State.collectAsState()
+        val languageId = ResolveLanguageId(sessionState)
+        var selectedLanguageId by rememberSaveable { mutableStateOf("") }
+        var selectedLanguageLevelId by rememberSaveable { mutableStateOf("") }
+
+        LaunchedEffect(languageId) {
+            profileController.ClearError()
+            profileController.GetLanguages(languageId)
+            profileController.GetLanguageLevels(languageId)
+        }
+
+        ProfileLanguageFormScreen(
+            languages = profileState.Languages,
+            languageLevels = profileState.LanguageLevels,
+            selectedLanguageId = selectedLanguageId,
+            selectedLanguageLevelId = selectedLanguageLevelId,
+            isLoading = profileState.IsLoading &&
+                (profileState.CurrentAction == "GetLanguages" ||
+                    profileState.CurrentAction == "GetLanguageLevels" ||
+                    profileState.CurrentAction == "InsertMemberLanguage"),
+            errorMessage = profileState.ErrorMessage,
+            onBackClick = { navigator.back() },
+            onLanguageSelected = { selectedLanguageId = it },
+            onLanguageLevelSelected = { selectedLanguageLevelId = it },
+            onSaveClick = {
+                profileController.InsertMemberLanguage(
+                    memberId = sessionState.MemberId,
+                    languageId = selectedLanguageId.toIntOrNull() ?: 0,
+                    languageLevelId = selectedLanguageLevelId.toIntOrNull() ?: 0
+                ) {
+                    navigator.back()
+                }
+            }
+        )
+    }
+
     composable(route = ProfileRoutes.ProfileBio) {
         val profileState by profileController.State.collectAsState()
         var value by rememberSaveable { mutableStateOf("") }
@@ -267,26 +437,6 @@ fun NavGraphBuilder.profileGraph(
             onValueChange = { value = it },
             onSaveClick = {
                 profileController.UpsertBio(MemberProfileBioUpdateModel(sessionState.MemberId, value)) { navigator.back() }
-            }
-        )
-    }
-
-    composable(route = ProfileRoutes.ProfileCouple) {
-        val profileState by profileController.State.collectAsState()
-        var selectedValue by rememberSaveable { mutableStateOf<Boolean?>(null) }
-
-        LaunchedEffect(sessionState.MemberId) { profileController.GetMemberProfile(sessionState.MemberId) }
-        LaunchedEffect(profileState.MemberProfileResult) {
-            if (profileState.MemberProfileResult?.Success == true) selectedValue = profileState.MemberProfile?.IsCouple
-        }
-
-        ProfileCoupleScreen(
-            selectedValue = selectedValue,
-            onBackClick = { navigator.back() },
-            onSelected = { selectedValue = it },
-            onSaveClick = {
-                val value = selectedValue ?: return@ProfileCoupleScreen
-                profileController.UpsertCouple(MemberProfileCoupleUpdateModel(sessionState.MemberId, value)) { navigator.back() }
             }
         )
     }
@@ -729,18 +879,20 @@ fun NavGraphBuilder.profileGraph(
         LaunchedEffect(profileState.MemberResult) { if (profileState.MemberResult?.Success == true) profession = profileState.Member?.Profession.orEmpty() }
         ProfileProfessionScreen(
             value = profession,
-            isLoading = profileState.IsLoading && (profileState.CurrentAction == "GetProfile" || profileState.CurrentAction == "UpdateBasicProfile"),
+            isLoading = profileState.IsLoading && (profileState.CurrentAction == "GetProfile" || profileState.CurrentAction == "UpdateProfession"),
             errorMessage = profileState.ErrorMessage,
             onBackClick = { navigator.back() },
             onValueChange = { profession = it },
             onSaveClick = {
-                val member = profileState.Member ?: return@ProfileProfessionScreen
-                profileController.UpdateBasicProfile(languageId, MemberUpdateModel(
-                    MemberId = member.MemberId,
-                    Name = member.Name,
-                    Surname = member.Surname,
-                    Profession = profession.trim()
-                )) { navigator.back() }
+                profileController.UpdateProfession(
+                    languageId = languageId,
+                    model = MemberUpdateProfessionModel(
+                        MemberId = sessionState.MemberId,
+                        Profession = profession
+                    )
+                ) {
+                    navigator.back()
+                }
             }
         )
     }

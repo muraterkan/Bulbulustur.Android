@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Profile
 
+import com.bulbulustur.android.Application.Views.Profile.Components.BbProfileStickySaveBar as CommonProfileStickySaveBar
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -132,8 +134,10 @@ fun ProfileLifestyleScreen(
                 onBackClick = onBackClick
             )
         },
+        
         bottomBar = {
-            ProfileLifestyleSaveBar(
+            CommonProfileStickySaveBar(
+    
                 enabled = hasChanged && !isSaving,
                 isSaving = isSaving,
                 onClick = {
@@ -366,9 +370,9 @@ private fun ProfileLifestyleOptionRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable {
-                onClick()
-            }
+            
+            .profileClickable(onClick = onClick)
+        
             .padding(
                 horizontal = BBSpacing.CardPadding,
                 vertical = BBSpacing.Space3

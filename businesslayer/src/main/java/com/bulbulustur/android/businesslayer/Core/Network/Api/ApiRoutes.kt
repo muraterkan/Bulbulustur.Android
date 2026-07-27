@@ -333,4 +333,18 @@ object ApiRoutes {
 
     const val PURE_ANNOUNCEMENT_BASE_URL =
         "http://$APPLICATION_SERVER_HOST:30500/api/Announcement/"
+
+    // -------------------------------------------------------------------------
+    // Flatmates API - 30505
+    // -------------------------------------------------------------------------
+
+    const val FLATMATE_BASE_URL =
+        "http://$APPLICATION_SERVER_HOST:30505/api/"
+
+    // -------------------------------------------------------------------------
+    // TravelGirls API - 30510
+    // -------------------------------------------------------------------------
+
+    const val TRAVEL_GIRLS_BASE_URL =
+        "http://$APPLICATION_SERVER_HOST:30510/api/"
 }

@@ -1,5 +1,9 @@
 package com.bulbulustur.android.Application.Views.Profile
 
+import com.bulbulustur.android.Application.Views.Profile.Components.BbProfileHeroCard
+
+import com.bulbulustur.android.Application.Views.Profile.Components.BbProfileStickySaveBar
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -78,11 +82,13 @@ fun ProfileNumberValueScreen(
             )
         },
         bottomBar = {
-            ProfileMeasurementBottomBar(
+            
+        BbProfileStickySaveBar(
                 enabled = isValid && !isLoading,
-                isLoading = isLoading,
-                onSaveClick = onSaveClick
+                isSaving = isLoading,
+                onClick = onSaveClick
             )
+    
         }
     ) { innerPadding ->
         Column(
@@ -96,10 +102,12 @@ fun ProfileNumberValueScreen(
                 ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
-            ProfileMeasurementIntro(
-                label = label,
+            
+        BbProfileHeroCard(
+                title = " Bilginizi Seçin",
                 description = description
             )
+    
 
             ProfileMeasurementPickerCard(
                 selectedValue = selectedValue,

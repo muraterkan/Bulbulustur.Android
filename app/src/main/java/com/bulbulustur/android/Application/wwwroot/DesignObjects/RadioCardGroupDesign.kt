@@ -1,5 +1,9 @@
-package com.bulbulustur.android.Application.wwwroot.DesignObjects
 
+            package com.bulbulustur.android.Application.wwwroot.DesignObjects
+
+import androidx.compose.ui.draw.clip
+
+        
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -57,9 +61,13 @@ private fun BbRadioCardItem(
     onClick: () -> Unit
 ) {
     Surface(
+        
         modifier = Modifier
             .fillMaxWidth()
+            .clip(BBRadius.Card)
             .selectable(
+    
+    
                 selected = selected,
                 enabled = enabled,
                 role = Role.RadioButton,

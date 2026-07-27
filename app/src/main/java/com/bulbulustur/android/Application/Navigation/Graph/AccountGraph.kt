@@ -105,6 +105,7 @@ fun NavGraphBuilder.accountGraph(
         val uriHandler = LocalUriHandler.current
 
         DashboardScreen(
+            memberPicture = sessionState.MemberPicture,
             isLogoutLoading = logonState.IsLoggingOut,
             onSecurityClick = {
                 navigator.navController.navigate(AccountRoutes.Security)

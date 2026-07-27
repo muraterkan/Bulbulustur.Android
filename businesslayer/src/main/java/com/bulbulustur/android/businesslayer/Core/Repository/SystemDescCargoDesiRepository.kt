@@ -12,10 +12,13 @@ class SystemDescCargoDesiRepository(
     private val apiClient: ApiClient = ApiClient
 ) : ISystemDescCargoDesiRepository {
 
-    override suspend fun GetSystemDescCargoDesiListAsync(): Result<List<SystemDescCargoDesiDTO>> {
+    override suspend fun GetSystemDescCargoDesisAsync(
+        count: Int
+    ): Result<List<SystemDescCargoDesiDTO>> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetSystemDescCargoDesiListAsync"
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "GetSystemDescCargoDesisAsync",
+            query = "count=$count"
         )
     }
 
@@ -23,7 +26,7 @@ class SystemDescCargoDesiRepository(
         systemDescCargoDesiId: Int
     ): Result<SystemDescCargoDesiUpdateModel?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
             method = "GetSystemDescCargoDesiByIdAsync",
             query = "systemDescCargoDesiId=$systemDescCargoDesiId"
         )
@@ -33,7 +36,7 @@ class SystemDescCargoDesiRepository(
         systemDescCargoDesiId: Int
     ): Result<SystemDescCargoDesiDTO?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
             method = "GetSystemDescCargoDesiByIdExtendedAsync",
             query = "systemDescCargoDesiId=$systemDescCargoDesiId"
         )
@@ -43,8 +46,8 @@ class SystemDescCargoDesiRepository(
         model: SystemDescCargoDesiInsertModel
     ): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "InsertAsync",
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "InsertSystemDescCargoDesiAsync",
             data = model
         )
     }
@@ -53,8 +56,8 @@ class SystemDescCargoDesiRepository(
         model: SystemDescCargoDesiUpdateModel
     ): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "UpdateAsync",
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "UpdateSystemDescCargoDesiAsync",
             data = model
         )
     }
@@ -63,8 +66,8 @@ class SystemDescCargoDesiRepository(
         systemDescCargoDesiId: Int
     ): Result<Unit> {
         return apiClient.DeleteAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "DeleteAsync",
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "DeleteSystemDescCargoDesiAsync",
             query = "systemDescCargoDesiId=$systemDescCargoDesiId"
         )
     }

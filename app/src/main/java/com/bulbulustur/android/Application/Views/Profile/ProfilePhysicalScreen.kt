@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Profile
 
+import com.bulbulustur.android.Application.Views.Profile.Components.BbProfileStickySaveBar as CommonProfileStickySaveBar
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -149,9 +151,9 @@ fun ProfilePhysicalScreen(
                 !isSaving
 
     Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .imePadding(),
+        
+            modifier = Modifier.fillMaxSize(),
+        
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
@@ -159,8 +161,10 @@ fun ProfilePhysicalScreen(
                 onBackClick = onBackClick
             )
         },
+        
         bottomBar = {
-            ProfilePhysicalSaveBar(
+            CommonProfileStickySaveBar(
+    
                 enabled = canSave,
                 isSaving = isSaving,
                 onClick = {
@@ -495,9 +499,9 @@ private fun ProfileRadioRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable {
-                onClick()
-            }
+            
+            .profileClickable(onClick = onClick)
+        
             .padding(
                 horizontal = BBSpacing.CardPadding,
                 vertical = BBSpacing.Space3

@@ -33,6 +33,9 @@ import androidx.compose.material3.MaterialTheme
 
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import coil3.compose.AsyncImage
 import androidx.compose.runtime.Composable
 
 import androidx.compose.ui.Alignment
@@ -51,6 +54,7 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BbTypography
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberDTO
+import com.bulbulustur.android.businesslayer.Core.Network.MemberPictureUrlResolver
 
 @Composable
 fun AccountScreen(
@@ -119,6 +123,11 @@ fun AccountScreen(
         false -> "Doğrulanmamış"
         null -> "Bilinmiyor"
     }
+
+    val memberPictureUrl =
+        MemberPictureUrlResolver.Resolve(
+            member?.Picture
+        )
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,

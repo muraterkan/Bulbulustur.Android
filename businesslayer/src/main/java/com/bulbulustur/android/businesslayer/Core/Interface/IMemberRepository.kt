@@ -11,6 +11,7 @@ import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdat
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 import com.bulbulustur.android.businesslayer.Core.Model.ChangePasswordAsyncModel
 import com.bulbulustur.android.businesslayer.Core.Model.ChangeMailModel
+import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdateProfessionModel
 
 interface IMemberRepository {
 
@@ -34,6 +35,7 @@ interface IMemberRepository {
 
     suspend fun MemberUpdateTcknAsync(model: MemberUpdateTcknModel): Result<MemberUpdateTcknModel>
 
+    suspend fun MemberUpdateProfessionAsync(model: MemberUpdateProfessionModel): Result<MemberUpdateProfessionModel>
 
     suspend fun ChangePasswordAsync(languageId: Int, model: ChangePasswordAsyncModel): Result<Unit>
 

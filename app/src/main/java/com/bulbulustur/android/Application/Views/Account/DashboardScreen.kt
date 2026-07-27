@@ -3,6 +3,7 @@ package com.bulbulustur.android.Application.Views.Account
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
+import coil3.compose.AsyncImage
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -73,9 +74,11 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BbTypography
 import com.bulbulustur.android.R
+import com.bulbulustur.android.businesslayer.Core.Network.MemberPictureUrlResolver
 
 @Composable
 fun DashboardScreen(
+    memberPicture: String = "",
     isLogoutLoading: Boolean = false,
     onSecurityClick: () -> Unit = {},
     onProfileClick: () -> Unit = {},
@@ -105,7 +108,12 @@ fun DashboardScreen(
     onModeSwitchClick: () -> Unit = {},
     onBasketClick: () -> Unit = {}
 ) {
-    val useProfilePhoto = true
+    val profilePictureUrl =
+        MemberPictureUrlResolver.Resolve(
+            memberPicture
+        )
+
+    val useProfilePhoto = profilePictureUrl.isNotBlank()
 
     val accountData = remember {
         DashboardHomeData(
@@ -157,6 +165,7 @@ fun DashboardScreen(
                 AccountProfileHero(
                     data = accountData,
                     useProfilePhoto = useProfilePhoto,
+                    profilePictureUrl = profilePictureUrl,
                     onProfileClick = onProfileClick,
                     onMessagesClick = onMessagesClick,
                     onSettingsClick = onSettingsClick
@@ -356,6 +365,7 @@ fun DashboardScreen(
 private fun AccountProfileHero(
     data: DashboardHomeData,
     useProfilePhoto: Boolean,
+    profilePictureUrl: String,
     onProfileClick: () -> Unit,
     onMessagesClick: () -> Unit,
     onSettingsClick: () -> Unit
@@ -398,6 +408,7 @@ private fun AccountProfileHero(
         ) {
             AccountAvatar(
                 useProfilePhoto = useProfilePhoto,
+                profilePictureUrl = profilePictureUrl,
                 initials = data.initials,
                 onClick = onProfileClick
             )
@@ -458,6 +469,7 @@ private fun AccountProfileHero(
 @Composable
 private fun AccountAvatar(
     useProfilePhoto: Boolean,
+    profilePictureUrl: String,
     initials: String,
     onClick: () -> Unit
 ) {
@@ -475,8 +487,8 @@ private fun AccountAvatar(
         contentAlignment = Alignment.Center
     ) {
         if (useProfilePhoto) {
-            Image(
-                painter = painterResource(id = R.drawable.murat_erkan),
+            AsyncImage(
+                model = profilePictureUrl,
                 contentDescription = "Profil fotoğrafı",
                 modifier = Modifier
                     .fillMaxSize()

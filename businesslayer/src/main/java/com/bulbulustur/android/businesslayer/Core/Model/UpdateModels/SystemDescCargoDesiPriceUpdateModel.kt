@@ -1,13 +1,13 @@
-﻿package com.bulbulustur.android.businesslayer.Core.Model.UpdateModels
+package com.bulbulustur.android.businesslayer.Core.Model.UpdateModels
 
 data class SystemDescCargoDesiPriceUpdateModel(
-    val SystemDescCargoDesiPriceId: Int = 0,
-    val EmployeeId: Int = 0,
-    val InsertedDate: String = "",
-    val StatusId: Int = 0,
-    val CargoCompanyId: Int = 0,
-    val SystemDescDesiId: Int = 0,
-    val NetPrice: Double = 0.0,
-    val GrossPrice: Double? = null,
-    val Content: String = ""
+    val systemDescCargoDesiPriceId: Int,
+    val employeeId: Int,
+    val insertedDate: String,
+    val statusId: Int,
+    val cargoCompanyId: Int,
+    val systemDescDesiId: Int,
+    val netPrice: Double,
+    val grossPrice: Double?,
+    val content: String
 )

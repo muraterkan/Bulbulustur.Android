@@ -1,8 +1,12 @@
 package com.bulbulustur.android.Application.Controllers
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberProfileDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.MemberLanguageDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.SystemDescLanguageDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.SystemDescLanguageLevelDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.SystemDescAlcoholHabitDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.SystemDescBodyHairDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.SystemDescBodyTypeDTO
@@ -18,6 +22,9 @@ import com.bulbulustur.android.businesslayer.Core.DTO.SystemDescReligionDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.SystemDescSkinToneDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.SystemDescSmokingHabitDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.IMemberProfileRepository
+import com.bulbulustur.android.businesslayer.Core.Interface.IMemberLanguageRepository
+import com.bulbulustur.android.businesslayer.Core.Interface.ISystemDescLanguageRepository
+import com.bulbulustur.android.businesslayer.Core.Interface.ISystemDescLanguageLevelRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IMemberRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.ISystemDescAlcoholHabitRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.ISystemDescBodyHairRepository
@@ -33,6 +40,7 @@ import com.bulbulustur.android.businesslayer.Core.Interface.ISystemDescRelations
 import com.bulbulustur.android.businesslayer.Core.Interface.ISystemDescReligionRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.ISystemDescSkinToneRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.ISystemDescSmokingHabitRepository
+import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.MemberLanguageInsertModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberProfileAlcoholHabitUpdateModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberProfileArmpitHairPreferenceUpdateModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberProfileBioUpdateModel
@@ -61,7 +69,11 @@ import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdat
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdateBirthDateModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdateGenderModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdateModel
+import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdateProfessionModel
 import com.bulbulustur.android.businesslayer.Core.Repository.MemberProfileRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.MemberLanguageRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.SystemDescLanguageRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.SystemDescLanguageLevelRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.SystemDescAlcoholHabitRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.SystemDescBodyHairRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.SystemDescBodyTypeRepository
@@ -102,6 +114,9 @@ data class ProfileControllerState(
     val BodyTypeListResult: Result<List<SystemDescBodyTypeDTO>>? = null,
     val SkinToneListResult: Result<List<SystemDescSkinToneDTO>>? = null,
     val PubicHairListResult: Result<List<SystemDescPubicHairDTO>>? = null,
+    val MemberLanguageListResult: Result<List<MemberLanguageDTO>>? = null,
+    val LanguageListResult: Result<List<SystemDescLanguageDTO>>? = null,
+    val LanguageLevelListResult: Result<List<SystemDescLanguageLevelDTO>>? = null,
     val ErrorMessage: String? = null
 ) {
     val Member: MemberDTO?
@@ -151,6 +166,15 @@ data class ProfileControllerState(
 
     val PubicHairs: List<SystemDescPubicHairDTO>
         get() = PubicHairListResult?.Data.orEmpty()
+
+    val MemberLanguages: List<MemberLanguageDTO>
+        get() = MemberLanguageListResult?.Data.orEmpty()
+
+    val Languages: List<SystemDescLanguageDTO>
+        get() = LanguageListResult?.Data.orEmpty()
+
+    val LanguageLevels: List<SystemDescLanguageLevelDTO>
+        get() = LanguageLevelListResult?.Data.orEmpty()
 }
 
 class ProfileController(
@@ -170,7 +194,10 @@ class ProfileController(
     private val systemDescBodyHairRepository: ISystemDescBodyHairRepository = SystemDescBodyHairRepository(),
     private val systemDescBodyTypeRepository: ISystemDescBodyTypeRepository = SystemDescBodyTypeRepository(),
     private val systemDescSkinToneRepository: ISystemDescSkinToneRepository = SystemDescSkinToneRepository(),
-    private val systemDescPubicHairRepository: ISystemDescPubicHairRepository = SystemDescPubicHairRepository()
+    private val systemDescPubicHairRepository: ISystemDescPubicHairRepository = SystemDescPubicHairRepository(),
+    private val memberLanguageRepository: IMemberLanguageRepository = MemberLanguageRepository(),
+    private val systemDescLanguageRepository: ISystemDescLanguageRepository = SystemDescLanguageRepository(),
+    private val systemDescLanguageLevelRepository: ISystemDescLanguageLevelRepository = SystemDescLanguageLevelRepository()
 ) : BaseController() {
 
     private val _state = MutableStateFlow(ProfileControllerState())
@@ -239,18 +266,6 @@ class ProfileController(
             operationType = "Profile.MemberProfile.Bio.Upsert",
             request = {
                 memberProfileRepository.UpsertBioAsync(model.copy(Bio = bio))
-            },
-            onSuccess = onSuccess
-        )
-    }
-
-    fun UpsertCouple(model: MemberProfileCoupleUpdateModel, onSuccess: (() -> Unit)? = null) {
-        ExecuteMemberProfileUpdate(
-            memberId = model.MemberId,
-            currentAction = "UpsertCouple",
-            operationType = "Profile.MemberProfile.Couple.Upsert",
-            request = {
-                memberProfileRepository.UpsertCoupleAsync(model)
             },
             onSuccess = onSuccess
         )
@@ -562,9 +577,19 @@ class ProfileController(
         viewModelScope.launch {
             SetLoading("UpdateBasicProfile")
 
+            Log.d(
+                "ProfileProfession",
+                "REQUEST memberId=${model.MemberId} name=${model.Name} surname=${model.Surname} profession=${model.Profession}"
+            )
+
             val response = executeService.PostAsync(operationType = "Profile.Member.Update") {
                 memberRepository.UpdateAsync(model)
             }
+
+            Log.d(
+                "ProfileProfession",
+                "RESPONSE success=${response.Success} message=${response.Message} data=${response.Data}"
+            )
 
             Complete {
                 copy(ErrorMessage = response.Message.takeIf { !response.Success })
@@ -916,6 +941,159 @@ class ProfileController(
 
             if (response.Success) {
                 GetProfile(languageId = languageId, memberId = model.MemberId)
+                onSuccess?.invoke()
+            }
+        }
+    }
+
+    fun UpdateProfession(
+        languageId: Int,
+        model: MemberUpdateProfessionModel,
+        onSuccess: (() -> Unit)? = null
+    ) {
+        if (!ValidateLanguage(languageId)) return
+        if (!ValidateMember(model.MemberId)) return
+
+        if (model.Profession.isBlank()) {
+            SetError("Meslek bilgisi zorunludur.")
+            return
+        }
+
+        viewModelScope.launch { SetLoading("UpdateProfession")
+
+            val response = executeService.PostAsync(
+                operationType = "Profile.Member.Profession.Update"
+            ) {
+                memberRepository.MemberUpdateProfessionAsync(
+                    model.copy(Profession = model.Profession.trim())
+                )
+            }
+
+            Complete {
+                copy(
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+
+            if (response.Success) {
+                GetProfile(
+                    languageId = languageId,
+                    memberId = model.MemberId
+                )
+                onSuccess?.invoke()
+            }
+        }
+    }
+
+    fun GetMemberLanguages(
+        memberId: Int,
+        count: Int = 100
+    ) {
+        if (!ValidateMember(memberId)) return
+
+        viewModelScope.launch {
+            SetLoading("GetMemberLanguages")
+
+            val response = executeService.GetAsync(cacheKey = "") {
+                memberLanguageRepository.GetAccountLanguagesAsync(
+                    memberId = memberId,
+                    count = count
+                )
+            }
+
+            Complete {
+                copy(
+                    MemberLanguageListResult = response,
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+        }
+    }
+
+    fun GetLanguages(
+        languageId: Int,
+        count: Int = 500
+    ) {
+        if (!ValidateLanguage(languageId)) return
+
+        viewModelScope.launch {
+            SetLoading("GetLanguages")
+
+            val response = executeService.GetAsync(cacheKey = "") {
+                systemDescLanguageRepository.GetSystemDescLanguagesAsync(
+                    languageId = languageId,
+                    count = count
+                )
+            }
+
+            Complete {
+                copy(
+                    LanguageListResult = response,
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+        }
+    }
+
+    fun GetLanguageLevels(languageId: Int, count: Int = 100) {
+        viewModelScope.launch {
+            SetLoading("GetLanguageLevels")
+
+            val response = executeService.GetAsync(cacheKey = "") {
+                
+systemDescLanguageLevelRepository.GetSystemDescLanguageLevelsAsync(
+                    languageId = languageId,
+                    count = count
+                )
+            }
+
+            Complete {
+                copy(
+                    LanguageLevelListResult = response,
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+        }
+    }
+
+    fun InsertMemberLanguage(
+        memberId: Int,
+        languageId: Int,
+        languageLevelId: Int,
+        onSuccess: (() -> Unit)? = null
+    ) {
+        if (!ValidateMember(memberId)) return
+        if (!ValidateId(languageId, "Dil seçiniz.")) return
+        if (!ValidateId(languageLevelId, "Dil seviyesi seçiniz.")) return
+
+        val model = MemberLanguageInsertModel(
+            InsertedBy = memberId,
+            StatusId = 2,
+            MemberId = memberId,
+            LanguageId = languageId,
+            LanguageLevelId = languageLevelId
+        )
+
+        viewModelScope.launch {
+            SetLoading("InsertMemberLanguage")
+
+            val response = executeService.PostAsync(
+                operationType = "Profile.MemberLanguage.Insert"
+            ) {
+                memberLanguageRepository.InsertAccountLanguageAsync(
+                    memberId = memberId,
+                    model = model
+                )
+            }
+
+            Complete {
+                copy(
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+
+            if (response.Success) {
+                GetMemberLanguages(memberId)
                 onSuccess?.invoke()
             }
         }

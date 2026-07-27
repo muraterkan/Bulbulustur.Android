@@ -15,15 +15,24 @@ data class UserSessionState(
     val CurrencyName: String = "Türk Lirası",
     val CurrencySymbol: String = "₺",
     val AuthenticationState: EAuthenticationState = EAuthenticationState.Initializing,
-    val MemberId: Int = 0
+    val MemberId: Int = 0,
+    val MemberName: String = "",
+    val MemberSurname: String = "",
+    val MemberFullName: String = "",
+    val MemberProfession: String = "",
+    val MemberPicture: String = ""
 ) {
 
     val IsAuthenticated: Boolean
-        get() = AuthenticationState == EAuthenticationState.Authenticated && MemberId > 0
+        get() =
+            AuthenticationState == EAuthenticationState.Authenticated &&
+                    MemberId > 0
 
     val IsAnonymous: Boolean
-        get() = AuthenticationState == EAuthenticationState.Anonymous
+        get() =
+            AuthenticationState == EAuthenticationState.Anonymous
 
     val IsAuthenticationInitializing: Boolean
-        get() = AuthenticationState == EAuthenticationState.Initializing
+        get() =
+            AuthenticationState == EAuthenticationState.Initializing
 }

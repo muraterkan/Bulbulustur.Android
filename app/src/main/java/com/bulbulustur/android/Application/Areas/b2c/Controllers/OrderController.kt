@@ -212,7 +212,7 @@ class OrderController(
         viewModelScope.launch {
             StartLoading("GetReturnRequestReasonsAsync")
 
-            val result = returnRequestReasonRepository.GetSystemDescReturnRequestReasonListAsync()
+            val result = returnRequestReasonRepository.GetSystemDescReturnRequestReasonsAsync(100)
 
             _state.update {
                 it.copy(

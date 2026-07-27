@@ -33,7 +33,12 @@ class SecureTokenStore(
         accessToken: String,
         refreshToken: String,
         expiration: String,
-        memberId: Int
+        memberId: Int,
+        memberName: String,
+        memberSurname: String,
+        memberFullName: String,
+        memberProfession: String,
+        memberPicture: String
     ): Boolean {
         require(accessToken.isNotBlank()) {
             "AccessToken boş olamaz."
@@ -53,14 +58,15 @@ class SecureTokenStore(
 
         val tokenModel =
             SecureTokenModel(
-                AccessToken =
-                    accessToken,
-                RefreshToken =
-                    refreshToken,
-                Expiration =
-                    expiration,
-                MemberId =
-                    memberId
+                AccessToken = accessToken,
+                RefreshToken = refreshToken,
+                Expiration = expiration,
+                MemberId = memberId,
+                MemberName = memberName,
+                MemberSurname = memberSurname,
+                MemberFullName = memberFullName,
+                MemberProfession = memberProfession,
+                MemberPicture = memberPicture
             )
 
         return try {

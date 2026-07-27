@@ -302,16 +302,21 @@ object AccountRoutes {
 }
 
 object ProfileRoutes {
-    const val ProfileInfo = "profile"
-    const val ProfileEdit = "profile/edit"
+    
+            const val ProfileInfo = "profile"
+    const val ProfileCompletion = "profile/completion"
+
+            const val ProfileEdit = "profile/edit"
     const val ProfileGender = "profile/gender"
     const val ProfileBirthDate = "profile/birth-date"
     const val ProfileAddress = "profile/address"
-    
-    
+
+    const val ProfileLanguages = "profile/languages"
+    const val ProfileLanguagesCreate = "profile/languages/create"
+
+
     const val ProfileBio = "profile/summary/bio"
-    const val ProfileCouple = "profile/summary/couple"
-const val ProfilePrivateInformation = "profile/private-information"
+    const val ProfilePrivateInformation = "profile/private-information"
     const val ProfileBreastSize = "profile/private-information/breast-size"
     const val ProfilePenisSize = "profile/private-information/penis-size"
 

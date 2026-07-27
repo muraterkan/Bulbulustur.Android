@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Profile
 
+import com.bulbulustur.android.Application.Views.Profile.Components.BbProfileStickySaveBar as CommonProfileStickySaveBar
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -98,9 +100,9 @@ fun ProfilePrivateInformationScreen(
                 !isSaving
 
     Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .imePadding(),
+        
+            modifier = Modifier.fillMaxSize(),
+        
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
@@ -108,8 +110,10 @@ fun ProfilePrivateInformationScreen(
                 onBackClick = onBackClick
             )
         },
+        
         bottomBar = {
-            ProfilePrivateInformationSaveBar(
+            CommonProfileStickySaveBar(
+    
                 enabled = canSave,
                 isSaving = isSaving,
                 onClick = {

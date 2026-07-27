@@ -1,9 +1,9 @@
-﻿package com.bulbulustur.android.businesslayer.Core.DTO
+package com.bulbulustur.android.businesslayer.Core.DTO
 
 data class SystemDescReturnRequestStatusDTO(
-    val SystemDescReturnRequestStatusId: Int = 0,
-    val EmployeeId: Int = 0,
-    val InsertedDate: String = "",
-    val StatusId: Int = 0,
-    val Content: String = ""
+    val systemDescReturnRequestStatusId: Int,
+    val employeeId: Int,
+    val insertedDate: String,
+    val statusId: Int,
+    val content: String
 )

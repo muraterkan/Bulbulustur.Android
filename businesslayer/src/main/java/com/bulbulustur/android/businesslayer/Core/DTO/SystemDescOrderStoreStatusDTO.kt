@@ -1,9 +1,9 @@
-﻿package com.bulbulustur.android.businesslayer.Core.DTO
+package com.bulbulustur.android.businesslayer.Core.DTO
 
 data class SystemDescOrderStoreStatusDTO(
-    val SystemDescOrderStoreStatusId: Int = 0,
-    val EmployeeId: Int = 0,
-    val InsertedDate: String = "",
-    val StatusId: Int = 0,
-    val Content: String = ""
+    val systemDescOrderStoreStatusId: Int,
+    val employeeId: Int,
+    val insertedDate: String,
+    val statusId: Int,
+    val content: String
 )

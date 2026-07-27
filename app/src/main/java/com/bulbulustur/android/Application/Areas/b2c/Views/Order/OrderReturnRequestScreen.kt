@@ -305,9 +305,7 @@ private fun OrderReturnReasonCard(
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(
-                BBSpacing.Space4
-            )
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
             OrderReturnSectionTitle(
                 title = "İade Nedeni",
@@ -316,16 +314,14 @@ private fun OrderReturnReasonCard(
 
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(
-                    BBSpacing.Space2
-                )
+                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
             ) {
                 reasons.forEach { reason ->
                     OrderReturnReasonRow(
-                        text = reason.Content,
-                        selected = reason.SystemDescReturnRequestReasonId == selectedReasonId,
+                        text = reason.content,
+                        selected = reason.systemDescReturnRequestReasonId == selectedReasonId,
                         onClick = {
-                            onReasonClick(reason.SystemDescReturnRequestReasonId)
+                            onReasonClick(reason.systemDescReturnRequestReasonId)
                         }
                     )
                 }

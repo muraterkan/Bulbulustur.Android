@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Profile
 
+import com.bulbulustur.android.Application.Views.Profile.Components.BbProfileStickySaveBar as CommonProfileStickySaveBar
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -80,8 +82,10 @@ fun ProfilePenisSizeScreen(
                 onBackClick = onBackClick
             )
         },
+        
         bottomBar = {
-            ProfilePenisSizeSaveBar(
+            CommonProfileStickySaveBar(
+    
                 enabled = canSave,
                 isSaving = isSaving,
                 onClick = {
@@ -255,7 +259,7 @@ private fun ProfilePenisSizeOptionRow(
 }
 
 @Composable
-private fun ProfilePenisSizeSaveBar(
+private fun BbProfileStickySaveBar(
     enabled: Boolean,
     isSaving: Boolean,
     onClick: () -> Unit

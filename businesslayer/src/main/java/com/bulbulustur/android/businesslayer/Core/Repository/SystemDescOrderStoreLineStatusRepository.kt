@@ -12,10 +12,13 @@ class SystemDescOrderStoreLineStatusRepository(
     private val apiClient: ApiClient = ApiClient
 ) : ISystemDescOrderStoreLineStatusRepository {
 
-    override suspend fun GetSystemDescOrderStoreLineStatusListAsync(): Result<List<SystemDescOrderStoreLineStatusDTO>> {
+    override suspend fun GetSystemDescOrderStoreLineStatusesAsync(
+        count: Int
+    ): Result<List<SystemDescOrderStoreLineStatusDTO>> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "GetSystemDescOrderStoreLineStatusListAsync"
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "GetSystemDescOrderStoreLineStatusesAsync",
+            query = "count=$count"
         )
     }
 
@@ -23,7 +26,7 @@ class SystemDescOrderStoreLineStatusRepository(
         systemDescOrderStoreLineStatusId: Int
     ): Result<SystemDescOrderStoreLineStatusUpdateModel?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
             method = "GetSystemDescOrderStoreLineStatusByIdAsync",
             query = "systemDescOrderStoreLineStatusId=$systemDescOrderStoreLineStatusId"
         )
@@ -33,7 +36,7 @@ class SystemDescOrderStoreLineStatusRepository(
         systemDescOrderStoreLineStatusId: Int
     ): Result<SystemDescOrderStoreLineStatusDTO?> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
             method = "GetSystemDescOrderStoreLineStatusByIdExtendedAsync",
             query = "systemDescOrderStoreLineStatusId=$systemDescOrderStoreLineStatusId"
         )
@@ -43,8 +46,8 @@ class SystemDescOrderStoreLineStatusRepository(
         model: SystemDescOrderStoreLineStatusInsertModel
     ): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "InsertAsync",
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "InsertSystemDescOrderStoreLineStatusAsync",
             data = model
         )
     }
@@ -53,8 +56,8 @@ class SystemDescOrderStoreLineStatusRepository(
         model: SystemDescOrderStoreLineStatusUpdateModel
     ): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "UpdateAsync",
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "UpdateSystemDescOrderStoreLineStatusAsync",
             data = model
         )
     }
@@ -63,8 +66,8 @@ class SystemDescOrderStoreLineStatusRepository(
         systemDescOrderStoreLineStatusId: Int
     ): Result<Unit> {
         return apiClient.DeleteAsync(
-            baseUrl = ApiRoutes.RESOURCE_BASE_URL,
-            method = "DeleteAsync",
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "DeleteSystemDescOrderStoreLineStatusAsync",
             query = "systemDescOrderStoreLineStatusId=$systemDescOrderStoreLineStatusId"
         )
     }

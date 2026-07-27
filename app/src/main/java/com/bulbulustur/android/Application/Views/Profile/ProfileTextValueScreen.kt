@@ -1,5 +1,11 @@
 package com.bulbulustur.android.Application.Views.Profile
 
+import com.bulbulustur.android.Application.Views.Profile.Components.BbProfileHeroCard
+
+import com.bulbulustur.android.Application.Views.Profile.Components.BbProfileStickySaveBar
+
+import com.bulbulustur.android.Application.Views.Profile.Components.BbProfileSaveButton
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -32,10 +38,18 @@ fun ProfileTextValueScreen(
 ) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
+        
         topBar = {
             BbInnerPageHeader(
                 title = title,
                 onBackClick = onBackClick
+            )
+        },
+        bottomBar = {
+            BbProfileStickySaveBar(
+                enabled = value.isNotBlank() && !isLoading,
+                isSaving = isLoading,
+                onClick = onSaveClick
             )
         }
     ) { innerPadding ->
@@ -50,11 +64,12 @@ fun ProfileTextValueScreen(
                 ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
-            Text(
-                text = description,
-                style = BbTypography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+            
+        BbProfileHeroCard(
+                title = " Bilgisi",
+                description = description
             )
+    
 
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
@@ -75,14 +90,6 @@ fun ProfileTextValueScreen(
                 )
             }
 
-            BbButton(
-                modifier = Modifier.fillMaxWidth(),
-                text = "Kaydet",
-                variant = BbButtonVariant.Primary,
-                enabled = value.isNotBlank() && !isLoading,
-                isLoading = isLoading,
-                onClick = onSaveClick
-            )
         }
     }
 }

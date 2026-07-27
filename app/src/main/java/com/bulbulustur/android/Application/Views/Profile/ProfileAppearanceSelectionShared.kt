@@ -1,5 +1,11 @@
 package com.bulbulustur.android.Application.Views.Profile
 
+import com.bulbulustur.android.Application.Views.Profile.Components.BbProfileHeroCard
+
+import com.bulbulustur.android.Application.Views.Profile.Components.BbProfileStickySaveBar
+
+import com.bulbulustur.android.Application.Views.Profile.Components.BbProfileSaveButton
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -47,10 +53,18 @@ fun ProfileAppearanceSelectionScreen(
 ) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
+        
         topBar = {
             BbInnerPageHeader(
                 title = title,
                 onBackClick = onBackClick
+            )
+        },
+        bottomBar = {
+            BbProfileStickySaveBar(
+                enabled = selectedId != null && !isLoading,
+                isSaving = isLoading,
+                onClick = onSaveClick
             )
         }
     ) { innerPadding ->
@@ -65,11 +79,12 @@ fun ProfileAppearanceSelectionScreen(
                 ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
-            Text(
-                text = description,
-                style = BbTypography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+            
+        BbProfileHeroCard(
+                title = " Bilginizi Seçin",
+                description = description
             )
+    
 
             when {
                 isLoading -> {
@@ -120,10 +135,12 @@ fun ProfileAppearanceSelectionScreen(
                         ) { option ->
                             BbCard(
                                 modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable {
+                                    
+        .fillMaxWidth()
+                                    .profileClickable {
                                         onSelected(option.Id)
-                                    },
+                                    }
+    ,
                                 variant = BbCardVariant.Outlined,
                                 padding = BbCardPadding.Medium
                             ) {
@@ -155,13 +172,8 @@ fun ProfileAppearanceSelectionScreen(
                         }
                     }
 
-                    Button(
-                        modifier = Modifier.fillMaxWidth(),
-                        enabled = selectedId != null,
-                        onClick = onSaveClick
-                    ) {
-                        Text(text = "Kaydet")
-                    }
+                    
+    
                 }
             }
         }

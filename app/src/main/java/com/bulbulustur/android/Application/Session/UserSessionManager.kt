@@ -20,28 +20,44 @@ class UserSessionManager(
     private val coroutineScope: CoroutineScope
 ) {
 
-    private val _state = MutableStateFlow(UserSessionState())
+    private val _state =
+        MutableStateFlow(
+            UserSessionState()
+        )
 
-    val State: StateFlow<UserSessionState> = _state.asStateFlow()
+    val State: StateFlow<UserSessionState> =
+        _state.asStateFlow()
 
     init {
         ObservePreferences()
         RestoreAuthentication()
     }
 
-    fun SetThemeMode(themeMode: EThemeMode) {
+    fun SetThemeMode(
+        themeMode: EThemeMode
+    ) {
         coroutineScope.launch {
-            userPreferenceDataStore.SetThemeMode(themeMode)
+            userPreferenceDataStore.SetThemeMode(
+                themeMode
+            )
         }
     }
 
-    fun SetLanguage(language: EApplicationLanguage) {
+    fun SetLanguage(
+        language: EApplicationLanguage
+    ) {
         coroutineScope.launch {
-            userPreferenceDataStore.SetLanguage(language)
+            userPreferenceDataStore.SetLanguage(
+                language
+            )
         }
     }
 
-    fun SetCountry(countryId: Int, countryName: String, countryCode: String) {
+    fun SetCountry(
+        countryId: Int,
+        countryName: String,
+        countryCode: String
+    ) {
         coroutineScope.launch {
             userPreferenceDataStore.SetCountry(
                 countryId = countryId,
@@ -71,19 +87,38 @@ class UserSessionManager(
         coroutineScope.launch {
             _state.update { currentState ->
                 currentState.copy(
-                    AuthenticationState = EAuthenticationState.Initializing,
-                    MemberId = 0
+                    AuthenticationState =
+                        EAuthenticationState.Initializing,
+                    MemberId =
+                        0,
+                    MemberName =
+                        "",
+                    MemberSurname =
+                        "",
+                    MemberFullName =
+                        "",
+                    MemberProfession =
+                        "",
+                    MemberPicture =
+                        ""
                 )
             }
 
-            val storedTokens = secureTokenStore.ReadTokens()
+            val storedTokens =
+                secureTokenStore.ReadTokens()
 
-            if (storedTokens == null || !storedTokens.HasTokens) {
+            if (
+                storedTokens == null ||
+                !storedTokens.HasTokens
+            ) {
                 SetAnonymous()
                 return@launch
             }
 
-            val isValid = TokenExpirationParser.IsValid(storedTokens.Expiration)
+            val isValid =
+                TokenExpirationParser.IsValid(
+                    storedTokens.Expiration
+                )
 
             if (!isValid) {
                 secureTokenStore.Clear()
@@ -93,27 +128,73 @@ class UserSessionManager(
 
             _state.update { currentState ->
                 currentState.copy(
-                    AuthenticationState = EAuthenticationState.Authenticated,
-                    MemberId = storedTokens.MemberId
+                    AuthenticationState =
+                        EAuthenticationState.Authenticated,
+                    MemberId =
+                        storedTokens.MemberId,
+                    MemberName =
+                        storedTokens.MemberName,
+                    MemberSurname =
+                        storedTokens.MemberSurname,
+                    MemberFullName =
+                        storedTokens.MemberFullName,
+                    MemberProfession =
+                        storedTokens.MemberProfession,
+                    MemberPicture =
+                        storedTokens.MemberPicture
                 )
             }
         }
     }
 
-    fun SetAuthenticated(authResponse: AuthResponse): Boolean {
-        val memberId = JwtMemberIdParser.Parse(authResponse.Token)
+    fun SetAuthenticated(
+        authResponse: AuthResponse
+    ): Boolean {
+        val responseMemberId =
+            authResponse.Member.MemberId
+
+        val tokenMemberId =
+            JwtMemberIdParser.Parse(
+                authResponse.Token
+            )
+
+        val memberId =
+            if (responseMemberId > 0) {
+                responseMemberId
+            } else {
+                tokenMemberId
+            }
 
         if (memberId <= 0) {
             SetAnonymous()
             return false
         }
 
-        val saved = secureTokenStore.SaveTokens(
-            accessToken = authResponse.Token,
-            refreshToken = authResponse.RefreshToken,
-            expiration = authResponse.Expiration,
-            memberId = memberId
-        )
+        val memberFullName =
+            authResponse.Member.FullName
+                .ifBlank {
+                    listOf(
+                        authResponse.Member.Name,
+                        authResponse.Member.Surname
+                    )
+                        .filter {
+                            it.isNotBlank()
+                        }
+                        .joinToString(" ")
+                }
+
+        val saved =
+            secureTokenStore.SaveTokens(
+                accessToken = authResponse.Token,
+                refreshToken = authResponse.RefreshToken,
+                expiration = authResponse.Expiration,
+                memberId = memberId,
+                memberName = authResponse.Member.Name,
+                memberSurname = authResponse.Member.Surname,
+                memberFullName = memberFullName,
+                memberProfession = authResponse.Member.Profession,
+                memberPicture = authResponse.Member.Picture
+            )
 
         if (!saved) {
             SetAnonymous()
@@ -122,8 +203,20 @@ class UserSessionManager(
 
         _state.update { currentState ->
             currentState.copy(
-                AuthenticationState = EAuthenticationState.Authenticated,
-                MemberId = memberId
+                AuthenticationState =
+                    EAuthenticationState.Authenticated,
+                MemberId =
+                    memberId,
+                MemberName =
+                    authResponse.Member.Name,
+                MemberSurname =
+                    authResponse.Member.Surname,
+                MemberFullName =
+                    memberFullName,
+                MemberProfession =
+                    authResponse.Member.Profession,
+                MemberPicture =
+                    authResponse.Member.Picture
             )
         }
 
@@ -146,14 +239,27 @@ class UserSessionManager(
     fun SetAnonymous() {
         _state.update { currentState ->
             currentState.copy(
-                AuthenticationState = EAuthenticationState.Anonymous,
-                MemberId = 0
+                AuthenticationState =
+                    EAuthenticationState.Anonymous,
+                MemberId =
+                    0,
+                MemberName =
+                    "",
+                MemberSurname =
+                    "",
+                MemberFullName =
+                    "",
+                MemberProfession =
+                    "",
+                MemberPicture =
+                    ""
             )
         }
     }
 
     fun ClearAuthentication(): Boolean {
-        val cleared = secureTokenStore.Clear()
+        val cleared =
+            secureTokenStore.Clear()
 
         SetAnonymous()
 
@@ -165,10 +271,13 @@ class UserSessionManager(
             userPreferenceDataStore.Reset()
             secureTokenStore.Clear()
 
-            _state.value = UserSessionState(
-                AuthenticationState = EAuthenticationState.Anonymous,
-                MemberId = 0
-            )
+            _state.value =
+                UserSessionState(
+                    AuthenticationState =
+                        EAuthenticationState.Anonymous,
+                    MemberId =
+                        0
+                )
         }
     }
 
@@ -177,16 +286,26 @@ class UserSessionManager(
             userPreferenceDataStore.SessionState.collect { preferenceState ->
                 _state.update { currentState ->
                     currentState.copy(
-                        IsInitialized = preferenceState.IsInitialized,
-                        ThemeMode = preferenceState.ThemeMode,
-                        Language = preferenceState.Language,
-                        CountryId = preferenceState.CountryId,
-                        CountryName = preferenceState.CountryName,
-                        CountryCode = preferenceState.CountryCode,
-                        CurrencyId = preferenceState.CurrencyId,
-                        CurrencyCode = preferenceState.CurrencyCode,
-                        CurrencyName = preferenceState.CurrencyName,
-                        CurrencySymbol = preferenceState.CurrencySymbol
+                        IsInitialized =
+                            preferenceState.IsInitialized,
+                        ThemeMode =
+                            preferenceState.ThemeMode,
+                        Language =
+                            preferenceState.Language,
+                        CountryId =
+                            preferenceState.CountryId,
+                        CountryName =
+                            preferenceState.CountryName,
+                        CountryCode =
+                            preferenceState.CountryCode,
+                        CurrencyId =
+                            preferenceState.CurrencyId,
+                        CurrencyCode =
+                            preferenceState.CurrencyCode,
+                        CurrencyName =
+                            preferenceState.CurrencyName,
+                        CurrencySymbol =
+                            preferenceState.CurrencySymbol
                     )
                 }
             }

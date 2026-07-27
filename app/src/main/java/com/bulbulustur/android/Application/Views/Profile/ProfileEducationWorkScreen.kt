@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Profile
 
+import com.bulbulustur.android.Application.Views.Profile.Components.BbProfileStickySaveBar as CommonProfileStickySaveBar
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -102,9 +104,9 @@ fun ProfileEducationWorkScreen(
                 normalizedJobTitle != normalizedInitialJobTitle
 
     Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .imePadding(),
+        
+            modifier = Modifier.fillMaxSize(),
+        
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
@@ -112,8 +114,10 @@ fun ProfileEducationWorkScreen(
                 onBackClick = onBackClick
             )
         },
+        
         bottomBar = {
-            ProfileEducationWorkSaveBar(
+            CommonProfileStickySaveBar(
+    
                 enabled = hasChanged && !isSaving,
                 isSaving = isSaving,
                 onClick = {
@@ -305,9 +309,9 @@ private fun ProfileEducationOptionRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable {
-                onClick()
-            }
+            
+            .profileClickable(onClick = onClick)
+        
             .padding(
                 horizontal = BBSpacing.CardPadding,
                 vertical = BBSpacing.Space3

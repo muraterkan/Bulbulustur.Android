@@ -45,3 +45,14 @@ captures/
 # OS
 .DS_Store
 Thumbs.db
+# Temporary and local context files
+*.bak
+*.backup
+*.orig
+*.rej
+*~
+*.tmp
+*.temp
+*-context.txt
+*-audit.txt
+sadas

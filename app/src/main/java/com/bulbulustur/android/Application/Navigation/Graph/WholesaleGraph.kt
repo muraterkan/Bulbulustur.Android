@@ -11,6 +11,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.bulbulustur.android.Application.Areas.b2b.Controllers.RfqController
+import com.bulbulustur.android.Application.Controllers.MessageController
 import com.bulbulustur.android.Application.Areas.b2b.Controllers.WholesaleBuyerRequestController
 import com.bulbulustur.android.Application.Areas.b2b.Views.Category.WholesaleCategoryDetailScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Category.WholesaleCategoryHomeScreen
@@ -22,6 +23,7 @@ import com.bulbulustur.android.Application.Areas.b2b.Views.Product.SampleRequest
 import com.bulbulustur.android.Application.Areas.b2b.Views.Product.CustomizationRequestScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Rfq.RfqCreateScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Rfq.RfqDetailScreen
+import com.bulbulustur.android.Application.Areas.b2b.Views.Rfq.RfqEditScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Rfq.RfqListScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Rfq.RfqOfferDetailScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Rfq.RfqOffersScreen
@@ -47,6 +49,7 @@ fun NavGraphBuilder.wholesaleGraph(
     homeController: HomeController,
     productController: ProductController,
     rfqController: RfqController,
+    messageController: MessageController,
     wholesaleBuyerRequestController: WholesaleBuyerRequestController
 ){
     composable(route = WholesaleRoutes.Home) {
@@ -567,6 +570,7 @@ fun NavGraphBuilder.wholesaleGraph(
 
     composable(route = RfqRoutes.List) {
         val rfqState by rfqController.State.collectAsState()
+        val messageState by messageController.State.collectAsState()
 
         LaunchedEffect(sessionState.MemberId) {
             rfqController.GetBuyerRequests(
@@ -586,7 +590,7 @@ fun NavGraphBuilder.wholesaleGraph(
                 ?: rfqState.BuyerRequestDeleteResult
                     ?.takeIf { !it.Success }
                     ?.Message,
-            deletingBuyerRequestKey = null,
+            deletingBuyerRequestKey = rfqState.DeletingBuyerRequestKey,
             onBackClick = {
                 navigator.back()
             },

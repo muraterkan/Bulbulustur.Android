@@ -1,0 +1,142 @@
+warning: in the working copy of 'app/src/main/java/com/bulbulustur/android/Application/Views/Account/DashboardScreen.kt', LF will be replaced by CRLF the next time Git touches it
+[1mdiff --git a/app/src/main/java/com/bulbulustur/android/Application/Views/Account/DashboardScreen.kt b/app/src/main/java/com/bulbulustur/android/Application/Views/Account/DashboardScreen.kt[m
+[1mindex 964647d..1e36ca1 100644[m
+[1m--- a/app/src/main/java/com/bulbulustur/android/Application/Views/Account/DashboardScreen.kt[m
+[1m+++ b/app/src/main/java/com/bulbulustur/android/Application/Views/Account/DashboardScreen.kt[m
+[36m@@ -121,10 +121,7 @@[m [mfun DashboardScreen([m
+             profileSubtitle = "Profili Görüntüle veya Düzenle",[m
+             initials = "ME",[m
+             profileId = "ID: 54108878",[m
+[31m-            city = "İstanbul",[m
+[31m-            orderCount = "0",[m
+[31m-            favoriteCount = "0",[m
+[31m-            quotationCount = "2"[m
+[32m+[m[32m            city = "İstanbul"[m
+         )[m
+     }[m
+ [m
+[36m@@ -172,17 +169,6 @@[m [mfun DashboardScreen([m
+                 )[m
+             }[m
+ [m
+[31m-            item {[m
+[31m-                AccountStatsStrip([m
+[31m-                    orderCount = accountData.orderCount,[m
+[31m-                    favoriteCount = accountData.favoriteCount,[m
+[31m-                    quotationCount = accountData.quotationCount,[m
+[31m-                    onOrdersClick = onOrdersClick,[m
+[31m-                    onFavoritesClick = onFavoritesClick,[m
+[31m-                    onQuotationRequestsClick = onQuotationRequestsClick[m
+[31m-                )[m
+[31m-            }[m
+[31m-[m
+             item {[m
+                 AccountPrimaryActions([m
+                     onQuotationRequestsClick = onQuotationRequestsClick,[m
+[36m@@ -576,94 +562,6 @@[m [mprivate fun AccountTopIconButton([m
+     }[m
+ }[m
+ [m
+[31m-@Composable[m
+[31m-private fun AccountStatsStrip([m
+[31m-    orderCount: String,[m
+[31m-    favoriteCount: String,[m
+[31m-    quotationCount: String,[m
+[31m-    onOrdersClick: () -> Unit,[m
+[31m-    onFavoritesClick: () -> Unit,[m
+[31m-    onQuotationRequestsClick: () -> Unit[m
+[31m-) {[m
+[31m-    BbCard([m
+[31m-        modifier = Modifier.fillMaxWidth(),[m
+[31m-        variant = BbCardVariant.Default,[m
+[31m-        padding = BbCardPadding.Medium[m
+[31m-    ) {[m
+[31m-        Row([m
+[31m-            modifier = Modifier.fillMaxWidth(),[m
+[31m-            horizontalArrangement = Arrangement.SpaceBetween,[m
+[31m-            verticalAlignment = Alignment.CenterVertically[m
+[31m-        ) {[m
+[31m-            AccountProfileStat([m
+[31m-                modifier = Modifier.weight(1f),[m
+[31m-                value = orderCount,[m
+[31m-                label = "Sipariş",[m
+[31m-                onClick = onOrdersClick[m
+[31m-            )[m
+[31m-[m
+[31m-            AccountVerticalDivider()[m
+[31m-[m
+[31m-            AccountProfileStat([m
+[31m-                modifier = Modifier.weight(1f),[m
+[31m-                value = favoriteCount,[m
+[31m-                label = "Favori",[m
+[31m-                onClick = onFavoritesClick[m
+[31m-            )[m
+[31m-[m
+[31m-            AccountVerticalDivider()[m
+[31m-[m
+[31m-            AccountProfileStat([m
+[31m-                modifier = Modifier.weight(1f),[m
+[31m-                value = quotationCount,[m
+[31m-                label = "Teklif",[m
+[31m-                onClick = onQuotationRequestsClick[m
+[31m-            )[m
+[31m-        }[m
+[31m-    }[m
+[31m-}[m
+[31m-[m
+[31m-@Composable[m
+[31m-private fun AccountProfileStat([m
+[31m-    modifier: Modifier,[m
+[31m-    value: String,[m
+[31m-    label: String,[m
+[31m-    onClick: () -> Unit[m
+[31m-) {[m
+[31m-    Column([m
+[31m-        modifier = modifier[m
+[31m-            .clickable {[m
+[31m-                onClick()[m
+[31m-            }[m
+[31m-            .padding(vertical = BBSpacing.Space1),[m
+[31m-        horizontalAlignment = Alignment.CenterHorizontally,[m
+[31m-        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)[m
+[31m-    ) {[m
+[31m-        Text([m
+[31m-            text = value,[m
+[31m-            style = BbTypography.titleLarge,[m
+[31m-            color = MaterialTheme.colorScheme.onSurface,[m
+[31m-            fontWeight = FontWeight.Bold[m
+[31m-        )[m
+[31m-[m
+[31m-        Text([m
+[31m-            text = label,[m
+[31m-            style = BbTypography.bodySmall,[m
+[31m-            color = MaterialTheme.colorScheme.onSurfaceVariant[m
+[31m-        )[m
+[31m-    }[m
+[31m-}[m
+[31m-[m
+[31m-@Composable[m
+[31m-private fun AccountVerticalDivider() {[m
+[31m-    Box([m
+[31m-        modifier = Modifier[m
+[31m-            .width(BBSpacing.BorderThin)[m
+[31m-            .height(BBSpacing.Space9)[m
+[31m-            .background(MaterialTheme.colorScheme.outlineVariant)[m
+[31m-    )[m
+[31m-}[m
+[31m-[m
+ @Composable[m
+ private fun AccountPrimaryActions([m
+     onQuotationRequestsClick: () -> Unit,[m
+[36m@@ -1170,10 +1068,7 @@[m [mprivate data class DashboardHomeData([m
+     val profileSubtitle: String,[m
+     val initials: String,[m
+     val profileId: String,[m
+[31m-    val city: String,[m
+[31m-    val orderCount: String,[m
+[31m-    val favoriteCount: String,[m
+[31m-    val quotationCount: String[m
+[32m+[m[32m    val city: String[m
+ )[m
+ [m
+ private enum class DashboardActionAccent {[m

@@ -19,6 +19,7 @@ data class MessageControllerState(
     val ThreadMessagesResult: Result<List<WholesaleMessageDTO>>? = null,
     val OtherUserResult: Result<MemberDTO>? = null,
     val UnreadCountResult: Result<Int>? = null,
+    val InsertResult: Result<Any?>? = null,
     val ReplyResult: Result<Any?>? = null,
     val MarkAsReadResult: Result<Any?>? = null,
     val ErrorMessage: String? = null
@@ -137,7 +138,63 @@ class MessageController(
         }
     }
 
-    fun Reply(memberId: Int, messageThreadId: Int, body: String, onSuccess: (() -> Unit)? = null) {
+    fun SendFirstMessage(
+        memberId: Int,
+        recipientId: Int,
+        body: String,
+        onSuccess: ((Int) -> Unit)? = null
+    ) {
+        if (memberId <= 0) {
+            SetError("Oturum açmanız gerekiyor.")
+            return
+        }
+
+        if (recipientId <= 0 || recipientId == memberId) {
+            SetError("Geçerli bir alıcı bilgisi bulunamadı.")
+            return
+        }
+
+        if (body.isBlank()) {
+            SetError("Mesaj içeriği boş olamaz.")
+            return
+        }
+
+        viewModelScope.launch {
+            SetLoading("Insert")
+
+            val response = executeService.PostAsync(operationType = "b2b.Message.Insert") {
+                wholesaleMessageRepository.InsertAsync(
+                    memberId = memberId,
+                    model = WholesaleMessageDTO(
+                        InsertedBy = memberId,
+                        InsertedDate = java.time.Instant.now().toString(),
+                        Body = body.trim(),
+                        SenderId = memberId,
+                        RecipientId = recipientId
+                    )
+                )
+            }
+
+            _state.update { currentState ->
+                currentState.copy(
+                    IsLoading = false,
+                    InsertResult = response,
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+
+            if (response.Success) {
+                onSuccess?.invoke(response.ResponseId)
+            }
+        }
+    }
+
+    fun Reply(
+        memberId: Int,
+        messageThreadId: Int,
+        body: String,
+        onSuccess: (() -> Unit)? = null
+    ) {
         if (memberId <= 0) {
             SetError("Oturum açmanız gerekiyor.")
             return
@@ -161,6 +218,7 @@ class MessageController(
                     memberId = memberId,
                     model = WholesaleMessageDTO(
                         InsertedBy = memberId,
+                        InsertedDate = java.time.Instant.now().toString(),
                         MessageThreadId = messageThreadId,
                         Body = body.trim(),
                         SenderId = memberId
@@ -176,7 +234,9 @@ class MessageController(
                 )
             }
 
-            if (response.Success) onSuccess?.invoke()
+            if (response.Success) {
+                onSuccess?.invoke()
+            }
         }
     }
 

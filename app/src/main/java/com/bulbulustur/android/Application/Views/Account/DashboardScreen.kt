@@ -121,10 +121,7 @@ fun DashboardScreen(
             profileSubtitle = "Profili Görüntüle veya Düzenle",
             initials = "ME",
             profileId = "ID: 54108878",
-            city = "İstanbul",
-            orderCount = "0",
-            favoriteCount = "0",
-            quotationCount = "2"
+            city = "İstanbul"
         )
     }
 
@@ -155,7 +152,6 @@ fun DashboardScreen(
                 .padding(innerPadding),
             contentPadding = PaddingValues(
                 start = BBSpacing.PageHorizontal,
-                top = BBSpacing.Space2,
                 end = BBSpacing.PageHorizontal,
                 bottom = BBSpacing.Space5
             ),
@@ -169,17 +165,6 @@ fun DashboardScreen(
                     onProfileClick = onProfileClick,
                     onMessagesClick = onMessagesClick,
                     onSettingsClick = onSettingsClick
-                )
-            }
-
-            item {
-                AccountStatsStrip(
-                    orderCount = accountData.orderCount,
-                    favoriteCount = accountData.favoriteCount,
-                    quotationCount = accountData.quotationCount,
-                    onOrdersClick = onOrdersClick,
-                    onFavoritesClick = onFavoritesClick,
-                    onQuotationRequestsClick = onQuotationRequestsClick
                 )
             }
 
@@ -372,13 +357,11 @@ private fun AccountProfileHero(
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = BBSpacing.Space2),
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -561,7 +544,7 @@ private fun AccountTopIconButton(
 ) {
     Box(
         modifier = Modifier
-            .size(BBSpacing.Space11)
+            .size(BBSpacing.Space9)
             .clickable {
                 onClick()
             },
@@ -571,97 +554,9 @@ private fun AccountTopIconButton(
             imageVector = icon,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.size(30.dp)
+            modifier = Modifier.size(BBIcon.SizeXl)
         )
     }
-}
-
-@Composable
-private fun AccountStatsStrip(
-    orderCount: String,
-    favoriteCount: String,
-    quotationCount: String,
-    onOrdersClick: () -> Unit,
-    onFavoritesClick: () -> Unit,
-    onQuotationRequestsClick: () -> Unit
-) {
-    BbCard(
-        modifier = Modifier.fillMaxWidth(),
-        variant = BbCardVariant.Default,
-        padding = BbCardPadding.Medium
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            AccountProfileStat(
-                modifier = Modifier.weight(1f),
-                value = orderCount,
-                label = "Sipariş",
-                onClick = onOrdersClick
-            )
-
-            AccountVerticalDivider()
-
-            AccountProfileStat(
-                modifier = Modifier.weight(1f),
-                value = favoriteCount,
-                label = "Favori",
-                onClick = onFavoritesClick
-            )
-
-            AccountVerticalDivider()
-
-            AccountProfileStat(
-                modifier = Modifier.weight(1f),
-                value = quotationCount,
-                label = "Teklif",
-                onClick = onQuotationRequestsClick
-            )
-        }
-    }
-}
-
-@Composable
-private fun AccountProfileStat(
-    modifier: Modifier,
-    value: String,
-    label: String,
-    onClick: () -> Unit
-) {
-    Column(
-        modifier = modifier
-            .clickable {
-                onClick()
-            }
-            .padding(vertical = BBSpacing.Space1),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
-    ) {
-        Text(
-            text = value,
-            style = BbTypography.titleLarge,
-            color = MaterialTheme.colorScheme.onSurface,
-            fontWeight = FontWeight.Bold
-        )
-
-        Text(
-            text = label,
-            style = BbTypography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-    }
-}
-
-@Composable
-private fun AccountVerticalDivider() {
-    Box(
-        modifier = Modifier
-            .width(BBSpacing.BorderThin)
-            .height(BBSpacing.Space9)
-            .background(MaterialTheme.colorScheme.outlineVariant)
-    )
 }
 
 @Composable
@@ -704,12 +599,12 @@ private fun AccountPrimaryActionCard(
 ) {
     val containerColor = when (accent) {
         DashboardActionAccent.Primary -> MaterialTheme.colorScheme.primaryContainer
-        DashboardActionAccent.Secondary -> MaterialTheme.colorScheme.secondaryContainer
+        DashboardActionAccent.Secondary -> MaterialTheme.colorScheme.tertiaryContainer
     }
 
     val contentColor = when (accent) {
         DashboardActionAccent.Primary -> MaterialTheme.colorScheme.onPrimaryContainer
-        DashboardActionAccent.Secondary -> MaterialTheme.colorScheme.onSecondaryContainer
+        DashboardActionAccent.Secondary -> MaterialTheme.colorScheme.onTertiaryContainer
     }
 
     Surface(
@@ -802,7 +697,8 @@ private fun DashboardAccountCard(
                 onClick()
             },
         shape = BBRadius.XlShape,
-        color = MaterialTheme.colorScheme.inverseSurface
+        color = MaterialTheme.colorScheme.surface,
+        border = BorderStroke(BBSpacing.BorderThin, MaterialTheme.colorScheme.outlineVariant)
     ) {
         Row(
             modifier = Modifier.padding(BBSpacing.CardPadding),
@@ -813,7 +709,7 @@ private fun DashboardAccountCard(
                 modifier = Modifier
                     .size(BBIcon.BoxLg)
                     .background(
-                        color = MaterialTheme.colorScheme.inversePrimary,
+                        color = MaterialTheme.colorScheme.primaryContainer,
                         shape = BBRadius.LgShape
                     ),
                 contentAlignment = Alignment.Center
@@ -821,7 +717,7 @@ private fun DashboardAccountCard(
                 Icon(
                     imageVector = Icons.Outlined.Badge,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.inverseSurface,
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
                     modifier = Modifier.size(BBIcon.Section)
                 )
             }
@@ -833,16 +729,14 @@ private fun DashboardAccountCard(
                 Text(
                     text = "Hesabım",
                     style = BbTypography.titleMedium,
-                    color = MaterialTheme.colorScheme.inverseOnSurface,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
                 )
 
                 Text(
                     text = "Kişisel bilgilerini, güvenlik ayarlarını ve hesap tercihlerini yönet.",
                     style = BbTypography.bodySmall,
-                    color = MaterialTheme.colorScheme.inverseOnSurface.copy(
-                        alpha = BBAlpha.Muted
-                    )
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
@@ -850,9 +744,7 @@ private fun DashboardAccountCard(
                 modifier = Modifier
                     .size(BBIcon.BoxSm)
                     .background(
-                        color = MaterialTheme.colorScheme.inverseOnSurface.copy(
-                            alpha = BBAlpha.Overlay
-                        ),
+                        color = MaterialTheme.colorScheme.surfaceVariant,
                         shape = BBRadius.LgShape
                     ),
                 contentAlignment = Alignment.Center
@@ -860,7 +752,7 @@ private fun DashboardAccountCard(
                 Icon(
                     imageVector = Icons.Outlined.ChevronRight,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.inverseOnSurface,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.size(BBIcon.SizeSm)
                 )
             }
@@ -1170,10 +1062,7 @@ private data class DashboardHomeData(
     val profileSubtitle: String,
     val initials: String,
     val profileId: String,
-    val city: String,
-    val orderCount: String,
-    val favoriteCount: String,
-    val quotationCount: String
+    val city: String
 )
 
 private enum class DashboardActionAccent {

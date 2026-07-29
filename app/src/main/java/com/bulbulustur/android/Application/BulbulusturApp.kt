@@ -656,9 +656,14 @@ private fun BulbulusturApplicationContent(
         )
     }
 
+    val assignedToSellerRepository = remember {
+        com.bulbulustur.android.businesslayer.Core.Repository.AssignedToSellerRepository()
+    }
+
     val rfqController = remember(
         executeService,
         buyerRequestRepository,
+        assignedToSellerRepository,
         sendedOfferRepository,
         productCategoryRepository,
         systemDescUnitRepository,
@@ -671,6 +676,7 @@ private fun BulbulusturApplicationContent(
         RfqController(
             executeService = executeService,
             buyerRequestRepository = buyerRequestRepository,
+            assignedToSellerRepository = assignedToSellerRepository,
             sendedOfferRepository = sendedOfferRepository,
             productCategoryRepository = productCategoryRepository,
             systemDescUnitRepository = systemDescUnitRepository,
@@ -828,6 +834,7 @@ private fun BulbulusturApplicationContent(
             homeController = wholesaleHomeController,
             productController = wholesaleProductController,
             rfqController = rfqController,
+            messageController = messageController,
             wholesaleBuyerRequestController = wholesaleBuyerRequestController
         )
 

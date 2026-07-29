@@ -225,7 +225,15 @@ private fun MessageBubbleCard(
     currentMemberId: Int
 ) {
     val isMine = message.InsertedBy == currentMemberId || message.SenderId == currentMemberId
-    val senderName = if (isMine) "Siz" else message.SenderFullName.ifBlank { message.SenderName.ifBlank { "Karşı taraf" } }
+    val senderName = if (isMine) {
+        "Siz"
+    } else {
+        message.SenderFullName
+            ?.takeIf { it.isNotBlank() }
+            ?: message.SenderName
+                ?.takeIf { it.isNotBlank() }
+            ?: "Karşı taraf"
+    }
 
     Column(
         modifier = Modifier.fillMaxWidth(),

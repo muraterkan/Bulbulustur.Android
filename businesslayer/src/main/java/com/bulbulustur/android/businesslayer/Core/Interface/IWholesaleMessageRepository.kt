@@ -14,6 +14,8 @@ interface IWholesaleMessageRepository {
 
     suspend fun GetUnreadMessageCountAsync(memberId: Int): Result<Int>
 
+    suspend fun InsertAsync(memberId: Int, model: WholesaleMessageDTO): Result<Any?>
+
     suspend fun ReplyAsync(memberId: Int, model: WholesaleMessageDTO): Result<Any?>
 
     suspend fun MarkAsRead(memberId: Int, messageId: Int): Result<Any?>

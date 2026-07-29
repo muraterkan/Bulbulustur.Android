@@ -43,6 +43,15 @@ class WholesaleMessageRepository(
         )
     }
 
+    override suspend fun InsertAsync(memberId: Int, model: WholesaleMessageDTO): Result<Any?> {
+        return apiClient.PostAsync(
+            baseUrl = ApiRoutes.B2B_MESSAGE_BASE_URL,
+            method = "InsertAsync",
+            data = model,
+            query = "memberId="
+        )
+    }
+
     override suspend fun ReplyAsync(memberId: Int, model: WholesaleMessageDTO): Result<Any?> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.B2B_MESSAGE_BASE_URL,

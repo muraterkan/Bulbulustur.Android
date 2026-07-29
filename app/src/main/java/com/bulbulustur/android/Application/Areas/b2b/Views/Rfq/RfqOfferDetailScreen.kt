@@ -16,13 +16,20 @@ import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Handshake
 import androidx.compose.material.icons.outlined.Message
 import androidx.compose.material.icons.outlined.RequestQuote
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
@@ -30,6 +37,7 @@ import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
+import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbTextarea
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
@@ -41,11 +49,16 @@ fun RfqOfferDetailScreen(
     offer: SendedOfferDTO?,
     isLoading: Boolean = false,
     errorMessage: String? = null,
+    isSendingMessage: Boolean = false,
+    messageError: String? = null,
     onBackClick: () -> Unit = {},
     onSellerClick: () -> Unit = {},
-    onMessageClick: () -> Unit = {},
+    onMessageClick: (String) -> Unit = {},
     onRetryClick: () -> Unit = {}
 ) {
+    var showMessageDialog by remember { mutableStateOf(false) }
+    var messageText by remember { mutableStateOf("") }
+
     Scaffold(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
@@ -106,17 +119,99 @@ fun RfqOfferDetailScreen(
                     item {
                         RfqOfferActionCard(
                             onSellerClick = onSellerClick,
-                            onMessageClick = onMessageClick
+                            onMessageClick = {
+                                messageText = ""
+                                showMessageDialog = true
+                            }
                         )
                     }
                 }
             }
         }
     }
+
+    if (showMessageDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                if (!isSendingMessage) {
+                    showMessageDialog = false
+                }
+            },
+            title = {
+                Text(
+                    text = "Satıcıya mesaj gönder",
+                    style = BbTypography.titleMedium
+                )
+            },
+            text = {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+                ) {
+                    Text(
+                        text = "Teklif hakkında satıcıya iletmek istediğiniz mesajı yazın.",
+                        style = BbTypography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+
+                    BbTextarea(
+                        value = messageText,
+                        onValueChange = {
+                            messageText = it
+                        },
+                        label = "Mesaj",
+                        placeholder = "Mesajınızı yazın...",
+                        minLines = 4,
+                        maxLines = 8
+                    )
+
+                    if (!messageError.isNullOrBlank()) {
+                        Text(
+                            text = messageError,
+                            style = BbTypography.bodySmall,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    enabled = messageText.isNotBlank() && !isSendingMessage,
+                    onClick = {
+                        val body = messageText.trim()
+
+                        if (body.isNotEmpty()) {
+                            onMessageClick(body)
+                        }
+                    }
+                ) {
+                    Text(
+                        text = if (isSendingMessage) {
+                            "Gönderiliyor..."
+                        } else {
+                            "Gönder"
+                        }
+                    )
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    enabled = !isSendingMessage,
+                    onClick = {
+                        showMessageDialog = false
+                    }
+                ) {
+                    Text(text = "Vazgeç")
+                }
+            }
+        )
+    }
 }
 
 @Composable
-private fun RfqOfferSummaryCard(offer: SendedOfferDTO) {
+private fun RfqOfferSummaryCard(
+    offer: SendedOfferDTO
+) {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
@@ -161,7 +256,9 @@ private fun RfqOfferSummaryCard(offer: SendedOfferDTO) {
 }
 
 @Composable
-private fun RfqOfferInfoCard(offer: SendedOfferDTO) {
+private fun RfqOfferInfoCard(
+    offer: SendedOfferDTO
+) {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
@@ -199,7 +296,9 @@ private fun RfqOfferInfoCard(offer: SendedOfferDTO) {
 }
 
 @Composable
-private fun RfqOfferMessageCard(offer: SendedOfferDTO) {
+private fun RfqOfferMessageCard(
+    offer: SendedOfferDTO
+) {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
@@ -216,7 +315,9 @@ private fun RfqOfferMessageCard(offer: SendedOfferDTO) {
             )
 
             Text(
-                text = offer.OfferDetail.ifBlank { "Teklif açıklaması bulunmuyor." },
+                text = offer.OfferDetail.ifBlank {
+                    "Teklif açıklaması bulunmuyor."
+                },
                 style = BbTypography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -226,7 +327,7 @@ private fun RfqOfferMessageCard(offer: SendedOfferDTO) {
 
 @Composable
 private fun RfqOfferInfoRow(
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    icon: ImageVector,
     title: String,
     value: String
 ) {

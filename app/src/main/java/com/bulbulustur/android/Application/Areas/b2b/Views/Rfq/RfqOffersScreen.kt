@@ -218,7 +218,7 @@ private fun RfqOfferListCard(
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                 ) {
                     Text(
-                        text = offer.Seller.ifBlank { "Satıcı" },
+                        text = offer.Seller.orEmpty().ifBlank { "Satıcı" },
                         style = BbTypography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -241,7 +241,7 @@ private fun RfqOfferListCard(
             RfqOfferListInfoRow(
                 icon = Icons.Outlined.Business,
                 title = "Satıcı",
-                value = offer.Seller.ifBlank { "-" }
+                value = offer.Seller.orEmpty().ifBlank { "-" }
             )
 
             RfqOfferListInfoRow(

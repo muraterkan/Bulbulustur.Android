@@ -45,6 +45,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
@@ -243,7 +244,7 @@ fun LogonPublicHeader(
         ) {
             Image(
                 painter = painterResource(
-                    id = R.drawable.logo_black
+                    id = if (MaterialTheme.colorScheme.background.luminance() < 0.5f) R.drawable.logo_white else R.drawable.logo_black
                 ),
                 contentDescription = "Bulbulustur",
                 modifier = Modifier

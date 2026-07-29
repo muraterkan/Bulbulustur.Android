@@ -10,6 +10,7 @@ import com.bulbulustur.android.businesslayer.Core.DTO.SystemDescMaterialTypeDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.SystemDescPaymentTermDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.SystemDescTradeTermDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.SystemDescUnitDTO
+import com.bulbulustur.android.businesslayer.Core.Interface.IAssignedToSellerRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IBuyerRequestRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IProductCategoryRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.ISendedOfferRepository
@@ -38,6 +39,7 @@ data class RfqControllerState(
     val IsCreateOptionsLoading: Boolean = false,
     val CurrentAction: String? = null,
     val ErrorMessage: String? = null,
+    val DeletingBuyerRequestKey: String? = null,
 
     val BuyerRequestListResult: Result<List<BuyerRequestDTO>>? = null,
     val BuyerRequestDetailResult: Result<BuyerRequestDTO?>? = null,
@@ -63,6 +65,9 @@ data class RfqControllerState(
 
     val BuyerRequest: BuyerRequestDTO?
         get() = BuyerRequestDetailResult?.Data
+
+    val BuyerRequestForUpdate: BuyerRequestUpdateModel?
+        get() = BuyerRequestUpdateDetailResult?.Data
 
     val SendedOffers: List<SendedOfferDTO>
         get() = SendedOfferListResult?.Data.orEmpty()
@@ -133,6 +138,7 @@ data class RfqControllerState(
 class RfqController(
     private val executeService: IExecuteService,
     private val buyerRequestRepository: IBuyerRequestRepository,
+    private val assignedToSellerRepository: IAssignedToSellerRepository,
     private val sendedOfferRepository: ISendedOfferRepository,
     private val productCategoryRepository: IProductCategoryRepository,
     private val systemDescUnitRepository: ISystemDescUnitRepository,
@@ -160,7 +166,7 @@ class RfqController(
             Start("GetBuyerRequests")
 
             val response = executeService.GetAsync(
-                cacheKey = "b2b.Rfq.GetBuyerRequests.$memberId.$count"
+                cacheKey = ""
             ) {
                 buyerRequestRepository.GetBuyerRequestsByMemberAsync(
                     memberId = memberId,
@@ -191,7 +197,7 @@ class RfqController(
             Start("GetBuyerRequest")
 
             val response = executeService.GetAsync(
-                cacheKey = "b2b.Rfq.GetBuyerRequest.$buyerRequestKey"
+                cacheKey = ""
             ) {
                 buyerRequestRepository.GetBuyerRequestsByIdExtendedAsync(
                     buyerRequestKey = buyerRequestKey
@@ -204,6 +210,32 @@ class RfqController(
                     ErrorMessage = response
                         .takeIf { !it.Success }
                         ?.Message
+                )
+            }
+        }
+    }
+
+    fun GetBuyerRequestForUpdate(buyerRequestKey: String) {
+        if (buyerRequestKey.isBlank()) {
+            SetError("RFQ anahtarı bulunamadı.")
+            return
+        }
+
+        viewModelScope.launch {
+            Start("GetBuyerRequestForUpdate")
+
+            val response = executeService.GetAsync(
+                cacheKey = ""
+            ) {
+                buyerRequestRepository.GetBuyerRequestsByIdAsync(
+                    buyerRequestKey = buyerRequestKey
+                )
+            }
+
+            Complete {
+                copy(
+                    BuyerRequestUpdateDetailResult = response,
+                    ErrorMessage = response.takeIf { !it.Success }?.Message
                 )
             }
         }
@@ -275,7 +307,7 @@ class RfqController(
         }
 
         viewModelScope.launch {
-            Start("DeleteBuyerRequest")
+            _state.update { it.copy(IsLoading = true, CurrentAction = "DeleteBuyerRequest", DeletingBuyerRequestKey = buyerRequestKey, ErrorMessage = null) }
 
             val response = executeService.PostAsync(
                 operationType = "b2b.Rfq.DeleteBuyerRequest"
@@ -288,6 +320,7 @@ class RfqController(
             Complete {
                 copy(
                     BuyerRequestDeleteResult = response,
+                    DeletingBuyerRequestKey = null,
                     ErrorMessage = response
                         .takeIf { !it.Success }
                         ?.Message
@@ -313,8 +346,7 @@ class RfqController(
             Start("GetSendedOffers")
 
             val response = executeService.GetAsync(
-                cacheKey =
-                    "b2b.Rfq.GetSendedOffers.$buyerRequestKey.$count"
+                cacheKey = ""
             ) {
                 sendedOfferRepository.GetSendedOffersAsync(
                     buyerRequestKey = buyerRequestKey,
@@ -345,8 +377,7 @@ class RfqController(
             Start("GetSendedOffer")
 
             val response = executeService.GetAsync(
-                cacheKey =
-                    "b2b.Rfq.GetSendedOffer.$sendedOfferId"
+                cacheKey = ""
             ) {
                 sendedOfferRepository
                     .GetSendedOfferByIdExtendedAsync(
@@ -361,6 +392,44 @@ class RfqController(
                         .takeIf { !it.Success }
                         ?.Message
                 )
+            }
+        }
+    }
+
+    fun ResolveSellerMemberId(
+        assignedToSellerId: Int,
+        onSuccess: (Int) -> Unit
+    ) {
+        if (assignedToSellerId <= 0) {
+            SetError("Satıcı atama bilgisi bulunamadı.")
+            return
+        }
+
+        viewModelScope.launch {
+            Start("ResolveSellerMemberId")
+
+            val response = executeService.GetAsync(
+                cacheKey = "b2b.Rfq.AssignedSeller."
+            ) {
+                assignedToSellerRepository.GetAssignedToSellersByIdExtendedAsync(
+                    assignedToSellerId = assignedToSellerId
+                )
+            }
+
+            val sellerMemberId = response.Data?.AssignedMemberId ?: 0
+
+            Complete {
+                copy(
+                    ErrorMessage = when {
+                        !response.Success -> response.Message
+                        sellerMemberId <= 0 -> "Satıcı üye bilgisi bulunamadı."
+                        else -> null
+                    }
+                )
+            }
+
+            if (response.Success && sellerMemberId > 0) {
+                onSuccess(sellerMemberId)
             }
         }
     }
@@ -605,6 +674,10 @@ class RfqController(
                 SendedOfferDetailResult = null
             )
         }
+    }
+
+    fun ClearUpdateResult() {
+        _state.update { it.copy(BuyerRequestUpdateResult = null, BuyerRequestUpdateDetailResult = null, ErrorMessage = null) }
     }
 
     fun ClearInsertResult() {

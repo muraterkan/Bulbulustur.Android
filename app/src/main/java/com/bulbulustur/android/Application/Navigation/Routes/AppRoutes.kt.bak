@@ -183,13 +183,10 @@ object RfqRoutes {
     const val ArgSendedOfferId = "sendedOfferId"
 
     const val Detail = "wholesale/rfq/detail/{$ArgBuyerRequestKey}"
-    const val Edit = "wholesale/rfq/edit/{$ArgBuyerRequestKey}"
     const val Offers = "wholesale/rfq/offers/{$ArgBuyerRequestKey}"
     const val OfferDetail = "wholesale/rfq/offer/{$ArgSendedOfferId}"
 
     fun detail(buyerRequestKey: String): String = "wholesale/rfq/detail/$buyerRequestKey"
-    fun edit(buyerRequestKey: String): String = "wholesale/rfq/edit/$buyerRequestKey"
-
 
     fun offers(buyerRequestKey: String): String = "wholesale/rfq/offers/$buyerRequestKey"
 

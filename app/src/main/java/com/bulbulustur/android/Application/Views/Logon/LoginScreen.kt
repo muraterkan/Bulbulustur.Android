@@ -2,6 +2,7 @@ package com.bulbulustur.android.Application.Views.Logon
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
@@ -310,24 +311,21 @@ fun LoginScreen(
             )
         )
 
-        Row(
+        Column(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement =
-                Arrangement.spacedBy(
-                    BBSpacing.Space3
-                )
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             SocialLoginButton(
-                modifier = Modifier.weight(1f),
-                label = "Google",
+                modifier = Modifier.fillMaxWidth(),
+                label = "Google ile devam et",
                 iconResId = R.drawable.ic_google,
                 isLoading = isLoading,
                 onClick = onGoogleClick
             )
 
             SocialLoginButton(
-                modifier = Modifier.weight(1f),
-                label = "Facebook",
+                modifier = Modifier.fillMaxWidth(),
+                label = "Facebook ile devam et",
                 iconResId = R.drawable.ic_facebook,
                 isLoading = isLoading,
                 onClick = onFacebookClick

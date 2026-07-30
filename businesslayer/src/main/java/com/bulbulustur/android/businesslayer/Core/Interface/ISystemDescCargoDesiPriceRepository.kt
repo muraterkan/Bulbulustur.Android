@@ -13,7 +13,7 @@ interface ISystemDescCargoDesiPriceRepository {
 
     suspend fun GetSystemDescCargoDesiPriceByIdAsync(
         systemDescCargoDesiPriceId: Int
-    ): Result<SystemDescCargoDesiPriceUpdateModel?>
+    ): Result<SystemDescCargoDesiPriceDTO?>
 
     suspend fun GetSystemDescCargoDesiPriceByIdExtendedAsync(
         systemDescCargoDesiPriceId: Int

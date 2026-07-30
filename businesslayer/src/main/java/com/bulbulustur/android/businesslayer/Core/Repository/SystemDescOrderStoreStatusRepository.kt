@@ -24,7 +24,7 @@ class SystemDescOrderStoreStatusRepository(
 
     override suspend fun GetSystemDescOrderStoreStatusByIdAsync(
         systemDescOrderStoreStatusId: Int
-    ): Result<SystemDescOrderStoreStatusUpdateModel?> {
+    ): Result<SystemDescOrderStoreStatusDTO?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
             method = "GetSystemDescOrderStoreStatusByIdAsync",

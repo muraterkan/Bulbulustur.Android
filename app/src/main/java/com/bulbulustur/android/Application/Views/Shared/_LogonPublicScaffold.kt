@@ -135,76 +135,75 @@ fun LogonPublicScaffold(
             .imePadding()
     ) {
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(
+                    rememberScrollState()
+                ),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Column(
                 modifier = Modifier
-                    .weight(1f, fill = true)
-                    .verticalScroll(
-                        rememberScrollState()
+                    .fillMaxWidth()
+                    .padding(
+                        horizontal = horizontalPadding
                     ),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            horizontal = horizontalPadding
-                        ),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Spacer(
-                        modifier = Modifier.height(
-                            headerTopSpace
+                Spacer(
+                    modifier = Modifier.height(
+                        headerTopSpace
+                    )
+                )
+
+                LogonPublicHeader(
+                    languages = languages,
+                    selectedLanguageId = resolvedSelectedLanguageId,
+                    isLanguageLoading = isLanguageLoading,
+                    languageErrorMessage = languageErrorMessage,
+                    onLanguageSelected = { languageId ->
+                        val selectedLanguage = resolveLogonPublicLanguage(
+                            languages = languages,
+                            languageId = languageId
                         )
+
+                        onLanguageIdSelected(languageId)
+                        onLanguageSelected(selectedLanguage)
+                    }
+                )
+
+                Spacer(
+                    modifier = Modifier.height(
+                        headerBottomSpace
                     )
-
-                    LogonPublicHeader(
-                        languages = languages,
-                        selectedLanguageId =
-                            resolvedSelectedLanguageId,
-                        isLanguageLoading =
-                            isLanguageLoading,
-                        languageErrorMessage =
-                            languageErrorMessage,
-                        onLanguageSelected = { languageId ->
-                            val selectedLanguage =
-                                resolveLogonPublicLanguage(
-                                    languages = languages,
-                                    languageId = languageId
-                                )
-
-                            onLanguageIdSelected(
-                                languageId
-                            )
-
-                            onLanguageSelected(
-                                selectedLanguage
-                            )
-                        }
-                    )
-
-                    Spacer(
-                        modifier = Modifier.height(
-                            headerBottomSpace
-                        )
-                    )
-                }
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            horizontal = horizontalPadding
-                        ),
-                    horizontalAlignment = Alignment.Start,
-                    content = content
                 )
             }
 
             Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        horizontal = horizontalPadding
+                    ),
+                horizontalAlignment = Alignment.Start,
+                content = content
+            )
+
+            Spacer(
+                modifier = Modifier.height(
+                    BBSpacing.Space8
+                )
+            )
+
+            Column(
                 modifier = Modifier.fillMaxWidth(),
                 content = footer
+            )
+
+            Spacer(
+                modifier = Modifier.height(
+                    BBSpacing.Space4
+                )
             )
         }
     }

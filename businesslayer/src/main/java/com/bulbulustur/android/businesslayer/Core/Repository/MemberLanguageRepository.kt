@@ -30,7 +30,7 @@ class MemberLanguageRepository(
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.COMMERCE_SUPPORT_ACCOUNT_BASE_URL,
             method = "GetAccountLanguagesByIdAsync",
-            query = "memberId=$memberId&couponId=$memberLanguageId"
+            query = "memberId=$memberId&memberLanguageId=$memberLanguageId"
         )
     }
 
@@ -59,12 +59,13 @@ class MemberLanguageRepository(
     }
 
     override suspend fun DeleteAccountLanguageAsync(
+        memberId : Int,
         memberLanguageId: Int
     ): Result<Unit> {
         return apiClient.DeleteAsync(
             baseUrl = ApiRoutes.COMMERCE_SUPPORT_ACCOUNT_BASE_URL,
             method = "DeleteAccountLanguagesAsync",
-            query = "couponId=$memberLanguageId"
+            query = "memberId=$memberId&memberLanguageId=$memberLanguageId"
         )
     }
 }

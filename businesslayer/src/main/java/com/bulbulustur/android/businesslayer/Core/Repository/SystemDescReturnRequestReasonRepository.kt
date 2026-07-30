@@ -24,7 +24,7 @@ class SystemDescReturnRequestReasonRepository(
 
     override suspend fun GetSystemDescReturnRequestReasonByIdAsync(
         systemDescReturnRequestReasonId: Int
-    ): Result<SystemDescReturnRequestReasonUpdateModel?> {
+    ): Result<SystemDescReturnRequestReasonDTO?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
             method = "GetSystemDescReturnRequestReasonByIdAsync",

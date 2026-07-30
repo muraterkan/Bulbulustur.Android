@@ -13,7 +13,7 @@ interface ISystemDescInvoiceTypeRepository {
 
     suspend fun GetSystemDescInvoiceTypeByIdAsync(
         systemDescInvoiceTypeId: Int
-    ): Result<SystemDescInvoiceTypeUpdateModel?>
+    ): Result<SystemDescInvoiceTypeDTO?>
 
     suspend fun GetSystemDescInvoiceTypeByIdExtendedAsync(
         systemDescInvoiceTypeId: Int

@@ -13,7 +13,7 @@ interface ISystemDescVisibilityTypeRepository {
 
     suspend fun GetSystemDescVisibilityTypeByIdAsync(
         systemDescVisibilityTypeId: Int
-    ): Result<SystemDescVisibilityTypeUpdateModel?>
+    ): Result<SystemDescVisibilityTypeDTO?>
 
     suspend fun GetSystemDescVisibilityTypeByIdExtendedAsync(
         systemDescVisibilityTypeId: Int

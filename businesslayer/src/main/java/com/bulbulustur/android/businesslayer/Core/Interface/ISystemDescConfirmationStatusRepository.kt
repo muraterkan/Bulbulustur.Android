@@ -13,7 +13,7 @@ interface ISystemDescConfirmationStatusRepository {
 
     suspend fun GetSystemDescConfirmationStatusByIdAsync(
         confirmationStatusId: Int
-    ): Result<SystemDescConfirmationStatusUpdateModel?>
+    ): Result<SystemDescConfirmationStatusDTO?>
 
     suspend fun GetSystemDescConfirmationStatusByIdExtendedAsync(
         confirmationStatusId: Int

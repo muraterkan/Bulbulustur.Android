@@ -24,7 +24,7 @@ class SystemDescCargoDesiRepository(
 
     override suspend fun GetSystemDescCargoDesiByIdAsync(
         systemDescCargoDesiId: Int
-    ): Result<SystemDescCargoDesiUpdateModel?> {
+    ): Result<SystemDescCargoDesiDTO?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
             method = "GetSystemDescCargoDesiByIdAsync",

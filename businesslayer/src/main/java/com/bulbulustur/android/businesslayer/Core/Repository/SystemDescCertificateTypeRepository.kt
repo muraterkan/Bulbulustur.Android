@@ -24,7 +24,7 @@ class SystemDescCertificateTypeRepository(
 
     override suspend fun GetSystemDescCertificateTypeByIdAsync(
         systemDescCertificateTypeId: Int
-    ): Result<SystemDescCertificateTypeUpdateModel?> {
+    ): Result<SystemDescCertificateTypeDTO?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
             method = "GetSystemDescCertificateTypeByIdAsync",

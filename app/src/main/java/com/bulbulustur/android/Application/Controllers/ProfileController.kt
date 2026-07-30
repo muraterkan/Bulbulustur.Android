@@ -524,6 +524,39 @@ systemDescLanguageLevelRepository.GetSystemDescLanguageLevelsAsync(
         }
     }
 
+    fun DeleteMemberLanguage(
+        memberId: Int,
+        memberLanguageId: Int,
+        onSuccess: (() -> Unit)? = null
+    ) {
+        if (!ValidateMember(memberId)) return
+        if (!ValidateId(memberLanguageId, "Dil kaydı bulunamadı.")) return
+
+        viewModelScope.launch {
+            SetLoading("DeleteMemberLanguage")
+
+            val response = executeService.PostAsync(
+                operationType = "Profile.MemberLanguage.Delete"
+            ) {
+                memberLanguageRepository.DeleteAccountLanguageAsync(
+                    memberId = memberId,
+                    memberLanguageId = memberLanguageId
+                )
+            }
+
+            Complete {
+                copy(
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+
+            if (response.Success) {
+                GetMemberLanguages(memberId)
+                onSuccess?.invoke()
+            }
+        }
+    }
+
     fun ClearError() {
         _state.update {
             it.copy(ErrorMessage = null)

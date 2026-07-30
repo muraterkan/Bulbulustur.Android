@@ -24,7 +24,7 @@ class SystemDescComplaintStatusRepository(
 
     override suspend fun GetSystemDescComplaintStatusByIdAsync(
         systemDescComplaintStatusId: Int
-    ): Result<SystemDescComplaintStatusUpdateModel?> {
+    ): Result<SystemDescComplaintStatusDTO?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
             method = "GetSystemDescComplaintStatusByIdAsync",

@@ -24,7 +24,7 @@ class SystemDescConfirmationStatusRepository(
 
     override suspend fun GetSystemDescConfirmationStatusByIdAsync(
         confirmationStatusId: Int
-    ): Result<SystemDescConfirmationStatusUpdateModel?> {
+    ): Result<SystemDescConfirmationStatusDTO?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
             method = "GetSystemDescConfirmationStatusByIdAsync",

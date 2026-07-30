@@ -13,7 +13,7 @@ interface ISystemDescOrderStoreLineStatusRepository {
 
     suspend fun GetSystemDescOrderStoreLineStatusByIdAsync(
         systemDescOrderStoreLineStatusId: Int
-    ): Result<SystemDescOrderStoreLineStatusUpdateModel?>
+    ): Result<SystemDescOrderStoreLineStatusDTO?>
 
     suspend fun GetSystemDescOrderStoreLineStatusByIdExtendedAsync(
         systemDescOrderStoreLineStatusId: Int

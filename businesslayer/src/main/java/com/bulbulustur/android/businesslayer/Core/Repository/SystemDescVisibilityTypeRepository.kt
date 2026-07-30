@@ -24,7 +24,7 @@ class SystemDescVisibilityTypeRepository(
 
     override suspend fun GetSystemDescVisibilityTypeByIdAsync(
         systemDescVisibilityTypeId: Int
-    ): Result<SystemDescVisibilityTypeUpdateModel?> {
+    ): Result<SystemDescVisibilityTypeDTO?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
             method = "GetSystemDescVisibilityTypeByIdAsync",

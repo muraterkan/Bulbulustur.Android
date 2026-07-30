@@ -24,7 +24,7 @@ class SystemDescInvoiceTypeRepository(
 
     override suspend fun GetSystemDescInvoiceTypeByIdAsync(
         systemDescInvoiceTypeId: Int
-    ): Result<SystemDescInvoiceTypeUpdateModel?> {
+    ): Result<SystemDescInvoiceTypeDTO?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
             method = "GetSystemDescInvoiceTypeByIdAsync",

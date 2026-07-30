@@ -24,7 +24,7 @@ class SystemDescReturnRequestStatusRepository(
 
     override suspend fun GetSystemDescReturnRequestStatusByIdAsync(
         systemDescReturnRequestStatusId: Int
-    ): Result<SystemDescReturnRequestStatusUpdateModel?> {
+    ): Result<SystemDescReturnRequestStatusDTO?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
             method = "GetSystemDescReturnRequestStatusByIdAsync",

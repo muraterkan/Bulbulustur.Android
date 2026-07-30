@@ -13,7 +13,7 @@ interface ISystemDescComplaintTypeRepository {
 
     suspend fun GetSystemDescComplaintTypeByIdAsync(
         systemDescComplaintTypeId: Int
-    ): Result<SystemDescComplaintTypeUpdateModel?>
+    ): Result<SystemDescComplaintTypeDTO?>
 
     suspend fun GetSystemDescComplaintTypeByIdExtendedAsync(
         systemDescComplaintTypeId: Int

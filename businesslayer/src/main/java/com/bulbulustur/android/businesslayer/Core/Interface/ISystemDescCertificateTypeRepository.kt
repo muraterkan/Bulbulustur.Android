@@ -13,7 +13,7 @@ interface ISystemDescCertificateTypeRepository {
 
     suspend fun GetSystemDescCertificateTypeByIdAsync(
         systemDescCertificateTypeId: Int
-    ): Result<SystemDescCertificateTypeUpdateModel?>
+    ): Result<SystemDescCertificateTypeDTO?>
 
     suspend fun GetSystemDescCertificateTypeByIdExtendedAsync(
         systemDescCertificateTypeId: Int

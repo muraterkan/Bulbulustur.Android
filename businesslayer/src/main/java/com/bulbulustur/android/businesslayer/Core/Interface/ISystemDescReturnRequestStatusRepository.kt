@@ -13,7 +13,7 @@ interface ISystemDescReturnRequestStatusRepository {
 
     suspend fun GetSystemDescReturnRequestStatusByIdAsync(
         systemDescReturnRequestStatusId: Int
-    ): Result<SystemDescReturnRequestStatusUpdateModel?>
+    ): Result<SystemDescReturnRequestStatusDTO?>
 
     suspend fun GetSystemDescReturnRequestStatusByIdExtendedAsync(
         systemDescReturnRequestStatusId: Int

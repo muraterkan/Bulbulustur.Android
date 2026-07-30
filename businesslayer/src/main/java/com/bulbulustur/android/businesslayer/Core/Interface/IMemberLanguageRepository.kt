@@ -28,6 +28,7 @@ interface IMemberLanguageRepository {
     ): Result<Unit>
 
     suspend fun DeleteAccountLanguageAsync(
+        memberId: Int,
         memberLanguageId: Int
     ): Result<Unit>
 }

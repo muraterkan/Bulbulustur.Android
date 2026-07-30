@@ -13,7 +13,7 @@ interface ISystemDescCargoDesiRepository {
 
     suspend fun GetSystemDescCargoDesiByIdAsync(
         systemDescCargoDesiId: Int
-    ): Result<SystemDescCargoDesiUpdateModel?>
+    ): Result<SystemDescCargoDesiDTO?>
 
     suspend fun GetSystemDescCargoDesiByIdExtendedAsync(
         systemDescCargoDesiId: Int

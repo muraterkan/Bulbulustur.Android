@@ -47,6 +47,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
@@ -428,7 +429,7 @@ private fun CompanyDetailTabs(
             )
 
             CompanyTabChip(
-                text = "İletişim",
+                text = BBLocalization.Current.Get(key = "0cf2cda1-7cf6-4d8b-ab56-8918e3a260fd", fallback = ""),
                 icon = Icons.Outlined.Email,
                 selected = false,
                 onClick = {
@@ -581,7 +582,7 @@ private fun CompanyAboutCard(
             )
 
             Text(
-                text = "Neden Biz",
+                text = BBLocalization.Current.Get(key = "34ad3e1b-96a7-4933-83c5-88b55d3cee6e", fallback = ""),
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -610,7 +611,7 @@ private fun CompanyInfoGrid(
             horizontalArrangement = Arrangement.spacedBy(BBSpacing.CardGapCompact)
         ) {
             CompanyInfoCard(
-                title = "Kuruluş Yılı",
+                title = BBLocalization.Current.Get(key = "2439777a-0431-4929-9600-07df5586ad67", fallback = ""),
                 value = company.foundationYear,
                 icon = Icons.Outlined.Factory,
                 modifier = Modifier.weight(1f)
@@ -629,7 +630,7 @@ private fun CompanyInfoGrid(
             horizontalArrangement = Arrangement.spacedBy(BBSpacing.CardGapCompact)
         ) {
             CompanyInfoCard(
-                title = "İhracat Pazarı",
+                title = BBLocalization.Current.Get(key = "481f21a7-ac4c-4135-8b49-d3e022095f71", fallback = ""),
                 value = company.exportMarkets,
                 icon = Icons.Outlined.Language,
                 modifier = Modifier.weight(1f)

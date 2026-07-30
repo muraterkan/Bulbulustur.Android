@@ -32,6 +32,7 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.NotificationsActive
 import androidx.compose.material3.Icon
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 
 @Composable
@@ -201,7 +202,7 @@ private fun AlarmProductImagePlaceholder() {
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "Ürün",
+            text = BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = ""),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

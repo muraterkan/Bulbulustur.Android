@@ -44,6 +44,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Shared.Address.AddressCascadeState
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
@@ -236,12 +237,12 @@ fun AccountScreen(
 
                     item {
                         ProfileInfoSection(
-                            title = "Doğrulama",
+                            title = BBLocalization.Current.Get(key = "1c188e84-b3f6-42b1-9634-c89f9cc9ffca", fallback = ""),
                             description = "Güvenlik ve hesap doğrulama bilgileri.",
                             icon = Icons.Outlined.Security
                         ) {
                             ProfileInfoRow(
-                                title = "E-Posta",
+                                title = BBLocalization.Current.Get(key = "1246f9ff-205d-4d92-84ee-7c8c7a3f2d46", fallback = "E-Posta"),
                                 value = email,
                                 icon = Icons.Outlined.Email,
                                 onClick = onEmailClick

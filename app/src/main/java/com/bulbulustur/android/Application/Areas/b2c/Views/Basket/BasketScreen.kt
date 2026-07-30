@@ -66,6 +66,7 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBAlpha
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.BasketControllerState
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.businesslayer.Core.DTO.BasketDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductFavoriteDTO
 
@@ -337,7 +338,7 @@ private fun BasketHeaderCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = if (lineCount > 0) "$lineCount ürün sepette" else "Sepetin boş",
+                    text = if (lineCount > 0) "$lineCount ürün sepette" else BBLocalization.Current.Get(key = "2617a5c2-1dca-464d-b4d4-f44ad5a5b7ad", fallback = ""),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
@@ -771,7 +772,8 @@ private fun BasketSummaryCard(
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
             BasketSummaryRow(
-                title = "Ödenecek Tutar",
+
+                title = BBLocalization.Current.Get(key = "0234baa2-519d-42ae-a2e8-760ebc0a1d06", fallback = "Ödenecek Tutar"),
                 value = payableTotalText,
                 isStrong = true
             )
@@ -904,7 +906,7 @@ private fun BasketEmptyCard() {
             )
 
             Text(
-                text = "Sepetin boş",
+                text = BBLocalization.Current.Get(key = "2617a5c2-1dca-464d-b4d4-f44ad5a5b7ad", fallback = ""),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -1267,7 +1269,7 @@ private fun BasketFavoriteSuggestionCard(
         }
 
         Text(
-            text = favorite.ProductName.ifBlank { "Ürün" },
+            text = favorite.ProductName.ifBlank { BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = "") },
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold,
@@ -1419,7 +1421,7 @@ private fun BasketDTO.ToBasketLineItem(): BasketLineItem {
             resolvedStoreLogoText,
         productName =
             ProductName.ifBlank {
-                "Ürün"
+                BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = "")
             },
         variantText =
             resolvedVariantText.ifBlank {

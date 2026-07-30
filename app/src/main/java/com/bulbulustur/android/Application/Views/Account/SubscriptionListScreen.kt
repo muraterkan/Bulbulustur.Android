@@ -27,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
@@ -54,7 +55,7 @@ fun SubscriptionListScreen(
 ) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
-        topBar = { BbInnerPageHeader(title = "Aboneliklerim", onBackClick = onBackClick) }
+        topBar = { BbInnerPageHeader(title = BBLocalization.Current.Get(key = "1ef8a30c-4837-40d1-b6eb-c0493e23e740", fallback = ""), onBackClick = onBackClick) }
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surfaceVariant).padding(innerPadding),

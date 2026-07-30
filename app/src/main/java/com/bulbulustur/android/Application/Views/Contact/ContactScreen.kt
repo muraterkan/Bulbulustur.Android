@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbChip
 import com.bulbulustur.android.Application.Views.Shared.Components.BbSectionHeader
@@ -166,7 +167,7 @@ private fun ContactHeader() {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.sm)
             ) {
                 BbChip(
-                    text = "Genel iletişim",
+                    text = BBLocalization.Current.Get(key = "4090dd0c-9586-4764-afc6-f098565fa7ae", fallback = ""),
                     selected = false,
                     onClick = {}
                 )
@@ -215,13 +216,13 @@ private fun ContactQuickInfoCard() {
             }
 
             ContactInfoRow(
-                title = "Genel iletişim",
+                title = BBLocalization.Current.Get(key = "4090dd0c-9586-4764-afc6-f098565fa7ae", fallback = ""),
                 value = "info@bulbulustur.com",
                 icon = Icons.Outlined.Email
             )
 
             ContactInfoRow(
-                title = "Çalışma saatleri",
+                title = BBLocalization.Current.Get(key = "43c30728-ac8e-4b4a-99ac-138fdbe37aab", fallback = ""),
                 value = "Pazartesi - Cuma / 09:00 - 18:00",
                 icon = Icons.Outlined.Work
             )
@@ -358,7 +359,7 @@ private fun ContactAlternativePanel(
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.xs)
                 ) {
                     Text(
-                        text = "Genel iletişim formu",
+                        text = BBLocalization.Current.Get(key = "4090dd0c-9586-4764-afc6-f098565fa7ae", fallback = ""),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface
@@ -543,7 +544,7 @@ private fun contactChannelItems(): List<ContactChannelItem> {
         ),
         ContactChannelItem(
             channelId = 4,
-            title = "Genel iletişim",
+            title = BBLocalization.Current.Get(key = "4090dd0c-9586-4764-afc6-f098565fa7ae", fallback = ""),
             description = "Bulbulustur hakkında öneri, bilgi ve genel sorularınızı iletin.",
             actionLabel = "Genel iletişime geç",
             target = ContactChannelTarget.GeneralContact,

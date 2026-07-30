@@ -33,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbChip
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
@@ -157,7 +158,7 @@ fun LastPriceRequestScreen(
                         onValueChange = {
                             paymentTerm.value = it
                         },
-                        label = "Ödeme Şartı",
+                        label = BBLocalization.Current.Get(key = "0ce51541-2adb-4cf7-91be-d1fcb7ffe88a", fallback = ""),
                         placeholder = "Peşin / vadeli",
                         icon = Icons.Outlined.Payments,
                         modifier = Modifier.weight(1f)
@@ -283,7 +284,7 @@ private fun LastPriceProductSummaryCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
         ) {
             Text(
-                text = "Ürün",
+                text = BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = ""),
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.SemiBold
@@ -472,7 +473,7 @@ private fun LastPriceSendCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Gönder",
+                    text = BBLocalization.Current.Get(key = "1bba90af-aa63-41f8-bd0d-b51c4477afd7", fallback = ""),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
@@ -506,7 +507,7 @@ private fun lastPriceSuggestionTexts(): List<LastPriceSuggestionText> {
             description = "Belirttiğim miktar için en iyi son fiyatı rica ederim."
         ),
         LastPriceSuggestionText(
-            title = "Ödeme Şartı",
+            title = BBLocalization.Current.Get(key = "0ce51541-2adb-4cf7-91be-d1fcb7ffe88a", fallback = ""),
             description = "Peşin ve vadeli ödeme seçeneklerine göre son fiyat bilgisini paylaşabilir misiniz?"
         ),
         LastPriceSuggestionText(

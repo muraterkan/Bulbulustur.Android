@@ -28,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
@@ -319,7 +320,7 @@ private fun MessageReplyEditor(
             )
 
             BbButton(
-                text = if (isSending) "Gönderiliyor..." else "Gönder",
+                text = if (isSending) "Gönderiliyor..." else BBLocalization.Current.Get(key = "1bba90af-aa63-41f8-bd0d-b51c4477afd7", fallback = ""),
                 onClick = onSendClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Primary,

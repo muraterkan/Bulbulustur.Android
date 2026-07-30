@@ -31,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
@@ -165,7 +166,7 @@ private fun RequestCard(
                 ) {
                     RequestInfoBox(
                         modifier = Modifier.weight(1f),
-                        title = "Satıcı",
+                        title = BBLocalization.Current.Get(key = "2ac4c8be-0d5d-4c84-afe8-628839892727", fallback = ""),
                         value = request.StoreName.OrDash(),
                         icon = Icons.Outlined.Storefront,
                         iconColor = BBColors.Blue.Blue600
@@ -173,7 +174,7 @@ private fun RequestCard(
 
                     RequestInfoBox(
                         modifier = Modifier.weight(1f),
-                        title = "Talep Nedeni",
+                        title = BBLocalization.Current.Get(key = "09298210-5271-4572-b02e-3b328d7e9cbf", fallback = ""),
                         value = request.ReturnRequestType.OrDash(),
                         icon = Icons.Outlined.ReceiptLong,
                         iconColor = BBColors.Orange.Orange600
@@ -182,7 +183,7 @@ private fun RequestCard(
 
                 RequestInfoBox(
                     modifier = Modifier.fillMaxWidth(),
-                    title = "Ürün",
+                    title = BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = ""),
                     value = request.ProductName.OrDash(),
                     icon = Icons.Outlined.Inventory2,
                     iconColor = BBColors.Yellow.Yellow800,
@@ -550,7 +551,7 @@ private fun RequestEmptyState(onOrderListClick: () -> Unit) {
             )
 
             Text(
-                text = "Kayıt Bulunamadı",
+                text = BBLocalization.Current.Get(key = "1bf1d23b-76a3-424f-bf58-9054748887f3", fallback = ""),
                 style = BbTypography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )

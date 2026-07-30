@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleProductCard
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleProductCardModel
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
@@ -102,7 +103,7 @@ private fun HomepageFeaturedProductsHeader(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
         ) {
             Text(
-                text = "Öne Çıkan Ürünler",
+                text = BBLocalization.Current.Get(key = "1c7c6ac9-2b6d-46ec-90f0-3f88b65beb11", fallback = ""),
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold

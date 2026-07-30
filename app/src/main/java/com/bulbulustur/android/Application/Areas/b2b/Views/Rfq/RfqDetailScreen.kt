@@ -30,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
@@ -281,13 +282,13 @@ private fun RfqDetailProductCard(
 
             RfqDetailInfoRow(
                 icon = Icons.Outlined.Inventory2,
-                title = "Ürün",
+                title = BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = ""),
                 value = buyerRequest.ProductName.ifBlank { "-" }
             )
 
             RfqDetailInfoRow(
                 icon = Icons.Outlined.Category,
-                title = "Kategori",
+                title = BBLocalization.Current.Get(key = "1a132fdc-096f-42d7-835d-96b0a17b3675", fallback = ""),
                 value = buyerRequest.CategoryName.ifBlank { "-" }
             )
 
@@ -302,7 +303,7 @@ private fun RfqDetailProductCard(
             if (buyerRequest.MaterialTypeName.isNotBlank()) {
                 RfqDetailInfoRow(
                     icon = Icons.Outlined.Article,
-                    title = "Malzeme",
+                    title = BBLocalization.Current.Get(key = "085e068b-d094-4f24-bbbd-dba4922bdb44", fallback = ""),
                     value = buyerRequest.MaterialTypeName
                 )
             }
@@ -338,7 +339,7 @@ private fun RfqDetailTradeCard(
 
             RfqDetailInfoRow(
                 icon = Icons.Outlined.Payments,
-                title = "Ödeme Şartı",
+                title = BBLocalization.Current.Get(key = "0ce51541-2adb-4cf7-91be-d1fcb7ffe88a", fallback = ""),
                 value = buyerRequest.PaymentTermName.ifBlank { "-" }
             )
 
@@ -350,7 +351,7 @@ private fun RfqDetailTradeCard(
 
             RfqDetailInfoRow(
                 icon = Icons.Outlined.Payments,
-                title = "Maksimum Bütçe",
+                title = BBLocalization.Current.Get(key = "141f5c72-aecf-4465-8b6c-d2ded28bd886", fallback = ""),
                 value = buyerRequest.MaxbudgetName.ifBlank { "-" }
             )
         }
@@ -372,7 +373,7 @@ private fun RfqDetailDeliveryCard(
         ) {
             RfqDetailSectionTitle(
                 icon = Icons.Outlined.LocalShipping,
-                title = "Teslimat Bilgileri"
+                title = BBLocalization.Current.Get(key = "2c20dfd9-18d2-44a2-8298-95d7f91ea8e8", fallback = "")
             )
 
             RfqDetailInfoRow(
@@ -580,7 +581,7 @@ private fun RfqDetailEmptyCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "RFQ kaydı bulunamadı.",
+            text = BBLocalization.Current.Get(key = "1bf1d23b-76a3-424f-bf58-9054748887f3", fallback = ""),
             style = BbTypography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

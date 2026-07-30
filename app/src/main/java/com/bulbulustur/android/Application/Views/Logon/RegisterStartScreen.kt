@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Shared.Address.AddressCascadeFields
 import com.bulbulustur.android.Application.Shared.Address.AddressCascadeState
 import com.bulbulustur.android.Application.Views.Shared.LogonPublicFieldLabel
@@ -94,7 +95,7 @@ fun RegisterStartScreen(
             eyebrow =
                 "Üyelik Tamamlama",
             title =
-                "Kayıt Ol",
+                BBLocalization.Current.Get(key = "2f3f4ea5-b7c1-4ebc-b42d-f81b4f84abec", fallback = ""),
             description =
                 "Bulbulustur hesabınızı oluşturmak için bilgilerinizi tamamlayın."
         )
@@ -138,7 +139,7 @@ fun RegisterStartScreen(
 
         LogonPublicFieldLabel(
             text =
-                "Soyad"
+                BBLocalization.Current.Get(key = "43b07485-278d-4633-9404-bf6a30a28222", fallback = "")
         )
 
         Spacer(
@@ -168,7 +169,7 @@ fun RegisterStartScreen(
 
         LogonPublicFieldLabel(
             text =
-                "E-posta"
+                BBLocalization.Current.Get(key = "1246f9ff-205d-4d92-84ee-7c8c7a3f2d46", fallback = "")
         )
 
         Spacer(
@@ -184,7 +185,7 @@ fun RegisterStartScreen(
             onValueChange = {
             },
             placeholder =
-                "Doğrulanmış e-posta adresiniz",
+                BBLocalization.Current.Get(key = "457d3d09-532e-4d44-b7fc-b6f18f43d5f7", fallback = ""),
             keyboardOptions =
                 KeyboardOptions(
                     keyboardType =
@@ -397,7 +398,7 @@ fun RegisterStartScreen(
                         "Hesap oluşturuluyor..."
 
                     isFormReady ->
-                        "Hesap Oluştur"
+                        BBLocalization.Current.Get(key = "0877fc97-9071-4a25-af7a-eb202ed15731", fallback = "")
 
                     else ->
                         "Bilgileri Tamamlayın"

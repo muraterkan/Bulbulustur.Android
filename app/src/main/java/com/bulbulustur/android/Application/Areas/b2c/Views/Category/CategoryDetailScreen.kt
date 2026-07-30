@@ -41,6 +41,7 @@ import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.Ret
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailBottomNavigationItem
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeader
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeaderLeadingAction
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
@@ -231,7 +232,7 @@ private fun CategoryDetailHero(
             Row(
                 horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
             ) {
-                CategoryStatPill("${category.productCount}", "ürün")
+                CategoryStatPill("${category.productCount}", BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = ""))
                 CategoryStatPill("${category.storeCount}", "mağaza")
                 CategoryStatPill("${category.campaignCount}", "kampanya")
             }
@@ -279,7 +280,7 @@ private fun CategorySubCategorySection(
         modifier = Modifier.fillMaxWidth()
     ) {
         RetailSectionTitle(
-            title = "Alt Kategoriler",
+            title = BBLocalization.Current.Get(key = "19e928cc-d4e4-426f-a1e8-fb8d9adf872f", fallback = ""),
             description = "Doğrudan ürün akışına inmek için hızlı seçim."
         )
 
@@ -446,7 +447,7 @@ private fun CategoryQuickFilterSection(
         modifier = Modifier.fillMaxWidth()
     ) {
         RetailSectionTitle(
-            title = "Hızlı Filtreler",
+            title = BBLocalization.Current.Get(key = "06861c0e-a393-4c0d-8851-978793cae548", fallback = ""),
             description = "Listeye geçmeden önce akışı daralt."
         )
 
@@ -474,7 +475,7 @@ private fun CategoryQuickFilterSection(
 @Composable
 private fun CategoryProductSectionHeader() {
     RetailSectionTitle(
-        title = "Öne Çıkan Ürünler",
+        title = BBLocalization.Current.Get(key = "1c7c6ac9-2b6d-46ec-90f0-3f88b65beb11", fallback = ""),
         description = "Bu kategoride dikkat çeken ürünlerden kısa bir seçki."
     )
 }
@@ -622,7 +623,7 @@ private fun getRetailCategoryDetail(
 ): RetailCategoryDetail {
     return RetailCategoryDetail(
         id = categoryInfo?.ProductCategoryId ?: categoryId,
-        name = categoryInfo?.CategoryName?.ifBlank { "Kategori" } ?: "Kategori",
+        name = categoryInfo?.CategoryName?.ifBlank { BBLocalization.Current.Get(key = "1a132fdc-096f-42d7-835d-96b0a17b3675", fallback = "") } ?: BBLocalization.Current.Get(key = "1a132fdc-096f-42d7-835d-96b0a17b3675", fallback = ""),
         description = categoryInfo?.Breadcrumb?.ifBlank { "Kategori ürünlerini keşfedin." } ?: "Kategori ürünlerini keşfedin.",
         iconText = (categoryInfo?.CategoryName?.ifBlank { "KA" } ?: "KA").take(2).uppercase(),
         productCount = 18420,
@@ -633,7 +634,7 @@ private fun getRetailCategoryDetail(
                 childCategories.map { child ->
                     RetailSubCategoryItem(
                         id = child.ProductCategoryId,
-                        name = child.CategoryName.ifBlank { "Kategori" },
+                        name = child.CategoryName.ifBlank { BBLocalization.Current.Get(key = "1a132fdc-096f-42d7-835d-96b0a17b3675", fallback = "") },
                         iconText = child.CategoryName.ifBlank { "KA" }.take(2).uppercase(),
                         productCount = 0
                     )

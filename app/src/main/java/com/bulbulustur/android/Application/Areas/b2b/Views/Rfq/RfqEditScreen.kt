@@ -26,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
@@ -121,7 +122,7 @@ fun RfqEditScreen(
 
             if (!errorMessage.isNullOrBlank()) {
                 item {
-                    RfqEditSection("Hata") {
+                    RfqEditSection(BBLocalization.Current.Get(key = "30aee7b0-b131-4f63-8659-f78378ac20f3", fallback = "")) {
                         Text(errorMessage, color = MaterialTheme.colorScheme.error, style = BbTypography.bodySmall)
                         BbButton(text = "Tekrar Dene", onClick = onRetryClick, modifier = Modifier.fillMaxWidth(), variant = BbButtonVariant.Outline, size = BbButtonSize.Medium)
                     }
@@ -132,7 +133,7 @@ fun RfqEditScreen(
                 item {
                     RfqEditSection("Ürün Bilgileri") {
                         BbTextInput(value = productName, onValueChange = { productName = it; validationMessage = null }, label = "Ürün Adı", placeholder = "Ürün adı", enabled = !isSubmitting)
-                        BbCategorySearchSelectInput(selectedValue = categoryId, onValueChange = { categoryId = it; validationMessage = null }, onSearchTextChange = onCategorySearch, options = categoryOptions, label = "Kategori", placeholder = "Kategori seçiniz", searchPlaceholder = "Kategori ara", maximumVisibleOptionCount = 50, enabled = !isSubmitting && categoryOptions.isNotEmpty())
+                        BbCategorySearchSelectInput(selectedValue = categoryId, onValueChange = { categoryId = it; validationMessage = null }, onSearchTextChange = onCategorySearch, options = categoryOptions, label = BBLocalization.Current.Get(key = "1a132fdc-096f-42d7-835d-96b0a17b3675", fallback = ""), placeholder = BBLocalization.Current.Get(key = "4834b933-045e-4ad5-8a39-9fbfc5a2122a", fallback = ""), searchPlaceholder = "Kategori ara", maximumVisibleOptionCount = 50, enabled = !isSubmitting && categoryOptions.isNotEmpty())
                         BbTextarea(value = productDescription, onValueChange = { productDescription = it; validationMessage = null }, label = "Ürün Açıklaması", placeholder = "Ürün detayları", enabled = !isSubmitting)
                     }
                 }
@@ -146,21 +147,21 @@ fun RfqEditScreen(
 
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)) {
                             RfqEditNumberInput(unitPrice, { unitPrice = it; validationMessage = null }, "Birim Fiyat", Modifier.weight(1f), !isSubmitting)
-                            Column(Modifier.weight(1f)) { BbSelectInput(selectedValue = currencyId, onValueChange = { currencyId = it; validationMessage = null }, options = currencyOptions, label = "Para Birimi", placeholder = "Para birimi seçiniz", enabled = !isSubmitting && currencyOptions.isNotEmpty()) }
+                            Column(Modifier.weight(1f)) { BbSelectInput(selectedValue = currencyId, onValueChange = { currencyId = it; validationMessage = null }, options = currencyOptions, label = BBLocalization.Current.Get(key = "47942374-ab80-47b3-af0f-c8a6aaf728e3", fallback = ""), placeholder = "Para birimi seçiniz", enabled = !isSubmitting && currencyOptions.isNotEmpty()) }
                         }
                     }
                 }
 
                 item {
                     RfqEditSection("Ürün Özellikleri") {
-                        BbSelectInput(selectedValue = colorId, onValueChange = { colorId = it; validationMessage = null }, options = colorOptions, label = "Renk", placeholder = "Renk seçiniz", enabled = !isSubmitting && colorOptions.isNotEmpty())
+                        BbSelectInput(selectedValue = colorId, onValueChange = { colorId = it; validationMessage = null }, options = colorOptions, label = "Renk", placeholder = BBLocalization.Current.Get(key = "435c95c7-5210-4f4d-9805-b555e7e43ba2", fallback = ""), enabled = !isSubmitting && colorOptions.isNotEmpty())
                         BbSelectInput(selectedValue = materialTypeId, onValueChange = { materialTypeId = it; validationMessage = null }, options = materialOptions, label = "Malzeme Türü", placeholder = "Malzeme seçiniz", enabled = !isSubmitting && materialOptions.isNotEmpty())
                     }
                 }
 
                 item {
                     RfqEditSection("Ticari Koşullar") {
-                        BbSelectInput(selectedValue = paymentTermId, onValueChange = { paymentTermId = it; validationMessage = null }, options = paymentOptions, label = "Ödeme Şartı", placeholder = "Ödeme şartı seçiniz", enabled = !isSubmitting && paymentOptions.isNotEmpty())
+                        BbSelectInput(selectedValue = paymentTermId, onValueChange = { paymentTermId = it; validationMessage = null }, options = paymentOptions, label = BBLocalization.Current.Get(key = "0ce51541-2adb-4cf7-91be-d1fcb7ffe88a", fallback = ""), placeholder = "Ödeme şartı seçiniz", enabled = !isSubmitting && paymentOptions.isNotEmpty())
                         BbSelectInput(selectedValue = tradeTermId, onValueChange = { tradeTermId = it; validationMessage = null }, options = tradeOptions, label = "Ticaret Şartı", placeholder = "Ticaret şartı seçiniz", enabled = !isSubmitting && tradeOptions.isNotEmpty())
                         BbTextInput(value = shippingTarget, onValueChange = { shippingTarget = it; validationMessage = null }, label = "Teslimat Hedefi", placeholder = "Ülke / Şehir / Liman", enabled = !isSubmitting)
                     }
@@ -183,12 +184,12 @@ fun RfqEditScreen(
 
                             validationMessage = when {
                                 productName.isBlank() -> "Ürün adı zorunludur."
-                                category == null -> "Kategori seçiniz."
+                                category == null -> BBLocalization.Current.Get(key = "4834b933-045e-4ad5-8a39-9fbfc5a2122a", fallback = "")
                                 purchaseQuantity.toDoubleOrNull()?.let { it > 0 } != true -> "Geçerli bir miktar giriniz."
                                 unit == null -> "Birim seçiniz."
                                 unitPrice.toDoubleOrNull()?.let { it >= 0 } != true -> "Geçerli bir birim fiyat giriniz."
                                 currency == null -> "Para birimi seçiniz."
-                                color == null -> "Renk seçiniz."
+                                color == null -> BBLocalization.Current.Get(key = "435c95c7-5210-4f4d-9805-b555e7e43ba2", fallback = "")
                                 material == null -> "Malzeme türü seçiniz."
                                 payment == null -> "Ödeme şartı seçiniz."
                                 trade == null -> "Ticaret şartı seçiniz."

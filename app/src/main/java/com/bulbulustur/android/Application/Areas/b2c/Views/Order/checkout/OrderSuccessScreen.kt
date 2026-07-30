@@ -32,6 +32,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 
 @Composable
@@ -560,7 +561,7 @@ private fun OrderSuccessBottomBar(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "Sipariş detayına git",
+                    text = BBLocalization.Current.Get(key = "45ff1768-f800-4829-9ccf-e59a75e76f16", fallback = ""),
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onPrimary

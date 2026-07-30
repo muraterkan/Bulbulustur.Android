@@ -44,6 +44,7 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.businesslayer.Core.DTO.CompanyDTO
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.CompanyUpdateModel
 import androidx.compose.foundation.layout.size
+import com.bulbulustur.android.Application.Localization.BBLocalization
 
 @Composable
 fun CompanyInfoEditScreen(
@@ -125,9 +126,9 @@ fun CompanyInfoEditScreen(
                         Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)) {
                             CompanySectionHeader(title = "Firma Kimliği", description = "Firma ünvanı ve resmi kayıt bilgileri.")
                             CompanyTextField(value = companyName, onValueChange = { companyName = it }, label = "Firma Ünvanı", placeholder = "Firma ünvanı")
-                            CompanyTextField(value = yearEstablished, onValueChange = { yearEstablished = it }, label = "Kuruluş Yılı", placeholder = "2025", keyboardType = KeyboardType.Number)
+                            CompanyTextField(value = yearEstablished, onValueChange = { yearEstablished = it }, label = BBLocalization.Current.Get(key = "2439777a-0431-4929-9600-07df5586ad67", fallback = ""), placeholder = "2025", keyboardType = KeyboardType.Number)
                             CompanyTextField(value = taxOffice, onValueChange = { taxOffice = it }, label = "Vergi Dairesi", placeholder = "Vergi dairesi")
-                            CompanyTextField(value = taxId, onValueChange = { taxId = it }, label = "Vergi Numarası", placeholder = "Vergi numarası", keyboardType = KeyboardType.Number)
+                            CompanyTextField(value = taxId, onValueChange = { taxId = it }, label = BBLocalization.Current.Get(key = "0f94c70f-fe11-4d18-8561-64d8499637df", fallback = "Vergi Numarası"), placeholder = "Vergi numarası", keyboardType = KeyboardType.Number)
                             CompanyTextField(value = mersisNo, onValueChange = { mersisNo = it }, label = "MERSİS No", placeholder = "MERSİS numarası", keyboardType = KeyboardType.Number)
                             CompanyTextField(value = kepAddress, onValueChange = { kepAddress = it }, label = "KEP Adresi", placeholder = "firma@hs01.kep.tr", keyboardType = KeyboardType.Email)
                         }
@@ -136,7 +137,7 @@ fun CompanyInfoEditScreen(
                     BbCard(modifier = Modifier.fillMaxWidth(), variant = BbCardVariant.Outlined, padding = BbCardPadding.Medium) {
                         Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)) {
                             CompanySectionHeader(title = "İletişim ve Adres", description = "Firma iletişim bilgileri ve resmi adresi.")
-                            CompanyTextField(value = email, onValueChange = { email = it }, label = "E-Posta", placeholder = "firma@ornek.com", keyboardType = KeyboardType.Email)
+                            CompanyTextField(value = email, onValueChange = { email = it }, label = BBLocalization.Current.Get(key = "1246f9ff-205d-4d92-84ee-7c8c7a3f2d46", fallback = "E-Posta"), placeholder = "firma@ornek.com", keyboardType = KeyboardType.Email)
                             CompanyTextField(value = url, onValueChange = { url = it }, label = "Web Sitesi", placeholder = "https://www.ornek.com", keyboardType = KeyboardType.Uri)
                             CompanyTextField(value = postCode, onValueChange = { postCode = it }, label = "Posta Kodu", placeholder = "Posta kodu", keyboardType = KeyboardType.Number)
                             OutlinedTextField(

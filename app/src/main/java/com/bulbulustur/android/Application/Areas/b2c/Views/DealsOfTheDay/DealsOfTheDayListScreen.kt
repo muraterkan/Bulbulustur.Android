@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeader
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeaderLeadingAction
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
@@ -352,7 +353,7 @@ private fun DealProductCard(
     val productName =
         deal.ProductName
             ?.takeIf { it.isNotBlank() }
-            ?: "Ürün"
+            ?: BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = "")
 
     val categoryName =
         deal.CategoryName
@@ -597,7 +598,7 @@ private fun DealProductCard(
                 ) {}
 
                 BbButton(
-                    text = "Ürünü İncele",
+                    text = BBLocalization.Current.Get(key = "0aa8fda4-a781-4746-8082-f0be1c5d8e50", fallback = ""),
                     modifier = Modifier.fillMaxWidth(),
                     variant = BbButtonVariant.Primary,
                     size = BbButtonSize.Small,

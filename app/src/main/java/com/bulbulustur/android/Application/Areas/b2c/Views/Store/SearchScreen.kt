@@ -41,6 +41,7 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 
 @Composable
@@ -609,9 +610,9 @@ private fun SearchArrow() {
 enum class RetailSearchType(
     val title: String
 ) {
-    Product("Ürün"),
-    Category("Kategori"),
-    Brand("Marka"),
+    Product(BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = "")),
+    Category(BBLocalization.Current.Get(key = "1a132fdc-096f-42d7-835d-96b0a17b3675", fallback = "")),
+    Brand(BBLocalization.Current.Get(key = "3f8b4f8b-6cba-43e5-bc5c-b9c07fb7208e", fallback = "")),
     Store("Mağaza")
 }
 

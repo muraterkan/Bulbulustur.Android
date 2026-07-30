@@ -28,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
@@ -159,7 +160,7 @@ private fun SubscriptionPlanInfoCard(subscription: MemberSubscriptionDTO) {
             SubscriptionPlanRow("Plan Tipi", subscription.SubscriptionPlanTypeName?.takeIf { it.isNotBlank() } ?: "-")
             SubscriptionPlanRow("Başlangıç Tarihi", subscription.StartDate.ToSubscriptionDateText())
             SubscriptionPlanRow("Bitiş Tarihi", subscription.EndDate.ToSubscriptionDateText())
-            SubscriptionPlanRow("Plan Fiyatı", subscription.GetPriceText(), valueColor = BBColors.Yellow.Yellow800)
+            SubscriptionPlanRow(BBLocalization.Current.Get(key = "434680f3-de2d-48b2-a7ac-124926fe8196", fallback = ""), subscription.GetPriceText(), valueColor = BBColors.Yellow.Yellow800)
         }
     }
 }

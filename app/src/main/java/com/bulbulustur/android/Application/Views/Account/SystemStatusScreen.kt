@@ -33,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
@@ -731,7 +732,7 @@ private fun systemStatusColors(
                 normalizedState.contains("kesinti") ||
                 normalizedState.contains("critical") ||
                 normalizedState.contains("major") ||
-                normalizedState.contains("hata") -> {
+                normalizedState.contains(BBLocalization.Current.Get(key = "30aee7b0-b131-4f63-8659-f78378ac20f3", fallback = "")) -> {
             SystemStatusColors(
                 Background = MaterialTheme.colorScheme.errorContainer,
                 Content = MaterialTheme.colorScheme.onErrorContainer

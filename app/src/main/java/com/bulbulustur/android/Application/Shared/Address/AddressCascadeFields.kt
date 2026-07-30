@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCategorySearchSelectInput
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbSelectOption
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
@@ -18,7 +19,7 @@ fun AddressCascadeFields(
     onDistrictSelected: (Int?) -> Unit,
     modifier: Modifier = Modifier,
     countryLabel: String = "Ülke",
-    countryPlaceholder: String = "Ülke seçiniz",
+    countryPlaceholder: String = BBLocalization.Current.Get(key = "387bcc7b-e309-4099-8f1d-0ee062d4b7f4", fallback = ""),
     countryStateLabel: String = "Eyalet / Bölge",
     countryStatePlaceholder: String = "Eyalet veya bölge seçiniz",
     countryDepartmentLabel: String = "Departman",

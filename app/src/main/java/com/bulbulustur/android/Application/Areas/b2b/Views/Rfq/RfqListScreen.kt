@@ -36,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleBottomNavigation
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleBottomNavigationItem
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
@@ -273,7 +274,7 @@ private fun RfqRequestCard(
                 horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
             ) {
                 BbButton(
-                    text = "Teklifler",
+                    text = BBLocalization.Current.Get(key = "05ce926b-485a-4872-b758-ac3eea7a80a2", fallback = ""),
                     onClick = {
                         onOffersClick(item.BuyerRequestKey)
                     },

@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbChip
 import com.bulbulustur.android.Application.Views.Shared.Components.BbSectionHeader
@@ -333,7 +334,7 @@ private fun legalDocumentItems(): List<LegalDocumentItem> {
     return listOf(
         LegalDocumentItem(
             legalDocumentId = 1,
-            title = "Gizlilik Politikası",
+            title = BBLocalization.Current.Get(key = "2b5d9eab-d37e-4a08-b2ff-635ccf71620e", fallback = ""),
             description = "Bulbulustur üzerinde alınan, işlenen ve saklanan kişisel verilere ilişkin açıklamalar.",
             categoryName = "Politikalar",
             updatedDateLabel = "Güncel",
@@ -386,7 +387,7 @@ private fun platformRuleItems(): List<LegalDocumentItem> {
         ),
         LegalDocumentItem(
             legalDocumentId = 7,
-            title = "Destek Politikası",
+            title = BBLocalization.Current.Get(key = "0ed62f3c-69a1-4aa7-befd-92ae1ce292c2", fallback = ""),
             description = "Destek süreçleri, başvuru kanalları ve kullanıcı bilgilendirme kuralları.",
             categoryName = "Destek",
             updatedDateLabel = "Güncel",

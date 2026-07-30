@@ -35,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
@@ -152,7 +153,7 @@ fun SearchScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Öne Çıkan Ürünler",
+                    title = BBLocalization.Current.Get(key = "1c7c6ac9-2b6d-46ec-90f0-3f88b65beb11", fallback = ""),
                     subtitle = "API sonrası gerçek arama sonuçları burada listelenecek"
                 )
             }

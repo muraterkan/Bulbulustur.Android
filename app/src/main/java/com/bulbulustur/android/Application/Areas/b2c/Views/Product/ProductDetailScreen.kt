@@ -101,6 +101,7 @@ import com.bulbulustur.android.businesslayer.Core.DTO.ProductBrowsingHistoryDTO
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components._B2CSponsoredAdverts
 import com.bulbulustur.android.businesslayer.Core.DTO.AdvertSponsoredDTO
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components._FromBrands
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductBrandSectionPageDTO
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -1505,7 +1506,7 @@ private fun RetailProductPriceCard(
                 )
 
                 RetailProductBenefitPill(
-                    text = "Güvenli Alışveriş",
+                    text = BBLocalization.Current.Get(key = "2e2945a3-b6bc-4e78-a248-9029f21102ce", fallback = ""),
                     icon = Icons.Outlined.Verified
                 )
             }
@@ -2653,7 +2654,7 @@ private fun RetailSizeGuideSheet(
         RetailSizeGuideTable()
 
         RetailSheetMutedBox(
-            text = "Ölçü tabloları genel bilgilendirme amaçlıdır. Marka, model ve üretim kalıbına göre küçük farklılıklar olabilir."
+            text = BBLocalization.Current.Get(key = "181231ec-715d-4c8b-9a98-79025a0267ad", fallback = "")
         )
 
         RetailSheetPrimaryButton(
@@ -2670,7 +2671,7 @@ private fun RetailReturnPolicySheet(
 ) {
     RetailSheetContainer(
         title = "İptal ve İade Koşulları",
-        subtitle = "Cayma hakkı, iade ve sipariş iptali",
+        subtitle = BBLocalization.Current.Get(key = "195d95d5-cb32-4a4c-af20-492c78b45ccd", fallback = ""),
         icon = Icons.Outlined.VerifiedUser,
         onCloseClick = onCloseClick
     ) {
@@ -2688,7 +2689,7 @@ private fun RetailReturnPolicySheet(
         )
 
         RetailSheetCheckRow(
-            text = "Satıcı tarafından henüz onaylanmamış siparişler iptal edilebilir."
+            text = BBLocalization.Current.Get(key = "04cdedba-fc84-4b30-82ac-a42bdc278198", fallback = "Ödenecek Tutar")
         )
 
         RetailSheetCheckRow(
@@ -2696,7 +2697,7 @@ private fun RetailReturnPolicySheet(
         )
 
         RetailSheetCheckRow(
-            text = "Cayma hakkı ve iade süreci yürürlükteki tüketici mevzuatı kapsamında değerlendirilir."
+            text = BBLocalization.Current.Get(key = "1787cc6e-07ac-467d-9e10-1b9c4e1297a6", fallback = "")
         )
 
         RetailSheetMutedBox(
@@ -2860,7 +2861,7 @@ private fun RetailReportAbuseSheet(
         )
 
         RetailSheetPrimaryButton(
-            text = "Gönder",
+            text = BBLocalization.Current.Get(key = "1bba90af-aa63-41f8-bd0d-b51c4477afd7", fallback = ""),
             onClick = onCloseClick
         )
     }
@@ -3671,7 +3672,7 @@ private fun ProductDTO.ToRetailProductDetail(
                             .takeIf {
                                 it.isNotBlank()
                             }
-                            ?: "Satıcı",
+                            ?: BBLocalization.Current.Get(key = "2ac4c8be-0d5d-4c84-afe8-628839892727", fallback = ""),
                     priceText =
                         FormatRetailProductPrice(
                             price =
@@ -3684,7 +3685,7 @@ private fun ProductDTO.ToRetailProductDetail(
                             .takeIf {
                                 it.isNotBlank()
                             }
-                            ?: "Satıcı"
+                            ?: BBLocalization.Current.Get(key = "2ac4c8be-0d5d-4c84-afe8-628839892727", fallback = "")
                 )
             }
 
@@ -3745,7 +3746,7 @@ private fun ProductDTO.ToRetailProductDetail(
     val resolvedStoreName =
         Store.takeIf {
             it.isNotBlank()
-        } ?: "Satıcı"
+        } ?: BBLocalization.Current.Get(key = "2ac4c8be-0d5d-4c84-afe8-628839892727", fallback = "")
 
     val resolvedStoreRating =
         StoreRating
@@ -3814,7 +3815,7 @@ private fun ProductDTO.ToRetailProductDetail(
     val resolvedProductName =
         ProductName.takeIf {
             it.isNotBlank()
-        } ?: "Ürün"
+        } ?: BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = "")
 
     val resolvedStoreLogoText =
         resolvedStoreName

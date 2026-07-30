@@ -26,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.width
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.LogonPublicFieldLabel
 import com.bulbulustur.android.Application.Views.Shared.LogonPublicPageTitle
 import com.bulbulustur.android.Application.Views.Shared.LogonPublicScaffold
@@ -123,7 +124,7 @@ fun ForgotPasswordScreen(
 
         LogonPublicFieldLabel(
             text =
-                "E-posta"
+                BBLocalization.Current.Get(key = "1246f9ff-205d-4d92-84ee-7c8c7a3f2d46", fallback = "")
         )
 
         Spacer(
@@ -143,7 +144,7 @@ fun ForgotPasswordScreen(
                 onInputChanged()
             },
             placeholder =
-                "E-posta adresiniz",
+                BBLocalization.Current.Get(key = "457d3d09-532e-4d44-b7fc-b6f18f43d5f7", fallback = ""),
             keyboardOptions =
                 KeyboardOptions(
                     keyboardType =

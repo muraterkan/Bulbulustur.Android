@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
@@ -40,7 +41,7 @@ fun AccountSecurityBottomMenu(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
             Text(
-                text = "Hesap Güvenliği",
+                text = BBLocalization.Current.Get(key = "2547b5db-8c29-48cb-9d91-d9376f88c45c", fallback = ""),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface
             )

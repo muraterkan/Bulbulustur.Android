@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.order
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -243,7 +245,7 @@ private fun OrderDetailSummaryCard(
 
                 OrderDetailMiniBox(
                     modifier = Modifier.weight(1f),
-                    title = "ÜRÜN",
+                    title = BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = ""),
                     value = "$productCount adet",
                     icon = Icons.Outlined.ReceiptLong,
                     iconColor = BBColors.Blue.Blue600
@@ -306,7 +308,7 @@ private fun OrderDetailStoreCard(
                         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                     ) {
                         Text(
-                            text = "Satıcı",
+                            text = BBLocalization.Current.Get(key = "2ac4c8be-0d5d-4c84-afe8-628839892727", fallback = ""),
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )

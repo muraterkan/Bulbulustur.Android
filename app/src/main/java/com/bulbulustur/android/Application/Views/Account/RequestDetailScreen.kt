@@ -33,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
@@ -319,7 +320,7 @@ private fun RequestDetailReasonCard(request: ReturnRequestDTO) {
     RequestDetailSimpleCard(
         icon = Icons.Outlined.ReceiptLong,
         iconColor = BBColors.Orange.Orange600,
-        title = "Talep Nedeni",
+        title = BBLocalization.Current.Get(key = "09298210-5271-4572-b02e-3b328d7e9cbf", fallback = ""),
         value = request.ReturnRequestType.OrDash()
     )
 }

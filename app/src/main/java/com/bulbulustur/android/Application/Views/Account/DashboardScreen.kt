@@ -64,6 +64,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailBottomNavigation
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailBottomNavigationItem
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
@@ -186,7 +187,7 @@ fun DashboardScreen(
                     title = "Alışveriş İşlemleri"
                 ) {
                     AccountMenuRow(
-                        title = "Siparişlerim",
+                        title = BBLocalization.Current.Get(key = "2c20dfd9-18d2-44a2-8298-95d7f91ea8e8", fallback = ""),
                         description = "Geçmiş ve aktif siparişlerini görüntüle.",
                         icon = Icons.Outlined.ProductionQuantityLimits,
                         onClick = onOrdersClick
@@ -306,7 +307,7 @@ fun DashboardScreen(
                     title = "Finansal"
                 ) {
                     AccountMenuRow(
-                        title = "Abonelikler",
+                        title = BBLocalization.Current.Get(key = "1ef8a30c-4837-40d1-b6eb-c0493e23e740", fallback = ""),
                         description = "Paket ve üyelik süreçlerini görüntüle.",
                         icon = Icons.Outlined.CreditCard,
                         onClick = onSubscriptionsClick
@@ -994,7 +995,7 @@ private fun AccountLogoutSection(
                 if (isLogoutLoading) {
                     "Çıkış Yapılıyor"
                 } else {
-                    "Çıkış Yap"
+                    BBLocalization.Current.Get(key = "2449e852-d554-48ff-b7a5-e29a3e096a81", fallback = "")
                 },
             description =
                 if (isLogoutLoading) {

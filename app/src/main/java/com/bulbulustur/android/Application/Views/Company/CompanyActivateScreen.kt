@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
@@ -247,7 +248,7 @@ private fun CompanyActivateSummaryCard(
             )
 
             CompanyActivateSummaryRow(
-                label = "Şirket",
+                label = BBLocalization.Current.Get(key = "46472ee0-e962-4f18-b39e-6ca4f0309ab6", fallback = ""),
                 value = companyActivateSummary.companyDisplayName
             )
 

@@ -2,6 +2,7 @@ package com.bulbulustur.android.Application.Controllers
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Session.UserSessionManager
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberTempDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.IAuthenticationRepository
@@ -1396,7 +1397,7 @@ class LogonController(
         }
 
         if (email.contains(" ")) {
-            return "Geçerli bir e-posta adresi girin."
+            return BBLocalization.Current.Get(key = "1a29428d-6472-4e3c-ba56-4e07d11cc334", fallback = "")
         }
 
         val emailParts =
@@ -1408,7 +1409,7 @@ class LogonController(
             emailParts[1].isBlank() ||
             !emailParts[1].contains(".")
         ) {
-            return "Geçerli bir e-posta adresi girin."
+            return BBLocalization.Current.Get(key = "1a29428d-6472-4e3c-ba56-4e07d11cc334", fallback = "")
         }
 
         return null
@@ -1431,7 +1432,7 @@ class LogonController(
             newPassword.length < 8 ||
             newPassword.length > 16
         ) {
-            return "Şifre 8 ile 16 karakter arasında olmalıdır."
+            return BBLocalization.Current.Get(key = "27fd8e90-9c8b-4b1e-b61b-90e9d566fbc4", fallback = "")
         }
 
         if (reNewPassword.isBlank()) {
@@ -1442,7 +1443,7 @@ class LogonController(
             reNewPassword.length < 8 ||
             reNewPassword.length > 16
         ) {
-            return "Şifre 8 ile 16 karakter arasında olmalıdır."
+            return BBLocalization.Current.Get(key = "27fd8e90-9c8b-4b1e-b61b-90e9d566fbc4", fallback = "")
         }
 
         if (newPassword != reNewPassword) {

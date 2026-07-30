@@ -51,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeader
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeaderLeadingAction
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbSectionHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
@@ -465,7 +466,7 @@ private fun CampaignDetailSummary(
         ) {
             CampaignSummaryLine(
                 icon = Icons.Outlined.Category,
-                title = "Kategori",
+                title = BBLocalization.Current.Get(key = "1a132fdc-096f-42d7-835d-96b0a17b3675", fallback = ""),
                 value = categoryName
             )
 
@@ -593,7 +594,7 @@ private fun CampaignConditionCard(
                 )
             ) {
                 Text(
-                    text = "Kampanya Koşulu",
+                    text = BBLocalization.Current.Get(key = "387bcc7b-e309-4099-8f1d-0ee062d4b7f4", fallback = ""),
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
                     color =
@@ -620,7 +621,7 @@ private fun CampaignProductCard(
     val productName =
         product.ProductName
             ?.takeIf { it.isNotBlank() }
-            ?: "Ürün"
+            ?: BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = "")
 
     val categoryName =
         product.CategoryName
@@ -843,7 +844,7 @@ private fun CampaignProductCard(
                 ) {}
 
                 BbButton(
-                    text = "İncele",
+                    text = BBLocalization.Current.Get(key = "24627553-85ff-442a-b353-f12f5e4a1612", fallback = ""),
                     modifier = Modifier.fillMaxWidth(),
                     variant = BbButtonVariant.Primary,
                     size = BbButtonSize.Small,

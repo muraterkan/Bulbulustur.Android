@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
@@ -67,7 +68,7 @@ fun BankAccountCreateScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Banka Hesabı Ekle",
+                title = BBLocalization.Current.Get(key = "42468515-8191-418a-a245-72ecf9a06558", fallback = ""),
                 onBackClick = onBackClick
             )
         }

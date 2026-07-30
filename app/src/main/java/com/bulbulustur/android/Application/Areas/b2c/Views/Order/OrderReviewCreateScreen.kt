@@ -37,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.OrderController
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
@@ -264,7 +265,7 @@ private fun OrderReviewRatingCard(
         ) {
             OrderReviewSectionTitle(
                 title = "Puanınız",
-                subtitle = "Bu ürüne kaç yıldız verirsiniz?"
+                subtitle = BBLocalization.Current.Get(key = "01c98b4a-601e-4837-a449-056329a0f9f2", fallback = "")
             )
 
             Row(

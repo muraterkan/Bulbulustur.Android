@@ -38,6 +38,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
@@ -165,7 +166,7 @@ fun WholesaleProductCard(
                 )
 
                 BbButton(
-                    text = "Ürünü İncele",
+                    text = BBLocalization.Current.Get(key = "0aa8fda4-a781-4746-8082-f0be1c5d8e50", fallback = ""),
                     onClick = onClick,
                     modifier = Modifier.fillMaxWidth(),
                     variant = BbButtonVariant.Outline,

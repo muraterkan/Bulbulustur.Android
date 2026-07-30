@@ -2,6 +2,7 @@ package com.bulbulustur.android.Application.Controllers
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberProfileDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberLanguageDTO
@@ -488,7 +489,7 @@ systemDescLanguageLevelRepository.GetSystemDescLanguageLevelsAsync(
         onSuccess: (() -> Unit)? = null
     ) {
         if (!ValidateMember(memberId)) return
-        if (!ValidateId(languageId, "Dil seçiniz.")) return
+        if (!ValidateId(languageId, BBLocalization.Current.Get(key = "387bcc7b-e309-4099-8f1d-0ee062d4b7f4", fallback = ""))) return
         if (!ValidateId(languageLevelId, "Dil seviyesi seçiniz.")) return
 
         val model = MemberLanguageInsertModel(

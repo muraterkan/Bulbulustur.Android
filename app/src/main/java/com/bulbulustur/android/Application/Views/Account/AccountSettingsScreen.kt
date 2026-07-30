@@ -41,6 +41,7 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
@@ -141,7 +142,7 @@ fun AccountSettingsScreen(
                     SettingsDashedDivider()
 
                     SettingsMenuRow(
-                        title = "Para Birimi",
+                        title = BBLocalization.Current.Get(key = "47942374-ab80-47b3-af0f-c8a6aaf728e3", fallback = ""),
                         value = currencyCode,
                         icon = Icons.Outlined.Payments,
                         onClick = onCurrencyClick
@@ -232,7 +233,7 @@ private fun SettingsProtectionBlock(
             ) {
                 SettingsQuickCard(
                     modifier = Modifier.weight(1f),
-                    title = "Hesap Güvenliği",
+                    title = BBLocalization.Current.Get(key = "2547b5db-8c29-48cb-9d91-d9376f88c45c", fallback = ""),
                     icon = Icons.Outlined.Security,
                     onClick = onAccountSecurityClick
                 )

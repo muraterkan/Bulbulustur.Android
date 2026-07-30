@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
@@ -209,7 +210,7 @@ fun RfqCreateScreen(
                         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
                     ) {
                         Text(
-                            text = "Teklif Talebi Oluştur",
+                            text = BBLocalization.Current.Get(key = "203882aa-6872-41de-a0db-26b13a6389e3", fallback = ""),
                             style = BbTypography.titleMedium,
                             color = MaterialTheme.colorScheme.onSurface
                         )
@@ -289,11 +290,11 @@ fun RfqCreateScreen(
                         },
                         onSearchTextChange = onCategorySearch,
                         options = categoryOptions,
-                        label = "Kategori",
+                        label = BBLocalization.Current.Get(key = "1a132fdc-096f-42d7-835d-96b0a17b3675", fallback = ""),
                         placeholder = if (isOptionsLoading) {
                             "Kategoriler yükleniyor..."
                         } else {
-                            "Kategori seçiniz"
+                            BBLocalization.Current.Get(key = "4834b933-045e-4ad5-8a39-9fbfc5a2122a", fallback = "")
                         },
                         searchPlaceholder = "Kategori ara",
                         maximumVisibleOptionCount = 50,
@@ -370,7 +371,7 @@ fun RfqCreateScreen(
                                     validationMessage = null
                                 },
                                 options = currencyOptions,
-                                label = "Para Birimi",
+                                label = BBLocalization.Current.Get(key = "47942374-ab80-47b3-af0f-c8a6aaf728e3", fallback = ""),
                                 placeholder = "Para birimi seçiniz",
                                 enabled = !isOptionsLoading && !isSubmitting && currencyOptions.isNotEmpty()
                             )
@@ -389,7 +390,7 @@ fun RfqCreateScreen(
                         },
                         options = colorOptions,
                         label = "Renk",
-                        placeholder = "Renk seçiniz",
+                        placeholder = BBLocalization.Current.Get(key = "435c95c7-5210-4f4d-9805-b555e7e43ba2", fallback = ""),
                         enabled = !isOptionsLoading && !isSubmitting && colorOptions.isNotEmpty()
                     )
 
@@ -416,7 +417,7 @@ fun RfqCreateScreen(
                             validationMessage = null
                         },
                         options = paymentTermOptions,
-                        label = "Ödeme Şartı",
+                        label = BBLocalization.Current.Get(key = "0ce51541-2adb-4cf7-91be-d1fcb7ffe88a", fallback = ""),
                         placeholder = "Ödeme şartı seçiniz",
                         enabled = !isOptionsLoading && !isSubmitting && paymentTermOptions.isNotEmpty()
                     )
@@ -499,12 +500,12 @@ fun RfqCreateScreen(
                         validationMessage = when {
                             memberId <= 0 -> "Üye bilgisi bulunamadı."
                             productName.isBlank() -> "Ürün adı zorunludur."
-                            selectedCategory == null -> "Kategori seçiniz."
+                            selectedCategory == null -> BBLocalization.Current.Get(key = "4834b933-045e-4ad5-8a39-9fbfc5a2122a", fallback = "")
                             purchaseQuantity.toDoubleOrNull() == null -> "Geçerli bir miktar giriniz."
                             selectedUnit == null -> "Birim seçiniz."
                             unitPrice.toDoubleOrNull() == null -> "Geçerli bir birim fiyat giriniz."
                             selectedCurrency == null -> "Para birimi seçiniz."
-                            selectedColor == null -> "Renk seçiniz."
+                            selectedColor == null -> BBLocalization.Current.Get(key = "435c95c7-5210-4f4d-9805-b555e7e43ba2", fallback = "")
                             selectedMaterialType == null -> "Malzeme türü seçiniz."
                             selectedPaymentTerm == null -> "Ödeme şartı seçiniz."
                             selectedTradeTerm == null -> "Ticaret şartı seçiniz."

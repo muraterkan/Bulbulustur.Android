@@ -31,6 +31,7 @@ import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.Ret
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailBottomNavigationItem
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeader
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeaderLeadingAction
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbProductCard
 import com.bulbulustur.android.Application.Views.Shared.Components.BbProductCardModel
 import com.bulbulustur.android.Application.Views.Shared.Components.BbProductGrid
@@ -541,7 +542,7 @@ private fun RetailProductListLoading() {
 
         Text(
             text =
-                "Ürünler yükleniyor...",
+                BBLocalization.Current.Get(key = "0953041e-609f-40de-90b7-ced652c5cb95", fallback = ""),
             style =
                 MaterialTheme.typography.bodyMedium,
             color =

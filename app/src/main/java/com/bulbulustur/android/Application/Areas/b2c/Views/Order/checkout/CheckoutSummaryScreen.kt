@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
@@ -275,7 +276,7 @@ private fun CheckoutSummaryAddressCard(
 ) {
     CheckoutSummaryInfoCard(
         title = "Teslimat adresi",
-        actionText = "Değiştir",
+        actionText = BBLocalization.Current.Get(key = "46abcd8f-976d-4c12-a55f-8aa3c4abb38b", fallback = ""),
         onActionClick = onEditAddressClick
     ) {
         Text(
@@ -310,7 +311,7 @@ private fun CheckoutSummaryCargoCard(
 ) {
     CheckoutSummaryInfoCard(
         title = "Kargo bilgisi",
-        actionText = "Değiştir",
+        actionText = BBLocalization.Current.Get(key = "46abcd8f-976d-4c12-a55f-8aa3c4abb38b", fallback = ""),
         onActionClick = onEditCargoClick
     ) {
         Text(
@@ -345,7 +346,7 @@ private fun CheckoutSummaryPaymentCard(
 ) {
     CheckoutSummaryInfoCard(
         title = "Ödeme yöntemi",
-        actionText = "Değiştir",
+        actionText = BBLocalization.Current.Get(key = "46abcd8f-976d-4c12-a55f-8aa3c4abb38b", fallback = ""),
         onActionClick = onEditPaymentClick
     ) {
         Text(
@@ -510,7 +511,7 @@ private fun CheckoutSummaryTotalCard(
             )
 
             CheckoutSummaryTotalRow(
-                title = "Ödenecek tutar",
+                title = BBLocalization.Current.Get(key = "0234baa2-519d-42ae-a2e8-760ebc0a1d06", fallback = "Ödenecek Tutar"),
                 value = total.totalPriceText,
                 isStrong = true
             )
@@ -589,7 +590,7 @@ private fun CheckoutSummaryAgreementCard(
             BbCheckboxRow(
                 checked = distanceSalesAgreementApproved,
                 onCheckedChange = onDistanceSalesAgreementChange,
-                title = "Mesafeli satış sözleşmesini okudum ve onaylıyorum."
+                title = BBLocalization.Current.Get(key = "09fe0c8a-ee0f-44cb-8b00-28dbe3a5dd9b", fallback = "")
             )
 
             BbCheckboxRow(

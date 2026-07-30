@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.OrderController
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
@@ -72,7 +73,7 @@ fun OrderListScreen(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "Siparişlerim",
+                title = BBLocalization.Current.Get(key = "2c20dfd9-18d2-44a2-8298-95d7f91ea8e8", fallback = ""),
                 subtitle = "Sipariş ve teslimat durumlarınızı takip edin.",
                 onBackClick = onBackClick
             )
@@ -170,7 +171,7 @@ private fun OrderListOverviewCard(totalOrderCount: Int) {
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                 ) {
                     Text(
-                        text = "Sipariş Özeti",
+                        text = BBLocalization.Current.Get(key = "0c433c4e-215e-41ed-9e27-e87d73028b66", fallback = ""),
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurface
                     )

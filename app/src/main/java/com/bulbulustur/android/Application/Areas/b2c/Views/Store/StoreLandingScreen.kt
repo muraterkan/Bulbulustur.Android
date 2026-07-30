@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Store
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -157,7 +159,7 @@ private fun SellerLandingTopBar(
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = "Bulbulustur'da Satış Yap",
+                text = BBLocalization.Current.Get(key = "37c64a4d-b74c-4474-bfa0-e8a07d376be8", fallback = ""),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onBackground

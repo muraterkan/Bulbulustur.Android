@@ -34,6 +34,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
@@ -89,13 +90,13 @@ fun CompanyInfoScreen(
                     item { CompanyStatsGrid(company = company, subscription = subscription) }
                     item {
                         CompanyInfoSection(title = "Şirket Kimliği", description = "Ünvan, şirket tipi ve kurumsal profil bilgileri.", icon = Icons.Outlined.Badge) {
-                            CompanyInfoRow("Şirket Ünvanı", company.CompanyName.OrDash())
+                            CompanyInfoRow(BBLocalization.Current.Get(key = "295bef89-1d52-45bf-8076-0cb215d76c41", fallback = ""), company.CompanyName.OrDash())
                             CompanyDivider()
                             CompanyInfoRow("Şirket Tipi", company.CompanyType.OrDash())
                             CompanyDivider()
                             CompanyInfoRow("Abonelik Planı", subscription.GetSubscriptionTitle())
                             CompanyDivider()
-                            CompanyInfoRow("Kuruluş Yılı", company.YearEstablished.OrDash())
+                            CompanyInfoRow(BBLocalization.Current.Get(key = "2439777a-0431-4929-9600-07df5586ad67", fallback = ""), company.YearEstablished.OrDash())
                         }
                     }
                     item {
@@ -123,7 +124,7 @@ fun CompanyInfoScreen(
                         CompanyInfoSection(title = "Vergi ve Resmi Bilgiler", description = "Fatura ve resmi kayıt süreçlerinde kullanılan bilgiler.", icon = Icons.Outlined.ReceiptLong) {
                             CompanyInfoRow("Vergi Dairesi", company.TaxOffice.OrDash())
                             CompanyDivider()
-                            CompanyInfoRow("Vergi Numarası", company.TaxId.OrDash())
+                            CompanyInfoRow(BBLocalization.Current.Get(key = "0f94c70f-fe11-4d18-8561-64d8499637df", fallback = "Vergi Numarası"), company.TaxId.OrDash())
                             CompanyDivider()
                             CompanyInfoRow("MERSİS", company.MersisNo.OrDash())
                             CompanyDivider()
@@ -131,7 +132,7 @@ fun CompanyInfoScreen(
                             CompanyDivider()
                             CompanyInfoRow("Web Sitesi", company.Url.OrDash())
                             CompanyDivider()
-                            CompanyInfoRow("E-Posta", company.Email.OrDash())
+                            CompanyInfoRow(BBLocalization.Current.Get(key = "1246f9ff-205d-4d92-84ee-7c8c7a3f2d46", fallback = "E-Posta"), company.Email.OrDash())
                         }
                     }
                     item {
@@ -187,7 +188,7 @@ private fun CompanyStatsGrid(company: CompanyDTO, subscription: MemberSubscripti
     Column(verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)) {
             CompanyStatCard(modifier = Modifier.weight(1f), icon = Icons.Outlined.Storefront, label = "Abonelik Planı", value = subscription?.SubscriptionPlanTypeName?.OrDash() ?: "-")
-            CompanyStatCard(modifier = Modifier.weight(1f), icon = Icons.Outlined.HomeWork, label = "Kuruluş Yılı", value = company.YearEstablished.OrDash())
+            CompanyStatCard(modifier = Modifier.weight(1f), icon = Icons.Outlined.HomeWork, label = BBLocalization.Current.Get(key = "2439777a-0431-4929-9600-07df5586ad67", fallback = ""), value = company.YearEstablished.OrDash())
         }
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)) {
             CompanyStatCard(modifier = Modifier.weight(1f), icon = Icons.Outlined.LocationOn, label = "Ülke / Şehir", value = listOf(company.CountryName.orEmpty(), company.CityName.orEmpty()).filter { it.isNotBlank() }.joinToString(" / ").ifBlank { "-" })

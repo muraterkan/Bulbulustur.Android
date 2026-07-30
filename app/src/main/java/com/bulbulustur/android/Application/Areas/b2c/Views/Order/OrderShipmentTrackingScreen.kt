@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.OrderController
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
@@ -274,7 +275,7 @@ private fun OrderShipmentDetailCard(tracking: OrderStoreLineDTO) {
             )
 
             OrderShipmentDetailRow(
-                title = "Ürün",
+                title = BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = ""),
                 value = tracking.ProductName.ifBlank {
                     "Ürün #${tracking.ProductId}"
                 }

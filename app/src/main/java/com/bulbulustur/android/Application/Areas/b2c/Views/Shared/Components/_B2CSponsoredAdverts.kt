@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -181,7 +183,7 @@ private fun SponsoredAdvertsSectionHeader() {
 
             Text(
                 text =
-                    "Öne çıkan ürünler",
+                    BBLocalization.Current.Get(key = "1c7c6ac9-2b6d-46ec-90f0-3f88b65beb11", fallback = ""),
                 style =
                     MaterialTheme.typography.bodySmall,
                 color =
@@ -295,7 +297,7 @@ private fun SponsoredAdvertCard(
                             .takeIf {
                                 it.isNotBlank()
                             }
-                            ?: "Ürün",
+                            ?: BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = ""),
                     style =
                         MaterialTheme.typography.bodyMedium,
                     color =

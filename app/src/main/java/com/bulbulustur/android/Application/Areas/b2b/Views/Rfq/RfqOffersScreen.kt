@@ -25,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
@@ -153,7 +154,7 @@ private fun RfqOffersSummaryCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Teklifler",
+                    text = BBLocalization.Current.Get(key = "05ce926b-485a-4872-b758-ac3eea7a80a2", fallback = ""),
                     style = BbTypography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -218,7 +219,7 @@ private fun RfqOfferListCard(
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                 ) {
                     Text(
-                        text = offer.Seller.orEmpty().ifBlank { "Satıcı" },
+                        text = offer.Seller.orEmpty().ifBlank { BBLocalization.Current.Get(key = "2ac4c8be-0d5d-4c84-afe8-628839892727", fallback = "") },
                         style = BbTypography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -240,13 +241,13 @@ private fun RfqOfferListCard(
 
             RfqOfferListInfoRow(
                 icon = Icons.Outlined.Business,
-                title = "Satıcı",
+                title = BBLocalization.Current.Get(key = "2ac4c8be-0d5d-4c84-afe8-628839892727", fallback = ""),
                 value = offer.Seller.orEmpty().ifBlank { "-" }
             )
 
             RfqOfferListInfoRow(
                 icon = Icons.Outlined.CalendarMonth,
-                title = "Gönderim Tarihi",
+                title = BBLocalization.Current.Get(key = "3863686d-6463-4211-bcbd-983e5968738e", fallback = ""),
                 value = offer.InsertedDate.ifBlank { "-" }
             )
 

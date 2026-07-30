@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
@@ -231,7 +232,7 @@ private fun QuestionAnswerCard(
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                 ) {
                     Text(
-                        text = item.ProductName.orEmpty().ifBlank { "Ürün" },
+                        text = item.ProductName.orEmpty().ifBlank { BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = "") },
                         style = BbTypography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurface
                     )

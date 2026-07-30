@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbSectionHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
@@ -123,7 +124,7 @@ fun WholesaleCategoryDetailScreen(
 
                     item {
                         BbSectionHeader(
-                            title = "Alt Kategoriler",
+                            title = BBLocalization.Current.Get(key = "19e928cc-d4e4-426f-a1e8-fb8d9adf872f", fallback = ""),
                             subtitle = "Bu kategoriye bağlı ürün gruplarını incele."
                         )
                     }
@@ -348,7 +349,7 @@ private fun WholesaleCategoryDetailActions(
         }
 
         BbButton(
-            text = "Bu kategoride teklif talebi oluştur",
+            text = BBLocalization.Current.Get(key = "203882aa-6872-41de-a0db-26b13a6389e3", fallback = ""),
             onClick = {
                 onRfqCreateClick(categoryId)
             },
@@ -520,7 +521,7 @@ private fun createWholesaleCategoryDetail(
             ?.CategoryName
             .orEmpty()
             .ifBlank {
-                "Kategori"
+                BBLocalization.Current.Get(key = "1a132fdc-096f-42d7-835d-96b0a17b3675", fallback = "")
             },
         description = categoryInfo
             ?.Breadcrumb
@@ -539,7 +540,7 @@ private fun createWholesaleCategoryDetail(
                 WholesaleSubCategoryItem(
                     categoryId = child.ProductCategoryId,
                     name = child.CategoryName.ifBlank {
-                        "Kategori"
+                        BBLocalization.Current.Get(key = "1a132fdc-096f-42d7-835d-96b0a17b3675", fallback = "")
                     },
                     description = child.Breadcrumb.ifBlank {
                         child.CategoryName

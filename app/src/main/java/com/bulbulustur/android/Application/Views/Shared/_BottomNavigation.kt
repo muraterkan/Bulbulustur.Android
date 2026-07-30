@@ -27,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
@@ -127,7 +128,7 @@ fun BuyerBottomNavigation(
 
                 BuyerBottomNavigationItemView(
                     selected = selectedItem == BuyerBottomNavigationItem.Basket,
-                    label = if (mode == EBuyerMode.Retail) "Sepet" else "Teklifler",
+                    label = if (mode == EBuyerMode.Retail) "Sepet" else BBLocalization.Current.Get(key = "05ce926b-485a-4872-b758-ac3eea7a80a2", fallback = ""),
                     icon = {
                         Icon(
                             imageVector = Icons.Outlined.LocalOffer,
@@ -146,7 +147,7 @@ fun BuyerBottomNavigation(
 
                 BuyerBottomNavigationItemView(
                     selected = selectedItem == BuyerBottomNavigationItem.Account,
-                    label = "Hesap",
+                    label = BBLocalization.Current.Get(key = "12cf0c4a-1b66-4a2e-800c-dfe75644a6bc", fallback = ""),
                     icon = {
                         Icon(
                             imageVector = Icons.Outlined.AccountCircle,

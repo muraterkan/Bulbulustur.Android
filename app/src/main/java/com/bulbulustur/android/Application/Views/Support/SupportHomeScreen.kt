@@ -28,11 +28,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.bulbulustur.android.Application.Localization.BBLocalization
+import com.bulbulustur.android.Application.Localization.LocalizationState
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
@@ -181,12 +184,17 @@ private fun SupportIntroCard() {
 private fun SupportQuickSearchChips(
     onSearchClick: (String) -> Unit
 ) {
+    val localization = BBLocalization.Current
+    val searchTerms = remember(localization.Resources) {
+        getSupportQuickSearchTerms(localization)
+    }
+
     FlowRow(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(BBSpacing.ChipGap),
         verticalArrangement = Arrangement.spacedBy(BBSpacing.ChipGap)
     ) {
-        getSupportQuickSearchTerms().forEach { searchTerm ->
+        searchTerms.forEach { searchTerm ->
             BbChip(
                 text = searchTerm,
                 selected = false,
@@ -411,12 +419,20 @@ data class SupportArticleItem(
     val icon: ImageVector
 )
 
-private fun getSupportQuickSearchTerms(): List<String> {
+private fun getSupportQuickSearchTerms(
+    localization: LocalizationState
+): List<String> {
     return listOf(
         "Sipariş",
-        "Ödeme",
+        localization.Get(
+            key = "0d5a9dc6-b4eb-4f81-b5f1-d9d09a40cf40",
+            fallback = ""
+        ),
         "Entegrasyon",
-        "Hesap Yönetimi",
+        localization.Get(
+            key = "269fa827-0814-48a5-8f53-085a5db9cab7",
+            fallback = ""
+        ),
         "Tedarik",
         "Draugr"
     )
@@ -469,14 +485,14 @@ private fun getSupportVideoGuideItems(): List<SupportVideoGuideItem> {
             title = "Hesap Bilgilerini Güncelleme",
             description = "Firma, kullanıcı ve iletişim bilgilerinizi nasıl güncellersiniz.",
             durationLabel = "4 dk",
-            categoryName = "Hesap"
+            categoryName = BBLocalization.Current.Get(key = "12cf0c4a-1b66-4a2e-800c-dfe75644a6bc", fallback = "")
         ),
         SupportVideoGuideItem(
             videoGuideId = 3,
             title = "Yeni Ürün Ekleme",
             description = "Ürün oluşturma, görsel ekleme ve temel ürün bilgileri.",
             durationLabel = "5 dk",
-            categoryName = "Ürün"
+            categoryName = BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = "")
         )
     )
 }

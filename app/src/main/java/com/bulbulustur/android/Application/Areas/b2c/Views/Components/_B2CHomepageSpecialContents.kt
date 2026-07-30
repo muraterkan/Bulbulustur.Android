@@ -26,6 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import coil3.compose.AsyncImage
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
@@ -161,7 +162,7 @@ private fun B2CHomepageSpecialProductCard(
                 } else {
                     Text(
                         text = product.ProductName
-                            .ifBlank { "Ürün" }
+                            .ifBlank { BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = "") }
                             .take(2)
                             .uppercase(),
                         style = MaterialTheme.typography.titleLarge,
@@ -177,7 +178,7 @@ private fun B2CHomepageSpecialProductCard(
             ) {
                 Text(
                     text = product.ProductName.ifBlank {
-                        "Ürün"
+                        BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = "")
                     },
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
@@ -186,7 +187,7 @@ private fun B2CHomepageSpecialProductCard(
                 )
 
                 Text(
-                    text = "Ürünü İncele",
+                    text = BBLocalization.Current.Get(key = "0aa8fda4-a781-4746-8082-f0be1c5d8e50", fallback = ""),
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.SemiBold

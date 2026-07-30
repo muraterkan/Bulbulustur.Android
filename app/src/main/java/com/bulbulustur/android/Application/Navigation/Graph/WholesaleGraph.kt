@@ -39,6 +39,7 @@ import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.WholesaleBu
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.WholesaleBuyerSampleRequestInsertModel
 import coil3.compose.AsyncImage
 import com.bulbulustur.android.Application.Areas.b2b.Controllers.ProductControllerState
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleProductDTO
 import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
 
@@ -435,7 +436,7 @@ fun NavGraphBuilder.wholesaleGraph(
 
         LastPriceRequestScreen(
             productId = requestProductId,
-            productName = product?.ProductName?.takeIf { it.isNotBlank() } ?: "Ürün",
+            productName = product?.ProductName?.takeIf { it.isNotBlank() } ?: BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = ""),
             companyName = product?.CompanyName?.takeIf { it.isNotBlank() } ?: "Tedarikçi",
             currentPriceLabel = product?.Price?.takeIf { it > 0.0 }?.let { "" } ?: "",
             onBackClick = { navigator.back() },
@@ -487,7 +488,7 @@ fun NavGraphBuilder.wholesaleGraph(
 
         SampleRequestScreen(
             productId = requestProductId,
-            productName = product?.ProductName?.takeIf { it.isNotBlank() } ?: "Ürün",
+            productName = product?.ProductName?.takeIf { it.isNotBlank() } ?: BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = ""),
             companyName = product?.CompanyName?.takeIf { it.isNotBlank() } ?: "Tedarikçi",
             onBackClick = { navigator.back() },
             onSendClick = { quantity, detail ->
@@ -536,7 +537,7 @@ fun NavGraphBuilder.wholesaleGraph(
 
         CustomizationRequestScreen(
             productId = requestProductId,
-            productName = product?.ProductName?.takeIf { it.isNotBlank() } ?: "Ürün",
+            productName = product?.ProductName?.takeIf { it.isNotBlank() } ?: BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = ""),
             companyName = product?.CompanyName?.takeIf { it.isNotBlank() } ?: "Tedarikçi",
             onBackClick = { navigator.back() },
             onSendClick = { detail, colorMaterial, sizeTechnical, packageLogo ->

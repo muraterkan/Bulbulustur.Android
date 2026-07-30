@@ -23,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
@@ -321,7 +322,7 @@ private fun PhoneStatusBadge(verified: Boolean) {
     }
 
     val text = if (verified) {
-        "Doğrulandı"
+        BBLocalization.Current.Get(key = "29991fb6-3b63-4e78-a488-d59b60560030", fallback = "")
     } else {
         "Doğrulanmadı"
     }

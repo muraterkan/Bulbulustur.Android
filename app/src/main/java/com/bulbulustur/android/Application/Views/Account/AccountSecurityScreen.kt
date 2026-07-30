@@ -37,6 +37,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
@@ -62,7 +63,7 @@ fun AccountSecurityScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Hesap ve Güvenlik",
+                title = BBLocalization.Current.Get(key = "2547b5db-8c29-48cb-9d91-d9376f88c45c", fallback = ""),
                 onBackClick = onBackClick
             )
         }
@@ -110,7 +111,7 @@ fun AccountSecurityScreen(
                     icon = Icons.Outlined.Security
                 ) {
                     AccountSecurityRow(
-                        title = "E-Posta",
+                        title = BBLocalization.Current.Get(key = "1246f9ff-205d-4d92-84ee-7c8c7a3f2d46", fallback = "E-Posta"),
                         value = "muraterkan500@gmail.com",
                         icon = Icons.Outlined.Email,
                         onClick = onEmailChangeClick
@@ -205,7 +206,7 @@ private fun AccountSecurityStrengthCard() {
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                 ) {
                     Text(
-                        text = "Hesap Güvenliği",
+                        text = BBLocalization.Current.Get(key = "2547b5db-8c29-48cb-9d91-d9376f88c45c", fallback = ""),
                         style = BbTypography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurface
                     )

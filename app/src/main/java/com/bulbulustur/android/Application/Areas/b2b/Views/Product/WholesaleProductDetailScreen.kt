@@ -87,6 +87,7 @@ import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.Who
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleProductCardModel
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleSearchHeader
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleSearchHeaderLeadingAction
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
@@ -717,7 +718,7 @@ private fun WholesaleTradeSummaryCard(
         }
 
         if (product.minimumOrderLabel.isNotBlank()) {
-            add("Min. Sipariş" to product.minimumOrderLabel)
+            add(BBLocalization.Current.Get(key = "2aa8d3d2-f93a-427e-8f03-070607e6b5ec", fallback = "") to product.minimumOrderLabel)
         }
     }
 
@@ -2159,7 +2160,7 @@ private fun WholesaleProductDetailBottomBar(onLastPriceRequestClick: () -> Unit,
             )
 
             WholesaleBottomActionButton(
-                text = "Özelleştir",
+                text = BBLocalization.Current.Get(key = "44b76fc9-f305-4368-80ce-fea7d160eb17", fallback = ""),
                 onClick = onCustomizationRequestClick,
                 modifier = Modifier.weight(1.05f),
                 containerColor = BBColors.SurfaceMuted,
@@ -2396,7 +2397,7 @@ private fun WholesaleProductDTO.ToWholesaleProductDetail(relatedProducts: List<W
         .distinct()
         .mapIndexed { index, imagePath ->
             WholesaleProductImage(
-                label = if (index == 0) ProductName.orEmpty().ifBlank { "Ürün" } else "${ProductName.orEmpty().ifBlank { "Ürün" }} ${index + 1}",
+                label = if (index == 0) ProductName.orEmpty().ifBlank { BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = "") } else "${ProductName.orEmpty().ifBlank { BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = "") }} ${index + 1}",
                 backgroundColor = BBColors.Surface,
                 foregroundColor = BBColors.TextMuted,
                 imageUrl = ResolveWholesaleProductImageUrl(imagePath)
@@ -2411,7 +2412,7 @@ private fun WholesaleProductDTO.ToWholesaleProductDetail(relatedProducts: List<W
             WholesaleMiniProduct(
                 id = relatedProduct.RelatedWholesaleProductId,
                 name = relatedProduct.ProductName.orEmpty().ifBlank {
-                    "Toptan Ürün"
+                    BBLocalization.Current.Get(key = "1d7da276-0c79-47a8-b8f5-d8aa0967d923", fallback = "")
                 },
                 priceLabel = if (relatedProduct.Price > 0) {
                     relatedProduct.Price.ToWholesalePriceText(relatedProduct.CurrencySymbol)
@@ -2472,7 +2473,7 @@ private fun WholesaleProductDTO.ToWholesaleProductDetail(relatedProducts: List<W
         if (Category.orEmpty().isNotBlank()) {
             add(
                 WholesaleHighlightFeature(
-                    label = "Kategori",
+                    label = BBLocalization.Current.Get(key = "1a132fdc-096f-42d7-835d-96b0a17b3675", fallback = ""),
                     value = Category
                 )
             )
@@ -2481,7 +2482,7 @@ private fun WholesaleProductDTO.ToWholesaleProductDetail(relatedProducts: List<W
         if (brandData?.Brand?.isNotBlank() == true) {
             add(
                 WholesaleHighlightFeature(
-                    label = "Marka",
+                    label = BBLocalization.Current.Get(key = "3f8b4f8b-6cba-43e5-bc5c-b9c07fb7208e", fallback = ""),
                     value = brandData.Brand
                 )
             )
@@ -2499,7 +2500,7 @@ private fun WholesaleProductDTO.ToWholesaleProductDetail(relatedProducts: List<W
         if (Customization.isNotBlank()) {
             add(
                 WholesaleHighlightFeature(
-                    label = "Özelleştirme",
+                    label = BBLocalization.Current.Get(key = "44b76fc9-f305-4368-80ce-fea7d160eb17", fallback = ""),
                     value = Customization
                 )
             )
@@ -2564,7 +2565,7 @@ private fun WholesaleProductDTO.ToWholesaleProductDetail(relatedProducts: List<W
         }
 
         if (PaymentTermsFormatted.isNotBlank()) {
-            add(WholesaleProductProperty("Ödeme Şartı", PaymentTermsFormatted))
+            add(WholesaleProductProperty(BBLocalization.Current.Get(key = "0ce51541-2adb-4cf7-91be-d1fcb7ffe88a", fallback = ""), PaymentTermsFormatted))
         }
     }
 
@@ -2572,7 +2573,7 @@ private fun WholesaleProductDTO.ToWholesaleProductDetail(relatedProducts: List<W
         if (Customization.isNotBlank()) {
             add(
                 WholesaleCustomizationOption(
-                    title = "Özelleştirme",
+                    title = BBLocalization.Current.Get(key = "44b76fc9-f305-4368-80ce-fea7d160eb17", fallback = ""),
                     description = Customization
                 )
             )
@@ -2676,11 +2677,11 @@ private fun WholesaleProductDTO.ToWholesaleProductDetail(relatedProducts: List<W
 
     return WholesaleProductDetail(
         id = WholesaleProductId,
-        name = ProductName.orEmpty().ifBlank { "Ürün" },
+        name = ProductName.orEmpty().ifBlank { BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = "") },
         searchPlaceholder = "Toptan Ürün, Kategori Veya Firma Ara",
         shortDescription = description,
         longDescription = description,
-        badgeText = Category.orEmpty().ifBlank { "Toptan Ürün" },
+        badgeText = Category.orEmpty().ifBlank { BBLocalization.Current.Get(key = "1d7da276-0c79-47a8-b8f5-d8aa0967d923", fallback = "") },
         priceLabel = resolvedPriceLabel,
         minimumOrderLabel = if (MinimumOrderQuantity > 0) "$MinimumOrderQuantity $unitText" else "",
         deliveryTimeLabel = leadTime,

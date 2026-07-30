@@ -41,6 +41,7 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 
 @Composable
@@ -110,7 +111,7 @@ fun CheckoutPaymentScreen(
                 item {
                     CheckoutProgressCard(
                         currentStep = "3",
-                        title = "Ödeme",
+                        title = BBLocalization.Current.Get(key = "0d5a9dc6-b4eb-4f81-b5f1-d9d09a40cf40", fallback = ""),
                         description = "Ödeme yöntemini seç ve kart bilgilerini gir."
                     )
                 }
@@ -218,7 +219,7 @@ private fun CheckoutPaymentTopBar(
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = "Ödeme",
+                text = BBLocalization.Current.Get(key = "0d5a9dc6-b4eb-4f81-b5f1-d9d09a40cf40", fallback = ""),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onBackground
@@ -340,7 +341,7 @@ private fun CheckoutPaymentSummaryCard(
             Spacer(modifier = Modifier.height(12.dp))
 
             CheckoutPaymentSummaryRow(
-                title = "Ödenecek tutar",
+                title = BBLocalization.Current.Get(key = "0234baa2-519d-42ae-a2e8-760ebc0a1d06", fallback = "Ödenecek Tutar"),
                 value = summary.totalPriceText,
                 isStrong = true
             )
@@ -507,7 +508,7 @@ private fun CheckoutNewCardForm(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             CheckoutPaymentSectionTitle(
-                title = "Kart bilgileri",
+                title = BBLocalization.Current.Get(key = "227d50c4-7fe0-4381-860e-960b3df7c10e", fallback = ""),
                 description = "Kart bilgilerin güvenli ödeme altyapısıyla işlenir."
             )
 
@@ -799,7 +800,7 @@ private fun getCheckoutPaymentScreenData(): CheckoutPaymentScreenData {
             ),
             CheckoutPaymentMethodItem(
                 id = 3,
-                title = "Havale / EFT",
+                title = BBLocalization.Current.Get(key = "40344faa-49b8-44d6-9e3f-04feae013f42", fallback = ""),
                 description = "V1 sonrası aktif edilebilecek alternatif ödeme akışı.",
                 iconText = "HE",
                 paymentType = CheckoutPaymentType.BankTransfer

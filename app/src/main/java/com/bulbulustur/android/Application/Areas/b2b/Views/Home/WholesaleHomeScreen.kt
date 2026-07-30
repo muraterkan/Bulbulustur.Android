@@ -48,6 +48,7 @@ import com.bulbulustur.android.Application.Areas.b2b.Views.Home.Components.Homep
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleBottomNavigation
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleBottomNavigationItem
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleSearchHeader
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
@@ -462,7 +463,7 @@ private fun wholesaleActionItems(
 ): List<WholesaleHomeActionItem> {
     return listOf(
         WholesaleHomeActionItem(
-            Title = "Teklifler",
+            Title = BBLocalization.Current.Get(key = "05ce926b-485a-4872-b758-ac3eea7a80a2", fallback = ""),
             Description = "RFQ kayıtlarını gör",
             Icon = Icons.Outlined.RequestQuote,
             Tint = BBColors.Orange.Orange700,
@@ -494,7 +495,7 @@ private fun wholesaleActionItems(
             OnClick = onSampleRequestClick
         ),
         WholesaleHomeActionItem(
-            Title = "Özelleştirme",
+            Title = BBLocalization.Current.Get(key = "44b76fc9-f305-4368-80ce-fea7d160eb17", fallback = ""),
             Description = "Logo, renk ve üretim detayı",
             Icon = Icons.Outlined.Category,
             Tint = BBColors.Purple.Purple700,

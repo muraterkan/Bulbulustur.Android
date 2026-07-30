@@ -27,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Shared.Address.AddressCascadeFields
 import com.bulbulustur.android.Application.Shared.Address.AddressCascadeState
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
@@ -93,7 +94,7 @@ fun AddressEditScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Adresi Düzenle",
+                title = BBLocalization.Current.Get(key = "25a000ba-1002-437a-b38f-ef07416bdfc7", fallback = ""),
                 onBackClick = onBackClick
             )
         }
@@ -129,7 +130,7 @@ fun AddressEditScreen(
                 AddressEditTextField(
                     value = surname,
                     onValueChange = { surname = it },
-                    label = "Soyad",
+                    label = BBLocalization.Current.Get(key = "43b07485-278d-4633-9404-bf6a30a28222", fallback = ""),
                     placeholder = "Soyadınız",
                     enabled = address != null && !isLoading
                 )

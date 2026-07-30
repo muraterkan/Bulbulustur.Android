@@ -22,6 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import coil3.compose.AsyncImage
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
@@ -131,7 +132,7 @@ private fun B2CDealOfTheDayCard(
                             deal.Picture
                         }
                     ),
-                    contentDescription = deal.ProductName.orEmpty().ifBlank { "Ürün" },
+                    contentDescription = deal.ProductName.orEmpty().ifBlank { BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = "") },
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(BBRadius.LgShape),
@@ -144,7 +145,7 @@ private fun B2CDealOfTheDayCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
             ) {
                 Text(
-                    text = deal.ProductName.orEmpty().ifBlank { "Ürün" },
+                    text = deal.ProductName.orEmpty().ifBlank { BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = "") },
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.SemiBold,

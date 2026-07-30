@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
@@ -220,7 +221,7 @@ private fun CouponCardHeader(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
         ) {
             Text(
-                text = "Kupon kodu",
+                text = BBLocalization.Current.Get(key = "453fcdc3-0776-4f61-8c3c-4b59c914273c", fallback = ""),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -584,6 +585,6 @@ private fun String.ToCouponLocalDate(): LocalDate? {
 
 private enum class CouponStatus(val Title: String) {
     Active(Title = "Etkin"),
-    Used(Title = "Kullanılmış"),
+    Used(Title = BBLocalization.Current.Get(key = "27249cd6-2134-46d6-8ac5-ff82ce3e13a8", fallback = "")),
     Expired(Title = "Süresi Dolmuş")
 }

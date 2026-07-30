@@ -41,6 +41,7 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
@@ -353,7 +354,7 @@ private fun getLegalPolicyGroups(): List<LegalPolicyGroup> {
             items = listOf(
                 LegalPolicyItem(
                     url = LegalPolicyUrls.Privacy,
-                    title = "Gizlilik Politikası",
+                    title = BBLocalization.Current.Get(key = "2b5d9eab-d37e-4a08-b2ff-635ccf71620e", fallback = ""),
                     description = "Kişisel verilerin nasıl işlendiğini ve korunduğunu inceleyin.",
                     icon = Icons.Outlined.PrivacyTip
                 ),
@@ -409,7 +410,7 @@ private fun getLegalPolicyGroups(): List<LegalPolicyGroup> {
                 ),
                 LegalPolicyItem(
                     url = LegalPolicyUrls.Support,
-                    title = "Destek Politikası",
+                    title = BBLocalization.Current.Get(key = "0ed62f3c-69a1-4aa7-befd-92ae1ce292c2", fallback = ""),
                     description = "Destek süreçleri ve kullanıcı iletişim kuralları.",
                     icon = Icons.Outlined.SupportAgent
                 )

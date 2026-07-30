@@ -35,6 +35,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.core.view.WindowCompat
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.LogonPublicScaffold
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
@@ -195,7 +196,7 @@ private fun ModeSelectionContent(
             )
 
             ModeSelectionCommerceCard(
-                title = "Teklif Talebi Oluştur",
+                title = BBLocalization.Current.Get(key = "203882aa-6872-41de-a0db-26b13a6389e3", fallback = ""),
                 description = "Toptan alım ihtiyacını belirt, tedarikçilerden teklif al.",
                 icon = Icons.Outlined.RequestQuote,
                 containerColor = if (isDark) {

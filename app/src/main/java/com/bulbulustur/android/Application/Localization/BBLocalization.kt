@@ -1,20 +1,30 @@
 package com.bulbulustur.android.Application.Localization
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.ReadOnlyComposable
-import androidx.compose.runtime.staticCompositionLocalOf
-
-internal val LocalBbLocalization =
-    staticCompositionLocalOf {
-        LocalizationState(
-            IsInitialized = true
-        )
-    }
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 
 object BBLocalization {
 
+    private var CurrentState by mutableStateOf(
+        LocalizationState(
+            IsInitialized = true
+        )
+    )
+
     val Current: LocalizationState
-        @Composable
-        @ReadOnlyComposable
-        get() = LocalBbLocalization.current
+        get() = CurrentState
+
+    @Composable
+    internal fun Bind(
+        state: LocalizationState
+    ) {
+        SideEffect {
+            if (CurrentState != state) {
+                CurrentState = state
+            }
+        }
+    }
 }

@@ -34,6 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.ProductQuestionControllerState
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
@@ -195,7 +196,7 @@ private fun ProductQuestionProductSummary(
     variantId: Int
 ) {
     val resolvedProductName = productName.ifBlank { "Ürün Soruları" }
-    val resolvedStoreName = storeName.ifBlank { "Satıcı" }
+    val resolvedStoreName = storeName.ifBlank { BBLocalization.Current.Get(key = "2ac4c8be-0d5d-4c84-afe8-628839892727", fallback = "") }
 
     Surface(
         modifier = Modifier.fillMaxWidth(),
@@ -283,7 +284,7 @@ private fun ProductQuestionAskCard(
             )
 
             Text(
-                text = "${storeName.ifBlank { "Satıcı" }} mağazasına ürün hakkında soru gönderebilirsiniz.",
+                text = "${storeName.ifBlank { BBLocalization.Current.Get(key = "2ac4c8be-0d5d-4c84-afe8-628839892727", fallback = "") }} mağazasına ürün hakkında soru gönderebilirsiniz.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -369,12 +370,12 @@ private fun ProductQuestionCard(
     val customerName = question.Questioner
         .orEmpty()
         .takeIf { it.isNotBlank() }
-        ?: "Müşteri"
+        ?: BBLocalization.Current.Get(key = "3a8d29be-870c-414f-bb7c-221b560b299e", fallback = "")
 
     val storeName = question.StoreName
         .orEmpty()
         .takeIf { it.isNotBlank() }
-        ?: fallbackStoreName.ifBlank { "Satıcı" }
+        ?: fallbackStoreName.ifBlank { BBLocalization.Current.Get(key = "2ac4c8be-0d5d-4c84-afe8-628839892727", fallback = "") }
 
     val answer = question.Message
         .orEmpty()
@@ -456,7 +457,7 @@ private fun ProductQuestionCard(
                         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                     ) {
                         Text(
-                            text = "Satıcı cevabı",
+                            text = BBLocalization.Current.Get(key = "3ba680c9-4dd6-4dfa-8302-5b3ff263aefb", fallback = ""),
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onPrimaryContainer

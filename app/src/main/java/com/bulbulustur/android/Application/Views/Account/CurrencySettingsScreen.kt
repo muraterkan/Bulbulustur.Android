@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
@@ -47,7 +48,7 @@ fun CurrencySettingsScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Para Birimi",
+                title = BBLocalization.Current.Get(key = "47942374-ab80-47b3-af0f-c8a6aaf728e3", fallback = ""),
                 onBackClick = onBackClick
             )
         }
@@ -172,7 +173,7 @@ private fun CurrencyRow(
             if (isSelected) {
                 Icon(
                     imageVector = Icons.Outlined.CheckCircle,
-                    contentDescription = "Seçili para birimi",
+                    contentDescription = BBLocalization.Current.Get(key = "47942374-ab80-47b3-af0f-c8a6aaf728e3", fallback = ""),
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(BBIcon.SizeLg)
                 )

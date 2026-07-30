@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.PopupProperties
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import java.util.Locale
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
@@ -43,7 +44,7 @@ fun BbSelectInput(
     onValueChange: (String) -> Unit,
     label: String,
     modifier: Modifier = Modifier,
-    placeholder: String = "Seçiniz",
+    placeholder: String = BBLocalization.Current.Get(key = "387bcc7b-e309-4099-8f1d-0ee062d4b7f4", fallback = ""),
     helperText: String? = null,
     errorText: String? = null,
     enabled: Boolean = true
@@ -231,7 +232,7 @@ fun BbSearchableSelectInput(
     onValueChange: (String) -> Unit,
     label: String,
     modifier: Modifier = Modifier,
-    placeholder: String = "Seçiniz",
+    placeholder: String = BBLocalization.Current.Get(key = "387bcc7b-e309-4099-8f1d-0ee062d4b7f4", fallback = ""),
     searchPlaceholder: String = "Ara...",
     helperText: String? = null,
     errorText: String? = null,

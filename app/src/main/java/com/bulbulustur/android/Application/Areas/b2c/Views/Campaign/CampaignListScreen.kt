@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeader
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeaderLeadingAction
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
@@ -152,7 +153,7 @@ fun CampaignListScreen(
                     item {
                         CampaignListInfoCard(
                             title = "Kampanyalar yükleniyor",
-                            description = "Aktif kampanyalar getiriliyor.",
+                            description = BBLocalization.Current.Get(key = "20b5f12d-1dbf-467c-af8e-3138533bedcc", fallback = ""),
                             showProgress = true
                         )
                     }

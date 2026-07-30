@@ -47,6 +47,7 @@ import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.Ret
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailBottomNavigationItem
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeader
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeaderLeadingAction
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbSectionHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
@@ -86,7 +87,7 @@ fun RetailCategoryHomeScreen(
             categories.mapIndexed { index, category ->
                 RetailCategoryHomeSubCategoryItem(
                     id = category.ProductCategoryId,
-                    title = category.CategoryName?.takeIf { it.isNotBlank() } ?: "Kategori",
+                    title = category.CategoryName?.takeIf { it.isNotBlank() } ?: BBLocalization.Current.Get(key = "1a132fdc-096f-42d7-835d-96b0a17b3675", fallback = ""),
                     description = category.Breadcrumb?.takeIf { it.isNotBlank() } ?: "Kategori ürünlerini keşfet",
                     icon = Icons.Outlined.Category,
                     backgroundColor = when (index % 4) {
@@ -194,7 +195,7 @@ fun RetailCategoryHomeScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Alt Kategoriler",
+                    title = BBLocalization.Current.Get(key = "19e928cc-d4e4-426f-a1e8-fb8d9adf872f", fallback = ""),
                     subtitle = "Bu kategori altındaki alışveriş kırılımlarını incele."
                 )
             }

@@ -22,6 +22,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
@@ -286,7 +287,7 @@ private fun NewEmailSupportingText(
 
         !validation.IsNewEmailValid -> {
             Text(
-                text = "Geçerli bir e-posta adresi girin.",
+                text = BBLocalization.Current.Get(key = "1a29428d-6472-4e3c-ba56-4e07d11cc334", fallback = ""),
                 color = MaterialTheme.colorScheme.error
             )
         }

@@ -36,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
@@ -341,7 +342,7 @@ private fun RetailFavoriteCard(
                 horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
             ) {
                 BbButton(
-                    text = "İncele",
+                    text = BBLocalization.Current.Get(key = "24627553-85ff-442a-b353-f12f5e4a1612", fallback = ""),
                     onClick = {
                         onProductClick(
                             favorite.ProductId,
@@ -451,7 +452,7 @@ private fun WholesaleFavoriteCard(
                 horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
             ) {
                 BbButton(
-                    text = "İncele",
+                    text = BBLocalization.Current.Get(key = "24627553-85ff-442a-b353-f12f5e4a1612", fallback = ""),
                     onClick = {
                         onProductClick(favorite.WholesaleProductId)
                     },

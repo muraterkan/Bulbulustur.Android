@@ -50,6 +50,7 @@ import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.Who
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleBottomNavigationItem
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleSearchHeader
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleSearchHeaderLeadingAction
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbSectionHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
@@ -96,7 +97,7 @@ fun WholesaleCategoryHomeScreen(
             WholesaleCategoryHomeItem(
                 id = category.ProductCategoryId,
                 title = category.CategoryName.ifBlank {
-                    "Kategori"
+                    BBLocalization.Current.Get(key = "1a132fdc-096f-42d7-835d-96b0a17b3675", fallback = "")
                 },
                 description = category.Breadcrumb.ifBlank {
                     "Toptan kategori ürünlerini keşfet"
@@ -744,7 +745,7 @@ private fun getWholesaleQuickActions(): List<WholesaleCategoryQuickActionItem> {
             target = WholesaleCategoryQuickActionTarget.Sample
         ),
         WholesaleCategoryQuickActionItem(
-            title = "Özelleştir",
+            title = BBLocalization.Current.Get(key = "44b76fc9-f305-4368-80ce-fea7d160eb17", fallback = ""),
             description = "Özel üretim talebi oluştur",
             icon = Icons.Outlined.Tune,
             backgroundColor = MaterialTheme.colorScheme.tertiaryContainer,
@@ -758,7 +759,7 @@ private fun getWholesaleQuickActions(): List<WholesaleCategoryQuickActionItem> {
 private fun getWholesaleCategoryShowcases(): List<WholesaleCategoryShowcaseItem> {
     return listOf(
         WholesaleCategoryShowcaseItem(
-            title = "Toptan Ürünler",
+            title = BBLocalization.Current.Get(key = "1d7da276-0c79-47a8-b8f5-d8aa0967d923", fallback = ""),
             description = "Yayınlanan toptan ürünleri listele.",
             icon = Icons.Outlined.ShoppingBasket,
             backgroundColor = MaterialTheme.colorScheme.primaryContainer,
@@ -775,7 +776,7 @@ private fun getWholesaleCategoryShowcases(): List<WholesaleCategoryShowcaseItem>
         ),
         WholesaleCategoryShowcaseItem(
             title = "Teklif Topla",
-            description = "İhtiyacın için teklif talebi oluştur.",
+            description = BBLocalization.Current.Get(key = "203882aa-6872-41de-a0db-26b13a6389e3", fallback = ""),
             icon = Icons.Outlined.RequestQuote,
             backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
             iconColor = MaterialTheme.colorScheme.onSecondaryContainer,

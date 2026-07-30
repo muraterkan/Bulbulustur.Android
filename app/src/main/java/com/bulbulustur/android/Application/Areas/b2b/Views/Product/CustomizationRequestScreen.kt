@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbChip
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
@@ -142,7 +143,7 @@ fun CustomizationRequestScreen(
                     onValueChange = {
                         colorMaterial.value = it
                     },
-                    label = "Renk / Malzeme",
+                    label = BBLocalization.Current.Get(key = "085e068b-d094-4f24-bbbd-dba4922bdb44", fallback = ""),
                     placeholder = "Örn. siyah, metal, mat yüzey, titanyum",
                     icon = Icons.Outlined.ColorLens
                 )
@@ -448,7 +449,7 @@ private fun CustomizationSendCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Gönder",
+                    text = BBLocalization.Current.Get(key = "1bba90af-aa63-41f8-bd0d-b51c4477afd7", fallback = ""),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
@@ -478,7 +479,7 @@ private data class CustomizationSuggestionText(
 private fun customizationSuggestionTexts(): List<CustomizationSuggestionText> {
     return listOf(
         CustomizationSuggestionText(
-            title = "Renk / Malzeme",
+            title = BBLocalization.Current.Get(key = "085e068b-d094-4f24-bbbd-dba4922bdb44", fallback = ""),
             description = "Ürün için özel renk, malzeme ve yüzey seçenekleri hakkında teklif almak istiyorum."
         ),
         CustomizationSuggestionText(

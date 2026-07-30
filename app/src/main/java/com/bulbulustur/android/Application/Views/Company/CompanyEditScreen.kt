@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
@@ -107,7 +108,7 @@ fun CompanyEditScreen(
             )
 
             Text(
-                text = "Şirketi Düzenle",
+                text = BBLocalization.Current.Get(key = "3ec5dfa9-46c0-40ea-adf8-fd66e633b153", fallback = ""),
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -140,8 +141,8 @@ fun CompanyEditScreen(
                             validationMessage = null
                         )
                     },
-                    label = "Şirketinizin Resmi Ünvanı",
-                    placeholder = "Şirket resmi ünvanı"
+                    label = BBLocalization.Current.Get(key = "1da8884c-e11c-469d-99f2-a02e4bc01b15", fallback = ""),
+                    placeholder = BBLocalization.Current.Get(key = "1da8884c-e11c-469d-99f2-a02e4bc01b15", fallback = "")
                 )
 
                 BbSelectInput(
@@ -165,7 +166,7 @@ fun CompanyEditScreen(
                             validationMessage = null
                         )
                     },
-                    label = "Kuruluş Yılı",
+                    label = BBLocalization.Current.Get(key = "2439777a-0431-4929-9600-07df5586ad67", fallback = ""),
                     placeholder = "Yıl seç",
                     options = establishmentYearOptions()
                 )
@@ -190,7 +191,7 @@ fun CompanyEditScreen(
                             validationMessage = null
                         )
                     },
-                    label = "Şirket Web Sitesi",
+                    label = BBLocalization.Current.Get(key = "42dedc34-458a-4284-89d4-a4950dff356a", fallback = ""),
                     placeholder = "www.firma.com"
                 )
             }
@@ -307,7 +308,7 @@ fun CompanyEditScreen(
                             validationMessage = null
                         )
                     },
-                    label = "Vergi Numarası",
+                    label = BBLocalization.Current.Get(key = "0f94c70f-fe11-4d18-8561-64d8499637df", fallback = "Vergi Numarası"),
                     placeholder = "Vergi numarası"
                 )
 
@@ -354,7 +355,7 @@ fun CompanyEditScreen(
                 }
 
                 BbButton(
-                    text = "Gönder",
+                    text = BBLocalization.Current.Get(key = "1bba90af-aa63-41f8-bd0d-b51c4477afd7", fallback = ""),
                     onClick = {
                         if (formState.value.canSubmit) {
                             onCompanyUpdateClick(formState.value)

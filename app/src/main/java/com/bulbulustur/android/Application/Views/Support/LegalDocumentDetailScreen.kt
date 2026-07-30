@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
@@ -79,7 +80,7 @@ fun LegalDocumentDetailScreen(
 
             item {
                 BbSectionHeader(
-                    title = "İçerik",
+                    title = BBLocalization.Current.Get(key = "2b91fb3e-ca32-47dd-99ab-3f018ee89c7d", fallback = ""),
                     subtitle = "Bu metin API bağlantısından sonra gerçek içerikle beslenecek"
                 )
             }
@@ -393,7 +394,7 @@ private fun getLegalDocumentDetail(
 
         else -> LegalDocumentDetail(
             legalDocumentId = legalDocumentId,
-            title = "Gizlilik Politikası",
+            title = BBLocalization.Current.Get(key = "2b5d9eab-d37e-4a08-b2ff-635ccf71620e", fallback = ""),
             description = "Bulbulustur üzerinde alınan, işlenen ve saklanan kişisel verilere ilişkin açıklamalar.",
             categoryName = "Politikalar",
             updatedDateLabel = "Güncel",
@@ -453,7 +454,7 @@ private fun getLegalTermsSections(): List<LegalDocumentSection> {
             body = "Kullanıcıların Bulbulustur uygulamasını kullanırken uyması gereken temel kurallar burada yer alacak."
         ),
         LegalDocumentSection(
-            title = "Üyelik ve hesap güvenliği",
+            title = BBLocalization.Current.Get(key = "2547b5db-8c29-48cb-9d91-d9376f88c45c", fallback = ""),
             body = "Hesap bilgilerinin korunması, yetkisiz kullanım ve kullanıcı sorumlulukları bu bölümde açıklanacak."
         ),
         LegalDocumentSection(

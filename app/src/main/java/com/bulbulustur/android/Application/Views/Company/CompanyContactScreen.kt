@@ -45,6 +45,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.R
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
@@ -451,7 +452,7 @@ private fun CompanyContactInfoCard(
 
             CompanyContactInfoRow(
                 icon = Icons.Outlined.Email,
-                title = "E-posta",
+                title = BBLocalization.Current.Get(key = "1246f9ff-205d-4d92-84ee-7c8c7a3f2d46", fallback = ""),
                 value = company.email,
                 onClick = onEmailClick
             )
@@ -616,7 +617,7 @@ private fun CompanyMessageCard(
                 },
                 placeholder = {
                     Text(
-                        text = "Ürün gereksinimlerinizi ve şirket bilgilerinizi burada detaylandırabilirsiniz."
+                        text = BBLocalization.Current.Get(key = "428f590d-8666-4b00-9841-7233221c0d93", fallback = "")
                     )
                 },
                 colors = TextFieldDefaults.colors(
@@ -633,7 +634,7 @@ private fun CompanyMessageCard(
             )
 
             BbButton(
-                text = "Gönder",
+                text = BBLocalization.Current.Get(key = "1bba90af-aa63-41f8-bd0d-b51c4477afd7", fallback = ""),
                 onClick = onSendClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Primary,

@@ -30,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
@@ -189,7 +190,7 @@ fun RfqOfferDetailScreen(
                         text = if (isSendingMessage) {
                             "Gönderiliyor..."
                         } else {
-                            "Gönder"
+                            BBLocalization.Current.Get(key = "1bba90af-aa63-41f8-bd0d-b51c4477afd7", fallback = "")
                         }
                     )
                 }
@@ -240,7 +241,7 @@ private fun RfqOfferSummaryCard(
                 )
 
                 Text(
-                    text = offer.Seller.ifBlank { "Satıcı" },
+                    text = offer.Seller.ifBlank { BBLocalization.Current.Get(key = "2ac4c8be-0d5d-4c84-afe8-628839892727", fallback = "") },
                     style = BbTypography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -270,13 +271,13 @@ private fun RfqOfferInfoCard(
         ) {
             RfqOfferInfoRow(
                 icon = Icons.Outlined.Business,
-                title = "Satıcı",
+                title = BBLocalization.Current.Get(key = "2ac4c8be-0d5d-4c84-afe8-628839892727", fallback = ""),
                 value = offer.Seller.ifBlank { "-" }
             )
 
             RfqOfferInfoRow(
                 icon = Icons.Outlined.CalendarMonth,
-                title = "Gönderim Tarihi",
+                title = BBLocalization.Current.Get(key = "3863686d-6463-4211-bcbd-983e5968738e", fallback = ""),
                 value = offer.InsertedDate.ifBlank { "-" }
             )
 
@@ -288,7 +289,7 @@ private fun RfqOfferInfoCard(
 
             RfqOfferInfoRow(
                 icon = Icons.Outlined.Handshake,
-                title = "Teklif Durumu",
+                title = BBLocalization.Current.Get(key = "12b0ea44-d114-423f-a6a8-19785c4c0c5c", fallback = ""),
                 value = offer.StatusId.toString()
             )
         }

@@ -21,6 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
@@ -110,7 +111,7 @@ fun AccountEditScreen(
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
                 ) {
                     ProfileEditSectionHeader(
-                        title = "Kişisel Bilgiler",
+                        title = BBLocalization.Current.Get(key = "2adcb241-fb30-4326-a81b-78b4fc025a82", fallback = ""),
                         description = "Ad, soyad ve meslek bilgilerinizi güncelleyin."
                     )
 
@@ -129,7 +130,7 @@ fun AccountEditScreen(
                         onValueChange = {
                             surnameState.value = it
                         },
-                        label = "Soyisim",
+                        label = BBLocalization.Current.Get(key = "15a15b53-974d-413d-9cee-f8622397c2d8", fallback = ""),
                         placeholder = "Soyisminiz",
                         enabled = !isLoading
                     )

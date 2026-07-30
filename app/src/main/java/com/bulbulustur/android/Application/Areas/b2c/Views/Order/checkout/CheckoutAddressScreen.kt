@@ -35,6 +35,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 
 @Composable
@@ -252,7 +253,7 @@ private fun CheckoutAddressSummaryCard(
         CheckoutAddressSummaryMiniCard(
             modifier = Modifier.weight(1f),
             title = "${summary.productCount}",
-            subtitle = "ürün"
+            subtitle = BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = "")
         )
 
         CheckoutAddressSummaryMiniCard(
@@ -517,7 +518,7 @@ private fun CheckoutInvoiceInfoCard() {
             modifier = Modifier.padding(BBSpacing.Space4)
         ) {
             Text(
-                text = "Fatura adresi",
+                text = BBLocalization.Current.Get(key = "2000c09b-307f-48c9-a3e2-9aa4290254f1", fallback = ""),
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface

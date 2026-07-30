@@ -51,6 +51,7 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberBankAccountDTO
 import androidx.compose.ui.layout.ContentScale
 import coil3.compose.AsyncImage
+import com.bulbulustur.android.Application.Localization.BBLocalization
 
 @Composable
 fun BankAccountListScreen(
@@ -86,7 +87,7 @@ fun BankAccountListScreen(
                 title = "Banka Hesaplarım",
                 onBackClick = onBackClick,
                 actionIcon = Icons.Outlined.Add,
-                actionContentDescription = "Banka Hesabı Ekle",
+                actionContentDescription = BBLocalization.Current.Get(key = "42468515-8191-418a-a245-72ecf9a06558", fallback = ""),
                 onActionClick = onCreateBankAccountClick
             )
         }
@@ -471,7 +472,7 @@ private fun BankAccountEmptyState(
             BankAccountIconBox()
 
             Text(
-                text = "Kayıt Bulunamadı",
+                text = BBLocalization.Current.Get(key = "1bf1d23b-76a3-424f-bf58-9054748887f3", fallback = ""),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -484,7 +485,7 @@ private fun BankAccountEmptyState(
             )
 
             BbButton(
-                text = "Banka Hesabı Ekle",
+                text = BBLocalization.Current.Get(key = "42468515-8191-418a-a245-72ecf9a06558", fallback = ""),
                 onClick = onCreateBankAccountClick,
                 variant = BbButtonVariant.Primary,
                 size = BbButtonSize.Medium

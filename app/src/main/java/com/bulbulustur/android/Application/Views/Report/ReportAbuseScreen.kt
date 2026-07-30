@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
@@ -426,7 +427,7 @@ private fun ReportAbuseBottomBar(
                 .padding(BBSpacing.PageHorizontal)
         ) {
             BbButton(
-                text = "Gönder",
+                text = BBLocalization.Current.Get(key = "1bba90af-aa63-41f8-bd0d-b51c4477afd7", fallback = ""),
                 onClick = onSubmitClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Success,
@@ -466,7 +467,7 @@ enum class ReportTargetType(
     val shortCode: String
 ) {
     Product(
-        displayName = "Ürün",
+        displayName = BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = ""),
         shortCode = "Ü"
     ),
     Store(

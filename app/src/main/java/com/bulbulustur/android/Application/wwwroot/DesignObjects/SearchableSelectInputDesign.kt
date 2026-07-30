@@ -31,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import kotlinx.coroutines.Dispatchers
@@ -45,7 +46,7 @@ fun BbCategorySearchSelectInput(
     onSearchTextChange: (String) -> Unit = {},
     label: String,
     modifier: Modifier = Modifier,
-    placeholder: String = "Seçiniz",
+    placeholder: String = BBLocalization.Current.Get(key = "387bcc7b-e309-4099-8f1d-0ee062d4b7f4", fallback = ""),
     searchPlaceholder: String = "Ara...",
     helperText: String? = null,
     errorText: String? = null,

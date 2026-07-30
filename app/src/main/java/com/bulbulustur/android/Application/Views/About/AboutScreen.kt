@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
@@ -189,7 +190,7 @@ private fun AboutEcosystemCard() {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
             ) {
                 AboutTrustRow(
-                    title = "Güvenli Ticaret",
+                    BBLocalization.Current.Get(key = "02040c6a-eb63-407c-9116-1348d6a4cec4", fallback = ""),
                     icon = Icons.Outlined.Verified
                 )
 
@@ -428,7 +429,7 @@ private fun AboutActionArea(
         )
 
         AboutActionCard(
-            title = "İletişim",
+            title = BBLocalization.Current.Get(key = "0cf2cda1-7cf6-4d8b-ab56-8918e3a260fd", fallback = ""),
             description = "Doğru ekibe hızlıca ulaş.",
             icon = Icons.Outlined.ChevronRight,
             onClick = onContactClick

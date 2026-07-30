@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
@@ -47,7 +48,7 @@ fun BankAccountListScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Banka Hesapları",
+                title = BBLocalization.Current.Get(key = "1c517c7a-c512-4c3e-8d8e-909b89ad19d0", fallback = ""),
                 onBackClick = onBackClick
             )
         }
@@ -75,7 +76,7 @@ fun BankAccountListScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Bulbulustur Banka Hesapları",
+                    title = BBLocalization.Current.Get(key = "476c62ef-dec2-4c77-9d21-e453954c9407", fallback = ""),
                     subtitle = "Ödeme yapmadan önce açıklama alanına sipariş numaranızı yazmayı unutmayın."
                 )
             }
@@ -232,7 +233,7 @@ private fun BankAccountCard(
             }
 
             BankAccountInfoBox(
-                title = "Hesap Sahibi",
+                title = BBLocalization.Current.Get(key = "46f2be80-7b18-463f-b787-056d45ff83c2", fallback = ""),
                 value = bankAccount.accountOwner,
                 icon = Icons.Outlined.AccountBalance
             )
@@ -272,7 +273,7 @@ private fun BankAccountCard(
             }
 
             Text(
-                text = "Ödeme açıklamasına sipariş numaranızı yazmanız önerilir.",
+                text = BBLocalization.Current.Get(key = "409592dc-0bdd-4c29-94d4-e0f92f461290", fallback = ""),
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

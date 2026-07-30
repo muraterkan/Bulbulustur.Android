@@ -61,6 +61,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import coil3.compose.AsyncImage
 import com.bulbulustur.android.Application.Config.LegalPolicyUrls
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBLayout
@@ -850,7 +851,7 @@ fun LogonPublicLegalFooter(
                         fontWeight = FontWeight.Bold
                     )
                 ) {
-                    append("Gizlilik Politikasını")
+                    append(BBLocalization.Current.Get(key = "2b5d9eab-d37e-4a08-b2ff-635ccf71620e", fallback = ""))
                 }
 
                 pop()

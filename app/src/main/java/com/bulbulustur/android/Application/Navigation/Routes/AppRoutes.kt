@@ -336,18 +336,7 @@ object ProfileRoutes {
     const val ProfileRelationshipType = "profile/relationship/relationship-type"
     const val ProfileChildrenPreference = "profile/relationship/children-preference"
 
-    const val ProfileDietType = "profile/lifestyle/diet-type"
-    const val ProfileExerciseHabit = "profile/lifestyle/exercise-habit"
-    const val ProfileAlcoholHabit = "profile/lifestyle/alcohol-habit"
-    const val ProfileSmokingHabit = "profile/lifestyle/smoking-habit"
-    const val ProfileReligion = "profile/lifestyle/religion"
 
-    const val ProfileHeight = "profile/physical/height"
-    const val ProfileWeight = "profile/physical/weight"
-    const val ProfileBodyType = "profile/physical/body-type"
-    const val ProfileSkinTone = "profile/physical/skin-tone"
-    const val ProfilePiercing = "profile/physical/piercing"
-    const val ProfileTattoo = "profile/physical/tattoo"
 }
 
 object BankAccountRoutes {

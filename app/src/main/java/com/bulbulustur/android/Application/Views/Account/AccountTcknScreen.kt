@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -68,7 +70,7 @@ fun AccountTcknScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "T.C. Kimlik Numarası",
+                title = BBLocalization.Current.Get(key = "562147fe-5d53-48d6-8797-ea9bbf17f91a", fallback = "T.C. Kimlik Numarası"),
                 onBackClick = onBackClick
             )
         }
@@ -119,7 +121,7 @@ fun AccountTcknScreen(
                         },
                         modifier = Modifier.fillMaxWidth(),
                         label = {
-                            Text(text = "T.C. Kimlik Numarası")
+                            Text(text = BBLocalization.Current.Get(key = "562147fe-5d53-48d6-8797-ea9bbf17f91a", fallback = "T.C. Kimlik Numarası"))
                         },
                         placeholder = {
                             Text(text = "11 haneli kimlik numarası")
@@ -169,7 +171,7 @@ fun AccountTcknScreen(
                 }
 
             BbButton(
-                text = "Güncelle",
+                text = BBLocalization.Current.Get(key = "58104fd9-46c6-4304-9abb-07f5273a33f9", fallback = "Güncelle"),
                 onClick = {
                     onSaveClick(tckn)
                 },

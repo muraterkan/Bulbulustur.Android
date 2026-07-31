@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Profile.Components
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,7 +23,7 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 fun BbProfileSaveButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    text: String = "Kaydet",
+    text: String = BBLocalization.Current.Get(key = "c70b208b-86cd-4955-b8ef-f5b5ee7bc0cc", fallback = "Kaydet"),
     enabled: Boolean = true,
     isSaving: Boolean = false
 ) {
@@ -40,7 +42,7 @@ fun BbProfileSaveButton(
 fun BbProfileStickySaveBar(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    text: String = "Kaydet",
+    text: String = BBLocalization.Current.Get(key = "c70b208b-86cd-4955-b8ef-f5b5ee7bc0cc", fallback = "Kaydet"),
     enabled: Boolean = true,
     isSaving: Boolean = false
 ) {

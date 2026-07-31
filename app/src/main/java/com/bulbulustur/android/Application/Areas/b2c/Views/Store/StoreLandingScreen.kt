@@ -216,7 +216,7 @@ private fun SellerLandingHero(
             ) {
                 SellerLandingHeroPill(
                     title = summary.storeCountText,
-                    subtitle = "mağaza"
+                    subtitle = BBLocalization.Current.Get(key = "a4bd79dd-e7ee-4407-9e7d-00582840c43a", fallback = "mağaza")
                 )
 
                 SellerLandingHeroPill(
@@ -304,7 +304,7 @@ private fun SellerLandingStatSection(
         SellerLandingStatCard(
             modifier = Modifier.weight(1f),
             title = summary.supportText,
-            subtitle = "destek"
+            subtitle = BBLocalization.Current.Get(key = "d7a5b38c-266c-4559-885a-309bb75d011f", fallback = "destek")
         )
 
         SellerLandingStatCard(
@@ -564,7 +564,7 @@ private fun getRetailSellerLandingScreenData(): RetailSellerLandingScreenData {
             modeText = "B2B+B2C",
             applicationTimeText = "5 dk",
             supportText = "Rehberli",
-            paymentText = "Güvenli"
+            paymentText = BBLocalization.Current.Get(key = "aba99f7e-0b0a-45aa-96b2-6ac03f36582a", fallback = "Güvenli")
         ),
         tabs = listOf(
             "Avantajlar",

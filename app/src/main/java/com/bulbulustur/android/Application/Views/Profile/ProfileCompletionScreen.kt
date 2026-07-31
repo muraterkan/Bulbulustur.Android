@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Profile
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
@@ -192,7 +194,7 @@ private fun ProfileCompletionItemRow(
 
                 Text(
                     text = if (item.IsCompleted) {
-                        "Tamamlandı"
+                        BBLocalization.Current.Get(key = "60ae9048-3404-4ea6-a789-f75e02e0b4ea", fallback = "Tamamlandı")
                     } else {
                         "Eksik"
                     },

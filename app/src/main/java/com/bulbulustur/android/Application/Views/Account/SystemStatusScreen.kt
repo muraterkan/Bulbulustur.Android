@@ -488,7 +488,7 @@ private fun SystemStatusMaintenanceRow(
 
         SystemStatusBadge(
             text = maintenance.MaintenanceStateName.ifBlank {
-                "Planlandı"
+                BBLocalization.Current.Get(key = "fc041a2b-1878-49b7-87c2-e9c3315e0df2", fallback = "Planlandı")
             },
             backgroundColor = statusColors.Background,
             contentColor = statusColors.Content
@@ -683,7 +683,7 @@ private fun SystemStatusErrorContent(
         )
 
         BbButton(
-            text = "Tekrar Dene",
+            text = BBLocalization.Current.Get(key = "9d1ce783-da20-464b-9203-cd1ce09918c6", fallback = "Tekrar Dene"),
             onClick = onRetryClick,
             modifier = Modifier
                 .fillMaxWidth()
@@ -721,7 +721,7 @@ private fun systemStatusColors(
         normalizedState.contains("degraded") ||
                 normalizedState.contains("maintenance") ||
                 normalizedState.contains("bakım") ||
-                normalizedState.contains("planlandı") -> {
+                normalizedState.contains(BBLocalization.Current.Get(key = "fc041a2b-1878-49b7-87c2-e9c3315e0df2", fallback = "planlandı")) -> {
             SystemStatusColors(
                 Background = MaterialTheme.colorScheme.tertiaryContainer,
                 Content = MaterialTheme.colorScheme.onTertiaryContainer

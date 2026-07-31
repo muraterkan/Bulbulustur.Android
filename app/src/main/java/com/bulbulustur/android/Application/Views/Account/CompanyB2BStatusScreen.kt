@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -91,7 +93,7 @@ fun CompanyB2BStatusScreen(
                             icon = Icons.Outlined.WorkspacePremium
                         ) {
                             CompanyB2BStatusInfoRow(
-                                title = "Şirket Adı",
+                                title = BBLocalization.Current.Get(key = "b53f56a9-8810-48b1-9046-339bc654167d", fallback = "Şirket Adı"),
                                 value = company.CompanyName.ifBlank { "-" },
                                 icon = Icons.Outlined.Business
                             )
@@ -99,7 +101,7 @@ fun CompanyB2BStatusScreen(
                             CompanyB2BStatusDivider()
 
                             CompanyB2BStatusInfoRow(
-                                title = "Listeleme Durumu",
+                                title = BBLocalization.Current.Get(key = "9ecdd9a2-74ae-487a-a86c-53c290391f3a", fallback = "Listeleme Durumu"),
                                 value = if (company.B2bIndex) "B2B Index Aktif" else "B2B Index Kapalı",
                                 icon = Icons.Outlined.Verified
                             )
@@ -107,7 +109,7 @@ fun CompanyB2BStatusScreen(
                             CompanyB2BStatusDivider()
 
                             CompanyB2BStatusInfoRow(
-                                title = "Abonelik Tipi",
+                                title = BBLocalization.Current.Get(key = "80de5ea4-3edc-40a7-a9c2-fd86ec8f75dc", fallback = "Abonelik Tipi"),
                                 value = subscription.GetSubscriptionTitle(),
                                 icon = Icons.Outlined.Storefront
                             )
@@ -276,7 +278,7 @@ private fun CompanyB2BStatusStatsGrid(company: CompanyDTO, subscription: MemberS
             CompanyB2BStatusStatCard(
                 modifier = Modifier.weight(1f),
                 icon = Icons.Outlined.Storefront,
-                label = "Abonelik",
+                label = BBLocalization.Current.Get(key = "b7249890-2e15-4455-9c2f-f0f02632d757", fallback = "Abonelik"),
                 value = subscription?.SubscriptionPlanTypeName?.ifBlank { "-" } ?: "-"
             )
         }
@@ -292,7 +294,7 @@ private fun CompanyB2BStatusStatsGrid(company: CompanyDTO, subscription: MemberS
             CompanyB2BStatusStatCard(
                 modifier = Modifier.weight(1f),
                 icon = Icons.Outlined.DateRange,
-                label = "Kuruluş",
+                label = BBLocalization.Current.Get(key = "e2ccaa2a-0c9b-48fd-9d01-7b4194002eca", fallback = "Kuruluş"),
                 value = company.YearEstablished.ifBlank { "-" }
             )
         }
@@ -423,7 +425,7 @@ private fun CompanyB2BManagementPanelCard(onClick: () -> Unit) {
 
             Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)) {
                 Text(
-                    text = "B2B Yönetim Paneline Git",
+                    text = BBLocalization.Current.Get(key = "f62aafe4-a920-4958-8c13-639221a4fd63", fallback = "B2B Yönetim Paneline Git"),
                     style = BbTypography.titleSmall,
                     color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
@@ -477,7 +479,7 @@ private fun CompanyB2BStatusErrorState(message: String, onRetryClick: () -> Unit
                 modifier = Modifier.size(BBIcon.Section)
             )
             Text(text = message, style = BbTypography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            BbButton(text = "Tekrar Dene", onClick = onRetryClick, variant = BbButtonVariant.Primary, size = BbButtonSize.Small)
+            BbButton(text = BBLocalization.Current.Get(key = "9d1ce783-da20-464b-9203-cd1ce09918c6", fallback = "Tekrar Dene"), onClick = onRetryClick, variant = BbButtonVariant.Primary, size = BbButtonSize.Small)
         }
     }
 }
@@ -497,7 +499,7 @@ private fun CompanyB2BStatusNotFoundState(onRetryClick: () -> Unit) {
                 modifier = Modifier.size(BBIcon.Section)
             )
             Text(text = "Firma bilgisi bulunamadı", style = BbTypography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
-            BbButton(text = "Tekrar Dene", onClick = onRetryClick, variant = BbButtonVariant.Primary, size = BbButtonSize.Small)
+            BbButton(text = BBLocalization.Current.Get(key = "9d1ce783-da20-464b-9203-cd1ce09918c6", fallback = "Tekrar Dene"), onClick = onRetryClick, variant = BbButtonVariant.Primary, size = BbButtonSize.Small)
         }
     }
 }

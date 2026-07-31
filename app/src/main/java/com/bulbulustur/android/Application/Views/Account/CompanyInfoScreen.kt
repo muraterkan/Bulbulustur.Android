@@ -92,45 +92,45 @@ fun CompanyInfoScreen(
                         CompanyInfoSection(title = "Şirket Kimliği", description = "Ünvan, şirket tipi ve kurumsal profil bilgileri.", icon = Icons.Outlined.Badge) {
                             CompanyInfoRow(BBLocalization.Current.Get(key = "295bef89-1d52-45bf-8076-0cb215d76c41", fallback = ""), company.CompanyName.OrDash())
                             CompanyDivider()
-                            CompanyInfoRow("Şirket Tipi", company.CompanyType.OrDash())
+                            CompanyInfoRow(BBLocalization.Current.Get(key = "ce4087e5-47b4-4b6a-a853-d02fc65dfe4f", fallback = "Şirket Tipi"), company.CompanyType.OrDash())
                             CompanyDivider()
-                            CompanyInfoRow("Abonelik Planı", subscription.GetSubscriptionTitle())
+                            CompanyInfoRow(BBLocalization.Current.Get(key = "bf84d3d3-4da3-41f0-bb97-5f7952d7d373", fallback = "Abonelik Planı"), subscription.GetSubscriptionTitle())
                             CompanyDivider()
                             CompanyInfoRow(BBLocalization.Current.Get(key = "2439777a-0431-4929-9600-07df5586ad67", fallback = ""), company.YearEstablished.OrDash())
                         }
                     }
                     item {
                         CompanyInfoSection(title = "Adres Bilgileri", description = "Şirketin kayıtlı lokasyon bilgileri.", icon = Icons.Outlined.LocationOn) {
-                            CompanyInfoRow("Adres", company.Address.OrDash())
+                            CompanyInfoRow(BBLocalization.Current.Get(key = "af1da4df-7298-4cd9-b256-371d098b59f7", fallback = "Adres"), company.Address.OrDash())
                             CompanyDivider()
-                            CompanyInfoRow("Ülke", company.CountryName.OrDash())
+                            CompanyInfoRow(BBLocalization.Current.Get(key = "8b04cc2a-5e86-4d4e-bf8c-7dc7bf1be325", fallback = "Ülke"), company.CountryName.OrDash())
                             if (company.CountryState.orEmpty().isNotBlank()) {
                                 CompanyDivider()
-                                CompanyInfoRow("Eyalet / Bölge", company.CountryState.orEmpty())
+                                CompanyInfoRow(BBLocalization.Current.Get(key = "e59fd16b-4f44-42cb-9488-de3a719b46dd", fallback = "Eyalet / Bölge"), company.CountryState.orEmpty())
                             }
                             if (company.CountryDepartment.orEmpty().isNotBlank()) {
                                 CompanyDivider()
                                 CompanyInfoRow("Departman", company.CountryDepartment.orEmpty())
                             }
                             CompanyDivider()
-                            CompanyInfoRow("Şehir", company.CityName.OrDash())
+                            CompanyInfoRow(BBLocalization.Current.Get(key = "a4936d53-1fc1-4e87-a255-2a4906748a61", fallback = "Şehir"), company.CityName.OrDash())
                             CompanyDivider()
-                            CompanyInfoRow("İlçe", company.DistrictName.OrDash())
+                            CompanyInfoRow(BBLocalization.Current.Get(key = "843fedae-4923-4542-9341-9832b4a5f773", fallback = "İlçe"), company.DistrictName.OrDash())
                             CompanyDivider()
-                            CompanyInfoRow("Posta Kodu", company.PostCode.OrDash())
+                            CompanyInfoRow(BBLocalization.Current.Get(key = "fff66b6e-cf51-4dde-a421-b8ce3df436d0", fallback = "Posta Kodu"), company.PostCode.OrDash())
                         }
                     }
                     item {
                         CompanyInfoSection(title = "Vergi ve Resmi Bilgiler", description = "Fatura ve resmi kayıt süreçlerinde kullanılan bilgiler.", icon = Icons.Outlined.ReceiptLong) {
-                            CompanyInfoRow("Vergi Dairesi", company.TaxOffice.OrDash())
+                            CompanyInfoRow(BBLocalization.Current.Get(key = "8c42e65e-d7a4-4ff2-9dce-e4073d4dc335", fallback = "Vergi Dairesi"), company.TaxOffice.OrDash())
                             CompanyDivider()
                             CompanyInfoRow(BBLocalization.Current.Get(key = "0f94c70f-fe11-4d18-8561-64d8499637df", fallback = "Vergi Numarası"), company.TaxId.OrDash())
                             CompanyDivider()
-                            CompanyInfoRow("MERSİS", company.MersisNo.OrDash())
+                            CompanyInfoRow(BBLocalization.Current.Get(key = "abc9ea53-da8a-4a53-bcc1-46dc5f9f9461", fallback = "MERSİS"), company.MersisNo.OrDash())
                             CompanyDivider()
                             CompanyInfoRow("KEP", company.KepAddress.OrDash())
                             CompanyDivider()
-                            CompanyInfoRow("Web Sitesi", company.Url.OrDash())
+                            CompanyInfoRow(BBLocalization.Current.Get(key = "a8fcc3ce-6d1a-40be-b752-974c9b774d7b", fallback = "Web Sitesi"), company.Url.OrDash())
                             CompanyDivider()
                             CompanyInfoRow(BBLocalization.Current.Get(key = "1246f9ff-205d-4d92-84ee-7c8c7a3f2d46", fallback = "E-Posta"), company.Email.OrDash())
                         }
@@ -164,7 +164,7 @@ private fun CompanyHeroCard(company: CompanyDTO) {
                 }
             }
             Row(horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2), verticalAlignment = Alignment.CenterVertically) {
-                CompanyHeroBadge(text = if (company.Verified) "Doğrulanmış Firma" else "Doğrulama Bekliyor", icon = Icons.Outlined.Verified)
+                CompanyHeroBadge(text = if (company.Verified) BBLocalization.Current.Get(key = "c6a0ff62-8828-475f-b553-37effb42efe6", fallback = "Doğrulanmış Firma") else "Doğrulama Bekliyor", icon = Icons.Outlined.Verified)
                 CompanyHeroBadge(text = if (company.B2bIndex) "B2B Aktif" else "B2B Kapalı", icon = Icons.Outlined.Storefront)
             }
         }
@@ -187,12 +187,12 @@ private fun CompanyHeroBadge(text: String, icon: ImageVector) {
 private fun CompanyStatsGrid(company: CompanyDTO, subscription: MemberSubscriptionDTO?) {
     Column(verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)) {
-            CompanyStatCard(modifier = Modifier.weight(1f), icon = Icons.Outlined.Storefront, label = "Abonelik Planı", value = subscription?.SubscriptionPlanTypeName?.OrDash() ?: "-")
+            CompanyStatCard(modifier = Modifier.weight(1f), icon = Icons.Outlined.Storefront, label = BBLocalization.Current.Get(key = "bf84d3d3-4da3-41f0-bb97-5f7952d7d373", fallback = "Abonelik Planı"), value = subscription?.SubscriptionPlanTypeName?.OrDash() ?: "-")
             CompanyStatCard(modifier = Modifier.weight(1f), icon = Icons.Outlined.HomeWork, label = BBLocalization.Current.Get(key = "2439777a-0431-4929-9600-07df5586ad67", fallback = ""), value = company.YearEstablished.OrDash())
         }
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)) {
             CompanyStatCard(modifier = Modifier.weight(1f), icon = Icons.Outlined.LocationOn, label = "Ülke / Şehir", value = listOf(company.CountryName.orEmpty(), company.CityName.orEmpty()).filter { it.isNotBlank() }.joinToString(" / ").ifBlank { "-" })
-            CompanyStatCard(modifier = Modifier.weight(1f), icon = Icons.Outlined.Verified, label = "Profil Durumu", value = if (company.StatusId > 0) "Aktif" else "Pasif")
+            CompanyStatCard(modifier = Modifier.weight(1f), icon = Icons.Outlined.Verified, label = BBLocalization.Current.Get(key = "9e5eef88-553b-43a2-b0d2-25609b8132af", fallback = "Profil Durumu"), value = if (company.StatusId > 0) "Aktif" else "Pasif")
         }
     }
 }
@@ -290,7 +290,7 @@ private fun CompanyErrorState(message: String, onRetryClick: () -> Unit) {
         Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)) {
             Icon(imageVector = Icons.Outlined.ErrorOutline, contentDescription = null, tint = MaterialTheme.colorScheme.error, modifier = Modifier.size(BBIcon.Section))
             Text(text = message, style = BbTypography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            BbButton(text = "Tekrar Dene", onClick = onRetryClick, variant = BbButtonVariant.Primary, size = BbButtonSize.Small)
+            BbButton(text = BBLocalization.Current.Get(key = "9d1ce783-da20-464b-9203-cd1ce09918c6", fallback = "Tekrar Dene"), onClick = onRetryClick, variant = BbButtonVariant.Primary, size = BbButtonSize.Small)
         }
     }
 }
@@ -302,7 +302,7 @@ private fun CompanyNotFoundState(onRetryClick: () -> Unit) {
             Icon(imageVector = Icons.Outlined.Business, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(BBIcon.Section))
             Text(text = "Firma bilgisi bulunamadı", style = BbTypography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
             Text(text = "Hesabınıza bağlı şirket kaydı bulunamadı veya görüntülenemiyor.", style = BbTypography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            BbButton(text = "Tekrar Dene", onClick = onRetryClick, variant = BbButtonVariant.Primary, size = BbButtonSize.Small)
+            BbButton(text = BBLocalization.Current.Get(key = "9d1ce783-da20-464b-9203-cd1ce09918c6", fallback = "Tekrar Dene"), onClick = onRetryClick, variant = BbButtonVariant.Primary, size = BbButtonSize.Small)
         }
     }
 }
@@ -332,7 +332,7 @@ private fun MemberSubscriptionDTO?.GetSubscriptionTitle(): String {
 
 private fun StoreRequestDTO?.GetB2CActionTitle(): String {
     return when (this?.StoreConfirmation) {
-        1, 2 -> "Başvuru Durumum"
+        1, 2 -> BBLocalization.Current.Get(key = "00b7c24a-f7aa-46d3-9678-70aa0eda3160", fallback = "Başvuru Durumum")
         3 -> "B2C Mağazamı Yönet"
         else -> "Perakende Mağaza Talebi Oluştur"
     }

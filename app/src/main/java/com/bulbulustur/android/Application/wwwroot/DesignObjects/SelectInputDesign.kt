@@ -403,7 +403,7 @@ fun BbSearchableSelectInput(
                         text = {
                             Text(
                                 text =
-                                    "Sonuç bulunamadı.",
+                                    BBLocalization.Current.Get(key = "8340c3dd-741e-4cdb-8080-b2a6f342c24e", fallback = "Sonuç bulunamadı."),
                                 style =
                                     MaterialTheme.typography.bodyMedium,
                                 color =

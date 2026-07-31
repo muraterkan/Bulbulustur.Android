@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Company
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -188,7 +190,7 @@ private fun CompanyListHero(
             )
 
             BbButton(
-                text = "Talep oluştur",
+                text = BBLocalization.Current.Get(key = "fcb264e8-a984-415f-b971-69ea0a531bd9", fallback = "Talep oluştur"),
                 onClick = onRfqCreateClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Primary,
@@ -351,14 +353,14 @@ private fun CompanyListCard(
                 )
             ) {
                 CompanySmallActionCard(
-                    title = "Ürünler",
+                    title = BBLocalization.Current.Get(key = "6cf7b92f-05e7-4ac7-be8c-ce98d8bf20c5", fallback = "Ürünler"),
                     icon = Icons.Outlined.Inventory2,
                     modifier = Modifier.weight(1f),
                     onClick = onProductListClick
                 )
 
                 CompanySmallActionCard(
-                    title = "İletişime geç",
+                    title = BBLocalization.Current.Get(key = "a439130c-b2cf-496f-9868-93ef084d9aec", fallback = "İletişime geç"),
                     icon = Icons.Outlined.Mail,
                     modifier = Modifier.weight(1f),
                     onClick = onMessageClick
@@ -422,7 +424,7 @@ private fun CompanyInfoGrid(
             )
 
             CompanyInfoBox(
-                title = "Ticaret sicil",
+                title = BBLocalization.Current.Get(key = "6c84ad65-9bba-4795-a376-efebd24c842f", fallback = "Ticaret sicil"),
                 value = company.TradeRegistryNumber,
                 modifier = Modifier.weight(1f)
             )
@@ -435,7 +437,7 @@ private fun CompanyInfoGrid(
             )
         ) {
             CompanyInfoBox(
-                title = "Yetenekler",
+                title = BBLocalization.Current.Get(key = "4f1ad3c8-8df8-48f2-b2c2-7b128d0f0e28", fallback = "Yetenekler"),
                 value = company.Capability,
                 modifier = Modifier.weight(1f)
             )
@@ -563,7 +565,7 @@ private fun CompanyListBottomCallout(
 
             Icon(
                 imageVector = Icons.Outlined.ChevronRight,
-                contentDescription = "Talep oluştur",
+                contentDescription = BBLocalization.Current.Get(key = "fcb264e8-a984-415f-b971-69ea0a531bd9", fallback = "Talep oluştur"),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
@@ -616,7 +618,7 @@ data class CompanyListItem(
 private fun getCompanyFilterNames(): List<String> {
     return listOf(
         "Tüm firmalar",
-        "Doğrulanmış",
+        BBLocalization.Current.Get(key = "c6a0ff62-8828-475f-b553-37effb42efe6", fallback = "Doğrulanmış"),
         "Üretici",
         "Toptancı",
         "İhracatçı",
@@ -632,7 +634,7 @@ private fun getCompanyListItems(): List<CompanyListItem> {
             CompanyId = 1,
             Name = "Bulbulustur İnternet Teknolojileri ve Tic. A.Ş.",
             Description = "Yazılım, dijital dönüşüm ve ticaret altyapıları alanında çözüm sağlayan firma.",
-            Country = "Türkiye",
+            Country = BBLocalization.Current.Get(key = "5365b492-6a1c-4b46-b5c0-b50cbfdd17a8", fallback = "Türkiye"),
             City = "İstanbul",
             Rating = "4,2",
             TradeRegistryNumber = "-",
@@ -647,7 +649,7 @@ private fun getCompanyListItems(): List<CompanyListItem> {
             CompanyId = 2,
             Name = "Anadolu Ambalaj Sanayi",
             Description = "Koli, kutu, poşet ve endüstriyel ambalaj ürünleri tedarikçisi.",
-            Country = "Türkiye",
+            Country = BBLocalization.Current.Get(key = "5365b492-6a1c-4b46-b5c0-b50cbfdd17a8", fallback = "Türkiye"),
             City = "Kocaeli",
             Rating = "4,6",
             TradeRegistryNumber = "245981",
@@ -662,12 +664,12 @@ private fun getCompanyListItems(): List<CompanyListItem> {
             CompanyId = 3,
             Name = "Marmara Endüstriyel Tedarik",
             Description = "Sanayi, depo, bakım ve üretim hattı sarf malzemeleri sağlar.",
-            Country = "Türkiye",
+            Country = BBLocalization.Current.Get(key = "5365b492-6a1c-4b46-b5c0-b50cbfdd17a8", fallback = "Türkiye"),
             City = "Bursa",
             Rating = "4,1",
             TradeRegistryNumber = "118204",
             Capability = "Toplu tedarik, sözleşmeli satış, hızlı termin",
-            BusinessModel = "Tedarikçi",
+            BusinessModel = BBLocalization.Current.Get(key = "95ab742c-6bb3-47da-bb8b-c37b3a979c24", fallback = "Tedarikçi"),
             ProductCount = 31,
             LogoText = "MET",
             IsVerified = false,

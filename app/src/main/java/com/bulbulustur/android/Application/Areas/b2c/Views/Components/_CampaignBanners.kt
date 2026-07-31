@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Home.Components
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -58,7 +60,7 @@ fun CampaignBanners(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Kampanyalar",
+                    text = BBLocalization.Current.Get(key = "e2812624-6bbc-4034-9a09-6570540d0785", fallback = "Kampanyalar"),
                     style = MaterialTheme.typography.labelMedium,
                     color = BBColors.Yellow.Yellow700,
                     fontWeight = FontWeight.SemiBold
@@ -80,7 +82,7 @@ fun CampaignBanners(
 
             TextButton(onClick = onViewAllClick) {
                 Text(
-                    text = "Tüm Kampanyalar",
+                    text = BBLocalization.Current.Get(key = "e2812624-6bbc-4034-9a09-6570540d0785", fallback = "Tüm Kampanyalar"),
                     style = MaterialTheme.typography.labelLarge
                 )
 
@@ -149,7 +151,7 @@ private fun CampaignBannerCard(
                     )
 
                     Text(
-                        text = "Kampanya",
+                        text = BBLocalization.Current.Get(key = "b66af534-b950-4603-8fb6-caf6ca5be73d", fallback = "Kampanya"),
                         style = MaterialTheme.typography.labelMedium,
                         color = BBColors.Orange.Orange700,
                         fontWeight = FontWeight.SemiBold

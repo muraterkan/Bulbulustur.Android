@@ -82,7 +82,7 @@ fun BuyerBottomNavigation(
             ) {
                 BuyerBottomNavigationItemView(
                     selected = selectedItem == BuyerBottomNavigationItem.Home,
-                    label = if (mode == EBuyerMode.Retail) "Ana Sayfa" else "Toptan",
+                    label = if (mode == EBuyerMode.Retail) BBLocalization.Current.Get(key = "fe9c56ac-dbc2-4fc6-afe0-bb3f7cf1f8f7", fallback = "Ana Sayfa") else "Toptan",
                     icon = {
                         Icon(
                             imageVector = Icons.Outlined.Home,
@@ -101,7 +101,7 @@ fun BuyerBottomNavigation(
 
                 BuyerBottomNavigationItemView(
                     selected = selectedItem == BuyerBottomNavigationItem.Menu,
-                    label = "Kategoriler",
+                    label = BBLocalization.Current.Get(key = "9eeb9367-4c7f-4740-b2c6-1badfe7798f2", fallback = "Kategoriler"),
                     icon = {
                         Icon(
                             imageVector = Icons.Outlined.Category,

@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Profile
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import com.bulbulustur.android.Application.Views.Profile.Components.BbProfileHeroCard
 
 import com.bulbulustur.android.Application.Views.Profile.Components.BbProfileStickySaveBar
@@ -522,7 +524,7 @@ private fun ProfileMeasurementBottomBar(
                     horizontal = BBSpacing.PageHorizontal,
                     vertical = BBSpacing.Space4
                 ),
-            text = "Kaydet",
+            text = BBLocalization.Current.Get(key = "c70b208b-86cd-4955-b8ef-f5b5ee7bc0cc", fallback = "Kaydet"),
             variant = BbButtonVariant.Primary,
             enabled = enabled,
             isLoading = isLoading,

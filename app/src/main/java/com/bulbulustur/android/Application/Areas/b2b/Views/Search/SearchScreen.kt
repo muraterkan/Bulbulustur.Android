@@ -231,7 +231,7 @@ private fun WholesaleSearchModeCards(
         ) {
             WholesaleSearchModeCard(
                 title = "Ürünlerde ara",
-                description = "Toptan ürün listesi",
+                description = BBLocalization.Current.Get(key = "79b4a21a-b9a4-47e9-8931-f5d66750cea0", fallback = "Toptan ürün listesi"),
                 icon = Icons.Outlined.Inventory2,
                 modifier = Modifier.weight(1f),
                 onClick = {

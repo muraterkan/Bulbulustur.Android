@@ -22,7 +22,9 @@ object BBLocalization {
         state: LocalizationState
     ) {
         SideEffect {
-            CurrentState = state
+            if (CurrentState != state) {
+                CurrentState = state
+            }
         }
     }
 }

@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Shared.Components
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -124,7 +126,7 @@ fun BbProductCard(
                 )
 
                 BbButton(
-                    text = "Sepete Ekle",
+                    text = BBLocalization.Current.Get(key = "9a748489-8d57-4bc5-becc-0937717d80df", fallback = "Sepete Ekle"),
                     onClick = onAddToBasketClick,
                     modifier = Modifier.fillMaxWidth(),
                     variant = BbButtonVariant.Primary,

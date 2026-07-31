@@ -55,7 +55,7 @@ fun FollowedStoreListScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Takip Edilen Mağazalar",
+                title = BBLocalization.Current.Get(key = "e24b9e8c-e78f-48fd-a557-b7b5d349bdfa", fallback = "Takip Edilen Mağazalar"),
                 onBackClick = onBackClick
             )
         }
@@ -292,7 +292,7 @@ private fun FollowedStoreInlineError(
             )
 
             BbButton(
-                text = "Tekrar Dene",
+                text = BBLocalization.Current.Get(key = "9d1ce783-da20-464b-9203-cd1ce09918c6", fallback = "Tekrar Dene"),
                 onClick = onRetryClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Light,
@@ -341,7 +341,7 @@ private fun FollowedStoreErrorState(
                 )
 
                 BbButton(
-                    text = "Tekrar Dene",
+                    text = BBLocalization.Current.Get(key = "9d1ce783-da20-464b-9203-cd1ce09918c6", fallback = "Tekrar Dene"),
                     onClick = onRetryClick,
                     modifier = Modifier.fillMaxWidth(),
                     variant = BbButtonVariant.Light,

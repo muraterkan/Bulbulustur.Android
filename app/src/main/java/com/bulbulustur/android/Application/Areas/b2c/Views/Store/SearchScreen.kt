@@ -274,7 +274,7 @@ private fun SearchInputArea(
         ),
         trailingIcon = {
             Text(
-                text = "Ara",
+                text = BBLocalization.Current.Get(key = "b62c3162-72af-439f-a20b-c4ca58f51035", fallback = "Ara"),
                 modifier = Modifier
                     .padding(end = BBSpacing.Space3)
                     .clickable {
@@ -322,7 +322,7 @@ private fun RecentSearchSection(
         modifier = Modifier.fillMaxWidth()
     ) {
         SearchSectionTitle(
-            title = "Son Aramalar",
+            title = BBLocalization.Current.Get(key = "ff16d4fd-2eec-49e2-b43b-cdb4a15f8ce2", fallback = "Son Aramalar"),
             description = "Tek dokunuşla tekrar ara."
         )
 
@@ -613,7 +613,7 @@ enum class RetailSearchType(
     Product(BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = "")),
     Category(BBLocalization.Current.Get(key = "1a132fdc-096f-42d7-835d-96b0a17b3675", fallback = "")),
     Brand(BBLocalization.Current.Get(key = "3f8b4f8b-6cba-43e5-bc5c-b9c07fb7208e", fallback = "")),
-    Store("Mağaza")
+    Store(BBLocalization.Current.Get(key = "a4bd79dd-e7ee-4407-9e7d-00582840c43a", fallback = "Mağaza"))
 }
 
 data class RetailSearchScreenData(

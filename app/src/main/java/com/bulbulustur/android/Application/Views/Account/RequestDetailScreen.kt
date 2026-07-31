@@ -68,7 +68,7 @@ fun RequestDetailScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Talep Detayı",
+                title = BBLocalization.Current.Get(key = "c179b226-774a-4b79-bcc5-5b4fbb580ae6", fallback = "Talep Detayı"),
                 onBackClick = onBackClick
             )
         }
@@ -227,7 +227,7 @@ private fun RequestDetailProductCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
             RequestDetailSectionTitle(
-                title = "Ürün Bilgileri",
+                title = BBLocalization.Current.Get(key = "90509413-3f80-4a57-b43b-21738dc74b50", fallback = "Ürün Bilgileri"),
                 subtitle = "Talebe konu ürün ve satıcı bilgileri"
             )
 
@@ -302,7 +302,7 @@ private fun RequestDetailProductCard(
 
                 if (request.StoreId > 0) {
                     BbButton(
-                        text = "Mağaza",
+                        text = BBLocalization.Current.Get(key = "a4bd79dd-e7ee-4407-9e7d-00582840c43a", fallback = "Mağaza"),
                         onClick = {
                             onStoreClick(request.StoreId)
                         },
@@ -336,7 +336,7 @@ private fun RequestDetailDescriptionCard(request: ReturnRequestDTO) {
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
         ) {
             Text(
-                text = "Açıklama",
+                text = BBLocalization.Current.Get(key = "db0a3356-2fa4-4c1f-9432-2c299ac52b92", fallback = "Açıklama"),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -367,7 +367,7 @@ private fun RequestDetailPropertiesCard(request: ReturnRequestDTO) {
             )
 
             RequestDetailPropertyRow(
-                title = "Renk",
+                title = BBLocalization.Current.Get(key = "846acd44-dbbf-4aa8-a537-cac0de8a1ef8", fallback = "Renk"),
                 value = request.Color.OrDash()
             )
 
@@ -388,7 +388,7 @@ private fun RequestDetailPropertiesCard(request: ReturnRequestDTO) {
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
             RequestDetailPropertyRow(
-                title = "Aksesuar",
+                title = BBLocalization.Current.Get(key = "053ae8f0-d8f8-46b1-b062-bc65615ce7a1", fallback = "Aksesuar"),
                 value = if (request.HaveAccessory == 1) "Mevcut" else "Mevcut Değil"
             )
         }
@@ -491,7 +491,7 @@ private fun RequestDetailActionsCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             RequestDetailSectionTitle(
-                title = "İşlemler",
+                title = BBLocalization.Current.Get(key = "be05ea07-1402-4690-9e84-ed7188006edb", fallback = "İşlemler"),
                 subtitle = "Talebe bağlı hızlı aksiyonlar"
             )
 
@@ -711,7 +711,7 @@ private fun RequestDetailErrorState(
                 )
 
                 BbButton(
-                    text = "Tekrar Dene",
+                    text = BBLocalization.Current.Get(key = "9d1ce783-da20-464b-9203-cd1ce09918c6", fallback = "Tekrar Dene"),
                     onClick = onRetryClick,
                     variant = BbButtonVariant.Primary,
                     size = BbButtonSize.Medium,
@@ -772,9 +772,9 @@ private fun GetReturnRequestDetailStatusFallback(statusId: Int): String {
     return when (statusId) {
         1 -> "Talep Alındı"
         2 -> "İncelemede"
-        3 -> "Onaylandı"
+        3 -> BBLocalization.Current.Get(key = "f160b198-ab2d-4515-8126-2ee3143329ec", fallback = "Onaylandı")
         4 -> "Reddedildi"
-        5 -> "Tamamlandı"
+        5 -> BBLocalization.Current.Get(key = "60ae9048-3404-4ea6-a789-f75e02e0b4ea", fallback = "Tamamlandı")
         else -> "Talep Alındı"
     }
 }

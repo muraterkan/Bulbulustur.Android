@@ -1063,7 +1063,7 @@ private fun RetailProductDetailVariantCard(
                 )
 
                 Text(
-                    text = "Seçenekler",
+                    text = BBLocalization.Current.Get(key = "bcbd7c30-5bcc-4ca7-9a2d-84c906b03042", fallback = "Seçenekler"),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -1103,7 +1103,7 @@ private fun RetailProductDetailVariantCard(
                         )
 
                         Text(
-                            text = "Seçenekler",
+                            text = BBLocalization.Current.Get(key = "bcbd7c30-5bcc-4ca7-9a2d-84c906b03042", fallback = "Seçenekler"),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -1124,7 +1124,7 @@ private fun RetailProductDetailVariantCard(
                         )
 
                         Text(
-                            text = "Ölçü Rehberi",
+                            text = BBLocalization.Current.Get(key = "6325a788-9f55-423d-8366-2b15a8b575e7", fallback = "Ölçü Rehberi"),
                             style = MaterialTheme.typography.labelMedium,
                             color = BBColors.Success,
                             fontWeight = FontWeight.Bold
@@ -1157,7 +1157,7 @@ private fun RetailProductDetailVariantCard(
                     modifier = Modifier.weight(1f)
                 ) {
                     Text(
-                        text = "Adet",
+                        text = BBLocalization.Current.Get(key = "dc8b8703-6e91-4b96-a249-95a161b7e7c3", fallback = "Adet"),
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold
@@ -1500,7 +1500,7 @@ private fun RetailProductPriceCard(
                     text = if (product.isInStock) {
                         product.stockText
                     } else {
-                        "Stokta Yok"
+                        BBLocalization.Current.Get(key = "bf96435f-90fa-498f-a617-9f213f4f1f8c", fallback = "Stokta Yok")
                     },
                     icon = Icons.Outlined.Inventory2
                 )
@@ -1597,21 +1597,21 @@ private fun RetailProductStockAlertCard(
                         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                     ) {
                         Text(
-                            text = "Stokta Yok",
+                            text = BBLocalization.Current.Get(key = "bf96435f-90fa-498f-a617-9f213f4f1f8c", fallback = "Stokta Yok"),
                             style = MaterialTheme.typography.titleSmall,
                             color = MaterialTheme.colorScheme.onSurface,
                             fontWeight = FontWeight.Bold
                         )
 
                         Text(
-                            text = "Bu ürün tekrar stoğa girdiğinde haberdar olabilirsin.",
+                            text = BBLocalization.Current.Get(key = "e587dd2b-dcb8-43f5-a93a-6fe16d435316", fallback = "Bu ürün tekrar stoğa girdiğinde haberdar olabilirsin."),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
 
                     Text(
-                        text = "Stok Alarmı",
+                        text = BBLocalization.Current.Get(key = "67669893-776b-4074-8667-8691f771b7db", fallback = "Stok Alarmı"),
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold
@@ -1647,7 +1647,7 @@ private fun RetailProductStockAlertCard(
                     )
 
                     Text(
-                        text = "Stoğa Gelince Haber Ver",
+                        text = BBLocalization.Current.Get(key = "cd154da7-10a9-491c-bead-5b46f55ef32e", fallback = "Stoğa Gelince Haber Ver"),
                         style = MaterialTheme.typography.labelLarge,
                         color = BBColors.White,
                         fontWeight = FontWeight.Bold
@@ -1677,7 +1677,7 @@ private fun RetailProductTrustLinksCard(
             modifier = Modifier.fillMaxWidth()
         ) {
             RetailProductTrustLinkRow(
-                title = "Daha Düşük Fiyat mı Gördünüz?",
+                title = BBLocalization.Current.Get(key = "eec1b9fa-9533-4761-873d-da4159c457d1", fallback = "Daha Düşük Fiyat mı Gördünüz?"),
                 icon = Icons.Outlined.WarningAmber,
                 onClick = onLowerPriceClick
             )
@@ -1685,7 +1685,7 @@ private fun RetailProductTrustLinksCard(
             RetailDashedDivider()
 
             RetailProductTrustLinkRow(
-                title = "Kötüye Kullanımı Bildir",
+                title = BBLocalization.Current.Get(key = "c72389b9-1d66-48a0-b270-0d8f6f3c777a", fallback = "Kötüye Kullanımı Bildir"),
                 icon = Icons.Outlined.Report,
                 onClick = onReportAbuseClick
             )
@@ -1693,7 +1693,7 @@ private fun RetailProductTrustLinksCard(
             RetailDashedDivider()
 
             RetailProductTrustLinkRow(
-                title = "İptal ve İade Koşulları",
+                title = BBLocalization.Current.Get(key = "67491b65-6239-4f4b-90ad-c79f7644da33", fallback = "İptal ve İade Koşulları"),
                 icon = Icons.Outlined.VerifiedUser,
                 onClick = onReturnPolicyClick
             )
@@ -1793,7 +1793,7 @@ private fun RetailSellerProductsCarousel(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
     ) {
         RetailSectionTitle(
-            title = "Satıcının Diğer Ürünleri",
+            title = BBLocalization.Current.Get(key = "ad7af87b-c03a-46ef-b824-d0a5bbcf4b5c", fallback = "Satıcının Diğer Ürünleri"),
             actionText = "Mağazaya Git",
             onActionClick = onStoreClick
         )
@@ -1944,7 +1944,7 @@ private fun RetailReviewCarousel(
     ) {
         RetailSectionTitle(
             title = "Ürün Değerlendirmeleri",
-            actionText = "Tüm Yorumlar",
+            actionText = BBLocalization.Current.Get(key = "6bfa7925-24fa-4094-b338-c698d6ad5a5a", fallback = "Tüm Yorumlar"),
             onActionClick = onReviewClick
         )
 
@@ -2154,7 +2154,7 @@ private fun RetailProductDetailStoreCard(
 
                     if (store.isVerified) {
                         RetailProductDetailPill(
-                            text = "Doğrulanmış",
+                            text = BBLocalization.Current.Get(key = "c6a0ff62-8828-475f-b553-37effb42efe6", fallback = "Doğrulanmış"),
                             icon = Icons.Outlined.Verified
                         )
                     }
@@ -2193,7 +2193,7 @@ private fun RetailProductDetailQuickActions(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
     ) {
         RetailProductDetailActionRow(
-            title = "Diğer Satıcılar",
+            title = BBLocalization.Current.Get(key = "ad7115b0-2a8e-4c7f-830b-4ebadec8f0c1", fallback = "Diğer Satıcılar"),
             subtitle = if (otherSellerCount > 0) {
                 "$otherSellerCount Satıcı daha bu ürünü sunuyor"
             } else {
@@ -2203,7 +2203,7 @@ private fun RetailProductDetailQuickActions(
         )
 
         RetailProductDetailActionRow(
-            title = "Soru & Cevap",
+            title = BBLocalization.Current.Get(key = "a72573eb-7c00-42d1-8489-8302f0f33a23", fallback = "Soru & Cevap"),
             subtitle = if (product.questionCount > 0) {
                 "${product.questionCount} Ürün sorusu"
             } else {
@@ -2274,7 +2274,7 @@ private fun RetailProductDescriptionSection(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
         ) {
             Text(
-                text = "Ürün Açıklaması",
+                text = BBLocalization.Current.Get(key = "eb7e1e0a-57ec-49bf-9968-61f0e5b75e6c", fallback = "Ürün Açıklaması"),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
@@ -2406,7 +2406,7 @@ private fun RetailProductDetailBottomBar(
                     horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
                 ) {
                     RetailProductBottomActionButton(
-                        text = "Sepete Ekle",
+                        text = BBLocalization.Current.Get(key = "9a748489-8d57-4bc5-becc-0937717d80df", fallback = "Sepete Ekle"),
                         onClick = onAddToBasketClick,
                         modifier = Modifier.weight(1f),
                         containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -2427,7 +2427,7 @@ private fun RetailProductDetailBottomBar(
                 }
             } else {
                 RetailProductBottomActionButton(
-                    text = "Stoğa Gelince Haber Ver",
+                    text = BBLocalization.Current.Get(key = "cd154da7-10a9-491c-bead-5b46f55ef32e", fallback = "Stoğa Gelince Haber Ver"),
                     onClick = onStockAlarmClick,
                     modifier = Modifier.fillMaxWidth(),
                     containerColor = BBColors.Success,
@@ -2624,7 +2624,7 @@ private fun RetailSheetContainer(
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Close,
-                        contentDescription = "Kapat",
+                        contentDescription = BBLocalization.Current.Get(key = "ca9452ab-b39e-4b65-b19b-c7e2b287bfaf", fallback = "Kapat"),
                         tint = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.size(BBIcon.SizeMd)
                     )
@@ -2641,13 +2641,13 @@ private fun RetailSizeGuideSheet(
     onCloseClick: () -> Unit
 ) {
     RetailSheetContainer(
-        title = "Ölçü Rehberi",
+        title = BBLocalization.Current.Get(key = "6325a788-9f55-423d-8366-2b15a8b575e7", fallback = "Ölçü Rehberi"),
         subtitle = "Doğru beden seçimi için kısa rehber",
         icon = Icons.Outlined.Straighten,
         onCloseClick = onCloseClick
     ) {
         RetailSheetInfoBox(
-            title = "Pratik Öneri",
+            title = BBLocalization.Current.Get(key = "b6e9d036-e602-4893-9dd4-63474c7b4bd7", fallback = "Pratik Öneri"),
             description = "Ölçüm yaparken ürünü kullanacağınız koşulları dikkate alın. Ayakkabı için çorap kalınlığı, kıyafet için kullanım rahatlığı önemlidir."
         )
 
@@ -2670,20 +2670,20 @@ private fun RetailReturnPolicySheet(
     onStoreClick: () -> Unit
 ) {
     RetailSheetContainer(
-        title = "İptal ve İade Koşulları",
+        title = BBLocalization.Current.Get(key = "67491b65-6239-4f4b-90ad-c79f7644da33", fallback = "İptal ve İade Koşulları"),
         subtitle = BBLocalization.Current.Get(key = "195d95d5-cb32-4a4c-af20-492c78b45ccd", fallback = ""),
         icon = Icons.Outlined.VerifiedUser,
         onCloseClick = onCloseClick
     ) {
         Text(
-            text = "İptal ve İade Süreci",
+            text = BBLocalization.Current.Get(key = "eca6edae-8391-4983-a6df-7fa4c5f764c2", fallback = "İptal ve İade Süreci"),
             style = MaterialTheme.typography.titleSmall,
             color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold
         )
 
         Text(
-            text = "Sipariş iptali ve iade süreçleri ürün, satıcı, teslimat durumu ve ilgili mevzuat kapsamında değerlendirilir. İade talebinizi sipariş detayınız üzerinden başlatabilirsiniz.",
+            text = BBLocalization.Current.Get(key = "c39301df-3a53-4f22-8a77-80a6e9a9f9de", fallback = "Sipariş iptali ve iade süreçleri ürün, satıcı, teslimat durumu ve ilgili mevzuat kapsamında değerlendirilir. İade talebinizi sipariş detayınız üzerinden başlatabilirsiniz."),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -2693,7 +2693,7 @@ private fun RetailReturnPolicySheet(
         )
 
         RetailSheetCheckRow(
-            text = "İade koşulları ürün türüne, kullanım durumuna ve satıcı politikalarına göre değişebilir."
+            text = BBLocalization.Current.Get(key = "5558799c-a572-4c77-8196-248890447299", fallback = "İade koşulları ürün türüne, kullanım durumuna ve satıcı politikalarına göre değişebilir.")
         )
 
         RetailSheetCheckRow(
@@ -2730,7 +2730,7 @@ private fun RetailLowerPriceSheet(
     }
 
     RetailSheetContainer(
-        title = "Daha Düşük Fiyat mı Gördünüz?",
+        title = BBLocalization.Current.Get(key = "eec1b9fa-9533-4761-873d-da4159c457d1", fallback = "Daha Düşük Fiyat mı Gördünüz?"),
         subtitle = "Fiyat geri bildirimi",
         icon = Icons.Outlined.WarningAmber,
         onCloseClick = onCloseClick
@@ -2785,7 +2785,7 @@ private fun RetailLowerPriceSheet(
         )
 
         RetailSheetPrimaryButton(
-            text = "Fiyatı Bildir",
+            text = BBLocalization.Current.Get(key = "c2b95a89-cff9-47cc-8c95-52d3c3ab435d", fallback = "Fiyatı Bildir"),
             onClick = onCloseClick
         )
     }
@@ -2813,7 +2813,7 @@ private fun RetailReportAbuseSheet(
     }
 
     RetailSheetContainer(
-        title = "Kötüye Kullanımı Bildir",
+        title = BBLocalization.Current.Get(key = "c72389b9-1d66-48a0-b270-0d8f6f3c777a", fallback = "Kötüye Kullanımı Bildir"),
         subtitle = "Güvenlik ve kalite bildirimi",
         icon = Icons.Outlined.Report,
         onCloseClick = onCloseClick
@@ -4033,7 +4033,7 @@ private fun getRetailProductDetail(
         badgeText = "%20",
         ratingText = "★ 4.8",
         cargoText = "Hızlı Kargo",
-        stockText = "Stokta Var",
+        stockText = BBLocalization.Current.Get(key = "ec4ad593-1712-4c53-9046-77e3a09f0d1a", fallback = "Stokta Var"),
         isInStock = true,
         reviewCount = 126,
         questionCount = 18,

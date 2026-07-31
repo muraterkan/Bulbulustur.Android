@@ -253,7 +253,7 @@ private fun WholesaleHeroCard(
                 )
 
                 BbButton(
-                    text = "Kategoriler",
+                    text = BBLocalization.Current.Get(key = "9eeb9367-4c7f-4740-b2c6-1badfe7798f2", fallback = "Kategoriler"),
                     onClick = onProductListClick,
                     modifier = Modifier.weight(1f),
                     variant = BbButtonVariant.Outline,
@@ -285,7 +285,7 @@ private fun WholesaleTrustRail() {
             WholesaleTrustItem(
                 modifier = Modifier.weight(1f),
                 icon = Icons.Outlined.Verified,
-                title = "Doğrulanmış"
+                title = BBLocalization.Current.Get(key = "c6a0ff62-8828-475f-b553-37effb42efe6", fallback = "Doğrulanmış")
             )
 
             WholesaleTrustItem(
@@ -297,7 +297,7 @@ private fun WholesaleTrustRail() {
             WholesaleTrustItem(
                 modifier = Modifier.weight(1f),
                 icon = Icons.Outlined.Shield,
-                title = "Güvenli"
+                title = BBLocalization.Current.Get(key = "aba99f7e-0b0a-45aa-96b2-6ac03f36582a", fallback = "Güvenli")
             )
         }
     }
@@ -471,7 +471,7 @@ private fun wholesaleActionItems(
             OnClick = onRfqListClick
         ),
         WholesaleHomeActionItem(
-            Title = "Teklif Al",
+            Title = BBLocalization.Current.Get(key = "9aa9e9a4-18b3-427b-943f-36170e46cb37", fallback = "Teklif Al"),
             Description = "Yeni teklif iste",
             Icon = Icons.Outlined.LocalOffer,
             Tint = BBColors.Orange.Orange700,
@@ -488,7 +488,7 @@ private fun wholesaleActionItems(
         ),
         WholesaleHomeActionItem(
             Title = "Numune",
-            Description = "Numune talebi gönder",
+            Description = BBLocalization.Current.Get(key = "a2568540-dd6c-4296-a2a2-0cea6adf103f", fallback = "Numune talebi gönder"),
             Icon = Icons.Outlined.Inventory2,
             Tint = BBColors.Blue.Blue700,
             BackgroundColor = BBColors.Blue.Blue50,

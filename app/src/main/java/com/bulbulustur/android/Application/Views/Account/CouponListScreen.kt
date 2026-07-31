@@ -65,7 +65,7 @@ fun CouponListScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Kuponlarım",
+                title = BBLocalization.Current.Get(key = "fd0f23de-98a8-4544-ac77-1d2ce02750af", fallback = "Kuponlarım"),
                 onBackClick = onBackClick
             )
         }
@@ -165,14 +165,14 @@ private fun CouponCard(coupon: MemberCouponDTO) {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
             ) {
                 CouponInfoBox(
-                    title = "Geçerlilik tarihi",
+                    title = BBLocalization.Current.Get(key = "d7d01e80-f385-4150-8d9d-d6db586b29f7", fallback = "Geçerlilik tarihi"),
                     value = expireDate,
                     icon = Icons.Outlined.CalendarMonth,
                     iconColor = BBColors.Yellow.Yellow800
                 )
 
                 CouponInfoBox(
-                    title = "Kullanım tarihi / sipariş no",
+                    title = BBLocalization.Current.Get(key = "f8b622fc-21cb-47a8-8f64-9c023d9341dd", fallback = "Kullanım tarihi / sipariş no"),
                     value = usageText,
                     icon = Icons.Outlined.ReceiptLong,
                     iconColor = BBColors.Blue.Blue600
@@ -235,7 +235,7 @@ private fun CouponCardHeader(
             )
 
             Text(
-                text = "Miktar",
+                text = BBLocalization.Current.Get(key = "64f1e179-caee-4a60-9500-d35fbc4ed554", fallback = "Miktar"),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -449,7 +449,7 @@ private fun CouponErrorState(
         )
 
         BbButton(
-            text = "Tekrar Dene",
+            text = BBLocalization.Current.Get(key = "9d1ce783-da20-464b-9203-cd1ce09918c6", fallback = "Tekrar Dene"),
             onClick = onRetryClick,
             modifier = Modifier.padding(top = BBSpacing.Space4),
             variant = BbButtonVariant.Primary,
@@ -479,7 +479,7 @@ private fun CouponFeedbackCard(
             )
 
             BbButton(
-                text = "Tekrar Dene",
+                text = BBLocalization.Current.Get(key = "9d1ce783-da20-464b-9203-cd1ce09918c6", fallback = "Tekrar Dene"),
                 onClick = onRetryClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Secondary,

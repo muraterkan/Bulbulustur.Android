@@ -66,7 +66,7 @@ fun ForgotPasswordScreen(
             eyebrow =
                 "Hesap Kurtarma",
             title =
-                "Şifremi Unuttum",
+                BBLocalization.Current.Get(key = "7719d233-45c9-4a08-9de7-e5fc19c7c4f6", fallback = "Şifremi Unuttum"),
             description =
                 if (isSuccessful) {
                     "Şifre yenileme talebiniz alındı."
@@ -256,7 +256,7 @@ fun ForgotPasswordScreen(
             ) {
                 Text(
                     text =
-                        "Giriş Yap",
+                        BBLocalization.Current.Get(key = "72289e9d-49e1-4c2a-8b0b-3ab5a67610a6", fallback = "Giriş Yap"),
                     style =
                         MaterialTheme.typography.labelLarge,
                     fontWeight =
@@ -391,7 +391,7 @@ private fun ResetPasswordInfoBox() {
         ) {
             Text(
                 text =
-                    "Güvenlik notu",
+                    BBLocalization.Current.Get(key = "545e09b0-df75-4578-8b69-d0b818cb0eda", fallback = "Güvenlik notu"),
                 style =
                     MaterialTheme.typography.labelLarge,
                 fontWeight =

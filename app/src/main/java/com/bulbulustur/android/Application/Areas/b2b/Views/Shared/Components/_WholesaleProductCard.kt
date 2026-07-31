@@ -151,7 +151,7 @@ fun WholesaleProductCard(
                 }
 
                 BbButton(
-                    text = "Teklif Al",
+                    text = BBLocalization.Current.Get(key = "9aa9e9a4-18b3-427b-943f-36170e46cb37", fallback = "Teklif Al"),
                     onClick = onRfqClick,
                     modifier = Modifier.fillMaxWidth(),
                     variant = BbButtonVariant.Primary,

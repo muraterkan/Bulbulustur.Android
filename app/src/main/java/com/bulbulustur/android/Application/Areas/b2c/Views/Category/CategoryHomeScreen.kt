@@ -88,7 +88,7 @@ fun RetailCategoryHomeScreen(
                 RetailCategoryHomeSubCategoryItem(
                     id = category.ProductCategoryId,
                     title = category.CategoryName?.takeIf { it.isNotBlank() } ?: BBLocalization.Current.Get(key = "1a132fdc-096f-42d7-835d-96b0a17b3675", fallback = ""),
-                    description = category.Breadcrumb?.takeIf { it.isNotBlank() } ?: "Kategori ürünlerini keşfet",
+                    description = category.Breadcrumb?.takeIf { it.isNotBlank() } ?: BBLocalization.Current.Get(key = "eb31aa30-3912-4a76-ac9b-457c319493f1", fallback = "Kategori ürünlerini keşfet"),
                     icon = Icons.Outlined.Category,
                     backgroundColor = when (index % 4) {
                         0 -> MaterialTheme.colorScheme.primaryContainer
@@ -305,7 +305,7 @@ private fun RetailCategoryHomeHeroCard(
                 )
             ) {
                 BbButton(
-                    text = "Ürünleri Gör",
+                    text = BBLocalization.Current.Get(key = "5e09b1c8-93e6-4e9a-a055-2f556f57d6dc", fallback = "Ürünleri Gör"),
                     onClick = onProductListClick,
                     modifier = Modifier.weight(1f),
                     variant = BbButtonVariant.Dark,
@@ -313,7 +313,7 @@ private fun RetailCategoryHomeHeroCard(
                 )
 
                 BbButton(
-                    text = "Mağazalar",
+                    text = BBLocalization.Current.Get(key = "91be3e9a-09f2-496b-806f-952a02209bb2", fallback = "Mağazalar"),
                     onClick = onStoreClick,
                     modifier = Modifier.weight(1f),
                     variant = BbButtonVariant.Light,
@@ -429,7 +429,7 @@ private fun RetailCategoryHomeTrustStrip() {
         ) {
             RetailCategoryHomeTrustItem(
                 icon = Icons.Outlined.Verified,
-                title = "Güvenli",
+                title = BBLocalization.Current.Get(key = "aba99f7e-0b0a-45aa-96b2-6ac03f36582a", fallback = "Güvenli"),
                 modifier = Modifier.weight(1f)
             )
 
@@ -441,7 +441,7 @@ private fun RetailCategoryHomeTrustStrip() {
 
             RetailCategoryHomeTrustItem(
                 icon = Icons.Outlined.Storefront,
-                title = "Mağazalar",
+                title = BBLocalization.Current.Get(key = "91be3e9a-09f2-496b-806f-952a02209bb2", fallback = "Mağazalar"),
                 modifier = Modifier.weight(1f)
             )
         }
@@ -704,7 +704,7 @@ private enum class RetailCategoryHomeShowcaseTarget {
 private fun getRetailCategoryHomeGateways(): List<RetailCategoryHomeGatewayItem> {
     return listOf(
         RetailCategoryHomeGatewayItem(
-            title = "Ürünler",
+            title = BBLocalization.Current.Get(key = "6cf7b92f-05e7-4ac7-be8c-ce98d8bf20c5", fallback = "Ürünler"),
             description = "Kategori Ürünleri",
             icon = Icons.Outlined.ShoppingBasket,
             backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
@@ -712,7 +712,7 @@ private fun getRetailCategoryHomeGateways(): List<RetailCategoryHomeGatewayItem>
             target = RetailCategoryHomeGatewayTarget.Products
         ),
         RetailCategoryHomeGatewayItem(
-            title = "Mağazalar",
+            title = BBLocalization.Current.Get(key = "91be3e9a-09f2-496b-806f-952a02209bb2", fallback = "Mağazalar"),
             description = "Kategori mağazaları",
             icon = Icons.Outlined.Storefront,
             backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
@@ -720,7 +720,7 @@ private fun getRetailCategoryHomeGateways(): List<RetailCategoryHomeGatewayItem>
             target = RetailCategoryHomeGatewayTarget.Stores
         ),
         RetailCategoryHomeGatewayItem(
-            title = "Favoriler",
+            title = BBLocalization.Current.Get(key = "b4370fd4-885d-41e7-928c-36b693ce3966", fallback = "Favoriler"),
             description = "Beğenilen ürünler",
             icon = Icons.Outlined.FavoriteBorder,
             backgroundColor = MaterialTheme.colorScheme.tertiaryContainer,
@@ -772,7 +772,7 @@ private fun getRetailCategoryHomeSubCategories(): List<RetailCategoryHomeSubCate
 private fun getRetailCategoryHomeShowcases(): List<RetailCategoryHomeShowcaseItem> {
     return listOf(
         RetailCategoryHomeShowcaseItem(
-            title = "Yeni Gelenler",
+            title = BBLocalization.Current.Get(key = "6788b820-f4b2-470b-92f8-7a8470387d4e", fallback = "Yeni Gelenler"),
             description = "Bu kategoriye yeni eklenen ürünleri keşfet.",
             icon = Icons.Outlined.NewReleases,
             backgroundColor = MaterialTheme.colorScheme.primaryContainer,
@@ -780,7 +780,7 @@ private fun getRetailCategoryHomeShowcases(): List<RetailCategoryHomeShowcaseIte
             target = RetailCategoryHomeShowcaseTarget.Products
         ),
         RetailCategoryHomeShowcaseItem(
-            title = "Kampanyalar",
+            title = BBLocalization.Current.Get(key = "e2812624-6bbc-4034-9a09-6570540d0785", fallback = "Kampanyalar"),
             description = "Seçili indirim ve fırsat vitrinlerine bak.",
             icon = Icons.Outlined.LocalOffer,
             backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
@@ -800,7 +800,7 @@ private fun getRetailCategoryHomeShowcases(): List<RetailCategoryHomeShowcaseIte
 
 private fun getRetailCategoryHomePopularSearches(): List<String> {
     return listOf(
-        "Telefon",
+        BBLocalization.Current.Get(key = "cf948c6a-2e6a-4f1e-b77b-13f8d15a1a67", fallback = "Telefon"),
         "Bluetooth kulaklık",
         "Notebook",
         "Akıllı saat",

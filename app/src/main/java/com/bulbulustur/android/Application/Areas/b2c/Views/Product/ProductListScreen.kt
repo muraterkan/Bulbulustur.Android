@@ -143,7 +143,7 @@ fun ProductListScreen(
             when (
                 selectedSortOption
             ) {
-                "En düşük fiyat" -> {
+                BBLocalization.Current.Get(key = "c4fa944e-eb81-40dd-80f6-4209c78db57c", fallback = "En düşük fiyat") -> {
                     searchFilteredProducts.sortedBy { product ->
                         product.Price
                     }
@@ -155,7 +155,7 @@ fun ProductListScreen(
                     }
                 }
 
-                "Yeni gelenler" -> {
+                BBLocalization.Current.Get(key = "6788b820-f4b2-470b-92f8-7a8470387d4e", fallback = "Yeni gelenler") -> {
                     searchFilteredProducts.sortedByDescending { product ->
                         product.InsertedDate
                     }
@@ -171,9 +171,9 @@ fun ProductListScreen(
         remember {
             listOf(
                 "Öne çıkan",
-                "En düşük fiyat",
+                BBLocalization.Current.Get(key = "c4fa944e-eb81-40dd-80f6-4209c78db57c", fallback = "En düşük fiyat"),
                 "En yüksek fiyat",
-                "Yeni gelenler"
+                BBLocalization.Current.Get(key = "6788b820-f4b2-470b-92f8-7a8470387d4e", fallback = "Yeni gelenler")
             )
         }
 
@@ -490,7 +490,7 @@ private fun RetailProductListResultHeader(
         ) {
             Text(
                 text =
-                    "Tüm Ürünler",
+                    BBLocalization.Current.Get(key = "6cf7b92f-05e7-4ac7-be8c-ce98d8bf20c5", fallback = "Tüm Ürünler"),
                 style =
                     MaterialTheme.typography.titleSmall,
                 fontWeight =
@@ -511,7 +511,7 @@ private fun RetailProductListResultHeader(
 
         Text(
             text =
-                "Filtrele",
+                BBLocalization.Current.Get(key = "bb4d65cd-d8cf-485d-9689-4f44c7353dfa", fallback = "Filtrele"),
             style =
                 MaterialTheme.typography.labelMedium,
             fontWeight =

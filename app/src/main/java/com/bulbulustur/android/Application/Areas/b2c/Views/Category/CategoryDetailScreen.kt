@@ -233,7 +233,7 @@ private fun CategoryDetailHero(
                 horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
             ) {
                 CategoryStatPill("${category.productCount}", BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = ""))
-                CategoryStatPill("${category.storeCount}", "mağaza")
+                CategoryStatPill("${category.storeCount}", BBLocalization.Current.Get(key = "a4bd79dd-e7ee-4407-9e7d-00582840c43a", fallback = "mağaza"))
                 CategoryStatPill("${category.campaignCount}", "kampanya")
             }
         }
@@ -641,8 +641,8 @@ private fun getRetailCategoryDetail(
                 }
             } else {
                 listOf(
-                    RetailSubCategoryItem(1, "Kadın Giyim", "KG", 5320),
-                    RetailSubCategoryItem(2, "Erkek Giyim", "EG", 4210),
+                    RetailSubCategoryItem(1, BBLocalization.Current.Get(key = "f481d8fc-9de9-4a6b-870d-1918537ae795", fallback = "Kadın Giyim"), "KG", 5320),
+                    RetailSubCategoryItem(2, BBLocalization.Current.Get(key = "a32e412f-224f-494e-995e-04e6fd8550aa", fallback = "Erkek Giyim"), "EG", 4210),
                     RetailSubCategoryItem(3, "Ayakkabı", "AY", 3170),
                     RetailSubCategoryItem(4, "Çanta", "ÇA", 1460)
                 )
@@ -668,7 +668,7 @@ private fun getRetailCategoryDetail(
             ),
             RetailCategoryCampaignItem(
                 id = 3,
-                title = "Avantajlı ürünler",
+                title = BBLocalization.Current.Get(key = "ac891c5a-522e-48a8-b750-744f9d6b364e", fallback = "Avantajlı ürünler"),
                 description = "Fiyat/performans ürünleri bir arada.",
                 badge = "Fırsat",
                 icon = Icons.Outlined.Search,
@@ -677,12 +677,12 @@ private fun getRetailCategoryDetail(
             )
         ),
         quickFilters = listOf(
-            "Popüler",
-            "Yeni Gelenler",
+            BBLocalization.Current.Get(key = "c45d05c5-c097-40c4-9379-a7ec77726c36", fallback = "Popüler"),
+            BBLocalization.Current.Get(key = "6788b820-f4b2-470b-92f8-7a8470387d4e", fallback = "Yeni Gelenler"),
             "Çok satanlar",
             "İndirimli",
             "Ücretsiz kargo",
-            "Yüksek puanlı"
+            BBLocalization.Current.Get(key = "d1f63ea5-7c48-4767-a74f-2e7b6efdf474", fallback = "Yüksek puanlı")
         ),
         products = listOf(
             RetailCategoryProductItem(

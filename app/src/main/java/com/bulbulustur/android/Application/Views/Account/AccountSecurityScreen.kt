@@ -91,7 +91,7 @@ fun AccountSecurityScreen(
 
             item {
                 AccountSecuritySection(
-                    title = "Profil",
+                    title = BBLocalization.Current.Get(key = "ab200e4f-1f9e-45f4-90a6-7d5d21d33953", fallback = "Profil"),
                     description = "Hesabınızda görünen temel bilgileri yönetin.",
                     icon = Icons.Outlined.Person
                 ) {
@@ -120,8 +120,8 @@ fun AccountSecurityScreen(
                     AccountSecurityDashedDivider()
 
                     AccountSecurityRow(
-                        title = "Şifre",
-                        value = "Hesabınıza giriş yapmak için kullanılır",
+                        title = BBLocalization.Current.Get(key = "f3bfe2a5-b25a-45b4-99f9-fbe3fb89bef5", fallback = "Şifre"),
+                        value = BBLocalization.Current.Get(key = "b7995d54-48fa-4227-86ab-39b0c469747c", fallback = "Hesabınıza giriş yapmak için kullanılır"),
                         icon = Icons.Outlined.Key,
                         onClick = onPasswordChangeClick
                     )
@@ -144,7 +144,7 @@ fun AccountSecurityScreen(
                     icon = Icons.Outlined.History
                 ) {
                     AccountSecurityRow(
-                        title = "Giriş Etkinlikleri",
+                        title = BBLocalization.Current.Get(key = "7c9dea88-25ba-4bbe-97bd-de9d27c119d2", fallback = "Giriş Etkinlikleri"),
                         value = "Oturum hareketleri ve erişim geçmişi",
                         icon = Icons.Outlined.History,
                         onClick = onLoginActivitiesClick

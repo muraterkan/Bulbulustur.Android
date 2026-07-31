@@ -546,7 +546,7 @@ private fun OrderMessageCard(
 @Composable
 private fun OrderEmptyState() {
     OrderMessageCard(
-        title = "Sipariş bulunamadı",
+        title = BBLocalization.Current.Get(key = "ce5819fb-ccf1-4289-afe8-805f804a9cfa", fallback = "Sipariş bulunamadı"),
         description = "Geçmiş veya devam eden siparişleriniz oluştuğunda burada listelenir."
     )
 }

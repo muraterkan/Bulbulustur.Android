@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Home
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -353,7 +355,7 @@ private fun RetailHomeTrustStrip() {
         ) {
             RetailHomeTrustItem(
                 icon = Icons.Outlined.Verified,
-                title = "Güvenli",
+                title = BBLocalization.Current.Get(key = "aba99f7e-0b0a-45aa-96b2-6ac03f36582a", fallback = "Güvenli"),
                 modifier = Modifier.weight(1f)
             )
 
@@ -365,7 +367,7 @@ private fun RetailHomeTrustStrip() {
 
             RetailHomeTrustItem(
                 icon = Icons.Outlined.Storefront,
-                title = "Mağazalar",
+                title = BBLocalization.Current.Get(key = "91be3e9a-09f2-496b-806f-952a02209bb2", fallback = "Mağazalar"),
                 modifier = Modifier.weight(1f)
             )
         }
@@ -508,7 +510,7 @@ private data class RetailHomeStoreItem(
 private fun getRetailHomeGateways(): List<RetailHomeGatewayItem> {
     return listOf(
         RetailHomeGatewayItem(
-            Title = "Kampanyalar",
+            Title = BBLocalization.Current.Get(key = "e2812624-6bbc-4034-9a09-6570540d0785", fallback = "Kampanyalar"),
             Description = "Aktif kampanya vitrinlerini keşfet",
             Icon = Icons.Outlined.LocalOffer,
             BackgroundColor =
@@ -518,7 +520,7 @@ private fun getRetailHomeGateways(): List<RetailHomeGatewayItem> {
             Target = RetailHomeGatewayTarget.Campaigns
         ),
         RetailHomeGatewayItem(
-            Title = "Günün Fırsatları",
+            Title = BBLocalization.Current.Get(key = "66913b06-a571-41d5-8a2d-dae82701da35", fallback = "Günün Fırsatları"),
             Description = "Bugüne özel seçili fırsatları incele",
             Icon = Icons.Outlined.LocalOffer,
             BackgroundColor =
@@ -528,7 +530,7 @@ private fun getRetailHomeGateways(): List<RetailHomeGatewayItem> {
             Target = RetailHomeGatewayTarget.DealsOfTheDay
         ),
         RetailHomeGatewayItem(
-            Title = "Mağazalar",
+            Title = BBLocalization.Current.Get(key = "91be3e9a-09f2-496b-806f-952a02209bb2", fallback = "Mağazalar"),
             Description = "Satıcı ve marka vitrinlerini keşfet",
             Icon = Icons.Outlined.Storefront,
             BackgroundColor =
@@ -538,7 +540,7 @@ private fun getRetailHomeGateways(): List<RetailHomeGatewayItem> {
             Target = RetailHomeGatewayTarget.Stores
         ),
         RetailHomeGatewayItem(
-            Title = "Favoriler",
+            Title = BBLocalization.Current.Get(key = "b4370fd4-885d-41e7-928c-36b693ce3966", fallback = "Favoriler"),
             Description = "Beğendiğin ürün ve mağazalara dön",
             Icon = Icons.Outlined.FavoriteBorder,
             BackgroundColor =

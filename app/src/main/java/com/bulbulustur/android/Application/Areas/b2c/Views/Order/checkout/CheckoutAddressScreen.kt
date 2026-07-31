@@ -87,7 +87,7 @@ fun CheckoutAddressScreen(
                 item {
                     CheckoutProgressCard(
                         currentStep = "1",
-                        title = "Teslimat adresi",
+                        title = BBLocalization.Current.Get(key = "fa3df4de-7069-4a3d-9dac-5a4ea9b88b65", fallback = "Teslimat adresi"),
                         description = "Siparişin gönderileceği adresi seç."
                     )
                 }
@@ -100,7 +100,7 @@ fun CheckoutAddressScreen(
 
                 item {
                     CheckoutAddressSectionTitle(
-                        title = "Adreslerim",
+                        title = BBLocalization.Current.Get(key = "a5c6a1af-5860-4dc6-9f86-c80c8631f063", fallback = "Adreslerim"),
                         description = "Teslimat için kayıtlı adreslerinden birini seç."
                     )
                 }
@@ -168,7 +168,7 @@ private fun CheckoutAddressTopBar(
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = "Teslimat adresi",
+                text = BBLocalization.Current.Get(key = "fa3df4de-7069-4a3d-9dac-5a4ea9b88b65", fallback = "Teslimat adresi"),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onBackground
@@ -259,13 +259,13 @@ private fun CheckoutAddressSummaryCard(
         CheckoutAddressSummaryMiniCard(
             modifier = Modifier.weight(1f),
             title = summary.totalPriceText,
-            subtitle = "tutar"
+            subtitle = BBLocalization.Current.Get(key = "56970099-caca-4d91-97ce-331dbb0d0a1a", fallback = "tutar")
         )
 
         CheckoutAddressSummaryMiniCard(
             modifier = Modifier.weight(1f),
             title = summary.storeCountText,
-            subtitle = "mağaza"
+            subtitle = BBLocalization.Current.Get(key = "a4bd79dd-e7ee-4407-9e7d-00582840c43a", fallback = "mağaza")
         )
     }
 }
@@ -386,7 +386,7 @@ private fun CheckoutAddressCard(
                 }
 
                 Text(
-                    text = "Düzenle",
+                    text = BBLocalization.Current.Get(key = "6a23f3ad-9109-471d-a670-7b5a40cf3cd9", fallback = "Düzenle"),
                     modifier = Modifier.clickable {
                         onEditAddressClick()
                     },
@@ -427,7 +427,7 @@ private fun CheckoutAddressDefaultBadge() {
             )
     ) {
         Text(
-            text = "Varsayılan",
+            text = BBLocalization.Current.Get(key = "7fac1179-ab8e-4bb8-9ca0-92369db1597e", fallback = "Varsayılan"),
             style = MaterialTheme.typography.labelSmall,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.primary

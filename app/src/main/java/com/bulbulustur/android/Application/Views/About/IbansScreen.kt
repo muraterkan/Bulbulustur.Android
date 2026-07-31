@@ -127,7 +127,7 @@ private fun BankAccountIntroCard() {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Ödemenizi Güvenle Tamamlayın",
+                    text = BBLocalization.Current.Get(key = "5dd36ed7-18f8-4a8a-b61d-88712af810aa", fallback = "Ödemenizi Güvenle Tamamlayın"),
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
@@ -166,7 +166,7 @@ private fun BankAccountWarningCard() {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Açıklama Alanına Sipariş Numaranızı Yazın",
+                    text = BBLocalization.Current.Get(key = "dc0231e7-85e4-45a0-8019-9e1e3a4377d8", fallback = "Açıklama Alanına Sipariş Numaranızı Yazın"),
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
@@ -264,7 +264,7 @@ private fun BankAccountCard(
                     Spacer(modifier = Modifier.padding(BBSpacing.Space1))
 
                     Text(
-                        text = "IBAN Kopyala",
+                        text = BBLocalization.Current.Get(key = "d687aafe-0c86-48e5-8972-e0463ec271e6", fallback = "IBAN Kopyala"),
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface

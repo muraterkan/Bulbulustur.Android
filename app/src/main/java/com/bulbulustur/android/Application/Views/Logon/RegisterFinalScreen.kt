@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Logon
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -173,7 +175,7 @@ private fun RegisterFinalStepList(
     ) {
         RegisterFinalStepItem(
             number = "1",
-            title = "Hesap bilgileri alındı",
+            title = BBLocalization.Current.Get(key = "e6f43d8c-aeec-4dfd-9140-f4d5a50fc413", fallback = "Hesap bilgileri alındı"),
             description = "Üyelik başlangıç bilgileriniz başarıyla kaydedildi.",
             isCompleted = true
         )
@@ -297,7 +299,7 @@ enum class RegisterFinalState(
     val description: String
 ) {
     Completed(
-        badgeText = "Üyelik Tamamlandı",
+        badgeText = BBLocalization.Current.Get(key = "60ae9048-3404-4ea6-a789-f75e02e0b4ea", fallback = "Üyelik Tamamlandı"),
         title = "Hesabınız Hazır",
         description = "Bulbulustur hesabınız başarıyla oluşturuldu. Artık giriş yapabilirsiniz."
     ),

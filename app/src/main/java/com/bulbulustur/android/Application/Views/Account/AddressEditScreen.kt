@@ -123,7 +123,7 @@ fun AddressEditScreen(
                     value = name,
                     onValueChange = { name = it },
                     label = "Ad",
-                    placeholder = "Adınız",
+                    placeholder = BBLocalization.Current.Get(key = "de47456e-91cb-47d5-8882-458fe0cf0b5e", fallback = "Adınız"),
                     enabled = address != null && !isLoading
                 )
 
@@ -131,14 +131,14 @@ fun AddressEditScreen(
                     value = surname,
                     onValueChange = { surname = it },
                     label = BBLocalization.Current.Get(key = "43b07485-278d-4633-9404-bf6a30a28222", fallback = ""),
-                    placeholder = "Soyadınız",
+                    placeholder = BBLocalization.Current.Get(key = "d3e38a79-6cd1-415b-89d2-2893719c54e8", fallback = "Soyadınız"),
                     enabled = address != null && !isLoading
                 )
 
                 AddressEditTextField(
                     value = phone,
                     onValueChange = { phone = it },
-                    label = "Telefon",
+                    label = BBLocalization.Current.Get(key = "cf948c6a-2e6a-4f1e-b77b-13f8d15a1a67", fallback = "Telefon"),
                     placeholder = "5xx xxx xx xx",
                     keyboardType = KeyboardType.Phone,
                     enabled = address != null && !isLoading
@@ -147,7 +147,7 @@ fun AddressEditScreen(
                 AddressEditTextField(
                     value = postCode,
                     onValueChange = { postCode = it },
-                    label = "Posta Kodu",
+                    label = BBLocalization.Current.Get(key = "fff66b6e-cf51-4dde-a421-b8ce3df436d0", fallback = "Posta Kodu"),
                     placeholder = "Posta kodu",
                     keyboardType = KeyboardType.Number,
                     enabled = address != null && !isLoading
@@ -185,7 +185,7 @@ fun AddressEditScreen(
                 AddressEditTextField(
                     value = addressTitle,
                     onValueChange = { addressTitle = it },
-                    label = "Adres Başlığı",
+                    label = BBLocalization.Current.Get(key = "a9620a09-6461-4898-9b6f-9b4116bb1594", fallback = "Adres Başlığı"),
                     placeholder = "Ev Adresim",
                     enabled = address != null && !isLoading
                 )
@@ -202,7 +202,7 @@ fun AddressEditScreen(
             }
 
             BbButton(
-                text = "Adresi Güncelle",
+                text = BBLocalization.Current.Get(key = "b373accc-fed2-49b0-bf96-1c3aee8511a9", fallback = "Adresi Güncelle"),
                 onClick = {
                     val currentAddress = address
 
@@ -398,7 +398,7 @@ private fun AddressEditDefaultField(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Varsayılan Adres",
+                    text = BBLocalization.Current.Get(key = "7fac1179-ab8e-4bb8-9ca0-92369db1597e", fallback = "Varsayılan Adres"),
                     style = BbTypography.labelLarge,
                     color = MaterialTheme.colorScheme.onSurface
                 )

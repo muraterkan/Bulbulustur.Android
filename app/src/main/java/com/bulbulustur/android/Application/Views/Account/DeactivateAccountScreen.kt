@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -74,7 +76,7 @@ fun DeactivateDashboardScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Hesabı Devre Dışı Bırak",
+                title = BBLocalization.Current.Get(key = "64052773-9d1d-48ee-b933-7c387c42147d", fallback = "Hesabı Devre Dışı Bırak"),
                 onBackClick = onBackClick
             )
         }
@@ -118,7 +120,7 @@ fun DeactivateDashboardScreen(
                         },
                         modifier = Modifier.fillMaxWidth(),
                         label = {
-                            Text(text = "Açıklama")
+                            Text(text = BBLocalization.Current.Get(key = "db0a3356-2fa4-4c1f-9432-2c299ac52b92", fallback = "Açıklama"))
                         },
                         placeholder = {
                             Text(text = "Kısa bir açıklama yazabilirsiniz")
@@ -175,7 +177,7 @@ fun DeactivateDashboardScreen(
                     }
 
                     BbButton(
-                        text = "Hesabı Devre Dışı Bırak",
+                        text = BBLocalization.Current.Get(key = "64052773-9d1d-48ee-b933-7c387c42147d", fallback = "Hesabı Devre Dışı Bırak"),
                         onClick = {
                             onDeactivateClick(
                                 reasonState.value,
@@ -333,7 +335,7 @@ private fun DeactivateConfirmationCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Onay",
+                    text = BBLocalization.Current.Get(key = "be8f7748-f764-4f04-9ddd-1a6de091ef34", fallback = "Onay"),
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onSurface
                 )

@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Controllers
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.lifecycle.viewModelScope
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberAddressDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberAgreementDTO
@@ -236,7 +238,7 @@ class AccountController(
 
     fun UpdateAccountCompany(languageId: Int, memberId: Int, updateModel: CompanyUpdateModel) {
         if (!ValidateMember(memberId)) return
-        if (!ValidateId(updateModel.CompanyId, "Şirket bilgisi bulunamadı.")) return
+        if (!ValidateId(updateModel.CompanyId, BBLocalization.Current.Get(key = "8d62c316-0982-473f-b9ce-01b1aebccdf9", fallback = "Şirket bilgisi bulunamadı."))) return
 
         viewModelScope.launch {
             SetLoading("UpdateAccountCompany")
@@ -1188,7 +1190,7 @@ class AccountController(
 
     fun GetReturnRequest(languageId: Int, memberId: Int, returnRequestId: Int) {
         if (!ValidateMember(memberId)) return
-        if (!ValidateId(returnRequestId, "İade talebi bulunamadı.")) return
+        if (!ValidateId(returnRequestId, BBLocalization.Current.Get(key = "8216e879-b868-4c8a-bc20-1b9f503c81a4", fallback = "İade talebi bulunamadı."))) return
 
         viewModelScope.launch {
             SetLoading("GetReturnRequest")
@@ -1236,7 +1238,7 @@ class AccountController(
 
     fun GetMemberSubscription(memberId: Int, memberSubscriptionId: Int) {
         if (!ValidateMember(memberId)) return
-        if (!ValidateId(memberSubscriptionId, "Abonelik bilgisi bulunamadı.")) return
+        if (!ValidateId(memberSubscriptionId, BBLocalization.Current.Get(key = "cf668625-d6eb-4c14-97de-fee71a127b64", fallback = "Abonelik bilgisi bulunamadı."))) return
 
         viewModelScope.launch {
             SetLoading("GetMemberSubscription")

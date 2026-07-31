@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Store
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -122,7 +124,7 @@ fun StoreProductListScreen(
             }
 
         when (selectedSortOption) {
-            "En düşük fiyat" -> searchFilteredProducts.sortedBy { product ->
+            BBLocalization.Current.Get(key = "c4fa944e-eb81-40dd-80f6-4209c78db57c", fallback = "En düşük fiyat") -> searchFilteredProducts.sortedBy { product ->
                 product.Price
             }
 
@@ -130,7 +132,7 @@ fun StoreProductListScreen(
                 product.Price
             }
 
-            "Yeni Gelenler" -> searchFilteredProducts.sortedByDescending { product ->
+            BBLocalization.Current.Get(key = "6788b820-f4b2-470b-92f8-7a8470387d4e", fallback = "Yeni Gelenler") -> searchFilteredProducts.sortedByDescending { product ->
                 product.InsertedDate
             }
 
@@ -141,9 +143,9 @@ fun StoreProductListScreen(
     val sortOptions = remember {
         listOf(
             "Öne çıkan",
-            "En düşük fiyat",
+            BBLocalization.Current.Get(key = "c4fa944e-eb81-40dd-80f6-4209c78db57c", fallback = "En düşük fiyat"),
             "En yüksek fiyat",
-            "Yeni Gelenler"
+            BBLocalization.Current.Get(key = "6788b820-f4b2-470b-92f8-7a8470387d4e", fallback = "Yeni Gelenler")
         )
     }
 

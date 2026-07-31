@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Company
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -66,7 +68,7 @@ fun CompanyProductsScreen(
     }
 
     var selectedFilter by remember {
-        mutableStateOf("Tümü")
+        mutableStateOf(BBLocalization.Current.Get(key = "40b32a95-e0ec-4b16-b54d-12b6fe90cced", fallback = "Tümü"))
     }
 
     var favoriteProductIds by remember {
@@ -78,25 +80,25 @@ fun CompanyProductsScreen(
         selectedFilter
     ) {
         when (selectedFilter) {
-            "Yeni" -> {
+            BBLocalization.Current.Get(key = "557ea0c9-948d-4e62-8ddc-948294a55b11", fallback = "Yeni") -> {
                 company.Products.filter { product ->
-                    product.BadgeText == "Yeni"
+                    product.BadgeText == BBLocalization.Current.Get(key = "557ea0c9-948d-4e62-8ddc-948294a55b11", fallback = "Yeni")
                 }
             }
 
-            "Popüler" -> {
+            BBLocalization.Current.Get(key = "c45d05c5-c097-40c4-9379-a7ec77726c36", fallback = "Popüler") -> {
                 company.Products.filter { product ->
-                    product.BadgeText == "Popüler"
+                    product.BadgeText == BBLocalization.Current.Get(key = "c45d05c5-c097-40c4-9379-a7ec77726c36", fallback = "Popüler")
                 }
             }
 
-            "Düşük MOQ" -> {
+            BBLocalization.Current.Get(key = "3c83d1c5-3b8b-4664-8ab3-985b45790a4f", fallback = "Düşük MOQ") -> {
                 company.Products.filter { product ->
                     product.IsLowMoq
                 }
             }
 
-            "Hızlı teklif" -> {
+            BBLocalization.Current.Get(key = "0f7c5558-348e-471a-8424-d096c7de94cc", fallback = "Hızlı teklif") -> {
                 company.Products.filter { product ->
                     product.HasFastQuote
                 }
@@ -325,7 +327,7 @@ private fun CompanyProductsHero(
                 )
             ) {
                 BbButton(
-                    text = "Profil",
+                    text = BBLocalization.Current.Get(key = "ab200e4f-1f9e-45f4-90a6-7d5d21d33953", fallback = "Profil"),
                     onClick = onCompanyProfileClick,
                     modifier = Modifier.weight(1f),
                     variant = BbButtonVariant.Outline,
@@ -333,7 +335,7 @@ private fun CompanyProductsHero(
                 )
 
                 BbButton(
-                    text = "İletişim",
+                    text = BBLocalization.Current.Get(key = "0cf2cda1-7cf6-4d8b-ab56-8918e3a260fd", fallback = "İletişim"),
                     onClick = onCompanyContactClick,
                     modifier = Modifier.weight(1f),
                     variant = BbButtonVariant.Secondary,
@@ -407,7 +409,7 @@ private fun CompanyProductsFilterHeader(
                 )
             ) {
                 Text(
-                    text = "Ürün Listesi",
+                    text = BBLocalization.Current.Get(key = "79b4a21a-b9a4-47e9-8931-f5d66750cea0", fallback = "Ürün Listesi"),
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
@@ -421,7 +423,7 @@ private fun CompanyProductsFilterHeader(
             }
 
             Text(
-                text = "Filtrele",
+                text = BBLocalization.Current.Get(key = "bb4d65cd-d8cf-485d-9689-4f44c7353dfa", fallback = "Filtrele"),
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.Bold
@@ -486,18 +488,18 @@ private fun getCompanyProducts(
         Description = "Firmanın toptan satışa sunduğu ürünleri kategori bazında inceleyin, fiyat aralıklarını karşılaştırın ve ürün detaylarından tedarik sürecine geçin.",
         IsVerified = true,
         Chips = listOf(
-            "Türkiye",
+            BBLocalization.Current.Get(key = "5365b492-6a1c-4b46-b5c0-b50cbfdd17a8", fallback = "Türkiye"),
             "Samsun",
-            "Doğrulanmış",
+            BBLocalization.Current.Get(key = "c6a0ff62-8828-475f-b553-37effb42efe6", fallback = "Doğrulanmış"),
             "120+ ürün",
-            "Hızlı teklif"
+            BBLocalization.Current.Get(key = "0f7c5558-348e-471a-8424-d096c7de94cc", fallback = "Hızlı teklif")
         ),
         Filters = listOf(
-            "Tümü",
-            "Yeni",
-            "Popüler",
-            "Düşük MOQ",
-            "Hızlı teklif"
+            BBLocalization.Current.Get(key = "40b32a95-e0ec-4b16-b54d-12b6fe90cced", fallback = "Tümü"),
+            BBLocalization.Current.Get(key = "557ea0c9-948d-4e62-8ddc-948294a55b11", fallback = "Yeni"),
+            BBLocalization.Current.Get(key = "c45d05c5-c097-40c4-9379-a7ec77726c36", fallback = "Popüler"),
+            BBLocalization.Current.Get(key = "3c83d1c5-3b8b-4664-8ab3-985b45790a4f", fallback = "Düşük MOQ"),
+            BBLocalization.Current.Get(key = "0f7c5558-348e-471a-8424-d096c7de94cc", fallback = "Hızlı teklif")
         ),
         Products = listOf(
             CompanyWholesaleProduct(
@@ -517,7 +519,7 @@ private fun getCompanyProducts(
                 Id = 2,
                 Title = "Paslanmaz makine yedek parçası",
                 Category = "Makine ve sanayi",
-                PriceText = "Teklif iste",
+                PriceText = BBLocalization.Current.Get(key = "dbb6b4e4-1a23-423d-9b87-5b0c8cbeb64d", fallback = "Teklif iste"),
                 MoqText = "MOQ 50",
                 SupplierText = "Ortobella",
                 BadgeText = "RFQ",
@@ -533,7 +535,7 @@ private fun getCompanyProducts(
                 PriceText = "₺420,00 / adet",
                 MoqText = "MOQ 200",
                 SupplierText = "Ortobella",
-                BadgeText = "Yeni",
+                BadgeText = BBLocalization.Current.Get(key = "557ea0c9-948d-4e62-8ddc-948294a55b11", fallback = "Yeni"),
                 ImageResId =
                     R.drawable.h3ff3b33d6a1447c898cee6e336867bachvar2,
                 IsLowMoq = false,
@@ -546,7 +548,7 @@ private fun getCompanyProducts(
                 PriceText = "₺78,50 / metre",
                 MoqText = "MOQ 500",
                 SupplierText = "Ortobella",
-                BadgeText = "Popüler",
+                BadgeText = BBLocalization.Current.Get(key = "c45d05c5-c097-40c4-9379-a7ec77726c36", fallback = "Popüler"),
                 ImageResId =
                     R.drawable.h3ff3b33d6a1447c898cee6e336867bachvar3,
                 IsLowMoq = false,
@@ -556,7 +558,7 @@ private fun getCompanyProducts(
                 Id = 5,
                 Title = "Özel baskılı promosyon çanta",
                 Category = "Promosyon ürünleri",
-                PriceText = "Teklif iste",
+                PriceText = BBLocalization.Current.Get(key = "dbb6b4e4-1a23-423d-9b87-5b0c8cbeb64d", fallback = "Teklif iste"),
                 MoqText = "MOQ 300",
                 SupplierText = "Ortobella",
                 BadgeText = "OEM",

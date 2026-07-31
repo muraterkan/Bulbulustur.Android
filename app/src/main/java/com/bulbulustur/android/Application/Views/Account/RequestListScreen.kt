@@ -63,7 +63,7 @@ fun RequestListScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Taleplerim",
+                title = BBLocalization.Current.Get(key = "edf6011a-a790-4d23-8a93-c539be6986ae", fallback = "Taleplerim"),
                 onBackClick = onBackClick
             )
         }
@@ -241,7 +241,7 @@ private fun RequestCardHeader(request: ReturnRequestDTO) {
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
         ) {
             Text(
-                text = "Talep No",
+                text = BBLocalization.Current.Get(key = "a521eeff-a1a3-4e23-b5b2-234acc43cb7a", fallback = "Talep No"),
                 style = BbTypography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -347,7 +347,7 @@ private fun RequestDescriptionBox(description: String) {
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
         ) {
             Text(
-                text = "Açıklama",
+                text = BBLocalization.Current.Get(key = "db0a3356-2fa4-4c1f-9432-2c299ac52b92", fallback = "Açıklama"),
                 style = BbTypography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -389,7 +389,7 @@ private fun RequestPhotoBox(photoCount: Int) {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "İade Edilen Ürünün Fotoğrafları",
+                    text = BBLocalization.Current.Get(key = "874c44f2-1af0-4ddb-b8b9-7bf162436c47", fallback = "İade Edilen Ürünün Fotoğrafları"),
                     style = BbTypography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -517,7 +517,7 @@ private fun RequestErrorState(
                 )
 
                 BbButton(
-                    text = "Tekrar Dene",
+                    text = BBLocalization.Current.Get(key = "9d1ce783-da20-464b-9203-cd1ce09918c6", fallback = "Tekrar Dene"),
                     onClick = onRetryClick,
                     variant = BbButtonVariant.Primary,
                     size = BbButtonSize.Medium,
@@ -563,7 +563,7 @@ private fun RequestEmptyState(onOrderListClick: () -> Unit) {
             )
 
             BbButton(
-                text = "Siparişlerime Git",
+                text = BBLocalization.Current.Get(key = "4a966b67-add3-4ad0-8a8b-a3e5e7318297", fallback = "Siparişlerime Git"),
                 onClick = onOrderListClick,
                 variant = BbButtonVariant.Primary,
                 size = BbButtonSize.Medium
@@ -578,9 +578,9 @@ private fun GetReturnRequestStatusFallback(statusId: Int): String {
     return when (statusId) {
         1 -> "Talep Alındı"
         2 -> "İncelemede"
-        3 -> "Onaylandı"
+        3 -> BBLocalization.Current.Get(key = "f160b198-ab2d-4515-8126-2ee3143329ec", fallback = "Onaylandı")
         4 -> "Reddedildi"
-        5 -> "Tamamlandı"
+        5 -> BBLocalization.Current.Get(key = "60ae9048-3404-4ea6-a789-f75e02e0b4ea", fallback = "Tamamlandı")
         else -> "Talep Alındı"
     }
 }

@@ -404,7 +404,7 @@ private fun OrderReviewActionCard(
                 text = if (isLoading) {
                     "Gönderiliyor"
                 } else {
-                    "Değerlendir"
+                    BBLocalization.Current.Get(key = "000bf440-0909-4b14-b7f1-cba8861e579f", fallback = "Değerlendir")
                 },
                 onClick = onSubmitClick,
                 modifier = Modifier.fillMaxWidth(),
@@ -428,7 +428,7 @@ private fun OrderReviewActionCard(
             )
 
             BbButton(
-                text = "Sipariş Detaylarına Dön",
+                text = BBLocalization.Current.Get(key = "b820bc4a-7523-4901-a326-a07c9ec43637", fallback = "Sipariş Detaylarına Dön"),
                 onClick = onBackClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Light,

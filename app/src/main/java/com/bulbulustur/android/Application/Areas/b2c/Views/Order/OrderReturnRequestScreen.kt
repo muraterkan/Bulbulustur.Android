@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.order
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -92,7 +94,7 @@ fun OrderReturnRequestScreen(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "İade Talebi",
+                title = BBLocalization.Current.Get(key = "c1b6be9d-c63a-494b-aa84-efbe15520640", fallback = "İade Talebi"),
                 subtitle = "Teslim edilen ürün için iade talebi oluştur.",
                 onBackClick = onBackClick
             )
@@ -401,7 +403,7 @@ private fun OrderReturnDescriptionCard(
             )
         ) {
             OrderReturnSectionTitle(
-                title = "Açıklama",
+                title = BBLocalization.Current.Get(key = "db0a3356-2fa4-4c1f-9432-2c299ac52b92", fallback = "Açıklama"),
                 subtitle = "İade talebinizin gönderilebilmesi için kısa bir açıklama yazın."
             )
 
@@ -565,7 +567,7 @@ private fun OrderReturnActionCard(
             )
         ) {
             BbButton(
-                text = "Talebi Gönder",
+                text = BBLocalization.Current.Get(key = "d2843cb0-ebbe-4d77-9873-62ac1d7ea9ee", fallback = "Talebi Gönder"),
                 onClick = onSubmitClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Primary,
@@ -585,7 +587,7 @@ private fun OrderReturnActionCard(
             )
 
             BbButton(
-                text = "Sipariş Detaylarına Dön",
+                text = BBLocalization.Current.Get(key = "b820bc4a-7523-4901-a326-a07c9ec43637", fallback = "Sipariş Detaylarına Dön"),
                 onClick = onBackClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Light,

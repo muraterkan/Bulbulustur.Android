@@ -360,7 +360,7 @@ private fun getLegalPolicyGroups(): List<LegalPolicyGroup> {
                 ),
                 LegalPolicyItem(
                     url = LegalPolicyUrls.Cookie,
-                    title = "Çerez Politikası",
+                    title = BBLocalization.Current.Get(key = "9dbf472e-78f6-43a6-97cd-b748c738b6d7", fallback = "Çerez Politikası"),
                     description = "Çerez ve benzeri teknolojilerin kullanım detayları.",
                     icon = Icons.Outlined.Cookie
                 ),
@@ -385,13 +385,13 @@ private fun getLegalPolicyGroups(): List<LegalPolicyGroup> {
             )
         ),
         LegalPolicyGroup(
-            title = "Koşullar",
+            title = BBLocalization.Current.Get(key = "4a78c2ab-57cb-41d3-9831-b6bf045ad4b8", fallback = "Koşullar"),
             description = "Platform kullanımına ait temel koşullar.",
             icon = Icons.Outlined.Rule,
             items = listOf(
                 LegalPolicyItem(
                     url = LegalPolicyUrls.Terms,
-                    title = "Kullanım Koşulları",
+                    title = BBLocalization.Current.Get(key = "786cbd9d-09d8-4c72-97ff-17ead1eff098", fallback = "Kullanım Koşulları"),
                     description = "Bulbulustur hizmetlerini kullanırken geçerli temel koşullar.",
                     icon = Icons.Outlined.RequestQuote
                 )

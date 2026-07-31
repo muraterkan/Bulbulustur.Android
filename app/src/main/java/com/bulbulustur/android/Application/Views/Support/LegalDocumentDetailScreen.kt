@@ -226,7 +226,7 @@ private fun LegalDocumentMetaCard(
             )
 
             LegalDocumentMetaRow(
-                title = "Durum",
+                title = BBLocalization.Current.Get(key = "965b0535-3674-4e76-95ca-4eeafde300fb", fallback = "Durum"),
                 value = "Güncel",
                 icon = Icons.Outlined.VerifiedUser
             )
@@ -372,9 +372,9 @@ private fun getLegalDocumentDetail(
 
         3 -> LegalDocumentDetail(
             legalDocumentId = legalDocumentId,
-            title = "Kullanım Koşulları",
+            title = BBLocalization.Current.Get(key = "786cbd9d-09d8-4c72-97ff-17ead1eff098", fallback = "Kullanım Koşulları"),
             description = "Bulbulustur uygulaması ve platform kullanımına ilişkin temel koşullar.",
-            categoryName = "Koşullar",
+            categoryName = BBLocalization.Current.Get(key = "4a78c2ab-57cb-41d3-9831-b6bf045ad4b8", fallback = "Koşullar"),
             updatedDateLabel = "Güncel",
             sectionCount = 4,
             icon = Icons.Outlined.Article,
@@ -383,7 +383,7 @@ private fun getLegalDocumentDetail(
 
         4 -> LegalDocumentDetail(
             legalDocumentId = legalDocumentId,
-            title = "Mesafeli Satış Sözleşmesi",
+            title = BBLocalization.Current.Get(key = "cbadbcf8-3e92-481d-b7bd-c002a9003abb", fallback = "Mesafeli Satış Sözleşmesi"),
             description = "Perakende Alışveriş süreçlerinde geçerli satış ve teslimat hükümleri.",
             categoryName = "Satış",
             updatedDateLabel = "Güncel",

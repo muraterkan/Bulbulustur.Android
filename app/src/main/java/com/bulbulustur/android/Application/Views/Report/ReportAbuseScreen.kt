@@ -77,7 +77,7 @@ fun ReportAbuseScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Kötüye Kullanım Bildir",
+                title = BBLocalization.Current.Get(key = "c72389b9-1d66-48a0-b270-0d8f6f3c777a", fallback = "Kötüye Kullanım Bildir"),
                 onBackClick = onBackClick
             )
         },
@@ -355,7 +355,7 @@ private fun ReportDetailSection(
                     .clip(BBRadius.LgShape),
                 placeholder = {
                     Text(
-                        text = "Bilmemiz gereken başka bir şey var mı? Detayları buraya yazın."
+                        text = BBLocalization.Current.Get(key = "ba4941f2-9a1a-4bba-a9ba-cf1987d77308", fallback = "Bilmemiz gereken başka bir şey var mı? Detayları buraya yazın.")
                     )
                 },
                 shape = BBRadius.LgShape,
@@ -471,7 +471,7 @@ enum class ReportTargetType(
         shortCode = "Ü"
     ),
     Store(
-        displayName = "Mağaza",
+        displayName = BBLocalization.Current.Get(key = "a4bd79dd-e7ee-4407-9e7d-00582840c43a", fallback = "Mağaza"),
         shortCode = "M"
     ),
     Review(
@@ -479,11 +479,11 @@ enum class ReportTargetType(
         shortCode = "Y"
     ),
     Question(
-        displayName = "Soru",
+        displayName = BBLocalization.Current.Get(key = "d1af1899-4d10-4568-a72a-1fd2028063d1", fallback = "Soru"),
         shortCode = "S"
     ),
     Message(
-        displayName = "Mesaj",
+        displayName = BBLocalization.Current.Get(key = "74d3bcb0-a3c9-477f-82f1-c091809c5a00", fallback = "Mesaj"),
         shortCode = "M"
     )
 }
@@ -521,7 +521,7 @@ private fun getReportReasonItems(): List<ReportReasonItem> {
         ),
         ReportReasonItem(
             id = 5,
-            title = "Kötüye Kullanım"
+            title = BBLocalization.Current.Get(key = "c72389b9-1d66-48a0-b270-0d8f6f3c777a", fallback = "Kötüye Kullanım")
         ),
         ReportReasonItem(
             id = 6,

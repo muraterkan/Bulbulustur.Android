@@ -90,7 +90,7 @@ fun OrderDetailScreen(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "Sipariş Detayları",
+                title = BBLocalization.Current.Get(key = "b820bc4a-7523-4901-a326-a07c9ec43637", fallback = "Sipariş Detayları"),
                 subtitle = orderKey.ifBlank { "Sipariş #$orderId" },
                 onBackClick = onBackClick
             )
@@ -138,7 +138,7 @@ fun OrderDetailScreen(
                 orderStores.isEmpty() -> {
                     item {
                         OrderDetailMessageCard(
-                            title = "Sipariş detayı bulunamadı",
+                            title = BBLocalization.Current.Get(key = "838ffc4f-83f8-4fc2-87dc-8b668084ba59", fallback = "Sipariş detayı bulunamadı"),
                             description = "Bu siparişe ait mağaza veya ürün kaydı bulunamadı."
                         )
                     }
@@ -330,7 +330,7 @@ private fun OrderDetailStoreCard(
             }
 
             BbButton(
-                text = "Satış Sözleşmesi",
+                text = BBLocalization.Current.Get(key = "8b46757f-5819-4b3d-ab88-c52ce2008e3f", fallback = "Satış Sözleşmesi"),
                 onClick = {
                     onContractClick(store.StoreKey)
                 },
@@ -456,7 +456,7 @@ private fun OrderDetailProductRow(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Toplam",
+                    text = BBLocalization.Current.Get(key = "e736c25f-c944-4f52-a206-819f93d64a29", fallback = "Toplam"),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -482,7 +482,7 @@ private fun OrderDetailProductRow(
 
         if (isCancelable) {
             BbButton(
-                text = "İptal Et",
+                text = BBLocalization.Current.Get(key = "92ebe8f3-c0b3-48a9-88a5-bb431ba27bf8", fallback = "İptal Et"),
                 onClick = {
                     onCancelRequestClick(
                         line.OrderStoreLineId.toLong(),
@@ -497,7 +497,7 @@ private fun OrderDetailProductRow(
 
         if (isDelivered) {
             BbButton(
-                text = "İade Talebi",
+                text = BBLocalization.Current.Get(key = "c1b6be9d-c63a-494b-aa84-efbe15520640", fallback = "İade Talebi"),
                 onClick = {
                     onReturnRequestClick(
                         line.OrderStoreLineId.toLong(),
@@ -510,7 +510,7 @@ private fun OrderDetailProductRow(
             )
 
             BbButton(
-                text = "Değerlendir",
+                text = BBLocalization.Current.Get(key = "000bf440-0909-4b14-b7f1-cba8861e579f", fallback = "Değerlendir"),
                 onClick = {
                     onReviewCreateClick(
                         line.OrderStoreLineId.toLong(),
@@ -533,7 +533,7 @@ private fun OrderDetailProductRow(
         }
 
         BbButton(
-            text = "Talep Oluştur",
+            text = BBLocalization.Current.Get(key = "fcb264e8-a984-415f-b971-69ea0a531bd9", fallback = "Talep Oluştur"),
             onClick = onSupportClick,
             modifier = Modifier.fillMaxWidth(),
             variant = BbButtonVariant.Light,
@@ -636,18 +636,18 @@ private fun OrderDetailPaymentCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
             Text(
-                text = "Ödeme Özeti",
+                text = BBLocalization.Current.Get(key = "af87a38e-5f78-42ee-ac0f-ee365d81e179", fallback = "Ödeme Özeti"),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
             OrderDetailStoreTotalRow(
-                title = "Ürün Toplamı",
+                title = BBLocalization.Current.Get(key = "9ca1b3ac-05ef-462c-a4ef-e4bcd4b4b11b", fallback = "Ürün Toplamı"),
                 value = netTotal.toCurrencyText()
             )
 
             OrderDetailStoreTotalRow(
-                title = "Kargo",
+                title = BBLocalization.Current.Get(key = "8fa1207a-2a06-4bdb-936b-f7da848e0f72", fallback = "Kargo"),
                 value = shippingTotal.toCurrencyText()
             )
 
@@ -656,7 +656,7 @@ private fun OrderDetailPaymentCard(
             )
 
             OrderDetailStoreTotalRow(
-                title = "Genel Toplam",
+                title = BBLocalization.Current.Get(key = "5a003c3e-9b6c-42ee-a69e-8b3b40e5176a", fallback = "Genel Toplam"),
                 value = total.toCurrencyText(),
                 strong = true
             )

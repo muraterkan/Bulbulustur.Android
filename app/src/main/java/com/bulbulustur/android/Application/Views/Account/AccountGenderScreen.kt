@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -60,7 +62,7 @@ fun AccountGenderScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Cinsiyet",
+                title = BBLocalization.Current.Get(key = "b3e02907-6ed9-44db-bd6a-b9276a1f8046", fallback = "Cinsiyet"),
                 onBackClick = onBackClick
             )
         }
@@ -147,7 +149,7 @@ fun AccountGenderScreen(
                 }
 
             BbButton(
-                text = "Güncelle",
+                text = BBLocalization.Current.Get(key = "58104fd9-46c6-4304-9abb-07f5273a33f9", fallback = "Güncelle"),
                 onClick = {
                     onSaveClick(selectedGenderId.intValue)
                 },

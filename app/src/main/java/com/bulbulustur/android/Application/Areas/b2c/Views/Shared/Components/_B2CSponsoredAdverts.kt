@@ -172,7 +172,7 @@ private fun SponsoredAdvertsSectionHeader() {
         ) {
             Text(
                 text =
-                    "Sponsorlu Ürünler",
+                    BBLocalization.Current.Get(key = "c0fa950b-d7b0-42a5-a83e-280020117364", fallback = "Sponsorlu Ürünler"),
                 style =
                     MaterialTheme.typography.titleMedium,
                 color =

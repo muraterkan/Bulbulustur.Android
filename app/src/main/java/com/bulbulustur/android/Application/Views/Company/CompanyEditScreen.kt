@@ -94,7 +94,7 @@ fun CompanyEditScreen(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.SectionGap)
     ) {
         BbButton(
-            text = "Şirket Bilgilerime Dön",
+            text = BBLocalization.Current.Get(key = "5d3c17c2-d063-4757-9940-62331a540e23", fallback = "Şirket Bilgilerime Dön"),
             onClick = onBackClick,
             variant = BbButtonVariant.Outline
         )
@@ -154,7 +154,7 @@ fun CompanyEditScreen(
                         )
                     },
                     label = "Şirketinizin Tipi",
-                    placeholder = "Şirket tipi seç",
+                    placeholder = BBLocalization.Current.Get(key = "ce4087e5-47b4-4b6a-a853-d02fc65dfe4f", fallback = "Şirket tipi seç"),
                     options = companyTypeOptions()
                 )
 
@@ -179,7 +179,7 @@ fun CompanyEditScreen(
                             validationMessage = null
                         )
                     },
-                    label = "Şirket E-postası",
+                    label = BBLocalization.Current.Get(key = "df1e83e4-fd95-41ce-b4a6-d2bbb1300e2a", fallback = "Şirket E-postası"),
                     placeholder = "ornek@firma.com"
                 )
 
@@ -218,7 +218,7 @@ fun CompanyEditScreen(
                             validationMessage = null
                         )
                     },
-                    label = "Şirketinizin Adresi",
+                    label = BBLocalization.Current.Get(key = "e8ec1405-952b-4a9e-bd42-72133f29c4ad", fallback = "Şirketinizin Adresi"),
                     placeholder = "Açık şirket adresi"
                 )
 
@@ -230,7 +230,7 @@ fun CompanyEditScreen(
                             validationMessage = null
                         )
                     },
-                    label = "Ülke",
+                    label = BBLocalization.Current.Get(key = "8b04cc2a-5e86-4d4e-bf8c-7dc7bf1be325", fallback = "Ülke"),
                     placeholder = "Ülke seç",
                     options = countryOptions()
                 )
@@ -244,8 +244,8 @@ fun CompanyEditScreen(
                             validationMessage = null
                         )
                     },
-                    label = "Şehir",
-                    placeholder = "Şehir seç",
+                    label = BBLocalization.Current.Get(key = "a4936d53-1fc1-4e87-a255-2a4906748a61", fallback = "Şehir"),
+                    placeholder = BBLocalization.Current.Get(key = "a4936d53-1fc1-4e87-a255-2a4906748a61", fallback = "Şehir seç"),
                     options = cityOptions()
                 )
 
@@ -257,7 +257,7 @@ fun CompanyEditScreen(
                             validationMessage = null
                         )
                     },
-                    label = "İlçe",
+                    label = BBLocalization.Current.Get(key = "843fedae-4923-4542-9341-9832b4a5f773", fallback = "İlçe"),
                     placeholder = "İlçe seç",
                     options = districtOptions()
                 )
@@ -269,7 +269,7 @@ fun CompanyEditScreen(
                             postalCode = postalCode
                         )
                     },
-                    label = "Posta Kodu",
+                    label = BBLocalization.Current.Get(key = "fff66b6e-cf51-4dde-a421-b8ce3df436d0", fallback = "Posta Kodu"),
                     placeholder = "Posta kodu"
                 )
             }
@@ -296,8 +296,8 @@ fun CompanyEditScreen(
                             validationMessage = null
                         )
                     },
-                    label = "Vergi Dairesi",
-                    placeholder = "Vergi dairesi"
+                    label = BBLocalization.Current.Get(key = "8c42e65e-d7a4-4ff2-9dce-e4073d4dc335", fallback = "Vergi Dairesi"),
+                    placeholder = BBLocalization.Current.Get(key = "8c42e65e-d7a4-4ff2-9dce-e4073d4dc335", fallback = "Vergi dairesi")
                 )
 
                 BbTextInput(
@@ -319,7 +319,7 @@ fun CompanyEditScreen(
                             mersisNumber = mersisNumber
                         )
                     },
-                    label = "Mersis No",
+                    label = BBLocalization.Current.Get(key = "cb3df3f8-c596-444a-b920-9240350f757d", fallback = "Mersis No"),
                     placeholder = "Mersis numarası"
                 )
 
@@ -330,7 +330,7 @@ fun CompanyEditScreen(
                             kepAddress = kepAddress
                         )
                     },
-                    label = "Kep Adresi",
+                    label = BBLocalization.Current.Get(key = "4f33b03a-913c-4ea8-9640-a58bd2f68dac", fallback = "Kep Adresi"),
                     placeholder = "kep@firma.com"
                 )
 
@@ -473,7 +473,7 @@ private fun establishmentYearOptions(): List<BbSelectOption> {
 
 private fun countryOptions(): List<BbSelectOption> {
     return listOf(
-        BbSelectOption("Türkiye", "Türkiye"),
+        BbSelectOption(BBLocalization.Current.Get(key = "5365b492-6a1c-4b46-b5c0-b50cbfdd17a8", fallback = "Türkiye"), BBLocalization.Current.Get(key = "5365b492-6a1c-4b46-b5c0-b50cbfdd17a8", fallback = "Türkiye")),
         BbSelectOption("Almanya", "Almanya"),
         BbSelectOption("Amerika Birleşik Devletleri", "Amerika Birleşik Devletleri"),
         BbSelectOption("Çin", "Çin"),
@@ -512,7 +512,7 @@ private fun createSampleCompanyEditFormState(): CompanyEditFormState {
         companyEmailAddress = "muraterkan500@yandex.com",
         companyWebsiteUrl = "www.turkiyeglobal.com",
         companyAddress = "Fulya Mah., Aytekin Kotil Cad., No: 1/1",
-        countryName = "Türkiye",
+        countryName = BBLocalization.Current.Get(key = "5365b492-6a1c-4b46-b5c0-b50cbfdd17a8", fallback = "Türkiye"),
         cityName = "İstanbul",
         districtName = "Şişli",
         postalCode = "34394",

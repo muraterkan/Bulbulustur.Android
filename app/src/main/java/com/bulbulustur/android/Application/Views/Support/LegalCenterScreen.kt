@@ -152,7 +152,7 @@ private fun LegalCenterHeader() {
                 )
 
                 BbChip(
-                    text = "Koşullar",
+                    text = BBLocalization.Current.Get(key = "4a78c2ab-57cb-41d3-9831-b6bf045ad4b8", fallback = "Koşullar"),
                     selected = false,
                     onClick = {}
                 )
@@ -193,7 +193,7 @@ private fun LegalCenterContactCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.xs)
             ) {
                 Text(
-                    text = "Yardım merkezi",
+                    text = BBLocalization.Current.Get(key = "e106f2d1-7b71-435a-be85-22f0c8262d05", fallback = "Yardım merkezi"),
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
@@ -350,15 +350,15 @@ private fun legalDocumentItems(): List<LegalDocumentItem> {
         ),
         LegalDocumentItem(
             legalDocumentId = 3,
-            title = "Kullanım Koşulları",
+            title = BBLocalization.Current.Get(key = "786cbd9d-09d8-4c72-97ff-17ead1eff098", fallback = "Kullanım Koşulları"),
             description = "Bulbulustur uygulaması ve platform kullanımına ilişkin temel koşullar.",
-            categoryName = "Koşullar",
+            categoryName = BBLocalization.Current.Get(key = "4a78c2ab-57cb-41d3-9831-b6bf045ad4b8", fallback = "Koşullar"),
             updatedDateLabel = "Güncel",
             icon = Icons.Outlined.Article
         ),
         LegalDocumentItem(
             legalDocumentId = 4,
-            title = "Mesafeli Satış Sözleşmesi",
+            title = BBLocalization.Current.Get(key = "cbadbcf8-3e92-481d-b7bd-c002a9003abb", fallback = "Mesafeli Satış Sözleşmesi"),
             description = "Perakende Alışveriş süreçlerinde geçerli satış ve teslimat hükümleri.",
             categoryName = "Satış",
             updatedDateLabel = "Güncel",
@@ -371,7 +371,7 @@ private fun platformRuleItems(): List<LegalDocumentItem> {
     return listOf(
         LegalDocumentItem(
             legalDocumentId = 5,
-            title = "Çerez Politikası",
+            title = BBLocalization.Current.Get(key = "9dbf472e-78f6-43a6-97cd-b748c738b6d7", fallback = "Çerez Politikası"),
             description = "Uygulama ve web deneyiminde kullanılan çerez ve benzeri teknolojilere ilişkin bilgiler.",
             categoryName = "Politikalar",
             updatedDateLabel = "Güncel",

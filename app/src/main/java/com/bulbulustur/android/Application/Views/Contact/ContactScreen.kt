@@ -101,7 +101,7 @@ fun ContactScreen(
 
         item {
             BbSectionHeader(
-                title = "Sık sorulan sorular",
+                title = BBLocalization.Current.Get(key = "9ef8310c-41c7-477b-a3d9-af4218787955", fallback = "Sık sorulan sorular"),
                 subtitle = "İletişim öncesi hızlı cevaplar"
             )
         }
@@ -141,7 +141,7 @@ private fun ContactHeader() {
                 )
 
                 Text(
-                    text = "Bize Ulaşın",
+                    text = BBLocalization.Current.Get(key = "48fc40fa-ca5a-4e5a-9add-5dc14c5d61bd", fallback = "Bize Ulaşın"),
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.SemiBold
@@ -149,7 +149,7 @@ private fun ContactHeader() {
             }
 
             Text(
-                text = "Size nasıl yardımcı olabiliriz?",
+                text = BBLocalization.Current.Get(key = "d70b4a99-dca7-46b6-80ed-b124d3513f24", fallback = "Size nasıl yardımcı olabiliriz?"),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -179,7 +179,7 @@ private fun ContactHeader() {
                 )
 
                 BbChip(
-                    text = "Yatırımcı ilişkileri",
+                    text = BBLocalization.Current.Get(key = "d70791d0-68e8-487c-94b5-d4002ff4b135", fallback = "Yatırımcı ilişkileri"),
                     selected = false,
                     onClick = {}
                 )
@@ -208,7 +208,7 @@ private fun ContactQuickInfoCard() {
                 )
 
                 Text(
-                    text = "Hızlı iletişim",
+                    text = BBLocalization.Current.Get(key = "95d658cb-8400-470a-8a9d-bad58d8a7d67", fallback = "Hızlı iletişim"),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
@@ -228,7 +228,7 @@ private fun ContactQuickInfoCard() {
             )
 
             ContactInfoRow(
-                title = "Konum",
+                title = BBLocalization.Current.Get(key = "ba7ade8e-52c2-4154-aac6-e0e20df6e803", fallback = "Konum"),
                 value = "İstanbul, Türkiye",
                 icon = Icons.Outlined.LocationOn
             )
@@ -402,7 +402,7 @@ private fun ContactAlternativePanel(
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.xs)
                 ) {
                     Text(
-                        text = "Yardım merkezine git",
+                        text = BBLocalization.Current.Get(key = "9d632e94-da2e-446a-bd4e-42f716b1cf88", fallback = "Yardım merkezine git"),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface
@@ -520,7 +520,7 @@ private fun contactChannelItems(): List<ContactChannelItem> {
     return listOf(
         ContactChannelItem(
             channelId = 1,
-            title = "Tedarikçi / Satıcı başvurusu",
+            title = BBLocalization.Current.Get(key = "9a9add6f-9ab5-47dc-863d-7a57fb437a0d", fallback = "Tedarikçi / Satıcı başvurusu"),
             description = "Bulbulustur ekosisteminde satış yapmak veya tedarikçi olarak yer almak için başvuru sürecine geçin.",
             actionLabel = "Başvuru sürecine geç",
             target = ContactChannelTarget.SellerApplication,
@@ -528,15 +528,15 @@ private fun contactChannelItems(): List<ContactChannelItem> {
         ),
         ContactChannelItem(
             channelId = 2,
-            title = "Müşteri desteği",
+            title = BBLocalization.Current.Get(key = "a2805229-b6c3-4470-b0ca-bbf833f3b95a", fallback = "Müşteri desteği"),
             description = "Sipariş, ödeme, üyelik ve kullanım deneyimiyle ilgili destek alın.",
-            actionLabel = "Yardım merkezine git",
+            actionLabel = BBLocalization.Current.Get(key = "9d632e94-da2e-446a-bd4e-42f716b1cf88", fallback = "Yardım merkezine git"),
             target = ContactChannelTarget.Support,
             icon = Icons.Outlined.SupportAgent
         ),
         ContactChannelItem(
             channelId = 3,
-            title = "Yatırımcı ilişkileri",
+            title = BBLocalization.Current.Get(key = "d70791d0-68e8-487c-94b5-d4002ff4b135", fallback = "Yatırımcı ilişkileri"),
             description = "Basın bülteni, kurumsal sunum, yatırım ilişkileri ve medya iletişimi için bize ulaşın.",
             actionLabel = "Kurumsal bilgi alın",
             target = ContactChannelTarget.Investor,
@@ -546,7 +546,7 @@ private fun contactChannelItems(): List<ContactChannelItem> {
             channelId = 4,
             title = BBLocalization.Current.Get(key = "4090dd0c-9586-4764-afc6-f098565fa7ae", fallback = ""),
             description = "Bulbulustur hakkında öneri, bilgi ve genel sorularınızı iletin.",
-            actionLabel = "Genel iletişime geç",
+            actionLabel = BBLocalization.Current.Get(key = "a439130c-b2cf-496f-9868-93ef084d9aec", fallback = "Genel iletişime geç"),
             target = ContactChannelTarget.GeneralContact,
             icon = Icons.Outlined.Email
         ),
@@ -554,13 +554,13 @@ private fun contactChannelItems(): List<ContactChannelItem> {
             channelId = 5,
             title = "Satış ve kurumsal çözümler",
             description = "Kurumsal çözüm, toplu satış ve ticari iş birlikleri için satış ekibiyle görüşün.",
-            actionLabel = "Satış ile iletişime geç",
+            actionLabel = BBLocalization.Current.Get(key = "a439130c-b2cf-496f-9868-93ef084d9aec", fallback = "Satış ile iletişime geç"),
             target = ContactChannelTarget.Sales,
             icon = Icons.Outlined.Payments
         ),
         ContactChannelItem(
             channelId = 6,
-            title = "Marka ve iş birlikleri",
+            title = BBLocalization.Current.Get(key = "eaf557b8-4925-4f0b-85ef-733efd386ae0", fallback = "Marka ve iş birlikleri"),
             description = "Marka iş birlikleri, kampanya ortaklıkları ve stratejik çalışmalar için iletişime geçin.",
             actionLabel = "İş birliğini başlat",
             target = ContactChannelTarget.Partnership,

@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Store
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -76,7 +78,7 @@ fun StoreDetailScreen(
     }
 
     var selectedCategory by remember {
-        mutableStateOf("Tümü")
+        mutableStateOf(BBLocalization.Current.Get(key = "40b32a95-e0ec-4b16-b54d-12b6fe90cced", fallback = "Tümü"))
     }
 
     var isFollowing by remember {
@@ -84,7 +86,7 @@ fun StoreDetailScreen(
     }
 
     val filteredProducts = remember(selectedCategory, store.products) {
-        if (selectedCategory == "Tümü") {
+        if (selectedCategory == BBLocalization.Current.Get(key = "40b32a95-e0ec-4b16-b54d-12b6fe90cced", fallback = "Tümü")) {
             store.products
         } else {
             store.products.filter {
@@ -189,7 +191,7 @@ fun StoreDetailScreen(
             item {
                 StoreDetailSectionTitle(
                     title = "${store.name} Ürünleri",
-                    description = "Mağazanın ürünlerini inceleyin, Favorilerinize ekleyin ve alışverişe devam edin."
+                    description = BBLocalization.Current.Get(key = "d16b2842-3a2f-445a-bbd0-07bddcb6cbd0", fallback = "Mağazanın ürünlerini inceleyin, Favorilerinize ekleyin ve alışverişe devam edin.")
                 )
             }
 
@@ -402,7 +404,7 @@ private fun StoreFollowButton(
                 text = if (isFollowing) {
                     "Takipte"
                 } else {
-                    "Takip Et"
+                    BBLocalization.Current.Get(key = "b7552375-6be4-4428-9cd0-6a70e3e8cc1d", fallback = "Takip Et")
                 },
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurface,
@@ -518,7 +520,7 @@ private fun StoreVerifiedBadge() {
             )
 
             Text(
-                text = "Doğrulanmış",
+                text = BBLocalization.Current.Get(key = "c6a0ff62-8828-475f-b553-37effb42efe6", fallback = "Doğrulanmış"),
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -538,7 +540,7 @@ private fun StoreInfoStatSection(
         StoreInfoStatCard(
             modifier = Modifier.weight(1f),
             title = "${store.productCount}",
-            subtitle = "Ürün"
+            subtitle = BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = "Ürün")
         )
 
         StoreInfoStatCard(
@@ -550,7 +552,7 @@ private fun StoreInfoStatSection(
         StoreInfoStatCard(
             modifier = Modifier.weight(1f),
             title = store.cargoText,
-            subtitle = "Kargo"
+            subtitle = BBLocalization.Current.Get(key = "8fa1207a-2a06-4bdb-936b-f7da848e0f72", fallback = "Kargo")
         )
     }
 }
@@ -624,7 +626,7 @@ private fun StoreTrustInfoCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Satıcı Şirket Bilgileri",
+                    text = BBLocalization.Current.Get(key = "5d3c17c2-d063-4757-9940-62331a540e23", fallback = "Satıcı Şirket Bilgileri"),
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
@@ -717,7 +719,7 @@ private fun StoreCategoryFilterSection(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
     ) {
         StoreDetailSectionTitle(
-            title = "Ürün Kategorileri",
+            title = BBLocalization.Current.Get(key = "bc3a7952-0d83-44ca-a8fa-c5a4dac434b4", fallback = "Ürün Kategorileri"),
             description = "Mağaza kategorilerine göre ürünleri keşfedin."
         )
 
@@ -874,7 +876,7 @@ private fun StoreProductCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 StoreSmallActionButton(
-                    text = "Sepete Ekle",
+                    text = BBLocalization.Current.Get(key = "9a748489-8d57-4bc5-becc-0937717d80df", fallback = "Sepete Ekle"),
                     icon = Icons.Outlined.ShoppingCart,
                     modifier = Modifier.weight(1f),
                     onClick = onAddToBasketClick
@@ -1018,7 +1020,7 @@ data class RetailStoreProductItem(
 
 private fun StoreDTO.ToRetailStoreDetail(): RetailStoreDetail {
     val resolvedName = StoreName.ifBlank {
-        "Mağaza"
+        BBLocalization.Current.Get(key = "a4bd79dd-e7ee-4407-9e7d-00582840c43a", fallback = "Mağaza")
     }
 
     return RetailStoreDetail(
@@ -1040,7 +1042,7 @@ private fun StoreDTO.ToRetailStoreDetail(): RetailStoreDetail {
             "Standart"
         },
         isVerified = CompanyId > 0 || StoreKey.isNotBlank(),
-        categories = listOf("Tümü"),
+        categories = listOf(BBLocalization.Current.Get(key = "40b32a95-e0ec-4b16-b54d-12b6fe90cced", fallback = "Tümü")),
         products = emptyList()
     )
 }
@@ -1060,11 +1062,11 @@ private fun getRetailStoreDetail(
         cargoText = "Hızlı",
         isVerified = true,
         categories = listOf(
-            "Tümü",
+            BBLocalization.Current.Get(key = "40b32a95-e0ec-4b16-b54d-12b6fe90cced", fallback = "Tümü"),
             "Ayakkabı",
-            "Kadın Giyim",
+            BBLocalization.Current.Get(key = "f481d8fc-9de9-4a6b-870d-1918537ae795", fallback = "Kadın Giyim"),
             "Çanta",
-            "Aksesuar"
+            BBLocalization.Current.Get(key = "053ae8f0-d8f8-46b1-b062-bc65615ce7a1", fallback = "Aksesuar")
         ),
         products = listOf(
             RetailStoreProductItem(
@@ -1080,7 +1082,7 @@ private fun getRetailStoreDetail(
                 name = "Rahat Taban Günlük Ayakkabı",
                 categoryName = "Ayakkabı",
                 priceText = "₺749,90",
-                badgeText = "Yeni",
+                badgeText = BBLocalization.Current.Get(key = "557ea0c9-948d-4e62-8ddc-948294a55b11", fallback = "Yeni"),
                 imageText = "P2"
             ),
             RetailStoreProductItem(
@@ -1094,7 +1096,7 @@ private fun getRetailStoreDetail(
             RetailStoreProductItem(
                 id = 4,
                 name = "Basic Pamuklu Kadın Tişört",
-                categoryName = "Kadın Giyim",
+                categoryName = BBLocalization.Current.Get(key = "f481d8fc-9de9-4a6b-870d-1918537ae795", fallback = "Kadın Giyim"),
                 priceText = "₺329,90",
                 badgeText = "%15",
                 imageText = "P4"
@@ -1104,7 +1106,7 @@ private fun getRetailStoreDetail(
                 name = "Yeni Sezon Kadın Spor Ayakkabı",
                 categoryName = "Ayakkabı",
                 priceText = "₺1.099,90",
-                badgeText = "Yeni",
+                badgeText = BBLocalization.Current.Get(key = "557ea0c9-948d-4e62-8ddc-948294a55b11", fallback = "Yeni"),
                 imageText = "P5"
             )
         )

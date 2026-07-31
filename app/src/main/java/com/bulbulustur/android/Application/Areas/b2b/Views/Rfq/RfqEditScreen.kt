@@ -111,7 +111,7 @@ fun RfqEditScreen(
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
-        topBar = { BbInnerPageHeader(title = "RFQ Düzenle", onBackClick = onBackClick) }
+        topBar = { BbInnerPageHeader(title = BBLocalization.Current.Get(key = "6a23f3ad-9109-471d-a670-7b5a40cf3cd9", fallback = "RFQ Düzenle"), onBackClick = onBackClick) }
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surfaceVariant).padding(innerPadding),
@@ -124,45 +124,45 @@ fun RfqEditScreen(
                 item {
                     RfqEditSection(BBLocalization.Current.Get(key = "30aee7b0-b131-4f63-8659-f78378ac20f3", fallback = "")) {
                         Text(errorMessage, color = MaterialTheme.colorScheme.error, style = BbTypography.bodySmall)
-                        BbButton(text = "Tekrar Dene", onClick = onRetryClick, modifier = Modifier.fillMaxWidth(), variant = BbButtonVariant.Outline, size = BbButtonSize.Medium)
+                        BbButton(text = BBLocalization.Current.Get(key = "9d1ce783-da20-464b-9203-cd1ce09918c6", fallback = "Tekrar Dene"), onClick = onRetryClick, modifier = Modifier.fillMaxWidth(), variant = BbButtonVariant.Outline, size = BbButtonSize.Medium)
                     }
                 }
             }
 
             if (initialized) {
                 item {
-                    RfqEditSection("Ürün Bilgileri") {
-                        BbTextInput(value = productName, onValueChange = { productName = it; validationMessage = null }, label = "Ürün Adı", placeholder = "Ürün adı", enabled = !isSubmitting)
+                    RfqEditSection(BBLocalization.Current.Get(key = "90509413-3f80-4a57-b43b-21738dc74b50", fallback = "Ürün Bilgileri")) {
+                        BbTextInput(value = productName, onValueChange = { productName = it; validationMessage = null }, label = BBLocalization.Current.Get(key = "6096bd2f-af02-449b-80ba-481a9f5ca31b", fallback = "Ürün Adı"), placeholder = BBLocalization.Current.Get(key = "6096bd2f-af02-449b-80ba-481a9f5ca31b", fallback = "Ürün adı"), enabled = !isSubmitting)
                         BbCategorySearchSelectInput(selectedValue = categoryId, onValueChange = { categoryId = it; validationMessage = null }, onSearchTextChange = onCategorySearch, options = categoryOptions, label = BBLocalization.Current.Get(key = "1a132fdc-096f-42d7-835d-96b0a17b3675", fallback = ""), placeholder = BBLocalization.Current.Get(key = "4834b933-045e-4ad5-8a39-9fbfc5a2122a", fallback = ""), searchPlaceholder = "Kategori ara", maximumVisibleOptionCount = 50, enabled = !isSubmitting && categoryOptions.isNotEmpty())
-                        BbTextarea(value = productDescription, onValueChange = { productDescription = it; validationMessage = null }, label = "Ürün Açıklaması", placeholder = "Ürün detayları", enabled = !isSubmitting)
+                        BbTextarea(value = productDescription, onValueChange = { productDescription = it; validationMessage = null }, label = BBLocalization.Current.Get(key = "eb7e1e0a-57ec-49bf-9968-61f0e5b75e6c", fallback = "Ürün Açıklaması"), placeholder = BBLocalization.Current.Get(key = "70d6b07c-d82a-4e84-a776-1bfdfe9d7bba", fallback = "Ürün detayları"), enabled = !isSubmitting)
                     }
                 }
 
                 item {
                     RfqEditSection("Miktar ve Fiyat") {
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)) {
-                            RfqEditNumberInput(purchaseQuantity, { purchaseQuantity = it; validationMessage = null }, "Miktar", Modifier.weight(1f), !isSubmitting)
-                            Column(Modifier.weight(1f)) { BbSelectInput(selectedValue = unitId, onValueChange = { unitId = it; validationMessage = null }, options = unitOptions, label = "Birim", placeholder = "Birim seçiniz", enabled = !isSubmitting && unitOptions.isNotEmpty()) }
+                            RfqEditNumberInput(purchaseQuantity, { purchaseQuantity = it; validationMessage = null }, BBLocalization.Current.Get(key = "64f1e179-caee-4a60-9500-d35fbc4ed554", fallback = "Miktar"), Modifier.weight(1f), !isSubmitting)
+                            Column(Modifier.weight(1f)) { BbSelectInput(selectedValue = unitId, onValueChange = { unitId = it; validationMessage = null }, options = unitOptions, label = BBLocalization.Current.Get(key = "8c9bc441-0d68-4f53-9549-179f61d7ece0", fallback = "Birim"), placeholder = BBLocalization.Current.Get(key = "723120da-c41c-4722-8827-f0bce1d29c34", fallback = "Birim seçiniz"), enabled = !isSubmitting && unitOptions.isNotEmpty()) }
                         }
 
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)) {
-                            RfqEditNumberInput(unitPrice, { unitPrice = it; validationMessage = null }, "Birim Fiyat", Modifier.weight(1f), !isSubmitting)
+                            RfqEditNumberInput(unitPrice, { unitPrice = it; validationMessage = null }, BBLocalization.Current.Get(key = "a3f9904a-f7e6-4ef6-a79b-5fbbcbb9dd22", fallback = "Birim Fiyat"), Modifier.weight(1f), !isSubmitting)
                             Column(Modifier.weight(1f)) { BbSelectInput(selectedValue = currencyId, onValueChange = { currencyId = it; validationMessage = null }, options = currencyOptions, label = BBLocalization.Current.Get(key = "47942374-ab80-47b3-af0f-c8a6aaf728e3", fallback = ""), placeholder = "Para birimi seçiniz", enabled = !isSubmitting && currencyOptions.isNotEmpty()) }
                         }
                     }
                 }
 
                 item {
-                    RfqEditSection("Ürün Özellikleri") {
+                    RfqEditSection(BBLocalization.Current.Get(key = "d036fcbd-c864-40cf-8899-cbdae6a6b913", fallback = "Ürün Özellikleri")) {
                         BbSelectInput(selectedValue = colorId, onValueChange = { colorId = it; validationMessage = null }, options = colorOptions, label = "Renk", placeholder = BBLocalization.Current.Get(key = "435c95c7-5210-4f4d-9805-b555e7e43ba2", fallback = ""), enabled = !isSubmitting && colorOptions.isNotEmpty())
-                        BbSelectInput(selectedValue = materialTypeId, onValueChange = { materialTypeId = it; validationMessage = null }, options = materialOptions, label = "Malzeme Türü", placeholder = "Malzeme seçiniz", enabled = !isSubmitting && materialOptions.isNotEmpty())
+                        BbSelectInput(selectedValue = materialTypeId, onValueChange = { materialTypeId = it; validationMessage = null }, options = materialOptions, label = BBLocalization.Current.Get(key = "db735556-6dc6-4008-96df-387f8e444159", fallback = "Malzeme Türü"), placeholder = "Malzeme seçiniz", enabled = !isSubmitting && materialOptions.isNotEmpty())
                     }
                 }
 
                 item {
                     RfqEditSection("Ticari Koşullar") {
                         BbSelectInput(selectedValue = paymentTermId, onValueChange = { paymentTermId = it; validationMessage = null }, options = paymentOptions, label = BBLocalization.Current.Get(key = "0ce51541-2adb-4cf7-91be-d1fcb7ffe88a", fallback = ""), placeholder = "Ödeme şartı seçiniz", enabled = !isSubmitting && paymentOptions.isNotEmpty())
-                        BbSelectInput(selectedValue = tradeTermId, onValueChange = { tradeTermId = it; validationMessage = null }, options = tradeOptions, label = "Ticaret Şartı", placeholder = "Ticaret şartı seçiniz", enabled = !isSubmitting && tradeOptions.isNotEmpty())
+                        BbSelectInput(selectedValue = tradeTermId, onValueChange = { tradeTermId = it; validationMessage = null }, options = tradeOptions, label = BBLocalization.Current.Get(key = "6c7bdc8a-1a1d-465d-a2da-7b873fea5e6e", fallback = "Ticaret Şartı"), placeholder = "Ticaret şartı seçiniz", enabled = !isSubmitting && tradeOptions.isNotEmpty())
                         BbTextInput(value = shippingTarget, onValueChange = { shippingTarget = it; validationMessage = null }, label = "Teslimat Hedefi", placeholder = "Ülke / Şehir / Liman", enabled = !isSubmitting)
                     }
                 }
@@ -186,12 +186,12 @@ fun RfqEditScreen(
                                 productName.isBlank() -> "Ürün adı zorunludur."
                                 category == null -> BBLocalization.Current.Get(key = "4834b933-045e-4ad5-8a39-9fbfc5a2122a", fallback = "")
                                 purchaseQuantity.toDoubleOrNull()?.let { it > 0 } != true -> "Geçerli bir miktar giriniz."
-                                unit == null -> "Birim seçiniz."
+                                unit == null -> BBLocalization.Current.Get(key = "723120da-c41c-4722-8827-f0bce1d29c34", fallback = "Birim seçiniz.")
                                 unitPrice.toDoubleOrNull()?.let { it >= 0 } != true -> "Geçerli bir birim fiyat giriniz."
                                 currency == null -> "Para birimi seçiniz."
                                 color == null -> BBLocalization.Current.Get(key = "435c95c7-5210-4f4d-9805-b555e7e43ba2", fallback = "")
                                 material == null -> "Malzeme türü seçiniz."
-                                payment == null -> "Ödeme şartı seçiniz."
+                                payment == null -> BBLocalization.Current.Get(key = "c89a68fc-73df-440a-b534-d51ce207c623", fallback = "Ödeme şartı seçiniz.")
                                 trade == null -> "Ticaret şartı seçiniz."
                                 shippingTarget.isBlank() -> "Teslimat hedefi zorunludur."
                                 productDescription.isBlank() -> "Ürün açıklaması zorunludur."

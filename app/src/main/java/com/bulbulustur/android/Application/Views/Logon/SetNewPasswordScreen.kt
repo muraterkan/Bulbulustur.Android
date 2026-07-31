@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Logon
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -84,7 +86,7 @@ fun SetNewPasswordScreen(
             eyebrow =
                 "Hesap Kurtarma",
             title =
-                "Yeni Şifre Belirle",
+                BBLocalization.Current.Get(key = "b950c83e-4e34-4b6d-a1fa-053f26502e63", fallback = "Yeni Şifre Belirle"),
             description =
                 "Hesabınız için yeni bir şifre oluşturun. Şifreniz 8 ile 16 karakter arasında olmalıdır."
         )
@@ -98,7 +100,7 @@ fun SetNewPasswordScreen(
 
         LogonPublicFieldLabel(
             text =
-                "Yeni Şifre"
+                BBLocalization.Current.Get(key = "868ebdd6-edca-430d-b987-78f5a7c89abd", fallback = "Yeni Şifre")
         )
 
         Spacer(
@@ -118,7 +120,7 @@ fun SetNewPasswordScreen(
                 onInputChanged()
             },
             placeholder =
-                "Yeni şifreniz",
+                BBLocalization.Current.Get(key = "868ebdd6-edca-430d-b987-78f5a7c89abd", fallback = "Yeni şifreniz"),
             trailingContent = {
                 TextButton(
                     onClick = {
@@ -188,7 +190,7 @@ fun SetNewPasswordScreen(
                 onInputChanged()
             },
             placeholder =
-                "Yeni şifrenizi tekrar girin",
+                BBLocalization.Current.Get(key = "f5a11c37-9ee5-47c0-a178-6343ee5bc63d", fallback = "Yeni şifrenizi tekrar girin"),
             trailingContent = {
                 TextButton(
                     onClick = {

@@ -242,7 +242,7 @@ fun BbCategorySearchSelectInput(
                 Text(
                     text =
                         if (visibleOptions.isEmpty()) {
-                            "Sonuç bulunamadı"
+                            BBLocalization.Current.Get(key = "8340c3dd-741e-4cdb-8080-b2a6f342c24e", fallback = "Sonuç bulunamadı")
                         } else {
                             "En fazla ${maximumVisibleOptionCount.coerceAtLeast(1)} sonuç gösteriliyor"
                         },

@@ -74,7 +74,7 @@ fun FavoriteListScreen(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "Favorilerim",
+                title = BBLocalization.Current.Get(key = "655d2dca-997f-41c6-aafe-479e03712a0a", fallback = "Favorilerim"),
                 onBackClick = onBackClick
             )
         }
@@ -356,7 +356,7 @@ private fun RetailFavoriteCard(
                 )
 
                 BbButton(
-                    text = "Sepete Ekle",
+                    text = BBLocalization.Current.Get(key = "9a748489-8d57-4bc5-becc-0937717d80df", fallback = "Sepete Ekle"),
                     onClick = {
                         onAddToBasketClick(favorite.FavoriteId)
                     },
@@ -462,7 +462,7 @@ private fun WholesaleFavoriteCard(
                 )
 
                 BbButton(
-                    text = "Teklif Al",
+                    text = BBLocalization.Current.Get(key = "9aa9e9a4-18b3-427b-943f-36170e46cb37", fallback = "Teklif Al"),
                     onClick = {
                         onRequestQuoteClick(favorite.WholesaleProductId)
                     },
@@ -586,7 +586,7 @@ private fun FavoriteErrorState(
                 )
 
                 BbButton(
-                    text = "Tekrar Dene",
+                    text = BBLocalization.Current.Get(key = "9d1ce783-da20-464b-9203-cd1ce09918c6", fallback = "Tekrar Dene"),
                     onClick = onRetryClick,
                     variant = BbButtonVariant.Primary,
                     size = BbButtonSize.Small,

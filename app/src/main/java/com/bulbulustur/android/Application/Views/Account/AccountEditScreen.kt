@@ -120,7 +120,7 @@ fun AccountEditScreen(
                         onValueChange = {
                             nameState.value = it
                         },
-                        label = "İsim",
+                        label = BBLocalization.Current.Get(key = "b42e911f-ca30-455e-8ba7-3659b55f2072", fallback = "İsim"),
                         placeholder = "İsminiz",
                         enabled = !isLoading
                     )
@@ -140,7 +140,7 @@ fun AccountEditScreen(
                         onValueChange = {
                             professionState.value = it
                         },
-                        label = "Meslek",
+                        label = BBLocalization.Current.Get(key = "5b1fbdba-1161-4716-966e-e40a815df70f", fallback = "Meslek"),
                         placeholder = "Mesleğiniz",
                         enabled = !isLoading
                     )
@@ -157,7 +157,7 @@ fun AccountEditScreen(
                 }
 
             BbButton(
-                text = "Güncelle",
+                text = BBLocalization.Current.Get(key = "58104fd9-46c6-4304-9abb-07f5273a33f9", fallback = "Güncelle"),
                 onClick = {
                     onSaveClick(
                         nameState.value,

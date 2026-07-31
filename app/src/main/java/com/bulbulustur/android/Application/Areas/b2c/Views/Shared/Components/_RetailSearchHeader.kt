@@ -29,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbIconBoxIcon
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbIconBoxSize
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
@@ -94,7 +95,7 @@ fun RetailSearchHeader(
                     contentDescription = if (
                         leadingAction == RetailSearchHeaderLeadingAction.Back
                     ) {
-                        "Geri"
+                        BBLocalization.Current.Get(key = "d94f43b6-5081-4e7d-b66e-8d19b37e9751", fallback = "Geri")
                     } else {
                         "Menü"
                     },
@@ -119,7 +120,7 @@ fun RetailSearchHeader(
                 )
                 RetailHeaderActionButton(
                     icon = Icons.Outlined.FavoriteBorder,
-                    contentDescription = "Favorilerim",
+                    contentDescription = BBLocalization.Current.Get(key = "655d2dca-997f-41c6-aafe-479e03712a0a", fallback = "Favorilerim"),
                     onClick = onFavoriteClick
                 )
             }
@@ -189,7 +190,7 @@ private fun RetailSearchInput(
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Search,
-                        contentDescription = "Ara",
+                        contentDescription = BBLocalization.Current.Get(key = "b62c3162-72af-439f-a20b-c4ca58f51035", fallback = "Ara"),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.height(
                             BBIcon.TopBarIcon

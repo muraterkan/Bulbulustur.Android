@@ -328,7 +328,7 @@ private fun WholesaleCategoryDetailActions(
             )
         ) {
             WholesaleCategoryActionCard(
-                title = "Ürünleri Gör",
+                title = BBLocalization.Current.Get(key = "5e09b1c8-93e6-4e9a-a055-2f556f57d6dc", fallback = "Ürünleri Gör"),
                 description = "Kategori ürünleri",
                 icon = Icons.Outlined.Inventory2,
                 modifier = Modifier.weight(1f),

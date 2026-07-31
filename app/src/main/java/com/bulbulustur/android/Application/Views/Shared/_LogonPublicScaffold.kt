@@ -833,7 +833,7 @@ fun LogonPublicLegalFooter(
                         fontWeight = FontWeight.Bold
                     )
                 ) {
-                    append("Kullanım Koşullarını")
+                    append(BBLocalization.Current.Get(key = "786cbd9d-09d8-4c72-97ff-17ead1eff098", fallback = "Kullanım Koşullarını"))
                 }
 
                 pop()

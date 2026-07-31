@@ -110,17 +110,17 @@ fun AccountScreen(
         ?.GenderId
         ?.takeIf { it > 0 }
         ?.toString()
-        ?: "Belirtilmemiş"
+        ?: BBLocalization.Current.Get(key = "e23c524e-fedd-4486-ac5e-25721a402156", fallback = "Belirtilmemiş")
 
     val birthDateText = member
         ?.BirthDate
         ?.trim()
         ?.take(10)
         ?.takeIf { it.isNotBlank() }
-        ?: "Belirtilmemiş"
+        ?: BBLocalization.Current.Get(key = "e23c524e-fedd-4486-ac5e-25721a402156", fallback = "Belirtilmemiş")
 
     val activationText = when (member?.Activation) {
-        true -> "Doğrulanmış"
+        true -> BBLocalization.Current.Get(key = "c6a0ff62-8828-475f-b553-37effb42efe6", fallback = "Doğrulanmış")
         false -> "Doğrulanmamış"
         null -> "Bilinmiyor"
     }
@@ -134,7 +134,7 @@ fun AccountScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Hesabım",
+                title = BBLocalization.Current.Get(key = "b32ffec3-51c2-403d-beda-5770383c4d2b", fallback = "Hesabım"),
                 onBackClick = onBackClick
             )
         }
@@ -209,7 +209,7 @@ fun AccountScreen(
                             ProfileDashedDivider()
 
                             ProfileInfoRow(
-                                title = "Cinsiyet",
+                                title = BBLocalization.Current.Get(key = "b3e02907-6ed9-44db-bd6a-b9276a1f8046", fallback = "Cinsiyet"),
                                 value = genderText,
                                 icon = Icons.Outlined.Man,
                                 onClick = onGenderClick
@@ -275,7 +275,7 @@ fun AccountScreen(
                             icon = Icons.Outlined.Business
                         ) {
                             ProfileInfoRow(
-                                title = "Şirket Bilgileri",
+                                title = BBLocalization.Current.Get(key = "5d3c17c2-d063-4757-9940-62331a540e23", fallback = "Şirket Bilgileri"),
                                 value = "Türkiye Global Ticaret Limited Şirketi",
                                 icon = Icons.Outlined.Business,
                                 onClick = onCompanyInfoClick

@@ -63,7 +63,7 @@ fun SampleRequestScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Numune Talebi",
+                title = BBLocalization.Current.Get(key = "a2568540-dd6c-4296-a2a2-0cea6adf103f", fallback = "Numune Talebi"),
                 onBackClick = onBackClick
             )
         }
@@ -106,7 +106,7 @@ fun SampleRequestScreen(
                     onValueChange = {
                         quantity.value = it
                     },
-                    label = "Miktar",
+                    label = BBLocalization.Current.Get(key = "64f1e179-caee-4a60-9500-d35fbc4ed554", fallback = "Miktar"),
                     placeholder = "1",
                     icon = Icons.Outlined.Inventory2
                 )
@@ -118,8 +118,8 @@ fun SampleRequestScreen(
                     onValueChange = {
                         detail.value = it
                     },
-                    label = "Diğer Detaylar",
-                    placeholder = "Bilmemiz gereken başka bir şey var mı? Tüm detayları buraya yazın."
+                    label = BBLocalization.Current.Get(key = "a997a8c2-5f4b-45e1-9aae-40c652406fcb", fallback = "Diğer Detaylar"),
+                    placeholder = BBLocalization.Current.Get(key = "ba4941f2-9a1a-4bba-a9ba-cf1987d77308", fallback = "Bilmemiz gereken başka bir şey var mı? Tüm detayları buraya yazın.")
                 )
             }
 
@@ -167,7 +167,7 @@ private fun SampleRequestHeader(
                 )
 
                 Text(
-                    text = "Numune Talebi",
+                    text = BBLocalization.Current.Get(key = "a2568540-dd6c-4296-a2a2-0cea6adf103f", fallback = "Numune Talebi"),
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.SemiBold
@@ -209,7 +209,7 @@ private fun SampleProductSummaryCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
         ) {
             Text(
-                text = "Tedarikçi",
+                text = BBLocalization.Current.Get(key = "95ab742c-6bb3-47da-bb8b-c37b3a979c24", fallback = "Tedarikçi"),
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.SemiBold

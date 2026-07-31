@@ -396,7 +396,7 @@ private fun WholesaleCategoryHeroCard(
                 )
             ) {
                 BbButton(
-                    text = "Ürünleri Gör",
+                    text = BBLocalization.Current.Get(key = "5e09b1c8-93e6-4e9a-a055-2f556f57d6dc", fallback = "Ürünleri Gör"),
                     onClick = onProductListClick,
                     modifier = Modifier.weight(1f),
                     variant = BbButtonVariant.Primary,
@@ -404,7 +404,7 @@ private fun WholesaleCategoryHeroCard(
                 )
 
                 BbButton(
-                    text = "Teklif Al",
+                    text = BBLocalization.Current.Get(key = "9aa9e9a4-18b3-427b-943f-36170e46cb37", fallback = "Teklif Al"),
                     onClick = onRfqClick,
                     modifier = Modifier.weight(1f),
                     variant = BbButtonVariant.Light,
@@ -413,7 +413,7 @@ private fun WholesaleCategoryHeroCard(
             }
 
             BbButton(
-                text = "Tedarikçileri Gör",
+                text = BBLocalization.Current.Get(key = "9346820b-56b1-4be1-9ac2-4d6f22fa18b5", fallback = "Tedarikçileri Gör"),
                 onClick = onCompanyListClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Outline,
@@ -713,7 +713,7 @@ private enum class WholesaleCategoryShowcaseTarget {
 private fun getWholesaleQuickActions(): List<WholesaleCategoryQuickActionItem> {
     return listOf(
         WholesaleCategoryQuickActionItem(
-            title = "Tedarikçiler",
+            title = BBLocalization.Current.Get(key = "9346820b-56b1-4be1-9ac2-4d6f22fa18b5", fallback = "Tedarikçiler"),
             description = "Toptan satış yapan firmalar",
             icon = Icons.Outlined.Business,
             backgroundColor = MaterialTheme.colorScheme.primaryContainer,
@@ -721,7 +721,7 @@ private fun getWholesaleQuickActions(): List<WholesaleCategoryQuickActionItem> {
             target = WholesaleCategoryQuickActionTarget.Companies
         ),
         WholesaleCategoryQuickActionItem(
-            title = "Teklif Al",
+            title = BBLocalization.Current.Get(key = "9aa9e9a4-18b3-427b-943f-36170e46cb37", fallback = "Teklif Al"),
             description = "İhtiyacını firmalara ilet",
             icon = Icons.Outlined.RequestQuote,
             backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
@@ -767,7 +767,7 @@ private fun getWholesaleCategoryShowcases(): List<WholesaleCategoryShowcaseItem>
             target = WholesaleCategoryShowcaseTarget.Products
         ),
         WholesaleCategoryShowcaseItem(
-            title = "Tedarikçiler",
+            title = BBLocalization.Current.Get(key = "9346820b-56b1-4be1-9ac2-4d6f22fa18b5", fallback = "Tedarikçiler"),
             description = "Toptan satış yapan firmalara ulaş.",
             icon = Icons.Outlined.Verified,
             backgroundColor = MaterialTheme.colorScheme.surfaceVariant,

@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -95,7 +97,7 @@ fun WholesaleSearchHeader(
                     contentDescription = if (
                         leadingAction == WholesaleSearchHeaderLeadingAction.Back
                     ) {
-                        "Geri"
+                        BBLocalization.Current.Get(key = "d94f43b6-5081-4e7d-b66e-8d19b37e9751", fallback = "Geri")
                     } else {
                         "Menü"
                     },
@@ -121,13 +123,13 @@ fun WholesaleSearchHeader(
 
                 WholesaleHeaderActionButton(
                     icon = Icons.Outlined.MailOutline,
-                    contentDescription = "Mesajlar",
+                    contentDescription = BBLocalization.Current.Get(key = "8e5477ec-e596-4a04-ac89-21ae8022b8f2", fallback = "Mesajlar"),
                     onClick = onMessageClick
                 )
 
                 WholesaleHeaderActionButton(
                     icon = Icons.Outlined.FavoriteBorder,
-                    contentDescription = "Favorilerim",
+                    contentDescription = BBLocalization.Current.Get(key = "655d2dca-997f-41c6-aafe-479e03712a0a", fallback = "Favorilerim"),
                     onClick = onFavoriteClick
                 )
             }
@@ -197,7 +199,7 @@ private fun WholesaleSearchInput(
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Search,
-                        contentDescription = "Ara",
+                        contentDescription = BBLocalization.Current.Get(key = "b62c3162-72af-439f-a20b-c4ca58f51035", fallback = "Ara"),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.height(
                             BBIcon.TopBarIcon

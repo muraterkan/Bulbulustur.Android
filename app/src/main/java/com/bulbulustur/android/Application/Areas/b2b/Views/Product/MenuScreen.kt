@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2b.Views.Product
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -227,7 +229,7 @@ private fun WholesaleMenuQuickActions(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
     ) {
         WholesaleMenuQuickActionCard(
-            title = "Tedarikçiler",
+            title = BBLocalization.Current.Get(key = "9346820b-56b1-4be1-9ac2-4d6f22fa18b5", fallback = "Tedarikçiler"),
             icon = {
                 Icon(
                     imageVector = Icons.Rounded.Factory,
@@ -240,7 +242,7 @@ private fun WholesaleMenuQuickActions(
         )
 
         WholesaleMenuQuickActionCard(
-            title = "Teklif Al",
+            title = BBLocalization.Current.Get(key = "9aa9e9a4-18b3-427b-943f-36170e46cb37", fallback = "Teklif Al"),
             icon = {
                 Icon(
                     imageVector = Icons.Rounded.Description,
@@ -253,7 +255,7 @@ private fun WholesaleMenuQuickActions(
         )
 
         WholesaleMenuQuickActionCard(
-            title = "Ara",
+            title = BBLocalization.Current.Get(key = "b62c3162-72af-439f-a20b-c4ca58f51035", fallback = "Ara"),
             icon = {
                 Icon(
                     imageVector = Icons.Rounded.Search,

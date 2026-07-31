@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Datastore
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -44,7 +46,7 @@ class UserPreferenceDataStore(
                     ThemeMode = preferences.ReadThemeMode(),
                     Language = preferences.ReadLanguage(),
                     CountryId = preferences[PreferenceKeys.CountryId] ?: 0,
-                    CountryName = preferences[PreferenceKeys.CountryName] ?: "Türkiye",
+                    CountryName = preferences[PreferenceKeys.CountryName] ?: BBLocalization.Current.Get(key = "5365b492-6a1c-4b46-b5c0-b50cbfdd17a8", fallback = "Türkiye"),
                     CountryCode = preferences[PreferenceKeys.CountryCode] ?: "TR",
                     CurrencyId = preferences[PreferenceKeys.CurrencyId] ?: 0,
                     CurrencyCode = preferences[PreferenceKeys.CurrencyCode] ?: "TRY",

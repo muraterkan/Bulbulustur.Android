@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Profile
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import com.bulbulustur.android.Application.Views.Profile.Components.BbProfileHeroCard
 
 import com.bulbulustur.android.Application.Views.Profile.Components.BbProfileStickySaveBar
@@ -196,7 +198,7 @@ fun ProfileBooleanPreferenceScreen(
         ),
         ProfileAppearanceSelectionOption(
             Id = 0,
-            Content = "Hayır"
+            Content = BBLocalization.Current.Get(key = "b4dbac50-7754-4131-82da-aefda288ca90", fallback = "Hayır")
         )
     )
 

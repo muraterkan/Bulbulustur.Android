@@ -154,7 +154,7 @@ private fun PhoneCard(
                         text = if (phone.IsDefault) {
                             "Varsayılan Telefon"
                         } else {
-                            "Telefon"
+                            BBLocalization.Current.Get(key = "cf948c6a-2e6a-4f1e-b77b-13f8d15a1a67", fallback = "Telefon")
                         },
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -180,7 +180,7 @@ private fun PhoneCard(
             ) {
                 if (!phone.Verified) {
                     BbButton(
-                        text = "Doğrula",
+                        text = BBLocalization.Current.Get(key = "d8b6ca6d-7132-4507-b5de-18990be07f5b", fallback = "Doğrula"),
                         onClick = {
                             onVerifyPhoneClick(phone.MemberPhoneId)
                         },
@@ -193,7 +193,7 @@ private fun PhoneCard(
                 }
 
                 BbButton(
-                    text = "Sil",
+                    text = BBLocalization.Current.Get(key = "e38050df-62e1-4b83-97ee-2643ad73390c", fallback = "Sil"),
                     onClick = {
                         onDeletePhoneClick(phone.MemberPhoneId)
                     },
@@ -256,7 +256,7 @@ private fun PhoneErrorState(message: String, onRetryClick: () -> Unit) {
             )
 
             BbButton(
-                text = "Tekrar Dene",
+                text = BBLocalization.Current.Get(key = "9d1ce783-da20-464b-9203-cd1ce09918c6", fallback = "Tekrar Dene"),
                 onClick = onRetryClick,
                 variant = BbButtonVariant.Light,
                 size = BbButtonSize.Medium
@@ -324,7 +324,7 @@ private fun PhoneStatusBadge(verified: Boolean) {
     val text = if (verified) {
         BBLocalization.Current.Get(key = "29991fb6-3b63-4e78-a488-d59b60560030", fallback = "")
     } else {
-        "Doğrulanmadı"
+        BBLocalization.Current.Get(key = "495ef79e-9f9d-4f6c-9c7b-6012adcb35b5", fallback = "Doğrulanmadı")
     }
 
     Box(

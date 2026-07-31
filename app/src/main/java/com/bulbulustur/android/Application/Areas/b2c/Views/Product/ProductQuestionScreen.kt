@@ -66,10 +66,10 @@ fun ProductQuestionScreen(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "Soru & Cevap",
+                title = BBLocalization.Current.Get(key = "a72573eb-7c00-42d1-8489-8302f0f33a23", fallback = "Soru & Cevap"),
                 onBackClick = onBackClick,
                 actionIcon = Icons.Outlined.AddComment,
-                actionContentDescription = "Soru sor",
+                actionContentDescription = BBLocalization.Current.Get(key = "d1af1899-4d10-4568-a72a-1fd2028063d1", fallback = "Soru sor"),
                 onActionClick = {
                     if (!isAuthenticated) {
                         onLoginRequired()
@@ -277,7 +277,7 @@ private fun ProductQuestionAskCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             Text(
-                text = "Satıcıya Soru Sor",
+                text = BBLocalization.Current.Get(key = "4bf83152-23e0-438c-adf8-cbf2d545bdba", fallback = "Satıcıya Soru Sor"),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -295,7 +295,7 @@ private fun ProductQuestionAskCard(
                     onValueChange = onQuestionTextChange,
                     modifier = Modifier.fillMaxWidth(),
                     label = {
-                        Text(text = "Sorunuz")
+                        Text(text = BBLocalization.Current.Get(key = "7f62bd9f-01a0-4cd2-b208-8c84fe01adae", fallback = "Sorunuz"))
                     },
                     placeholder = {
                         Text(text = "Ürün hakkında merak ettiğiniz konuyu yazın.")
@@ -431,7 +431,7 @@ private fun ProductQuestionCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Soru",
+                    text = BBLocalization.Current.Get(key = "d1af1899-4d10-4568-a72a-1fd2028063d1", fallback = "Soru"),
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurfaceVariant

@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -188,7 +190,7 @@ private fun CommunicationPreferenceRow(
             ) {
                 Text(
                     text = preference.PreferenceName.ifBlank {
-                        "İletişim tercihi"
+                        BBLocalization.Current.Get(key = "77fc0b2c-051f-405d-92f0-7066a2f7f670", fallback = "İletişim tercihi")
                     },
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface

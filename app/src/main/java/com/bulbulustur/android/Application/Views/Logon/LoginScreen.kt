@@ -95,7 +95,7 @@ fun LoginScreen(
     ) {
         LogonPublicPageTitle(
             eyebrow = "Bulbulustur Hesabı",
-            title = "Giriş Yap",
+            title = BBLocalization.Current.Get(key = "72289e9d-49e1-4c2a-8b0b-3ab5a67610a6", fallback = "Giriş Yap"),
             description =
                 "Hesabınıza giriş yapın, alışveriş ve toptan talep akışlarınıza devam edin."
         )
@@ -141,7 +141,7 @@ fun LoginScreen(
                 Alignment.CenterVertically
         ) {
             LogonPublicFieldLabel(
-                text = "Şifre"
+                text = BBLocalization.Current.Get(key = "f3bfe2a5-b25a-45b4-99f9-fbe3fb89bef5", fallback = "Şifre")
             )
 
             Spacer(
@@ -156,7 +156,7 @@ fun LoginScreen(
                 }
             ) {
                 Text(
-                    text = "Şifremi Unuttum",
+                    text = BBLocalization.Current.Get(key = "7719d233-45c9-4a08-9de7-e5fc19c7c4f6", fallback = "Şifremi Unuttum"),
                     style =
                         MaterialTheme.typography.labelLarge,
                     fontWeight =
@@ -244,7 +244,7 @@ fun LoginScreen(
             text = if (isLoading) {
                 "Giriş Yapılıyor..."
             } else {
-                "Giriş Yap"
+                BBLocalization.Current.Get(key = "72289e9d-49e1-4c2a-8b0b-3ab5a67610a6", fallback = "Giriş Yap")
             },
             onClick = {
                 SubmitLogin()
@@ -267,7 +267,7 @@ fun LoginScreen(
                 Alignment.CenterVertically
         ) {
             Text(
-                text = "Hesabınız yok mu?",
+                text = BBLocalization.Current.Get(key = "84fcb238-af63-4127-81a8-8b258d53a822", fallback = "Hesabınız yok mu?"),
                 style =
                     MaterialTheme.typography.bodySmall,
                 color =

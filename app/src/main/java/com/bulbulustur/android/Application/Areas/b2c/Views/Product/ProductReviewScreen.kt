@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Product
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -62,14 +64,14 @@ fun ProductReviewScreen(
     var selectedFilter by
     remember {
         mutableStateOf(
-            "Tümü"
+            BBLocalization.Current.Get(key = "40b32a95-e0ec-4b16-b54d-12b6fe90cced", fallback = "Tümü")
         )
     }
 
     val filters =
         remember {
             listOf(
-                "Tümü",
+                BBLocalization.Current.Get(key = "40b32a95-e0ec-4b16-b54d-12b6fe90cced", fallback = "Tümü"),
                 "5 Yıldız",
                 "4 Yıldız",
                 "3 Yıldız",
@@ -83,7 +85,7 @@ fun ProductReviewScreen(
             selectedFilter,
             State.Reviews
         ) {
-            if (selectedFilter == "Tümü") {
+            if (selectedFilter == BBLocalization.Current.Get(key = "40b32a95-e0ec-4b16-b54d-12b6fe90cced", fallback = "Tümü")) {
                 State.Reviews
             } else {
                 val selectedRating =
@@ -198,9 +200,9 @@ fun ProductReviewScreen(
                     item {
                         ProductReviewMessageCard(
                             title =
-                                "Henüz değerlendirme yok",
+                                BBLocalization.Current.Get(key = "fec90366-5731-4eb2-8dae-e72c6401e863", fallback = "Henüz değerlendirme yok"),
                             description =
-                                "Bu ürün için yayınlanmış bir müşteri değerlendirmesi bulunmuyor."
+                                BBLocalization.Current.Get(key = "7618039b-9a62-4817-8fec-2ee5d0ec57e0", fallback = "Bu ürün için yayınlanmış bir müşteri değerlendirmesi bulunmuyor.")
                         )
                     }
                 }
@@ -253,7 +255,7 @@ fun ProductReviewScreen(
                                     if (State.IsLoading) {
                                         "Yükleniyor"
                                     } else {
-                                        "Daha Fazla Göster"
+                                        BBLocalization.Current.Get(key = "e67b3c5d-fbdd-4f49-bb8f-72be40be9086", fallback = "Daha Fazla Göster")
                                     },
                                 onClick =
                                     onLoadMoreClick,
@@ -952,7 +954,7 @@ private fun ReviewDTO.ResolveCustomerName(): String {
             .takeIf {
                 it.isNotBlank()
             }
-        ?: "Müşteri"
+        ?: BBLocalization.Current.Get(key = "3a8d29be-870c-414f-bb7c-221b560b299e", fallback = "Müşteri")
 }
 
 private fun String.ToInitials(

@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Profile
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.draw.clip
 import coil3.compose.AsyncImage
@@ -62,7 +64,7 @@ fun ProfileScreen(
     memberProfile: MemberProfileDTO?,
     memberPicture: String = "",
     displayValues: ProfileDisplayValues = ProfileDisplayValues(),
-    languagesSummary: String = "Belirtilmemiş",
+    languagesSummary: String = BBLocalization.Current.Get(key = "e23c524e-fedd-4486-ac5e-25721a402156", fallback = "Belirtilmemiş"),
     addressCascadeState: AddressCascadeState,
     isLoading: Boolean = false,
     errorMessage: String? = null,
@@ -87,7 +89,7 @@ fun ProfileScreen(
     onCompanyInfoClick: () -> Unit = {},
     onB2BStatusClick: () -> Unit = {}
 ) {
-    val unspecified = "Belirtilmemiş"
+    val unspecified = BBLocalization.Current.Get(key = "e23c524e-fedd-4486-ac5e-25721a402156", fallback = "Belirtilmemiş")
 
     val fullName = listOfNotNull(
         member?.Name?.trim()?.takeIf { it.isNotBlank() },
@@ -125,7 +127,7 @@ fun ProfileScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Profilim",
+                title = BBLocalization.Current.Get(key = "ab200e4f-1f9e-45f4-90a6-7d5d21d33953", fallback = "Profilim"),
                 onBackClick = onBackClick
             )
         }
@@ -198,12 +200,12 @@ fun ProfileScreen(
 
                     item {
                         ProfileSectionCard(
-                            title = "Diller",
+                            title = BBLocalization.Current.Get(key = "fb9900fe-d66a-4aee-a030-f41b58100722", fallback = "Diller"),
                             description = "Konuştuğunuz dilleri ve seviyelerini yönetin.",
                             icon = Icons.Outlined.Translate
                         ) {
                             ProfileFieldRow(
-                                title = "Dillerim",
+                                title = BBLocalization.Current.Get(key = "fb9900fe-d66a-4aee-a030-f41b58100722", fallback = "Dillerim"),
                                 value = languagesSummary,
                                 icon = Icons.Outlined.Translate,
                                 onClick = onLanguagesClick
@@ -227,7 +229,7 @@ fun ProfileScreen(
                             ProfileDivider()
 
                             ProfileFieldRow(
-                                title = "Meslek",
+                                title = BBLocalization.Current.Get(key = "5b1fbdba-1161-4716-966e-e40a815df70f", fallback = "Meslek"),
                                 value = profession,
                                 icon = Icons.Outlined.WorkOutline,
                                 onClick = onProfessionClick
@@ -252,7 +254,7 @@ fun ProfileScreen(
 private fun Boolean?.toDisplayText(unspecified: String): String {
     return when (this) {
         true -> "Evet"
-        false -> "Hayır"
+        false -> BBLocalization.Current.Get(key = "b4dbac50-7754-4131-82da-aefda288ca90", fallback = "Hayır")
         null -> unspecified
     }
 }
@@ -288,7 +290,7 @@ private fun ProfileHeroCard(
                 if (pictureUrl.isNotBlank()) {
                     AsyncImage(
                         model = pictureUrl,
-                        contentDescription = "Profil fotoğrafı",
+                        contentDescription = BBLocalization.Current.Get(key = "b97518f9-86d4-46f0-9f2e-5e3f96aa7440", fallback = "Profil fotoğrafı"),
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.Crop
                     )

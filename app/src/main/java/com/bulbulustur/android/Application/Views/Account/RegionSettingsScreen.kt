@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -277,7 +279,7 @@ private fun RegionFlagFileNameByContent(
         .replace("ç", "c")
 
     return when (normalized) {
-        "turkiye", "türkiye", "turkey" -> "turkey.svg"
+        "turkiye", BBLocalization.Current.Get(key = "5365b492-6a1c-4b46-b5c0-b50cbfdd17a8", fallback = "türkiye"), "turkey" -> "turkey.svg"
         "united kingdom", "ingiltere", "birlesik krallik" -> "uk.svg"
         "united states", "united states of america", "amerika birleşik devletleri" -> "United States of America.svg"
         "afghanistan" -> "afghanistan.svg"

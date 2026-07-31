@@ -57,10 +57,10 @@ fun AddressListScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Adreslerim",
+                title = BBLocalization.Current.Get(key = "a5c6a1af-5860-4dc6-9f86-c80c8631f063", fallback = "Adreslerim"),
                 onBackClick = onBackClick,
                 actionIcon = Icons.Outlined.AddLocationAlt,
-                actionContentDescription = "Yeni Adres Ekle",
+                actionContentDescription = BBLocalization.Current.Get(key = "a1b99907-afe9-4bd9-abfd-58846f4e9252", fallback = "Yeni Adres Ekle"),
                 onActionClick = onCreateAddressClick
             )
         }
@@ -149,20 +149,20 @@ private fun AddressCard(
             ) {
                 AddressInfoRow(
                     icon = Icons.Outlined.Person,
-                    title = "Alıcı",
+                    title = BBLocalization.Current.Get(key = "d8fb620c-aaae-404d-ac48-5d6b6f3d93ed", fallback = "Alıcı"),
                     value = "${address.Name} ${address.Surname}".trim()
                 )
 
                 AddressInfoRow(
                     icon = Icons.Outlined.LocationOn,
-                    title = "Adres",
+                    title = BBLocalization.Current.Get(key = "af1da4df-7298-4cd9-b256-371d098b59f7", fallback = "Adres"),
                     value = address.Address
                 )
 
                 if (address.Phone.isNotBlank()) {
                     AddressInfoRow(
                         icon = Icons.Outlined.Person,
-                        title = "Telefon",
+                        title = BBLocalization.Current.Get(key = "cf948c6a-2e6a-4f1e-b77b-13f8d15a1a67", fallback = "Telefon"),
                         value = address.Phone
                     )
                 }
@@ -176,7 +176,7 @@ private fun AddressCard(
                     horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
                 ) {
                     BbButton(
-                        text = "Düzenle",
+                        text = BBLocalization.Current.Get(key = "6a23f3ad-9109-471d-a670-7b5a40cf3cd9", fallback = "Düzenle"),
                         onClick = {
                             onEditAddressClick(address.AddressKey)
                         },
@@ -194,7 +194,7 @@ private fun AddressCard(
                     )
 
                     BbButton(
-                        text = "Sil",
+                        text = BBLocalization.Current.Get(key = "e38050df-62e1-4b83-97ee-2643ad73390c", fallback = "Sil"),
                         onClick = {
                             onDeleteAddressClick(address.MemberAddressId)
                         },
@@ -252,7 +252,7 @@ private fun AddressCardHeader(address: MemberAddressDTO) {
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
         ) {
             Text(
-                text = address.AddressTitle.ifBlank { "Adres" },
+                text = address.AddressTitle.ifBlank { BBLocalization.Current.Get(key = "af1da4df-7298-4cd9-b256-371d098b59f7", fallback = "Adres") },
                 style = BbTypography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -319,7 +319,7 @@ private fun AddressDefaultBadge() {
             )
     ) {
         Text(
-            text = "Varsayılan Adres",
+            text = BBLocalization.Current.Get(key = "7fac1179-ab8e-4bb8-9ca0-92369db1597e", fallback = "Varsayılan Adres"),
             style = BbTypography.labelSmall,
             color = BBColors.Green.Green700
         )
@@ -362,7 +362,7 @@ private fun AddressErrorState(
             )
 
             BbButton(
-                text = "Tekrar Dene",
+                text = BBLocalization.Current.Get(key = "9d1ce783-da20-464b-9203-cd1ce09918c6", fallback = "Tekrar Dene"),
                 onClick = onRetryClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Outline,
@@ -416,7 +416,7 @@ private fun AddressEmptyState(
             )
 
             BbButton(
-                text = "Yeni Adres Ekle",
+                text = BBLocalization.Current.Get(key = "a1b99907-afe9-4bd9-abfd-58846f4e9252", fallback = "Yeni Adres Ekle"),
                 onClick = onCreateAddressClick,
                 variant = BbButtonVariant.Primary,
                 size = BbButtonSize.Medium

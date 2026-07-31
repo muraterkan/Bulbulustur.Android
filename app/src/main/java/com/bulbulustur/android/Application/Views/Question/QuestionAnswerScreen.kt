@@ -85,7 +85,7 @@ fun QuestionAnswerScreen(
                         .padding(innerPadding),
                     title = "Sorular alınamadı",
                     message = errorMessage,
-                    buttonText = "Tekrar Dene",
+                    buttonText = BBLocalization.Current.Get(key = "9d1ce783-da20-464b-9203-cd1ce09918c6", fallback = "Tekrar Dene"),
                     onButtonClick = onRetryClick
                 )
             }
@@ -238,7 +238,7 @@ private fun QuestionAnswerCard(
                     )
 
                     Text(
-                        text = item.StoreName.orEmpty().ifBlank { "Mağaza" },
+                        text = item.StoreName.orEmpty().ifBlank { BBLocalization.Current.Get(key = "a4bd79dd-e7ee-4407-9e7d-00582840c43a", fallback = "Mağaza") },
                         style = BbTypography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -261,13 +261,13 @@ private fun QuestionAnswerCard(
             AccountQuestionDivider()
 
             QuestionTextBlock(
-                label = "Soru",
+                label = BBLocalization.Current.Get(key = "d1af1899-4d10-4568-a72a-1fd2028063d1", fallback = "Soru"),
                 text = item.Question
             )
 
             if (isAnswered) {
                 QuestionTextBlock(
-                    label = "Cevap",
+                    label = BBLocalization.Current.Get(key = "8fcffd2a-a535-475d-9afa-bb88465a11fd", fallback = "Cevap"),
                     text = item.Message.orEmpty()
                 )
             } else {

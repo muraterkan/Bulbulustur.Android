@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Message
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -68,7 +70,7 @@ fun MessageInboxScreen(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "Mesajlar",
+                title = BBLocalization.Current.Get(key = "8e5477ec-e596-4a04-ac89-21ae8022b8f2", fallback = "Mesajlar"),
                 onBackClick = onBackClick
             )
         }
@@ -171,7 +173,7 @@ private fun MessageStatsRow(
             modifier = Modifier.weight(1f),
             icon = Icons.Outlined.MarkEmailUnread,
             value = unreadCount.toString(),
-            label = "Yeni",
+            label = BBLocalization.Current.Get(key = "557ea0c9-948d-4e62-8ddc-948294a55b11", fallback = "Yeni"),
             color = BBColors.Blue.Blue600,
             backgroundColor = BBColors.Blue.Blue50
         )
@@ -180,7 +182,7 @@ private fun MessageStatsRow(
             modifier = Modifier.weight(1f),
             icon = Icons.Outlined.MarkEmailRead,
             value = readCount.toString(),
-            label = "Okundu",
+            label = BBLocalization.Current.Get(key = "9576c74b-fa33-41f4-b5f8-b34358d221cd", fallback = "Okundu"),
             color = BBColors.Green.Green600,
             backgroundColor = BBColors.Green.Green50
         )
@@ -324,7 +326,7 @@ private fun MessageCard(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = otherName.ifBlank { "Üye" },
+                            text = otherName.ifBlank { BBLocalization.Current.Get(key = "980554c9-df75-41c6-a1d2-24574a8d554e", fallback = "Üye") },
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.weight(1f)
@@ -359,10 +361,10 @@ private fun MessageCard(
                 horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2),
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
             ) {
-                MessageSmallTag("Gelen Kutusu")
+                MessageSmallTag(BBLocalization.Current.Get(key = "24f66aea-c97e-4c82-af4c-528f9471a685", fallback = "Gelen Kutusu"))
                 MessageSmallTag("Toptan")
                 if (message.IsPriority) MessageSmallTag("Öncelikli")
-                if (message.IsStarred) MessageSmallTag("Yıldızlı")
+                if (message.IsStarred) MessageSmallTag(BBLocalization.Current.Get(key = "8d7ea4cc-931b-4515-8a90-05ada47bd539", fallback = "Yıldızlı"))
             }
         }
     }
@@ -405,7 +407,7 @@ private fun MessageStatusBadge(
     isUnread: Boolean
 ) {
     val color = if (isUnread) BBColors.Blue.Blue600 else BBColors.Green.Green600
-    val text = if (isUnread) "Yeni" else "Okundu"
+    val text = if (isUnread) BBLocalization.Current.Get(key = "557ea0c9-948d-4e62-8ddc-948294a55b11", fallback = "Yeni") else BBLocalization.Current.Get(key = "9576c74b-fa33-41f4-b5f8-b34358d221cd", fallback = "Okundu")
 
     Box(
         modifier = Modifier
@@ -514,11 +516,11 @@ private fun WholesaleMessageDTO.otherMemberName(currentMemberId: Int): String {
         }
     }
 
-    return resolvedName.ifBlank { "Kullanıcı" }
+    return resolvedName.ifBlank { BBLocalization.Current.Get(key = "74980bdc-ae16-4736-92c9-d7d63083e869", fallback = "Kullanıcı") }
 }
 
 private enum class MessageFilter(val label: String) {
-    All("Tümü"),
-    Unread("Okunmamış"),
-    Read("Okundu")
+    All(BBLocalization.Current.Get(key = "40b32a95-e0ec-4b16-b54d-12b6fe90cced", fallback = "Tümü")),
+    Unread(BBLocalization.Current.Get(key = "f13572fd-caf7-427b-a374-6514bfe9430a", fallback = "Okunmamış")),
+    Read(BBLocalization.Current.Get(key = "9576c74b-fa33-41f4-b5f8-b34358d221cd", fallback = "Okundu"))
 }

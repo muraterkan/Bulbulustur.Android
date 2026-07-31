@@ -335,7 +335,7 @@ private fun RfqOffersErrorCard(
             )
 
             BbButton(
-                text = "Tekrar Dene",
+                text = BBLocalization.Current.Get(key = "9d1ce783-da20-464b-9203-cd1ce09918c6", fallback = "Tekrar Dene"),
                 onClick = onRetryClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Outline,

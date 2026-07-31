@@ -196,7 +196,7 @@ fun DashboardScreen(
                     AccountDashedDivider()
 
                     AccountMenuRow(
-                        title = "Favorilerim",
+                        title = BBLocalization.Current.Get(key = "655d2dca-997f-41c6-aafe-479e03712a0a", fallback = "Favorilerim"),
                         description = "Perakende ve toptan favorilerini yönet.",
                         icon = Icons.Outlined.FavoriteBorder,
                         onClick = onFavoritesClick
@@ -205,7 +205,7 @@ fun DashboardScreen(
                     AccountDashedDivider()
 
                     AccountMenuRow(
-                        title = "Fiyat Teklifi İstekleri",
+                        title = BBLocalization.Current.Get(key = "d497388f-3bab-40fd-af5e-e6294231b04f", fallback = "Fiyat Teklifi İstekleri"),
                         description = "Toptan teklif ve RFQ süreçlerini takip et.",
                         icon = Icons.Outlined.RequestQuote,
                         onClick = onQuotationRequestsClick
@@ -214,7 +214,7 @@ fun DashboardScreen(
                     AccountDashedDivider()
 
                     AccountMenuRow(
-                        title = "Adreslerim",
+                        title = BBLocalization.Current.Get(key = "a5c6a1af-5860-4dc6-9f86-c80c8631f063", fallback = "Adreslerim"),
                         description = "Teslimat ve fatura adreslerini düzenle.",
                         icon = Icons.Outlined.Home,
                         onClick = onAddressClick
@@ -223,7 +223,7 @@ fun DashboardScreen(
                     AccountDashedDivider()
 
                     AccountMenuRow(
-                        title = "Banka Hesaplarım",
+                        title = BBLocalization.Current.Get(key = "56bb1452-c8f8-4bb0-8501-0947118999df", fallback = "Banka Hesaplarım"),
                         description = "IBAN ve banka hesap bilgilerini yönet.",
                         icon = Icons.Outlined.AccountBalance,
                         onClick = onBankAccountsClick
@@ -236,7 +236,7 @@ fun DashboardScreen(
                     title = "Ticari Profil"
                 ) {
                     AccountMenuRow(
-                        title = "Şirket Bilgileri",
+                        title = BBLocalization.Current.Get(key = "5d3c17c2-d063-4757-9940-62331a540e23", fallback = "Şirket Bilgileri"),
                         description = "Firma ve ticari hesap bilgilerini yönet.",
                         icon = Icons.Outlined.Business,
                         onClick = onCompanyInfoClick
@@ -276,7 +276,7 @@ fun DashboardScreen(
                     AccountDashedDivider()
 
                     AccountMenuRow(
-                        title = "Değerlendirmelerim",
+                        title = BBLocalization.Current.Get(key = "e6bb3a6c-5706-4ecd-8cab-8cb37ba1359b", fallback = "Değerlendirmelerim"),
                         description = "Yorum ve değerlendirmelerini görüntüle.",
                         icon = Icons.Outlined.Reviews,
                         onClick = onReviewsClick
@@ -285,7 +285,7 @@ fun DashboardScreen(
                     AccountDashedDivider()
 
                     AccountMenuRow(
-                        title = "Kuponlarım",
+                        title = BBLocalization.Current.Get(key = "fd0f23de-98a8-4544-ac77-1d2ce02750af", fallback = "Kuponlarım"),
                         description = "Tanımlı kampanya ve kuponlarını incele.",
                         icon = Icons.Outlined.LocalOffer,
                         onClick = onCouponsClick
@@ -294,7 +294,7 @@ fun DashboardScreen(
                     AccountDashedDivider()
 
                     AccountMenuRow(
-                        title = "Taleplerim",
+                        title = BBLocalization.Current.Get(key = "edf6011a-a790-4d23-8a93-c539be6986ae", fallback = "Taleplerim"),
                         description = "İade, destek ve işlem taleplerini takip et.",
                         icon = Icons.Outlined.HelpOutline,
                         onClick = onRequestsClick
@@ -473,7 +473,7 @@ private fun AccountAvatar(
         if (useProfilePhoto) {
             AsyncImage(
                 model = profilePictureUrl,
-                contentDescription = "Profil fotoğrafı",
+                contentDescription = BBLocalization.Current.Get(key = "b97518f9-86d4-46f0-9f2e-5e3f96aa7440", fallback = "Profil fotoğrafı"),
                 modifier = Modifier
                     .fillMaxSize()
                     .clip(BBRadius.IconBoxSoft),
@@ -571,7 +571,7 @@ private fun AccountPrimaryActions(
     ) {
         AccountPrimaryActionCard(
             modifier = Modifier.weight(1f),
-            title = "Toptan Teklif Al",
+            title = BBLocalization.Current.Get(key = "9aa9e9a4-18b3-427b-943f-36170e46cb37", fallback = "Toptan Teklif Al"),
             description = "Özel fiyat iste.",
             icon = Icons.Outlined.RequestQuote,
             accent = DashboardActionAccent.Primary,
@@ -728,7 +728,7 @@ private fun DashboardAccountCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Hesabım",
+                    text = BBLocalization.Current.Get(key = "b32ffec3-51c2-403d-beda-5770383c4d2b", fallback = "Hesabım"),
                     style = BbTypography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
@@ -801,7 +801,7 @@ private fun AccountUsagePurposeDarkCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Bulbulustur'u Hangi Amaçla Kullanıyorsun?",
+                    text = BBLocalization.Current.Get(key = "81ebee8c-44e5-40c8-b5e3-b88450002783", fallback = "Bulbulustur'u Hangi Amaçla Kullanıyorsun?"),
                     style = BbTypography.titleMedium,
                     color = MaterialTheme.colorScheme.inverseOnSurface,
                     fontWeight = FontWeight.Bold

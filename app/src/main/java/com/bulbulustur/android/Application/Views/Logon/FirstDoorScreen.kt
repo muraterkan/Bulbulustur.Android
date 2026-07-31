@@ -55,7 +55,7 @@ fun FirstDoorScreen(
     ) {
         LogonPublicPageTitle(
             eyebrow = "Yeni Üyelik",
-            title = "E-posta Adresinizi Girin",
+            title = BBLocalization.Current.Get(key = "e6f44bb3-1a51-4db7-86d7-ab38d008440a", fallback = "E-posta Adresinizi Girin"),
             description = "Kayıt işlemini başlatmak için e-posta adresinize bir doğrulama bağlantısı göndereceğiz."
         )
 
@@ -196,7 +196,7 @@ fun FirstDoorScreen(
                     onBackToLogonClick
             ) {
                 Text(
-                    text = "Giriş Yap",
+                    text = BBLocalization.Current.Get(key = "72289e9d-49e1-4c2a-8b0b-3ab5a67610a6", fallback = "Giriş Yap"),
                     style =
                         MaterialTheme.typography.labelLarge,
                     fontWeight =

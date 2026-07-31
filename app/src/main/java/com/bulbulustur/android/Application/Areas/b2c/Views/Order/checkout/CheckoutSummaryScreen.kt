@@ -275,7 +275,7 @@ private fun CheckoutSummaryAddressCard(
     onEditAddressClick: () -> Unit
 ) {
     CheckoutSummaryInfoCard(
-        title = "Teslimat adresi",
+        title = BBLocalization.Current.Get(key = "fa3df4de-7069-4a3d-9dac-5a4ea9b88b65", fallback = "Teslimat adresi"),
         actionText = BBLocalization.Current.Get(key = "46abcd8f-976d-4c12-a55f-8aa3c4abb38b", fallback = ""),
         onActionClick = onEditAddressClick
     ) {
@@ -345,7 +345,7 @@ private fun CheckoutSummaryPaymentCard(
     onEditPaymentClick: () -> Unit
 ) {
     CheckoutSummaryInfoCard(
-        title = "Ödeme yöntemi",
+        title = BBLocalization.Current.Get(key = "8c828c6c-67e7-4989-835d-1fead0c9518c", fallback = "Ödeme yöntemi"),
         actionText = BBLocalization.Current.Get(key = "46abcd8f-976d-4c12-a55f-8aa3c4abb38b", fallback = ""),
         onActionClick = onEditPaymentClick
     ) {
@@ -492,12 +492,12 @@ private fun CheckoutSummaryTotalCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
         ) {
             CheckoutSummaryTotalRow(
-                title = "Ürün toplamı",
+                title = BBLocalization.Current.Get(key = "9ca1b3ac-05ef-462c-a4ef-e4bcd4b4b11b", fallback = "Ürün toplamı"),
                 value = total.productTotalText
             )
 
             CheckoutSummaryTotalRow(
-                title = "Kargo",
+                title = BBLocalization.Current.Get(key = "8fa1207a-2a06-4bdb-936b-f7da848e0f72", fallback = "Kargo"),
                 value = total.cargoTotalText
             )
 
@@ -628,7 +628,7 @@ private fun CheckoutSummaryBottomBar(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    text = "Toplam",
+                    text = BBLocalization.Current.Get(key = "e736c25f-c944-4f52-a206-819f93d64a29", fallback = "Toplam"),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

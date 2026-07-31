@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -59,24 +61,24 @@ fun ProductHistoryScreen(
 
     val filters = remember {
         listOf(
-            "Tümü",
+            BBLocalization.Current.Get(key = "40b32a95-e0ec-4b16-b54d-12b6fe90cced", fallback = "Tümü"),
             "B2C Geçmişi",
             "Ayakkabı",
             "Giyim",
-            "Bugün",
+            BBLocalization.Current.Get(key = "5df01635-64c2-45a2-95e2-8b37bae9b423", fallback = "Bugün"),
             "Bu Hafta"
         )
     }
 
     var selectedFilter by remember {
-        mutableStateOf("Tümü")
+        mutableStateOf(BBLocalization.Current.Get(key = "40b32a95-e0ec-4b16-b54d-12b6fe90cced", fallback = "Tümü"))
     }
 
     val filteredItems = remember(
         selectedFilter,
         historyItems.toList()
     ) {
-        if (selectedFilter == "Tümü") {
+        if (selectedFilter == BBLocalization.Current.Get(key = "40b32a95-e0ec-4b16-b54d-12b6fe90cced", fallback = "Tümü")) {
             historyItems.toList()
         } else {
             historyItems.filter { historyItem ->
@@ -96,7 +98,7 @@ fun ProductHistoryScreen(
                 } else {
                     null
                 },
-                actionContentDescription = "Geçmişi Temizle",
+                actionContentDescription = BBLocalization.Current.Get(key = "e3a7f590-7914-429c-ad72-083f5e1399ba", fallback = "Geçmişi Temizle"),
                 onActionClick = {
                     historyItems.clear()
                 }
@@ -222,7 +224,7 @@ private fun ProductHistoryIntroCard(
             )
 
             Text(
-                text = "Ürünleri tekrar inceleyebilir, Favorilerinize ekleyebilir veya ürün detayına geri dönebilirsiniz.",
+                text = BBLocalization.Current.Get(key = "07b57663-9575-4f87-bd3a-c34ae73cb794", fallback = "Ürünleri tekrar inceleyebilir, Favorilerinize ekleyebilir veya ürün detayına geri dönebilirsiniz."),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -232,7 +234,7 @@ private fun ProductHistoryIntroCard(
                 horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
             ) {
                 BbButton(
-                    text = "Ürünleri İncele",
+                    text = BBLocalization.Current.Get(key = "0aa8fda4-a781-4746-8082-f0be1c5d8e50", fallback = "Ürünleri İncele"),
                     onClick = onGoProductsClick,
                     modifier = Modifier.weight(1f),
                     variant = BbButtonVariant.Primary,
@@ -302,8 +304,8 @@ private fun ProductHistoryResultHeader(
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = if (selectedFilter == "Tümü") {
-                    "Son Görüntülenenler"
+                text = if (selectedFilter == BBLocalization.Current.Get(key = "40b32a95-e0ec-4b16-b54d-12b6fe90cced", fallback = "Tümü")) {
+                    BBLocalization.Current.Get(key = "a960175a-01e0-4cb7-bd4e-b36e2cfba5b4", fallback = "Son Görüntülenenler")
                 } else {
                     selectedFilter
                 },
@@ -368,7 +370,7 @@ private fun ProductHistoryCard(
             )
 
             BbButton(
-                text = "Ürüne Git",
+                text = BBLocalization.Current.Get(key = "c51e5608-c176-4df9-b23d-cdb5d66db1ab", fallback = "Ürüne Git"),
                 onClick = onProductClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Primary,
@@ -484,7 +486,7 @@ private fun ProductHistoryEmptyState(
                 )
 
                 BbButton(
-                    text = "Ürünleri İncele",
+                    text = BBLocalization.Current.Get(key = "0aa8fda4-a781-4746-8082-f0be1c5d8e50", fallback = "Ürünleri İncele"),
                     onClick = onGoProductsClick,
                     variant = BbButtonVariant.Primary,
                     size = BbButtonSize.Medium
@@ -560,9 +562,9 @@ private fun getProductHistoryItems(): List<ProductHistoryItem> {
             description = "Daha önce görüntülediğin ürün. Ürünü tekrar inceleyebilirsin.",
             categoryName = "Ayakkabı",
             viewedDateText = "Daha Önce Baktın",
-            historyTypeText = "Geçmiş",
+            historyTypeText = BBLocalization.Current.Get(key = "ee443d91-14f7-4540-ada8-8e29f7b40c90", fallback = "Geçmiş"),
             imageText = "P1",
-            filterTags = listOf("B2C Geçmişi", "Ayakkabı", "Bugün")
+            filterTags = listOf("B2C Geçmişi", "Ayakkabı", BBLocalization.Current.Get(key = "5df01635-64c2-45a2-95e2-8b37bae9b423", fallback = "Bugün"))
         ),
         ProductHistoryItem(
             id = 2,
@@ -571,7 +573,7 @@ private fun getProductHistoryItems(): List<ProductHistoryItem> {
             description = "Daha önce görüntülediğin ürün. Ürünü tekrar inceleyebilirsin.",
             categoryName = "Ayakkabı",
             viewedDateText = "Dün Baktın",
-            historyTypeText = "Geçmiş",
+            historyTypeText = BBLocalization.Current.Get(key = "ee443d91-14f7-4540-ada8-8e29f7b40c90", fallback = "Geçmiş"),
             imageText = "P2",
             filterTags = listOf("B2C Geçmişi", "Ayakkabı", "Bu Hafta")
         ),
@@ -582,7 +584,7 @@ private fun getProductHistoryItems(): List<ProductHistoryItem> {
             description = "Daha önce görüntülediğin ürün. Ürünü tekrar inceleyebilirsin.",
             categoryName = "Giyim",
             viewedDateText = "3 Gün Önce Baktın",
-            historyTypeText = "Geçmiş",
+            historyTypeText = BBLocalization.Current.Get(key = "ee443d91-14f7-4540-ada8-8e29f7b40c90", fallback = "Geçmiş"),
             imageText = "P3",
             filterTags = listOf("B2C Geçmişi", "Giyim", "Bu Hafta")
         ),
@@ -593,7 +595,7 @@ private fun getProductHistoryItems(): List<ProductHistoryItem> {
             description = "Daha önce görüntülediğin ürün. Ürünü tekrar inceleyebilirsin.",
             categoryName = "Çanta",
             viewedDateText = "Bu Hafta Baktın",
-            historyTypeText = "Geçmiş",
+            historyTypeText = BBLocalization.Current.Get(key = "ee443d91-14f7-4540-ada8-8e29f7b40c90", fallback = "Geçmiş"),
             imageText = "P4",
             filterTags = listOf("B2C Geçmişi", "Bu Hafta")
         )

@@ -64,7 +64,7 @@ fun CompanyHomeScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Tedarikçi Ana Sayfası",
+                title = BBLocalization.Current.Get(key = "aa4d6776-e3ee-4f98-aaec-846aaf364323", fallback = "Tedarikçi Ana Sayfası"),
                 onBackClick = onBackClick
             )
         }
@@ -106,8 +106,8 @@ fun CompanyHomeScreen(
                     title = "Ortobella Comfort Ürün Vitrinleri",
                     subtitle = "Firmanın öne çıkardığı özel ürün gruplarını ve toptan alıma uygun koleksiyonlarını Keşfedin.",
                     items = listOf(
-                        "Yeni Ürünler",
-                        "Popüler Ürünler",
+                        BBLocalization.Current.Get(key = "eec14366-a992-4dad-89a1-0b04e54af995", fallback = "Yeni Ürünler"),
+                        BBLocalization.Current.Get(key = "7bd92f2e-dbdb-42b1-a9f6-8e5211feb9a4", fallback = "Popüler Ürünler"),
                         "Kurumsal Alıma Uygun Ürünler"
                     ),
                     icon = Icons.Outlined.Inventory2,
@@ -217,7 +217,7 @@ private fun CompanyHomeHero(
                 horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
             ) {
                 BbButton(
-                    text = "Ürünleri Gör",
+                    text = BBLocalization.Current.Get(key = "5e09b1c8-93e6-4e9a-a055-2f556f57d6dc", fallback = "Ürünleri Gör"),
                     onClick = onProductsClick,
                     modifier = Modifier.weight(1f),
                     variant = BbButtonVariant.Primary,
@@ -225,7 +225,7 @@ private fun CompanyHomeHero(
                 )
 
                 BbButton(
-                    text = "Profil",
+                    text = BBLocalization.Current.Get(key = "ab200e4f-1f9e-45f4-90a6-7d5d21d33953", fallback = "Profil"),
                     onClick = onProfileClick,
                     modifier = Modifier.weight(1f),
                     variant = BbButtonVariant.Outline,
@@ -234,7 +234,7 @@ private fun CompanyHomeHero(
             }
 
             BbButton(
-                text = "İletişime Geç",
+                text = BBLocalization.Current.Get(key = "a439130c-b2cf-496f-9868-93ef084d9aec", fallback = "İletişime Geç"),
                 onClick = onContactClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Secondary,
@@ -383,21 +383,21 @@ private fun CompanyHomeTabs(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
         ) {
             CompanyHomeTabChip(
-                text = "Ana Sayfa",
+                text = BBLocalization.Current.Get(key = "fe9c56ac-dbc2-4fc6-afe0-bb3f7cf1f8f7", fallback = "Ana Sayfa"),
                 icon = Icons.Outlined.Business,
                 selected = true,
                 onClick = {}
             )
 
             CompanyHomeTabChip(
-                text = "Profil",
+                text = BBLocalization.Current.Get(key = "ab200e4f-1f9e-45f4-90a6-7d5d21d33953", fallback = "Profil"),
                 icon = Icons.Outlined.Business,
                 selected = false,
                 onClick = onProfileClick
             )
 
             CompanyHomeTabChip(
-                text = "Ürünler",
+                text = BBLocalization.Current.Get(key = "6cf7b92f-05e7-4ac7-be8c-ce98d8bf20c5", fallback = "Ürünler"),
                 icon = Icons.Outlined.Inventory2,
                 selected = false,
                 onClick = onProductsClick
@@ -523,9 +523,9 @@ private fun getCompanyHome(
         description = "Çanta, tekstil ve promosyon ürünleri alanında çalışan doğrulanmış tedarikçi.",
         isVerified = true,
         chips = listOf(
-            "Türkiye",
+            BBLocalization.Current.Get(key = "5365b492-6a1c-4b46-b5c0-b50cbfdd17a8", fallback = "Türkiye"),
             "Samsun",
-            "Doğrulanmış",
+            BBLocalization.Current.Get(key = "c6a0ff62-8828-475f-b553-37effb42efe6", fallback = "Doğrulanmış"),
             "Toptancı",
             "120+ Ürün"
         )

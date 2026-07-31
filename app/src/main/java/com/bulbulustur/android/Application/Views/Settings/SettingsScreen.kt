@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Settings
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
@@ -68,7 +70,7 @@ fun SettingsScreen(
 
         item {
             SettingsOptionCard(
-                title = "Dil",
+                title = BBLocalization.Current.Get(key = "5259eecf-5b93-46fb-bf7c-34acd890bf9a", fallback = "Dil"),
                 description = "Uygulama Dilini Değiştir",
                 currentValue = currentLanguageName,
                 icon = Icons.Outlined.Language,
@@ -106,7 +108,7 @@ private fun SettingsHeader() {
                 )
 
                 Text(
-                    text = "Ayarlar",
+                    text = BBLocalization.Current.Get(key = "1280c93e-c908-4ee3-9e4c-d09fec8f88ec", fallback = "Ayarlar"),
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.SemiBold
@@ -138,7 +140,7 @@ private fun SettingsHeader() {
                 )
 
                 BbChip(
-                    text = "Dil",
+                    text = BBLocalization.Current.Get(key = "5259eecf-5b93-46fb-bf7c-34acd890bf9a", fallback = "Dil"),
                     selected = false,
                     onClick = {}
                 )

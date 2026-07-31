@@ -127,7 +127,7 @@ fun RegisterStartScreen(
                     it
             },
             placeholder =
-                "Adınız"
+                BBLocalization.Current.Get(key = "de47456e-91cb-47d5-8882-458fe0cf0b5e", fallback = "Adınız")
         )
 
         Spacer(
@@ -157,7 +157,7 @@ fun RegisterStartScreen(
                     it
             },
             placeholder =
-                "Soyadınız"
+                BBLocalization.Current.Get(key = "d3e38a79-6cd1-415b-89d2-2893719c54e8", fallback = "Soyadınız")
         )
 
         Spacer(
@@ -260,7 +260,7 @@ fun RegisterStartScreen(
 
         Text(
             text =
-                "Güvenlik",
+                BBLocalization.Current.Get(key = "aba99f7e-0b0a-45aa-96b2-6ac03f36582a", fallback = "Güvenlik"),
             style =
                 MaterialTheme.typography.titleMedium,
             fontWeight =
@@ -278,7 +278,7 @@ fun RegisterStartScreen(
 
         LogonPublicFieldLabel(
             text =
-                "Şifre"
+                BBLocalization.Current.Get(key = "f3bfe2a5-b25a-45b4-99f9-fbe3fb89bef5", fallback = "Şifre")
         )
 
         Spacer(
@@ -471,7 +471,7 @@ fun RegisterStartScreen(
             ) {
                 Text(
                     text =
-                        "Giriş Yap",
+                        BBLocalization.Current.Get(key = "72289e9d-49e1-4c2a-8b0b-3ab5a67610a6", fallback = "Giriş Yap"),
                     style =
                         MaterialTheme.typography.labelLarge,
                     fontWeight =

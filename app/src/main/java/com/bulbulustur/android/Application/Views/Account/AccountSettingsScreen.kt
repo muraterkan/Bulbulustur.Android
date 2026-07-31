@@ -75,7 +75,7 @@ fun AccountSettingsScreen(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "Ayarlar",
+                title = BBLocalization.Current.Get(key = "1280c93e-c908-4ee3-9e4c-d09fec8f88ec", fallback = "Ayarlar"),
                 onBackClick = onBackClick
             )
         }
@@ -115,7 +115,7 @@ fun AccountSettingsScreen(
             item {
                 SettingsMenuGroup {
                     SettingsMenuRow(
-                        title = "Dil",
+                        title = BBLocalization.Current.Get(key = "5259eecf-5b93-46fb-bf7c-34acd890bf9a", fallback = "Dil"),
                         value = languageName,
                         icon = Icons.Outlined.Language,
                         onClick = onLanguageClick
@@ -240,7 +240,7 @@ private fun SettingsProtectionBlock(
 
                 SettingsQuickCard(
                     modifier = Modifier.weight(1f),
-                    title = "Gizlilik",
+                    title = BBLocalization.Current.Get(key = "aa934bc7-e714-4ef0-a1eb-54f3de234490", fallback = "Gizlilik"),
                     icon = Icons.Outlined.Visibility,
                     onClick = onPrivacyClick
                 )
@@ -261,7 +261,7 @@ private fun SettingsProtectionBlock(
 
                 SettingsQuickCard(
                     modifier = Modifier.weight(1f),
-                    title = "Yardım Merkezi",
+                    title = BBLocalization.Current.Get(key = "e106f2d1-7b71-435a-be85-22f0c8262d05", fallback = "Yardım Merkezi"),
                     icon = Icons.Outlined.SupportAgent,
                     onClick = onHelpCenterClick
                 )

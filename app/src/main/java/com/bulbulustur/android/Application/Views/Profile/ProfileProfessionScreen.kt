@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Profile
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.runtime.Composable
 
 @Composable
@@ -12,9 +14,9 @@ fun ProfileProfessionScreen(
     onSaveClick: () -> Unit
 ) {
     ProfileTextValueScreen(
-        title = "Meslek",
+        title = BBLocalization.Current.Get(key = "5b1fbdba-1161-4716-966e-e40a815df70f", fallback = "Meslek"),
         description = "Meslek bilginizi girin.",
-        label = "Meslek",
+        label = BBLocalization.Current.Get(key = "5b1fbdba-1161-4716-966e-e40a815df70f", fallback = "Meslek"),
         value = value,
         isLoading = isLoading,
         errorMessage = errorMessage,

@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Navigation.Graph
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -44,7 +46,7 @@ fun NavGraphBuilder.profileGraph(
                 }
                 ?.Content
                 ?.takeIf { it.isNotBlank() }
-                ?: "Belirtilmemiş"
+                ?: BBLocalization.Current.Get(key = "e23c524e-fedd-4486-ac5e-25721a402156", fallback = "Belirtilmemiş")
         )
 
         LaunchedEffect(languageId, sessionState.MemberId) {
@@ -83,7 +85,7 @@ fun NavGraphBuilder.profileGraph(
             .map { it.Language.trim() }
             .filter { it.isNotBlank() }
             .joinToString(", ")
-            .ifBlank { "Belirtilmemiş" }
+            .ifBlank { BBLocalization.Current.Get(key = "e23c524e-fedd-4486-ac5e-25721a402156", fallback = "Belirtilmemiş") }
 
         ProfileScreen(
             member = member,
@@ -172,7 +174,7 @@ fun NavGraphBuilder.profileGraph(
                         !member?.Surname.isNullOrBlank()
             ),
             ProfileCompletionItem(
-                Title = "Meslek",
+                Title = BBLocalization.Current.Get(key = "5b1fbdba-1161-4716-966e-e40a815df70f", fallback = "Meslek"),
                 IsCompleted = !member?.Profession.isNullOrBlank()
             ),
             ProfileCompletionItem(
@@ -180,7 +182,7 @@ fun NavGraphBuilder.profileGraph(
                 IsCompleted = !memberProfile?.Bio.isNullOrBlank()
             ),
             ProfileCompletionItem(
-                Title = "Diller",
+                Title = BBLocalization.Current.Get(key = "fb9900fe-d66a-4aee-a030-f41b58100722", fallback = "Diller"),
                 IsCompleted = profileState.MemberLanguages.isNotEmpty()
             )
         )

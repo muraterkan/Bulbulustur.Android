@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2b.Controllers
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.lifecycle.viewModelScope
 import com.bulbulustur.android.businesslayer.Core.DTO.BuyerRequestDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryDTO
@@ -369,7 +371,7 @@ class RfqController(
         sendedOfferId: Int
     ) {
         if (sendedOfferId <= 0) {
-            SetError("Teklif bilgisi bulunamadı.")
+            SetError(BBLocalization.Current.Get(key = "610d11e9-739f-4470-be8c-2efc1e41560d", fallback = "Teklif bilgisi bulunamadı."))
             return
         }
 

@@ -156,10 +156,10 @@ private fun SubscriptionPlanInfoCard(subscription: MemberSubscriptionDTO) {
             }
 
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-            SubscriptionPlanRow("Abonelik Tipi", subscription.SubscriptionTypeName?.takeIf { it.isNotBlank() } ?: "-")
+            SubscriptionPlanRow(BBLocalization.Current.Get(key = "80de5ea4-3edc-40a7-a9c2-fd86ec8f75dc", fallback = "Abonelik Tipi"), subscription.SubscriptionTypeName?.takeIf { it.isNotBlank() } ?: "-")
             SubscriptionPlanRow("Plan Tipi", subscription.SubscriptionPlanTypeName?.takeIf { it.isNotBlank() } ?: "-")
-            SubscriptionPlanRow("Başlangıç Tarihi", subscription.StartDate.ToSubscriptionDateText())
-            SubscriptionPlanRow("Bitiş Tarihi", subscription.EndDate.ToSubscriptionDateText())
+            SubscriptionPlanRow(BBLocalization.Current.Get(key = "53e831f1-50ef-4ad1-a5f0-8e84aaa110da", fallback = "Başlangıç Tarihi"), subscription.StartDate.ToSubscriptionDateText())
+            SubscriptionPlanRow(BBLocalization.Current.Get(key = "ca02fdc1-6f0f-41b0-9fca-f1874b867da3", fallback = "Bitiş Tarihi"), subscription.EndDate.ToSubscriptionDateText())
             SubscriptionPlanRow(BBLocalization.Current.Get(key = "434680f3-de2d-48b2-a7ac-124926fe8196", fallback = ""), subscription.GetPriceText(), valueColor = BBColors.Yellow.Yellow800)
         }
     }
@@ -194,7 +194,7 @@ private fun SubscriptionDetailErrorState(message: String, onRetryClick: () -> Un
         Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)) {
             Icon(imageVector = Icons.Outlined.ErrorOutline, contentDescription = null, tint = MaterialTheme.colorScheme.error, modifier = Modifier.size(BBIcon.Empty))
             Text(text = message, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            BbButton(text = "Tekrar Dene", onClick = onRetryClick, variant = BbButtonVariant.Primary, size = BbButtonSize.Small)
+            BbButton(text = BBLocalization.Current.Get(key = "9d1ce783-da20-464b-9203-cd1ce09918c6", fallback = "Tekrar Dene"), onClick = onRetryClick, variant = BbButtonVariant.Primary, size = BbButtonSize.Small)
         }
     }
 }
@@ -204,9 +204,9 @@ private fun SubscriptionDetailNotFoundState(onRetryClick: () -> Unit) {
     BbCard(modifier = Modifier.fillMaxWidth(), variant = BbCardVariant.Outlined, padding = BbCardPadding.Large) {
         Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)) {
             Icon(imageVector = Icons.Outlined.Subscriptions, contentDescription = null, tint = BBColors.Yellow.Yellow800, modifier = Modifier.size(BBIcon.Empty))
-            Text(text = "Abonelik bulunamadı", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
+            Text(text = BBLocalization.Current.Get(key = "cf668625-d6eb-4c14-97de-fee71a127b64", fallback = "Abonelik bulunamadı"), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
             Text(text = "İstenen abonelik kaydı bulunamadı veya görüntülenemiyor.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            BbButton(text = "Tekrar Dene", onClick = onRetryClick, variant = BbButtonVariant.Primary, size = BbButtonSize.Small)
+            BbButton(text = BBLocalization.Current.Get(key = "9d1ce783-da20-464b-9203-cd1ce09918c6", fallback = "Tekrar Dene"), onClick = onRetryClick, variant = BbButtonVariant.Primary, size = BbButtonSize.Small)
         }
     }
 }
@@ -221,7 +221,7 @@ private fun MemberSubscriptionDTO.GetSubscriptionTitle(): String {
     if (!typeName.isNullOrBlank()) return typeName
     if (!planTypeName.isNullOrBlank()) return planTypeName
 
-    return "Abonelik"
+    return BBLocalization.Current.Get(key = "b7249890-2e15-4455-9c2f-f0f02632d757", fallback = "Abonelik")
 }
 
 private fun MemberSubscriptionDTO.GetPriceText(): String {

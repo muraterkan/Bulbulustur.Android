@@ -193,7 +193,7 @@ fun DealsOfTheDayListScreen(
                         }
                     ) {
                         DealsInfoCard(
-                            title = "Fırsat bulunamadı",
+                            title = BBLocalization.Current.Get(key = "fa7f36dd-b420-431a-9cc1-132b39b3836c", fallback = "Fırsat bulunamadı"),
                             description = if (searchText.isBlank()) {
                                 "Şu anda listelenecek fırsat bulunmuyor."
                             } else {
@@ -255,7 +255,7 @@ private fun DealsHero(
             DealHeroLabel()
 
             Text(
-                text = "Günün Öne Çıkan Fırsatları",
+                text = BBLocalization.Current.Get(key = "66913b06-a571-41d5-8a2d-dae82701da35", fallback = "Günün Öne Çıkan Fırsatları"),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color =
@@ -306,7 +306,7 @@ private fun DealHeroLabel() {
             )
 
             Text(
-                text = "Günün Fırsatları",
+                text = BBLocalization.Current.Get(key = "66913b06-a571-41d5-8a2d-dae82701da35", fallback = "Günün Fırsatları"),
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -324,14 +324,14 @@ private fun DealsSectionHeader() {
         )
     ) {
         Text(
-            text = "LİSTE İÇERİĞİ",
+            text = BBLocalization.Current.Get(key = "54d3baf6-4b2d-4685-93cd-9241476fc72c", fallback = "LİSTE İÇERİĞİ"),
             style = MaterialTheme.typography.labelSmall,
             fontWeight = FontWeight.SemiBold,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         Text(
-            text = "Kampanyalı Ürünler",
+            text = BBLocalization.Current.Get(key = "d778653c-63d8-4680-9240-dd275184250c", fallback = "Kampanyalı Ürünler"),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onBackground
@@ -358,7 +358,7 @@ private fun DealProductCard(
     val categoryName =
         deal.CategoryName
             ?.takeIf { it.isNotBlank() }
-            ?: "Günün Fırsatı"
+            ?: BBLocalization.Current.Get(key = "66913b06-a571-41d5-8a2d-dae82701da35", fallback = "Günün Fırsatı")
 
     val brandName =
         deal.Brand
@@ -567,7 +567,7 @@ private fun DealProductCard(
                     }
 
                     Text(
-                        text = "KDV dahil fiyat",
+                        text = BBLocalization.Current.Get(key = "e207b851-03c3-4075-b303-3750e1961a94", fallback = "KDV dahil fiyat"),
                         style = MaterialTheme.typography.labelSmall,
                         color =
                             MaterialTheme.colorScheme.onSurfaceVariant
@@ -585,7 +585,7 @@ private fun DealProductCard(
                     )
 
                     DealTag(
-                        text = "Günün Fırsatı",
+                        text = BBLocalization.Current.Get(key = "66913b06-a571-41d5-8a2d-dae82701da35", fallback = "Günün Fırsatı"),
                         highlighted = false
                     )
                 }
@@ -637,7 +637,7 @@ private fun DealBadge(
             )
 
             Text(
-                text = "Günün Fırsatı",
+                text = BBLocalization.Current.Get(key = "66913b06-a571-41d5-8a2d-dae82701da35", fallback = "Günün Fırsatı"),
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onError,

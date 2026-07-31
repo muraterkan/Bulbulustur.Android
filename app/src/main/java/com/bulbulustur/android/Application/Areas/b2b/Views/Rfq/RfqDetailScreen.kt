@@ -191,7 +191,7 @@ private fun RfqDetailSummaryCard(
             }
 
             BbButton(
-                text = "Yeni Teklif Al",
+                text = BBLocalization.Current.Get(key = "9aa9e9a4-18b3-427b-943f-36170e46cb37", fallback = "Yeni Teklif Al"),
                 onClick = onCreateRfqClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Light,
@@ -277,7 +277,7 @@ private fun RfqDetailProductCard(
         ) {
             RfqDetailSectionTitle(
                 icon = Icons.Outlined.Article,
-                title = "Ürün Bilgileri"
+                title = BBLocalization.Current.Get(key = "90509413-3f80-4a57-b43b-21738dc74b50", fallback = "Ürün Bilgileri")
             )
 
             RfqDetailInfoRow(
@@ -311,7 +311,7 @@ private fun RfqDetailProductCard(
             if (buyerRequest.ColorName.isNotBlank()) {
                 RfqDetailInfoRow(
                     icon = Icons.Outlined.Article,
-                    title = "Renk",
+                    title = BBLocalization.Current.Get(key = "846acd44-dbbf-4aa8-a537-cac0de8a1ef8", fallback = "Renk"),
                     value = buyerRequest.ColorName
                 )
             }
@@ -345,7 +345,7 @@ private fun RfqDetailTradeCard(
 
             RfqDetailInfoRow(
                 icon = Icons.Outlined.RequestQuote,
-                title = "Ticaret Şartı",
+                title = BBLocalization.Current.Get(key = "6c7bdc8a-1a1d-465d-a2da-7b873fea5e6e", fallback = "Ticaret Şartı"),
                 value = buyerRequest.TradeTermName.ifBlank { "-" }
             )
 
@@ -563,7 +563,7 @@ private fun RfqDetailErrorCard(
             )
 
             BbButton(
-                text = "Tekrar Dene",
+                text = BBLocalization.Current.Get(key = "9d1ce783-da20-464b-9203-cd1ce09918c6", fallback = "Tekrar Dene"),
                 onClick = onRetryClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Outline,

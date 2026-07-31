@@ -162,7 +162,7 @@ fun CompanyDetailScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Ürün Grupları",
+                    title = BBLocalization.Current.Get(key = "e8333e34-ffbb-4135-82fa-f847eb8929b1", fallback = "Ürün Grupları"),
                     subtitle = "Firmanın öne çıkan toptan ürün aileleri"
                 )
             }
@@ -301,7 +301,7 @@ private fun CompanyDetailHero(
                         add(company.businessModel)
 
                         if (company.isVerified) {
-                            add("Doğrulanmış")
+                            add(BBLocalization.Current.Get(key = "c6a0ff62-8828-475f-b553-37effb42efe6", fallback = "Doğrulanmış"))
                         }
                     }
                 )
@@ -324,7 +324,7 @@ private fun CompanyLogoBox() {
             painter = painterResource(
                 id = R.drawable.company_logo_nexa
             ),
-            contentDescription = "Company Logo",
+            contentDescription = BBLocalization.Current.Get(key = "d7ccb0f9-2233-4861-aeb9-b42312a98397", fallback = "Company Logo"),
             modifier = Modifier
                 .padding(BBSpacing.Space2)
                 .height(BBSpacing.Space12)
@@ -347,7 +347,7 @@ private fun CompanyDetailMainActions(
             horizontalArrangement = Arrangement.spacedBy(BBSpacing.CardGapCompact)
         ) {
             CompanyActionCard(
-                title = "Ürünleri Gör",
+                title = BBLocalization.Current.Get(key = "5e09b1c8-93e6-4e9a-a055-2f556f57d6dc", fallback = "Ürünleri Gör"),
                 description = "${company.productCount} ürün grubu",
                 icon = Icons.Outlined.Inventory2,
                 modifier = Modifier.weight(1f),
@@ -357,7 +357,7 @@ private fun CompanyDetailMainActions(
             )
 
             CompanyActionCard(
-                title = "İletişime Geç",
+                title = BBLocalization.Current.Get(key = "a439130c-b2cf-496f-9868-93ef084d9aec", fallback = "İletişime Geç"),
                 description = "Yetkili kişiye ulaş",
                 icon = Icons.Outlined.Mail,
                 modifier = Modifier.weight(1f),
@@ -368,7 +368,7 @@ private fun CompanyDetailMainActions(
         }
 
         BbButton(
-            text = "İletişime Geç",
+            text = BBLocalization.Current.Get(key = "a439130c-b2cf-496f-9868-93ef084d9aec", fallback = "İletişime Geç"),
             onClick = {
                 onContactClick(company.companyId)
             },
@@ -404,7 +404,7 @@ private fun CompanyDetailTabs(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
         ) {
             CompanyTabChip(
-                text = "Ana Sayfa",
+                text = BBLocalization.Current.Get(key = "fe9c56ac-dbc2-4fc6-afe0-bb3f7cf1f8f7", fallback = "Ana Sayfa"),
                 icon = Icons.Outlined.Home,
                 selected = false,
                 onClick = {
@@ -413,14 +413,14 @@ private fun CompanyDetailTabs(
             )
 
             CompanyTabChip(
-                text = "Profil",
+                text = BBLocalization.Current.Get(key = "ab200e4f-1f9e-45f4-90a6-7d5d21d33953", fallback = "Profil"),
                 icon = Icons.Outlined.Business,
                 selected = true,
                 onClick = {}
             )
 
             CompanyTabChip(
-                text = "Ürünler",
+                text = BBLocalization.Current.Get(key = "6cf7b92f-05e7-4ac7-be8c-ce98d8bf20c5", fallback = "Ürünler"),
                 icon = Icons.Outlined.Inventory2,
                 selected = false,
                 onClick = {
@@ -569,7 +569,7 @@ private fun CompanyAboutCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             Text(
-                text = "Şirket Hakkında",
+                text = BBLocalization.Current.Get(key = "72467348-2eb8-484a-9253-27b28dbac2f3", fallback = "Şirket Hakkında"),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -618,7 +618,7 @@ private fun CompanyInfoGrid(
             )
 
             CompanyInfoCard(
-                title = "Çalışan",
+                title = BBLocalization.Current.Get(key = "c763a88c-136e-44ed-9f5b-4f295ac6cb89", fallback = "Çalışan"),
                 value = company.employeeCount,
                 icon = Icons.Outlined.Business,
                 modifier = Modifier.weight(1f)
@@ -637,7 +637,7 @@ private fun CompanyInfoGrid(
             )
 
             CompanyInfoCard(
-                title = "Adres",
+                title = BBLocalization.Current.Get(key = "af1da4df-7298-4cd9-b256-371d098b59f7", fallback = "Adres"),
                 value = company.addressSummary,
                 icon = Icons.Outlined.LocationOn,
                 modifier = Modifier.weight(1f)
@@ -645,7 +645,7 @@ private fun CompanyInfoGrid(
         }
 
         CompanyInfoCard(
-            title = "Web Sitesi",
+            title = BBLocalization.Current.Get(key = "a8fcc3ce-6d1a-40be-b752-974c9b774d7b", fallback = "Web Sitesi"),
             value = company.website,
             icon = Icons.Outlined.Home,
             modifier = Modifier.fillMaxWidth(),
@@ -841,7 +841,7 @@ private fun CompanyTrustPanel(
                 )
 
                 Text(
-                    text = "İletişime Geç",
+                    text = BBLocalization.Current.Get(key = "a439130c-b2cf-496f-9868-93ef084d9aec", fallback = "İletişime Geç"),
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onSurface
@@ -971,7 +971,7 @@ private fun getCompanyDetail(companyId: Int): CompanyDetail {
         shortDescription = "Yazılım, dijital dönüşüm ve ticaret altyapıları alanında çözüm sağlayan firma.",
         about = "Firma; üretim, tedarik, satış ve e-ticaret operasyonlarını dijital altyapılarla güçlendiren çözümler geliştirir. Mobil uygulamada bu alan ileride gerçek firma açıklaması, yetenekler ve ticari profil bilgileriyle beslenecek.",
         whyUs = "Firma profili, ürünleri, belgeleri ve iletişim bilgileri tek ekranda sunularak alıcının daha hızlı karar vermesine yardımcı olur.",
-        country = "Türkiye",
+        country = BBLocalization.Current.Get(key = "5365b492-6a1c-4b46-b5c0-b50cbfdd17a8", fallback = "Türkiye"),
         city = "İstanbul",
         businessModel = "Perakendeci, Toptancı",
         productCount = 12,
@@ -992,7 +992,7 @@ private fun getCompanyDetail(companyId: Int): CompanyDetail {
             "Firma Bilgileri",
             "Ürün Portföyü",
             "Sertifika",
-            "Mesaj"
+            BBLocalization.Current.Get(key = "74d3bcb0-a3c9-477f-82f1-c091809c5a00", fallback = "Mesaj")
         ),
         productGroups = getCompanyProductGroups(),
         certificates = getCompanyCertificates()

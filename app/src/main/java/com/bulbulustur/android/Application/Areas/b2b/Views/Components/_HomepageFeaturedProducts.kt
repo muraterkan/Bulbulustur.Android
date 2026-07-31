@@ -120,14 +120,14 @@ private fun HomepageFeaturedProductsHeader(
             onClick = onViewAllClick
         ) {
             Text(
-                text = "Tümünü Gör",
+                text = BBLocalization.Current.Get(key = "7fa2dfd8-809f-4a8d-8fde-f33e7f652b45", fallback = "Tümünü Gör"),
                 style = MaterialTheme.typography.labelLarge,
                 color = BBColors.Navy.Navy700
             )
 
             Icon(
                 imageVector = Icons.Outlined.ArrowForward,
-                contentDescription = "Tümünü Gör",
+                contentDescription = BBLocalization.Current.Get(key = "7fa2dfd8-809f-4a8d-8fde-f33e7f652b45", fallback = "Tümünü Gör"),
                 modifier = Modifier.size(BBIcon.SizeSm),
                 tint = BBColors.Navy.Navy700
             )

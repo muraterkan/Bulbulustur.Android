@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -93,7 +95,7 @@ fun ChangePasswordAsyncScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Şifre Değiştir",
+                title = BBLocalization.Current.Get(key = "cee2df6f-2392-41ab-92f5-ab1a30499bc7", fallback = "Şifre Değiştir"),
                 onBackClick = onBackClick
             )
         }
@@ -130,7 +132,7 @@ fun ChangePasswordAsyncScreen(
                         onValueChange = { value ->
                             oldPasswordState.value = value
                         },
-                        label = "Mevcut Şifre",
+                        label = BBLocalization.Current.Get(key = "bd2bef6c-333d-4987-a251-7b92e93e6dfc", fallback = "Mevcut Şifre"),
                         visible = showOldPasswordState.value,
                         onVisibilityChange = {
                             showOldPasswordState.value = !showOldPasswordState.value
@@ -142,7 +144,7 @@ fun ChangePasswordAsyncScreen(
                         onValueChange = { value ->
                             newPasswordState.value = value
                         },
-                        label = "Yeni Şifre",
+                        label = BBLocalization.Current.Get(key = "868ebdd6-edca-430d-b987-78f5a7c89abd", fallback = "Yeni Şifre"),
                         visible = showNewPasswordState.value,
                         onVisibilityChange = {
                             showNewPasswordState.value = !showNewPasswordState.value
@@ -179,7 +181,7 @@ fun ChangePasswordAsyncScreen(
                         message.isNotBlank()
                     }?.let { message ->
                         PasswordMessageBox(
-                            title = "Şifre Güncellendi",
+                            title = BBLocalization.Current.Get(key = "9b4fea9f-f8e4-4f46-ad0f-4435f5293249", fallback = "Şifre Güncellendi"),
                             message = message,
                             type = PasswordMessageType.Success
                         )

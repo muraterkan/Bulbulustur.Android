@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Preference
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -139,7 +141,7 @@ private fun UsagePurposeIntroCard() {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Bulbulustur'u En Çok Hangi Amaçla Kullanıyorsunuz?",
+                    text = BBLocalization.Current.Get(key = "81ebee8c-44e5-40c8-b5e3-b88450002783", fallback = "Bulbulustur'u En Çok Hangi Amaçla Kullanıyorsunuz?"),
                     style = BbTypography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )

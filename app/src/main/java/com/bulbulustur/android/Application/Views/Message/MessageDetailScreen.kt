@@ -313,8 +313,8 @@ private fun MessageReplyEditor(
             BbTextarea(
                 value = value,
                 onValueChange = onValueChange,
-                label = "Mesaj",
-                placeholder = "Yanıtınızı yazın...",
+                label = BBLocalization.Current.Get(key = "74d3bcb0-a3c9-477f-82f1-c091809c5a00", fallback = "Mesaj"),
+                placeholder = BBLocalization.Current.Get(key = "97d0db58-c9c4-46d9-8384-23ed67446215", fallback = "Yanıtınızı yazın..."),
                 minLines = 4,
                 maxLines = 8
             )

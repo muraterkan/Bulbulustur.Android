@@ -53,28 +53,28 @@ fun AccountSecurityBottomMenu(
             )
 
             AccountSecurityBottomMenuRow(
-                title = "Giriş Etkinlikleri",
+                title = BBLocalization.Current.Get(key = "7c9dea88-25ba-4bbe-97bd-de9d27c119d2", fallback = "Giriş Etkinlikleri"),
                 description = "Son giriş hareketlerini ve cihaz bilgilerini görüntüle.",
                 selected = selectedItem == AccountSecurityMenuItem.LoginActivities,
                 onClick = onLoginActivitiesClick
             )
 
             AccountSecurityBottomMenuRow(
-                title = "Şifre Değiştir",
+                title = BBLocalization.Current.Get(key = "cee2df6f-2392-41ab-92f5-ab1a30499bc7", fallback = "Şifre Değiştir"),
                 description = "Hesabın için yeni ve güçlü bir şifre belirle.",
                 selected = selectedItem == AccountSecurityMenuItem.ChangePasswordAsync,
                 onClick = onChangePasswordAsyncClick
             )
 
             AccountSecurityBottomMenuRow(
-                title = "E-Posta Değiştir",
+                title = BBLocalization.Current.Get(key = "56b7b2b0-d2da-4d53-a361-88b4890ebb6c", fallback = "E-Posta Değiştir"),
                 description = "Hesabına bağlı e-posta adresini güncelle.",
                 selected = selectedItem == AccountSecurityMenuItem.ChangeEmail,
                 onClick = onChangeEmailClick
             )
 
             AccountSecurityBottomMenuRow(
-                title = "Hesabı Devre Dışı Bırak",
+                title = BBLocalization.Current.Get(key = "64052773-9d1d-48ee-b933-7c387c42147d", fallback = "Hesabı Devre Dışı Bırak"),
                 description = "Hesabını geçici olarak erişime kapat.",
                 selected = selectedItem == AccountSecurityMenuItem.DeactivateAccount,
                 onClick = onDeactivateAccountClick

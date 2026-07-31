@@ -74,7 +74,7 @@ fun CustomizationRequestScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Özelleştirme Talebi",
+                title = BBLocalization.Current.Get(key = "68960cea-67f2-4a28-a612-050ebc6f43aa", fallback = "Özelleştirme Talebi"),
                 onBackClick = onBackClick
             )
         }
@@ -117,8 +117,8 @@ fun CustomizationRequestScreen(
                     onValueChange = {
                         detail.value = it
                     },
-                    label = "Diğer Detaylar",
-                    placeholder = "Talep ettiğiniz ürün özelleştirmesi hakkında daha fazla detay verin."
+                    label = BBLocalization.Current.Get(key = "a997a8c2-5f4b-45e1-9aae-40c652406fcb", fallback = "Diğer Detaylar"),
+                    placeholder = BBLocalization.Current.Get(key = "71fd9411-9b01-4e07-b0b9-67d79e1b3082", fallback = "Talep ettiğiniz ürün özelleştirmesi hakkında daha fazla detay verin.")
                 )
             }
 
@@ -219,7 +219,7 @@ private fun CustomizationRequestHeader(
                 )
 
                 Text(
-                    text = "Özelleştirme Talebi",
+                    text = BBLocalization.Current.Get(key = "68960cea-67f2-4a28-a612-050ebc6f43aa", fallback = "Özelleştirme Talebi"),
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.SemiBold
@@ -261,7 +261,7 @@ private fun CustomizationProductSummaryCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
         ) {
             Text(
-                text = "Tedarikçi",
+                text = BBLocalization.Current.Get(key = "95ab742c-6bb3-47da-bb8b-c37b3a979c24", fallback = "Tedarikçi"),
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.SemiBold

@@ -84,7 +84,7 @@ fun BankAccountListScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Banka Hesaplarım",
+                title = BBLocalization.Current.Get(key = "56bb1452-c8f8-4bb0-8501-0947118999df", fallback = "Banka Hesaplarım"),
                 onBackClick = onBackClick,
                 actionIcon = Icons.Outlined.Add,
                 actionContentDescription = BBLocalization.Current.Get(key = "42468515-8191-418a-a245-72ecf9a06558", fallback = ""),
@@ -226,7 +226,7 @@ private fun BankAccountCard(
                     )
 
                     BbButton(
-                        text = "Düzenle",
+                        text = BBLocalization.Current.Get(key = "6a23f3ad-9109-471d-a670-7b5a40cf3cd9", fallback = "Düzenle"),
                         onClick = {
                             onEditBankAccountClick(item.MemberBankAccountId)
                         },
@@ -245,7 +245,7 @@ private fun BankAccountCard(
                     )
 
                     BbButton(
-                        text = "Sil",
+                        text = BBLocalization.Current.Get(key = "e38050df-62e1-4b83-97ee-2643ad73390c", fallback = "Sil"),
                         onClick = {
                             onDeleteBankAccountClick(item.MemberBankAccountId)
                         },
@@ -287,7 +287,7 @@ private fun BankAccountCardHeader(item: MemberBankAccountDTO) {
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
         ) {
             Text(
-                text = "Banka Hesabı",
+                text = BBLocalization.Current.Get(key = "5a4bd077-2a76-4789-966c-a292d3a38902", fallback = "Banka Hesabı"),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -446,7 +446,7 @@ private fun BankAccountErrorState(
             )
 
             BbButton(
-                text = "Tekrar Dene",
+                text = BBLocalization.Current.Get(key = "9d1ce783-da20-464b-9203-cd1ce09918c6", fallback = "Tekrar Dene"),
                 onClick = onRetryClick,
                 variant = BbButtonVariant.Primary,
                 size = BbButtonSize.Medium
@@ -516,7 +516,7 @@ private fun BankAccountIconBox(
         if (pictureUrl.isNotBlank() && !imageLoadFailed) {
             AsyncImage(
                 model = pictureUrl,
-                contentDescription = "Banka logosu",
+                contentDescription = BBLocalization.Current.Get(key = "9b887f37-1dce-414f-be28-b15c3dbc9e08", fallback = "Banka logosu"),
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(BBSpacing.Space2),

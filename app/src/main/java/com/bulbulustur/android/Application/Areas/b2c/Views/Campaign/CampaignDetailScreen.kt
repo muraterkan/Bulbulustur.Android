@@ -272,7 +272,7 @@ private fun CampaignDetailHero(
     val campaignName =
         campaign.CampaignName
             ?.takeIf { it.isNotBlank() }
-            ?: "Kampanya"
+            ?: BBLocalization.Current.Get(key = "b66af534-b950-4603-8fb6-caf6ca5be73d", fallback = "Kampanya")
 
     val description =
         campaign.Description
@@ -332,7 +332,7 @@ private fun CampaignDetailHero(
                     modifier = Modifier
                         .align(Alignment.TopStart)
                         .padding(BBSpacing.Space3),
-                    text = "Kampanya",
+                    text = BBLocalization.Current.Get(key = "b66af534-b950-4603-8fb6-caf6ca5be73d", fallback = "Kampanya"),
                     icon = Icons.Outlined.LocalOffer
                 )
             }
@@ -472,13 +472,13 @@ private fun CampaignDetailSummary(
 
             CampaignSummaryLine(
                 icon = Icons.Outlined.ShoppingBag,
-                title = "Maksimum ürün",
+                title = BBLocalization.Current.Get(key = "5c8e4b6c-cf81-4990-a2e2-2735855d38bf", fallback = "Maksimum ürün"),
                 value = campaign.MaximumProducts.toString()
             )
 
             CampaignSummaryLine(
                 icon = Icons.Outlined.Inventory2,
-                title = "Kampanya ürünü",
+                title = BBLocalization.Current.Get(key = "d778653c-63d8-4680-9240-dd275184250c", fallback = "Kampanya ürünü"),
                 value = campaign.CampaignProducts
                     .orEmpty()
                     .size
@@ -812,7 +812,7 @@ private fun CampaignProductCard(
                     }
 
                     Text(
-                        text = "Kampanyalı fiyat",
+                        text = BBLocalization.Current.Get(key = "5b922b77-6524-4fe5-816f-662afbee60ba", fallback = "Kampanyalı fiyat"),
                         style = MaterialTheme.typography.labelSmall,
                         color =
                             MaterialTheme.colorScheme.onSurfaceVariant
@@ -976,7 +976,7 @@ private fun CampaignExploreCard(
             )
 
             BbButton(
-                text = "Tüm Kampanyalar",
+                text = BBLocalization.Current.Get(key = "e2812624-6bbc-4034-9a09-6570540d0785", fallback = "Tüm Kampanyalar"),
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Dark,
                 size = BbButtonSize.Medium,

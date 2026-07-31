@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Shared.Components
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -73,7 +75,7 @@ fun BbInnerPageHeader(
             ) {
                 BbInnerHeaderActionButton(
                     icon = Icons.AutoMirrored.Outlined.ArrowBack,
-                    contentDescription = "Geri",
+                    contentDescription = BBLocalization.Current.Get(key = "d94f43b6-5081-4e7d-b66e-8d19b37e9751", fallback = "Geri"),
                     onClick = onBackClick
                 )
 

@@ -62,7 +62,7 @@ fun B2CHomepageSpecialContents(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
         ) {
             Text(
-                text = "Ürün Vitrini",
+                text = BBLocalization.Current.Get(key = "ca2297c4-f57f-4a7a-9380-65693990a625", fallback = "Ürün Vitrini"),
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
@@ -91,7 +91,7 @@ fun B2CHomepageSpecialContents(
 
                 BbChip(
                     text = group.GroupName.ifBlank {
-                        "Ürün Vitrini"
+                        BBLocalization.Current.Get(key = "ca2297c4-f57f-4a7a-9380-65693990a625", fallback = "Ürün Vitrini")
                     },
                     selected = selectedGroupIndex == index,
                     onClick = {

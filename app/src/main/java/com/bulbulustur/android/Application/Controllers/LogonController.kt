@@ -1105,7 +1105,7 @@ class LogonController(
                         true,
                     SetNewPasswordMessage =
                         response.Message.ifBlank {
-                            "Şifreniz başarıyla güncellendi."
+                            BBLocalization.Current.Get(key = "903b84fd-627e-43db-9b58-aa4c6f857eab", fallback = "Şifreniz başarıyla güncellendi.")
                         }
                 )
             }
@@ -1338,7 +1338,7 @@ class LogonController(
         }
 
         if (model.Surname.isBlank()) {
-            return "Soyadınızı girin."
+            return BBLocalization.Current.Get(key = "56fcc8b3-06bb-4dfc-8a89-c2792879d0ac", fallback = "Soyadınızı girin.")
         }
 
         if (model.CountryId <= 0) {
@@ -1346,7 +1346,7 @@ class LogonController(
         }
 
         if (model.CityId <= 0) {
-            return "Şehir seçin."
+            return BBLocalization.Current.Get(key = "a63fde8b-360d-4778-9454-c588680b0b23", fallback = "Şehir seçin.")
         }
 
         if (model.Password.length < 8) {
@@ -1393,7 +1393,7 @@ class LogonController(
         email: String
     ): String? {
         if (email.isBlank()) {
-            return "E-posta adresinizi girin."
+            return BBLocalization.Current.Get(key = "e6f44bb3-1a51-4db7-86d7-ab38d008440a", fallback = "E-posta adresinizi girin.")
         }
 
         if (email.contains(" ")) {
@@ -1425,7 +1425,7 @@ class LogonController(
         }
 
         if (newPassword.isBlank()) {
-            return "Yeni şifrenizi girin."
+            return BBLocalization.Current.Get(key = "f5a11c37-9ee5-47c0-a178-6343ee5bc63d", fallback = "Yeni şifrenizi girin.")
         }
 
         if (
@@ -1436,7 +1436,7 @@ class LogonController(
         }
 
         if (reNewPassword.isBlank()) {
-            return "Yeni şifrenizi tekrar girin."
+            return BBLocalization.Current.Get(key = "f5a11c37-9ee5-47c0-a178-6343ee5bc63d", fallback = "Yeni şifrenizi tekrar girin.")
         }
 
         if (

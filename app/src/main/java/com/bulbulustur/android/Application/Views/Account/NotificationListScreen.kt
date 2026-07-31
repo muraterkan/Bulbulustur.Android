@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -48,7 +50,7 @@ fun NotificationListScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Bildirimler",
+                title = BBLocalization.Current.Get(key = "9bc9cd06-7971-4d1c-9082-85a6bdaf77c2", fallback = "Bildirimler"),
                 onBackClick = onBackClick
             )
         }
@@ -193,7 +195,7 @@ private fun getDemoNotifications(): List<NotificationItem> {
         NotificationItem(
             title = "Siparişiniz Hazırlanıyor",
             description = "BB-2026-0001 numaralı siparişiniz satıcı tarafından hazırlanıyor.",
-            timeText = "Bugün",
+            timeText = BBLocalization.Current.Get(key = "5df01635-64c2-45a2-95e2-8b37bae9b423", fallback = "Bugün"),
             icon = Icons.Outlined.ShoppingBag,
             isUnread = true
         ),

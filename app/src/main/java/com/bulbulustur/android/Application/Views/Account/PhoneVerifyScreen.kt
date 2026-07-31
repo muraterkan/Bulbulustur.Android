@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -70,7 +72,7 @@ fun PhoneVerifyScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Telefon Doğrulama",
+                title = BBLocalization.Current.Get(key = "e794a643-6916-433f-87f1-09e4e0ff0e20", fallback = "Telefon Doğrulama"),
                 onBackClick = onBackClick
             )
         }
@@ -111,7 +113,7 @@ fun PhoneVerifyScreen(
                             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                         ) {
                             Text(
-                                text = "Doğrulama Kodu",
+                                text = BBLocalization.Current.Get(key = "5b42591f-3bf6-4c01-a524-3ee87b518d5c", fallback = "Doğrulama Kodu"),
                                 style = MaterialTheme.typography.titleSmall,
                                 color = MaterialTheme.colorScheme.onSurface
                             )
@@ -176,7 +178,7 @@ fun PhoneVerifyScreen(
                             }
 
                         BbButton(
-                            text = "Telefonu Doğrula",
+                            text = BBLocalization.Current.Get(key = "e794a643-6916-433f-87f1-09e4e0ff0e20", fallback = "Telefonu Doğrula"),
                             onClick = {
                                 onVerifyClick(normalizedCode)
                             },

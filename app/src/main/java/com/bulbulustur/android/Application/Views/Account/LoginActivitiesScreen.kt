@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -209,7 +211,7 @@ private fun LoginActivityCard(activity: MemberLoginActivityDTO) {
             )
 
             LoginActivityInfoRow(
-                label = "Tarih",
+                label = BBLocalization.Current.Get(key = "e4602d88-9a44-4ed3-827b-8844da4a88be", fallback = "Tarih"),
                 value = activity.InsertedDate.ifBlank { "Bilgi bulunmuyor" }
             )
         }

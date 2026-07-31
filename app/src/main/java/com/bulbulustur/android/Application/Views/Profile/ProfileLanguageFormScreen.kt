@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Profile
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import com.bulbulustur.android.Application.Views.Profile.Components.BbProfileHeroCard
 
 import com.bulbulustur.android.Application.Views.Profile.Components.BbProfileStickySaveBar
@@ -93,7 +95,7 @@ fun ProfileLanguageFormScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Dil Ekle",
+                title = BBLocalization.Current.Get(key = "4bbb0259-3a57-4199-ae6b-725fdba47179", fallback = "Dil Ekle"),
                 onBackClick = onBackClick
             )
         },
@@ -167,7 +169,7 @@ fun ProfileLanguageFormScreen(
                             selectedValue = selectedLanguageId,
                             options = languageOptions,
                             onValueChange = onLanguageSelected,
-                            label = "Dil",
+                            label = BBLocalization.Current.Get(key = "5259eecf-5b93-46fb-bf7c-34acd890bf9a", fallback = "Dil"),
                             placeholder = "Konuştuğun dili seç",
                             searchPlaceholder = "Dil ara...",
                             helperText = "Listede arama yaparak bir dil seçebilirsin.",

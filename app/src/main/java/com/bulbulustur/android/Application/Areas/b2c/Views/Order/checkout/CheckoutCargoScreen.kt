@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -268,7 +270,7 @@ private fun CheckoutCargoAddressCard(
             modifier = Modifier.padding(BBSpacing.Space4)
         ) {
             Text(
-                text = "Teslimat adresi",
+                text = BBLocalization.Current.Get(key = "fa3df4de-7069-4a3d-9dac-5a4ea9b88b65", fallback = "Teslimat adresi"),
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -623,7 +625,7 @@ private fun getCheckoutCargoScreenData(): CheckoutCargoScreenData {
                 cargoOptions = listOf(
                     CheckoutCargoOptionItem(
                         id = 1,
-                        companyName = "Yurtiçi Kargo",
+                        companyName = BBLocalization.Current.Get(key = "e592d42e-ccb1-4c88-b47e-89a6757970f5", fallback = "Yurtiçi Kargo"),
                         deliveryEstimateText = "Tahmini teslimat: 1-3 iş günü",
                         priceText = "₺49,90",
                         priceValue = 49.90,
@@ -648,7 +650,7 @@ private fun getCheckoutCargoScreenData(): CheckoutCargoScreenData {
                 cargoOptions = listOf(
                     CheckoutCargoOptionItem(
                         id = 3,
-                        companyName = "Yurtiçi Kargo",
+                        companyName = BBLocalization.Current.Get(key = "e592d42e-ccb1-4c88-b47e-89a6757970f5", fallback = "Yurtiçi Kargo"),
                         deliveryEstimateText = "Tahmini teslimat: 2-4 iş günü",
                         priceText = "₺39,90",
                         priceValue = 39.90,

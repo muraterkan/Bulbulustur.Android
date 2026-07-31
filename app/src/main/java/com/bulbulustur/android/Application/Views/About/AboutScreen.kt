@@ -56,7 +56,7 @@ fun AboutScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Hakkımızda",
+                title = BBLocalization.Current.Get(key = "a980d1d3-0c97-4b45-b342-98d4157dc379", fallback = "Hakkımızda"),
                 onBackClick = onBackClick
             )
         }
@@ -100,7 +100,7 @@ fun AboutScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Ne Yapıyoruz?",
+                    title = BBLocalization.Current.Get(key = "c58e1d2d-c0e4-4ea0-a4f7-6158e988a819", fallback = "Ne Yapıyoruz?"),
                     subtitle = "Toptan, perakende ve dijital ticaret altyapısını aynı omurgada topluyoruz"
                 )
             }
@@ -408,21 +408,21 @@ private fun AboutActionArea(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
     ) {
         AboutActionCard(
-            title = "Yatırımcı İlişkileri",
+            title = BBLocalization.Current.Get(key = "d70791d0-68e8-487c-94b5-d4002ff4b135", fallback = "Yatırımcı İlişkileri"),
             description = "Kurumsal bilgi ve yatırımcı iletişim alanına geç.",
             icon = Icons.Outlined.Business,
             onClick = onInvestorClick
         )
 
         AboutActionCard(
-            title = "Kariyer",
+            title = BBLocalization.Current.Get(key = "d0402efd-1de4-4014-a781-a12d16a2f43d", fallback = "Kariyer"),
             description = "Bulbulustur ekosisteminde açık roller ve ekip kültürü.",
             icon = Icons.Outlined.Business,
             onClick = onCareerClick
         )
 
         AboutActionCard(
-            title = "Yol Haritası",
+            title = BBLocalization.Current.Get(key = "9e514dba-077f-4b79-95ce-5f2743895544", fallback = "Yol Haritası"),
             description = "Platformun gelişim adımlarını incele.",
             icon = Icons.Outlined.RocketLaunch,
             onClick = onRoadmapClick
@@ -503,7 +503,7 @@ private data class AboutPlatformItem(
 private fun aboutStoryItems(): List<AboutStoryItem> {
     return listOf(
         AboutStoryItem(
-            title = "Bizim Hikayemiz",
+            title = BBLocalization.Current.Get(key = "6833a4a3-9f65-4be6-9c7d-13501943a3ab", fallback = "Bizim Hikayemiz"),
             description = "Bulbulustur, üretici, tedarikçi, mağaza ve alıcıları aynı dijital omurgada buluşturmak için geliştirilen bir ticaret altyapısıdır.",
             icon = Icons.Outlined.HistoryEdu
         ),
@@ -513,12 +513,12 @@ private fun aboutStoryItems(): List<AboutStoryItem> {
             icon = Icons.Outlined.Lightbulb
         ),
         AboutStoryItem(
-            title = "Neye İnanıyoruz?",
+            title = BBLocalization.Current.Get(key = "8aa642d5-8035-4bb3-99fc-eb8d685e4692", fallback = "Neye İnanıyoruz?"),
             description = "Ticaretin daha görünür, izlenebilir, erişilebilir ve dijital altyapılarla daha güçlü hale gelmesi gerektiğine inanıyoruz.",
             icon = Icons.Outlined.AutoAwesome
         ),
         AboutStoryItem(
-            title = "Vizyon",
+            title = BBLocalization.Current.Get(key = "83e55f8c-1284-4ef8-a364-13aa257fee84", fallback = "Vizyon"),
             description = "Türkiye merkezli güçlü bir dijital ticaret altyapısından başlayıp, çok dilli ve çok pazarlı bir ekosistem kurmak.",
             icon = Icons.Outlined.Public
         )
@@ -538,7 +538,7 @@ private fun aboutPlatformItems(): List<AboutPlatformItem> {
             icon = Icons.Outlined.Business
         ),
         AboutPlatformItem(
-            title = "Satıcılar",
+            title = BBLocalization.Current.Get(key = "ad7115b0-2a8e-4c7f-830b-4ebadec8f0c1", fallback = "Satıcılar"),
             description = "Perakende satış, sipariş, ödeme ve operasyon süreçlerini Bulbulustur altyapısı ile yönetir.",
             icon = Icons.Outlined.Verified
         ),

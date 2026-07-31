@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Store
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -58,7 +60,7 @@ fun StoreOnboardingInfoScreen(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "Satıcı Başvurusu",
+                title = BBLocalization.Current.Get(key = "9a9add6f-9ab5-47dc-863d-7a57fb437a0d", fallback = "Satıcı Başvurusu"),
                 onBackClick = onBackClick
             )
         }

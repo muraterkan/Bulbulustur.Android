@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Profile
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -131,7 +133,7 @@ private fun ProfilePhotoSheetHeader() {
         )
     ) {
         Text(
-            text = "Profil Fotoğrafı",
+            text = BBLocalization.Current.Get(key = "b97518f9-86d4-46f0-9f2e-5e3f96aa7440", fallback = "Profil Fotoğrafı"),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface
         )

@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.order
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -299,8 +301,8 @@ private fun OrderCancelReasonCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
             OrderCancelSectionTitle(
-                title = "İptal Nedeni",
-                subtitle = "Bu ürünü neden iptal etmek istediğinizi seçin."
+                title = BBLocalization.Current.Get(key = "6a5272b2-6e98-4371-a596-a3816429a463", fallback = "İptal Nedeni"),
+                subtitle = BBLocalization.Current.Get(key = "56eedafa-dae0-471a-8228-df07162a4d88", fallback = "Bu ürünü neden iptal etmek istediğinizi seçin.")
             )
 
             Column(
@@ -386,7 +388,7 @@ private fun OrderCancelDescriptionCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             OrderCancelSectionTitle(
-                title = "Açıklama",
+                title = BBLocalization.Current.Get(key = "db0a3356-2fa4-4c1f-9432-2c299ac52b92", fallback = "Açıklama"),
                 subtitle = "Talebin değerlendirilmesi için kısa bir açıklama yazabilirsiniz."
             )
 
@@ -470,7 +472,7 @@ private fun OrderCancelActionCard(
                 text = if (isLoading) {
                     "Talep Gönderiliyor"
                 } else {
-                    "Talebi Gönder"
+                    BBLocalization.Current.Get(key = "d2843cb0-ebbe-4d77-9873-62ac1d7ea9ee", fallback = "Talebi Gönder")
                 },
                 onClick = onSubmitClick,
                 modifier = Modifier.fillMaxWidth(),
@@ -495,7 +497,7 @@ private fun OrderCancelActionCard(
             )
 
             BbButton(
-                text = "Sipariş Detaylarına Dön",
+                text = BBLocalization.Current.Get(key = "b820bc4a-7523-4901-a326-a07c9ec43637", fallback = "Sipariş Detaylarına Dön"),
                 onClick = onBackClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Light,

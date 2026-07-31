@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Store
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -73,7 +75,7 @@ fun StoreListScreen(
 
     val alphabetFilters = remember {
         listOf(
-            "Tümü",
+            BBLocalization.Current.Get(key = "40b32a95-e0ec-4b16-b54d-12b6fe90cced", fallback = "Tümü"),
             "0-9",
             "A",
             "B",
@@ -102,7 +104,7 @@ fun StoreListScreen(
     }
 
     var selectedAlphabetFilter by remember {
-        mutableStateOf("Tümü")
+        mutableStateOf(BBLocalization.Current.Get(key = "40b32a95-e0ec-4b16-b54d-12b6fe90cced", fallback = "Tümü"))
     }
 
     val filteredStores = remember(searchText, selectedAlphabetFilter, items) {
@@ -117,7 +119,7 @@ fun StoreListScreen(
         }
 
         when (selectedAlphabetFilter) {
-            "Tümü" -> searchFilteredStores
+            BBLocalization.Current.Get(key = "40b32a95-e0ec-4b16-b54d-12b6fe90cced", fallback = "Tümü") -> searchFilteredStores
             "0-9" -> searchFilteredStores.filter { store ->
                 store.name.firstOrNull()?.isDigit() == true
             }
@@ -131,11 +133,11 @@ fun StoreListScreen(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "Mağazalar",
+                title = BBLocalization.Current.Get(key = "91be3e9a-09f2-496b-806f-952a02209bb2", fallback = "Mağazalar"),
                 onBackClick = onBackClick,
                 actionContent = {
                     StoreListHeaderActionButton(
-                        text = "Satıcı Ol",
+                        text = BBLocalization.Current.Get(key = "b666c949-1b61-46d3-aa54-9ff65c1ac820", fallback = "Satıcı Ol"),
                         icon = Icons.Outlined.Storefront,
                         onClick = onSellerInfoClick
                     )
@@ -333,7 +335,7 @@ private fun StoreListSearchCard(
             singleLine = true,
             placeholder = {
                 Text(
-                    text = "Mağaza Adı Ara..."
+                    text = BBLocalization.Current.Get(key = "ed96c697-b2d3-43ed-bf60-30aec5de4541", fallback = "Mağaza Adı Ara...")
                 )
             },
             leadingIcon = {
@@ -420,7 +422,7 @@ private fun StoreListResultHeader(
         )
 
         Text(
-            text = if (selectedFilter == "Tümü") {
+            text = if (selectedFilter == BBLocalization.Current.Get(key = "40b32a95-e0ec-4b16-b54d-12b6fe90cced", fallback = "Tümü")) {
                 "Tüm mağazalar gösteriliyor."
             } else {
                 "$selectedFilter filtresi uygulanıyor."
@@ -567,7 +569,7 @@ private fun StoreListErrorState(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
-            StoreListStatusPill(text = "Hata")
+            StoreListStatusPill(text = BBLocalization.Current.Get(key = "30aee7b0-b131-4f63-8659-f78378ac20f3", fallback = "Hata"))
 
             Text(
                 text = "Mağazalar alınamadı",
@@ -790,7 +792,7 @@ private data class StoreListItem(
 
 private fun StoreDTO.ToStoreListItem(): StoreListItem {
     val resolvedName = StoreName.ifBlank {
-        "Mağaza"
+        BBLocalization.Current.Get(key = "a4bd79dd-e7ee-4407-9e7d-00582840c43a", fallback = "Mağaza")
     }
 
     return StoreListItem(

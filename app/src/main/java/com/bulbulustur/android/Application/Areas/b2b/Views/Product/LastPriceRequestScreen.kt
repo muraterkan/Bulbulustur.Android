@@ -81,7 +81,7 @@ fun LastPriceRequestScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Son Fiyat Talebi",
+                title = BBLocalization.Current.Get(key = "7b2a3a2b-db92-4545-8079-19e0cc8d870d", fallback = "Son Fiyat Talebi"),
                 onBackClick = onBackClick
             )
         }
@@ -114,7 +114,7 @@ fun LastPriceRequestScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Talep Detayları",
+                    title = BBLocalization.Current.Get(key = "c179b226-774a-4b79-bcc5-5b4fbb580ae6", fallback = "Talep Detayları"),
                     subtitle = "Son fiyat alabilmek için miktar ve beklentilerinizi yazın"
                 )
             }
@@ -129,7 +129,7 @@ fun LastPriceRequestScreen(
                         onValueChange = {
                             quantity.value = it
                         },
-                        label = "Miktar",
+                        label = BBLocalization.Current.Get(key = "64f1e179-caee-4a60-9500-d35fbc4ed554", fallback = "Miktar"),
                         placeholder = "Örn. 1000",
                         icon = Icons.Outlined.Inventory2,
                         modifier = Modifier.weight(1f)
@@ -183,7 +183,7 @@ fun LastPriceRequestScreen(
                     onValueChange = {
                         detail.value = it
                     },
-                    label = "Diğer Detaylar",
+                    label = BBLocalization.Current.Get(key = "a997a8c2-5f4b-45e1-9aae-40c652406fcb", fallback = "Diğer Detaylar"),
                     placeholder = "Bilmemiz gereken başka bir şey var mı? Miktar, hedef fiyat, ödeme ve teslimat beklentinizi yazın."
                 )
             }
@@ -511,11 +511,11 @@ private fun lastPriceSuggestionTexts(): List<LastPriceSuggestionText> {
             description = "Peşin ve vadeli ödeme seçeneklerine göre son fiyat bilgisini paylaşabilir misiniz?"
         ),
         LastPriceSuggestionText(
-            title = "Teslimat",
+            title = BBLocalization.Current.Get(key = "fa83755d-d80d-4f50-bb5a-631ef8331078", fallback = "Teslimat"),
             description = "Teslimat süresi, kargo/lojistik maliyeti ve hedef teslimat bilgisiyle birlikte son fiyat rica ederim."
         ),
         LastPriceSuggestionText(
-            title = "Karşılaştırma",
+            title = BBLocalization.Current.Get(key = "ab778422-abe4-4635-b214-9d43ec55750c", fallback = "Karşılaştırma"),
             description = "Aynı ürün için alternatif kalite veya ambalaj seçenekleri varsa fiyat karşılaştırması almak isterim."
         )
     )

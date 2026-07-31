@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Controllers
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.lifecycle.viewModelScope
 import com.bulbulustur.android.businesslayer.Core.DTO.BasketDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.BasketInsertResponse
@@ -167,7 +169,7 @@ class BasketController(
             _state.update { currentState ->
                 currentState.copy(
                     ErrorMessage =
-                        "Ürün fiyat bilgisi bulunamadı."
+                        BBLocalization.Current.Get(key = "7a2833af-d6f0-4cdb-afe8-9f61bb82b1a5", fallback = "Ürün fiyat bilgisi bulunamadı.")
                 )
             }
 

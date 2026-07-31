@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Profile
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import com.bulbulustur.android.Application.Views.Profile.Components.BbProfileStickySaveBar as CommonProfileStickySaveBar
 
 import androidx.compose.foundation.background
@@ -504,7 +506,7 @@ private fun ProfileEducationWorkSaveBar(
                 )
 
                 Text(
-                    text = "Kaydet",
+                    text = BBLocalization.Current.Get(key = "c70b208b-86cd-4955-b8ef-f5b5ee7bc0cc", fallback = "Kaydet"),
                     modifier = Modifier.padding(start = BBSpacing.Space2),
                     style = BbTypography.titleSmall,
                     fontWeight = FontWeight.Bold

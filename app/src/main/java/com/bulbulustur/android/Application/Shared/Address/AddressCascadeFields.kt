@@ -18,16 +18,16 @@ fun AddressCascadeFields(
     onCitySelected: (Int) -> Unit,
     onDistrictSelected: (Int?) -> Unit,
     modifier: Modifier = Modifier,
-    countryLabel: String = "Ülke",
+    countryLabel: String = BBLocalization.Current.Get(key = "8b04cc2a-5e86-4d4e-bf8c-7dc7bf1be325", fallback = "Ülke"),
     countryPlaceholder: String = BBLocalization.Current.Get(key = "387bcc7b-e309-4099-8f1d-0ee062d4b7f4", fallback = ""),
-    countryStateLabel: String = "Eyalet / Bölge",
+    countryStateLabel: String = BBLocalization.Current.Get(key = "e59fd16b-4f44-42cb-9488-de3a719b46dd", fallback = "Eyalet / Bölge"),
     countryStatePlaceholder: String = "Eyalet veya bölge seçiniz",
     countryDepartmentLabel: String = "Departman",
     countryDepartmentPlaceholder: String = "Departman seçiniz",
-    cityLabel: String = "Şehir",
-    cityPlaceholder: String = "Şehir seçiniz",
-    districtLabel: String = "İlçe",
-    districtPlaceholder: String = "İlçe seçiniz",
+    cityLabel: String = BBLocalization.Current.Get(key = "a4936d53-1fc1-4e87-a255-2a4906748a61", fallback = "Şehir"),
+    cityPlaceholder: String = BBLocalization.Current.Get(key = "a63fde8b-360d-4778-9454-c588680b0b23", fallback = "Şehir seçiniz"),
+    districtLabel: String = BBLocalization.Current.Get(key = "843fedae-4923-4542-9341-9832b4a5f773", fallback = "İlçe"),
+    districtPlaceholder: String = BBLocalization.Current.Get(key = "ff3403fe-85af-4a61-84d8-fd525d6bb11e", fallback = "İlçe seçiniz"),
     countryErrorText: String? = null,
     countryStateErrorText: String? = null,
     countryDepartmentErrorText: String? = null,
@@ -165,7 +165,7 @@ fun AddressCascadeFields(
                         countryStatePlaceholder
                     },
                 searchPlaceholder =
-                    "Eyalet veya bölge ara...",
+                    BBLocalization.Current.Get(key = "e59fd16b-4f44-42cb-9488-de3a719b46dd", fallback = "Eyalet veya bölge ara..."),
                 errorText =
                     countryStateErrorText
                         ?: state.CountryStateError,
@@ -243,7 +243,7 @@ fun AddressCascadeFields(
                     cityPlaceholder
                 },
             searchPlaceholder =
-                "Şehir ara...",
+                BBLocalization.Current.Get(key = "a4936d53-1fc1-4e87-a255-2a4906748a61", fallback = "Şehir ara..."),
             errorText =
                 cityErrorText
                     ?: state.CityError,

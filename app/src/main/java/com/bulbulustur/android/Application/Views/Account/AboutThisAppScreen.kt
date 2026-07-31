@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import android.content.pm.PackageManager
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
@@ -502,7 +504,7 @@ private fun AboutClearCacheSheet(
             horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
         ) {
             AboutSheetButton(
-                text = "İptal",
+                text = BBLocalization.Current.Get(key = "92ebe8f3-c0b3-48a9-88a5-bb431ba27bf8", fallback = "İptal"),
                 modifier = Modifier.weight(1f),
                 containerColor = MaterialTheme.colorScheme.surfaceVariant,
                 contentColor = MaterialTheme.colorScheme.onSurface,
@@ -726,7 +728,7 @@ private fun AboutBottomSheetTopBar(
         ) {
             Icon(
                 imageVector = Icons.Outlined.Close,
-                contentDescription = "Kapat",
+                contentDescription = BBLocalization.Current.Get(key = "ca9452ab-b39e-4b65-b19b-c7e2b287bfaf", fallback = "Kapat"),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.size(BBIcon.Ui)
             )

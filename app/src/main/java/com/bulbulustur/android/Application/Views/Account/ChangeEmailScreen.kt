@@ -71,7 +71,7 @@ fun ChangeEmailScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "E-Posta Değiştir",
+                title = BBLocalization.Current.Get(key = "56b7b2b0-d2da-4d53-a361-88b4890ebb6c", fallback = "E-Posta Değiştir"),
                 onBackClick = onBackClick
             )
         }
@@ -112,7 +112,7 @@ fun ChangeEmailScreen(
                         onValueChange = { value ->
                             newEmailState.value = value
                         },
-                        label = "Yeni E-Posta",
+                        label = BBLocalization.Current.Get(key = "e0e7ede9-103b-4236-b9e2-ac2d8167aac1", fallback = "Yeni E-Posta"),
                         placeholder = "ornek@bulbulustur.com",
                         isError = newEmailState.value.isNotBlank() &&
                                 (!emailValidationState.value.IsNewEmailValid ||

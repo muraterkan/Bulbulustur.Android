@@ -105,7 +105,7 @@ private fun SubscriptionCard(subscription: MemberSubscriptionDTO, onSubscription
                 SubscriptionIconBox(iconColor = BBColors.Yellow.Yellow800, backgroundColor = MaterialTheme.colorScheme.primaryContainer)
 
                 Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)) {
-                    Text(text = "ABONELİK PLANI", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(text = BBLocalization.Current.Get(key = "bf84d3d3-4da3-41f0-bb97-5f7952d7d373", fallback = "ABONELİK PLANI"), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Text(text = subscription.GetSubscriptionTitle(), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
                 }
 
@@ -120,7 +120,7 @@ private fun SubscriptionCard(subscription: MemberSubscriptionDTO, onSubscription
             }
 
             BbButton(
-                text = "Detayları Gör",
+                text = BBLocalization.Current.Get(key = "b136ac4d-f11b-4e90-9231-3fd15c387daa", fallback = "Detayları Gör"),
                 onClick = { onSubscriptionDetailClick(subscription.MemberSubscriptionId) },
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Light,
@@ -195,7 +195,7 @@ private fun SubscriptionErrorState(message: String, onRetryClick: () -> Unit) {
         Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)) {
             Icon(imageVector = Icons.Outlined.ErrorOutline, contentDescription = null, tint = MaterialTheme.colorScheme.error, modifier = Modifier.size(BBIcon.Empty))
             Text(text = message, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            BbButton(text = "Tekrar Dene", onClick = onRetryClick, variant = BbButtonVariant.Primary, size = BbButtonSize.Small)
+            BbButton(text = BBLocalization.Current.Get(key = "9d1ce783-da20-464b-9203-cd1ce09918c6", fallback = "Tekrar Dene"), onClick = onRetryClick, variant = BbButtonVariant.Primary, size = BbButtonSize.Small)
         }
     }
 }
@@ -205,7 +205,7 @@ private fun SubscriptionEmptyState() {
     BbCard(modifier = Modifier.fillMaxWidth(), variant = BbCardVariant.Outlined, padding = BbCardPadding.Large) {
         Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)) {
             SubscriptionIconBox(iconColor = BBColors.Yellow.Yellow800, backgroundColor = MaterialTheme.colorScheme.primaryContainer)
-            Text(text = "Abonelik bulunamadı", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
+            Text(text = BBLocalization.Current.Get(key = "cf668625-d6eb-4c14-97de-fee71a127b64", fallback = "Abonelik bulunamadı"), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
             Text(text = "Aktif veya geçmiş abonelik bilgileriniz oluştuğunda burada görüntülenir.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
@@ -221,7 +221,7 @@ private fun MemberSubscriptionDTO.GetSubscriptionTitle(): String {
     if (!typeName.isNullOrBlank()) return typeName
     if (!planTypeName.isNullOrBlank()) return planTypeName
 
-    return "Abonelik"
+    return BBLocalization.Current.Get(key = "b7249890-2e15-4455-9c2f-f0f02632d757", fallback = "Abonelik")
 }
 
 private fun MemberSubscriptionDTO.GetPriceText(): String {

@@ -67,7 +67,7 @@ private enum class AccountReviewTab(
     ),
     Store(
         SourceType = "STORE",
-        Title = "Mağaza",
+        Title = BBLocalization.Current.Get(key = "a4bd79dd-e7ee-4407-9e7d-00582840c43a", fallback = "Mağaza"),
         EmptyText = "mağaza değerlendirmeniz",
         Icon = Icons.Outlined.Storefront
     ),
@@ -116,7 +116,7 @@ fun ReviewListScreen(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "Değerlendirmelerim",
+                title = BBLocalization.Current.Get(key = "e6bb3a6c-5706-4ecd-8cab-8cb37ba1359b", fallback = "Değerlendirmelerim"),
                 onBackClick = onBackClick
             )
         }
@@ -392,7 +392,7 @@ private fun ReviewCard(
             Düzenleme ve silme endpointleri kesinleştikten sonra açılacak.
 
             BbButton(
-                text = "Düzenle",
+                text = BBLocalization.Current.Get(key = "6a23f3ad-9109-471d-a670-7b5a40cf3cd9", fallback = "Düzenle"),
                 onClick = {
                     onEditReviewClick(review.ReviewId)
                 },
@@ -564,7 +564,7 @@ private fun ReviewErrorState(
             )
 
             BbButton(
-                text = "Tekrar Dene",
+                text = BBLocalization.Current.Get(key = "9d1ce783-da20-464b-9203-cd1ce09918c6", fallback = "Tekrar Dene"),
                 onClick = onRetryClick,
                 variant = BbButtonVariant.Primary,
                 size = BbButtonSize.Small
@@ -646,7 +646,7 @@ private fun String?.ToReviewBadgeText(): String {
 private fun String?.ToTargetActionText(): String {
     return when {
         equals("PRODUCT", ignoreCase = true) -> "Ürünü Gör"
-        equals("STORE", ignoreCase = true) -> "Mağazayı Gör"
+        equals("STORE", ignoreCase = true) -> BBLocalization.Current.Get(key = "d26114e4-960d-45f4-96a2-9dfb44957e0e", fallback = "Mağazayı Gör")
         equals("COMPANY", ignoreCase = true) -> "Firmayı Gör"
         else -> "İlgili Kaydı Gör"
     }

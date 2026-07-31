@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.order
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -71,7 +73,7 @@ fun OrderContractScreen(
         topBar = {
             BbInnerPageHeader(
                 title = "Sözleşme",
-                subtitle = "Siparişe ait mesafeli satış sözleşmesi.",
+                subtitle = BBLocalization.Current.Get(key = "cbadbcf8-3e92-481d-b7bd-c002a9003abb", fallback = "Siparişe ait mesafeli satış sözleşmesi."),
                 onBackClick = onBackClick
             )
         }
@@ -191,7 +193,7 @@ private fun OrderContractSummaryCard(
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                 ) {
                     Text(
-                        text = "Mesafeli Satış Sözleşmesi",
+                        text = BBLocalization.Current.Get(key = "cbadbcf8-3e92-481d-b7bd-c002a9003abb", fallback = "Mesafeli Satış Sözleşmesi"),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -239,7 +241,7 @@ private fun OrderContractInfoGrid(contract: ContractDTO) {
         ) {
             OrderContractInfoBox(
                 modifier = Modifier.weight(1f),
-                title = "SİPARİŞ",
+                title = BBLocalization.Current.Get(key = "da8fa875-cb8f-4354-a354-86a2d8213bc8", fallback = "SİPARİŞ"),
                 value = contract.OrderKey,
                 icon = Icons.Outlined.Numbers,
                 iconColor = BBColors.Yellow.Yellow800
@@ -247,7 +249,7 @@ private fun OrderContractInfoGrid(contract: ContractDTO) {
 
             OrderContractInfoBox(
                 modifier = Modifier.weight(1f),
-                title = "MAĞAZA",
+                title = BBLocalization.Current.Get(key = "a4bd79dd-e7ee-4407-9e7d-00582840c43a", fallback = "MAĞAZA"),
                 value = contract.StoreKey,
                 icon = Icons.Outlined.RequestQuote,
                 iconColor = BBColors.Blue.Blue600
@@ -260,7 +262,7 @@ private fun OrderContractInfoGrid(contract: ContractDTO) {
         ) {
             OrderContractInfoBox(
                 modifier = Modifier.weight(1f),
-                title = "TARİH",
+                title = BBLocalization.Current.Get(key = "e4602d88-9a44-4ed3-827b-8844da4a88be", fallback = "TARİH"),
                 value = contract.InsertedDate.ifBlank { "-" },
                 icon = Icons.Outlined.CalendarMonth,
                 iconColor = BBColors.Blue.Blue600

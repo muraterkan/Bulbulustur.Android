@@ -257,7 +257,7 @@ private fun CompanyContactHero(
                 )
             ) {
                 BbButton(
-                    text = "Profil",
+                    text = BBLocalization.Current.Get(key = "ab200e4f-1f9e-45f4-90a6-7d5d21d33953", fallback = "Profil"),
                     onClick = onCompanyProfileClick,
                     modifier = Modifier.weight(1f),
                     variant = BbButtonVariant.Outline,
@@ -265,7 +265,7 @@ private fun CompanyContactHero(
                 )
 
                 BbButton(
-                    text = "Ürünler",
+                    text = BBLocalization.Current.Get(key = "6cf7b92f-05e7-4ac7-be8c-ce98d8bf20c5", fallback = "Ürünler"),
                     onClick = onCompanyProductsClick,
                     modifier = Modifier.weight(1f),
                     variant = BbButtonVariant.Primary,
@@ -430,7 +430,7 @@ private fun CompanyContactInfoCard(
             )
         ) {
             Text(
-                text = "Adres ve kurumsal iletişim",
+                text = BBLocalization.Current.Get(key = "ace8f221-fd2b-43d4-ada9-de36f2bf5af0", fallback = "Adres ve kurumsal iletişim"),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
@@ -438,14 +438,14 @@ private fun CompanyContactInfoCard(
 
             CompanyContactInfoRow(
                 icon = Icons.Outlined.Language,
-                title = "Web sitesi",
+                title = BBLocalization.Current.Get(key = "a8fcc3ce-6d1a-40be-b752-974c9b774d7b", fallback = "Web sitesi"),
                 value = company.website,
                 onClick = onWebsiteClick
             )
 
             CompanyContactInfoRow(
                 icon = Icons.Outlined.LocationOn,
-                title = "Adres",
+                title = BBLocalization.Current.Get(key = "af1da4df-7298-4cd9-b256-371d098b59f7", fallback = "Adres"),
                 value = company.address,
                 onClick = onAddressClick
             )
@@ -587,7 +587,7 @@ private fun CompanyMessageCard(
                     )
                 ) {
                     Text(
-                        text = "Mesaj gönder",
+                        text = BBLocalization.Current.Get(key = "c294574b-e9e3-4820-b0b2-23b326a7aeb3", fallback = "Mesaj gönder"),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold
@@ -612,7 +612,7 @@ private fun CompanyMessageCard(
                 onValueChange = onMessageChange,
                 label = {
                     Text(
-                        text = "Mesajınız"
+                        text = BBLocalization.Current.Get(key = "f1b79206-6b85-4636-a67d-636fdb2488d6", fallback = "Mesajınız")
                     )
                 },
                 placeholder = {
@@ -709,10 +709,10 @@ private fun getCompanyContact(
         address = "Yeni Mah. Çarşamba Cad. No:52 Piazza AVM -1 Kat / Canik / Samsun",
         email = "sales@ortobella.com",
         chips = listOf(
-            "Türkiye",
+            BBLocalization.Current.Get(key = "5365b492-6a1c-4b46-b5c0-b50cbfdd17a8", fallback = "Türkiye"),
             "Samsun",
-            "Doğrulanmış",
-            "Tedarikçi",
+            BBLocalization.Current.Get(key = "c6a0ff62-8828-475f-b553-37effb42efe6", fallback = "Doğrulanmış"),
+            BBLocalization.Current.Get(key = "95ab742c-6bb3-47da-bb8b-c37b3a979c24", fallback = "Tedarikçi"),
             "Hızlı yanıt"
         )
     )

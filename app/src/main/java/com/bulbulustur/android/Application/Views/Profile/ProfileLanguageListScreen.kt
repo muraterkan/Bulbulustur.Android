@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Profile
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -66,13 +68,13 @@ fun ProfileLanguageListScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Dillerim",
+                title = BBLocalization.Current.Get(key = "fb9900fe-d66a-4aee-a030-f41b58100722", fallback = "Dillerim"),
                 onBackClick = onBackClick
             )
         },
         bottomBar = {
             BbProfileStickySaveBar(
-                text = "Dil Ekle",
+                text = BBLocalization.Current.Get(key = "4bbb0259-3a57-4199-ae6b-725fdba47179", fallback = "Dil Ekle"),
                 enabled = !isLoading,
                 onClick = onAddClick
             )
@@ -210,7 +212,7 @@ fun ProfileLanguageListScreen(
                             ?.Content
                             ?.trim()
                             ?.takeIf { it.isNotBlank() }
-                            ?: "Seviye belirtilmemiş"
+                            ?: BBLocalization.Current.Get(key = "e23c524e-fedd-4486-ac5e-25721a402156", fallback = "Seviye belirtilmemiş")
 
                         val isDeleting = deletingMemberLanguageId == language.MemberLanguageId
 
@@ -266,7 +268,7 @@ fun ProfileLanguageListScreen(
 
                                     Icon(
                                         imageVector = Icons.Outlined.ChevronRight,
-                                        contentDescription = "Düzenle",
+                                        contentDescription = BBLocalization.Current.Get(key = "6a23f3ad-9109-471d-a670-7b5a40cf3cd9", fallback = "Düzenle"),
                                         tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                         modifier = Modifier.size(BBIcon.SizeMd)
                                     )
@@ -332,7 +334,7 @@ fun ProfileLanguageListScreen(
                     }
                 ) {
                     Text(
-                        text = "Sil",
+                        text = BBLocalization.Current.Get(key = "e38050df-62e1-4b83-97ee-2643ad73390c", fallback = "Sil"),
                         color = MaterialTheme.colorScheme.error,
                         fontWeight = FontWeight.Bold
                     )
@@ -345,7 +347,7 @@ fun ProfileLanguageListScreen(
                         pendingDeleteMemberLanguageId = null
                     }
                 ) {
-                    Text("İptal")
+                    Text(BBLocalization.Current.Get(key = "92ebe8f3-c0b3-48a9-88a5-bb431ba27bf8", fallback = "İptal"))
                 }
             }
         )

@@ -106,7 +106,7 @@ fun CampaignListScreen(
                 onSearchTextChange = {
                     searchText = it
                 },
-                placeholder = "Kampanya ara",
+                placeholder = BBLocalization.Current.Get(key = "b66af534-b950-4603-8fb6-caf6ca5be73d", fallback = "Kampanya ara"),
                 onSearchClick = {
                     onSearchSubmit(searchText)
                 },
@@ -143,7 +143,7 @@ fun CampaignListScreen(
 
             item {
                 CampaignSectionTitle(
-                    title = "Tüm Kampanyalar",
+                    title = BBLocalization.Current.Get(key = "e2812624-6bbc-4034-9a09-6570540d0785", fallback = "Tüm Kampanyalar"),
                     description = "Bulbulustur içinde öne çıkan kampanya alanlarını ve avantajlı alışveriş fırsatlarını görüntüle."
                 )
             }
@@ -333,7 +333,7 @@ private fun CampaignListCard(
     val campaignName =
         campaign.CampaignName
             ?.takeIf { it.isNotBlank() }
-            ?: "Kampanya"
+            ?: BBLocalization.Current.Get(key = "b66af534-b950-4603-8fb6-caf6ca5be73d", fallback = "Kampanya")
 
     val description =
         campaign.Description
@@ -414,7 +414,7 @@ private fun CampaignListCard(
                 )
             ) {
                 Text(
-                    text = "Kampanya",
+                    text = BBLocalization.Current.Get(key = "b66af534-b950-4603-8fb6-caf6ca5be73d", fallback = "Kampanya"),
                     style = MaterialTheme.typography.labelSmall,
                     color =
                         MaterialTheme.colorScheme.onSurfaceVariant
@@ -453,7 +453,7 @@ private fun CampaignListCard(
                 ) {}
 
                 BbButton(
-                    text = "Detayları Gör",
+                    text = BBLocalization.Current.Get(key = "b136ac4d-f11b-4e90-9231-3fd15c387daa", fallback = "Detayları Gör"),
                     modifier = Modifier.fillMaxWidth(),
                     variant = BbButtonVariant.Primary,
                     size = BbButtonSize.Small,
@@ -500,7 +500,7 @@ private fun CampaignBadge(
             )
 
             Text(
-                text = "Kampanya",
+                text = BBLocalization.Current.Get(key = "b66af534-b950-4603-8fb6-caf6ca5be73d", fallback = "Kampanya"),
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onError

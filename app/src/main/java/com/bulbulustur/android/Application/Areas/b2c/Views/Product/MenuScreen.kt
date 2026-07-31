@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Product
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -227,7 +229,7 @@ private fun RetailMenuQuickActions(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
     ) {
         RetailMenuQuickActionCard(
-            title = "Kampanyalar",
+            title = BBLocalization.Current.Get(key = "e2812624-6bbc-4034-9a09-6570540d0785", fallback = "Kampanyalar"),
             icon = {
                 Icon(
                     imageVector = Icons.Rounded.LocalOffer,
@@ -240,7 +242,7 @@ private fun RetailMenuQuickActions(
         )
 
         RetailMenuQuickActionCard(
-            title = "Mağazalar",
+            title = BBLocalization.Current.Get(key = "91be3e9a-09f2-496b-806f-952a02209bb2", fallback = "Mağazalar"),
             icon = {
                 Icon(
                     imageVector = Icons.Rounded.Storefront,
@@ -253,7 +255,7 @@ private fun RetailMenuQuickActions(
         )
 
         RetailMenuQuickActionCard(
-            title = "Ara",
+            title = BBLocalization.Current.Get(key = "b62c3162-72af-439f-a20b-c4ca58f51035", fallback = "Ara"),
             icon = {
                 Icon(
                     imageVector = Icons.Rounded.Search,

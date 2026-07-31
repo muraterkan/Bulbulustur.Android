@@ -64,7 +64,7 @@ fun RfqOfferDetailScreen(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "Teklif Detayı",
+                title = BBLocalization.Current.Get(key = "b3f5f4a8-42dc-45ca-8394-7d1919d9a101", fallback = "Teklif Detayı"),
                 onBackClick = onBackClick
             )
         }
@@ -160,7 +160,7 @@ fun RfqOfferDetailScreen(
                         onValueChange = {
                             messageText = it
                         },
-                        label = "Mesaj",
+                        label = BBLocalization.Current.Get(key = "74d3bcb0-a3c9-477f-82f1-c091809c5a00", fallback = "Mesaj"),
                         placeholder = "Mesajınızı yazın...",
                         minLines = 4,
                         maxLines = 8
@@ -235,7 +235,7 @@ private fun RfqOfferSummaryCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Satıcı Teklifi",
+                    text = BBLocalization.Current.Get(key = "f12ff8d3-fd4d-4197-b9a2-7399b8c2d803", fallback = "Satıcı Teklifi"),
                     style = BbTypography.labelSmall,
                     color = BBColors.Yellow.Yellow800
                 )
@@ -393,7 +393,7 @@ private fun RfqOfferActionCard(
             )
 
             BbButton(
-                text = "Mesaj Gönder",
+                text = BBLocalization.Current.Get(key = "c294574b-e9e3-4820-b0b2-23b326a7aeb3", fallback = "Mesaj Gönder"),
                 onClick = onMessageClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Primary,
@@ -446,7 +446,7 @@ private fun RfqOfferDetailErrorCard(
             )
 
             BbButton(
-                text = "Tekrar Dene",
+                text = BBLocalization.Current.Get(key = "9d1ce783-da20-464b-9203-cd1ce09918c6", fallback = "Tekrar Dene"),
                 onClick = onRetryClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Outline,
@@ -464,7 +464,7 @@ private fun RfqOfferDetailEmptyCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Teklif kaydı bulunamadı.",
+            text = BBLocalization.Current.Get(key = "610d11e9-739f-4470-be8c-2efc1e41560d", fallback = "Teklif kaydı bulunamadı."),
             style = BbTypography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

@@ -75,10 +75,10 @@ fun RfqListScreen(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "Fiyat Teklifi İstekleri",
+                title = BBLocalization.Current.Get(key = "d497388f-3bab-40fd-af5e-e6294231b04f", fallback = "Fiyat Teklifi İstekleri"),
                 onBackClick = onBackClick,
                 actionIcon = Icons.Outlined.Add,
-                actionContentDescription = "Teklif Al",
+                actionContentDescription = BBLocalization.Current.Get(key = "9aa9e9a4-18b3-427b-943f-36170e46cb37", fallback = "Teklif Al"),
                 onActionClick = onCreateRfqClick
             )
         },
@@ -177,7 +177,7 @@ private fun RfqCreateActionCard(onCreateRfqClick: () -> Unit) {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Yeni Teklif Al",
+                    text = BBLocalization.Current.Get(key = "9aa9e9a4-18b3-427b-943f-36170e46cb37", fallback = "Yeni Teklif Al"),
                     style = BbTypography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -394,7 +394,7 @@ private fun RfqListLoadingCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Fiyat teklifi istekleri yükleniyor...",
+            text = BBLocalization.Current.Get(key = "d497388f-3bab-40fd-af5e-e6294231b04f", fallback = "Fiyat teklifi istekleri yükleniyor..."),
             style = BbTypography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -422,7 +422,7 @@ private fun RfqListErrorCard(
             )
 
             BbButton(
-                text = "Tekrar Dene",
+                text = BBLocalization.Current.Get(key = "9d1ce783-da20-464b-9203-cd1ce09918c6", fallback = "Tekrar Dene"),
                 onClick = onRetryClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Outline,

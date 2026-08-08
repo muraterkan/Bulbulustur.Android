@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Controllers
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import android.content.Context
 import androidx.lifecycle.viewModelScope
 import coil3.imageLoader
@@ -62,7 +64,7 @@ class SettingsController(
             }
 
             val response = executeService.GetAsync(
-                cacheKey = "Settings.Languages.$languageId.$count"
+                cacheKey = ""
             ) {
                 systemDescLanguageRepository.GetSystemDescLanguagesAsync(
                     languageId = languageId,
@@ -218,9 +220,9 @@ class SettingsController(
                     IsClearingCache = false,
                     IsCacheCleared = result.isSuccess,
                     CacheMessage = if (result.isSuccess) {
-                        "Önbellek başarıyla temizlendi."
+                        BBLocalization.Current.Get(key = "e305d8cc-bdde-4c75-9134-abc88a9ed23b", fallback = "Önbellek başarıyla temizlendi.")
                     } else {
-                        "Önbellek tamamen temizlenemedi."
+                        BBLocalization.Current.Get(key = "900d0aa2-f733-462c-a4b6-0e627487ca6d", fallback = "Önbellek tamamen temizlenemedi.")
                     },
                     ErrorMessage = result.exceptionOrNull()?.message
                 )

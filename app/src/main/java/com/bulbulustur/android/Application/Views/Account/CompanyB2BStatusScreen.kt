@@ -63,7 +63,7 @@ fun CompanyB2BStatusScreen(
 ) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
-        topBar = { BbInnerPageHeader(title = "B2B Index Durumu", onBackClick = onBackClick) }
+        topBar = { BbInnerPageHeader(title = BBLocalization.Current.Get(key = "1593c999-ed73-445d-8be0-e928e8218379", fallback = "B2B Index Durumu"), onBackClick = onBackClick) }
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surfaceVariant).padding(innerPadding),
@@ -88,8 +88,8 @@ fun CompanyB2BStatusScreen(
 
                     item {
                         CompanyB2BStatusSection(
-                            title = "B2B Listeleme Bilgileri",
-                            description = "Bu bilgiler şirketinizin Bulbulustur toptan satış tarafındaki görünürlüğünü gösterir.",
+                            title = BBLocalization.Current.Get(key = "e8f83e36-f9b7-43ac-a183-46c9f8227196", fallback = "B2B Listeleme Bilgileri"),
+                            description = BBLocalization.Current.Get(key = "4e4bad3f-eb9e-4287-b924-ef00545b6ddc", fallback = "Bu bilgiler şirketinizin Bulbulustur toptan satış tarafındaki görünürlüğünü gösterir."),
                             icon = Icons.Outlined.WorkspacePremium
                         ) {
                             CompanyB2BStatusInfoRow(
@@ -102,7 +102,7 @@ fun CompanyB2BStatusScreen(
 
                             CompanyB2BStatusInfoRow(
                                 title = BBLocalization.Current.Get(key = "9ecdd9a2-74ae-487a-a86c-53c290391f3a", fallback = "Listeleme Durumu"),
-                                value = if (company.B2bIndex) "B2B Index Aktif" else "B2B Index Kapalı",
+                                value = if (company.B2bIndex) BBLocalization.Current.Get(key = "665ebc8d-3ce5-48db-b56c-28c1c2aeca0e", fallback = "B2B Index Aktif") else BBLocalization.Current.Get(key = "2c599839-1d89-42d6-85ce-7abfbf0f068a", fallback = "B2B Index Kapalı"),
                                 icon = Icons.Outlined.Verified
                             )
 
@@ -117,7 +117,7 @@ fun CompanyB2BStatusScreen(
                             CompanyB2BStatusDivider()
 
                             CompanyB2BStatusInfoRow(
-                                title = "Firma Kimliği",
+                                title = BBLocalization.Current.Get(key = "68ddf12a-a56d-4957-a06d-6e7c04a6e8b9", fallback = "Firma Kimliği"),
                                 value = company.CompanyKey.ifBlank { "-" },
                                 icon = Icons.Outlined.Language
                             )
@@ -159,16 +159,16 @@ private fun CompanyB2BStatusIntroCard(active: Boolean) {
 
             Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)) {
                 Text(
-                    text = if (active) "Şirketiniz Toptan Ticaret Görünürlüğünde" else "B2B Index Görünürlüğünüz Kapalı",
+                    text = if (active) BBLocalization.Current.Get(key = "2b0b8a92-f977-4203-9c60-54afda6545d0", fallback = "Şirketiniz Toptan Ticaret Görünürlüğünde") else BBLocalization.Current.Get(key = "607ee6c3-fc56-42e2-8223-44a1e5ed5e0a", fallback = "B2B Index Görünürlüğünüz Kapalı"),
                     style = BbTypography.titleLarge,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
                     text = if (active) {
-                        "Bulbulustur B2B Index üzerinde şirketiniz aktif olarak listeleniyor."
+                        BBLocalization.Current.Get(key = "4e02d147-08b8-4ef8-ace6-8212795c2406", fallback = "Bulbulustur B2B Index üzerinde şirketiniz aktif olarak listeleniyor.")
                     } else {
-                        "Şirketiniz şu anda B2B Index üzerinde listelenmiyor."
+                        BBLocalization.Current.Get(key = "f0f6bb99-aa68-4f81-8e05-4b5171ea2884", fallback = "Şirketiniz şu anda B2B Index üzerinde listelenmiyor.")
                     },
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -226,12 +226,12 @@ private fun CompanyB2BActiveSummaryCard(company: CompanyDTO, subscription: Membe
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 CompanyB2BStatusPill(
-                    text = if (company.B2bIndex) "B2B Index Aktif" else "B2B Index Kapalı",
+                    text = if (company.B2bIndex) BBLocalization.Current.Get(key = "665ebc8d-3ce5-48db-b56c-28c1c2aeca0e", fallback = "B2B Index Aktif") else BBLocalization.Current.Get(key = "2c599839-1d89-42d6-85ce-7abfbf0f068a", fallback = "B2B Index Kapalı"),
                     icon = Icons.Outlined.Verified
                 )
 
                 CompanyB2BStatusPill(
-                    text = if (company.B2bIndex) "Yönetim Hazır" else "Aktivasyon Gerekli",
+                    text = if (company.B2bIndex) BBLocalization.Current.Get(key = "c2a581bf-e867-4505-8c36-2de85547f830", fallback = "Yönetim Hazır") else BBLocalization.Current.Get(key = "90307252-4df9-4ba9-80d2-6ced3aa8ee9d", fallback = "Aktivasyon Gerekli"),
                     icon = Icons.Outlined.WorkspacePremium
                 )
             }
@@ -271,8 +271,8 @@ private fun CompanyB2BStatusStatsGrid(company: CompanyDTO, subscription: MemberS
             CompanyB2BStatusStatCard(
                 modifier = Modifier.weight(1f),
                 icon = Icons.Outlined.Verified,
-                label = "Listeleme",
-                value = if (company.B2bIndex) "Aktif" else "Kapalı"
+                label = BBLocalization.Current.Get(key = "04b64160-7376-42d9-b406-b231860d8610", fallback = "Listeleme"),
+                value = if (company.B2bIndex) "Aktif" else BBLocalization.Current.Get(key = "fecd4b5c-9c9d-4d13-9906-49ac69360bfe", fallback = "Kapalı")
             )
 
             CompanyB2BStatusStatCard(
@@ -288,7 +288,7 @@ private fun CompanyB2BStatusStatsGrid(company: CompanyDTO, subscription: MemberS
                 modifier = Modifier.weight(1f),
                 icon = Icons.Outlined.RequestQuote,
                 label = "RFQ",
-                value = if (company.B2bIndex) "Açık" else "Kapalı"
+                value = if (company.B2bIndex) BBLocalization.Current.Get(key = "66e51b09-1fc9-48d0-bdfd-b795252d90de", fallback = "Açık") else BBLocalization.Current.Get(key = "fecd4b5c-9c9d-4d13-9906-49ac69360bfe", fallback = "Kapalı")
             )
 
             CompanyB2BStatusStatCard(
@@ -431,7 +431,7 @@ private fun CompanyB2BManagementPanelCard(onClick: () -> Unit) {
                 )
 
                 Text(
-                    text = "Şirket profilinizi, ürünlerinizi ve toptan satış operasyonlarınızı yönetmek için panel tarafına geçin.",
+                    text = BBLocalization.Current.Get(key = "db099506-b1d2-4658-9117-18dfd134b294", fallback = "Şirket profilinizi, ürünlerinizi ve toptan satış operasyonlarınızı yönetmek için panel tarafına geçin."),
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = BBAlpha.Muted)
                 )
@@ -498,7 +498,7 @@ private fun CompanyB2BStatusNotFoundState(onRetryClick: () -> Unit) {
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.size(BBIcon.Section)
             )
-            Text(text = "Firma bilgisi bulunamadı", style = BbTypography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
+            Text(text = BBLocalization.Current.Get(key = "4f467a63-d0ab-423f-ae06-65c598e5a641", fallback = "Firma bilgisi bulunamadı"), style = BbTypography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
             BbButton(text = BBLocalization.Current.Get(key = "9d1ce783-da20-464b-9203-cd1ce09918c6", fallback = "Tekrar Dene"), onClick = onRetryClick, variant = BbButtonVariant.Primary, size = BbButtonSize.Small)
         }
     }

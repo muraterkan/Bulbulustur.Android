@@ -136,7 +136,7 @@ fun PhoneVerifyScreen(
                             },
                             modifier = Modifier.fillMaxWidth(),
                             label = {
-                                Text(text = "Kod")
+                                Text(text = BBLocalization.Current.Get(key = "63716768-e5f4-41b0-96f0-767b1b5541ed", fallback = "Kod"))
                             },
                             placeholder = {
                                 Text(text = "4 haneli kod")
@@ -190,7 +190,7 @@ fun PhoneVerifyScreen(
                         )
 
                         BbButton(
-                            text = "Kodu Tekrar Gönder",
+                            text = BBLocalization.Current.Get(key = "a1535394-439f-4506-9999-7752d27c2fd4", fallback = "Kodu Tekrar Gönder"),
                             onClick = onResendCodeClick,
                             modifier = Modifier.fillMaxWidth(),
                             variant = BbButtonVariant.Light,

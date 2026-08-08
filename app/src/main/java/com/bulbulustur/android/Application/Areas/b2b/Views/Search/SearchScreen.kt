@@ -1,26 +1,21 @@
 package com.bulbulustur.android.Application.Areas.b2b.Views.Search
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Business
-import androidx.compose.material.icons.outlined.Category
 import androidx.compose.material.icons.outlined.ChevronRight
-import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.Inventory2
 import androidx.compose.material.icons.outlined.RequestQuote
-import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.outlined.Storefront
-import androidx.compose.material.icons.outlined.Verified
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -35,36 +30,75 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleSearchHeader
+import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleSearchHeaderLeadingAction
 import com.bulbulustur.android.Application.Localization.BBLocalization
+import com.bulbulustur.android.Application.Views.Shared.Components.BbSectionHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
-import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbChip
-import com.bulbulustur.android.Application.Views.Shared.Components.BbSectionHeader
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
+import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleProductDTO
 
 @Composable
 fun SearchScreen(
+    onBackClick: () -> Unit = {},
+    onFavoriteClick: () -> Unit = {},
+    onMessageClick: () -> Unit = {},
     onProductSearchClick: (String) -> Unit = {},
     onCompanySearchClick: (String) -> Unit = {},
-    onCategoryClick: (Int) -> Unit = {},
-    onCompanyClick: (Int) -> Unit = {},
     onProductClick: (Int) -> Unit = {},
-    onRfqCreateClick: (String) -> Unit = {}
+    onRfqCreateClick: (String) -> Unit = {},
+    productResults: List<WholesaleProductDTO> = emptyList(),
+    hasProductSearch: Boolean = false,
+    bottomBar: @Composable () -> Unit = {}
 ) {
     var searchText by remember {
         mutableStateOf("")
     }
 
+    val displayedProducts = remember(productResults) {
+        productResults.map { product ->
+            product.toWholesaleSearchProductResult()
+        }
+    }
+
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.background
+        modifier = Modifier.fillMaxSize(),
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            WholesaleSearchHeader(
+                searchText = searchText,
+                onSearchTextChange = {
+                    searchText = it
+                },
+                onMenuClick = onBackClick,
+                onFavoriteClick = onFavoriteClick,
+                onMessageClick = onMessageClick,
+                placeholder = BBLocalization.Current.Get(
+                    key = "8d009caa-1db4-42e9-b394-dc818277d259",
+                    fallback = "Toptan ürün, kategori veya tedarikçi ara"
+                ),
+                onSearchClick = {
+                    onProductSearchClick(searchText)
+                },
+                onClearClick = {
+                    searchText = ""
+                },
+                leadingAction = WholesaleSearchHeaderLeadingAction.Back,
+                onBackClick = onBackClick
+            )
+        },
+        bottomBar = bottomBar
     ) { innerPadding ->
         LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background),
             contentPadding = PaddingValues(
                 start = BBSpacing.PageHorizontal,
                 top = innerPadding.calculateTopPadding() + BBSpacing.PageTopCompact,
@@ -73,14 +107,6 @@ fun SearchScreen(
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.SectionGapCompact)
         ) {
-            item {
-                WholesaleSearchHeader()
-            }
-
-            item {
-
-            }
-
             item {
                 WholesaleSearchModeCards(
                     searchText = searchText,
@@ -92,124 +118,80 @@ fun SearchScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Popüler Aramalar",
-                    subtitle = "Toptan pazaryerinde sık kullanılan arama girişleri"
-                )
-            }
-
-            item {
-                WholesalePopularSearchChips(
-                    onSearchClick = onProductSearchClick
-                )
-            }
-
-            item {
-                BbSectionHeader(
-                    title = "Önerilen kategoriler",
-                    subtitle = "Aramaya başlamadan hızlı kategori girişi"
-                )
-            }
-
-            items(
-                items = getWholesaleSearchCategoryResults(),
-                key = { category ->
-                    category.categoryId
-                }
-            ) { category ->
-                WholesaleSearchResultCard(
-                    title = category.name,
-                    description = category.description,
-                    meta = "${category.productCount} ürün grubu",
-                    icon = category.icon,
-                    onClick = {
-                        onCategoryClick(category.categoryId)
+                    title = BBLocalization.Current.Get(
+                        key = "1c7c6ac9-2b6d-46ec-90f0-3f88b65beb11",
+                        fallback = "Ürün sonuçları"
+                    ),
+                    subtitle = if (hasProductSearch) {
+                        BBLocalization.Current.Get(
+                            key = "5a8d3281-5a12-4a83-b707-43bd1c2c81ac",
+                            fallback = "Arama sonucunda bulunan toptan ürünler"
+                        )
+                    } else {
+                        BBLocalization.Current.Get(
+                            key = "72c68813-7e27-4db8-a39c-39585ab73352",
+                            fallback = "Toptan pazaryerinde ürün aramak için üstteki arama alanını kullanın"
+                        )
                     }
                 )
             }
 
-            item {
-                BbSectionHeader(
-                    title = "Öne çıkan firmalar",
-                    subtitle = "Dummy firma sonuçları"
-                )
-            }
-
-            items(
-                items = getWholesaleSearchCompanyResults(),
-                key = { company ->
-                    company.companyId
-                }
-            ) { company ->
-                WholesaleSearchResultCard(
-                    title = company.name,
-                    description = company.description,
-                    meta = "${company.productCount} ürün • ${company.city}",
-                    icon = company.icon,
-                    onClick = {
-                        onCompanyClick(company.companyId)
+            when {
+                !hasProductSearch -> {
+                    item {
+                        WholesaleSearchInfoCard(
+                            title = BBLocalization.Current.Get(
+                                key = "0e2dc829-9eb6-4c30-a0d8-321e3a6d4b89",
+                                fallback = "Arama yapın"
+                            ),
+                            description = BBLocalization.Current.Get(
+                                key = "52984df1-44f0-45b4-8a7f-8c51e33ef720",
+                                fallback = "Toptan ürünleri bulmak için en az 3 karakterlik bir arama terimi girin."
+                            ),
+                            icon = Icons.Outlined.Inventory2
+                        )
                     }
-                )
-            }
-
-            item {
-                BbSectionHeader(
-                    title = BBLocalization.Current.Get(key = "1c7c6ac9-2b6d-46ec-90f0-3f88b65beb11", fallback = ""),
-                    subtitle = "API sonrası gerçek arama sonuçları burada listelenecek"
-                )
-            }
-
-            items(
-                items = getWholesaleSearchProductResults(),
-                key = { product ->
-                    product.productId
                 }
-            ) { product ->
-                WholesaleSearchResultCard(
-                    title = product.name,
-                    description = product.description,
-                    meta = "Min. ${product.minimumOrderQuantity} adet • ${product.companyName}",
-                    icon = product.icon,
-                    onClick = {
-                        onProductClick(product.productId)
+
+                displayedProducts.isEmpty() -> {
+                    item {
+                        WholesaleSearchInfoCard(
+                            title = BBLocalization.Current.Get(
+                                key = "827ac3ff-d105-4f4c-9fa3-cf6b891a7f4e",
+                                fallback = "Ürün bulunamadı"
+                            ),
+                            description = BBLocalization.Current.Get(
+                                key = "0f4521b0-f999-4f8c-9351-d50cc71c2a19",
+                                fallback = "Arama kriterine uygun toptan ürün bulunamadı."
+                            ),
+                            icon = Icons.Outlined.Inventory2
+                        )
                     }
-                )
+                }
+
+                else -> {
+                    itemsIndexed(
+                        items = displayedProducts,
+                        key = { index, product ->
+                            "wholesale-search-product-${product.productId}-$index"
+                        }
+                    ) { _, product ->
+                        WholesaleSearchResultCard(
+                            title = product.name,
+                            description = product.description,
+                            meta = product.meta,
+                            icon = product.icon,
+                            onClick = {
+                                onProductClick(product.productId)
+                            }
+                        )
+                    }
+                }
             }
 
             item {
                 Spacer(modifier = Modifier.height(BBSpacing.Space4))
             }
-        }
-    }
-}
-
-@Composable
-private fun WholesaleSearchHeader() {
-    BbCard(
-        modifier = Modifier.fillMaxWidth(),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Large
-    ) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
-        ) {
-            WholesaleSearchIconTitleRow(
-                icon = Icons.Outlined.Search,
-                title = "Toptan Arama"
-            )
-
-            Text(
-                text = "Ürün, firma ve sektör bul",
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-
-            Text(
-                text = "Toptan akışında arama sadece ürün değil; firma, kategori ve teklif ihtiyacına da kapı açar.",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
         }
     }
 }
@@ -230,8 +212,14 @@ private fun WholesaleSearchModeCards(
             horizontalArrangement = Arrangement.spacedBy(BBSpacing.CardGapCompact)
         ) {
             WholesaleSearchModeCard(
-                title = "Ürünlerde ara",
-                description = BBLocalization.Current.Get(key = "79b4a21a-b9a4-47e9-8931-f5d66750cea0", fallback = "Toptan ürün listesi"),
+                title = BBLocalization.Current.Get(
+                    key = "1060807b-bfd6-4a32-af48-585becf37a8e",
+                    fallback = "Ürünlerde ara"
+                ),
+                description = BBLocalization.Current.Get(
+                    key = "79b4a21a-b9a4-47e9-8931-f5d66750cea0",
+                    fallback = "Toptan ürün listesi"
+                ),
                 icon = Icons.Outlined.Inventory2,
                 modifier = Modifier.weight(1f),
                 onClick = {
@@ -240,8 +228,14 @@ private fun WholesaleSearchModeCards(
             )
 
             WholesaleSearchModeCard(
-                title = "Firmalarda ara",
-                description = "Firma Vitrini",
+                title = BBLocalization.Current.Get(
+                    key = "3238ddc7-c996-4b0e-af73-73c5ed68586b",
+                    fallback = "Firmalarda ara"
+                ),
+                description = BBLocalization.Current.Get(
+                    key = "e8a21e2e-de5d-4682-b64a-7cdd977fc29e",
+                    fallback = "Firma Vitrini"
+                ),
                 icon = Icons.Outlined.Business,
                 modifier = Modifier.weight(1f),
                 onClick = {
@@ -251,7 +245,10 @@ private fun WholesaleSearchModeCards(
         }
 
         BbButton(
-            text = "Aradığını bulamadın mı? Teklif talebi oluştur",
+            text = BBLocalization.Current.Get(
+                key = "fb037e3d-5dfd-4da8-b23d-3f7995cb8acd",
+                fallback = "Aradığını bulamadın mı? Teklif talebi oluştur"
+            ),
             onClick = {
                 onRfqCreateClick(searchText)
             },
@@ -304,28 +301,6 @@ private fun WholesaleSearchModeCard(
                 text = description,
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-private fun WholesalePopularSearchChips(
-    onSearchClick: (String) -> Unit
-) {
-    FlowRow(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(BBSpacing.ChipGap),
-        verticalArrangement = Arrangement.spacedBy(BBSpacing.ChipGap)
-    ) {
-        getWholesalePopularSearchTerms().forEach { searchTerm ->
-            BbChip(
-                text = searchTerm,
-                selected = false,
-                onClick = {
-                    onSearchClick(searchTerm)
-                }
             )
         }
     }
@@ -390,126 +365,95 @@ private fun WholesaleSearchResultCard(
 }
 
 @Composable
-private fun WholesaleSearchIconTitleRow(
-    icon: ImageVector,
-    title: String
+private fun WholesaleSearchInfoCard(
+    title: String,
+    description: String,
+    icon: ImageVector
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(BBSpacing.IconTextGap)
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
     ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.primary
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary
+            )
 
-        Text(
-            text = title,
-            style = MaterialTheme.typography.labelLarge,
-            color = MaterialTheme.colorScheme.primary,
-            fontWeight = FontWeight.SemiBold
-        )
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+            ) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+
+                Text(
+                    text = description,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
     }
 }
-
-data class WholesaleSearchCategoryResult(
-    val categoryId: Int,
-    val name: String,
-    val description: String,
-    val productCount: Int,
-    val icon: ImageVector
-)
-
-data class WholesaleSearchCompanyResult(
-    val companyId: Int,
-    val name: String,
-    val description: String,
-    val city: String,
-    val productCount: Int,
-    val icon: ImageVector
-)
 
 data class WholesaleSearchProductResult(
     val productId: Int,
     val name: String,
     val description: String,
-    val companyName: String,
-    val minimumOrderQuantity: Int,
+    val meta: String,
     val icon: ImageVector
 )
 
-private fun getWholesalePopularSearchTerms(): List<String> {
-    return listOf(
-        "Koli",
-        "Streç film",
-        "Baskılı poşet",
-        "Kargo etiketi",
-        "Endüstriyel makine",
-        "Kuru gıda",
-        "Medikal sarf",
-        "Tekstil aksesuar"
-    )
-}
-
-private fun getWholesaleSearchCategoryResults(): List<WholesaleSearchCategoryResult> {
-    return listOf(
-        WholesaleSearchCategoryResult(
-            categoryId = 1,
-            name = "Ambalaj ve Paketleme",
-            description = "Koli, kutu, poşet, etiket ve koruyucu ambalaj ürünleri.",
-            productCount = 128,
-            icon = Icons.Outlined.Category
-        ),
-        WholesaleSearchCategoryResult(
-            categoryId = 2,
-            name = "Makine ve Endüstriyel Ekipman",
-            description = "Üretim, bakım, yedek parça ve sanayi ekipmanları.",
-            productCount = 96,
-            icon = Icons.Outlined.Verified
+private fun WholesaleProductDTO.toWholesaleSearchProductResult(): WholesaleSearchProductResult {
+    val name = ProductName
+        .takeIf { it.isNotBlank() }
+        ?: SeoTitle.takeIf { it.isNotBlank() }
+        ?: BBLocalization.Current.Get(
+            key = "45ac0832-bf5d-4c76-a747-f544863260cb",
+            fallback = "Toptan ürün"
         )
-    )
-}
 
-private fun getWholesaleSearchCompanyResults(): List<WholesaleSearchCompanyResult> {
-    return listOf(
-        WholesaleSearchCompanyResult(
-            companyId = 1,
-            name = "Anadolu Ambalaj Sanayi",
-            description = "Koli, kutu ve e-ticaret ambalaj ürünleri firması.",
-            city = "İstanbul",
-            productCount = 42,
-            icon = Icons.Outlined.Business
-        ),
-        WholesaleSearchCompanyResult(
-            companyId = 2,
-            name = "Marmara Tedarik Merkezi",
-            description = "Endüstriyel sarf ve depolama ürünleri firması.",
-            city = "Kocaeli",
-            productCount = 31,
-            icon = Icons.Outlined.Storefront
+    val description = Description
+        .takeIf { it.isNotBlank() }
+        ?: Category.takeIf { it.isNotBlank() }
+        ?: BBLocalization.Current.Get(
+            key = "4b06bbbe-2824-4b75-81e9-a3796bc59339",
+            fallback = "Ürün açıklaması bulunmuyor."
         )
-    )
-}
 
-private fun getWholesaleSearchProductResults(): List<WholesaleSearchProductResult> {
-    return listOf(
-        WholesaleSearchProductResult(
-            productId = 1,
-            name = "E-ticaret Kargo Kolisi",
-            description = "Çoklu ölçü seçeneğiyle toptan koli ürünü.",
-            companyName = "Anadolu Ambalaj",
-            minimumOrderQuantity = 100,
-            icon = Icons.Outlined.Inventory2
-        ),
-        WholesaleSearchProductResult(
-            productId = 2,
-            name = "Baskılı Mağaza Poşeti",
-            description = "Logo baskılı, farklı ebat seçenekli poşet grubu.",
-            companyName = "Marmara Tedarik",
-            minimumOrderQuantity = 500,
-            icon = Icons.Outlined.History
+    val companyName = CompanyName
+        .takeIf { it.isNotBlank() }
+        ?: BBLocalization.Current.Get(
+            key = "e3af0e39-0a77-4184-b981-905315dbd1c",
+            fallback = "Firma bilgisi yok"
         )
+
+    val quantityText = if (MinimumOrderQuantity > 0) {
+        "Min. $MinimumOrderQuantity adet"
+    } else {
+        BBLocalization.Current.Get(
+            key = "e2256c25-f471-4083-8f20-57650248c7a7",
+            fallback = "Minimum sipariş bilgisi yok"
+        )
+    }
+
+    return WholesaleSearchProductResult(
+        productId = WholesaleProductId,
+        name = name,
+        description = description,
+        meta = "$quantityText • $companyName",
+        icon = Icons.Outlined.Inventory2
     )
 }
 
@@ -520,4 +464,3 @@ private fun SearchScreenPreview() {
         SearchScreen()
     }
 }
-

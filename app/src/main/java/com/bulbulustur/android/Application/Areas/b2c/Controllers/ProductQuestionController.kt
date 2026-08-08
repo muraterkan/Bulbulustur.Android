@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Controllers
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.lifecycle.viewModelScope
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductCustomerQuestionDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.IProductCustomerQuestionRepository
@@ -148,7 +150,7 @@ class ProductQuestionController(
                     Count =
                         count,
                     ErrorMessage =
-                        "Geçerli ürün bilgisi bulunamadı."
+                        BBLocalization.Current.Get(key = "e8930a30-3c0e-43e7-a0d6-502cdfe3f484", fallback = "Geçerli ürün bilgisi bulunamadı.")
                 )
             }
 
@@ -202,7 +204,7 @@ class ProductQuestionController(
                             null
                         } else {
                             response.Message
-                                ?: "Ürün soruları alınamadı."
+                                ?: BBLocalization.Current.Get(key = "0f7727b0-de6a-489e-a0d6-a7c09c835708", fallback = "Ürün soruları alınamadı.")
                         }
                 )
             }
@@ -225,7 +227,7 @@ class ProductQuestionController(
             languageId <= 0 -> {
                 SetError(
                     message =
-                        "Dil bilgisi bulunamadı."
+                        BBLocalization.Current.Get(key = "a2538f8a-25cd-4e64-8572-75585c749dc0", fallback = "Dil bilgisi bulunamadı.")
                 )
 
                 return
@@ -234,7 +236,7 @@ class ProductQuestionController(
             memberId <= 0 -> {
                 SetError(
                     message =
-                        "Soru göndermek için giriş yapmalısınız."
+                        BBLocalization.Current.Get(key = "620e9799-25f8-4b36-9fd3-59f808d55b02", fallback = "Soru göndermek için giriş yapmalısınız.")
                 )
 
                 return
@@ -243,7 +245,7 @@ class ProductQuestionController(
             storeId <= 0 -> {
                 SetError(
                     message =
-                        "Mağaza bilgisi bulunamadı."
+                        BBLocalization.Current.Get(key = "a64056f3-b719-45da-8cb0-b33f95963bac", fallback = "Mağaza bilgisi bulunamadı.")
                 )
 
                 return
@@ -252,7 +254,7 @@ class ProductQuestionController(
             productId <= 0 -> {
                 SetError(
                     message =
-                        "Ürün bilgisi bulunamadı."
+                        BBLocalization.Current.Get(key = "c2dbad86-bccd-49ab-af0f-8919d3adbb71", fallback = "Ürün bilgisi bulunamadı.")
                 )
 
                 return
@@ -261,7 +263,7 @@ class ProductQuestionController(
             productSecureKey.isBlank() -> {
                 SetError(
                     message =
-                        "Ürün güvenlik anahtarı bulunamadı."
+                        BBLocalization.Current.Get(key = "88e11e89-2b66-4f97-bd8e-15e005cc636a", fallback = "Ürün güvenlik anahtarı bulunamadı.")
                 )
 
                 return
@@ -270,7 +272,7 @@ class ProductQuestionController(
             normalizedQuestion.isBlank() -> {
                 SetError(
                     message =
-                        "Ürün sorusu boş bırakılamaz."
+                        BBLocalization.Current.Get(key = "29a9a720-5de4-4502-bac7-399b23bdb059", fallback = "Ürün sorusu boş bırakılamaz.")
                 )
 
                 return
@@ -328,7 +330,7 @@ class ProductQuestionController(
                     SuccessMessage =
                         if (response.Success) {
                             response.Message
-                                ?: "Sorunuz ilgili satıcıya gönderildi."
+                                ?: BBLocalization.Current.Get(key = "5978fcc2-ef28-416d-9684-fac14db2bfd9", fallback = "Sorunuz ilgili satıcıya gönderildi.")
                         } else {
                             null
                         },
@@ -337,7 +339,7 @@ class ProductQuestionController(
                             null
                         } else {
                             response.Message
-                                ?: "Ürün sorusu gönderilemedi."
+                                ?: BBLocalization.Current.Get(key = "8ef02491-5878-4561-a522-024ad187954d", fallback = "Ürün sorusu gönderilemedi.")
                         }
                 )
             }

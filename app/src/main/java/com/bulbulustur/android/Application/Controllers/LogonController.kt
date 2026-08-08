@@ -239,7 +239,7 @@ class LogonController(
                     LastResult =
                         null,
                     ErrorMessage =
-                        "Google kimlik doğrulama bilgisi alınamadı.",
+                        BBLocalization.Current.Get(key = "e7b7b25c-bfe3-45dc-955f-4e92fc130a00", fallback = "Google kimlik doğrulama bilgisi alınamadı."),
                     IsLoginSuccessful =
                         false
                 )
@@ -298,7 +298,7 @@ class LogonController(
                 LastResult = null,
                 ErrorMessage =
                     message.ifBlank {
-                        "Google ile giriş başlatılamadı."
+                        BBLocalization.Current.Get(key = "18b3f4f4-b103-445f-8d84-796123cc4ced", fallback = "Google ile giriş başlatılamadı.")
                     },
                 IsLoginSuccessful = false
             )
@@ -376,7 +376,7 @@ class LogonController(
                             if (localTokensCleared) {
                                 null
                             } else {
-                                "Oturum bilgileri cihazdan tamamen temizlenemedi."
+                                BBLocalization.Current.Get(key = "778ea177-be8b-451d-b8ba-1f0c6fa0219b", fallback = "Oturum bilgileri cihazdan tamamen temizlenemedi.")
                             },
                         IsLoginSuccessful =
                             false,
@@ -484,7 +484,7 @@ class LogonController(
                             response,
                         ErrorMessage =
                             response.Message.ifBlank {
-                                "Doğrulama e-postası gönderilemedi."
+                                BBLocalization.Current.Get(key = "8e840fd7-4b80-4b54-a174-36cc36b14401", fallback = "Doğrulama e-postası gönderilemedi.")
                             },
                         IsFirstDoorSuccessful =
                             false
@@ -546,7 +546,7 @@ class LogonController(
                     LastResult =
                         null,
                     ErrorMessage =
-                        "Kayıt bağlantısı geçersiz.",
+                        BBLocalization.Current.Get(key = "54fb6609-058f-4096-9c36-7db3b45abbe1", fallback = "Kayıt bağlantısı geçersiz."),
                     IsMemberTempLoading =
                         false,
                     IsMemberTempLoaded =
@@ -609,7 +609,7 @@ class LogonController(
                             response,
                         ErrorMessage =
                             response.Message.ifBlank {
-                                "Kayıt bağlantısı geçersiz veya süresi dolmuş."
+                                BBLocalization.Current.Get(key = "6cda054a-c825-4c87-bba1-d5f8be2e92a2", fallback = "Kayıt bağlantısı geçersiz veya süresi dolmuş.")
                             },
                         IsMemberTempLoading =
                             false,
@@ -777,7 +777,7 @@ class LogonController(
                             response,
                         ErrorMessage =
                             response.Message.ifBlank {
-                                "Üyelik oluşturulamadı."
+                                BBLocalization.Current.Get(key = "cff38eaa-8e95-4b48-85c5-65476580dc64", fallback = "Üyelik oluşturulamadı.")
                             },
                         IsRegisterSuccessful =
                             false,
@@ -927,7 +927,7 @@ class LogonController(
                             response,
                         ErrorMessage =
                             response.Message.ifBlank {
-                                "Şifre yenileme bağlantısı gönderilemedi."
+                                BBLocalization.Current.Get(key = "d5107145-1fda-4354-a9bb-8945b93ed60c", fallback = "Şifre yenileme bağlantısı gönderilemedi.")
                             },
                         IsForgotPasswordSuccessful =
                             false,
@@ -957,7 +957,7 @@ class LogonController(
                         normalizedEmail,
                     ForgotPasswordMessage =
                         response.Message.ifBlank {
-                            "Şifre yenileme bağlantısı e-posta adresinize gönderildi."
+                            BBLocalization.Current.Get(key = "d94407f7-56c6-4fbb-b9cf-673d883a3762", fallback = "Şifre yenileme bağlantısı e-posta adresinize gönderildi.")
                         }
                 )
             }
@@ -1079,7 +1079,7 @@ class LogonController(
                             response,
                         ErrorMessage =
                             response.Message.ifBlank {
-                                "Şifreniz güncellenemedi."
+                                BBLocalization.Current.Get(key = "84c8de86-66bc-4dd5-aacb-517820fe0d71", fallback = "Şifreniz güncellenemedi.")
                             },
                         IsSetNewPasswordSuccessful =
                             false,
@@ -1215,7 +1215,7 @@ class LogonController(
                         response,
                     ErrorMessage =
                         response.Message.ifBlank {
-                            "Giriş işlemi başarısız oldu."
+                            BBLocalization.Current.Get(key = "9292c9d6-cfd3-496f-a98a-bd2ae649b96a", fallback = "Giriş işlemi başarısız oldu.")
                         },
                     IsLoginSuccessful =
                         false
@@ -1239,7 +1239,7 @@ class LogonController(
                     LastResult =
                         response,
                     ErrorMessage =
-                        "Oturum bilgileri güvenli şekilde kaydedilemedi.",
+                        BBLocalization.Current.Get(key = "775bcd8c-188b-4e34-a34f-249978857c13", fallback = "Oturum bilgileri güvenli şekilde kaydedilemedi."),
                     IsLoginSuccessful =
                         false
                 )
@@ -1334,7 +1334,7 @@ class LogonController(
         }
 
         if (model.Name.isBlank()) {
-            return "Adınızı girin."
+            return BBLocalization.Current.Get(key = "fbb6bd43-f7c0-458c-a2c7-9fd93b72893d", fallback = "Adınızı girin.")
         }
 
         if (model.Surname.isBlank()) {
@@ -1342,7 +1342,7 @@ class LogonController(
         }
 
         if (model.CountryId <= 0) {
-            return "Ülke seçin."
+            return BBLocalization.Current.Get(key = "baf6fc11-018f-4241-aa11-c726c07bb26c", fallback = "Ülke seçin.")
         }
 
         if (model.CityId <= 0) {
@@ -1350,19 +1350,19 @@ class LogonController(
         }
 
         if (model.Password.length < 8) {
-            return "Şifreniz en az 8 karakter olmalıdır."
+            return BBLocalization.Current.Get(key = "8e93a610-e453-4461-befd-6f809bb3ce62", fallback = "Şifreniz en az 8 karakter olmalıdır.")
         }
 
         if (model.Password != model.PasswordAgain) {
-            return "Şifreler birbiriyle eşleşmiyor."
+            return BBLocalization.Current.Get(key = "b7421a1d-7c44-4d9f-9ab1-58e3e0ad4f91", fallback = "Şifreler birbiriyle eşleşmiyor.")
         }
 
         if (model.ActivationCode.isBlank()) {
-            return "Kayıt doğrulama bilgisi bulunamadı."
+            return BBLocalization.Current.Get(key = "ea2e0332-af39-4955-93da-1ed8a2f95497", fallback = "Kayıt doğrulama bilgisi bulunamadı.")
         }
 
         if (model.Uuid.isBlank()) {
-            return "Kayıt bağlantısı geçersiz."
+            return BBLocalization.Current.Get(key = "54fb6609-058f-4096-9c36-7db3b45abbe1", fallback = "Kayıt bağlantısı geçersiz.")
         }
 
         return null
@@ -1383,7 +1383,7 @@ class LogonController(
         }
 
         if (password.isBlank()) {
-            return "Şifrenizi girin."
+            return BBLocalization.Current.Get(key = "9288dd27-98b7-4b3c-814f-0bc3d2f89ee9", fallback = "Şifrenizi girin.")
         }
 
         return null
@@ -1421,7 +1421,7 @@ class LogonController(
         reNewPassword: String
     ): String? {
         if (activationCode.isBlank()) {
-            return "Şifre yenileme bağlantısı geçersiz veya süresi dolmuş."
+            return BBLocalization.Current.Get(key = "e923bdf1-23aa-4920-bb3c-40861e43938b", fallback = "Şifre yenileme bağlantısı geçersiz veya süresi dolmuş.")
         }
 
         if (newPassword.isBlank()) {
@@ -1447,7 +1447,7 @@ class LogonController(
         }
 
         if (newPassword != reNewPassword) {
-            return "Şifreler birbiriyle eşleşmiyor."
+            return BBLocalization.Current.Get(key = "b7421a1d-7c44-4d9f-9ab1-58e3e0ad4f91", fallback = "Şifreler birbiriyle eşleşmiyor.")
         }
 
         return null

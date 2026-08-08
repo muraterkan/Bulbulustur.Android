@@ -114,8 +114,8 @@ fun OrderDetailScreen(
                 orderKey.isBlank() -> {
                     item {
                         OrderDetailMessageCard(
-                            title = "Sipariş anahtarı bulunamadı",
-                            description = "Sipariş detayı açılamadı."
+                            title = BBLocalization.Current.Get(key = "b9e4b392-a83b-410e-87fe-aefdfb9ee96f", fallback = "Sipariş anahtarı bulunamadı"),
+                            description = BBLocalization.Current.Get(key = "2dc4d4ed-b521-48c8-9b4f-ee0150940d11", fallback = "Sipariş detayı açılamadı.")
                         )
                     }
                 }
@@ -129,7 +129,7 @@ fun OrderDetailScreen(
                 state.ErrorMessage != null && orderStores.isEmpty() -> {
                     item {
                         OrderDetailMessageCard(
-                            title = "Sipariş detayı alınamadı",
+                            title = BBLocalization.Current.Get(key = "1430044f-f898-4e82-bc22-828a0fd579e3", fallback = "Sipariş detayı alınamadı"),
                             description = state.ErrorMessage.orEmpty()
                         )
                     }
@@ -139,7 +139,7 @@ fun OrderDetailScreen(
                     item {
                         OrderDetailMessageCard(
                             title = BBLocalization.Current.Get(key = "838ffc4f-83f8-4fc2-87dc-8b668084ba59", fallback = "Sipariş detayı bulunamadı"),
-                            description = "Bu siparişe ait mağaza veya ürün kaydı bulunamadı."
+                            description = BBLocalization.Current.Get(key = "2c6bbf2b-d0c8-4e6c-a336-ff9198c83503", fallback = "Bu siparişe ait mağaza veya ürün kaydı bulunamadı.")
                         )
                     }
                 }
@@ -366,7 +366,7 @@ private fun OrderDetailStoreCard(
             }
 
             OrderDetailStoreTotalRow(
-                title = "Mağaza Toplamı",
+                title = BBLocalization.Current.Get(key = "905dde5f-252f-408b-9e9e-b2c423bb0c8e", fallback = "Mağaza Toplamı"),
                 value = store.StoreGrandTotal.toCurrencyText()
             )
         }
@@ -384,7 +384,7 @@ private fun OrderDetailProductRow(
     onShipmentTrackingClick: (Int) -> Unit
 ) {
     val statusText = line.OrderStoreLineStatus.ifBlank {
-        line.OrderStatus.ifBlank { "Sipariş Alındı" }
+        line.OrderStatus.ifBlank { BBLocalization.Current.Get(key = "cb303be2-afdb-4770-9baf-f58c86d5f7fe", fallback = "Sipariş Alındı") }
     }
 
     val statusColor = getOrderLineStatusColor(statusText)
@@ -586,13 +586,13 @@ private fun OrderDetailCargoBox(
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                 ) {
                     Text(
-                        text = cargoCompany.ifBlank { "Kargo Bilgisi" },
+                        text = cargoCompany.ifBlank { BBLocalization.Current.Get(key = "eea452e8-aad2-44dc-a4fd-df4bad4b3093", fallback = "Kargo Bilgisi") },
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurface
                     )
 
                     Text(
-                        text = deliveryNumber.ifBlank { "Takip numarası bulunamadı" },
+                        text = deliveryNumber.ifBlank { BBLocalization.Current.Get(key = "97fbe7cf-b8c5-4237-8b4b-a4a3c2768972", fallback = "Takip numarası bulunamadı") },
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -601,7 +601,7 @@ private fun OrderDetailCargoBox(
 
             if (enabled) {
                 BbButton(
-                    text = "Kargom Nerede?",
+                    text = BBLocalization.Current.Get(key = "aae1659a-e21e-4b62-8a79-ba17a842feab", fallback = "Kargom Nerede?"),
                     onClick = onClick,
                     modifier = Modifier.fillMaxWidth(),
                     variant = BbButtonVariant.Primary,
@@ -806,7 +806,7 @@ private fun OrderDetailLoadingCard() {
             CircularProgressIndicator()
 
             Text(
-                text = "Sipariş detayı yükleniyor",
+                text = BBLocalization.Current.Get(key = "eecf1130-6cd5-457f-8dbb-bcb843fe48e3", fallback = "Sipariş detayı yükleniyor"),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -855,7 +855,7 @@ private fun getOrderLineStatusColor(status: String): Color {
     return when {
         status.contains("teslim", ignoreCase = true) -> BBColors.Green.Green600
         status.contains("kargo", ignoreCase = true) -> BBColors.Blue.Blue600
-        status.contains("hazır", ignoreCase = true) -> BBColors.Orange.Orange600
+        status.contains(BBLocalization.Current.Get(key = "70730163-a54a-4490-ac2c-46af941301ae", fallback = "hazır"), ignoreCase = true) -> BBColors.Orange.Orange600
         status.contains("iptal", ignoreCase = true) -> MaterialTheme.colorScheme.error
         else -> MaterialTheme.colorScheme.onSurfaceVariant
     }

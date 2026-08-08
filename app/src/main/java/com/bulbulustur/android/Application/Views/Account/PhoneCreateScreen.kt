@@ -55,7 +55,7 @@ fun PhoneCreateScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Telefon Ekle",
+                title = BBLocalization.Current.Get(key = "040b1a10-3032-4140-8473-80d332b4a964", fallback = "Telefon Ekle"),
                 onBackClick = onBackClick
             )
         }
@@ -91,13 +91,13 @@ fun PhoneCreateScreen(
                         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                     ) {
                         Text(
-                            text = "Telefon Bilgisi",
+                            text = BBLocalization.Current.Get(key = "6e7a8255-1ab0-4c2a-a3a3-6bd0c683759a", fallback = "Telefon Bilgisi"),
                             style = MaterialTheme.typography.titleSmall,
                             color = MaterialTheme.colorScheme.onSurface
                         )
 
                         Text(
-                            text = "Cep telefonu numaranızı ülke kodu ile birlikte girin.",
+                            text = BBLocalization.Current.Get(key = "5608e5c7-2018-4891-9d31-0c173d823b7a", fallback = "Cep telefonu numaranızı ülke kodu ile birlikte girin."),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -148,7 +148,7 @@ fun PhoneCreateScreen(
                         }
 
                     BbButton(
-                        text = "Telefonu Kaydet",
+                        text = BBLocalization.Current.Get(key = "4b41811e-1de2-4279-8fe1-2281ca1f84ee", fallback = "Telefonu Kaydet"),
                         onClick = {
                             onSaveClick(normalizedPhone)
                         },
@@ -172,7 +172,7 @@ private fun PhoneCreateIntroCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Telefon numarası kaydedildikten sonra doğrulama kodu SMS ile gönderilecektir.",
+            text = BBLocalization.Current.Get(key = "00640f2a-9bfa-41a1-b760-600f4f57ad72", fallback = "Telefon numarası kaydedildikten sonra doğrulama kodu SMS ile gönderilecektir."),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

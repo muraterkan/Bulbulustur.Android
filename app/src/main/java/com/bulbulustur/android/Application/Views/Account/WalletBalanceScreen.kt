@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -47,7 +49,7 @@ fun WalletBalanceScreen(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "Cüzdan ve Bakiye",
+                title = BBLocalization.Current.Get(key = "08e11cee-13cd-4f6f-91b0-fe3c169015c3", fallback = "Cüzdan ve Bakiye"),
                 onBackClick = onBackClick
             )
         }
@@ -82,7 +84,7 @@ fun WalletBalanceScreen(
 
                     WalletInfoBox(
                         modifier = Modifier.weight(1f),
-                        title = "İADE",
+                        title = BBLocalization.Current.Get(key = "1fc82475-d2ff-4cf3-8949-25e5a4bf315e", fallback = "İADE"),
                         value = "0,00 TL"
                     )
                 }
@@ -130,7 +132,7 @@ private fun WalletHeroCard() {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "KULLANILABİLİR BAKİYE",
+                    text = BBLocalization.Current.Get(key = "5dc43b4f-e249-4fda-afc2-c5f41a1cd7cc", fallback = "KULLANILABİLİR BAKİYE"),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.primary
                 )
@@ -142,7 +144,7 @@ private fun WalletHeroCard() {
                 )
 
                 Text(
-                    text = "İade bakiyesi, bekleyen ödeme hareketleri ve finansal işlemler burada görüntülenir.",
+                    text = BBLocalization.Current.Get(key = "29a8e507-b9b1-4e60-a6ae-33ae51e9656f", fallback = "İade bakiyesi, bekleyen ödeme hareketleri ve finansal işlemler burada görüntülenir."),
                     style = MaterialTheme.typography.bodySmall,
                     color = BBColors.White.copy(alpha = 0.78f)
                 )
@@ -208,13 +210,13 @@ private fun WalletTransactionCard() {
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                 ) {
                     Text(
-                        text = "Finansal Hareketler",
+                        text = BBLocalization.Current.Get(key = "c9c83366-0401-46b2-90d2-9852ef768808", fallback = "Finansal Hareketler"),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
 
                     Text(
-                        text = "Bakiye, iade ve ödeme hareketleriniz oluştuğunda burada listelenir.",
+                        text = BBLocalization.Current.Get(key = "3e36981f-3184-46fe-83bd-b3179acf6fc8", fallback = "Bakiye, iade ve ödeme hareketleriniz oluştuğunda burada listelenir."),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -231,7 +233,7 @@ private fun WalletTransactionCard() {
                     .padding(BBSpacing.CardPaddingCompact)
             ) {
                 Text(
-                    text = "Henüz finansal hareket bulunmuyor.",
+                    text = BBLocalization.Current.Get(key = "3b5fc3af-94b8-4e74-bc2f-8e5ae92f892b", fallback = "Henüz finansal hareket bulunmuyor."),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -278,13 +280,13 @@ private fun WalletBankAccountCard(
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                 ) {
                     Text(
-                        text = "Bağlı Banka Hesapları",
+                        text = BBLocalization.Current.Get(key = "3d508333-95c4-4e9c-8b7e-9c4faee5c91f", fallback = "Bağlı Banka Hesapları"),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
 
                     Text(
-                        text = "İade ve geri ödeme süreçlerinde kullanılacak IBAN bilgilerinizi yönetin.",
+                        text = BBLocalization.Current.Get(key = "eb755b83-9838-40e4-bf42-5981ab7eda1c", fallback = "İade ve geri ödeme süreçlerinde kullanılacak IBAN bilgilerinizi yönetin."),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -292,7 +294,7 @@ private fun WalletBankAccountCard(
             }
 
             BbButton(
-                text = "Banka Hesaplarını Yönet",
+                text = BBLocalization.Current.Get(key = "3689b6be-5e99-47f1-8229-218bca071aa4", fallback = "Banka Hesaplarını Yönet"),
                 onClick = onBankAccountsClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Light,

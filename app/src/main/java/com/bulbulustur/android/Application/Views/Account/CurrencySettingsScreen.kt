@@ -109,7 +109,7 @@ private fun CurrencyIntroCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Seçiminiz ürün listeleme, sepet ve ödeme ekranlarında kullanılacaktır.",
+            text = BBLocalization.Current.Get(key = "93d16054-82e1-408d-8736-daf94f15de5d", fallback = "Seçiminiz ürün listeleme, sepet ve ödeme ekranlarında kullanılacaktır."),
             style = BbTypography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -200,7 +200,7 @@ private fun CurrencyLoadingCard() {
             )
 
             Text(
-                text = "Para birimleri yükleniyor...",
+                text = BBLocalization.Current.Get(key = "8230ed4c-e124-474d-87d6-054b5a0d8008", fallback = "Para birimleri yükleniyor..."),
                 style = BbTypography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -217,7 +217,7 @@ private fun ResolveCurrencySettingsItems(
                 SystemDescCurrencyId = 1,
                 IsoCode = "TRY",
                 CurrencySymbol = "₺",
-                Content = "Türk Lirası"
+                Content = BBLocalization.Current.Get(key = "03f77d05-c54c-44f2-99f9-3dc82473eb51", fallback = "Türk Lirası")
             ),
             SystemDescCurrencyDTO(
                 SystemDescCurrencyId = 2,
@@ -245,7 +245,7 @@ private fun CurrencyFallbackName(
     isoCode: String
 ): String {
     return when (isoCode.uppercase()) {
-        "TRY" -> "Türk Lirası"
+        "TRY" -> BBLocalization.Current.Get(key = "03f77d05-c54c-44f2-99f9-3dc82473eb51", fallback = "Türk Lirası")
         "USD" -> "US Dollar"
         "EUR" -> "Euro"
         "GBP" -> "Pound Sterling"

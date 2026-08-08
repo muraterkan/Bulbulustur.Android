@@ -183,7 +183,7 @@ private fun RfqCreateActionCard(onCreateRfqClick: () -> Unit) {
                 )
 
                 Text(
-                    text = "Ürün, miktar ve ticari koşulları belirterek tedarikçilerden teklif alın.",
+                    text = BBLocalization.Current.Get(key = "68197456-74c2-4d7d-ab5f-ffe8c3a93929", fallback = "Ürün, miktar ve ticari koşulları belirterek tedarikçilerden teklif alın."),
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -231,7 +231,7 @@ private fun RfqRequestCard(
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
                 ) {
                     Text(
-                        text = item.ProductName.ifBlank { "Teklif Talebi" },
+                        text = item.ProductName.ifBlank { BBLocalization.Current.Get(key = "d6a3a561-934c-46b0-af29-c48498e0171c", fallback = "Teklif Talebi") },
                         style = BbTypography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -253,7 +253,7 @@ private fun RfqRequestCard(
 
                         RfqSmallChip(
                             icon = Icons.Outlined.LocalOffer,
-                            text = item.CategoryName.ifBlank { "Kategori Yok" }
+                            text = item.CategoryName.ifBlank { BBLocalization.Current.Get(key = "a4848550-7fae-4a4a-b9c5-2a63b29d3c9e", fallback = "Kategori Yok") }
                         )
                     }
                 }
@@ -292,7 +292,7 @@ private fun RfqRequestCard(
                 )
 
                 BbButton(
-                    text = "Detay",
+                    text = BBLocalization.Current.Get(key = "3feff293-3c00-44ae-a23f-0a2c613ee66f", fallback = "Detay"),
                     onClick = {
                         onDetailClick(item.BuyerRequestKey)
                     },
@@ -311,7 +311,7 @@ private fun RfqRequestCard(
             }
 
             BbButton(
-                text = "RFQ Kaydını Sil",
+                text = BBLocalization.Current.Get(key = "49c98334-3fc8-4e86-b378-507450b813b4", fallback = "RFQ Kaydını Sil"),
                 onClick = {
                     onDeleteClick(item.BuyerRequestKey)
                 },
@@ -447,19 +447,19 @@ private fun RfqEmptyState(onDiscoverWholesaleClick: () -> Unit) {
             RfqIconBox()
 
             Text(
-                text = "Teklif Talebi Bulunamadı",
+                text = BBLocalization.Current.Get(key = "0ca4cc60-47c3-4281-8f1a-684a45c2c8e5", fallback = "Teklif Talebi Bulunamadı"),
                 style = BbTypography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
-                text = "Henüz kayıtlı fiyat teklifi isteğiniz bulunmuyor.",
+                text = BBLocalization.Current.Get(key = "2fff02da-88d2-46d7-b646-b9a757139a49", fallback = "Henüz kayıtlı fiyat teklifi isteğiniz bulunmuyor."),
                 style = BbTypography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             BbButton(
-                text = "Toptan Ürünleri Keşfet",
+                text = BBLocalization.Current.Get(key = "d941e312-4eb0-44eb-b9cf-d7d943697808", fallback = "Toptan Ürünleri Keşfet"),
                 onClick = onDiscoverWholesaleClick,
                 variant = BbButtonVariant.Primary,
                 size = BbButtonSize.Medium

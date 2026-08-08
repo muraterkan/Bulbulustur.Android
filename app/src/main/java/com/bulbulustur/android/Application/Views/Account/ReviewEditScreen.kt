@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -49,7 +51,7 @@ fun ReviewEditScreen(
     var rating by remember { mutableIntStateOf(5) }
     var comment by remember {
         mutableStateOf(
-            "Makineyi 7 gündür kullanıyorum. Bu süre içinde hem deneyim kazandım hem de internetten okuduğum birçok bilgiyle karşılaştırdım. Ürünü almayı düşünenler için detaylı bir deneyim paylaşmak istedim."
+            BBLocalization.Current.Get(key = "9395cc5f-c9c6-44c7-9aae-fba53fc64513", fallback = "Makineyi 7 gündür kullanıyorum. Bu süre içinde hem deneyim kazandım hem de internetten okuduğum birçok bilgiyle karşılaştırdım. Ürünü almayı düşünenler için detaylı bir deneyim paylaşmak istedim.")
         )
     }
 
@@ -57,7 +59,7 @@ fun ReviewEditScreen(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "Değerlendirmeyi Düzenle",
+                title = BBLocalization.Current.Get(key = "477da4c7-72bd-4773-9bd3-f935f6155199", fallback = "Değerlendirmeyi Düzenle"),
                 onBackClick = onBackClick
             )
         }
@@ -137,7 +139,7 @@ private fun ReviewEditProductCard() {
             )
 
             Text(
-                text = "Bu değerlendirme ürün detayında ve sipariş deneyimi alanlarında görünebilir.",
+                text = BBLocalization.Current.Get(key = "4fb61469-b877-4cfa-8251-03f8c94a23a4", fallback = "Bu değerlendirme ürün detayında ve sipariş deneyimi alanlarında görünebilir."),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -159,7 +161,7 @@ private fun ReviewEditRatingCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             Text(
-                text = "Puanınız",
+                text = BBLocalization.Current.Get(key = "ff8659ff-509e-444e-9c59-472a54a9af89", fallback = "Puanınız"),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -213,7 +215,7 @@ private fun ReviewEditCommentCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             Text(
-                text = "Değerlendirme Metni",
+                text = BBLocalization.Current.Get(key = "dcb9e863-b218-4045-8a9d-5a7be5a66c31", fallback = "Değerlendirme Metni"),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -226,7 +228,7 @@ private fun ReviewEditCommentCard(
                 shape = BBRadius.Input,
                 textStyle = MaterialTheme.typography.bodySmall,
                 label = {
-                    Text(text = "Değerlendirmeniz")
+                    Text(text = BBLocalization.Current.Get(key = "7d0f7ae4-b195-435e-9c17-de6fc8511e50", fallback = "Değerlendirmeniz"))
                 }
             )
         }
@@ -248,7 +250,7 @@ private fun ReviewEditActionCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             BbButton(
-                text = "Değerlendirmeyi Kaydet",
+                text = BBLocalization.Current.Get(key = "a91d9b53-879d-417c-90ce-7583c9ee05a8", fallback = "Değerlendirmeyi Kaydet"),
                 onClick = onSaveClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Primary,
@@ -264,7 +266,7 @@ private fun ReviewEditActionCard(
             )
 
             BbButton(
-                text = "Değerlendirmeyi Sil",
+                text = BBLocalization.Current.Get(key = "30c2a244-a2a8-466a-a193-0fd46cf59a3b", fallback = "Değerlendirmeyi Sil"),
                 onClick = onDeleteClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Danger,

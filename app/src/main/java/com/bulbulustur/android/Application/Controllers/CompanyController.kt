@@ -1,8 +1,12 @@
 package com.bulbulustur.android.Application.Controllers
 
 import androidx.lifecycle.viewModelScope
-import com.bulbulustur.android.businesslayer.Core.Util.Execute.IExecuteService
+import com.bulbulustur.android.businesslayer.Core.DTO.CompanyDTO
+import com.bulbulustur.android.businesslayer.Core.Interface.ICompanyRepository
+import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.CompanyUpdateModel
+import com.bulbulustur.android.businesslayer.Core.Repository.CompanyRepository
 import com.bulbulustur.android.businesslayer.Core.Util.Result
+import com.bulbulustur.android.businesslayer.Core.Util.PaginatedList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -12,213 +16,51 @@ import kotlinx.coroutines.launch
 data class CompanyControllerState(
     val IsLoading: Boolean = false,
     val CurrentAction: String? = null,
-    val LastResult: Result<Any?>? = null,
+        val CompanyListResult: Result<PaginatedList<CompanyDTO>>? = null,
+    val CompanyResult: Result<CompanyDTO?>? = null,
+    val CompanyUpdateResult: Result<Any?>? = null,
     val ErrorMessage: String? = null
 )
 
-sealed interface CompanyControllerEvent {
-    data object Refresh : CompanyControllerEvent
-    data class Load(val parameters: Map<String, Any?> = emptyMap()) : CompanyControllerEvent
-    data class Submit(val body: Any? = null) : CompanyControllerEvent
-}
-
 class CompanyController(
-    private val executeService: IExecuteService,
-    private val defaultRepository: IAppDefaultRepository
+    private val companyRepository: ICompanyRepository = CompanyRepository()
 ) : BaseController() {
-
     private val _state = MutableStateFlow(CompanyControllerState())
     val State: StateFlow<CompanyControllerState> = _state.asStateFlow()
-
-
-    fun Index(parameters: Map<String, Any?> = emptyMap()) {
+    fun GetCompanies(languageId: Int, page: Int = 1, pageSize: Int = 20) {
         viewModelScope.launch {
-            _state.update {
-                it.copy(
-                    IsLoading = true,
-                    ErrorMessage = null,
-                    CurrentAction = "Index"
-                )
-            }
-
-            val response = executeService.GetAsync(
-                cacheKey = "App.Company.Index." + parameters.toString()
-            ) {
-                defaultRepository.GetAsync(
-                    actionName = "Index",
-                    parameters = parameters
-                )
-            }
-
-            _state.update {
-                it.copy(
-                    IsLoading = false,
-                    LastResult = response
-                )
-            }
+            _state.update { it.copy(IsLoading = true, ErrorMessage = null, CurrentAction = "GetCompanies") }
+            val response = companyRepository.GetCompaniesAsync(languageId = languageId, page = page, pageSize = pageSize)
+            _state.update { it.copy(IsLoading = false, CompanyListResult = response, ErrorMessage = if (response.Success) null else response.Message) }
         }
     }
-    fun List(parameters: Map<String, Any?> = emptyMap()) {
+
+
+    fun GetCompany(languageId: Int, companyId: Int) {
         viewModelScope.launch {
-            _state.update {
-                it.copy(
-                    IsLoading = true,
-                    ErrorMessage = null,
-                    CurrentAction = "List"
-                )
-            }
-
-            val response = executeService.GetAsync(
-                cacheKey = "App.Company.List." + parameters.toString()
-            ) {
-                defaultRepository.GetAsync(
-                    actionName = "List",
-                    parameters = parameters
-                )
-            }
-
-            _state.update {
-                it.copy(
-                    IsLoading = false,
-                    LastResult = response
-                )
-            }
+            _state.update { it.copy(IsLoading = true, ErrorMessage = null, CurrentAction = "GetCompany") }
+            val response = companyRepository.GetCompanyAsync(languageId = languageId, companyId = companyId)
+            _state.update { it.copy(IsLoading = false, CompanyResult = response, ErrorMessage = if (response.Success) null else response.Message) }
         }
     }
-    fun Detail(parameters: Map<String, Any?> = emptyMap()) {
+
+    fun GetCompanyByMember(languageId: Int, memberId: Int) {
         viewModelScope.launch {
-            _state.update {
-                it.copy(
-                    IsLoading = true,
-                    ErrorMessage = null,
-                    CurrentAction = "Detail"
-                )
-            }
-
-            val response = executeService.GetAsync(
-                cacheKey = "App.Company.Detail." + parameters.toString()
-            ) {
-                defaultRepository.GetAsync(
-                    actionName = "Detail",
-                    parameters = parameters
-                )
-            }
-
-            _state.update {
-                it.copy(
-                    IsLoading = false,
-                    LastResult = response
-                )
-            }
+            _state.update { it.copy(IsLoading = true, ErrorMessage = null, CurrentAction = "GetCompanyByMember") }
+            val response = companyRepository.GetCompanyByMemberAsync(languageId = languageId, memberId = memberId)
+            _state.update { it.copy(IsLoading = false, CompanyResult = response, ErrorMessage = if (response.Success) null else response.Message) }
         }
     }
-    fun Edit(parameters: Map<String, Any?> = emptyMap()) {
+
+    fun UpdateCompany(memberId: Int, updateModel: CompanyUpdateModel) {
         viewModelScope.launch {
-            _state.update {
-                it.copy(
-                    IsLoading = true,
-                    ErrorMessage = null,
-                    CurrentAction = "Edit"
-                )
-            }
-
-            val response = executeService.GetAsync(
-                cacheKey = "App.Company.Edit." + parameters.toString()
-            ) {
-                defaultRepository.GetAsync(
-                    actionName = "Edit",
-                    parameters = parameters
-                )
-            }
-
-            _state.update {
-                it.copy(
-                    IsLoading = false,
-                    LastResult = response
-                )
-            }
+            _state.update { it.copy(IsLoading = true, ErrorMessage = null, CurrentAction = "UpdateCompany", CompanyUpdateResult = null) }
+            val response = companyRepository.UpdateCompanyAsync(memberId = memberId, updateModel = updateModel)
+            _state.update { it.copy(IsLoading = false, CompanyUpdateResult = response, ErrorMessage = if (response.Success) null else response.Message) }
         }
     }
-    fun Products(parameters: Map<String, Any?> = emptyMap()) {
-        viewModelScope.launch {
-            _state.update {
-                it.copy(
-                    IsLoading = true,
-                    ErrorMessage = null,
-                    CurrentAction = "Products"
-                )
-            }
 
-            val response = executeService.GetAsync(
-                cacheKey = "App.Company.Products." + parameters.toString()
-            ) {
-                defaultRepository.GetAsync(
-                    actionName = "Products",
-                    parameters = parameters
-                )
-            }
-
-            _state.update {
-                it.copy(
-                    IsLoading = false,
-                    LastResult = response
-                )
-            }
-        }
-    }
-    fun Contact(parameters: Map<String, Any?> = emptyMap()) {
-        viewModelScope.launch {
-            _state.update {
-                it.copy(
-                    IsLoading = true,
-                    ErrorMessage = null,
-                    CurrentAction = "Contact"
-                )
-            }
-
-            val response = executeService.GetAsync(
-                cacheKey = "App.Company.Contact." + parameters.toString()
-            ) {
-                defaultRepository.GetAsync(
-                    actionName = "Contact",
-                    parameters = parameters
-                )
-            }
-
-            _state.update {
-                it.copy(
-                    IsLoading = false,
-                    LastResult = response
-                )
-            }
-        }
-    }
-    fun Activate(parameters: Map<String, Any?> = emptyMap()) {
-        viewModelScope.launch {
-            _state.update {
-                it.copy(
-                    IsLoading = true,
-                    ErrorMessage = null,
-                    CurrentAction = "Activate"
-                )
-            }
-
-            val response = executeService.GetAsync(
-                cacheKey = "App.Company.Activate." + parameters.toString()
-            ) {
-                defaultRepository.GetAsync(
-                    actionName = "Activate",
-                    parameters = parameters
-                )
-            }
-
-            _state.update {
-                it.copy(
-                    IsLoading = false,
-                    LastResult = response
-                )
-            }
-        }
+    fun ResetCompanyUpdateResult() {
+        _state.update { it.copy(CompanyUpdateResult = null) }
     }
 }
-

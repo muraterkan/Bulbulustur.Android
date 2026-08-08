@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Controllers
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.lifecycle.viewModelScope
 import com.bulbulustur.android.businesslayer.Core.DTO.ReviewDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.IReviewRepository
@@ -135,7 +137,7 @@ class ProductReviewController(
                     HasNextPage =
                         false,
                     ErrorMessage =
-                        "Geçerli değerlendirme parametreleri bulunamadı."
+                        BBLocalization.Current.Get(key = "a6eaf805-9df7-4fb3-a4ad-85bd6ecad250", fallback = "Geçerli değerlendirme parametreleri bulunamadı.")
                 )
             }
 
@@ -231,7 +233,7 @@ class ProductReviewController(
                             null
                         } else {
                             response.Message
-                                ?: "Değerlendirmeler alınamadı."
+                                ?: BBLocalization.Current.Get(key = "4a26c4e4-5c82-4c19-9e36-08cb0dadf54f", fallback = "Değerlendirmeler alınamadı.")
                         }
                 )
             }

@@ -156,7 +156,7 @@ fun ChangePasswordAsyncScreen(
                         onValueChange = { value ->
                             newPasswordAgainState.value = value
                         },
-                        label = "Yeni Şifre Tekrar",
+                        label = BBLocalization.Current.Get(key = "22e6bc04-5fef-4eda-8932-fc4a39accc77", fallback = "Yeni Şifre Tekrar"),
                         visible = showNewPasswordAgainState.value,
                         onVisibilityChange = {
                             showNewPasswordAgainState.value = !showNewPasswordAgainState.value
@@ -171,7 +171,7 @@ fun ChangePasswordAsyncScreen(
                         message.isNotBlank()
                     }?.let { message ->
                         PasswordMessageBox(
-                            title = "İşlem Tamamlanamadı",
+                            title = BBLocalization.Current.Get(key = "aee471fe-aa14-4587-897c-f5a3489aa980", fallback = "İşlem Tamamlanamadı"),
                             message = message,
                             type = PasswordMessageType.Error
                         )
@@ -188,7 +188,7 @@ fun ChangePasswordAsyncScreen(
                     }
 
                     BbButton(
-                        text = "Şifreyi Güncelle",
+                        text = BBLocalization.Current.Get(key = "cee2df6f-2392-41ab-92f5-ab1a30499bc7", fallback = "Şifreyi Güncelle"),
                         onClick = {
                             onSaveClick(
                                 oldPasswordState.value,
@@ -216,7 +216,7 @@ private fun ChangePasswordAsyncIntroCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Hesabınızın şifresini güçlü ve size özel bir şifreyle güncelleyin.",
+            text = BBLocalization.Current.Get(key = "9ab92b0b-d50c-442e-ab1c-0958c734b49d", fallback = "Hesabınızın şifresini güçlü ve size özel bir şifreyle güncelleyin."),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -258,7 +258,7 @@ private fun PasswordTextField(
                     text = if (visible) {
                         "Gizle"
                     } else {
-                        "Göster"
+                        BBLocalization.Current.Get(key = "5a99cd16-cf8f-4a23-8f31-98feb0428fc9", fallback = "Göster")
                     },
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.primary
@@ -293,28 +293,28 @@ private fun PasswordRuleBox(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
         ) {
             Text(
-                text = "Güçlü Şifre Kontrolü",
+                text = BBLocalization.Current.Get(key = "bd78df23-2901-4d8e-9cf1-9a9f46eaa71e", fallback = "Güçlü Şifre Kontrolü"),
                 style = MaterialTheme.typography.labelLarge,
                 color = BBColors.Yellow.Yellow800
             )
 
             PasswordRuleRow(
-                text = "Mevcut şifre girilmeli",
+                text = BBLocalization.Current.Get(key = "9058a0cb-a08e-4fd9-a77d-a0bc6b22e61a", fallback = "Mevcut şifre girilmeli"),
                 valid = validation.hasOldPassword
             )
 
             PasswordRuleRow(
-                text = "Yeni şifre en az 8 karakter olmalı",
+                text = BBLocalization.Current.Get(key = "e1031029-340b-45e4-81d4-aff220a723e8", fallback = "Yeni şifre en az 8 karakter olmalı"),
                 valid = validation.hasMinimumLength
             )
 
             PasswordRuleRow(
-                text = "Yeni şifre büyük harf, küçük harf ve rakam içermeli",
+                text = BBLocalization.Current.Get(key = "132072b2-7e1f-4626-afd9-7dec60130d29", fallback = "Yeni şifre büyük harf, küçük harf ve rakam içermeli"),
                 valid = validation.hasStrongPattern
             )
 
             PasswordRuleRow(
-                text = "Yeni şifre ve tekrar şifre aynı olmalı",
+                text = BBLocalization.Current.Get(key = "ee1afa2b-dd41-4a2d-b382-c66482b4c015", fallback = "Yeni şifre ve tekrar şifre aynı olmalı"),
                 valid = validation.passwordsMatch
             )
         }

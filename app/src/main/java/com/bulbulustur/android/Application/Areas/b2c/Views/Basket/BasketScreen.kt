@@ -171,7 +171,7 @@ fun BasketScreen(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "Sepetim",
+                title = BBLocalization.Current.Get(key = "644233b1-e3f8-4255-a523-2de4a6b0369c", fallback = "Sepetim"),
                 onBackClick = onBackClick
             )
         },
@@ -348,7 +348,7 @@ private fun BasketHeaderCard(
                     text = if (lineCount > 0) {
                         "$storeCount mağazadan gönderim yapılacak"
                     } else {
-                        "Ürün Keşfine dönüp sepetini doldurabilirsin."
+                        BBLocalization.Current.Get(key = "507ef499-3ec4-4197-98b3-66c6a6402a33", fallback = "Ürün Keşfine dönüp sepetini doldurabilirsin.")
                     },
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -385,7 +385,7 @@ private fun BasketCouponCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Kupon ve İndirimler",
+                    text = BBLocalization.Current.Get(key = "b2007b6f-06c1-4ddf-b73e-2f6da5361af3", fallback = "Kupon ve İndirimler"),
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.surface,
                     fontWeight = FontWeight.Bold
@@ -395,7 +395,7 @@ private fun BasketCouponCard(
                     text = if (couponApplied) {
                         "WELCOME75 kuponu uygulandı."
                     } else {
-                        "İndirim kodu ekle veya kullanılabilir kuponlarını görüntüle."
+                        BBLocalization.Current.Get(key = "b9d14d51-71dc-48f4-88eb-d2a4e85f7496", fallback = "İndirim kodu ekle veya kullanılabilir kuponlarını görüntüle.")
                     },
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -438,14 +438,14 @@ private fun BasketFavoriteShortcutCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Favorilerinden Sepete Ekle",
+                    text = BBLocalization.Current.Get(key = "55923458-0616-4032-931c-1b5b1bcce9eb", fallback = "Favorilerinden Sepete Ekle"),
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
                 )
 
                 Text(
-                    text = "Daha önce beğendiğin ürünleri hızlıca sepete aktar.",
+                    text = BBLocalization.Current.Get(key = "7dfdda4a-d0ee-4f95-b744-ed44e127308f", fallback = "Daha önce beğendiğin ürünleri hızlıca sepete aktar."),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -704,7 +704,7 @@ private fun BasketLineCard(
 
                     Text(
                         text =
-                            "Favoriye Taşı",
+                            BBLocalization.Current.Get(key = "da76c00e-61ee-46da-9690-5a8d15c7ce6e", fallback = "Favoriye Taşı"),
                         style =
                             MaterialTheme.typography.labelSmall,
                         fontWeight =
@@ -759,7 +759,7 @@ private fun BasketSummaryCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             Text(
-                text = "Sepet Özeti",
+                text = BBLocalization.Current.Get(key = "c3894b16-f66b-47f2-8853-11c6d9084bdf", fallback = "Sepet Özeti"),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -767,7 +767,7 @@ private fun BasketSummaryCard(
 
             BasketSummaryRow(BBLocalization.Current.Get(key = "9ca1b3ac-05ef-462c-a4ef-e4bcd4b4b11b", fallback = "Ürün Toplamı"), productTotalText)
             BasketSummaryRow(BBLocalization.Current.Get(key = "8fa1207a-2a06-4bdb-936b-f7da848e0f72", fallback = "Kargo"), cargoTotalText)
-            BasketSummaryRow("İndirim", discountTotalText)
+            BasketSummaryRow(BBLocalization.Current.Get(key = "9dd8d854-ca26-4660-bcb3-b7ec8e3f458b", fallback = "İndirim"), discountTotalText)
 
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
@@ -877,7 +877,7 @@ private fun BasketCheckoutBar(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "Siparişi Tamamla",
+                    text = BBLocalization.Current.Get(key = "e07ad224-7f9f-4399-8920-8f0072f48d66", fallback = "Siparişi Tamamla"),
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onPrimary
@@ -913,7 +913,7 @@ private fun BasketEmptyCard() {
             )
 
             Text(
-                text = "Ürün Keşfine dönüp sepetini doldurabilirsin.",
+                text = BBLocalization.Current.Get(key = "507ef499-3ec4-4197-98b3-66c6a6402a33", fallback = "Ürün Keşfine dönüp sepetini doldurabilirsin."),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -933,7 +933,7 @@ private fun BasketBuyerProtectionCard() {
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
             Text(
-                text = "Alıcı Koruması",
+                text = BBLocalization.Current.Get(key = "fc82ed32-9912-4b06-a0a8-6b18c5b59bc1", fallback = "Alıcı Koruması"),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -952,13 +952,13 @@ private fun BasketBuyerProtectionCard() {
                 BasketProtectionItem(
                     modifier = Modifier.weight(1f),
                     icon = Icons.Outlined.LocalShipping,
-                    title = "Lojistik destek"
+                    title = BBLocalization.Current.Get(key = "74ca1228-4df5-45be-82a3-43a8ea25d7a8", fallback = "Lojistik destek")
                 )
 
                 BasketProtectionItem(
                     modifier = Modifier.weight(1f),
                     icon = Icons.Outlined.Wallet,
-                    title = "Kolay iade"
+                    title = BBLocalization.Current.Get(key = "e23b24ca-7b5a-4151-8a18-4ce8df96d94a", fallback = "Kolay iade")
                 )
             }
         }
@@ -1041,7 +1041,7 @@ private fun BasketCouponSheet(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
             Text(
-                text = "Kupon ve İndirimler",
+                text = BBLocalization.Current.Get(key = "b2007b6f-06c1-4ddf-b73e-2f6da5361af3", fallback = "Kupon ve İndirimler"),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -1052,7 +1052,7 @@ private fun BasketCouponSheet(
                 onValueChange = { couponCode = it },
                 modifier = Modifier.fillMaxWidth(),
                 label = {
-                    Text(text = "İndirim kodu")
+                    Text(text = BBLocalization.Current.Get(key = "dc05e804-da03-4004-9d31-a2fb22475bb4", fallback = "İndirim kodu"))
                 },
                 singleLine = true,
                 shape = BBRadius.Input
@@ -1068,13 +1068,13 @@ private fun BasketCouponSheet(
 
             BasketCouponOption(
                 title = "WELCOME75",
-                description = "Sepette 75 TL indirim",
+                description = BBLocalization.Current.Get(key = "4db7a44f-e02d-4241-930f-a49fa767ec44", fallback = "Sepette 75 TL indirim"),
                 onClick = onApplyCouponClick
             )
 
             BasketCouponOption(
                 title = "KARGO50",
-                description = "Seçili mağazalarda kargo indirimi",
+                description = BBLocalization.Current.Get(key = "5a535861-862b-4088-96af-dc7a41dea2e1", fallback = "Seçili mağazalarda kargo indirimi"),
                 onClick = onApplyCouponClick
             )
         }
@@ -1151,7 +1151,7 @@ private fun BasketFavoriteSheet(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
             Text(
-                text = "Favorilerinden Sepete Ekle",
+                text = BBLocalization.Current.Get(key = "55923458-0616-4032-931c-1b5b1bcce9eb", fallback = "Favorilerinden Sepete Ekle"),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -1194,7 +1194,7 @@ private fun BasketFavoriteSheet(
 
                 favorites.isEmpty() -> {
                     Text(
-                        text = "Henüz sepete ekleyebileceğin bir favorin bulunmuyor.",
+                        text = BBLocalization.Current.Get(key = "72e32e3b-2153-4f5f-a506-d70cfad97fae", fallback = "Henüz sepete ekleyebileceğin bir favorin bulunmuyor."),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -1425,7 +1425,7 @@ private fun BasketDTO.ToBasketLineItem(): BasketLineItem {
             },
         variantText =
             resolvedVariantText.ifBlank {
-                "Standart"
+                BBLocalization.Current.Get(key = "081fb0ca-4f68-4277-9ca0-028d1e9d147f", fallback = "Standart")
             },
         priceText =
             FormatBasketPrice(
@@ -1441,7 +1441,7 @@ private fun BasketDTO.ToBasketLineItem(): BasketLineItem {
         quantity =
             Quantity,
         cargoText =
-            "Kargo bilgisi ödeme adımında netleşir.",
+            BBLocalization.Current.Get(key = "0c7b108c-136d-4c5a-add7-bfbbba981634", fallback = "Kargo bilgisi ödeme adımında netleşir."),
         cargoPriceValue =
             SummaryShippingCost,
         imageText =

@@ -69,7 +69,7 @@ fun B2CHomepageSpecialContents(
             )
 
             Text(
-                text = "Seçilmiş ürün gruplarını keşfedin.",
+                text = BBLocalization.Current.Get(key = "1ec41061-3327-4607-bf1a-78856e233f24", fallback = "Seçilmiş ürün gruplarını keşfedin."),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

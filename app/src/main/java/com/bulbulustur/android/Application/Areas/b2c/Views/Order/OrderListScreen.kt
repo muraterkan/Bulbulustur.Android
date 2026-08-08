@@ -74,7 +74,7 @@ fun OrderListScreen(
         topBar = {
             BbInnerPageHeader(
                 title = BBLocalization.Current.Get(key = "2c20dfd9-18d2-44a2-8298-95d7f91ea8e8", fallback = ""),
-                subtitle = "Sipariş ve teslimat durumlarınızı takip edin.",
+                subtitle = BBLocalization.Current.Get(key = "fb16cb4b-ab22-49e9-b6aa-9687cc81a41a", fallback = "Sipariş ve teslimat durumlarınızı takip edin."),
                 onBackClick = onBackClick
             )
         }
@@ -97,8 +97,8 @@ fun OrderListScreen(
                 memberId <= 0 -> {
                     item {
                         OrderMessageCard(
-                            title = "Oturum bilgisi bulunamadı",
-                            description = "Siparişlerinizi görüntülemek için hesabınıza giriş yapmanız gerekiyor."
+                            title = BBLocalization.Current.Get(key = "7d3eff10-e01c-4564-a290-e3542478f979", fallback = "Oturum bilgisi bulunamadı"),
+                            description = BBLocalization.Current.Get(key = "23036200-215d-4425-b832-1d99ea7aa703", fallback = "Siparişlerinizi görüntülemek için hesabınıza giriş yapmanız gerekiyor.")
                         )
                     }
                 }
@@ -112,7 +112,7 @@ fun OrderListScreen(
                 state.ErrorMessage != null && state.Orders.isEmpty() -> {
                     item {
                         OrderMessageCard(
-                            title = "Siparişler alınamadı",
+                            title = BBLocalization.Current.Get(key = "9f159f2d-5f29-4ead-87cb-85e6c6c7e2cb", fallback = "Siparişler alınamadı"),
                             description = state.ErrorMessage.orEmpty()
                         )
                     }
@@ -177,7 +177,7 @@ private fun OrderListOverviewCard(totalOrderCount: Int) {
                     )
 
                     Text(
-                        text = "Geçmiş ve devam eden siparişleriniz.",
+                        text = BBLocalization.Current.Get(key = "a565098f-3c40-4845-a0a6-208931f663ed", fallback = "Geçmiş ve devam eden siparişleriniz."),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -186,7 +186,7 @@ private fun OrderListOverviewCard(totalOrderCount: Int) {
 
             OrderStatBox(
                 modifier = Modifier.fillMaxWidth(),
-                title = "Toplam Sipariş",
+                title = BBLocalization.Current.Get(key = "aa6c81e4-9db4-4711-a7e5-07b4cbef137f", fallback = "Toplam Sipariş"),
                 value = totalOrderCount.toString()
             )
         }
@@ -200,7 +200,7 @@ private fun OrderCard(
 ) {
     val statusText = order.OrderStatusId.takeIf { it > 0 }?.let {
         "Sipariş Durumu #$it"
-    } ?: "Sipariş Alındı"
+    } ?: BBLocalization.Current.Get(key = "cb303be2-afdb-4770-9baf-f58c86d5f7fe", fallback = "Sipariş Alındı")
 
     BbCard(
         modifier = Modifier.fillMaxWidth(),
@@ -289,14 +289,14 @@ private fun OrderCard(
                     )
 
                     Text(
-                        text = "Satıcı bilgileri sipariş detayında",
+                        text = BBLocalization.Current.Get(key = "a9ba4576-144b-476d-b96a-bb8c27a54563", fallback = "Satıcı bilgileri sipariş detayında"),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
                 BbButton(
-                    text = "Detay",
+                    text = BBLocalization.Current.Get(key = "3feff293-3c00-44ae-a23f-0a2c613ee66f", fallback = "Detay"),
                     onClick = {
                         onOrderDetailClick(order.OrderId, order.OrderKey)
                     },
@@ -355,7 +355,7 @@ private fun OrderProductSummaryBox(order: OrderDTO) {
             )
 
             Text(
-                text = "Ürün ve mağaza bilgileri için sipariş detayını görüntüleyin.",
+                text = BBLocalization.Current.Get(key = "61961c85-56dd-41af-a0c7-dc18630ed8d1", fallback = "Ürün ve mağaza bilgileri için sipariş detayını görüntüleyin."),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -499,7 +499,7 @@ private fun OrderLoadingCard() {
             CircularProgressIndicator()
 
             Text(
-                text = "Siparişler yükleniyor",
+                text = BBLocalization.Current.Get(key = "932722ec-cd40-4c87-a068-f0912d06e8af", fallback = "Siparişler yükleniyor"),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -547,7 +547,7 @@ private fun OrderMessageCard(
 private fun OrderEmptyState() {
     OrderMessageCard(
         title = BBLocalization.Current.Get(key = "ce5819fb-ccf1-4289-afe8-805f804a9cfa", fallback = "Sipariş bulunamadı"),
-        description = "Geçmiş veya devam eden siparişleriniz oluştuğunda burada listelenir."
+        description = BBLocalization.Current.Get(key = "d3da98ef-dc95-41b3-9f93-4920f9051e73", fallback = "Geçmiş veya devam eden siparişleriniz oluştuğunda burada listelenir.")
     )
 }
 

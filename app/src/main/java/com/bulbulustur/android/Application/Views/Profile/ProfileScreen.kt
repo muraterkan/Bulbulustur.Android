@@ -95,7 +95,7 @@ fun ProfileScreen(
         member?.Name?.trim()?.takeIf { it.isNotBlank() },
         member?.Surname?.trim()?.takeIf { it.isNotBlank() }
     ).joinToString(" ").ifBlank {
-        "Profil bilgisi bulunamadı"
+        BBLocalization.Current.Get(key = "b6ce821b-409f-4a39-bbfb-282139032de4", fallback = "Profil bilgisi bulunamadı")
     }
 
     val profession = member
@@ -168,7 +168,7 @@ fun ProfileScreen(
                 member == null -> {
                     item {
                         ProfileMessageCard(
-                            message = "Profil bilgisi bulunamadı."
+                            message = BBLocalization.Current.Get(key = "be5abf47-f519-4a9b-92e8-68ca7aacbc79", fallback = "Profil bilgisi bulunamadı.")
                         )
                     }
                 }
@@ -185,12 +185,12 @@ fun ProfileScreen(
 
                     item {
                         ProfileSectionCard(
-                            title = "Profil Özeti",
-                            description = "Profilinizde görünen kısa tanıtım bilginiz.",
+                            title = BBLocalization.Current.Get(key = "c51bf43a-c12d-4409-bde9-6fc0cfaa92e7", fallback = "Profil Özeti"),
+                            description = BBLocalization.Current.Get(key = "72132ecf-c234-4360-a3cb-6e19c6744905", fallback = "Profilinizde görünen kısa tanıtım bilginiz."),
                             icon = Icons.Outlined.Person
                         ) {
                             ProfileFieldRow(
-                                title = "Hakkımda",
+                                title = BBLocalization.Current.Get(key = "ab9646c9-03e3-48a1-8414-c724db187884", fallback = "Hakkımda"),
                                 value = bio,
                                 icon = Icons.Outlined.Description,
                                 onClick = onBioClick
@@ -201,7 +201,7 @@ fun ProfileScreen(
                     item {
                         ProfileSectionCard(
                             title = BBLocalization.Current.Get(key = "fb9900fe-d66a-4aee-a030-f41b58100722", fallback = "Diller"),
-                            description = "Konuştuğunuz dilleri ve seviyelerini yönetin.",
+                            description = BBLocalization.Current.Get(key = "b74ee547-af93-40ff-8651-cb550b6633a1", fallback = "Konuştuğunuz dilleri ve seviyelerini yönetin."),
                             icon = Icons.Outlined.Translate
                         ) {
                             ProfileFieldRow(
@@ -215,12 +215,12 @@ fun ProfileScreen(
 
                    item {
                         ProfileSectionCard(
-                            title = "Eğitim ve İş",
-                            description = "Eğitim ve çalışma hayatınız.",
+                            title = BBLocalization.Current.Get(key = "abe57e95-3977-4455-8687-1671edc75506", fallback = "Eğitim ve İş"),
+                            description = BBLocalization.Current.Get(key = "a0c55735-d953-4005-be94-cc106e5e1045", fallback = "Eğitim ve çalışma hayatınız."),
                             icon = Icons.Outlined.School
                         ) {
                             ProfileFieldRow(
-                                title = "Eğitim Düzeyi",
+                                title = BBLocalization.Current.Get(key = "daf0f071-a537-4ed3-a935-e461cacb51c5", fallback = "Eğitim Düzeyi"),
                                 value = displayValues.Education,
                                 icon = Icons.Outlined.School,
                                 onClick = onEducationClick
@@ -238,7 +238,7 @@ fun ProfileScreen(
                             ProfileDivider()
 
                             ProfileFieldRow(
-                                title = "İş Unvanı",
+                                title = BBLocalization.Current.Get(key = "0c9548f7-abe3-4c0b-9b3c-db52d490e8ed", fallback = "İş Unvanı"),
                                 value = jobTitle,
                                 icon = Icons.Outlined.Badge,
                                 onClick = onJobTitleClick

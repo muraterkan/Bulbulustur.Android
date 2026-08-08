@@ -95,8 +95,8 @@ fun SampleRequestScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Numune Detayları",
-                    subtitle = "Kaç adet numune istediğinizi ve özel notlarınızı yazın"
+                    title = BBLocalization.Current.Get(key = "227128f4-0b5c-41c2-942a-cb05d069ed9a", fallback = "Numune Detayları"),
+                    subtitle = BBLocalization.Current.Get(key = "d7abde99-4d5f-48c4-9eba-e1f4d0593a66", fallback = "Kaç adet numune istediğinizi ve özel notlarınızı yazın")
                 )
             }
 
@@ -175,14 +175,14 @@ private fun SampleRequestHeader(
             }
 
             Text(
-                text = "Numune İsteği Oluştur",
+                text = BBLocalization.Current.Get(key = "2d1187c2-4aac-46ac-887b-8148921fd6aa", fallback = "Numune İsteği Oluştur"),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
-                text = "Toptan alım öncesinde ürünü incelemek için tedarikçiden numune talep edin.",
+                text = BBLocalization.Current.Get(key = "8ab902e5-1f69-45fd-9e0f-6099c7f541df", fallback = "Toptan alım öncesinde ürünü incelemek için tedarikçiden numune talep edin."),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -268,7 +268,7 @@ private fun SampleRequestHintCard() {
             )
 
             Text(
-                text = "Numune talebinizde hedef kullanım amacını, istediğiniz adet bilgisini ve teslimat notlarını belirtmeniz tedarikçi dönüşünü hızlandırır.",
+                text = BBLocalization.Current.Get(key = "31ee8e4a-1228-4a98-9c4e-dacf6350cd48", fallback = "Numune talebinizde hedef kullanım amacını, istediğiniz adet bilgisini ve teslimat notlarını belirtmeniz tedarikçi dönüşünü hızlandırır."),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.weight(1f)

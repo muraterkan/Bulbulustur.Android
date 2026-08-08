@@ -23,7 +23,6 @@ import com.bulbulustur.android.Application.Views.Account.AccountBirthDateScreen
 import com.bulbulustur.android.Application.Views.Account.AccountEditScreen
 import com.bulbulustur.android.Application.Views.Account.AccountGenderScreen
 import com.bulbulustur.android.Application.Views.Profile.*
-import com.bulbulustur.android.businesslayer.Core.Enums.EApplicationLanguage
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.*
 
 fun NavGraphBuilder.profileGraph(
@@ -44,7 +43,7 @@ fun NavGraphBuilder.profileGraph(
                 .firstOrNull {
                     it.SystemDescEducationId == memberProfile?.EducationId
                 }
-                ?.Content
+                ?.let { it.EducationName.ifBlank { it.Content } }
                 ?.takeIf { it.isNotBlank() }
                 ?: BBLocalization.Current.Get(key = "e23c524e-fedd-4486-ac5e-25721a402156", fallback = "Belirtilmemiş")
         )
@@ -169,7 +168,7 @@ fun NavGraphBuilder.profileGraph(
 
         val completionItems = listOf(
             ProfileCompletionItem(
-                Title = "Ad ve soyad",
+                Title = BBLocalization.Current.Get(key = "ccd28d78-ddac-404f-9389-836aa954c12a", fallback = "Ad ve soyad"),
                 IsCompleted = !member?.Name.isNullOrBlank() &&
                         !member?.Surname.isNullOrBlank()
             ),
@@ -178,7 +177,7 @@ fun NavGraphBuilder.profileGraph(
                 IsCompleted = !member?.Profession.isNullOrBlank()
             ),
             ProfileCompletionItem(
-                Title = "Hakkımda",
+                Title = BBLocalization.Current.Get(key = "ab9646c9-03e3-48a1-8414-c724db187884", fallback = "Hakkımda"),
                 IsCompleted = !memberProfile?.Bio.isNullOrBlank()
             ),
             ProfileCompletionItem(
@@ -595,7 +594,7 @@ fun NavGraphBuilder.profileGraph(
             options = profileState.Educations.map {
                 ProfileAppearanceSelectionOption(
                     Id = it.SystemDescEducationId,
-                    Content = it.Content
+                    Content = it.EducationName.ifBlank { it.Content }
                 )
             },
             selectedId = selectedId,
@@ -716,8 +715,5 @@ fun NavGraphBuilder.profileGraph(
 }
 
 private fun ResolveLanguageId(sessionState: UserSessionState): Int {
-    return when (sessionState.Language) {
-        EApplicationLanguage.Turkish -> 1
-        EApplicationLanguage.English -> 2
-    }
+    return sessionState.Language.Id
 }

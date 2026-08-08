@@ -116,14 +116,14 @@ fun ProfileLanguageListScreen(
                             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                         ) {
                             Text(
-                                text = "Konuştuğun Diller",
+                                text = BBLocalization.Current.Get(key = "8650b28f-5503-4ae4-8a32-c09ffac75695", fallback = "Konuştuğun Diller"),
                                 style = MaterialTheme.typography.titleMedium,
                                 color = MaterialTheme.colorScheme.onSurface,
                                 fontWeight = FontWeight.Bold
                             )
 
                             Text(
-                                text = "Her dil için konuşma seviyeni ayrı ayrı belirleyebilirsin.",
+                                text = BBLocalization.Current.Get(key = "58ec3f89-e41f-41b4-a926-d4285da79e39", fallback = "Her dil için konuşma seviyeni ayrı ayrı belirleyebilirsin."),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -184,14 +184,14 @@ fun ProfileLanguageListScreen(
                                 )
 
                                 Text(
-                                    text = "Henüz dil eklenmedi",
+                                    text = BBLocalization.Current.Get(key = "33db0456-4107-4869-aa09-9440d9bb8073", fallback = "Henüz dil eklenmedi"),
                                     style = MaterialTheme.typography.titleMedium,
                                     color = MaterialTheme.colorScheme.onSurface,
                                     fontWeight = FontWeight.Bold
                                 )
 
                                 Text(
-                                    text = "Profiline konuştuğun ilk dili ekleyerek başlayabilirsin.",
+                                    text = BBLocalization.Current.Get(key = "6d5be702-7011-4c79-8658-b4874384bad7", fallback = "Profiline konuştuğun ilk dili ekleyerek başlayabilirsin."),
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -314,7 +314,7 @@ fun ProfileLanguageListScreen(
             },
             title = {
                 Text(
-                    text = "Dil silinsin mi?",
+                    text = BBLocalization.Current.Get(key = "1e9adffd-0a17-4c11-8b37-e44832bea01a", fallback = "Dil silinsin mi?"),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold
                 )

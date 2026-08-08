@@ -52,10 +52,10 @@ fun PhoneListScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Telefonlarım",
+                title = BBLocalization.Current.Get(key = "30a80ae2-5527-4320-b805-f7a60420e71b", fallback = "Telefonlarım"),
                 onBackClick = onBackClick,
                 actionIcon = Icons.Outlined.Add,
-                actionContentDescription = "Telefon Ekle",
+                actionContentDescription = BBLocalization.Current.Get(key = "040b1a10-3032-4140-8473-80d332b4a964", fallback = "Telefon Ekle"),
                 onActionClick = onCreatePhoneClick
             )
         }
@@ -152,7 +152,7 @@ private fun PhoneCard(
                 ) {
                     Text(
                         text = if (phone.IsDefault) {
-                            "Varsayılan Telefon"
+                            BBLocalization.Current.Get(key = "36c0167b-48fc-4b93-b700-fdc57d101d46", fallback = "Varsayılan Telefon")
                         } else {
                             BBLocalization.Current.Get(key = "cf948c6a-2e6a-4f1e-b77b-13f8d15a1a67", fallback = "Telefon")
                         },
@@ -162,7 +162,7 @@ private fun PhoneCard(
 
                     Text(
                         text = phone.Phone.ifBlank {
-                            "Telefon bilgisi bulunamadı"
+                            BBLocalization.Current.Get(key = "d6b9322e-9a61-4975-a94a-fe9d9473f28e", fallback = "Telefon bilgisi bulunamadı")
                         },
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurface
@@ -223,7 +223,7 @@ private fun PhoneLoadingState() {
             CircularProgressIndicator()
 
             Text(
-                text = "Telefonlar yükleniyor...",
+                text = BBLocalization.Current.Get(key = "46cb1299-d4ec-4eb9-bfbd-f7b2786c9203", fallback = "Telefonlar yükleniyor..."),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -244,7 +244,7 @@ private fun PhoneErrorState(message: String, onRetryClick: () -> Unit) {
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             Text(
-                text = "Telefonlar Alınamadı",
+                text = BBLocalization.Current.Get(key = "9e1589e4-2f80-4612-9d09-9e198ee55a99", fallback = "Telefonlar Alınamadı"),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -282,13 +282,13 @@ private fun PhoneEmptyState(onCreatePhoneClick: () -> Unit) {
             )
 
             Text(
-                text = "Telefon Numarası Bulunmuyor",
+                text = BBLocalization.Current.Get(key = "d61191c5-8fbf-4206-b3c5-12518cda6fbf", fallback = "Telefon Numarası Bulunmuyor"),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
-                text = "Telefon ekleyerek doğrulama ve güvenlik süreçlerini daha sağlam hale getirebilirsiniz.",
+                text = BBLocalization.Current.Get(key = "32d056bb-2015-4137-ba31-1ea21bf8d8e7", fallback = "Telefon ekleyerek doğrulama ve güvenlik süreçlerini daha sağlam hale getirebilirsiniz."),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -298,7 +298,7 @@ private fun PhoneEmptyState(onCreatePhoneClick: () -> Unit) {
             )
 
             BbButton(
-                text = "Telefon Ekle",
+                text = BBLocalization.Current.Get(key = "040b1a10-3032-4140-8473-80d332b4a964", fallback = "Telefon Ekle"),
                 onClick = onCreatePhoneClick,
                 variant = BbButtonVariant.Primary,
                 size = BbButtonSize.Medium

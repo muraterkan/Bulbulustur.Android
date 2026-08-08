@@ -62,11 +62,11 @@ fun ProductHistoryScreen(
     val filters = remember {
         listOf(
             BBLocalization.Current.Get(key = "40b32a95-e0ec-4b16-b54d-12b6fe90cced", fallback = "Tümü"),
-            "B2C Geçmişi",
+            BBLocalization.Current.Get(key = "d44c93d2-d92f-44fd-a74d-b5882fde4143", fallback = "B2C Geçmişi"),
             "Ayakkabı",
             "Giyim",
             BBLocalization.Current.Get(key = "5df01635-64c2-45a2-95e2-8b37bae9b423", fallback = "Bugün"),
-            "Bu Hafta"
+            BBLocalization.Current.Get(key = "7b889cfc-00b2-4c72-84aa-59f4fa4f08a7", fallback = "Bu Hafta")
         )
     }
 
@@ -91,7 +91,7 @@ fun ProductHistoryScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Ürün Geçmişi",
+                title = BBLocalization.Current.Get(key = "b83a18ec-928e-40dd-a58f-b5bbe13b39b3", fallback = "Ürün Geçmişi"),
                 onBackClick = onBackClick,
                 actionIcon = if (historyItems.isNotEmpty()) {
                     Icons.Outlined.DeleteSweep
@@ -217,7 +217,7 @@ private fun ProductHistoryIntroCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             Text(
-                text = "Daha Önce Baktığınız Ürünler Burada",
+                text = BBLocalization.Current.Get(key = "ecc4ddc1-6d0d-4c45-bd0d-11fd91f21944", fallback = "Daha Önce Baktığınız Ürünler Burada"),
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -243,7 +243,7 @@ private fun ProductHistoryIntroCard(
 
                 if (itemCount > 0) {
                     BbButton(
-                        text = "Temizle",
+                        text = BBLocalization.Current.Get(key = "0bff2074-48a3-4ba4-808f-2583f63aa227", fallback = "Temizle"),
                         onClick = onClearHistoryClick,
                         modifier = Modifier.weight(1f),
                         variant = BbButtonVariant.Outline,
@@ -469,18 +469,18 @@ private fun ProductHistoryEmptyState(
                 }
 
                 ProductHistoryStatusPill(
-                    text = "Geçmiş Bulunamadı"
+                    text = BBLocalization.Current.Get(key = "c2c34e4e-2e6b-4fd3-b036-21309299b8b3", fallback = "Geçmiş Bulunamadı")
                 )
 
                 Text(
-                    text = "Listelenecek Ürün Bulunmuyor",
+                    text = BBLocalization.Current.Get(key = "27d673dc-14e8-4e04-8915-e75b1c9a8a8d", fallback = "Listelenecek Ürün Bulunmuyor"),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = "Ürünleri inceledikçe geçmişiniz burada görünür. Alışverişe başlayarak ürünleri keşfedebilirsiniz.",
+                    text = BBLocalization.Current.Get(key = "adfd0b78-6021-49f2-84ba-154b03820ae9", fallback = "Ürünleri inceledikçe geçmişiniz burada görünür. Alışverişe başlayarak ürünleri keşfedebilirsiniz."),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -559,45 +559,45 @@ private fun getProductHistoryItems(): List<ProductHistoryItem> {
             id = 1,
             productId = 1,
             productName = "Ortobella Confort Kadın Hakiki Deri Ayakkabı",
-            description = "Daha önce görüntülediğin ürün. Ürünü tekrar inceleyebilirsin.",
+            description = BBLocalization.Current.Get(key = "90d158d5-2a25-4e83-9122-bf623d3be6a9", fallback = "Daha önce görüntülediğin ürün. Ürünü tekrar inceleyebilirsin."),
             categoryName = "Ayakkabı",
-            viewedDateText = "Daha Önce Baktın",
+            viewedDateText = BBLocalization.Current.Get(key = "c18aac89-74a8-418e-92ad-7ed31a5092a1", fallback = "Daha Önce Baktın"),
             historyTypeText = BBLocalization.Current.Get(key = "ee443d91-14f7-4540-ada8-8e29f7b40c90", fallback = "Geçmiş"),
             imageText = "P1",
-            filterTags = listOf("B2C Geçmişi", "Ayakkabı", BBLocalization.Current.Get(key = "5df01635-64c2-45a2-95e2-8b37bae9b423", fallback = "Bugün"))
+            filterTags = listOf(BBLocalization.Current.Get(key = "d44c93d2-d92f-44fd-a74d-b5882fde4143", fallback = "B2C Geçmişi"), "Ayakkabı", BBLocalization.Current.Get(key = "5df01635-64c2-45a2-95e2-8b37bae9b423", fallback = "Bugün"))
         ),
         ProductHistoryItem(
             id = 2,
             productId = 2,
             productName = "Ortobella Comfort Hakiki Deri Topuk Dikeni Terlik M13",
-            description = "Daha önce görüntülediğin ürün. Ürünü tekrar inceleyebilirsin.",
+            description = BBLocalization.Current.Get(key = "90d158d5-2a25-4e83-9122-bf623d3be6a9", fallback = "Daha önce görüntülediğin ürün. Ürünü tekrar inceleyebilirsin."),
             categoryName = "Ayakkabı",
-            viewedDateText = "Dün Baktın",
+            viewedDateText = BBLocalization.Current.Get(key = "437206ba-593d-4edb-8aee-50ed6d47e470", fallback = "Dün Baktın"),
             historyTypeText = BBLocalization.Current.Get(key = "ee443d91-14f7-4540-ada8-8e29f7b40c90", fallback = "Geçmiş"),
             imageText = "P2",
-            filterTags = listOf("B2C Geçmişi", "Ayakkabı", "Bu Hafta")
+            filterTags = listOf(BBLocalization.Current.Get(key = "d44c93d2-d92f-44fd-a74d-b5882fde4143", fallback = "B2C Geçmişi"), "Ayakkabı", BBLocalization.Current.Get(key = "7b889cfc-00b2-4c72-84aa-59f4fa4f08a7", fallback = "Bu Hafta"))
         ),
         ProductHistoryItem(
             id = 3,
             productId = 3,
             productName = "Oversize Pamuklu Basic Tişört",
-            description = "Daha önce görüntülediğin ürün. Ürünü tekrar inceleyebilirsin.",
+            description = BBLocalization.Current.Get(key = "90d158d5-2a25-4e83-9122-bf623d3be6a9", fallback = "Daha önce görüntülediğin ürün. Ürünü tekrar inceleyebilirsin."),
             categoryName = "Giyim",
             viewedDateText = "3 Gün Önce Baktın",
             historyTypeText = BBLocalization.Current.Get(key = "ee443d91-14f7-4540-ada8-8e29f7b40c90", fallback = "Geçmiş"),
             imageText = "P3",
-            filterTags = listOf("B2C Geçmişi", "Giyim", "Bu Hafta")
+            filterTags = listOf(BBLocalization.Current.Get(key = "d44c93d2-d92f-44fd-a74d-b5882fde4143", fallback = "B2C Geçmişi"), "Giyim", BBLocalization.Current.Get(key = "7b889cfc-00b2-4c72-84aa-59f4fa4f08a7", fallback = "Bu Hafta"))
         ),
         ProductHistoryItem(
             id = 4,
             productId = 4,
-            productName = "Günlük Kullanım Omuz Çantası",
-            description = "Daha önce görüntülediğin ürün. Ürünü tekrar inceleyebilirsin.",
+            productName = BBLocalization.Current.Get(key = "a36cb9c0-b208-452a-ba5b-65604d0a9f19", fallback = "Günlük Kullanım Omuz Çantası"),
+            description = BBLocalization.Current.Get(key = "90d158d5-2a25-4e83-9122-bf623d3be6a9", fallback = "Daha önce görüntülediğin ürün. Ürünü tekrar inceleyebilirsin."),
             categoryName = "Çanta",
-            viewedDateText = "Bu Hafta Baktın",
+            viewedDateText = BBLocalization.Current.Get(key = "0fa9526d-4a1a-40f0-a9d9-19341eec54df", fallback = "Bu Hafta Baktın"),
             historyTypeText = BBLocalization.Current.Get(key = "ee443d91-14f7-4540-ada8-8e29f7b40c90", fallback = "Geçmiş"),
             imageText = "P4",
-            filterTags = listOf("B2C Geçmişi", "Bu Hafta")
+            filterTags = listOf(BBLocalization.Current.Get(key = "d44c93d2-d92f-44fd-a74d-b5882fde4143", fallback = "B2C Geçmişi"), BBLocalization.Current.Get(key = "7b889cfc-00b2-4c72-84aa-59f4fa4f08a7", fallback = "Bu Hafta"))
         )
     )
 }

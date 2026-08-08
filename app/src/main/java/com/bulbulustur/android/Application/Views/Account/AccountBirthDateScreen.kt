@@ -62,7 +62,7 @@ fun AccountBirthDateScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Doğum Tarihi",
+                title = BBLocalization.Current.Get(key = "f622784c-d8fe-46e0-adee-dcc5e8c03e57", fallback = "Doğum Tarihi"),
                 onBackClick = onBackClick
             )
         }
@@ -111,7 +111,7 @@ fun AccountBirthDateScreen(
                         },
                         modifier = Modifier.fillMaxWidth(),
                         label = {
-                            Text(text = "Doğum Tarihi")
+                            Text(text = BBLocalization.Current.Get(key = "f622784c-d8fe-46e0-adee-dcc5e8c03e57", fallback = "Doğum Tarihi"))
                         },
                         placeholder = {
                             Text(text = "YYYY-MM-DD")

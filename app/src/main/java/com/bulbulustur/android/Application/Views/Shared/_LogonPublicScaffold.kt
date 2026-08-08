@@ -4,22 +4,74 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
@@ -95,7 +147,9 @@ fun LogonPublicScaffold(
     selectedLanguageId: Int = 1,
     isLanguageLoading: Boolean = false,
     languageErrorMessage: String? = null,
-    selectedLanguageCode: String = if (selectedLanguageId == 2) "en" else "tr",
+    
+selectedLanguageCode: String = ""
+,
     horizontalPadding: Dp = BBSpacing.Space7,
     headerTopSpace: Dp = BBSpacing.Space8,
     headerBottomSpace: Dp = BBSpacing.Space8,
@@ -108,24 +162,10 @@ fun LogonPublicScaffold(
     },
     content: @Composable ColumnScope.() -> Unit
 ) {
+    
     val resolvedSelectedLanguageId =
-        when {
-            selectedLanguageId == 1 ||
-                    selectedLanguageId == 2 -> {
-                selectedLanguageId
-            }
+        selectedLanguageId.takeIf { it > 0 } ?: 1
 
-            selectedLanguageCode.equals(
-                other = "en",
-                ignoreCase = true
-            ) -> {
-                2
-            }
-
-            else -> {
-                1
-            }
-        }
 
     Box(
         modifier = modifier
@@ -263,7 +303,7 @@ fun LogonPublicHeader(
         Surface(
             modifier = Modifier
                 .defaultMinSize(
-                    minHeight = BBIcon.BoxLg
+                    minHeight = BBIcon.BoxMd
                 )
                 .clickable {
                     isLanguageDialogVisible = true
@@ -360,9 +400,7 @@ private fun LogonPublicLanguageDialog(
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(
-                    BBSpacing.PageHorizontal
-                ),
+                .padding(horizontal = BBSpacing.Space4),
             shape = BBRadius.XxlShape,
             color = MaterialTheme.colorScheme.surface,
             border = BorderStroke(
@@ -374,9 +412,7 @@ private fun LogonPublicLanguageDialog(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(
-                        BBSpacing.Space5
-                    ),
+                    .padding(BBSpacing.Space4),
                 horizontalAlignment =
                     Alignment.CenterHorizontally,
                 verticalArrangement =
@@ -385,7 +421,7 @@ private fun LogonPublicLanguageDialog(
                     )
             ) {
                 Text(
-                    text = "Dil Seçimi",
+                    text = BBLocalization.Current.Get(key = "14b9a67f-fae7-4458-bb61-d768bdbf8df9", fallback = "Dil Seçimi"),
                     style = BbTypography.titleLarge,
                     color =
                         MaterialTheme.colorScheme.onSurface,
@@ -394,7 +430,7 @@ private fun LogonPublicLanguageDialog(
                 )
 
                 Text(
-                    text = "Uygulamada kullanmak istediğiniz dili seçin.",
+                    text = BBLocalization.Current.Get(key = "53d51ce5-7364-442e-952e-75e9c0fc39d3", fallback = "Uygulamada kullanmak istediğiniz dili seçin."),
                     style = BbTypography.bodySmall,
                     color =
                         MaterialTheme.colorScheme.onSurfaceVariant,
@@ -416,12 +452,12 @@ private fun LogonPublicLanguageDialog(
                         ) {
                             CircularProgressIndicator(
                                 modifier = Modifier.size(
-                                    BBIcon.SizeLg
+                                    BBIcon.SizeMd
                                 )
                             )
 
                             Text(
-                                text = "Diller yükleniyor...",
+                                text = BBLocalization.Current.Get(key = "4cb87a4e-27ee-4945-95dc-31c9c14b8986", fallback = "Diller yükleniyor..."),
                                 style =
                                     BbTypography.bodyMedium,
                                 color =
@@ -444,20 +480,28 @@ private fun LogonPublicLanguageDialog(
                         )
                     }
                 }
-
-                visibleLanguages.forEach { language ->
-                    LogonPublicLanguageRow(
-                        language = language,
-                        isSelected =
-                            language.id ==
-                                    selectedLanguageId,
-                        onClick = {
-                            onLanguageSelected(
-                                language.id
-                            )
-                        }
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(max = 560.dp),
+                    verticalArrangement = Arrangement.spacedBy(
+                        BBSpacing.Space2
                     )
+                ) {
+                    items(
+                        items = visibleLanguages,
+                        key = { language -> language.id }
+                    ) { language ->
+                        LogonPublicLanguageRow(
+                            language = language,
+                            isSelected = language.id == selectedLanguageId,
+                            onClick = {
+                                onLanguageSelected(language.id)
+                            }
+                        )
+                    }
                 }
+
             }
         }
     }
@@ -509,7 +553,7 @@ private fun LogonPublicLanguageRow(
             ) {
                 Box(
                     modifier = Modifier.size(
-                        BBIcon.BoxLg
+                        BBIcon.BoxMd
                     ),
                     contentAlignment = Alignment.Center
                 ) {
@@ -519,7 +563,7 @@ private fun LogonPublicLanguageRow(
                         contentDescription =
                             language.label,
                         modifier = Modifier.size(
-                            BBIcon.SizeLg
+                            BBIcon.SizeMd
                         ),
                         contentScale =
                             ContentScale.Fit
@@ -554,10 +598,10 @@ private fun LogonPublicLanguageRow(
                 Icon(
                     imageVector =
                         Icons.Outlined.CheckCircle,
-                    contentDescription = "Seçili dil",
+                    contentDescription = BBLocalization.Current.Get(key = "5a440cd9-a690-4baf-86ec-f79bb9b5ebcf", fallback = "Seçili dil"),
                     tint = BBColors.Yellow.Yellow500,
                     modifier = Modifier.size(
-                        BBIcon.SizeLg
+                        BBIcon.SizeMd
                     )
                 )
             }
@@ -978,10 +1022,9 @@ private fun resolveLogonPublicLanguages(
     languages: List<SystemDescLanguageDTO>
 ): List<LogonPublicLanguage> {
     return languages
-        .filter {
-            it.SystemDescLanguageId == 1 ||
-                    it.SystemDescLanguageId == 2
-        }
+        .filter { it.SystemDescLanguageId > 0 }
+        .distinctBy { it.SystemDescLanguageId }
+        .sortedBy { it.SystemDescLanguageId }
         .map {
             LogonPublicLanguage(
                 id =
@@ -996,24 +1039,24 @@ private fun resolveLogonPublicLanguages(
                         ) {
                             "English"
                         } else {
-                            "Türkçe"
+                            BBLocalization.Current.Get(key = "0917b779-9fd5-4c09-a77a-7561824c9d2c", fallback = "Türkçe")
                         },
-                code =
-                    it.LanguageIsoCode
-                        ?.takeIf { value ->
-                            value.isNotBlank()
-                        }
-                        ?: if (
-                            it.SystemDescLanguageId == 2
-                        ) {
-                            "en"
-                        } else {
-                            "tr"
-                        },
-                flagAssetPath =
-                    resolveLogonPublicFlagPath(
+                
+code = it.LanguageIsoCode
+                    ?.trim()
+                    ?.takeIf { value -> value.isNotBlank() }
+                    ?: resolveLogonPublicLanguageCode(
                         it.SystemDescLanguageId
                     )
+,
+                
+flagAssetPath = resolveLogonPublicFlagPath(
+                    languageId = it.SystemDescLanguageId,
+                    languageCode = it.LanguageIsoCode
+                        ?.trim()
+                        .orEmpty()
+                )
+
             )
         }
         .distinctBy {
@@ -1049,7 +1092,7 @@ private fun logonPublicFallbackLanguages():
         LogonPublicLanguage(
             id = 1,
             code = "tr",
-            label = "Türkçe",
+            label = BBLocalization.Current.Get(key = "0917b779-9fd5-4c09-a77a-7561824c9d2c", fallback = "Türkçe"),
             flagAssetPath =
                 LOGON_PUBLIC_TURKISH_FLAG
         ),
@@ -1069,6 +1112,51 @@ private fun resolveLogonPublicFlagPath(
     return when (languageId) {
         1 -> LOGON_PUBLIC_TURKISH_FLAG
         2 -> LOGON_PUBLIC_ENGLISH_FLAG
+        else -> LOGON_PUBLIC_FALLBACK_FLAG
+    }
+}
+private fun resolveLogonPublicLanguageCode(
+    languageId: Int
+): String {
+    return when (languageId) {
+        1 -> "tr"
+        2 -> "en"
+        3 -> "de"
+        4 -> "fr"
+        5 -> "es"
+        6 -> "it"
+        7 -> "pt"
+        8 -> "nl"
+        9 -> "pl"
+        10 -> "ru"
+        11 -> "ar"
+        else -> ""
+    }
+}
+
+private fun resolveLogonPublicFlagPath(
+    languageId: Int,
+    languageCode: String
+): String {
+    val resolvedCode = languageCode
+        .trim()
+        .lowercase()
+        .ifBlank {
+            resolveLogonPublicLanguageCode(languageId)
+        }
+
+    return when (resolvedCode) {
+        "tr" -> "file:///android_asset/flags/turkey.svg"
+        "en" -> "file:///android_asset/flags/uk.svg"
+        "de" -> "file:///android_asset/flags/germany.svg"
+        "fr" -> "file:///android_asset/flags/france.svg"
+        "es" -> "file:///android_asset/flags/spain.svg"
+        "it" -> "file:///android_asset/flags/italy.svg"
+        "pt" -> "file:///android_asset/flags/portugal.svg"
+        "nl" -> "file:///android_asset/flags/netherlands.svg"
+        "pl" -> "file:///android_asset/flags/poland.svg"
+        "ru" -> "file:///android_asset/flags/russia.svg"
+        "ar" -> "file:///android_asset/flags/saudi-arabia.svg"
         else -> LOGON_PUBLIC_FALLBACK_FLAG
     }
 }

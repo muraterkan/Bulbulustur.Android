@@ -116,7 +116,7 @@ fun ProfileAppearanceSelectionScreen(
                         padding = BbCardPadding.Medium
                     ) {
                         Text(
-                            text = "Seçenek bulunamadı.",
+                            text = BBLocalization.Current.Get(key = "f4d40646-a0a2-411f-915e-663d388772fb", fallback = "Seçenek bulunamadı."),
                             style = BbTypography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )

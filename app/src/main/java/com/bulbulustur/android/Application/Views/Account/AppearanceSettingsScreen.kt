@@ -1,4 +1,6 @@
-﻿package com.bulbulustur.android.Application.Views.Account
+package com.bulbulustur.android.Application.Views.Account
+
+import com.bulbulustur.android.Application.Localization.BBLocalization
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -49,7 +51,7 @@ fun AppearanceSettingsScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Görünüm",
+                title = BBLocalization.Current.Get(key = "ad70cf0b-cc2b-48f5-b015-292828278234", fallback = "Görünüm"),
                 onBackClick = onBackClick
             )
         }
@@ -99,7 +101,7 @@ private fun AppearanceIntroCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Bulbulustur uygulamasında kullanmak istediğiniz görünüm modunu seçin.",
+            text = BBLocalization.Current.Get(key = "92d1f72f-a2b0-49d4-a006-53acd554db25", fallback = "Bulbulustur uygulamasında kullanmak istediğiniz görünüm modunu seçin."),
             style = BbTypography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -183,20 +185,20 @@ private fun appearanceThemeOptions(): List<AppearanceThemeOption> {
     return listOf(
         AppearanceThemeOption(
             ThemeMode = EThemeMode.System,
-            Title = "Sistem Varsayılanı",
-            Description = "Uygulama cihazınızın açık veya koyu tema ayarını takip eder.",
+            Title = BBLocalization.Current.Get(key = "0aa4645e-5d01-4a47-88b1-89e737922d4d", fallback = "Sistem Varsayılanı"),
+            Description = BBLocalization.Current.Get(key = "a4f713cd-1086-4f43-81a7-b38509f8904e", fallback = "Uygulama cihazınızın açık veya koyu tema ayarını takip eder."),
             Icon = Icons.Outlined.AutoMode
         ),
         AppearanceThemeOption(
             ThemeMode = EThemeMode.Light,
-            Title = "Açık Tema",
-            Description = "Uygulama her zaman açık tema ile görüntülenir.",
+            Title = BBLocalization.Current.Get(key = "0da169d7-c163-4a92-99c5-5e7aa5a6abce", fallback = "Açık Tema"),
+            Description = BBLocalization.Current.Get(key = "b4314bbe-bd36-4d42-8e15-3fc93905be26", fallback = "Uygulama her zaman açık tema ile görüntülenir."),
             Icon = Icons.Outlined.LightMode
         ),
         AppearanceThemeOption(
             ThemeMode = EThemeMode.Dark,
-            Title = "Koyu Tema",
-            Description = "Uygulama her zaman koyu tema ile görüntülenir.",
+            Title = BBLocalization.Current.Get(key = "5d279884-96b2-4549-b7f1-5d47493c3a59", fallback = "Koyu Tema"),
+            Description = BBLocalization.Current.Get(key = "1b033efe-2086-4a59-892d-4506e3afb93d", fallback = "Uygulama her zaman koyu tema ile görüntülenir."),
             Icon = Icons.Outlined.DarkMode
         )
     )

@@ -164,7 +164,7 @@ private fun MessageStatsRow(
             modifier = Modifier.weight(1f),
             icon = Icons.Outlined.Mail,
             value = totalCount.toString(),
-            label = "Gelen",
+            label = BBLocalization.Current.Get(key = "fdb534e9-6237-4da4-b330-265fcb907c9e", fallback = "Gelen"),
             color = MaterialTheme.colorScheme.onSurface,
             backgroundColor = MaterialTheme.colorScheme.surface
         )
@@ -273,13 +273,13 @@ private fun MessageSectionTitle() {
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
     ) {
         Text(
-            text = "Toptan mesajlar",
+            text = BBLocalization.Current.Get(key = "d1e01238-afe9-4610-b99a-b717f56d21a5", fallback = "Toptan mesajlar"),
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onSurface
         )
 
         Text(
-            text = "Toptan ticaret görüşmelerinizi konuşma bazlı görüntüleyin.",
+            text = BBLocalization.Current.Get(key = "530eb08e-637f-4566-b108-142273ca743b", fallback = "Toptan ticaret görüşmelerinizi konuşma bazlı görüntüleyin."),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -362,8 +362,8 @@ private fun MessageCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
             ) {
                 MessageSmallTag(BBLocalization.Current.Get(key = "24f66aea-c97e-4c82-af4c-528f9471a685", fallback = "Gelen Kutusu"))
-                MessageSmallTag("Toptan")
-                if (message.IsPriority) MessageSmallTag("Öncelikli")
+                MessageSmallTag(BBLocalization.Current.Get(key = "cd90e72e-8745-4543-836b-ca914c3640f8", fallback = "Toptan"))
+                if (message.IsPriority) MessageSmallTag(BBLocalization.Current.Get(key = "aaadbd80-916e-45c9-9763-bca4312209ea", fallback = "Öncelikli"))
                 if (message.IsStarred) MessageSmallTag(BBLocalization.Current.Get(key = "8d7ea4cc-931b-4515-8a90-05ada47bd539", fallback = "Yıldızlı"))
             }
         }
@@ -484,7 +484,7 @@ private fun MessageEmptyState() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Henüz bir toptan mesajınız bulunmuyor.",
+            text = BBLocalization.Current.Get(key = "a49906d3-4601-495b-8ba9-27d499ac9ab9", fallback = "Henüz bir toptan mesajınız bulunmuyor."),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

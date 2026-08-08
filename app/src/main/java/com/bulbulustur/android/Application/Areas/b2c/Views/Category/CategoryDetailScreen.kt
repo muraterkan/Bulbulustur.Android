@@ -92,7 +92,7 @@ fun CategoryDetailScreen(
                 onSearchTextChange = {
                     searchText = it
                 },
-                placeholder = "Ürün, kategori veya marka ara",
+                placeholder = BBLocalization.Current.Get(key = "e4f653c3-8828-4934-aa3b-959cede38feb", fallback = "Ürün, kategori veya marka ara"),
                 leadingAction = RetailSearchHeaderLeadingAction.Back,
                 onBackClick = onBackClick,
                 onMenuClick = onMenuClick,
@@ -281,7 +281,7 @@ private fun CategorySubCategorySection(
     ) {
         RetailSectionTitle(
             title = BBLocalization.Current.Get(key = "19e928cc-d4e4-426f-a1e8-fb8d9adf872f", fallback = ""),
-            description = "Doğrudan ürün akışına inmek için hızlı seçim."
+            description = BBLocalization.Current.Get(key = "74a46e5a-2695-4867-8660-b0fe2b4f8528", fallback = "Doğrudan ürün akışına inmek için hızlı seçim.")
         )
 
         Spacer(modifier = Modifier.height(BBSpacing.Space3))
@@ -356,8 +356,8 @@ private fun CategoryCampaignSection(
         modifier = Modifier.fillMaxWidth()
     ) {
         RetailSectionTitle(
-            title = "Kategori Vitrinleri",
-            description = "Ürün, mağaza ve kampanya akışlarına hızlı geç."
+            title = BBLocalization.Current.Get(key = "21f6b0ee-67eb-40fb-899d-640fb99a7397", fallback = "Kategori Vitrinleri"),
+            description = BBLocalization.Current.Get(key = "9beff001-6dd9-4017-9f1f-72ef6606495a", fallback = "Ürün, mağaza ve kampanya akışlarına hızlı geç.")
         )
 
         Spacer(modifier = Modifier.height(BBSpacing.Space3))
@@ -448,7 +448,7 @@ private fun CategoryQuickFilterSection(
     ) {
         RetailSectionTitle(
             title = BBLocalization.Current.Get(key = "06861c0e-a393-4c0d-8851-978793cae548", fallback = ""),
-            description = "Listeye geçmeden önce akışı daralt."
+            description = BBLocalization.Current.Get(key = "095ec6b8-65fd-4f79-9512-e675636a5455", fallback = "Listeye geçmeden önce akışı daralt.")
         )
 
         Spacer(modifier = Modifier.height(BBSpacing.Space2))
@@ -476,7 +476,7 @@ private fun CategoryQuickFilterSection(
 private fun CategoryProductSectionHeader() {
     RetailSectionTitle(
         title = BBLocalization.Current.Get(key = "1c7c6ac9-2b6d-46ec-90f0-3f88b65beb11", fallback = ""),
-        description = "Bu kategoride dikkat çeken ürünlerden kısa bir seçki."
+        description = BBLocalization.Current.Get(key = "4340b4b1-5348-4601-ad94-18ea0ca8f5cc", fallback = "Bu kategoride dikkat çeken ürünlerden kısa bir seçki.")
     )
 }
 
@@ -624,7 +624,7 @@ private fun getRetailCategoryDetail(
     return RetailCategoryDetail(
         id = categoryInfo?.ProductCategoryId ?: categoryId,
         name = categoryInfo?.CategoryName?.ifBlank { BBLocalization.Current.Get(key = "1a132fdc-096f-42d7-835d-96b0a17b3675", fallback = "") } ?: BBLocalization.Current.Get(key = "1a132fdc-096f-42d7-835d-96b0a17b3675", fallback = ""),
-        description = categoryInfo?.Breadcrumb?.ifBlank { "Kategori ürünlerini keşfedin." } ?: "Kategori ürünlerini keşfedin.",
+        description = categoryInfo?.Breadcrumb?.ifBlank { BBLocalization.Current.Get(key = "eaccf589-4817-4e98-a847-53257da7e56c", fallback = "Kategori ürünlerini keşfedin.") } ?: BBLocalization.Current.Get(key = "eaccf589-4817-4e98-a847-53257da7e56c", fallback = "Kategori ürünlerini keşfedin."),
         iconText = (categoryInfo?.CategoryName?.ifBlank { "KA" } ?: "KA").take(2).uppercase(),
         productCount = 18420,
         storeCount = 624,
@@ -650,17 +650,17 @@ private fun getRetailCategoryDetail(
         campaigns = listOf(
             RetailCategoryCampaignItem(
                 id = 1,
-                title = "Sezonun öne çıkanları",
-                description = "Yeni gelen ürünlerde seçili fırsatlar.",
-                badge = "Yeni sezon",
+                title = BBLocalization.Current.Get(key = "1ed21217-a8d6-4f77-92fa-74f896f7095e", fallback = "Sezonun öne çıkanları"),
+                description = BBLocalization.Current.Get(key = "978c0658-d963-40e6-ab55-197f5a2987b9", fallback = "Yeni gelen ürünlerde seçili fırsatlar."),
+                badge = BBLocalization.Current.Get(key = "d0d0d256-d10b-4d42-9264-995b9315c54d", fallback = "Yeni sezon"),
                 icon = Icons.Outlined.LocalOffer,
                 backgroundColor = MaterialTheme.colorScheme.primaryContainer,
                 iconColor = MaterialTheme.colorScheme.onPrimaryContainer
             ),
             RetailCategoryCampaignItem(
                 id = 2,
-                title = "Haftanın Vitrinleri",
-                description = "Popüler mağazalardan hızlı keşif.",
+                title = BBLocalization.Current.Get(key = "02d45695-958e-4458-9deb-d27d85a58d73", fallback = "Haftanın Vitrinleri"),
+                description = BBLocalization.Current.Get(key = "cb15dd3d-ec2b-4ed9-ad0a-30c02fbff24c", fallback = "Popüler mağazalardan hızlı keşif."),
                 badge = "Vitrin",
                 icon = Icons.Outlined.Storefront,
                 backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
@@ -669,8 +669,8 @@ private fun getRetailCategoryDetail(
             RetailCategoryCampaignItem(
                 id = 3,
                 title = BBLocalization.Current.Get(key = "ac891c5a-522e-48a8-b750-744f9d6b364e", fallback = "Avantajlı ürünler"),
-                description = "Fiyat/performans ürünleri bir arada.",
-                badge = "Fırsat",
+                description = BBLocalization.Current.Get(key = "46803f6f-2986-4bd3-8315-67d453e2bd72", fallback = "Fiyat/performans ürünleri bir arada."),
+                badge = BBLocalization.Current.Get(key = "2499e0cc-b6ba-4d7d-92e7-d93d72414d14", fallback = "Fırsat"),
                 icon = Icons.Outlined.Search,
                 backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
                 iconColor = MaterialTheme.colorScheme.onSurfaceVariant
@@ -679,15 +679,15 @@ private fun getRetailCategoryDetail(
         quickFilters = listOf(
             BBLocalization.Current.Get(key = "c45d05c5-c097-40c4-9379-a7ec77726c36", fallback = "Popüler"),
             BBLocalization.Current.Get(key = "6788b820-f4b2-470b-92f8-7a8470387d4e", fallback = "Yeni Gelenler"),
-            "Çok satanlar",
-            "İndirimli",
-            "Ücretsiz kargo",
+            BBLocalization.Current.Get(key = "ba358f76-477e-4da3-b3e2-bc88c7ddc6df", fallback = "Çok satanlar"),
+            BBLocalization.Current.Get(key = "5d1d3591-7f28-4ff3-95a2-e196e8faf1cb", fallback = "İndirimli"),
+            BBLocalization.Current.Get(key = "fc8b89db-1fef-443a-9740-e1c37f44ca2f", fallback = "Ücretsiz kargo"),
             BBLocalization.Current.Get(key = "d1f63ea5-7c48-4767-a74f-2e7b6efdf474", fallback = "Yüksek puanlı")
         ),
         products = listOf(
             RetailCategoryProductItem(
                 id = 1,
-                name = "Kadın klasik sneaker ayakkabı",
+                name = BBLocalization.Current.Get(key = "cf2f4de0-711c-4308-a055-3ef7eb00d9c7", fallback = "Kadın klasik sneaker ayakkabı"),
                 storeName = "Ortobella",
                 priceText = "₺899,90",
                 imageText = "P1"
@@ -701,7 +701,7 @@ private fun getRetailCategoryDetail(
             ),
             RetailCategoryProductItem(
                 id = 3,
-                name = "Günlük kullanım omuz çantası",
+                name = BBLocalization.Current.Get(key = "71e49e6e-e73e-4edd-88c3-3f835352d635", fallback = "Günlük kullanım omuz çantası"),
                 storeName = "Urban Touch",
                 priceText = "₺649,90",
                 imageText = "P3"

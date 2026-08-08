@@ -66,7 +66,7 @@ fun StoreProductListScreen(
     }
 
     var selectedSortOption by remember {
-        mutableStateOf("Öne çıkan")
+        mutableStateOf(BBLocalization.Current.Get(key = "d02a9b8b-001b-4e99-9073-9150016441f3", fallback = "Öne çıkan"))
     }
 
     var favoriteProductIds by remember {
@@ -128,7 +128,7 @@ fun StoreProductListScreen(
                 product.Price
             }
 
-            "En yüksek fiyat" -> searchFilteredProducts.sortedByDescending { product ->
+            BBLocalization.Current.Get(key = "a6913ebd-df97-42c0-9fa5-2138d2cd73e1", fallback = "En yüksek fiyat") -> searchFilteredProducts.sortedByDescending { product ->
                 product.Price
             }
 
@@ -142,9 +142,9 @@ fun StoreProductListScreen(
 
     val sortOptions = remember {
         listOf(
-            "Öne çıkan",
+            BBLocalization.Current.Get(key = "d02a9b8b-001b-4e99-9073-9150016441f3", fallback = "Öne çıkan"),
             BBLocalization.Current.Get(key = "c4fa944e-eb81-40dd-80f6-4209c78db57c", fallback = "En düşük fiyat"),
-            "En yüksek fiyat",
+            BBLocalization.Current.Get(key = "a6913ebd-df97-42c0-9fa5-2138d2cd73e1", fallback = "En yüksek fiyat"),
             BBLocalization.Current.Get(key = "6788b820-f4b2-470b-92f8-7a8470387d4e", fallback = "Yeni Gelenler")
         )
     }
@@ -183,7 +183,7 @@ fun StoreProductListScreen(
                     modifier = Modifier.padding(
                         horizontal = BBSpacing.PageHorizontal
                     ),
-                    title = "Mağaza Ürünleri"
+                    title = BBLocalization.Current.Get(key = "c8bd0ce4-56e5-4b39-bca3-33a6fcfbdcdf", fallback = "Mağaza Ürünleri")
                 )
 
                 StoreProductListHorizontalFilters(
@@ -221,7 +221,7 @@ fun StoreProductListScreen(
                 !State.ErrorMessage.isNullOrBlank() &&
                         products.isEmpty() -> {
                     StoreProductListError(
-                        message = State.ErrorMessage ?: "Ürünler yüklenemedi."
+                        message = State.ErrorMessage ?: BBLocalization.Current.Get(key = "0a4c4d79-c42d-473a-8f38-23d57c89bbbe", fallback = "Ürünler yüklenemedi.")
                     )
                 }
 
@@ -331,7 +331,7 @@ private fun StoreProductListResultHeader(
         )
 
         Text(
-            text = "Mağaza ürünleri",
+            text = BBLocalization.Current.Get(key = "845e87d3-d457-473f-8359-3efbf74746d4", fallback = "Mağaza ürünleri"),
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -362,7 +362,7 @@ private fun StoreProductListLoading() {
         )
 
         Text(
-            text = "Mağaza ürünleri yükleniyor...",
+            text = BBLocalization.Current.Get(key = "f1849aad-bdb6-4e9e-8e93-ec17941da932", fallback = "Mağaza ürünleri yükleniyor..."),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -379,7 +379,7 @@ private fun StoreProductListError(
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Ürünler alınamadı",
+            text = BBLocalization.Current.Get(key = "0a4c4d79-c42d-473a-8f38-23d57c89bbbe", fallback = "Ürünler alınamadı"),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold
@@ -407,7 +407,7 @@ private fun StoreProductListEmpty() {
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Ürün bulunamadı",
+            text = BBLocalization.Current.Get(key = "9afc052e-e2bf-413d-81c6-461bfc3c9174", fallback = "Ürün bulunamadı"),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold
@@ -420,7 +420,7 @@ private fun StoreProductListEmpty() {
         )
 
         Text(
-            text = "Arama veya filtre seçimini değiştirerek tekrar deneyebilirsin.",
+            text = BBLocalization.Current.Get(key = "59f50847-365f-4959-b050-641d7c1e18cc", fallback = "Arama veya filtre seçimini değiştirerek tekrar deneyebilirsin."),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

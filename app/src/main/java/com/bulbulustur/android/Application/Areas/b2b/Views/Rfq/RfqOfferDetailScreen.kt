@@ -140,7 +140,7 @@ fun RfqOfferDetailScreen(
             },
             title = {
                 Text(
-                    text = "Satıcıya mesaj gönder",
+                    text = BBLocalization.Current.Get(key = "c057af1a-9235-4700-8f57-a8ea89556bf7", fallback = "Satıcıya mesaj gönder"),
                     style = BbTypography.titleMedium
                 )
             },
@@ -150,7 +150,7 @@ fun RfqOfferDetailScreen(
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
                 ) {
                     Text(
-                        text = "Teklif hakkında satıcıya iletmek istediğiniz mesajı yazın.",
+                        text = BBLocalization.Current.Get(key = "4302c892-bd4d-4361-a77f-72c1805de7bf", fallback = "Teklif hakkında satıcıya iletmek istediğiniz mesajı yazın."),
                         style = BbTypography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -161,7 +161,7 @@ fun RfqOfferDetailScreen(
                             messageText = it
                         },
                         label = BBLocalization.Current.Get(key = "74d3bcb0-a3c9-477f-82f1-c091809c5a00", fallback = "Mesaj"),
-                        placeholder = "Mesajınızı yazın...",
+                        placeholder = BBLocalization.Current.Get(key = "aeee1dfb-9298-4919-950b-833a9e982240", fallback = "Mesajınızı yazın..."),
                         minLines = 4,
                         maxLines = 8
                     )
@@ -188,7 +188,7 @@ fun RfqOfferDetailScreen(
                 ) {
                     Text(
                         text = if (isSendingMessage) {
-                            "Gönderiliyor..."
+                            BBLocalization.Current.Get(key = "747533e0-13c8-4b49-82ca-ebf9fea6b37f", fallback = "Gönderiliyor...")
                         } else {
                             BBLocalization.Current.Get(key = "1bba90af-aa63-41f8-bd0d-b51c4477afd7", fallback = "")
                         }
@@ -202,7 +202,7 @@ fun RfqOfferDetailScreen(
                         showMessageDialog = false
                     }
                 ) {
-                    Text(text = "Vazgeç")
+                    Text(text = BBLocalization.Current.Get(key = "18a6f5c0-ab35-483d-8691-fad99e9680f2", fallback = "Vazgeç"))
                 }
             }
         )
@@ -283,7 +283,7 @@ private fun RfqOfferInfoCard(
 
             RfqOfferInfoRow(
                 icon = Icons.Outlined.RequestQuote,
-                title = "Bağlı RFQ",
+                title = BBLocalization.Current.Get(key = "71d5c915-7070-4504-8038-de18d51c4437", fallback = "Bağlı RFQ"),
                 value = "RFQ-${offer.BuyerRequestId}"
             )
 
@@ -310,14 +310,14 @@ private fun RfqOfferMessageCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             Text(
-                text = "Teklif Açıklaması",
+                text = BBLocalization.Current.Get(key = "d0f64b7c-a2f8-4479-8b25-39b21a907219", fallback = "Teklif Açıklaması"),
                 style = BbTypography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
                 text = offer.OfferDetail.ifBlank {
-                    "Teklif açıklaması bulunmuyor."
+                    BBLocalization.Current.Get(key = "0dc47331-859b-4760-98fb-04624b4dc27f", fallback = "Teklif açıklaması bulunmuyor.")
                 },
                 style = BbTypography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -378,7 +378,7 @@ private fun RfqOfferActionCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             BbButton(
-                text = "Satıcıyı Gör",
+                text = BBLocalization.Current.Get(key = "cbbc18bc-5a0a-4dee-9d39-c470aba8a51b", fallback = "Satıcıyı Gör"),
                 onClick = onSellerClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Light,
@@ -418,7 +418,7 @@ private fun RfqOfferDetailLoadingCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Teklif detayı yükleniyor...",
+            text = BBLocalization.Current.Get(key = "6fa8b424-23e4-4e5c-8ca5-025841b0d7b2", fallback = "Teklif detayı yükleniyor..."),
             style = BbTypography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

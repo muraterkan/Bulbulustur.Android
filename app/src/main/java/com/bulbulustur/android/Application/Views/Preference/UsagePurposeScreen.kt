@@ -52,7 +52,7 @@ fun UsagePurposeScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Kullanım Amacı",
+                title = BBLocalization.Current.Get(key = "ff489322-baaf-495e-b71a-9a9a37ad401e", fallback = "Kullanım Amacı"),
                 onBackClick = onBackClick
             )
         }
@@ -76,8 +76,8 @@ fun UsagePurposeScreen(
 
             item {
                 UsagePurposeOptionCard(
-                    title = "Perakende Alışveriş Yapıyorum",
-                    description = "Ürün Keşfi, sepet, sipariş ve favoriler benim için önemli.",
+                    title = BBLocalization.Current.Get(key = "275f5656-d923-4853-b4f6-56a67a24d4ef", fallback = "Perakende Alışveriş Yapıyorum"),
+                    description = BBLocalization.Current.Get(key = "58e82096-5777-4dff-86a4-9e2088fa4080", fallback = "Ürün Keşfi, sepet, sipariş ve favoriler benim için önemli."),
                     icon = Icons.Outlined.ShoppingBag,
                     isSelected = false,
                     onClick = onRetailClick
@@ -86,8 +86,8 @@ fun UsagePurposeScreen(
 
             item {
                 UsagePurposeOptionCard(
-                    title = "Toptan Alım Yapıyorum",
-                    description = "Tedarikçi, RFQ, teklif ve şirket profilleriyle ilerlemek istiyorum.",
+                    title = BBLocalization.Current.Get(key = "72ac1a72-61e2-4ac4-820d-07504f196bbc", fallback = "Toptan Alım Yapıyorum"),
+                    description = BBLocalization.Current.Get(key = "263d305f-474b-42df-9b33-0542e4350685", fallback = "Tedarikçi, RFQ, teklif ve şirket profilleriyle ilerlemek istiyorum."),
                     icon = Icons.Outlined.Business,
                     isSelected = true,
                     onClick = onWholesaleClick
@@ -96,8 +96,8 @@ fun UsagePurposeScreen(
 
             item {
                 UsagePurposeOptionCard(
-                    title = "Her İkisini de Kullanıyorum",
-                    description = "Hem perakende alışveriş hem de toptan ticaret akışlarını görmek istiyorum.",
+                    title = BBLocalization.Current.Get(key = "0cdeacf1-ae0f-414b-ae02-26085aaef637", fallback = "Her İkisini de Kullanıyorum"),
+                    description = BBLocalization.Current.Get(key = "fed718f4-5532-47dd-9ac6-ac9bbf49a37c", fallback = "Hem perakende alışveriş hem de toptan ticaret akışlarını görmek istiyorum."),
                     icon = Icons.Outlined.Storefront,
                     isSelected = false,
                     onClick = onBothClick
@@ -147,7 +147,7 @@ private fun UsagePurposeIntroCard() {
                 )
 
                 Text(
-                    text = "Bu seçimle ana sayfa, öneriler ve hızlı işlem kartları zamanla size daha uygun hale gelir.",
+                    text = BBLocalization.Current.Get(key = "f0aa49b8-017e-4d5e-8371-d21df2754d0d", fallback = "Bu seçimle ana sayfa, öneriler ve hızlı işlem kartları zamanla size daha uygun hale gelir."),
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

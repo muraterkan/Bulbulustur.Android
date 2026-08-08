@@ -83,8 +83,8 @@ private fun SubscriptionIntroCard() {
             SubscriptionIconBox(iconColor = BBColors.Yellow.Yellow800, backgroundColor = MaterialTheme.colorScheme.primaryContainer)
 
             Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)) {
-                Text(text = "Paket ve Üyelik Süreçleri", style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSurface)
-                Text(text = "Hesabınıza bağlı aktif veya geçmiş abonelikleri, dönem aralıklarını ve plan ücretlerini buradan takip edebilirsiniz.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(text = BBLocalization.Current.Get(key = "e6232031-8e86-4c3c-9804-d79a246c6248", fallback = "Paket ve Üyelik Süreçleri"), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSurface)
+                Text(text = BBLocalization.Current.Get(key = "13c4fe46-407f-4c6c-bd0d-6b5aaac51b7f", fallback = "Hesabınıza bağlı aktif veya geçmiş abonelikleri, dönem aralıklarını ve plan ücretlerini buradan takip edebilirsiniz."), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
     }
@@ -109,14 +109,14 @@ private fun SubscriptionCard(subscription: MemberSubscriptionDTO, onSubscription
                     Text(text = subscription.GetSubscriptionTitle(), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
                 }
 
-                SubscriptionStatusBadge(statusText = if (isActive) "Aktif Plan" else "Süresi Doldu", active = isActive)
+                SubscriptionStatusBadge(statusText = if (isActive) BBLocalization.Current.Get(key = "00bf5c04-31b1-4bb7-bd75-c324f3f06288", fallback = "Aktif Plan") else BBLocalization.Current.Get(key = "118b21aa-4c6f-483e-b20a-ba7779e4185e", fallback = "Süresi Doldu"), active = isActive)
             }
 
             SubscriptionPriceBox(priceText = subscription.GetPriceText())
 
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)) {
                 SubscriptionInfoBox(modifier = Modifier.weight(1f), title = "BAŞLANGIÇ", value = subscription.StartDate.ToSubscriptionDateText(), iconColor = BBColors.Blue.Blue600)
-                SubscriptionInfoBox(modifier = Modifier.weight(1f), title = "BİTİŞ", value = subscription.EndDate.ToSubscriptionDateText(), iconColor = BBColors.Orange.Orange600)
+                SubscriptionInfoBox(modifier = Modifier.weight(1f), title = BBLocalization.Current.Get(key = "ba2cca15-1d43-4b16-a4a9-e2e2bfbdcba6", fallback = "BİTİŞ"), value = subscription.EndDate.ToSubscriptionDateText(), iconColor = BBColors.Orange.Orange600)
             }
 
             BbButton(
@@ -141,7 +141,7 @@ private fun SubscriptionPriceBox(priceText: String) {
         Icon(imageVector = Icons.Outlined.CreditCard, contentDescription = null, tint = BBColors.Yellow.Yellow800, modifier = Modifier.size(BBIcon.Action))
 
         Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)) {
-            Text(text = "PLAN ÜCRETİ", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(text = BBLocalization.Current.Get(key = "5aec85b7-838d-49cf-b95c-3509952ab8df", fallback = "PLAN ÜCRETİ"), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Text(text = priceText, style = MaterialTheme.typography.titleMedium, color = BBColors.Yellow.Yellow800)
         }
     }
@@ -206,7 +206,7 @@ private fun SubscriptionEmptyState() {
         Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)) {
             SubscriptionIconBox(iconColor = BBColors.Yellow.Yellow800, backgroundColor = MaterialTheme.colorScheme.primaryContainer)
             Text(text = BBLocalization.Current.Get(key = "cf668625-d6eb-4c14-97de-fee71a127b64", fallback = "Abonelik bulunamadı"), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
-            Text(text = "Aktif veya geçmiş abonelik bilgileriniz oluştuğunda burada görüntülenir.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(text = BBLocalization.Current.Get(key = "628695b3-0260-4e4a-8f24-c751bcb585ed", fallback = "Aktif veya geçmiş abonelik bilgileriniz oluştuğunda burada görüntülenir."), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
 }

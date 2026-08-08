@@ -35,7 +35,6 @@ import com.bulbulustur.android.Application.Views.Logon.RegisterFinalState
 import com.bulbulustur.android.Application.Views.Logon.RegisterStartScreen
 import com.bulbulustur.android.Application.Views.Logon.SetNewPasswordScreen
 import com.bulbulustur.android.R
-import com.bulbulustur.android.businesslayer.Core.Enums.EApplicationLanguage
 import com.bulbulustur.android.businesslayer.Core.Model.MemberRegisterModel
 import kotlinx.coroutines.launch
 import androidx.compose.ui.res.stringResource
@@ -78,16 +77,7 @@ fun NavGraphBuilder.logonGraph(
 
         val googleWebClientId = stringResource(R.string.google_web_client_id)
 
-        val languageId =
-            when (
-                sessionState.Language
-            ) {
-                EApplicationLanguage.Turkish ->
-                    1
-
-                EApplicationLanguage.English ->
-                    2
-            }
+        val languageId = sessionState.Language.Id
 
         LaunchedEffect(
             logonState.IsLoginSuccessful
@@ -206,16 +196,7 @@ fun NavGraphBuilder.logonGraph(
         val logonState by
         logonController.State.collectAsState()
 
-        val languageId =
-            when (
-                sessionState.Language
-            ) {
-                EApplicationLanguage.Turkish ->
-                    1
-
-                EApplicationLanguage.English ->
-                    2
-            }
+        val languageId = sessionState.Language.Id
 
         LaunchedEffect(
             Unit
@@ -270,16 +251,7 @@ fun NavGraphBuilder.logonGraph(
         val logonState by
         logonController.State.collectAsState()
 
-        val languageId =
-            when (
-                sessionState.Language
-            ) {
-                EApplicationLanguage.Turkish ->
-                    1
-
-                EApplicationLanguage.English ->
-                    2
-            }
+        val languageId = sessionState.Language.Id
 
         val activationCode =
             backStackEntry.arguments
@@ -387,16 +359,7 @@ fun NavGraphBuilder.logonGraph(
         val logonState by
         logonController.State.collectAsState()
 
-        val languageId =
-            when (
-                sessionState.Language
-            ) {
-                EApplicationLanguage.Turkish ->
-                    1
-
-                EApplicationLanguage.English ->
-                    2
-            }
+        val languageId = sessionState.Language.Id
 
         LaunchedEffect(
             logonState.IsFirstDoorSuccessful
@@ -471,16 +434,7 @@ fun NavGraphBuilder.logonGraph(
                 ?.trim()
                 .orEmpty()
 
-        val languageId =
-            when (
-                sessionState.Language
-            ) {
-                EApplicationLanguage.Turkish ->
-                    1
-
-                EApplicationLanguage.English ->
-                    2
-            }
+        val languageId = sessionState.Language.Id
 
         LaunchedEffect(
             uuid,
@@ -793,16 +747,7 @@ fun NavGraphBuilder.logonGraph(
                     logonState.FirstDoorEmail
 
                 if (email.isNotBlank()) {
-                    val languageId =
-                        when (
-                            sessionState.Language
-                        ) {
-                            EApplicationLanguage.Turkish ->
-                                1
-
-                            EApplicationLanguage.English ->
-                                2
-                        }
+                    val languageId = sessionState.Language.Id
 
                     logonController.FirstDoorPost(
                         email =

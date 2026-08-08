@@ -106,7 +106,7 @@ fun DealsOfTheDayListScreen(
                 onSearchTextChange = {
                     searchText = it
                 },
-                placeholder = "Fırsat ürünü ara",
+                placeholder = BBLocalization.Current.Get(key = "2c5e3e73-42da-414b-bd7e-16f91bd736e2", fallback = "Fırsat ürünü ara"),
                 onSearchClick = {
                     Unit
                 },
@@ -165,8 +165,8 @@ fun DealsOfTheDayListScreen(
                         }
                     ) {
                         DealsInfoCard(
-                            title = "Fırsatlar yükleniyor",
-                            description = "Bugünün fırsatları getiriliyor.",
+                            title = BBLocalization.Current.Get(key = "4a0fbe2f-6640-48d6-acad-51d26948d497", fallback = "Fırsatlar yükleniyor"),
+                            description = BBLocalization.Current.Get(key = "ac1b0db3-5f98-4231-9747-03fc76a75c13", fallback = "Bugünün fırsatları getiriliyor."),
                             showProgress = true
                         )
                     }
@@ -180,7 +180,7 @@ fun DealsOfTheDayListScreen(
                         }
                     ) {
                         DealsInfoCard(
-                            title = "Fırsatlar alınamadı",
+                            title = BBLocalization.Current.Get(key = "27302aa9-04d6-42ca-8a49-a2bc5216ca03", fallback = "Fırsatlar alınamadı"),
                             description = errorMessage
                         )
                     }
@@ -195,9 +195,9 @@ fun DealsOfTheDayListScreen(
                         DealsInfoCard(
                             title = BBLocalization.Current.Get(key = "fa7f36dd-b420-431a-9cc1-132b39b3836c", fallback = "Fırsat bulunamadı"),
                             description = if (searchText.isBlank()) {
-                                "Şu anda listelenecek fırsat bulunmuyor."
+                                BBLocalization.Current.Get(key = "7abf08a7-0d8a-4d0d-a613-05db00e97e9a", fallback = "Şu anda listelenecek fırsat bulunmuyor.")
                             } else {
-                                "Arama kriterine uygun fırsat bulunamadı."
+                                BBLocalization.Current.Get(key = "9a91b3f0-6b86-4861-be4a-3538662a22b3", fallback = "Arama kriterine uygun fırsat bulunamadı.")
                             }
                         )
                     }
@@ -263,7 +263,7 @@ private fun DealsHero(
             )
 
             Text(
-                text = "Kampanyalı ürünleri, avantajlı fiyatları ve alışveriş fırsatlarını tek sayfada keşfet.",
+                text = BBLocalization.Current.Get(key = "a5ee4c60-0154-4a79-a4fd-508a542d5164", fallback = "Kampanyalı ürünleri, avantajlı fiyatları ve alışveriş fırsatlarını tek sayfada keşfet."),
                 style = MaterialTheme.typography.bodyMedium,
                 color =
                     MaterialTheme.colorScheme.onPrimaryContainer
@@ -338,7 +338,7 @@ private fun DealsSectionHeader() {
         )
 
         Text(
-            text = "Bugün öne çıkan indirimli ürünleri incele ve alışverişe devam et.",
+            text = BBLocalization.Current.Get(key = "9d09125c-882e-40d2-9143-35d8d784227e", fallback = "Bugün öne çıkan indirimli ürünleri incele ve alışverişe devam et."),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -580,7 +580,7 @@ private fun DealProductCard(
                     )
                 ) {
                     DealTag(
-                        text = "Yoğun İlgi",
+                        text = BBLocalization.Current.Get(key = "9a123e2d-a73b-4d68-a090-0272bdec76d5", fallback = "Yoğun İlgi"),
                         highlighted = true
                     )
 

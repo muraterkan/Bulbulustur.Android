@@ -1,5 +1,7 @@
 package com.bulbulustur.android.businesslayer.Core.Repository
 
+import java.net.URLEncoder
+
 import com.bulbulustur.android.businesslayer.Core.DTO.B2CProductDataDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.B2CProductFilterDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductDTO
@@ -9,6 +11,7 @@ import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.ProductUpda
 import com.bulbulustur.android.businesslayer.Core.Network.ApiClient
 import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
 import com.bulbulustur.android.businesslayer.Core.Util.Result
+import com.bulbulustur.android.businesslayer.Core.Util.PaginatedList
 
 class ProductRepository(
     private val apiClient: ApiClient = ApiClient
@@ -85,6 +88,15 @@ class ProductRepository(
                 "languageId=$languageId" +
                         "&productId=$productId" +
                         "&variantId=$variantId"
+        )
+    }
+
+    override suspend fun GetSearchingProductsAsync(storeId: Int, key: String, page: Int, pageSize: Int, sortOrder: String): Result<PaginatedList<ProductDTO>> {
+        val encodedKey = URLEncoder.encode(key.trim(), "UTF-8")
+        return apiClient.GetAsync(
+            baseUrl = ApiRoutes.B2C_PRODUCT_BASE_URL,
+            method = "GetSearchingProductsAsync",
+            query = "storeId=$storeId&key=$encodedKey&page=$page&pageSize=$pageSize&sortOrder=$sortOrder"
         )
     }
 }

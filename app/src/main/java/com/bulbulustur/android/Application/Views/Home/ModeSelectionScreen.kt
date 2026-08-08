@@ -50,7 +50,9 @@ fun ModeSelectionScreen(
     selectedLanguageId: Int = 1,
     isLanguageLoading: Boolean = false,
     languageErrorMessage: String? = null,
-    onLanguageSelected: (Int) -> Unit = {},
+    
+        onLanguageSelected: (Int, String) -> Unit = { _, _ -> }
+    ,
     onRetailClick: () -> Unit,
     onWholesaleClick: () -> Unit,
     onRfqClick: () -> Unit
@@ -73,7 +75,27 @@ fun ModeSelectionScreen(
         horizontalPadding = BBSpacing.PageHorizontal,
         headerTopSpace = BBSpacing.Space5,
         headerBottomSpace = BBSpacing.Space12,
-        onLanguageIdSelected = onLanguageSelected
+        
+onLanguageIdSelected = { selectedLanguageId ->
+            val selectedLanguage = languages.firstOrNull { language ->
+                language.SystemDescLanguageId == selectedLanguageId
+            }
+
+            val selectedLanguageCode =
+                selectedLanguage?.LanguageIsoCode
+                    ?.trim()
+                    .orEmpty()
+
+            
+if (selectedLanguage != null) {
+                onLanguageSelected(
+                    selectedLanguage.SystemDescLanguageId,
+                    selectedLanguageCode
+                )
+            }
+
+        }
+
     ) {
         ModeSelectionContent(
             isDark = isDark,
@@ -106,7 +128,7 @@ private fun ModeSelectionContent(
         )
 
         Text(
-            text = "Alışveriş Modunu Seç",
+            text = BBLocalization.Current.Get(key = "b233e234-fa0a-4ff7-a02e-4f639cb80436", fallback = "Alışveriş Modunu Seç"),
             style = BbTypography.headlineSmall,
             fontWeight = FontWeight.ExtraBold,
             color = if (isDark) {
@@ -118,7 +140,7 @@ private fun ModeSelectionContent(
         )
 
         Text(
-            text = "Perakende alışverişe veya toptan ticaret akışına hızlıca giriş yap.",
+            text = BBLocalization.Current.Get(key = "925a2cb3-60e6-482d-baf1-fc47b9bacc87", fallback = "Perakende alışverişe veya toptan ticaret akışına hızlıca giriş yap."),
             modifier = Modifier.padding(
                 top = BBSpacing.Space2
             ),
@@ -142,8 +164,8 @@ private fun ModeSelectionContent(
             )
         ) {
             ModeSelectionCommerceCard(
-                title = "Perakende Alışveriş",
-                description = "Ürünleri keşfet, favorilerine ekle ve güvenle sepetine taşı.",
+                title = BBLocalization.Current.Get(key = "adfb92da-e66b-4549-b73e-ebc51a56acbb", fallback = "Perakende Alışveriş"),
+                description = BBLocalization.Current.Get(key = "cdfcd1fc-7f05-42ea-9022-1784151cd771", fallback = "Ürünleri keşfet, favorilerine ekle ve güvenle sepetine taşı."),
                 icon = Icons.Outlined.LocalMall,
                 containerColor = if (isDark) {
                     BBColors.Ink.Ink800
@@ -169,8 +191,8 @@ private fun ModeSelectionContent(
             )
 
             ModeSelectionCommerceCard(
-                title = "Toptan Ticaret",
-                description = "Tedarikçileri, toplu ürünleri ve teklif süreçlerini keşfet.",
+                title = BBLocalization.Current.Get(key = "f1aa464c-b1eb-49cd-a651-3802350f4af1", fallback = "Toptan Ticaret"),
+                description = BBLocalization.Current.Get(key = "190ad21d-edd5-47e3-832f-7a1278591753", fallback = "Tedarikçileri, toplu ürünleri ve teklif süreçlerini keşfet."),
                 icon = Icons.Outlined.Business,
                 containerColor = if (isDark) {
                     BBColors.Ink.Ink800
@@ -197,7 +219,7 @@ private fun ModeSelectionContent(
 
             ModeSelectionCommerceCard(
                 title = BBLocalization.Current.Get(key = "203882aa-6872-41de-a0db-26b13a6389e3", fallback = ""),
-                description = "Toptan alım ihtiyacını belirt, tedarikçilerden teklif al.",
+                description = BBLocalization.Current.Get(key = "44ffbd4d-725c-4094-be44-6151812303a6", fallback = "Toptan alım ihtiyacını belirt, tedarikçilerden teklif al."),
                 icon = Icons.Outlined.RequestQuote,
                 containerColor = if (isDark) {
                     BBColors.Ink.Ink900
@@ -258,7 +280,7 @@ private fun ModeSelectionEyebrow(
         )
     ) {
         Text(
-            text = "Bulbulustur Alıcı Uygulaması",
+            text = BBLocalization.Current.Get(key = "e835604f-584b-4348-82b7-388c1d285d2d", fallback = "Bulbulustur Alıcı Uygulaması"),
             modifier = Modifier.padding(
                 horizontal = BBSpacing.Space4,
                 vertical = BBSpacing.Space2

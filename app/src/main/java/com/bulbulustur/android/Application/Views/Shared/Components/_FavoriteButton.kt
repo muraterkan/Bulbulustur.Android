@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Shared.Components
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -72,9 +74,9 @@ private fun BbFavoriteIconButtonContent(
                 Icons.Outlined.FavoriteBorder
             },
             contentDescription = if (isFavorite) {
-                "Favorilerden çıkar"
+                BBLocalization.Current.Get(key = "ed502881-8152-44af-8238-accd89828c46", fallback = "Favorilerden çıkar")
             } else {
-                "Favorilere ekle"
+                BBLocalization.Current.Get(key = "78ef79d0-8390-42b9-a896-d370aa0d3928", fallback = "Favorilere ekle")
             },
             tint = if (isFavorite) {
                 BBColors.Danger

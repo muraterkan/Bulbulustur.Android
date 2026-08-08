@@ -190,7 +190,7 @@ private fun WholesaleMenuHero() {
             .padding(BBSpacing.Space5)
     ) {
         WholesaleMenuBadge(
-            text = "Toptan Kategori Keşfi"
+            text = BBLocalization.Current.Get(key = "19785118-e034-45bc-9f8d-067e4f2325ab", fallback = "Toptan Kategori Keşfi")
         )
 
         Spacer(
@@ -198,7 +198,7 @@ private fun WholesaleMenuHero() {
         )
 
         Text(
-            text = "Sektörleri, tedarikçileri ve toptan ürün gruplarını keşfet",
+            text = BBLocalization.Current.Get(key = "80b58e1f-101b-430b-8168-ad978ff042b3", fallback = "Sektörleri, tedarikçileri ve toptan ürün gruplarını keşfet"),
             style = MaterialTheme.typography.headlineSmall,
             color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold
@@ -209,7 +209,7 @@ private fun WholesaleMenuHero() {
         )
 
         Text(
-            text = "Ana kategoriye gir, kategori ana sayfasında alt kırılımlar, tedarikçiler, ürün Vitrinleri ve teklif akışlarıyla devam et.",
+            text = BBLocalization.Current.Get(key = "73907a4f-cb17-46f7-90c2-0feb546193ec", fallback = "Ana kategoriye gir, kategori ana sayfasında alt kırılımlar, tedarikçiler, ürün Vitrinleri ve teklif akışlarıyla devam et."),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -316,7 +316,7 @@ private fun WholesaleMenuSectionTitle() {
             .padding(top = BBSpacing.Space2)
     ) {
         Text(
-            text = "Ana Kategoriler",
+            text = BBLocalization.Current.Get(key = "c0b1dbee-2ead-42f0-9803-724dc48c055c", fallback = "Ana Kategoriler"),
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold
@@ -327,7 +327,7 @@ private fun WholesaleMenuSectionTitle() {
         )
 
         Text(
-            text = "Alt Kategoriler kategori ana sayfasında listelenecek.",
+            text = BBLocalization.Current.Get(key = "9fa20011-37a2-4328-95a2-9bad52bbf8b4", fallback = "Alt Kategoriler kategori ana sayfasında listelenecek."),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -393,7 +393,7 @@ private fun WholesaleMenuCategoryCard(
                 )
 
                 Text(
-                    text = "Sektöre gir",
+                    text = BBLocalization.Current.Get(key = "eb772521-85ff-4a4e-89da-363c53e2d712", fallback = "Sektöre gir"),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center
@@ -440,23 +440,23 @@ private data class WholesaleMenuCategory(
 private fun wholesaleMenuCategories(): List<WholesaleMenuCategory> {
     return listOf(
         WholesaleMenuCategory(1, "Otomobil Parça ve Aksesuarları"),
-        WholesaleMenuCategory(2, "Tüketici Elektroniği"),
-        WholesaleMenuCategory(3, "Elektronik Parçalar"),
+        WholesaleMenuCategory(2, BBLocalization.Current.Get(key = "fafed4f2-263a-4555-816b-3ccc58c31b77", fallback = "Tüketici Elektroniği")),
+        WholesaleMenuCategory(3, BBLocalization.Current.Get(key = "3fef55c6-116c-43de-bc54-9d81d571e7dd", fallback = "Elektronik Parçalar")),
         WholesaleMenuCategory(4, "Moda Aksesuarları ve Ayakkabılar"),
         WholesaleMenuCategory(5, "Moda Giyim ve Kumaşlar"),
-        WholesaleMenuCategory(6, "Yiyecek, Ev ve Evcil Hayvanlar"),
+        WholesaleMenuCategory(6, BBLocalization.Current.Get(key = "30b90139-2535-4203-8f21-2899850dd34e", fallback = "Yiyecek, Ev ve Evcil Hayvanlar")),
         WholesaleMenuCategory(7, "Mobilya ve Ev Dekorasyonu"),
-        WholesaleMenuCategory(8, "Hediyeler ve Primer"),
-        WholesaleMenuCategory(9, "Donanım"),
+        WholesaleMenuCategory(8, BBLocalization.Current.Get(key = "6d690260-bfdc-4076-8f76-6ba927051199", fallback = "Hediyeler ve Primer")),
+        WholesaleMenuCategory(9, BBLocalization.Current.Get(key = "e2d9ee4a-f543-4223-a2a9-729651759f4a", fallback = "Donanım")),
         WholesaleMenuCategory(10, "Sağlık ve Kişisel Bakım"),
-        WholesaleMenuCategory(11, "Ev Aletleri"),
-        WholesaleMenuCategory(12, "Endüstriyel Malzemeler"),
-        WholesaleMenuCategory(13, "Makine ve Ekipman"),
+        WholesaleMenuCategory(11, BBLocalization.Current.Get(key = "ef6ae962-4218-4763-83be-64fd949ff2af", fallback = "Ev Aletleri")),
+        WholesaleMenuCategory(12, BBLocalization.Current.Get(key = "2ac5d1f3-1bf3-4f8d-b873-c05e097d643c", fallback = "Endüstriyel Malzemeler")),
+        WholesaleMenuCategory(13, BBLocalization.Current.Get(key = "0ad29899-bac8-4bc2-88f7-cc2af6be001e", fallback = "Makine ve Ekipman")),
         WholesaleMenuCategory(14, "Mobil Elektronik"),
         WholesaleMenuCategory(15, "Anne, Çocuk ve Oyuncaklar"),
         WholesaleMenuCategory(16, "Baskı ve Paketleme"),
         WholesaleMenuCategory(17, "Akıllı Yaşam Elektroniği"),
-        WholesaleMenuCategory(18, "Spor ve Dış Mekan")
+        WholesaleMenuCategory(18, BBLocalization.Current.Get(key = "5deb432b-d645-40d7-abc6-d4334d58312e", fallback = "Spor ve Dış Mekan"))
     )
 }
 

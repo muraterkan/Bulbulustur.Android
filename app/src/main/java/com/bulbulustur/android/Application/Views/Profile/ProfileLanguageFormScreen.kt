@@ -102,7 +102,7 @@ fun ProfileLanguageFormScreen(
         
         bottomBar = {
             BbProfileStickySaveBar(
-                text = "Dili Kaydet",
+                text = BBLocalization.Current.Get(key = "0f22cd2d-a7c6-4a2b-bf8d-657e9dc0800b", fallback = "Dili Kaydet"),
                 enabled = canSave,
                 isSaving = isLoading,
                 onClick = onSaveClick
@@ -140,14 +140,14 @@ fun ProfileLanguageFormScreen(
                         )
 
                         Text(
-                            text = "Konuştuğun Dili Ekle",
+                            text = BBLocalization.Current.Get(key = "eff02c15-d71a-4071-9120-fd02a711a869", fallback = "Konuştuğun Dili Ekle"),
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.onSurface,
                             fontWeight = FontWeight.Bold
                         )
 
                         Text(
-                            text = "Dili ve o dildeki konuşma seviyeni seç.",
+                            text = BBLocalization.Current.Get(key = "3afa32a0-fbbf-4c6f-b896-282ce832bb03", fallback = "Dili ve o dildeki konuşma seviyeni seç."),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -170,9 +170,9 @@ fun ProfileLanguageFormScreen(
                             options = languageOptions,
                             onValueChange = onLanguageSelected,
                             label = BBLocalization.Current.Get(key = "5259eecf-5b93-46fb-bf7c-34acd890bf9a", fallback = "Dil"),
-                            placeholder = "Konuştuğun dili seç",
-                            searchPlaceholder = "Dil ara...",
-                            helperText = "Listede arama yaparak bir dil seçebilirsin.",
+                            placeholder = BBLocalization.Current.Get(key = "22c536ea-5c90-4b74-8f76-7830c149cff1", fallback = "Konuştuğun dili seç"),
+                            searchPlaceholder = BBLocalization.Current.Get(key = "70b6f5f1-b451-46a5-a170-c6857eb72f7d", fallback = "Dil ara..."),
+                            helperText = BBLocalization.Current.Get(key = "75447192-1caa-4d5f-b18f-213c195026e2", fallback = "Listede arama yaparak bir dil seçebilirsin."),
                             enabled = !isLoading,
                             maximumVisibleOptionCount = 100
                         )
@@ -181,9 +181,9 @@ fun ProfileLanguageFormScreen(
                             selectedValue = selectedLanguageLevelId,
                             options = levelOptions,
                             onValueChange = onLanguageLevelSelected,
-                            label = "Dil Seviyesi",
-                            placeholder = "Seviye seç",
-                            helperText = "Bu dili ne düzeyde konuştuğunu belirt.",
+                            label = BBLocalization.Current.Get(key = "f233c7c9-99a3-4ec6-9938-31aaf7317518", fallback = "Dil Seviyesi"),
+                            placeholder = BBLocalization.Current.Get(key = "70a1ba8c-e8be-443c-8042-3e6a16e32abf", fallback = "Seviye seç"),
+                            helperText = BBLocalization.Current.Get(key = "079482a4-146e-4ef8-ace9-d1b97f57c9f9", fallback = "Bu dili ne düzeyde konuştuğunu belirt."),
                             enabled = !isLoading
                         )
                     }
@@ -214,7 +214,7 @@ fun ProfileLanguageFormScreen(
                         padding = BbCardPadding.Medium
                     ) {
                         Text(
-                            text = "Dil listesi sunucudan boş döndü.",
+                            text = BBLocalization.Current.Get(key = "5b9009c0-156a-481c-b423-6d2aaf3ebf51", fallback = "Dil listesi sunucudan boş döndü."),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.error
                         )
@@ -240,7 +240,7 @@ fun ProfileLanguageFormScreen(
                             )
 
                             Text(
-                                text = "Dil seviyesi listesi sunucudan boş döndü.",
+                                text = BBLocalization.Current.Get(key = "2e88e080-2056-4ed1-9a91-517a18180a21", fallback = "Dil seviyesi listesi sunucudan boş döndü."),
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.error
                             )

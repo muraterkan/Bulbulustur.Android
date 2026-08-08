@@ -107,8 +107,8 @@ fun AccountSettingsScreen(
 
             item {
                 SettingsSectionTitle(
-                    title = "Tercihler",
-                    subtitle = "Dil, görünüm ve bölgesel tercihlerini yönet."
+                    title = BBLocalization.Current.Get(key = "f5dc72ff-667e-4b30-977a-d92df95518dd", fallback = "Tercihler"),
+                    subtitle = BBLocalization.Current.Get(key = "4df352cc-9caa-450e-80d3-ef1437fd338d", fallback = "Dil, görünüm ve bölgesel tercihlerini yönet.")
                 )
             }
 
@@ -124,7 +124,7 @@ fun AccountSettingsScreen(
                     SettingsDashedDivider()
 
                     SettingsMenuRow(
-                        title = "Görünüm",
+                        title = BBLocalization.Current.Get(key = "ad70cf0b-cc2b-48f5-b015-292828278234", fallback = "Görünüm"),
                         value = themeName,
                         icon = Icons.Outlined.Palette,
                         onClick = onAppearanceClick
@@ -133,7 +133,7 @@ fun AccountSettingsScreen(
                     SettingsDashedDivider()
 
                     SettingsMenuRow(
-                        title = "Ülke ve Bölge",
+                        title = BBLocalization.Current.Get(key = "6d04e51f-f2f0-4a9d-95e8-696daefd0929", fallback = "Ülke ve Bölge"),
                         value = countryName,
                         icon = Icons.Outlined.Public,
                         onClick = onRegionClick
@@ -151,7 +151,7 @@ fun AccountSettingsScreen(
                     SettingsDashedDivider()
 
                     SettingsMenuRow(
-                        title = "Bildirim ve İzinler",
+                        title = BBLocalization.Current.Get(key = "2cb7179b-eb4b-46fd-bae3-9265b9f9bc02", fallback = "Bildirim ve İzinler"),
                         value = null,
                         icon = Icons.Outlined.Notifications,
                         onClick = onCommunicationPreferenceClick
@@ -161,15 +161,15 @@ fun AccountSettingsScreen(
 
             item {
                 SettingsSectionTitle(
-                    title = "Platform",
-                    subtitle = "Uygulama bilgileri ve yasal metinler."
+                    title = BBLocalization.Current.Get(key = "41fe178c-0054-4c06-8afd-86c7ad29b815", fallback = "Platform"),
+                    subtitle = BBLocalization.Current.Get(key = "bd9c9ebe-1cce-49c4-a53d-88701764e9f1", fallback = "Uygulama bilgileri ve yasal metinler.")
                 )
             }
 
             item {
                 SettingsMenuGroup {
                     SettingsMenuRow(
-                        title = "Uygulama Hakkında",
+                        title = BBLocalization.Current.Get(key = "fc0a3fe5-4123-4ec5-8499-fccd3efd88d3", fallback = "Uygulama Hakkında"),
                         value = null,
                         icon = Icons.Outlined.Info,
                         onClick = onAboutThisAppClick
@@ -178,7 +178,7 @@ fun AccountSettingsScreen(
                     SettingsDashedDivider()
 
                     SettingsMenuRow(
-                        title = "Yasal Metinler ve Politikalar",
+                        title = BBLocalization.Current.Get(key = "8aa96ea1-dff6-4eda-86b6-81d12a74cbb6", fallback = "Yasal Metinler ve Politikalar"),
                         value = null,
                         icon = Icons.Outlined.RequestQuote,
                         onClick = onLegalPoliciesClick
@@ -207,14 +207,14 @@ private fun SettingsProtectionBlock(
             )
         ) {
             Text(
-                text = "Hesabın Güvende",
+                text = BBLocalization.Current.Get(key = "23ac9a7c-cf38-4887-a332-dcedcf9e03ee", fallback = "Hesabın Güvende"),
                 style = BbTypography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
-                text = "Hesap, gizlilik ve izin ayarlarını tek merkezden yönet.",
+                text = BBLocalization.Current.Get(key = "2960bc80-a8fc-4155-be22-6de6c23ea373", fallback = "Hesap, gizlilik ve izin ayarlarını tek merkezden yönet."),
                 style = BbTypography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -254,7 +254,7 @@ private fun SettingsProtectionBlock(
             ) {
                 SettingsQuickCard(
                     modifier = Modifier.weight(1f),
-                    title = "İzinler",
+                    title = BBLocalization.Current.Get(key = "ec9bccd0-1f0c-47bb-abd7-9d3cc80f75f2", fallback = "İzinler"),
                     icon = Icons.Outlined.Lock,
                     onClick = onPermissionsClick
                 )

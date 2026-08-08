@@ -149,7 +149,7 @@ fun ChangeEmailScreen(
                         message.isNotBlank()
                     }?.let { message ->
                         EmailMessageBox(
-                            title = "İşlem Tamamlanamadı",
+                            title = BBLocalization.Current.Get(key = "aee471fe-aa14-4587-897c-f5a3489aa980", fallback = "İşlem Tamamlanamadı"),
                             message = message,
                             type = EmailMessageType.Error
                         )
@@ -159,14 +159,14 @@ fun ChangeEmailScreen(
                         message.isNotBlank()
                     }?.let { message ->
                         EmailMessageBox(
-                            title = "Doğrulama Bağlantısı Gönderildi",
+                            title = BBLocalization.Current.Get(key = "e88e7166-1495-47d5-84cb-c957eedef5b1", fallback = "Doğrulama Bağlantısı Gönderildi"),
                             message = message,
                             type = EmailMessageType.Success
                         )
                     }
 
                     BbButton(
-                        text = "Doğrulama Bağlantısı Gönder",
+                        text = BBLocalization.Current.Get(key = "3bd173f1-2a4e-41b6-a560-738fee4b4324", fallback = "Doğrulama Bağlantısı Gönder"),
                         onClick = {
                             onSaveClick(
                                 newEmailState.value.trim(),
@@ -193,7 +193,7 @@ private fun ChangeEmailIntroCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Yeni e-posta adresinize bir doğrulama bağlantısı gönderilir. E-posta adresiniz, bağlantıyı açtıktan sonra değiştirilir.",
+            text = BBLocalization.Current.Get(key = "606142ba-9b1c-4ccc-853b-a99961d1a8f7", fallback = "Yeni e-posta adresinize bir doğrulama bağlantısı gönderilir. E-posta adresiniz, bağlantıyı açtıktan sonra değiştirilir."),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -217,14 +217,14 @@ private fun CurrentEmailBox(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
         ) {
             Text(
-                text = "Mevcut E-Posta",
+                text = BBLocalization.Current.Get(key = "24439f56-a3af-4d1c-8748-f401d49f813b", fallback = "Mevcut E-Posta"),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Text(
                 text = currentEmail.ifBlank {
-                    "E-posta bilgisi bulunamadı"
+                    BBLocalization.Current.Get(key = "7b48f474-d8fb-428a-b336-d189dc8547ab", fallback = "E-posta bilgisi bulunamadı")
                 },
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface
@@ -280,7 +280,7 @@ private fun NewEmailSupportingText(
     when {
         newEmail.isBlank() -> {
             Text(
-                text = "Yeni e-posta adresinizi yazın.",
+                text = BBLocalization.Current.Get(key = "8528e208-c647-4970-8d89-3b3422d6ff63", fallback = "Yeni e-posta adresinizi yazın."),
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
@@ -294,14 +294,14 @@ private fun NewEmailSupportingText(
 
         validation.IsSameEmail -> {
             Text(
-                text = "Yeni e-posta mevcut e-posta ile aynı olamaz.",
+                text = BBLocalization.Current.Get(key = "46f817dc-1e38-487d-a557-b91a870b99a2", fallback = "Yeni e-posta mevcut e-posta ile aynı olamaz."),
                 color = MaterialTheme.colorScheme.error
             )
         }
 
         else -> {
             Text(
-                text = "E-posta formatı uygun görünüyor.",
+                text = BBLocalization.Current.Get(key = "95549e1f-4a9f-43dc-8bf1-3788c5978623", fallback = "E-posta formatı uygun görünüyor."),
                 color = BBColors.Green.Green700
             )
         }
@@ -316,28 +316,28 @@ private fun ReNewEmailSupportingText(
     when {
         reNewEmail.isBlank() -> {
             Text(
-                text = "Yeni e-posta adresinizi tekrar yazın.",
+                text = BBLocalization.Current.Get(key = "ee5b938b-eba0-4f18-bcef-b96d56bef2cf", fallback = "Yeni e-posta adresinizi tekrar yazın."),
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
 
         !validation.IsReNewEmailValid -> {
             Text(
-                text = "Geçerli bir e-posta adresini tekrar girin.",
+                text = BBLocalization.Current.Get(key = "31b18c0d-4e53-4168-9cb2-902c77bc112d", fallback = "Geçerli bir e-posta adresini tekrar girin."),
                 color = MaterialTheme.colorScheme.error
             )
         }
 
         !validation.EmailsMatch -> {
             Text(
-                text = "Yeni e-posta adresleri eşleşmiyor.",
+                text = BBLocalization.Current.Get(key = "b316ebfb-e16c-470e-b3af-d56e38e190ec", fallback = "Yeni e-posta adresleri eşleşmiyor."),
                 color = MaterialTheme.colorScheme.error
             )
         }
 
         else -> {
             Text(
-                text = "E-posta adresleri eşleşiyor.",
+                text = BBLocalization.Current.Get(key = "7acf58a7-5eb5-489a-a0b8-c9abadc938c2", fallback = "E-posta adresleri eşleşiyor."),
                 color = BBColors.Green.Green700
             )
         }
@@ -359,13 +359,13 @@ private fun ChangeEmailInfoBox() {
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
         ) {
             Text(
-                text = "Doğrulama Bağlantısı",
+                text = BBLocalization.Current.Get(key = "7b82a47e-6237-4860-8ebe-0d5161ecc4a1", fallback = "Doğrulama Bağlantısı"),
                 style = MaterialTheme.typography.labelLarge,
                 color = BBColors.Blue.Blue700
             )
 
             Text(
-                text = "Bağlantı yeni e-posta adresinize gönderilir. Değişiklik tamamlandığında güvenlik nedeniyle yeniden giriş yapmanız gerekebilir.",
+                text = BBLocalization.Current.Get(key = "ec36eb04-cd64-4d43-b4c9-25a92d78fa25", fallback = "Bağlantı yeni e-posta adresinize gönderilir. Değişiklik tamamlandığında güvenlik nedeniyle yeniden giriş yapmanız gerekebilir."),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

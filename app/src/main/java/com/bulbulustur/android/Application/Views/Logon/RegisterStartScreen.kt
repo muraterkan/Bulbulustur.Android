@@ -93,11 +93,11 @@ fun RegisterStartScreen(
     ) {
         LogonPublicPageTitle(
             eyebrow =
-                "Üyelik Tamamlama",
+                BBLocalization.Current.Get(key = "149f95c3-6cf0-4726-9cf9-1ad7cd2e6ac4", fallback = "Üyelik Tamamlama"),
             title =
                 BBLocalization.Current.Get(key = "2f3f4ea5-b7c1-4ebc-b42d-f81b4f84abec", fallback = ""),
             description =
-                "Bulbulustur hesabınızı oluşturmak için bilgilerinizi tamamlayın."
+                BBLocalization.Current.Get(key = "0f550629-d738-4ef0-b5b6-493a39254c81", fallback = "Bulbulustur hesabınızı oluşturmak için bilgilerinizi tamamlayın.")
         )
 
         Spacer(
@@ -109,7 +109,7 @@ fun RegisterStartScreen(
 
         LogonPublicFieldLabel(
             text =
-                "Ad"
+                BBLocalization.Current.Get(key = "9b9cf3d0-0463-4f28-83de-c750f16963e4", fallback = "Ad")
         )
 
         Spacer(
@@ -202,7 +202,7 @@ fun RegisterStartScreen(
 
         Text(
             text =
-                "Konum Bilgileri",
+                BBLocalization.Current.Get(key = "73a67a8a-8c74-40a7-ab6e-09100c4918f0", fallback = "Konum Bilgileri"),
             style =
                 MaterialTheme.typography.titleMedium,
             fontWeight =
@@ -220,7 +220,7 @@ fun RegisterStartScreen(
 
         Text(
             text =
-                "Ülke ve şehir bilgileri platform deneyiminizi hazırlamak için kullanılır.",
+                BBLocalization.Current.Get(key = "1d3d2b7f-b77c-4a63-a824-2ba8bb672194", fallback = "Ülke ve şehir bilgileri platform deneyiminizi hazırlamak için kullanılır."),
             style =
                 MaterialTheme.typography.bodySmall,
             color =
@@ -296,7 +296,7 @@ fun RegisterStartScreen(
                     it
             },
             placeholder =
-                "En az 8 karakter",
+                BBLocalization.Current.Get(key = "2de0628e-e31a-4d82-b6e7-c8a48fcd348e", fallback = "En az 8 karakter"),
             visualTransformation =
                 PasswordVisualTransformation(),
             keyboardOptions =
@@ -315,7 +315,7 @@ fun RegisterStartScreen(
 
         LogonPublicFieldLabel(
             text =
-                "Şifre Tekrar"
+                BBLocalization.Current.Get(key = "22e6bc04-5fef-4eda-8932-fc4a39accc77", fallback = "Şifre Tekrar")
         )
 
         Spacer(
@@ -333,7 +333,7 @@ fun RegisterStartScreen(
                     it
             },
             placeholder =
-                "Şifrenizi tekrar girin",
+                BBLocalization.Current.Get(key = "22e6bc04-5fef-4eda-8932-fc4a39accc77", fallback = "Şifrenizi tekrar girin"),
             visualTransformation =
                 PasswordVisualTransformation(),
             keyboardOptions =
@@ -356,7 +356,7 @@ fun RegisterStartScreen(
 
             Text(
                 text =
-                    "Şifreler birbiriyle eşleşmiyor.",
+                    BBLocalization.Current.Get(key = "b7421a1d-7c44-4d9f-9ab1-58e3e0ad4f91", fallback = "Şifreler birbiriyle eşleşmiyor."),
                 style =
                     MaterialTheme.typography.bodySmall,
                 color =
@@ -395,13 +395,13 @@ fun RegisterStartScreen(
             text =
                 when {
                     isRegisterLoading ->
-                        "Hesap oluşturuluyor..."
+                        BBLocalization.Current.Get(key = "7ec94929-68f0-4cf6-8411-c2ea8f567d9d", fallback = "Hesap oluşturuluyor...")
 
                     isFormReady ->
                         BBLocalization.Current.Get(key = "0877fc97-9071-4a25-af7a-eb202ed15731", fallback = "")
 
                     else ->
-                        "Bilgileri Tamamlayın"
+                        BBLocalization.Current.Get(key = "bc8dd3f3-103e-4810-a790-f729d1bb1923", fallback = "Bilgileri Tamamlayın")
                 },
             onClick = {
                 if (!isFormReady) {
@@ -456,7 +456,7 @@ fun RegisterStartScreen(
         ) {
             Text(
                 text =
-                    "Zaten hesabınız var mı?",
+                    BBLocalization.Current.Get(key = "450a3be3-a073-4365-a1a5-5d8a0e7ae4e7", fallback = "Zaten hesabınız var mı?"),
                 style =
                     MaterialTheme.typography.bodySmall,
                 color =

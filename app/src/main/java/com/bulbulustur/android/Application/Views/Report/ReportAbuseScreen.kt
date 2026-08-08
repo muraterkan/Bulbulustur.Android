@@ -152,7 +152,7 @@ private fun ReportAbuseIntroCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             Text(
-                text = "Güvenlik ve Kalite Bildirimi",
+                text = BBLocalization.Current.Get(key = "3fbe2de4-fc49-4a22-a18e-bc6731b42463", fallback = "Güvenlik ve Kalite Bildirimi"),
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -236,14 +236,14 @@ private fun ReportSafetyInfoCard() {
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             Text(
-                text = "Bildiriminiz İncelenir",
+                text = BBLocalization.Current.Get(key = "79e89197-e161-4f27-94a7-27bbd9222b1f", fallback = "Bildiriminiz İncelenir"),
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
-                text = "Ürün bilgisi, görsel, açıklama veya satıcıyla ilgili uygunsuz bir durum fark ettiyseniz kısa bilgilerle bildirebilirsiniz.",
+                text = BBLocalization.Current.Get(key = "62f45811-0ef4-485e-8450-f618fbf92303", fallback = "Ürün bilgisi, görsel, açıklama veya satıcıyla ilgili uygunsuz bir durum fark ettiyseniz kısa bilgilerle bildirebilirsiniz."),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -256,11 +256,11 @@ private fun ReportSafetyInfoCard() {
                 )
 
                 ReportSafetyBullet(
-                    text = "Uygunsuz görsel veya açıklama"
+                    text = BBLocalization.Current.Get(key = "5f8ea7e4-15c2-4ae5-a7c4-fec70fc32099", fallback = "Uygunsuz görsel veya açıklama")
                 )
 
                 ReportSafetyBullet(
-                    text = "Sahte ürün veya kötüye kullanım şüphesi"
+                    text = BBLocalization.Current.Get(key = "4019f467-e0e2-4a60-b582-83595468f5cd", fallback = "Sahte ürün veya kötüye kullanım şüphesi")
                 )
             }
         }
@@ -302,8 +302,8 @@ private fun ReportReasonSection(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
     ) {
         BbSectionHeader(
-            title = "Şikayet Nedenini Seç",
-            subtitle = "Bildirimini daha hızlı değerlendirebilmemiz için uygun nedeni seç."
+            title = BBLocalization.Current.Get(key = "6574f41f-13a8-4397-8551-2206cd8cc8ea", fallback = "Şikayet Nedenini Seç"),
+            subtitle = BBLocalization.Current.Get(key = "a0820661-d2fa-4eef-8957-941b6cf5c20c", fallback = "Bildirimini daha hızlı değerlendirebilmemiz için uygun nedeni seç.")
         )
 
         FlowRow(
@@ -342,8 +342,8 @@ private fun ReportDetailSection(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             BbSectionHeader(
-                title = "Bildirim Detayları",
-                subtitle = "Kısa bir açıklama yazmanız incelemeyi kolaylaştırır."
+                title = BBLocalization.Current.Get(key = "4c0ba602-2a93-48fc-b255-0b67ade0bfd6", fallback = "Bildirim Detayları"),
+                subtitle = BBLocalization.Current.Get(key = "2f4809ca-053a-4567-ba84-0440dc7d57cf", fallback = "Kısa bir açıklama yazmanız incelemeyi kolaylaştırır.")
             )
 
             TextField(
@@ -402,7 +402,7 @@ private fun ReportPrivacyNoticeCard() {
             }
 
             Text(
-                text = "Kişisel bilgi, ödeme bilgisi veya üçüncü kişilere ait özel bilgiler paylaşmayın. Bildirimin kalite ve güvenlik kontrolleri kapsamında değerlendirilebilir.",
+                text = BBLocalization.Current.Get(key = "f5f70231-a75e-4b52-9717-bbb969d2174c", fallback = "Kişisel bilgi, ödeme bilgisi veya üçüncü kişilere ait özel bilgiler paylaşmayın. Bildirimin kalite ve güvenlik kontrolleri kapsamında değerlendirilebilir."),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.weight(1f)
@@ -509,15 +509,15 @@ private fun getReportReasonItems(): List<ReportReasonItem> {
         ),
         ReportReasonItem(
             id = 2,
-            title = "Uygunsuz Görsel Veya Açıklama"
+            title = BBLocalization.Current.Get(key = "5f8ea7e4-15c2-4ae5-a7c4-fec70fc32099", fallback = "Uygunsuz Görsel Veya Açıklama")
         ),
         ReportReasonItem(
             id = 3,
-            title = "Sahte Ürün Şüphesi"
+            title = BBLocalization.Current.Get(key = "67617f10-469a-4d76-bca1-22a3e3026396", fallback = "Sahte Ürün Şüphesi")
         ),
         ReportReasonItem(
             id = 4,
-            title = "Yasaklı Ürün"
+            title = BBLocalization.Current.Get(key = "b7dd5218-64b6-47bb-9db3-304af3e9aa5d", fallback = "Yasaklı Ürün")
         ),
         ReportReasonItem(
             id = 5,
@@ -525,7 +525,7 @@ private fun getReportReasonItems(): List<ReportReasonItem> {
         ),
         ReportReasonItem(
             id = 6,
-            title = "Diğer"
+            title = BBLocalization.Current.Get(key = "5abf726f-e2c0-470b-83a4-7a8a3d4a76ee", fallback = "Diğer")
         )
     )
 }

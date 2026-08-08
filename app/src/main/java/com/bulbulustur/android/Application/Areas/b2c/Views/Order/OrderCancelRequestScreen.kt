@@ -93,8 +93,8 @@ fun OrderCancelRequestScreen(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "İptal Talebi",
-                subtitle = "Sipariş satırı için iptal talebi oluştur.",
+                title = BBLocalization.Current.Get(key = "f07eb17d-4e1e-4248-a03e-4300d53d54dd", fallback = "İptal Talebi"),
+                subtitle = BBLocalization.Current.Get(key = "cae5c719-dd9d-4a4c-90e0-20204a4e9b66", fallback = "Sipariş satırı için iptal talebi oluştur."),
                 onBackClick = onBackClick
             )
         }
@@ -124,8 +124,8 @@ fun OrderCancelRequestScreen(
                 orderStoreLineId <= 0L || orderKey.isBlank() -> {
                     item {
                         OrderCancelMessageCard(
-                            title = "Sipariş bilgisi eksik",
-                            description = "İptal talebi için sipariş satırı veya sipariş anahtarı bulunamadı."
+                            title = BBLocalization.Current.Get(key = "1202f4fc-a180-41eb-a681-417274d697e1", fallback = "Sipariş bilgisi eksik"),
+                            description = BBLocalization.Current.Get(key = "c823ce20-defe-4f1a-92c7-9aba9f6585f9", fallback = "İptal talebi için sipariş satırı veya sipariş anahtarı bulunamadı.")
                         )
                     }
                 }
@@ -133,8 +133,8 @@ fun OrderCancelRequestScreen(
                 memberId <= 0 -> {
                     item {
                         OrderCancelMessageCard(
-                            title = "Oturum bilgisi bulunamadı",
-                            description = "İptal talebi oluşturmak için hesabınıza giriş yapmanız gerekiyor."
+                            title = BBLocalization.Current.Get(key = "7d3eff10-e01c-4564-a290-e3542478f979", fallback = "Oturum bilgisi bulunamadı"),
+                            description = BBLocalization.Current.Get(key = "e02721f5-6867-40da-bfc3-5ccc5b2bf61d", fallback = "İptal talebi oluşturmak için hesabınıza giriş yapmanız gerekiyor.")
                         )
                     }
                 }
@@ -144,7 +144,7 @@ fun OrderCancelRequestScreen(
                         state.CancelationTypes.isEmpty() -> {
                     item {
                         OrderCancelLoadingCard(
-                            text = "İptal nedenleri yükleniyor"
+                            text = BBLocalization.Current.Get(key = "f17951e9-f9ab-4715-8109-a72f6c5d9646", fallback = "İptal nedenleri yükleniyor")
                         )
                     }
                 }
@@ -154,7 +154,7 @@ fun OrderCancelRequestScreen(
                         state.CurrentAction == "GetOrderCancelationTypes" -> {
                     item {
                         OrderCancelMessageCard(
-                            title = "İptal nedenleri alınamadı",
+                            title = BBLocalization.Current.Get(key = "61db1d81-ad2c-471b-9ae8-59117d1eb048", fallback = "İptal nedenleri alınamadı"),
                             description = state.ErrorMessage.orEmpty()
                         )
                     }
@@ -163,8 +163,8 @@ fun OrderCancelRequestScreen(
                 state.CancelationTypes.isEmpty() -> {
                     item {
                         OrderCancelMessageCard(
-                            title = "İptal nedeni bulunamadı",
-                            description = "İptal talebi için kullanılabilir neden kaydı bulunamadı."
+                            title = BBLocalization.Current.Get(key = "5cfcc94d-2ba4-4cc6-a213-1f8a608c0990", fallback = "İptal nedeni bulunamadı"),
+                            description = BBLocalization.Current.Get(key = "8c522bf7-dbcf-4f31-8cc8-53f7873b5cac", fallback = "İptal talebi için kullanılabilir neden kaydı bulunamadı.")
                         )
                     }
                 }
@@ -200,7 +200,7 @@ fun OrderCancelRequestScreen(
                         ?.let { errorMessage ->
                             item {
                                 OrderCancelMessageCard(
-                                    title = "Talep gönderilemedi",
+                                    title = BBLocalization.Current.Get(key = "78af2bde-b828-4709-9a26-bfb63ceeeda2", fallback = "Talep gönderilemedi"),
                                     description = errorMessage
                                 )
                             }
@@ -262,13 +262,13 @@ private fun OrderCancelIntroCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "İptal Talebi Oluştur",
+                    text = BBLocalization.Current.Get(key = "48a5f419-3e2a-4529-b668-8dbb79470ff9", fallback = "İptal Talebi Oluştur"),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = orderKey.ifBlank { "Sipariş bilgisi bulunamadı" },
+                    text = orderKey.ifBlank { BBLocalization.Current.Get(key = "8e120dac-0c09-4c00-bd3f-956965773636", fallback = "Sipariş bilgisi bulunamadı") },
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -389,7 +389,7 @@ private fun OrderCancelDescriptionCard(
         ) {
             OrderCancelSectionTitle(
                 title = BBLocalization.Current.Get(key = "db0a3356-2fa4-4c1f-9432-2c299ac52b92", fallback = "Açıklama"),
-                subtitle = "Talebin değerlendirilmesi için kısa bir açıklama yazabilirsiniz."
+                subtitle = BBLocalization.Current.Get(key = "c4929e2d-e4ca-40b8-b1de-d5a8165f0240", fallback = "Talebin değerlendirilmesi için kısa bir açıklama yazabilirsiniz.")
             )
 
             OutlinedTextField(
@@ -400,7 +400,7 @@ private fun OrderCancelDescriptionCard(
                 shape = BBRadius.Input,
                 placeholder = {
                     Text(
-                        text = "İptal talebinizle ilgili açıklama yazın."
+                        text = BBLocalization.Current.Get(key = "40a0224b-ec74-436b-9465-7e2d8e170b0c", fallback = "İptal talebinizle ilgili açıklama yazın.")
                     )
                 },
                 leadingIcon = {
@@ -437,13 +437,13 @@ private fun OrderCancelWarningCard() {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "İptal Süreci",
+                    text = BBLocalization.Current.Get(key = "07391226-73a9-4769-9510-761c08a44470", fallback = "İptal Süreci"),
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = "Talebiniz sipariş durumuna göre değerlendirilir. Sonuç sipariş kayıtlarına yansıtılır.",
+                    text = BBLocalization.Current.Get(key = "4f1445c5-c54d-4c86-bb37-7c90cf17d1c8", fallback = "Talebiniz sipariş durumuna göre değerlendirilir. Sonuç sipariş kayıtlarına yansıtılır."),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -470,7 +470,7 @@ private fun OrderCancelActionCard(
         ) {
             BbButton(
                 text = if (isLoading) {
-                    "Talep Gönderiliyor"
+                    BBLocalization.Current.Get(key = "9e2242ce-b33a-417e-b44a-24714bebabbb", fallback = "Talep Gönderiliyor")
                 } else {
                     BBLocalization.Current.Get(key = "d2843cb0-ebbe-4d77-9873-62ac1d7ea9ee", fallback = "Talebi Gönder")
                 },

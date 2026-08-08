@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Controllers
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.lifecycle.viewModelScope
 import com.bulbulustur.android.businesslayer.Core.DTO.ContractDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.OrderDTO
@@ -54,7 +56,7 @@ class OrderController(
 
     fun GetOrdersByMemberIdAsync(memberId: Int, count: Int = 100) {
         if (memberId <= 0) {
-            SetError("Geçerli bir üye bilgisi zorunludur.")
+            SetError(BBLocalization.Current.Get(key = "01553cfb-5f40-4e39-9c92-c904de75070b", fallback = "Geçerli bir üye bilgisi zorunludur."))
             return
         }
 
@@ -75,7 +77,7 @@ class OrderController(
 
     fun GetOrderStoresAsync(orderKey: String) {
         if (orderKey.isBlank()) {
-            SetError("Sipariş anahtarı zorunludur.")
+            SetError(BBLocalization.Current.Get(key = "eac7e139-74e8-4af8-8da1-ec49ec2a58f5", fallback = "Sipariş anahtarı zorunludur."))
             return
         }
 
@@ -96,12 +98,12 @@ class OrderController(
 
     fun GetOrderTrackingAsync(cargoTrackingNumber: Int, memberId: Int) {
         if (cargoTrackingNumber <= 0) {
-            SetError("Geçerli bir kargo takip numarası zorunludur.")
+            SetError(BBLocalization.Current.Get(key = "edc6e8b5-1ee0-4712-874f-ce31c25d3d82", fallback = "Geçerli bir kargo takip numarası zorunludur."))
             return
         }
 
         if (memberId <= 0) {
-            SetError("Geçerli bir üye bilgisi zorunludur.")
+            SetError(BBLocalization.Current.Get(key = "01553cfb-5f40-4e39-9c92-c904de75070b", fallback = "Geçerli bir üye bilgisi zorunludur."))
             return
         }
 
@@ -122,12 +124,12 @@ class OrderController(
 
     fun GetOrderStoreContractAsync(orderKey: String, storeKey: String) {
         if (orderKey.isBlank()) {
-            SetError("Sipariş anahtarı zorunludur.")
+            SetError(BBLocalization.Current.Get(key = "eac7e139-74e8-4af8-8da1-ec49ec2a58f5", fallback = "Sipariş anahtarı zorunludur."))
             return
         }
 
         if (storeKey.isBlank()) {
-            SetError("Mağaza anahtarı zorunludur.")
+            SetError(BBLocalization.Current.Get(key = "26417db0-aa8d-46bf-9cb5-4393a8718a66", fallback = "Mağaza anahtarı zorunludur."))
             return
         }
 
@@ -148,7 +150,7 @@ class OrderController(
 
     fun GetOrderCancelationTypes(count: Int = 15) {
         if (count <= 0) {
-            SetError("Listeleme adedi sıfırdan büyük olmalıdır.")
+            SetError(BBLocalization.Current.Get(key = "f59f776b-fc40-4fb1-8930-77e44b3ca307", fallback = "Listeleme adedi sıfırdan büyük olmalıdır."))
             return
         }
 
@@ -169,27 +171,27 @@ class OrderController(
 
     fun InsertOrderCancelationAsync(languageId: Int, memberId: Int, insertModel: OrderCancelationInsertModel) {
         if (languageId <= 0) {
-            SetError("Geçerli bir dil bilgisi zorunludur.")
+            SetError(BBLocalization.Current.Get(key = "bf71e6f0-be25-466c-94af-03f5a128c948", fallback = "Geçerli bir dil bilgisi zorunludur."))
             return
         }
 
         if (memberId <= 0) {
-            SetError("Geçerli bir üye bilgisi zorunludur.")
+            SetError(BBLocalization.Current.Get(key = "01553cfb-5f40-4e39-9c92-c904de75070b", fallback = "Geçerli bir üye bilgisi zorunludur."))
             return
         }
 
         if (insertModel.OrderStoreLineId <= 0) {
-            SetError("Sipariş satırı bilgisi zorunludur.")
+            SetError(BBLocalization.Current.Get(key = "fb32d16c-15f9-4650-a187-bf4275a48820", fallback = "Sipariş satırı bilgisi zorunludur."))
             return
         }
 
         if (insertModel.OrderCancelationTypeId <= 0) {
-            SetError("Sipariş iptal nedeni zorunludur.")
+            SetError(BBLocalization.Current.Get(key = "baa151dc-84e6-46b8-89b7-2b5d03b22d1c", fallback = "Sipariş iptal nedeni zorunludur."))
             return
         }
 
         if (insertModel.OrderKey.isBlank()) {
-            SetError("Sipariş anahtarı zorunludur.")
+            SetError(BBLocalization.Current.Get(key = "eac7e139-74e8-4af8-8da1-ec49ec2a58f5", fallback = "Sipariş anahtarı zorunludur."))
             return
         }
 
@@ -226,27 +228,27 @@ class OrderController(
 
     fun InsertReturnRequestAsync(languageId: Int, memberId: Int, returnRequest: ReturnRequestDTO) {
         if (languageId <= 0) {
-            SetError("Geçerli bir dil bilgisi zorunludur.")
+            SetError(BBLocalization.Current.Get(key = "bf71e6f0-be25-466c-94af-03f5a128c948", fallback = "Geçerli bir dil bilgisi zorunludur."))
             return
         }
 
         if (memberId <= 0) {
-            SetError("Geçerli bir üye bilgisi zorunludur.")
+            SetError(BBLocalization.Current.Get(key = "01553cfb-5f40-4e39-9c92-c904de75070b", fallback = "Geçerli bir üye bilgisi zorunludur."))
             return
         }
 
         if (returnRequest.OrderStoreLineId <= 0) {
-            SetError("Sipariş satırı bilgisi zorunludur.")
+            SetError(BBLocalization.Current.Get(key = "fb32d16c-15f9-4650-a187-bf4275a48820", fallback = "Sipariş satırı bilgisi zorunludur."))
             return
         }
 
         if (returnRequest.ReturnRequestReasonId <= 0) {
-            SetError("İade nedeni zorunludur.")
+            SetError(BBLocalization.Current.Get(key = "64d00b3b-3243-4fe4-820a-ef42ca837d51", fallback = "İade nedeni zorunludur."))
             return
         }
 
         if (returnRequest.Description.isNullOrBlank()) {
-            SetError("İade açıklaması zorunludur.")
+            SetError(BBLocalization.Current.Get(key = "6748f42b-352e-4787-83c5-b4797e76a350", fallback = "İade açıklaması zorunludur."))
             return
         }
 
@@ -323,27 +325,27 @@ class OrderController(
 
     fun InsertReviewAsync(insertModel: ReviewInsertModel) {
         if (insertModel.MemberId <= 0) {
-            SetError("Geçerli bir üye bilgisi zorunludur.")
+            SetError(BBLocalization.Current.Get(key = "01553cfb-5f40-4e39-9c92-c904de75070b", fallback = "Geçerli bir üye bilgisi zorunludur."))
             return
         }
 
         if (insertModel.ItemId <= 0) {
-            SetError("Geçerli bir ürün bilgisi zorunludur.")
+            SetError(BBLocalization.Current.Get(key = "20db14d0-bc6f-499a-8120-6b54e67e1916", fallback = "Geçerli bir ürün bilgisi zorunludur."))
             return
         }
 
         if (insertModel.SecureKey.isBlank()) {
-            SetError("Ürün anahtarı zorunludur.")
+            SetError(BBLocalization.Current.Get(key = "0876bc24-422c-4e89-975b-52517af34cde", fallback = "Ürün anahtarı zorunludur."))
             return
         }
 
         if (insertModel.Content.isBlank()) {
-            SetError("Değerlendirme metni zorunludur.")
+            SetError(BBLocalization.Current.Get(key = "2094a6b9-64b4-4741-b4ab-ccbe1f7c4e45", fallback = "Değerlendirme metni zorunludur."))
             return
         }
 
         if (insertModel.Rating < 1.0 || insertModel.Rating > 5.0) {
-            SetError("Değerlendirme puanı 1 ile 5 arasında olmalıdır.")
+            SetError(BBLocalization.Current.Get(key = "acaf714d-1b73-4b73-b88f-b17c20892d72", fallback = "Değerlendirme puanı 1 ile 5 arasında olmalıdır."))
             return
         }
 

@@ -112,7 +112,7 @@ fun CheckoutPaymentScreen(
                     CheckoutProgressCard(
                         currentStep = "3",
                         title = BBLocalization.Current.Get(key = "0d5a9dc6-b4eb-4f81-b5f1-d9d09a40cf40", fallback = ""),
-                        description = "Ödeme yöntemini seç ve kart bilgilerini gir."
+                        description = BBLocalization.Current.Get(key = "17bf05fa-23fa-465b-9ce6-471127a5e133", fallback = "Ödeme yöntemini seç ve kart bilgilerini gir.")
                     )
                 }
 
@@ -125,7 +125,7 @@ fun CheckoutPaymentScreen(
                 item {
                     CheckoutPaymentSectionTitle(
                         title = BBLocalization.Current.Get(key = "8c828c6c-67e7-4989-835d-1fead0c9518c", fallback = "Ödeme yöntemi"),
-                        description = "Sipariş için kullanmak istediğin ödeme tipini seç."
+                        description = BBLocalization.Current.Get(key = "885a68c2-74c7-4574-82a7-0a74e2e06803", fallback = "Sipariş için kullanmak istediğin ödeme tipini seç.")
                     )
                 }
 
@@ -226,7 +226,7 @@ private fun CheckoutPaymentTopBar(
             )
 
             Text(
-                text = "Checkout adım 3 / 4",
+                text = BBLocalization.Current.Get(key = "aeebca81-a389-4d0b-8afd-9f2649ef2316", fallback = "Checkout adım 3 / 4"),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -325,7 +325,7 @@ private fun CheckoutPaymentSummaryCard(
             Spacer(modifier = Modifier.height(8.dp))
 
             CheckoutPaymentSummaryRow(
-                title = "İndirim",
+                title = BBLocalization.Current.Get(key = "9dd8d854-ca26-4660-bcb3-b7ec8e3f458b", fallback = "İndirim"),
                 value = summary.discountText
             )
 
@@ -509,7 +509,7 @@ private fun CheckoutNewCardForm(
         ) {
             CheckoutPaymentSectionTitle(
                 title = BBLocalization.Current.Get(key = "227d50c4-7fe0-4381-860e-960b3df7c10e", fallback = ""),
-                description = "Kart bilgilerin güvenli ödeme altyapısıyla işlenir."
+                description = BBLocalization.Current.Get(key = "f49620eb-c9eb-4f27-9bf2-3d2240bb6889", fallback = "Kart bilgilerin güvenli ödeme altyapısıyla işlenir.")
             )
 
             CheckoutPaymentTextField(
@@ -521,7 +521,7 @@ private fun CheckoutNewCardForm(
             CheckoutPaymentTextField(
                 value = cardHolderName,
                 onValueChange = onCardHolderNameChange,
-                placeholder = "Kart üzerindeki isim"
+                placeholder = BBLocalization.Current.Get(key = "5bd3e50e-cfaa-4c0f-a743-db35321e51a4", fallback = "Kart üzerindeki isim")
             )
 
             Row(
@@ -550,7 +550,7 @@ private fun CheckoutNewCardForm(
                     modifier = Modifier.weight(1f)
                 ) {
                     Text(
-                        text = "Kartı sonraki alışverişler için kaydet",
+                        text = BBLocalization.Current.Get(key = "691c3311-8b41-4e98-b83a-47c569511753", fallback = "Kartı sonraki alışverişler için kaydet"),
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurface
@@ -559,7 +559,7 @@ private fun CheckoutNewCardForm(
                     Spacer(modifier = Modifier.height(3.dp))
 
                     Text(
-                        text = "Kart saklama altyapısı aktif olduğunda kullanılacak.",
+                        text = BBLocalization.Current.Get(key = "710724c1-f69a-46a5-a621-62e23354510e", fallback = "Kart saklama altyapısı aktif olduğunda kullanılacak."),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -642,7 +642,7 @@ private fun CheckoutSecurePaymentInfoCard() {
                 Spacer(modifier = Modifier.height(5.dp))
 
                 Text(
-                    text = "Ödeme adımında 3D Secure ve banka doğrulama süreçleri ödeme sağlayıcısına göre çalışır. Sipariş onayı bir sonraki adımda gösterilir.",
+                    text = BBLocalization.Current.Get(key = "768c487d-15fd-4400-bea6-f0470a4042f6", fallback = "Ödeme adımında 3D Secure ve banka doğrulama süreçleri ödeme sağlayıcısına göre çalışır. Sipariş onayı bir sonraki adımda gösterilir."),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -705,7 +705,7 @@ private fun CheckoutPaymentBottomBar(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "Özete geç",
+                    text = BBLocalization.Current.Get(key = "c0cac04f-f3c8-4afc-8d3c-08c30a15e544", fallback = "Özete geç"),
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onPrimary
@@ -786,15 +786,15 @@ private fun getCheckoutPaymentScreenData(): CheckoutPaymentScreenData {
         paymentMethods = listOf(
             CheckoutPaymentMethodItem(
                 id = 1,
-                title = "Yeni kart ile öde",
-                description = "Kredi kartı veya banka kartı bilgilerini gir.",
+                title = BBLocalization.Current.Get(key = "14a55dd6-8372-464b-9ad6-cc07baffd7c6", fallback = "Yeni kart ile öde"),
+                description = BBLocalization.Current.Get(key = "27ddad65-f6d5-49f1-b457-567af3bc0cf7", fallback = "Kredi kartı veya banka kartı bilgilerini gir."),
                 iconText = "YK",
                 paymentType = CheckoutPaymentType.NewCard
             ),
             CheckoutPaymentMethodItem(
                 id = 2,
                 title = BBLocalization.Current.Get(key = "c29a02a2-aa01-4602-b804-77f45c5f07a0", fallback = "Kayıtlı kart"),
-                description = "Daha önce kaydedilen kartla hızlı ödeme.",
+                description = BBLocalization.Current.Get(key = "e9cea64e-da69-4816-b727-617b561c5822", fallback = "Daha önce kaydedilen kartla hızlı ödeme."),
                 iconText = "KK",
                 paymentType = CheckoutPaymentType.SavedCard
             ),

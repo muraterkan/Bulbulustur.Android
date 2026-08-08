@@ -65,7 +65,6 @@ import com.bulbulustur.android.Application.Views.Account.SubscriptionListScreen
 import com.bulbulustur.android.Application.Views.Account.WalletBalanceScreen
 import com.bulbulustur.android.Application.Views.Preference.UsagePurposeScreen
 import com.bulbulustur.android.Application.Views.Question.QuestionAnswerScreen
-import com.bulbulustur.android.businesslayer.Core.Enums.EApplicationLanguage
 import com.bulbulustur.android.businesslayer.Core.Model.ChangeMailModel
 import com.bulbulustur.android.businesslayer.Core.Model.ChangePasswordAsyncModel
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.MemberBankAccountInsertModel
@@ -83,10 +82,8 @@ fun NavGraphBuilder.accountGraph(
     composable(route = AccountRoutes.AccountHome) {
         val logonState by logonController.State.collectAsState()
 
-        val languageId = when (sessionState.Language) {
-            EApplicationLanguage.Turkish -> 1
-            EApplicationLanguage.English -> 2
-        }
+        val languageId = sessionState.Language.Id
+        val addressCascadeState by addressCascadeController.State.collectAsState()
 
         if (!sessionState.IsAuthenticated) {
             LaunchedEffect(Unit) {
@@ -205,10 +202,7 @@ fun NavGraphBuilder.accountGraph(
         val accountState by accountController.State.collectAsState()
         val addressCascadeState by addressCascadeController.State.collectAsState()
 
-        val languageId = when (sessionState.Language) {
-            EApplicationLanguage.Turkish -> 1
-            EApplicationLanguage.English -> 2
-        }
+        val languageId = sessionState.Language.Id
 
         LaunchedEffect(languageId, sessionState.MemberId) {
             accountController.GetAccount(
@@ -284,10 +278,7 @@ fun NavGraphBuilder.accountGraph(
     composable(route = AccountRoutes.EmailChange) {
         val accountState by accountController.State.collectAsState()
 
-        val languageId = when (sessionState.Language) {
-            EApplicationLanguage.Turkish -> 1
-            EApplicationLanguage.English -> 2
-        }
+        val languageId = sessionState.Language.Id
 
         val currentEmail = accountState.Member?.Email.orEmpty()
 
@@ -332,10 +323,7 @@ fun NavGraphBuilder.accountGraph(
     composable(route = AccountRoutes.PasswordChange) {
         val accountState by accountController.State.collectAsState()
 
-        val languageId = when (sessionState.Language) {
-            EApplicationLanguage.Turkish -> 1
-            EApplicationLanguage.English -> 2
-        }
+        val languageId = sessionState.Language.Id
 
         LaunchedEffect(Unit) {
             accountController.ResetPasswordChangeState()
@@ -392,10 +380,7 @@ fun NavGraphBuilder.accountGraph(
     composable(route = AccountRoutes.ProfileTckn) {
         val accountState by accountController.State.collectAsState()
 
-        val languageId = when (sessionState.Language) {
-            EApplicationLanguage.Turkish -> 1
-            EApplicationLanguage.English -> 2
-        }
+        val languageId = sessionState.Language.Id
 
         LaunchedEffect(sessionState.MemberId) {
             if (accountState.Member == null) {
@@ -438,10 +423,7 @@ fun NavGraphBuilder.accountGraph(
     composable(route = AccountRoutes.PhoneList) {
         val accountState by accountController.State.collectAsState()
 
-        val languageId = when (sessionState.Language) {
-            EApplicationLanguage.Turkish -> 1
-            EApplicationLanguage.English -> 2
-        }
+        val languageId = sessionState.Language.Id
 
         LaunchedEffect(sessionState.MemberId) {
             accountController.GetPhones(
@@ -498,10 +480,7 @@ fun NavGraphBuilder.accountGraph(
     composable(route = AccountRoutes.PhoneCreate) {
         val accountState by accountController.State.collectAsState()
 
-        val languageId = when (sessionState.Language) {
-            EApplicationLanguage.Turkish -> 1
-            EApplicationLanguage.English -> 2
-        }
+        val languageId = sessionState.Language.Id
 
         LaunchedEffect(Unit) {
             accountController.ResetPhoneState()
@@ -550,10 +529,7 @@ fun NavGraphBuilder.accountGraph(
     ) { backStackEntry ->
         val accountState by accountController.State.collectAsState()
 
-        val languageId = when (sessionState.Language) {
-            EApplicationLanguage.Turkish -> 1
-            EApplicationLanguage.English -> 2
-        }
+        val languageId = sessionState.Language.Id
 
         val memberPhoneId = backStackEntry.arguments
             ?.getInt("memberPhoneId")
@@ -662,10 +638,7 @@ fun NavGraphBuilder.accountGraph(
         val accountState by accountController.State.collectAsState()
         val addressCascadeState by addressCascadeController.State.collectAsState()
 
-        val languageId = when (sessionState.Language) {
-            EApplicationLanguage.Turkish -> 1
-            EApplicationLanguage.English -> 2
-        }
+        val languageId = sessionState.Language.Id
 
         LaunchedEffect(Unit) {
             addressCascadeController.OnEvent(AddressCascadeEvent.Clear)
@@ -754,10 +727,7 @@ fun NavGraphBuilder.accountGraph(
         val accountState by accountController.State.collectAsState()
         val addressCascadeState by addressCascadeController.State.collectAsState()
 
-        val languageId = when (sessionState.Language) {
-            EApplicationLanguage.Turkish -> 1
-            EApplicationLanguage.English -> 2
-        }
+        val languageId = sessionState.Language.Id
 
         val addressKey = backStackEntry.arguments
             ?.getString("addressKey")
@@ -884,10 +854,7 @@ fun NavGraphBuilder.accountGraph(
     composable(route = AccountRoutes.CompanyInfo) {
         val accountState by accountController.State.collectAsState()
 
-        val languageId = when (sessionState.Language) {
-            EApplicationLanguage.Turkish -> 1
-            EApplicationLanguage.English -> 2
-        }
+        val languageId = sessionState.Language.Id
 
         LaunchedEffect(languageId, sessionState.MemberId) {
             accountController.GetAccountCompany(languageId = languageId, memberId = sessionState.MemberId)
@@ -941,11 +908,9 @@ fun NavGraphBuilder.accountGraph(
 
     composable(route = AccountRoutes.CompanyInfoEdit) {
         val accountState by accountController.State.collectAsState()
+        val addressCascadeState by addressCascadeController.State.collectAsState()
 
-        val languageId = when (sessionState.Language) {
-            EApplicationLanguage.Turkish -> 1
-            EApplicationLanguage.English -> 2
-        }
+        val languageId = sessionState.Language.Id
 
         LaunchedEffect(languageId, sessionState.MemberId) {
             if (accountState.Company == null) {
@@ -955,19 +920,59 @@ fun NavGraphBuilder.accountGraph(
             accountController.ResetCompanyUpdateResult()
         }
 
+        LaunchedEffect(accountState.Company?.CompanyId, accountState.Company?.CountryId, accountState.Company?.CountryStateId, accountState.Company?.CountryDepartmentId, accountState.Company?.CityId, accountState.Company?.DistrictId) {
+            val company = accountState.Company
+
+            if (company != null) {
+                addressCascadeController.OnEvent(
+                    AddressCascadeEvent.SetInitialSelection(
+                        Selection = AddressCascadeSelection(
+                            CountryId = company.CountryId,
+                            CountryStateId = company.CountryStateId,
+                            CountryDepartmentId = company.CountryDepartmentId,
+                            CityId = company.CityId,
+                            DistrictId = company.DistrictId
+                        ),
+                        LanguageId = languageId
+                    )
+                )
+            }
+        }
+
         LaunchedEffect(accountState.CompanyUpdateResult?.Success) {
             if (accountState.CompanyUpdateResult?.Success == true) {
+                addressCascadeController.OnEvent(AddressCascadeEvent.Clear)
                 navigator.back()
             }
         }
 
         CompanyInfoEditScreen(
             company = accountState.Company,
+            addressCascadeState = addressCascadeState,
             isLoading = accountState.IsLoading,
             errorMessage = accountState.ErrorMessage,
-            onBackClick = { navigator.back() },
+            onBackClick = {
+                addressCascadeController.OnEvent(AddressCascadeEvent.Clear)
+                navigator.back()
+            },
             onRetryClick = {
+                addressCascadeController.OnEvent(AddressCascadeEvent.Clear)
                 accountController.GetAccountCompany(languageId = languageId, memberId = sessionState.MemberId)
+            },
+            onCountrySelected = { countryId ->
+                addressCascadeController.OnEvent(AddressCascadeEvent.SelectCountry(CountryId = countryId, LanguageId = languageId))
+            },
+            onCountryStateSelected = { countryStateId ->
+                addressCascadeController.OnEvent(AddressCascadeEvent.SelectCountryState(CountryStateId = countryStateId, LanguageId = languageId))
+            },
+            onCountryDepartmentSelected = { countryDepartmentId ->
+                addressCascadeController.OnEvent(AddressCascadeEvent.SelectCountryDepartment(CountryDepartmentId = countryDepartmentId, LanguageId = languageId))
+            },
+            onCitySelected = { cityId ->
+                addressCascadeController.OnEvent(AddressCascadeEvent.SelectCity(CityId = cityId, LanguageId = languageId))
+            },
+            onDistrictSelected = { districtId ->
+                addressCascadeController.OnEvent(AddressCascadeEvent.SelectDistrict(DistrictId = districtId))
             },
             onSaveClick = { updateModel ->
                 accountController.UpdateAccountCompany(
@@ -982,10 +987,7 @@ fun NavGraphBuilder.accountGraph(
     composable(route = AccountRoutes.CompanyB2BIndex) {
         val accountState by accountController.State.collectAsState()
 
-        val languageId = when (sessionState.Language) {
-            EApplicationLanguage.Turkish -> 1
-            EApplicationLanguage.English -> 2
-        }
+        val languageId = sessionState.Language.Id
 
         LaunchedEffect(languageId, sessionState.MemberId) {
             accountController.GetAccountCompany(languageId = languageId, memberId = sessionState.MemberId)
@@ -1010,10 +1012,7 @@ fun NavGraphBuilder.accountGraph(
     composable(route = AccountRoutes.CompanyB2BStatus) {
         val accountState by accountController.State.collectAsState()
 
-        val languageId = when (sessionState.Language) {
-            EApplicationLanguage.Turkish -> 1
-            EApplicationLanguage.English -> 2
-        }
+        val languageId = sessionState.Language.Id
 
         LaunchedEffect(languageId, sessionState.MemberId) {
             accountController.GetAccountCompany(languageId = languageId, memberId = sessionState.MemberId)
@@ -1280,10 +1279,7 @@ fun NavGraphBuilder.accountGraph(
     composable(route = AccountRoutes.Requests) {
         val accountState by accountController.State.collectAsState()
 
-        val languageId = when (sessionState.Language) {
-            EApplicationLanguage.Turkish -> 1
-            EApplicationLanguage.English -> 2
-        }
+        val languageId = sessionState.Language.Id
 
         LaunchedEffect(languageId, sessionState.MemberId) {
             accountController.GetReturnRequests(
@@ -1329,10 +1325,7 @@ fun NavGraphBuilder.accountGraph(
         val accountState by accountController.State.collectAsState()
         val returnRequestId = backStackEntry.arguments?.getInt("requestId") ?: 0
 
-        val languageId = when (sessionState.Language) {
-            EApplicationLanguage.Turkish -> 1
-            EApplicationLanguage.English -> 2
-        }
+        val languageId = sessionState.Language.Id
 
         LaunchedEffect(languageId, sessionState.MemberId, returnRequestId) {
             if (returnRequestId > 0) {

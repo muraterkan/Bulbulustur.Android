@@ -41,7 +41,7 @@ fun CommunicationPreferenceScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Bildirim ve İzinler",
+                title = BBLocalization.Current.Get(key = "2cb7179b-eb4b-46fd-bae3-9265b9f9bc02", fallback = "Bildirim ve İzinler"),
                 onBackClick = onBackClick
             )
         }
@@ -66,7 +66,7 @@ fun CommunicationPreferenceScreen(
                     padding = BbCardPadding.Medium
                 ) {
                     Text(
-                        text = "E-posta, SMS ve telefon iletişim tercihlerinizi buradan yönetebilirsiniz.",
+                        text = BBLocalization.Current.Get(key = "1764aa48-4f77-48f4-bbac-1419321cecb4", fallback = "E-posta, SMS ve telefon iletişim tercihlerinizi buradan yönetebilirsiniz."),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -100,7 +100,7 @@ fun CommunicationPreferenceScreen(
                                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
                             ) {
                                 Text(
-                                    text = "Tercihler yüklenemedi",
+                                    text = BBLocalization.Current.Get(key = "6d558ac0-89c2-48c9-b66c-053e0ef413bc", fallback = "Tercihler yüklenemedi"),
                                     style = MaterialTheme.typography.titleSmall,
                                     color = MaterialTheme.colorScheme.error
                                 )
@@ -112,7 +112,7 @@ fun CommunicationPreferenceScreen(
                                 )
 
                                 Text(
-                                    text = "Tekrar denemek için dokunun.",
+                                    text = BBLocalization.Current.Get(key = "7e313006-8bd1-4836-9937-bbe3e4ac5288", fallback = "Tekrar denemek için dokunun."),
                                     style = MaterialTheme.typography.labelMedium,
                                     color = MaterialTheme.colorScheme.primary
                                 )
@@ -129,7 +129,7 @@ fun CommunicationPreferenceScreen(
                             padding = BbCardPadding.Medium
                         ) {
                             Text(
-                                text = "Tanımlı iletişim tercihi bulunamadı.",
+                                text = BBLocalization.Current.Get(key = "744fb307-ace5-4159-8eba-e7d21ac2b52f", fallback = "Tanımlı iletişim tercihi bulunamadı."),
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )

@@ -137,7 +137,7 @@ fun BbCategorySearchSelectInput(
                     imageVector =
                         Icons.Outlined.ArrowDropDown,
                     contentDescription =
-                        "Listeyi aç"
+                        BBLocalization.Current.Get(key = "c2a66b95-8864-4d9f-9377-8629678b4f8d", fallback = "Listeyi aç")
                 )
             },
             isError =

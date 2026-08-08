@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2b.Views.Home.Components
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -53,14 +55,14 @@ fun HomepageSpecialContents(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
         ) {
             Text(
-                text = "Seçilmiş Toptan Ürün Grupları",
+                text = BBLocalization.Current.Get(key = "b18fcc04-78f7-4914-afb6-8f283fd08a61", fallback = "Seçilmiş Toptan Ürün Grupları"),
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
-                text = "Toptan alıma uygun özel ürün vitrinlerini keşfedin.",
+                text = BBLocalization.Current.Get(key = "79b1703e-e0b9-43a0-80ef-9ceb2dd6933a", fallback = "Toptan alıma uygun özel ürün vitrinlerini keşfedin."),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -77,7 +79,7 @@ fun HomepageSpecialContents(
                 val group = specialContents[index]
 
                 BbChip(
-                    text = group.GroupName.ifBlank { "Toptan Vitrin" },
+                    text = group.GroupName.ifBlank { BBLocalization.Current.Get(key = "4272734e-b75c-4eb5-a568-7d7f629116fe", fallback = "Toptan Vitrin") },
                     selected = selectedGroupIndex == index,
                     onClick = {
                         selectedGroupIndex = index
@@ -125,7 +127,7 @@ private fun WholesaleHomepageSpecialDTO.ToWholesaleProductCardModel(isFavorite: 
         Title = ProductName,
         PriceText = "Teklif ile",
         MoqText = if (MinimumOrderQuantity > 0) "MOQ $MinimumOrderQuantity" else "",
-        BadgeText = "Özel Vitrin",
+        BadgeText = BBLocalization.Current.Get(key = "03fd0ba4-09a9-4909-bdb0-e0951aab5800", fallback = "Özel Vitrin"),
         ImageUrl = ResolveWholesaleHomepageSpecialImageUrl(DefaultPicture),
         IsFavorite = isFavorite
     )

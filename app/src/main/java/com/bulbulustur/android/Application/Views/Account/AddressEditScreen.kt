@@ -116,13 +116,13 @@ fun AddressEditScreen(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.SectionGap)
         ) {
             AddressEditSection(
-                title = "Alıcı Bilgileri",
-                description = "Teslimatı alacak kişinin bilgilerini düzenleyin."
+                title = BBLocalization.Current.Get(key = "1d0cb70f-85fe-425d-b8b8-08399ee986c3", fallback = "Alıcı Bilgileri"),
+                description = BBLocalization.Current.Get(key = "63204e70-1f43-490f-8b08-1f9c4d72b5ee", fallback = "Teslimatı alacak kişinin bilgilerini düzenleyin.")
             ) {
                 AddressEditTextField(
                     value = name,
                     onValueChange = { name = it },
-                    label = "Ad",
+                    label = BBLocalization.Current.Get(key = "9b9cf3d0-0463-4f28-83de-c750f16963e4", fallback = "Ad"),
                     placeholder = BBLocalization.Current.Get(key = "de47456e-91cb-47d5-8882-458fe0cf0b5e", fallback = "Adınız"),
                     enabled = address != null && !isLoading
                 )
@@ -155,8 +155,8 @@ fun AddressEditScreen(
             }
 
             AddressEditSection(
-                title = "Konum Bilgileri",
-                description = "Adresin ülke, bölge, şehir ve ilçe bilgilerini düzenleyin."
+                title = BBLocalization.Current.Get(key = "73a67a8a-8c74-40a7-ab6e-09100c4918f0", fallback = "Konum Bilgileri"),
+                description = BBLocalization.Current.Get(key = "65351ade-40a8-411f-8328-73e6620211ca", fallback = "Adresin ülke, bölge, şehir ve ilçe bilgilerini düzenleyin.")
             ) {
                 AddressCascadeFields(
                     state = addressCascadeState,
@@ -171,14 +171,14 @@ fun AddressEditScreen(
             }
 
             AddressEditSection(
-                title = "Adres Detayı",
-                description = "Açık adresi ve adres başlığını düzenleyin."
+                title = BBLocalization.Current.Get(key = "6ec6d9c7-1640-4941-a059-742f80d10a5a", fallback = "Adres Detayı"),
+                description = BBLocalization.Current.Get(key = "53f22222-9b27-4fe8-9236-39b09b9fe671", fallback = "Açık adresi ve adres başlığını düzenleyin.")
             ) {
                 AddressEditTextArea(
                     value = addressText,
                     onValueChange = { addressText = it },
-                    label = "Açık Adres",
-                    placeholder = "Mahalle, cadde, sokak, bina, kat ve daire bilgisi",
+                    label = BBLocalization.Current.Get(key = "7dd4d1d8-64bd-448a-848e-8bfadd0553aa", fallback = "Açık Adres"),
+                    placeholder = BBLocalization.Current.Get(key = "0f207740-61e2-47e1-bca3-90bcb3926066", fallback = "Mahalle, cadde, sokak, bina, kat ve daire bilgisi"),
                     enabled = address != null && !isLoading
                 )
 
@@ -186,7 +186,7 @@ fun AddressEditScreen(
                     value = addressTitle,
                     onValueChange = { addressTitle = it },
                     label = BBLocalization.Current.Get(key = "a9620a09-6461-4898-9b6f-9b4116bb1594", fallback = "Adres Başlığı"),
-                    placeholder = "Ev Adresim",
+                    placeholder = BBLocalization.Current.Get(key = "8d02a590-e33e-4798-adea-4794c5a4a590", fallback = "Ev Adresim"),
                     enabled = address != null && !isLoading
                 )
 
@@ -404,7 +404,7 @@ private fun AddressEditDefaultField(
                 )
 
                 Text(
-                    text = "Siparişlerde öncelikli olarak bu adres kullanılır.",
+                    text = BBLocalization.Current.Get(key = "40e684d5-e4ec-4e72-ac8d-293fce44664f", fallback = "Siparişlerde öncelikli olarak bu adres kullanılır."),
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

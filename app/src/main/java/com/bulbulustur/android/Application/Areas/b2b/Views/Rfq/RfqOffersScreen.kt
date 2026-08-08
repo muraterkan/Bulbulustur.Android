@@ -54,7 +54,7 @@ fun RfqOffersScreen(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "Gelen Teklifler",
+                title = BBLocalization.Current.Get(key = "a8e6d495-3f06-4ced-8dd0-841e72da687c", fallback = "Gelen Teklifler"),
                 onBackClick = onBackClick
             )
         }
@@ -307,7 +307,7 @@ private fun RfqOffersLoadingCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Teklifler yükleniyor...",
+            text = BBLocalization.Current.Get(key = "efbc440c-5f90-4703-a827-35238df93928", fallback = "Teklifler yükleniyor..."),
             style = BbTypography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -375,13 +375,13 @@ private fun RfqOffersEmptyCard() {
             }
 
             Text(
-                text = "Henüz Teklif Yok",
+                text = BBLocalization.Current.Get(key = "3c567143-ad1e-4650-b6b1-5d8b18f45b2b", fallback = "Henüz Teklif Yok"),
                 style = BbTypography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
-                text = "Bu fiyat teklifi isteğine henüz satıcı teklifi gönderilmedi.",
+                text = BBLocalization.Current.Get(key = "44454cb7-8948-47be-991a-a879f73e88f2", fallback = "Bu fiyat teklifi isteğine henüz satıcı teklifi gönderilmedi."),
                 style = BbTypography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

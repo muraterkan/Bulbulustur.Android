@@ -292,24 +292,24 @@ private fun StoreListHeroCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             StoreListStatusPill(
-                text = "Bulbulustur Mağazaları"
+                text = BBLocalization.Current.Get(key = "156549eb-65bd-43c7-9fc5-d9bfaac351fd", fallback = "Bulbulustur Mağazaları")
             )
 
             Text(
-                text = "Güvenilir Mağazaları Keşfedin",
+                text = BBLocalization.Current.Get(key = "b11bf88a-7271-427f-a24a-7122c52401bf", fallback = "Güvenilir Mağazaları Keşfedin"),
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
-                text = "Perakende alışveriş için ürün, mağaza puanı ve mağaza detaylarını tek akışta inceleyin.",
+                text = BBLocalization.Current.Get(key = "3378b17b-1bff-49ee-9d3a-fefa00af20c8", fallback = "Perakende alışveriş için ürün, mağaza puanı ve mağaza detaylarını tek akışta inceleyin."),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             StoreListPrimaryButton(
-                text = "Nasıl Çalışır?",
+                text = BBLocalization.Current.Get(key = "6c99e78c-75c0-4f16-8834-4ea835c484f8", fallback = "Nasıl Çalışır?"),
                 icon = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
                 modifier = Modifier.fillMaxWidth(),
                 onClick = onHowItWorksClick
@@ -423,7 +423,7 @@ private fun StoreListResultHeader(
 
         Text(
             text = if (selectedFilter == BBLocalization.Current.Get(key = "40b32a95-e0ec-4b16-b54d-12b6fe90cced", fallback = "Tümü")) {
-                "Tüm mağazalar gösteriliyor."
+                BBLocalization.Current.Get(key = "c910c4fc-3c8d-434c-ac68-734f6bb109ba", fallback = "Tüm mağazalar gösteriliyor.")
             } else {
                 "$selectedFilter filtresi uygulanıyor."
             },
@@ -523,7 +523,7 @@ private fun StoreListCard(
             }
 
             StoreListPrimaryButton(
-                text = "Mağazayı İncele",
+                text = BBLocalization.Current.Get(key = "946b1d23-5c82-4e52-a366-d8492368eac6", fallback = "Mağazayı İncele"),
                 icon = Icons.Outlined.Storefront,
                 modifier = Modifier.fillMaxWidth(),
                 onClick = onClick
@@ -547,7 +547,7 @@ private fun StoreListLoadingState() {
             CircularProgressIndicator()
 
             Text(
-                text = "Mağazalar yükleniyor...",
+                text = BBLocalization.Current.Get(key = "c65fbcde-0a45-4556-9c11-1e4331da0b25", fallback = "Mağazalar yükleniyor..."),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -601,23 +601,23 @@ private fun StoreListEmptyState(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
-            StoreListStatusPill(text = "Mağaza Bulunamadı")
+            StoreListStatusPill(text = BBLocalization.Current.Get(key = "9141e794-372f-4548-81a2-ef81b797a60c", fallback = "Mağaza Bulunamadı"))
 
             Text(
-                text = "Listelenecek Mağaza Bulunmuyor",
+                text = BBLocalization.Current.Get(key = "16f66cd8-6413-4f4e-b981-0bf04a4a9b69", fallback = "Listelenecek Mağaza Bulunmuyor"),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
-                text = "Bu filtrede mağaza bulunamadı. Satıcı olmak istiyorsanız başvuru süreci web panelinde tamamlanır.",
+                text = BBLocalization.Current.Get(key = "9664d489-4342-45bc-a0c1-8cfec8f3f2d5", fallback = "Bu filtrede mağaza bulunamadı. Satıcı olmak istiyorsanız başvuru süreci web panelinde tamamlanır."),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             StoreListPrimaryButton(
-                text = "Satıcı Başvurusu Hakkında",
+                text = BBLocalization.Current.Get(key = "b90712c7-5604-4947-a417-5f1e625d461c", fallback = "Satıcı Başvurusu Hakkında"),
                 icon = Icons.Outlined.Storefront,
                 modifier = Modifier.fillMaxWidth(),
                 onClick = onSellerInfoClick
@@ -664,14 +664,14 @@ private fun StoreListSellerInfoBanner(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Satıcı olmak ister misiniz?",
+                    text = BBLocalization.Current.Get(key = "92798553-780f-49a0-9ca3-0ba54f681150", fallback = "Satıcı olmak ister misiniz?"),
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = "Başvuru ve mağaza yönetimi web paneli üzerinden tamamlanır.",
+                    text = BBLocalization.Current.Get(key = "62dfc179-6a41-4ac2-8a78-467164a448a3", fallback = "Başvuru ve mağaza yönetimi web paneli üzerinden tamamlanır."),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -800,12 +800,12 @@ private fun StoreDTO.ToStoreListItem(): StoreListItem {
         name = resolvedName,
         logoText = resolvedName.take(2).uppercase(),
         description = StoreDescription.ifBlank {
-            "Mağaza vitrini"
+            BBLocalization.Current.Get(key = "7ef0bc22-35db-4470-a426-670c1408e856", fallback = "Mağaza vitrini")
         },
         categoryName = if (CompanyId > 0) {
-            "Kurumsal Mağaza"
+            BBLocalization.Current.Get(key = "bd064b33-af61-455b-a442-b39b85fa710c", fallback = "Kurumsal Mağaza")
         } else {
-            "Perakende Mağaza"
+            BBLocalization.Current.Get(key = "966a452c-8fbd-4f8e-a848-2a9a01e7b7c4", fallback = "Perakende Mağaza")
         },
         ratingText = if (Rating > 0.0) {
             String.format(Locale.US, "%.1f", Rating)
@@ -815,7 +815,7 @@ private fun StoreDTO.ToStoreListItem(): StoreListItem {
         cargoText = if (DefaultEstimatedShippingTime > 0) {
             "${DefaultEstimatedShippingTime} gün"
         } else {
-            "Standart"
+            BBLocalization.Current.Get(key = "081fb0ca-4f68-4277-9ca0-028d1e9d147f", fallback = "Standart")
         },
         isVerified = !StoreKey.isNullOrBlank() || CompanyId > 0
     )

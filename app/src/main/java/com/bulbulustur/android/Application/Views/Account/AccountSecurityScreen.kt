@@ -92,12 +92,12 @@ fun AccountSecurityScreen(
             item {
                 AccountSecuritySection(
                     title = BBLocalization.Current.Get(key = "ab200e4f-1f9e-45f4-90a6-7d5d21d33953", fallback = "Profil"),
-                    description = "Hesabınızda görünen temel bilgileri yönetin.",
+                    description = BBLocalization.Current.Get(key = "f6141dae-a633-4fbd-a278-f853cfca9c39", fallback = "Hesabınızda görünen temel bilgileri yönetin."),
                     icon = Icons.Outlined.Person
                 ) {
                     AccountSecurityRow(
-                        title = "Profil Bilgileri",
-                        value = "Ad soyad, hesap ID ve temel profil bilgileri",
+                        title = BBLocalization.Current.Get(key = "589265c1-b3c1-4f48-ab37-47bce366de11", fallback = "Profil Bilgileri"),
+                        value = BBLocalization.Current.Get(key = "f1b36dce-fc6d-4eeb-a5e4-4dc18e075aca", fallback = "Ad soyad, hesap ID ve temel profil bilgileri"),
                         icon = Icons.Outlined.Person,
                         onClick = onProfileInfoClick
                     )
@@ -106,8 +106,8 @@ fun AccountSecurityScreen(
 
             item {
                 AccountSecuritySection(
-                    title = "Giriş ve Güvenlik",
-                    description = "E-posta, şifre ve giriş güvenliği ayarları.",
+                    title = BBLocalization.Current.Get(key = "72de0009-aa0a-48ed-b08e-5ce322991021", fallback = "Giriş ve Güvenlik"),
+                    description = BBLocalization.Current.Get(key = "2ecf7d43-0ef8-4e69-b801-5a81939ac1b4", fallback = "E-posta, şifre ve giriş güvenliği ayarları."),
                     icon = Icons.Outlined.Security
                 ) {
                     AccountSecurityRow(
@@ -129,8 +129,8 @@ fun AccountSecurityScreen(
                     AccountSecurityDashedDivider()
 
                     AccountSecurityRow(
-                        title = "Telefonlarım",
-                        value = "SMS doğrulama ve güvenlik işlemleri",
+                        title = BBLocalization.Current.Get(key = "30a80ae2-5527-4320-b805-f7a60420e71b", fallback = "Telefonlarım"),
+                        value = BBLocalization.Current.Get(key = "2f4bca35-95dd-423b-bf0c-f49645013a71", fallback = "SMS doğrulama ve güvenlik işlemleri"),
                         icon = Icons.Outlined.PhoneIphone,
                         onClick = onPhonesClick
                     )
@@ -139,13 +139,13 @@ fun AccountSecurityScreen(
 
             item {
                 AccountSecuritySection(
-                    title = "Oturum Geçmişi",
-                    description = "Hesabınıza yapılan erişimleri kontrol edin.",
+                    title = BBLocalization.Current.Get(key = "b513dd09-c8de-47dd-9754-631b270b6442", fallback = "Oturum Geçmişi"),
+                    description = BBLocalization.Current.Get(key = "cc2e3ef1-ee9a-4da0-bf52-f8974af7060f", fallback = "Hesabınıza yapılan erişimleri kontrol edin."),
                     icon = Icons.Outlined.History
                 ) {
                     AccountSecurityRow(
                         title = BBLocalization.Current.Get(key = "7c9dea88-25ba-4bbe-97bd-de9d27c119d2", fallback = "Giriş Etkinlikleri"),
-                        value = "Oturum hareketleri ve erişim geçmişi",
+                        value = BBLocalization.Current.Get(key = "98745379-fe37-41ef-8e54-64b8bab43a1f", fallback = "Oturum hareketleri ve erişim geçmişi"),
                         icon = Icons.Outlined.History,
                         onClick = onLoginActivitiesClick
                     )
@@ -163,7 +163,7 @@ private fun AccountSecurityIntroCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Profil, giriş ve doğrulama bilgilerinizi güvenle yönetin.",
+            text = BBLocalization.Current.Get(key = "2e95e873-6644-4392-bc48-1acaa37ae808", fallback = "Profil, giriş ve doğrulama bilgilerinizi güvenle yönetin."),
             style = BbTypography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -212,7 +212,7 @@ private fun AccountSecurityStrengthCard() {
                     )
 
                     Text(
-                        text = "Telefon doğrulaması tamamlandığında güvenlik seviyeniz artar.",
+                        text = BBLocalization.Current.Get(key = "29845859-89a3-4697-b020-81de3bcf448c", fallback = "Telefon doğrulaması tamamlandığında güvenlik seviyeniz artar."),
                         style = BbTypography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

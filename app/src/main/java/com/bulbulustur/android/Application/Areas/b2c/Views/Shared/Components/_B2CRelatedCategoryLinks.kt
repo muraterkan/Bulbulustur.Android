@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -42,7 +44,7 @@ fun _B2CRelatedCategoryLinks(
     ) {
         _RetailSectionTitle(
             title =
-                "İlgili Kategoriler"
+                BBLocalization.Current.Get(key = "e675f152-9fda-4647-aca2-0376e996a3f5", fallback = "İlgili Kategoriler")
         )
 
         Row(

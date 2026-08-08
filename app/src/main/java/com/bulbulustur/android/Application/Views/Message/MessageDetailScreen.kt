@@ -64,7 +64,7 @@ fun MessageDetailScreen(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "Mesaj Detayı",
+                title = BBLocalization.Current.Get(key = "6516e119-a8f7-44ed-aa46-f412c142a3ba", fallback = "Mesaj Detayı"),
                 onBackClick = onBackClick
             )
         }
@@ -177,7 +177,7 @@ private fun MessageParticipantCard(otherUser: MemberDTO?) {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = otherUser.fullName().ifBlank { "Toptan kullanıcı" },
+                    text = otherUser.fullName().ifBlank { BBLocalization.Current.Get(key = "2578a723-02d6-4f7b-aafb-ec618f46e735", fallback = "Toptan kullanıcı") },
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -191,7 +191,7 @@ private fun MessageParticipantCard(otherUser: MemberDTO?) {
                 }
 
                 Text(
-                    text = "Toptan ticaret görüşmesi",
+                    text = BBLocalization.Current.Get(key = "c59382e8-3ebd-42c6-817e-758ce000a79e", fallback = "Toptan ticaret görüşmesi"),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -207,13 +207,13 @@ private fun MessageConversationHeader() {
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
     ) {
         Text(
-            text = "Konuşma",
+            text = BBLocalization.Current.Get(key = "6c37943c-1198-466b-8ffa-58787e7c327b", fallback = "Konuşma"),
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onSurface
         )
 
         Text(
-            text = "Mesaj geçmişinizi görüntüleyin ve yanıt gönderin.",
+            text = BBLocalization.Current.Get(key = "b402a12e-4194-494e-8fe8-250a55adafd4", fallback = "Mesaj geçmişinizi görüntüleyin ve yanıt gönderin."),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -233,7 +233,7 @@ private fun MessageBubbleCard(
             ?.takeIf { it.isNotBlank() }
             ?: message.SenderName
                 ?.takeIf { it.isNotBlank() }
-            ?: "Karşı taraf"
+            ?: BBLocalization.Current.Get(key = "418c6767-c6df-4e18-bee6-44d03099d84c", fallback = "Karşı taraf")
     }
 
     Column(
@@ -304,7 +304,7 @@ private fun MessageReplyEditor(
                 )
 
                 Text(
-                    text = "Yanıtla",
+                    text = BBLocalization.Current.Get(key = "4a49d383-b72b-4b48-8985-f35822aaf75e", fallback = "Yanıtla"),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -378,7 +378,7 @@ private fun MessageDetailEmptyState() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Bu konuşmada gösterilecek mesaj bulunmuyor.",
+            text = BBLocalization.Current.Get(key = "d5404ff4-10e7-4335-9732-8f53641e2226", fallback = "Bu konuşmada gösterilecek mesaj bulunmuyor."),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

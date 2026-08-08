@@ -116,7 +116,7 @@ fun ProductReviewScreen(
         topBar = {
             BbInnerPageHeader(
                 title =
-                    "Ürün Değerlendirmeleri",
+                    BBLocalization.Current.Get(key = "47459db5-2c10-463e-9c78-aba51e39f219", fallback = "Ürün Değerlendirmeleri"),
                 onBackClick =
                     onBackClick
             )
@@ -189,7 +189,7 @@ fun ProductReviewScreen(
                     item {
                         ProductReviewMessageCard(
                             title =
-                                "Değerlendirmeler alınamadı",
+                                BBLocalization.Current.Get(key = "4a26c4e4-5c82-4c19-9e36-08cb0dadf54f", fallback = "Değerlendirmeler alınamadı"),
                             description =
                                 State.ErrorMessage
                         )
@@ -211,9 +211,9 @@ fun ProductReviewScreen(
                     item {
                         ProductReviewMessageCard(
                             title =
-                                "Bu filtrede yorum yok",
+                                BBLocalization.Current.Get(key = "f794ffc2-c7b8-4fbe-ba85-7d5a3d5d2414", fallback = "Bu filtrede yorum yok"),
                             description =
-                                "Seçtiğiniz puana ait değerlendirme bulunamadı."
+                                BBLocalization.Current.Get(key = "8f062c74-33b1-450f-a1dc-dc1cc2b0be91", fallback = "Seçtiğiniz puana ait değerlendirme bulunamadı.")
                         )
                     }
                 }
@@ -222,7 +222,7 @@ fun ProductReviewScreen(
                     item {
                         ProductReviewSectionTitle(
                             title =
-                                "Müşteri Değerlendirmeleri",
+                                BBLocalization.Current.Get(key = "64cd190f-4f96-4edf-85be-b1ef1778e3a9", fallback = "Müşteri Değerlendirmeleri"),
                             description =
                                 "${filteredReviews.size} değerlendirme gösteriliyor."
                         )
@@ -253,7 +253,7 @@ fun ProductReviewScreen(
                             BbButton(
                                 text =
                                     if (State.IsLoading) {
-                                        "Yükleniyor"
+                                        BBLocalization.Current.Get(key = "3d602cfc-e863-482d-8f87-e76b8fa32f0c", fallback = "Yükleniyor")
                                     } else {
                                         BBLocalization.Current.Get(key = "e67b3c5d-fbdd-4f49-bb8f-72be40be9086", fallback = "Daha Fazla Göster")
                                     },
@@ -286,7 +286,7 @@ private fun ProductReviewProductSummary(
             ?.takeIf {
                 it.isNotBlank()
             }
-            ?: "Ürün Değerlendirmeleri"
+            ?: BBLocalization.Current.Get(key = "47459db5-2c10-463e-9c78-aba51e39f219", fallback = "Ürün Değerlendirmeleri")
 
     val storeName =
         product
@@ -294,7 +294,7 @@ private fun ProductReviewProductSummary(
             ?.takeIf {
                 it.isNotBlank()
             }
-            ?: "Satıcı bilgisi"
+            ?: BBLocalization.Current.Get(key = "2132e096-e397-4fc1-bb82-793c20e3fee2", fallback = "Satıcı bilgisi")
 
     val variantText =
         listOfNotNull(
@@ -491,7 +491,7 @@ private fun ProductReviewScoreSummary(
 
                 Text(
                     text =
-                        "Yayınlanmış değerlendirmeler",
+                        BBLocalization.Current.Get(key = "0337270f-cfb6-4adc-9302-7c5c49587f91", fallback = "Yayınlanmış değerlendirmeler"),
                     style =
                         MaterialTheme.typography.bodySmall,
                     color =
@@ -520,8 +520,8 @@ private fun ProductReviewFilterSection(
             )
     ) {
         ProductReviewSectionTitle(
-            title = "Puan Filtresi",
-            description = "Değerlendirmeleri verilen puana göre filtreleyin."
+            title = BBLocalization.Current.Get(key = "05bdf6dd-a76d-47be-bc76-1e1b75dfc5b0", fallback = "Puan Filtresi"),
+            description = BBLocalization.Current.Get(key = "c63bb455-d4d9-428d-bcf0-97eda989a627", fallback = "Değerlendirmeleri verilen puana göre filtreleyin.")
         )
 
         FlowRow(
@@ -692,7 +692,7 @@ private fun ProductReviewCard(
             Text(
                 text =
                     review.Content.ifBlank {
-                        "Değerlendirme metni bulunmuyor."
+                        BBLocalization.Current.Get(key = "75868752-adb9-4e92-af8f-945eac590db7", fallback = "Değerlendirme metni bulunmuyor.")
                     },
                 style =
                     MaterialTheme.typography.bodyMedium,

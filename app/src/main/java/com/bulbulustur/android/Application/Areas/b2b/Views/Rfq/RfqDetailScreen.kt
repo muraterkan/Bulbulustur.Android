@@ -60,7 +60,7 @@ fun RfqDetailScreen(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "RFQ Detayı",
+                title = BBLocalization.Current.Get(key = "764f77d3-0300-443c-9597-4bcd512a9819", fallback = "RFQ Detayı"),
                 onBackClick = onBackClick
             )
         }
@@ -177,7 +177,7 @@ private fun RfqDetailSummaryCard(
                     )
 
                     Text(
-                        text = buyerRequest.ProductName.ifBlank { "Teklif Talebi" },
+                        text = buyerRequest.ProductName.ifBlank { BBLocalization.Current.Get(key = "d6a3a561-934c-46b0-af29-c48498e0171c", fallback = "Teklif Talebi") },
                         style = BbTypography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -223,12 +223,12 @@ private fun RfqDetailQuantityCard(
         ) {
             RfqDetailSectionTitle(
                 icon = Icons.Outlined.Inventory2,
-                title = "Talep Bilgileri"
+                title = BBLocalization.Current.Get(key = "fd68636e-aa8c-4d25-997d-289cc46d0a9e", fallback = "Talep Bilgileri")
             )
 
             RfqDetailInfoRow(
                 icon = Icons.Outlined.Straighten,
-                title = "Talep Miktarı",
+                title = BBLocalization.Current.Get(key = "0b01d182-3eb2-457b-8a01-748d13f05e48", fallback = "Talep Miktarı"),
                 value = buildString {
                     append(buyerRequest.PurchaseQuantity)
                     if (buyerRequest.UnitName.isNotBlank()) {
@@ -240,7 +240,7 @@ private fun RfqDetailQuantityCard(
 
             RfqDetailInfoRow(
                 icon = Icons.Outlined.Payments,
-                title = "Hedef Birim Fiyat",
+                title = BBLocalization.Current.Get(key = "7dfcda70-a543-4cd3-8868-f3ccd5e7c88b", fallback = "Hedef Birim Fiyat"),
                 value = buildString {
                     append(buyerRequest.UnitPrice)
                     if (buyerRequest.CurrencySymbol.isNotBlank()) {
@@ -255,7 +255,7 @@ private fun RfqDetailQuantityCard(
 
             RfqDetailInfoRow(
                 icon = Icons.Outlined.Schedule,
-                title = "Son Talep Tarihi",
+                title = BBLocalization.Current.Get(key = "5c1ba8a0-4630-4e54-886d-22c66eb4942f", fallback = "Son Talep Tarihi"),
                 value = buyerRequest.LastRequestDate.ifBlank { "-" }
             )
         }
@@ -334,7 +334,7 @@ private fun RfqDetailTradeCard(
         ) {
             RfqDetailSectionTitle(
                 icon = Icons.Outlined.Payments,
-                title = "Ticari Koşullar"
+                title = BBLocalization.Current.Get(key = "b57feb8b-30a7-4c26-a638-cce10d96c69d", fallback = "Ticari Koşullar")
             )
 
             RfqDetailInfoRow(
@@ -378,13 +378,13 @@ private fun RfqDetailDeliveryCard(
 
             RfqDetailInfoRow(
                 icon = Icons.Outlined.LocalShipping,
-                title = "Teslimat Türü",
+                title = BBLocalization.Current.Get(key = "cff0d134-575c-437c-8008-56ae7e028bd2", fallback = "Teslimat Türü"),
                 value = buyerRequest.ShippingTypeName.ifBlank { "-" }
             )
 
             RfqDetailInfoRow(
                 icon = Icons.Outlined.LocalShipping,
-                title = "Teslimat Hedefi",
+                title = BBLocalization.Current.Get(key = "79063e0f-af2c-4425-9c4a-90140dd6493f", fallback = "Teslimat Hedefi"),
                 value = buyerRequest.ShippingTarget.ifBlank { "-" }
             )
         }
@@ -406,17 +406,17 @@ private fun RfqDetailOffersCard(
         ) {
             RfqDetailSectionTitle(
                 icon = Icons.Outlined.LocalOffer,
-                title = "Gelen Teklifler"
+                title = BBLocalization.Current.Get(key = "a8e6d495-3f06-4ced-8dd0-841e72da687c", fallback = "Gelen Teklifler")
             )
 
             Text(
-                text = "Bu fiyat teklifi isteğine gönderilen satıcı tekliflerini ayrı sayfada inceleyin.",
+                text = BBLocalization.Current.Get(key = "0b5eb705-1160-4374-93eb-0fed13dd74eb", fallback = "Bu fiyat teklifi isteğine gönderilen satıcı tekliflerini ayrı sayfada inceleyin."),
                 style = BbTypography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             BbButton(
-                text = "Teklifleri Gör",
+                text = BBLocalization.Current.Get(key = "1679b840-b1c4-4f9d-8aab-c17e0fabdf90", fallback = "Teklifleri Gör"),
                 onClick = onOffersClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Primary,
@@ -535,7 +535,7 @@ private fun RfqDetailLoadingCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "RFQ detayı yükleniyor...",
+            text = BBLocalization.Current.Get(key = "256ad3ea-3055-46c9-ad4a-0a85955dcd46", fallback = "RFQ detayı yükleniyor..."),
             style = BbTypography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

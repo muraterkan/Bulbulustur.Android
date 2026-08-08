@@ -334,7 +334,7 @@ private fun AddressLoadingState() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Adresler yükleniyor...",
+            text = BBLocalization.Current.Get(key = "01bb3a50-9e6f-46a2-ae98-0bd0693e50f0", fallback = "Adresler yükleniyor..."),
             style = BbTypography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -410,7 +410,7 @@ private fun AddressEmptyState(
             )
 
             Text(
-                text = "Henüz kayıtlı adresiniz bulunmuyor. Teslimat ve fatura süreçleri için yeni adres ekleyebilirsiniz.",
+                text = BBLocalization.Current.Get(key = "0d76b875-7409-4752-a1e3-6a71310b661c", fallback = "Henüz kayıtlı adresiniz bulunmuyor. Teslimat ve fatura süreçleri için yeni adres ekleyebilirsiniz."),
                 style = BbTypography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

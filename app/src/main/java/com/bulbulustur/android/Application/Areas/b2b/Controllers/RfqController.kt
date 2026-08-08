@@ -160,7 +160,7 @@ class RfqController(
         count: Int = 100
     ) {
         if (memberId <= 0) {
-            SetError("Üye bilgisi bulunamadı.")
+            SetError(BBLocalization.Current.Get(key = "b8f76c94-db02-44ad-b1d7-9cd3b235fb75", fallback = "Üye bilgisi bulunamadı."))
             return
         }
 
@@ -191,7 +191,7 @@ class RfqController(
         buyerRequestKey: String
     ) {
         if (buyerRequestKey.isBlank()) {
-            SetError("RFQ anahtarı bulunamadı.")
+            SetError(BBLocalization.Current.Get(key = "6d373f7e-fa8f-445e-bee3-ee70fca0f94b", fallback = "RFQ anahtarı bulunamadı."))
             return
         }
 
@@ -219,7 +219,7 @@ class RfqController(
 
     fun GetBuyerRequestForUpdate(buyerRequestKey: String) {
         if (buyerRequestKey.isBlank()) {
-            SetError("RFQ anahtarı bulunamadı.")
+            SetError(BBLocalization.Current.Get(key = "6d373f7e-fa8f-445e-bee3-ee70fca0f94b", fallback = "RFQ anahtarı bulunamadı."))
             return
         }
 
@@ -304,7 +304,7 @@ class RfqController(
         onSuccess: () -> Unit = {}
     ) {
         if (buyerRequestKey.isBlank()) {
-            SetError("Silinecek RFQ kaydı bulunamadı.")
+            SetError(BBLocalization.Current.Get(key = "9abde9ac-5b36-471b-8173-446c8d112a07", fallback = "Silinecek RFQ kaydı bulunamadı."))
             return
         }
 
@@ -340,7 +340,7 @@ class RfqController(
         count: Int = 100
     ) {
         if (buyerRequestKey.isBlank()) {
-            SetError("RFQ anahtarı bulunamadı.")
+            SetError(BBLocalization.Current.Get(key = "6d373f7e-fa8f-445e-bee3-ee70fca0f94b", fallback = "RFQ anahtarı bulunamadı."))
             return
         }
 
@@ -403,7 +403,7 @@ class RfqController(
         onSuccess: (Int) -> Unit
     ) {
         if (assignedToSellerId <= 0) {
-            SetError("Satıcı atama bilgisi bulunamadı.")
+            SetError(BBLocalization.Current.Get(key = "6ad19534-3a4d-4cba-a85d-0d708d144149", fallback = "Satıcı atama bilgisi bulunamadı."))
             return
         }
 
@@ -424,7 +424,7 @@ class RfqController(
                 copy(
                     ErrorMessage = when {
                         !response.Success -> response.Message
-                        sellerMemberId <= 0 -> "Satıcı üye bilgisi bulunamadı."
+                        sellerMemberId <= 0 -> BBLocalization.Current.Get(key = "f1b6ce78-809d-4e90-893f-7b536f782b5f", fallback = "Satıcı üye bilgisi bulunamadı.")
                         else -> null
                     }
                 )

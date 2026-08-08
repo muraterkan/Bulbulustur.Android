@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2b.Views.Product
+package com.bulbulustur.android.Application.Areas.b2b.Views.Product
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
@@ -175,8 +175,8 @@ if (isDetailLoading) {
             onBackClick = onBackClick,
             onFavoriteClick = onFavoriteClick,
             onMessageClick = onMessageClick,
-            title = "Ürün bulunamadı",
-            description = "Bu ürün kaldırılmış veya artık yayında olmayabilir."
+            title = BBLocalization.Current.Get(key = "9afc052e-e2bf-413d-81c6-461bfc3c9174", fallback = "Ürün bulunamadı"),
+            description = BBLocalization.Current.Get(key = "882051b8-72b2-4491-98b0-2ba3c117e55d", fallback = "Bu ürün kaldırılmış veya artık yayında olmayabilir.")
         )
 
         return
@@ -322,7 +322,7 @@ if (isDetailLoading) {
 
             if (product.companyBestSellerProducts.isNotEmpty()) {
                 WholesaleHorizontalProductSection(
-                    title = "Bu Firmanın Çok Satanları",
+                    title = BBLocalization.Current.Get(key = "41845aa9-e2b8-400e-ab02-8e115b633b5f", fallback = "Bu Firmanın Çok Satanları"),
                     products = product.companyBestSellerProducts,
                     onHeaderClick = onCompanyBestSellerProductsClick,
                     onProductClick = onCompanyBestSellerProductClick
@@ -408,7 +408,7 @@ private fun WholesaleProductDetailStateScaffold(
                 onMenuClick = {},
                 onFavoriteClick = onFavoriteClick,
                 onMessageClick = onMessageClick,
-                placeholder = "Toptan Ürün, Kategori Veya Firma Ara",
+                placeholder = BBLocalization.Current.Get(key = "8d009caa-1db4-42e9-b394-dc818277d259", fallback = "Toptan Ürün, Kategori Veya Firma Ara"),
                 onSearchClick = {},
                 onClearClick = {
                     searchText = ""
@@ -629,7 +629,7 @@ private fun WholesaleProductTitleCard(
 
                 if (product.customizationOptions.isNotEmpty()) {
                     WholesaleMiniPill(
-                        text = "Özelleştirilebilir",
+                        text = BBLocalization.Current.Get(key = "c148c859-c9f7-4f79-bd24-0e6591f973ec", fallback = "Özelleştirilebilir"),
                         icon = Icons.Outlined.Tune,
                         containerColor = BBColors.Blue.Blue50,
                         contentColor = BBColors.Blue.Blue700
@@ -687,7 +687,7 @@ private fun WholesaleProductTitleCard(
                         )
 
                         Text(
-                            text = "Firma Puanı",
+                            text = BBLocalization.Current.Get(key = "8aef0a76-da2c-4c29-bb18-8d889a8d0169", fallback = "Firma Puanı"),
                             style = MaterialTheme.typography.bodySmall,
                             color = BBColors.TextMuted
                         )
@@ -724,7 +724,7 @@ private fun WholesaleTradeSummaryCard(
 
     val secondRowMetrics = buildList {
         if (product.deliveryTimeLabel.isNotBlank()) {
-            add("Üretim Süresi" to product.deliveryTimeLabel)
+            add(BBLocalization.Current.Get(key = "8105c4f2-d451-4aa9-aeed-c6fb3bf730c6", fallback = "Üretim Süresi") to product.deliveryTimeLabel)
         }
 
         if (product.originCountry.isNotBlank()) {
@@ -760,7 +760,7 @@ private fun WholesaleTradeSummaryCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
             WholesaleSectionLabel(
-                text = "Ticari Teklif Özeti",
+                text = BBLocalization.Current.Get(key = "0371c529-2665-4d56-861a-71fd4e1599c7", fallback = "Ticari Teklif Özeti"),
                 icon = Icons.Outlined.RequestQuote
             )
 
@@ -836,7 +836,7 @@ private fun WholesalePriceBreakdownCard(
     ) {
         Column {
             WholesaleCardHeader(
-                title = "Adede Göre Teklif",
+                title = BBLocalization.Current.Get(key = "f0d86bd5-2480-41cd-be00-7667540c09f1", fallback = "Adede Göre Teklif"),
                 icon = Icons.Outlined.Paid,
                 onClick = onClick
             )
@@ -977,7 +977,7 @@ private fun WholesaleCustomizationOptionsCard(options: List<WholesaleCustomizati
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             WholesaleCardHeaderInline(
-                title = "Özelleştirme Seçenekleri",
+                title = BBLocalization.Current.Get(key = "e6425e4f-38df-48df-8deb-949b3f544bfa", fallback = "Özelleştirme Seçenekleri"),
                 icon = Icons.Outlined.Tune,
                 onClick = onCustomizationRequestClick
             )
@@ -994,7 +994,7 @@ private fun WholesaleCustomizationOptionsCard(options: List<WholesaleCustomizati
             }
 
             WholesaleInlineAction(
-                text = "Özelleştirme Talebi Oluştur",
+                text = BBLocalization.Current.Get(key = "05910be6-5215-49ec-892d-0e4bda976909", fallback = "Özelleştirme Talebi Oluştur"),
                 icon = Icons.Outlined.Tune,
                 onClick = onCustomizationRequestClick
             )
@@ -1027,7 +1027,7 @@ private fun WholesaleOrderAndDeliveryCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
             WholesaleSectionLabel(
-                text = "Üretim ve Teslimat",
+                text = BBLocalization.Current.Get(key = "7f08f3c0-4c2f-4ae6-8214-f9ffdcb50c9b", fallback = "Üretim ve Teslimat"),
                 icon = Icons.Outlined.LocalShipping
             )
 
@@ -1084,7 +1084,7 @@ private fun WholesaleOrderAndDeliveryCard(
 
             if (product.deliveryDescription.isNotBlank()) {
                 WholesaleInfoBlock(
-                    title = "Teslimat Notu",
+                    title = BBLocalization.Current.Get(key = "f3dc6d44-2867-468c-8e56-320d33dfd021", fallback = "Teslimat Notu"),
                     description = product.deliveryDescription
                 )
             }
@@ -1107,12 +1107,12 @@ private fun WholesaleSecureTradeCard() {
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
             WholesaleSectionLabel(
-                text = "Bulbulustur Güvenli Ticaret",
+                text = BBLocalization.Current.Get(key = "c5019f73-2435-4d5d-9dbd-33a7f887013b", fallback = "Bulbulustur Güvenli Ticaret"),
                 icon = Icons.Outlined.Security
             )
 
             Text(
-                text = "Teklif, numune ve özelleştirme taleplerini kayıt altına alarak firma ile güvenli ticari iletişim başlat.",
+                text = BBLocalization.Current.Get(key = "0810000f-68da-430b-834a-27ad6967665e", fallback = "Teklif, numune ve özelleştirme taleplerini kayıt altına alarak firma ile güvenli ticari iletişim başlat."),
                 style = MaterialTheme.typography.bodySmall,
                 color = BBColors.TextSubtle
             )
@@ -1121,9 +1121,9 @@ private fun WholesaleSecureTradeCard() {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
             ) {
-                WholesaleTrustMetric("Güvenli Teklif", Icons.Outlined.RequestQuote, Modifier.weight(1f))
+                WholesaleTrustMetric(BBLocalization.Current.Get(key = "627efc27-dfe4-4ded-b09a-d1f43f40f9ac", fallback = "Güvenli Teklif"), Icons.Outlined.RequestQuote, Modifier.weight(1f))
                 WholesaleTrustMetric("Numune Desteği", Icons.Outlined.Inventory2, Modifier.weight(1f))
-                WholesaleTrustMetric("Firma Doğrulama", Icons.Outlined.Verified, Modifier.weight(1f))
+                WholesaleTrustMetric(BBLocalization.Current.Get(key = "560b2b1e-6ee1-47f0-b2f0-d2223bff1868", fallback = "Firma Doğrulama"), Icons.Outlined.Verified, Modifier.weight(1f))
             }
         }
     }
@@ -1211,7 +1211,7 @@ private fun WholesaleCompanyDeepCard(
 
                 Icon(
                     imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
-                    contentDescription = "Firma Profilini Görüntüle",
+                    contentDescription = BBLocalization.Current.Get(key = "f2d74425-dd5b-40e4-bace-92bfa0b0e008", fallback = "Firma Profilini Görüntüle"),
                     tint = BBColors.TextMuted,
                     modifier = Modifier.size(BBIcon.SizeMd)
                 )
@@ -1226,7 +1226,7 @@ private fun WholesaleCompanyDeepCard(
                         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
                     ) {
                         Text(
-                            text = "Firma Genel Bilgileri",
+                            text = BBLocalization.Current.Get(key = "e8f19a82-0133-4419-96e4-bd264e6803fa", fallback = "Firma Genel Bilgileri"),
                             style = MaterialTheme.typography.titleSmall,
                             color = BBColors.TextStrong,
                             fontWeight = FontWeight.Bold
@@ -1265,7 +1265,7 @@ private fun WholesaleCompanyDeepCard(
                 )
 
                 WholesaleOutlineActionButton(
-                    text = "Firma Profilini Görüntüle",
+                    text = BBLocalization.Current.Get(key = "f2d74425-dd5b-40e4-bace-92bfa0b0e008", fallback = "Firma Profilini Görüntüle"),
                     onClick = onCompanyProfileClick,
                     modifier = Modifier.weight(1f)
                 )
@@ -1325,7 +1325,7 @@ private fun WholesaleProductInformationCard(
                 )
             ) {
                 WholesaleSectionLabel(
-                    text = "Teknik Bilgiler",
+                    text = BBLocalization.Current.Get(key = "8da24015-907e-4b53-91ae-f60bb2c72392", fallback = "Teknik Bilgiler"),
                     icon = Icons.Outlined.Inventory2
                 )
             }
@@ -1588,7 +1588,7 @@ private fun WholesaleRelatedCategoryChipsSection(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             Text(
-                text = "İlgili Kategoriler",
+                text = BBLocalization.Current.Get(key = "e675f152-9fda-4647-aca2-0376e996a3f5", fallback = "İlgili Kategoriler"),
                 style = MaterialTheme.typography.titleMedium,
                 color = BBColors.TextStrong,
                 fontWeight = FontWeight.Bold
@@ -2150,7 +2150,7 @@ private fun WholesaleProductDetailBottomBar(onLastPriceRequestClick: () -> Unit,
             horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
         ) {
             WholesaleBottomActionButton(
-                text = "Numune",
+                text = BBLocalization.Current.Get(key = "76f040d9-6f98-4e10-aeba-fcbf5a6691ba", fallback = "Numune"),
                 onClick = onSampleRequestClick,
                 modifier = Modifier.weight(1f),
                 containerColor = BBColors.SurfaceMuted,
@@ -2170,7 +2170,7 @@ private fun WholesaleProductDetailBottomBar(onLastPriceRequestClick: () -> Unit,
             )
 
             WholesaleBottomActionButton(
-                text = "Son Fiyat",
+                text = BBLocalization.Current.Get(key = "1cfc3769-add7-41d6-b18b-117466c6e19f", fallback = "Son Fiyat"),
                 onClick = onLastPriceRequestClick,
                 modifier = Modifier.weight(1.05f),
                 containerColor = BBColors.Primary,
@@ -2364,7 +2364,7 @@ private fun WholesaleProductDTO.ToWholesaleProductDetail(relatedProducts: List<W
         mainPrice?.Prices?.isNotBlank() == true -> mainPrice.Prices.orEmpty()
         mainPrice != null && mainPrice.Price > 0 -> mainPrice.Price.ToWholesalePriceText(mainPrice.CurrencySymbol)
         Price > 0 -> Price.ToWholesalePriceText("")
-        else -> "Teklif İle"
+        else -> BBLocalization.Current.Get(key = "ba6fe1b6-4d68-487c-b98a-eed9fe59bb2c", fallback = "Teklif İle")
     }
 
     val resolvedPriceBreaks = Prices.map { price ->
@@ -2379,7 +2379,7 @@ private fun WholesaleProductDTO.ToWholesaleProductDetail(relatedProducts: List<W
         val priceLabel = when {
             price.Prices.orEmpty().isNotBlank() -> price.Prices.orEmpty()
             price.Price > 0 -> price.Price.ToWholesalePriceText(price.CurrencySymbol)
-            else -> "Teklif İle"
+            else -> BBLocalization.Current.Get(key = "ba6fe1b6-4d68-487c-b98a-eed9fe59bb2c", fallback = "Teklif İle")
         }
 
         WholesalePriceBreak(
@@ -2417,7 +2417,7 @@ private fun WholesaleProductDTO.ToWholesaleProductDetail(relatedProducts: List<W
                 priceLabel = if (relatedProduct.Price > 0) {
                     relatedProduct.Price.ToWholesalePriceText(relatedProduct.CurrencySymbol)
                 } else {
-                    "Teklif İle"
+                    BBLocalization.Current.Get(key = "ba6fe1b6-4d68-487c-b98a-eed9fe59bb2c", fallback = "Teklif İle")
                 },
                 metaLabel = if (relatedProduct.MinimumOrderQuantity > 0) {
                     "Minimum ${relatedProduct.MinimumOrderQuantity} Adet"
@@ -2444,7 +2444,7 @@ private fun WholesaleProductDTO.ToWholesaleProductDetail(relatedProducts: List<W
         if (SamplePrice > 0) {
             add(
                 WholesaleTradeBenefit(
-                    text = "Numune Mevcut",
+                    text = BBLocalization.Current.Get(key = "3504840e-b3be-48c7-b72b-b9902c556456", fallback = "Numune Mevcut"),
                     icon = Icons.Outlined.Inventory2
                 )
             )
@@ -2462,7 +2462,7 @@ private fun WholesaleProductDTO.ToWholesaleProductDetail(relatedProducts: List<W
         if (Customization.isNotBlank()) {
             add(
                 WholesaleTradeBenefit(
-                    text = "Özelleştirilebilir",
+                    text = BBLocalization.Current.Get(key = "c148c859-c9f7-4f79-bd24-0e6591f973ec", fallback = "Özelleştirilebilir"),
                     icon = Icons.Outlined.Tune
                 )
             )
@@ -2554,7 +2554,7 @@ private fun WholesaleProductDTO.ToWholesaleProductDetail(relatedProducts: List<W
         if (DimensionsPerUnit.isNotBlank()) {
             add(
                 WholesaleProductProperty(
-                    name = "Birim Ölçü",
+                    name = BBLocalization.Current.Get(key = "b7141028-a7c4-4b49-ac68-d471379d1247", fallback = "Birim Ölçü"),
                     value = "$DimensionsPerUnit $DimensionsPerUnitType".trim()
                 )
             )
@@ -2595,7 +2595,7 @@ private fun WholesaleProductDTO.ToWholesaleProductDetail(relatedProducts: List<W
             if (verificationSummary.VerificationStatus.isNotBlank()) {
                 add(
                     WholesaleCompanyMetricItem(
-                        title = "Doğrulama Durumu",
+                        title = BBLocalization.Current.Get(key = "4dd0ae59-017e-4bd3-9ba6-995962f97c01", fallback = "Doğrulama Durumu"),
                         value = verificationSummary.VerificationStatus
                     )
                 )
@@ -2604,7 +2604,7 @@ private fun WholesaleProductDTO.ToWholesaleProductDetail(relatedProducts: List<W
             if (verificationSummary.TotalYearsValid > 0) {
                 add(
                     WholesaleCompanyMetricItem(
-                        title = "Geçerlilik Süresi",
+                        title = BBLocalization.Current.Get(key = "ea5e466c-a319-4170-b432-93b94c08f591", fallback = "Geçerlilik Süresi"),
                         value = "${verificationSummary.TotalYearsValid} Yıl"
                     )
                 )
@@ -2615,7 +2615,7 @@ private fun WholesaleProductDTO.ToWholesaleProductDetail(relatedProducts: List<W
             if (verifications.isNotEmpty()) {
                 add(
                     WholesaleCompanyMetricItem(
-                        title = "Doğrulama Sayısı",
+                        title = BBLocalization.Current.Get(key = "f44d1432-d011-4777-b7f5-33430eaf1d01", fallback = "Doğrulama Sayısı"),
                         value = verifications.size.toString()
                     )
                 )
@@ -2625,7 +2625,7 @@ private fun WholesaleProductDTO.ToWholesaleProductDetail(relatedProducts: List<W
         if (ViewCount > 0) {
             add(
                 WholesaleCompanyMetricItem(
-                    title = "Görüntülenme",
+                    title = BBLocalization.Current.Get(key = "2847695f-3842-459a-849a-67582da91b74", fallback = "Görüntülenme"),
                     value = ViewCount.toString()
                 )
             )
@@ -2645,7 +2645,7 @@ private fun WholesaleProductDTO.ToWholesaleProductDetail(relatedProducts: List<W
         if (paymentTerms.isNotEmpty()) {
             add(
                 WholesaleCompanyMetricItem(
-                    title = "Ödeme Seçeneği",
+                    title = BBLocalization.Current.Get(key = "d63d8a3f-f006-4267-9962-2ed4be2c9643", fallback = "Ödeme Seçeneği"),
                     value = paymentTerms.size.toString()
                 )
             )
@@ -2678,7 +2678,7 @@ private fun WholesaleProductDTO.ToWholesaleProductDetail(relatedProducts: List<W
     return WholesaleProductDetail(
         id = WholesaleProductId,
         name = ProductName.orEmpty().ifBlank { BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = "") },
-        searchPlaceholder = "Toptan Ürün, Kategori Veya Firma Ara",
+        searchPlaceholder = BBLocalization.Current.Get(key = "8d009caa-1db4-42e9-b394-dc818277d259", fallback = "Toptan Ürün, Kategori Veya Firma Ara"),
         shortDescription = description,
         longDescription = description,
         badgeText = Category.orEmpty().ifBlank { BBLocalization.Current.Get(key = "1d7da276-0c79-47a8-b8f5-d8aa0967d923", fallback = "") },

@@ -89,7 +89,7 @@ fun AccountGenderScreen(
                 padding = BbCardPadding.Medium
             ) {
                 Text(
-                    text = "Profilinizde gösterilecek cinsiyet bilgisini seçin.",
+                    text = BBLocalization.Current.Get(key = "fd012660-3646-49d1-bfdb-554655fc837d", fallback = "Profilinizde gösterilecek cinsiyet bilgisini seçin."),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -106,7 +106,7 @@ fun AccountGenderScreen(
                     when {
                         isLoading && selectableGenders.isEmpty() -> {
                             Text(
-                                text = "Cinsiyet seçenekleri yükleniyor...",
+                                text = BBLocalization.Current.Get(key = "bc391322-df48-40eb-a579-fe189ac1052b", fallback = "Cinsiyet seçenekleri yükleniyor..."),
                                 modifier = Modifier.padding(BBSpacing.CardPadding),
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant

@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2b.Views.Product
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -73,9 +75,9 @@ fun WholesaleProductListScreen(
 
     val sortFilters = remember {
         listOf(
-            "Öne çıkan",
+            BBLocalization.Current.Get(key = "d02a9b8b-001b-4e99-9073-9150016441f3", fallback = "Öne çıkan"),
             "Min. sipariş",
-            "Yeni tedarik",
+            BBLocalization.Current.Get(key = "3259e32e-3904-4d90-888e-79439610c98a", fallback = "Yeni tedarik"),
             "Hızlı teklif"
         )
     }
@@ -93,7 +95,7 @@ fun WholesaleProductListScreen(
     }
 
     var selectedSort by remember {
-        mutableStateOf("Öne çıkan")
+        mutableStateOf(BBLocalization.Current.Get(key = "d02a9b8b-001b-4e99-9073-9150016441f3", fallback = "Öne çıkan"))
     }
 
     val filteredProducts = remember(
@@ -127,7 +129,7 @@ fun WholesaleProductListScreen(
                 }
             }
 
-            "Yeni tedarik" -> {
+            BBLocalization.Current.Get(key = "3259e32e-3904-4d90-888e-79439610c98a", fallback = "Yeni tedarik") -> {
                 categoryResult.filter { product ->
                     product.IsNew
                 }
@@ -154,7 +156,7 @@ fun WholesaleProductListScreen(
                 },
                 onMenuClick = onMenuClick,
                 onFavoriteClick = onFavoriteClick,
-                placeholder = "Ürün, firma veya RFQ ara",
+                placeholder = BBLocalization.Current.Get(key = "157e8207-fc00-4788-b847-62900c8daa48", fallback = "Ürün, firma veya RFQ ara"),
                 onSearchClick = {
                     onSearchClick(searchText)
                 },
@@ -308,7 +310,7 @@ private fun WholesaleProductListIntroCard() {
             )
 
             Text(
-                text = "Sektörlerden, tedarikçilerden ve teklif akışlarından ürün keşfet.",
+                text = BBLocalization.Current.Get(key = "3ea03f74-61c0-4d3e-aeec-3562785d14c0", fallback = "Sektörlerden, tedarikçilerden ve teklif akışlarından ürün keşfet."),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -370,7 +372,7 @@ private fun B2BProductData.ToWholesaleProductListEntry(): WholesaleProductListEn
     val moqText = if (MinimumOrderQuantity > 0) {
         "Min. $MinimumOrderQuantity $MinimumOrderUnit"
     } else {
-        "Min. sipariş bilgisi yok"
+        BBLocalization.Current.Get(key = "ef701131-2f8f-45b4-8c13-b288eca14634", fallback = "Min. sipariş bilgisi yok")
     }
 
     return WholesaleProductListEntry(
@@ -381,7 +383,7 @@ private fun B2BProductData.ToWholesaleProductListEntry(): WholesaleProductListEn
             PriceText = priceText,
             MoqText = moqText,
             SupplierText = CompanyName,
-            BadgeText = "Toptan",
+            BadgeText = BBLocalization.Current.Get(key = "cd90e72e-8745-4543-836b-ca914c3640f8", fallback = "Toptan"),
             ImageResId = R.drawable.h3ff3b33d6a1447c898cee6e336867bach,
             IsFavorite = false
         ),

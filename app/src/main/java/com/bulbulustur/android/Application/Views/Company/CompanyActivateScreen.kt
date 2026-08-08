@@ -74,7 +74,7 @@ fun CompanyActivateScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             BbChip(
-                text = "Bulbulustur B2B Index"
+                text = BBLocalization.Current.Get(key = "4617972b-64be-4110-a2f0-2b5b399b94d8", fallback = "Bulbulustur B2B Index")
             )
 
             Text(
@@ -93,18 +93,18 @@ fun CompanyActivateScreen(
         CompanyActivateInfoCard()
 
         CompanyActivateBenefitCard(
-            title = "Global Görünürlük",
-            description = "Şirket profiliniz uluslararası alıcılar için daha Keşfedilebilir hale gelir."
+            title = BBLocalization.Current.Get(key = "a0a8ab67-0d72-439c-a52b-f3befadf44a1", fallback = "Global Görünürlük"),
+            description = BBLocalization.Current.Get(key = "2d881f9f-9e38-469f-b35a-a8e306c645ac", fallback = "Şirket profiliniz uluslararası alıcılar için daha Keşfedilebilir hale gelir.")
         )
 
         CompanyActivateBenefitCard(
-            title = "RFQ Fırsatları",
-            description = "Potansiyel alıcılardan teklif alma süreciniz güçlenir."
+            title = BBLocalization.Current.Get(key = "64194408-118e-4ce1-8a70-b57998b16235", fallback = "RFQ Fırsatları"),
+            description = BBLocalization.Current.Get(key = "86de864c-3166-4885-94c6-11f86a819289", fallback = "Potansiyel alıcılardan teklif alma süreciniz güçlenir.")
         )
 
         CompanyActivateBenefitCard(
-            title = "Kurumsal Vitrin",
-            description = "Şirket bilgileriniz daha düzenli, güven veren ve B2B profiline uygun şekilde sunulur."
+            title = BBLocalization.Current.Get(key = "fcc5e39f-8321-4b88-ba71-0e73835565c2", fallback = "Kurumsal Vitrin"),
+            description = BBLocalization.Current.Get(key = "19f7b87c-4daa-42d1-ad9a-04282eeb7df3", fallback = "Şirket bilgileriniz daha düzenli, güven veren ve B2B profiline uygun şekilde sunulur.")
         )
 
         CompanyActivateSummaryCard(
@@ -133,7 +133,7 @@ fun CompanyActivateScreen(
                 )
 
                 Text(
-                    text = "Ayarların etkili olması birkaç saate kadar sürebilir.",
+                    text = BBLocalization.Current.Get(key = "14d902c3-9e5c-4d1e-9f8b-aa6fe03c8ff6", fallback = "Ayarların etkili olması birkaç saate kadar sürebilir."),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -153,7 +153,7 @@ fun CompanyActivateScreen(
                             onCompanyActivateClick(formState.value)
                         } else {
                             formState.value = formState.value.copy(
-                                validationMessage = "Devam etmek için kullanıcı sözleşmesini kabul etmelisin."
+                                validationMessage = BBLocalization.Current.Get(key = "651aa3f8-bca0-4325-a725-c7f79e007fe8", fallback = "Devam etmek için kullanıcı sözleşmesini kabul etmelisin.")
                             )
                         }
                     },
@@ -179,13 +179,13 @@ private fun CompanyActivateInfoCard() {
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = "B2B Index nedir?",
+                text = BBLocalization.Current.Get(key = "bdb200f1-14fa-4407-b84f-f1f23e2ce3e0", fallback = "B2B Index nedir?"),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
-                text = "Şirketinizin ürün ve hizmetlerini global alıcılarla buluşturmak için tasarlanmış kurumsal görünürlük alanıdır. Başlangıçta ücretsiz olarak kullanabilir, ihtiyaçlarınıza göre açıklama ve planlarınızı daha sonra geliştirebilirsiniz.",
+                text = BBLocalization.Current.Get(key = "42fbb8cb-5466-4615-b753-a24a33e57875", fallback = "Şirketinizin ürün ve hizmetlerini global alıcılarla buluşturmak için tasarlanmış kurumsal görünürlük alanıdır. Başlangıçta ücretsiz olarak kullanabilir, ihtiyaçlarınıza göre açıklama ve planlarınızı daha sonra geliştirebilirsiniz."),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -236,13 +236,13 @@ private fun CompanyActivateSummaryCard(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = "Ek Bilgiler",
+                text = BBLocalization.Current.Get(key = "ad97229a-586f-4c99-ac7f-64ebbfa86eba", fallback = "Ek Bilgiler"),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
-                text = "Aktivasyon yapılacak şirket kaydı.",
+                text = BBLocalization.Current.Get(key = "e9611cdd-b422-4355-904e-41eba582de04", fallback = "Aktivasyon yapılacak şirket kaydı."),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -253,7 +253,7 @@ private fun CompanyActivateSummaryCard(
             )
 
             CompanyActivateSummaryRow(
-                label = "Şirket Kimliği",
+                label = BBLocalization.Current.Get(key = "b05816cf-38fa-4a75-8d66-bf800fb4a8d7", fallback = "Şirket Kimliği"),
                 value = companyActivateSummary.companyCode
             )
 
@@ -263,7 +263,7 @@ private fun CompanyActivateSummaryCard(
             )
 
             CompanyActivateSummaryRow(
-                label = "B2B Index Durumu",
+                label = BBLocalization.Current.Get(key = "1593c999-ed73-445d-8be0-e928e8218379", fallback = "B2B Index Durumu"),
                 value = companyActivateSummary.b2bIndexStatusText
             )
         }
@@ -302,8 +302,8 @@ private fun createSampleCompanyActivateSummary(): CompanyActivateSummary {
         companyId = 2,
         companyCode = "FGAOlbO7EGAZ5nB",
         createdDateText = "17.10.2025",
-        b2bIndexStatusText = "Kapalı",
-        companyDisplayName = "Türkiye Global Ticaret Limited Şirketi"
+        b2bIndexStatusText = BBLocalization.Current.Get(key = "fecd4b5c-9c9d-4d13-9906-49ac69360bfe", fallback = "Kapalı"),
+        companyDisplayName = BBLocalization.Current.Get(key = "796d73f2-bf9e-4b2a-82e4-d74a8ba96608", fallback = "Türkiye Global Ticaret Limited Şirketi")
     )
 }
 

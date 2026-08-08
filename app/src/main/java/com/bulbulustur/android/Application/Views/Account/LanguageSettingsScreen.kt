@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Account
+package com.bulbulustur.android.Application.Views.Account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -34,8 +34,6 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BbTypography
 import com.bulbulustur.android.businesslayer.Core.DTO.SystemDescLanguageDTO
 
-private const val LANGUAGE_SETTINGS_TURKISH_FLAG = "file:///android_asset/flags/turkey.svg"
-private const val LANGUAGE_SETTINGS_ENGLISH_FLAG = "file:///android_asset/flags/uk.svg"
 private const val LANGUAGE_SETTINGS_FALLBACK_FLAG = "file:///android_asset/flags/flag.svg"
 
 @Composable
@@ -44,7 +42,7 @@ fun LanguageSettingsScreen(
     selectedLanguageId: Int,
     isLoading: Boolean,
     errorMessage: String?,
-    onLanguageSelected: (Int) -> Unit,
+    onLanguageSelected: (Int, String) -> Unit,
     onBackClick: () -> Unit = {}
 ) {
     val visibleLanguages = ResolveLanguageSettingsItems(languages)
@@ -69,7 +67,7 @@ fun LanguageSettingsScreen(
                 end = BBSpacing.PageHorizontal,
                 bottom = innerPadding.calculateBottomPadding() + BBSpacing.PageBottom
             ),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
         ) {
             item {
                 LanguageIntroCard()
@@ -77,7 +75,7 @@ fun LanguageSettingsScreen(
 
             if (isLoading && languages.isEmpty()) {
                 item {
-                    SettingsLoadingCard("Diller yükleniyor...")
+                    SettingsLoadingCard(BBLocalization.Current.Get(key = "4cb87a4e-27ee-4945-95dc-31c9c14b8986", fallback = "Diller yükleniyor..."))
                 }
             } else {
                 items(
@@ -89,7 +87,7 @@ fun LanguageSettingsScreen(
                         isSelected = language.id == selectedLanguageId,
                         onClick = {
                             if (language.id != selectedLanguageId) {
-                                onLanguageSelected(language.id)
+                                onLanguageSelected(language.id, language.code)
                             }
                         }
                     )
@@ -107,7 +105,7 @@ private fun LanguageIntroCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Uygulamada kullanmak istediğiniz dili seçin.",
+            text = BBLocalization.Current.Get(key = "53d51ce5-7364-442e-952e-75e9c0fc39d3", fallback = "Uygulamada kullanmak istediğiniz dili seçin."),
             style = BbTypography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -128,7 +126,7 @@ private fun LanguageRow(
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
@@ -168,7 +166,7 @@ private fun LanguageRow(
             if (isSelected) {
                 Icon(
                     imageVector = Icons.Outlined.CheckCircle,
-                    contentDescription = "Seçili dil",
+                    contentDescription = BBLocalization.Current.Get(key = "5a440cd9-a690-4baf-86ec-f79bb9b5ebcf", fallback = "Seçili dil"),
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(BBIcon.SizeLg)
                 )
@@ -185,7 +183,7 @@ private fun SettingsLoadingCard(message: String) {
         padding = BbCardPadding.Medium
     ) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2),
             verticalAlignment = Alignment.CenterVertically
         ) {
             CircularProgressIndicator(
@@ -207,10 +205,9 @@ private fun ResolveLanguageSettingsItems(
     languages: List<SystemDescLanguageDTO>
 ): List<LanguageSettingsItem> {
     return languages
-        .filter {
-            it.SystemDescLanguageId == 1 ||
-                    it.SystemDescLanguageId == 2
-        }
+        .filter { it.SystemDescLanguageId > 0 }
+        .distinctBy { it.SystemDescLanguageId }
+        .sortedBy { it.SystemDescLanguageId }
         .map {
             LanguageSettingsItem(
                 id = it.SystemDescLanguageId,
@@ -218,45 +215,64 @@ private fun ResolveLanguageSettingsItems(
                     ?.takeIf { value -> value.isNotBlank() }
                     ?: when (it.SystemDescLanguageId) {
                         2 -> "English"
-                        else -> "Türkçe"
+                        else -> BBLocalization.Current.Get(key = "0917b779-9fd5-4c09-a77a-7561824c9d2c", fallback = "Türkçe")
                     },
-                code = it.LanguageIsoCode
-                    ?.takeIf { value -> value.isNotBlank() }
-                    ?: when (it.SystemDescLanguageId) {
-                        2 -> "en"
-                        else -> "tr"
-                    },
-                flagAssetPath = ResolveLanguageSettingsFlagPath(
-                    it.SystemDescLanguageId
-                )
+                code = ResolveLanguageSettingsCode(it.SystemDescLanguageId, it.LanguageIsoCode),
+                flagAssetPath = ResolveLanguageSettingsFlagPath(it.SystemDescLanguageId, it.LanguageIsoCode, it.Class)
             )
         }
         .ifEmpty {
             listOf(
                 LanguageSettingsItem(
                     id = 1,
-                    title = "Türkçe",
+                    title = BBLocalization.Current.Get(key = "0917b779-9fd5-4c09-a77a-7561824c9d2c", fallback = "Türkçe"),
                     code = "tr",
-                    flagAssetPath = LANGUAGE_SETTINGS_TURKISH_FLAG
+                    flagAssetPath = ResolveLanguageSettingsFlagPath(1, "tr", null)
                 ),
                 LanguageSettingsItem(
                     id = 2,
                     title = "English",
                     code = "en",
-                    flagAssetPath = LANGUAGE_SETTINGS_ENGLISH_FLAG
+                    flagAssetPath = ResolveLanguageSettingsFlagPath(2, "en", null)
                 )
             )
         }
 }
 
-private fun ResolveLanguageSettingsFlagPath(
-    languageId: Int
-): String {
-    return when (languageId) {
-        1 -> LANGUAGE_SETTINGS_TURKISH_FLAG
-        2 -> LANGUAGE_SETTINGS_ENGLISH_FLAG
-        else -> LANGUAGE_SETTINGS_FALLBACK_FLAG
+private fun ResolveLanguageSettingsCode(languageId: Int, languageIsoCode: String?): String {
+    return languageIsoCode?.trim()?.lowercase()?.takeIf { it.isNotBlank() } ?: when (languageId) {
+        1 -> "tr"
+        2 -> "en"
+        3 -> "de"
+        4 -> "fr"
+        5 -> "es"
+        6 -> "it"
+        7 -> "pt"
+        8 -> "nl"
+        9 -> "pl"
+        10 -> "ru"
+        11 -> "ar"
+        else -> ""
     }
+}
+
+private fun ResolveLanguageSettingsFlagPath(languageId: Int, languageIsoCode: String?, languageClass: String?): String {
+    val code = ResolveLanguageSettingsCode(languageId, languageIsoCode)
+    val assetName = languageClass?.trim()?.lowercase()?.removeSuffix(".svg")?.takeIf { it.isNotBlank() } ?: when (code) {
+        "tr" -> "turkey"
+        "en" -> "uk"
+        "de" -> "germany"
+        "fr" -> "france"
+        "es" -> "spain"
+        "it" -> "italy"
+        "pt" -> "portugal"
+        "nl" -> "netherlands"
+        "pl" -> "poland"
+        "ru" -> "russia"
+        "ar" -> "saudi-arabia"
+        else -> return LANGUAGE_SETTINGS_FALLBACK_FLAG
+    }
+    return "file:///android_asset/flags/$assetName.svg"
 }
 
 private data class LanguageSettingsItem(

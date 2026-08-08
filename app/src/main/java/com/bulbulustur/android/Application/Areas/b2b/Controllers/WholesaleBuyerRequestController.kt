@@ -1,5 +1,9 @@
 package com.bulbulustur.android.Application.Areas.b2b.Controllers
 
+import android.util.Log
+
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.lifecycle.viewModelScope
 import com.bulbulustur.android.businesslayer.Core.Interface.IWholesaleBuyerCustomizeRequestRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IWholesaleBuyerLastPriceRequestRepository
@@ -36,7 +40,7 @@ class WholesaleBuyerRequestController(
 
     fun InsertLastPriceRequest(languageId: Int, model: WholesaleBuyerLastPriceRequestInsertModel, onSuccess: () -> Unit = {}) {
         if (languageId <= 0 || model.InsertedBy <= 0 || model.WholesaleProductId <= 0 || model.CompanyId <= 0) {
-            SetError("Son fiyat talebi için gerekli bilgiler eksik.")
+            SetError(BBLocalization.Current.Get(key = "eedef71d-7220-41fd-8082-d153a7ccf794", fallback = "Son fiyat talebi için gerekli bilgiler eksik."))
             return
         }
 
@@ -60,7 +64,7 @@ class WholesaleBuyerRequestController(
 
     fun InsertSampleRequest(languageId: Int, model: WholesaleBuyerSampleRequestInsertModel, onSuccess: () -> Unit = {}) {
         if (languageId <= 0 || model.InsertedBy <= 0 || model.WholesaleProductId <= 0 || model.CompanyId <= 0) {
-            SetError("Numune talebi için gerekli bilgiler eksik.")
+            SetError(BBLocalization.Current.Get(key = "034899e5-cfa2-46b8-86dd-db08e61e0ad8", fallback = "Numune talebi için gerekli bilgiler eksik."))
             return
         }
 
@@ -84,7 +88,7 @@ class WholesaleBuyerRequestController(
 
     fun InsertCustomizeRequest(languageId: Int, model: WholesaleBuyerCustomizeRequestInsertModel, onSuccess: () -> Unit = {}) {
         if (languageId <= 0 || model.InsertedBy <= 0 || model.WholesaleProductId <= 0 || model.CompanyId <= 0) {
-            SetError("Özelleştirme talebi için gerekli bilgiler eksik.")
+            SetError(BBLocalization.Current.Get(key = "2e862aa8-6e88-449e-a5d8-c9b3e7c91da9", fallback = "Özelleştirme talebi için gerekli bilgiler eksik."))
             return
         }
 

@@ -72,7 +72,7 @@ fun OrderContractScreen(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "Sözleşme",
+                title = BBLocalization.Current.Get(key = "46aaf0f1-e0bc-429e-9a7d-5c26ee275449", fallback = "Sözleşme"),
                 subtitle = BBLocalization.Current.Get(key = "cbadbcf8-3e92-481d-b7bd-c002a9003abb", fallback = "Siparişe ait mesafeli satış sözleşmesi."),
                 onBackClick = onBackClick
             )
@@ -96,8 +96,8 @@ fun OrderContractScreen(
                 orderKey.isBlank() || storeKey.isBlank() -> {
                     item {
                         OrderContractMessageCard(
-                            title = "Sözleşme bilgisi eksik",
-                            description = "Sipariş veya mağaza anahtarı bulunamadı."
+                            title = BBLocalization.Current.Get(key = "bf9ae67b-414c-4dbb-8c78-afef77dffa5a", fallback = "Sözleşme bilgisi eksik"),
+                            description = BBLocalization.Current.Get(key = "425b726a-13a6-4865-b3e8-2c468de48d02", fallback = "Sipariş veya mağaza anahtarı bulunamadı.")
                         )
                     }
                 }
@@ -111,7 +111,7 @@ fun OrderContractScreen(
                 state.ErrorMessage != null && state.Contract == null -> {
                     item {
                         OrderContractMessageCard(
-                            title = "Sözleşme alınamadı",
+                            title = BBLocalization.Current.Get(key = "9891ee14-8be2-40e6-98fb-39a517213676", fallback = "Sözleşme alınamadı"),
                             description = state.ErrorMessage.orEmpty()
                         )
                     }
@@ -120,8 +120,8 @@ fun OrderContractScreen(
                 state.Contract == null -> {
                     item {
                         OrderContractMessageCard(
-                            title = "Sözleşme bulunamadı",
-                            description = "Bu sipariş ve mağaza için kayıtlı sözleşme bulunamadı."
+                            title = BBLocalization.Current.Get(key = "7f372c3b-70c4-4f07-a241-1519ddac1165", fallback = "Sözleşme bulunamadı"),
+                            description = BBLocalization.Current.Get(key = "9a012116-37ca-46b2-a459-04ab2d36261c", fallback = "Bu sipariş ve mağaza için kayıtlı sözleşme bulunamadı.")
                         )
                     }
                 }
@@ -207,11 +207,11 @@ private fun OrderContractSummaryCard(
             }
 
             OrderContractNoticeBox(
-                text = "Bu belge, sipariş oluşturulduğu anda geçerli olan sözleşme metnidir."
+                text = BBLocalization.Current.Get(key = "4c972645-8504-497b-81a7-277cd8a93251", fallback = "Bu belge, sipariş oluşturulduğu anda geçerli olan sözleşme metnidir.")
             )
 
             BbButton(
-                text = "Yazdır",
+                text = BBLocalization.Current.Get(key = "58656233-1be3-433e-9624-6018dac6a333", fallback = "Yazdır"),
                 onClick = onPrintClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Primary,
@@ -270,7 +270,7 @@ private fun OrderContractInfoGrid(contract: ContractDTO) {
 
             OrderContractInfoBox(
                 modifier = Modifier.weight(1f),
-                title = "VERSİYON",
+                title = BBLocalization.Current.Get(key = "705d7bc6-c5db-41c1-b062-6aa236415d50", fallback = "VERSİYON"),
                 value = contract.Version?.toString() ?: "-",
                 icon = Icons.Outlined.ReceiptLong,
                 iconColor = MaterialTheme.colorScheme.onSurfaceVariant
@@ -297,13 +297,13 @@ private fun OrderContractLegalTextCard(contractText: String) {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "HUKUKİ METİN",
+                    text = BBLocalization.Current.Get(key = "8e3ace60-8ad0-4c13-9e6a-be2fc5a6eb5e", fallback = "HUKUKİ METİN"),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
                 Text(
-                    text = "Sözleşme İçeriği",
+                    text = BBLocalization.Current.Get(key = "56a81cd3-b265-494c-b8fc-80aee84a651c", fallback = "Sözleşme İçeriği"),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -311,7 +311,7 @@ private fun OrderContractLegalTextCard(contractText: String) {
 
             Text(
                 text = contractText.ifBlank {
-                    "Sözleşme metni bulunamadı."
+                    BBLocalization.Current.Get(key = "29f53147-06b4-45b5-a4dc-59cdd46fe460", fallback = "Sözleşme metni bulunamadı.")
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -336,19 +336,19 @@ private fun OrderContractBottomActionCard(onPrintClick: () -> Unit) {
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             Text(
-                text = "Belge İşlemleri",
+                text = BBLocalization.Current.Get(key = "137cef6d-23b8-4142-963b-b2e402d26335", fallback = "Belge İşlemleri"),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
-                text = "Sözleşme belgesini yazdırabilir veya sistem paylaşım ekranına aktarabilirsiniz.",
+                text = BBLocalization.Current.Get(key = "26aa82f2-8067-4f5f-8046-bc5175dd55fa", fallback = "Sözleşme belgesini yazdırabilir veya sistem paylaşım ekranına aktarabilirsiniz."),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             BbButton(
-                text = "Belgeyi Yazdır",
+                text = BBLocalization.Current.Get(key = "a1fe8a9e-2d6d-4e04-aec4-aaf249ba60fe", fallback = "Belgeyi Yazdır"),
                 onClick = onPrintClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Light,
@@ -465,7 +465,7 @@ private fun OrderContractLoadingCard() {
             CircularProgressIndicator()
 
             Text(
-                text = "Sözleşme yükleniyor",
+                text = BBLocalization.Current.Get(key = "83e14f2f-4997-446e-b721-0658818d209b", fallback = "Sözleşme yükleniyor"),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface
             )

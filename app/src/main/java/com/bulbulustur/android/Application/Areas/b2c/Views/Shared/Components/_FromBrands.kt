@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -149,7 +151,7 @@ private fun FromBrandsSectionHeader(
             .takeIf {
                 it.isNotBlank()
             }
-            ?: "Markadan Seçimler"
+            ?: BBLocalization.Current.Get(key = "cd0cf42d-3872-4232-8480-b3b55d9bafea", fallback = "Markadan Seçimler")
 
     Column(
         modifier =

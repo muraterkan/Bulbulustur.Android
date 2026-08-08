@@ -76,7 +76,7 @@ fun RegisterFinalScreen(
 
         BbButton(
             modifier = Modifier.fillMaxWidth(),
-            text = "Giriş Ekranına Dön",
+            text = BBLocalization.Current.Get(key = "6777bc00-123b-4116-9093-08c80fb9d405", fallback = "Giriş Ekranına Dön"),
             onClick = onGoToLogonClick,
             variant = BbButtonVariant.Primary,
             size = BbButtonSize.Large
@@ -87,7 +87,7 @@ fun RegisterFinalScreen(
 
             BbButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = "Doğrulama E-postasını Tekrar Gönder",
+                text = BBLocalization.Current.Get(key = "82ddb53c-927e-4ee2-9f36-2f8e5fb5ebb7", fallback = "Doğrulama E-postasını Tekrar Gönder"),
                 onClick = onResendVerificationClick,
                 variant = BbButtonVariant.Outline,
                 size = BbButtonSize.Large
@@ -148,7 +148,7 @@ private fun RegisterFinalEmailBox(
             horizontalAlignment = Alignment.Start
         ) {
             Text(
-                text = "Doğrulama adresi",
+                text = BBLocalization.Current.Get(key = "85ebb70e-40ae-42ab-a43b-db9fc1b6ba78", fallback = "Doğrulama adresi"),
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -176,21 +176,21 @@ private fun RegisterFinalStepList(
         RegisterFinalStepItem(
             number = "1",
             title = BBLocalization.Current.Get(key = "e6f43d8c-aeec-4dfd-9140-f4d5a50fc413", fallback = "Hesap bilgileri alındı"),
-            description = "Üyelik başlangıç bilgileriniz başarıyla kaydedildi.",
+            description = BBLocalization.Current.Get(key = "5763f532-b0b8-46de-b9cf-43f4a1b2b438", fallback = "Üyelik başlangıç bilgileriniz başarıyla kaydedildi."),
             isCompleted = true
         )
 
         RegisterFinalStepItem(
             number = "2",
             title = when (finalState) {
-                RegisterFinalState.Completed -> "E-posta doğrulandı"
-                RegisterFinalState.WaitingEmailVerification -> "E-posta doğrulaması bekleniyor"
-                RegisterFinalState.WaitingApproval -> "Firma kontrolü bekleniyor"
+                RegisterFinalState.Completed -> BBLocalization.Current.Get(key = "c02eda05-5650-4aae-aac4-f7e7dc87d696", fallback = "E-posta doğrulandı")
+                RegisterFinalState.WaitingEmailVerification -> BBLocalization.Current.Get(key = "42e70163-f34e-407a-b0f7-0f227f176efa", fallback = "E-posta doğrulaması bekleniyor")
+                RegisterFinalState.WaitingApproval -> BBLocalization.Current.Get(key = "c25bd5dd-9430-4e3f-9da5-8b4defa28760", fallback = "Firma kontrolü bekleniyor")
             },
             description = when (finalState) {
-                RegisterFinalState.Completed -> "Hesabınız giriş için hazır."
-                RegisterFinalState.WaitingEmailVerification -> "Size gönderilen bağlantıya tıklayarak hesabınızı doğrulayın."
-                RegisterFinalState.WaitingApproval -> "Kurumsal hesap bilgileriniz kontrol edildikten sonra aktifleşir."
+                RegisterFinalState.Completed -> BBLocalization.Current.Get(key = "7d49c907-0cc4-43a7-8550-d1f574b70c80", fallback = "Hesabınız giriş için hazır.")
+                RegisterFinalState.WaitingEmailVerification -> BBLocalization.Current.Get(key = "08a108c0-b73a-4d98-bec9-6225964bac11", fallback = "Size gönderilen bağlantıya tıklayarak hesabınızı doğrulayın.")
+                RegisterFinalState.WaitingApproval -> BBLocalization.Current.Get(key = "f95784ca-5c6f-4fb4-8383-ca088dba3778", fallback = "Kurumsal hesap bilgileriniz kontrol edildikten sonra aktifleşir.")
             },
             isCompleted = finalState == RegisterFinalState.Completed
         )
@@ -276,7 +276,7 @@ private fun RegisterFinalInfoBox() {
             modifier = Modifier.padding(BBSpacing.CardPaddingCompact)
         ) {
             Text(
-                text = "Küçük not",
+                text = BBLocalization.Current.Get(key = "7e065f34-1b8c-4b78-a29b-7eff0de8dde3", fallback = "Küçük not"),
                 style = MaterialTheme.typography.labelLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -285,7 +285,7 @@ private fun RegisterFinalInfoBox() {
             Spacer(modifier = Modifier.height(BBSpacing.Space1))
 
             Text(
-                text = "E-postayı görmüyorsanız spam veya gereksiz klasörünü kontrol edin.",
+                text = BBLocalization.Current.Get(key = "7adbe37b-b969-48a2-9896-f0a5da9f6698", fallback = "E-postayı görmüyorsanız spam veya gereksiz klasörünü kontrol edin."),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -300,20 +300,20 @@ enum class RegisterFinalState(
 ) {
     Completed(
         badgeText = BBLocalization.Current.Get(key = "60ae9048-3404-4ea6-a789-f75e02e0b4ea", fallback = "Üyelik Tamamlandı"),
-        title = "Hesabınız Hazır",
-        description = "Bulbulustur hesabınız başarıyla oluşturuldu. Artık giriş yapabilirsiniz."
+        title = BBLocalization.Current.Get(key = "f969d0dc-eb33-45fb-b9b7-059fae97a5b4", fallback = "Hesabınız Hazır"),
+        description = BBLocalization.Current.Get(key = "6fc27b1f-c786-4fe8-aca1-dec1dd833167", fallback = "Bulbulustur hesabınız başarıyla oluşturuldu. Artık giriş yapabilirsiniz.")
     ),
 
     WaitingEmailVerification(
-        badgeText = "Doğrulama Bekleniyor",
-        title = "E-postanızı Kontrol Edin",
-        description = "Hesabınızı aktifleştirmek için e-posta adresinize gönderilen doğrulama bağlantısını kullanın."
+        badgeText = BBLocalization.Current.Get(key = "87939038-b2b6-42b6-8168-1b162c1a4b8b", fallback = "Doğrulama Bekleniyor"),
+        title = BBLocalization.Current.Get(key = "ebea7a31-bc45-4257-9ff7-e6ae5cec63bf", fallback = "E-postanızı Kontrol Edin"),
+        description = BBLocalization.Current.Get(key = "c343e7cd-ba99-4000-8371-46a0ed4bddba", fallback = "Hesabınızı aktifleştirmek için e-posta adresinize gönderilen doğrulama bağlantısını kullanın.")
     ),
 
     WaitingApproval(
-        badgeText = "Kontrol Bekleniyor",
-        title = "Kurumsal Hesap İnceleniyor",
-        description = "Firma hesabınız kontrol sürecine alındı. Onaylandığında giriş yapabilirsiniz."
+        badgeText = BBLocalization.Current.Get(key = "69b0d82d-d772-4a8d-97df-e21e332a05f0", fallback = "Kontrol Bekleniyor"),
+        title = BBLocalization.Current.Get(key = "765654e1-4e7b-4ad2-9599-d4b0d616dbce", fallback = "Kurumsal Hesap İnceleniyor"),
+        description = BBLocalization.Current.Get(key = "85615cba-65b6-41ba-8d00-2990f5a9f487", fallback = "Firma hesabınız kontrol sürecine alındı. Onaylandığında giriş yapabilirsiniz.")
     )
 }
 

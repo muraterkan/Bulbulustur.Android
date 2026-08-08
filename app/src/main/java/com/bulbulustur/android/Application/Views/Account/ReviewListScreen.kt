@@ -62,19 +62,19 @@ private enum class AccountReviewTab(
     Product(
         SourceType = "PRODUCT",
         Title = BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = ""),
-        EmptyText = "ürün değerlendirmeniz",
+        EmptyText = BBLocalization.Current.Get(key = "843cfb38-bf11-4c5d-bdb1-2d464c70c597", fallback = "ürün değerlendirmeniz"),
         Icon = Icons.Outlined.Comment
     ),
     Store(
         SourceType = "STORE",
         Title = BBLocalization.Current.Get(key = "a4bd79dd-e7ee-4407-9e7d-00582840c43a", fallback = "Mağaza"),
-        EmptyText = "mağaza değerlendirmeniz",
+        EmptyText = BBLocalization.Current.Get(key = "f93af02f-e65f-4bb1-8a07-f6a0dbcfbad7", fallback = "mağaza değerlendirmeniz"),
         Icon = Icons.Outlined.Storefront
     ),
     Company(
         SourceType = "COMPANY",
         Title = "Firma",
-        EmptyText = "firma değerlendirmeniz",
+        EmptyText = BBLocalization.Current.Get(key = "4201ac9b-836e-41fc-9719-98614b0cb273", fallback = "firma değerlendirmeniz"),
         Icon = Icons.Outlined.Domain
     )
 }
@@ -203,13 +203,13 @@ private fun ReviewIntroCard() {
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
         ) {
             Text(
-                text = "Yorum Geçmişi",
+                text = BBLocalization.Current.Get(key = "7a84cd4c-feae-421d-a5bc-9e4def48473f", fallback = "Yorum Geçmişi"),
                 style = MaterialTheme.typography.labelSmall,
                 color = BBColors.Yellow.Yellow800
             )
 
             Text(
-                text = "Ürünler, mağazalar ve firmalar hakkında yaptığınız değerlendirmeleri burada görüntüleyebilirsiniz.",
+                text = BBLocalization.Current.Get(key = "53db043c-ebd4-4830-9d90-3612f3c8a343", fallback = "Ürünler, mağazalar ve firmalar hakkında yaptığınız değerlendirmeleri burada görüntüleyebilirsiniz."),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -344,7 +344,7 @@ private fun ReviewCard(
 
             Text(
                 text = review.Content.orEmpty().ifBlank {
-                    "Değerlendirme metni bulunmuyor."
+                    BBLocalization.Current.Get(key = "75868752-adb9-4e92-af8f-945eac590db7", fallback = "Değerlendirme metni bulunmuyor.")
                 },
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -402,7 +402,7 @@ private fun ReviewCard(
             )
 
             BbButton(
-                text = "Değerlendirmeyi Sil",
+                text = BBLocalization.Current.Get(key = "30c2a244-a2a8-466a-a193-0fd46cf59a3b", fallback = "Değerlendirmeyi Sil"),
                 onClick = {
                     onDeleteReviewClick(review.ReviewId)
                 },
@@ -627,28 +627,28 @@ private fun ReviewDTO.GetReviewTitle(): String {
             .trim()
             .takeIf { it.isNotBlank() }
         ?: when {
-            SourceType.equals("PRODUCT", ignoreCase = true) -> "Ürün değerlendirmesi"
-            SourceType.equals("STORE", ignoreCase = true) -> "Mağaza değerlendirmesi"
-            SourceType.equals("COMPANY", ignoreCase = true) -> "Firma değerlendirmesi"
-            else -> "Değerlendirme"
+            SourceType.equals("PRODUCT", ignoreCase = true) -> BBLocalization.Current.Get(key = "5dbf8ac0-e1d1-4fda-bc75-858557550f7a", fallback = "Ürün değerlendirmesi")
+            SourceType.equals("STORE", ignoreCase = true) -> BBLocalization.Current.Get(key = "f93af02f-e65f-4bb1-8a07-f6a0dbcfbad7", fallback = "Mağaza değerlendirmesi")
+            SourceType.equals("COMPANY", ignoreCase = true) -> BBLocalization.Current.Get(key = "46adcb80-404c-48f6-93d3-ce033d837ba7", fallback = "Firma değerlendirmesi")
+            else -> BBLocalization.Current.Get(key = "e6a2e880-cfa4-4692-8657-7e8565e7ae4c", fallback = "Değerlendirme")
         }
 }
 
 private fun String?.ToReviewBadgeText(): String {
     return when {
-        equals("PRODUCT", ignoreCase = true) -> "ÜRÜN DEĞERLENDİRMESİ"
-        equals("STORE", ignoreCase = true) -> "MAĞAZA DEĞERLENDİRMESİ"
-        equals("COMPANY", ignoreCase = true) -> "FİRMA DEĞERLENDİRMESİ"
-        else -> "DEĞERLENDİRME"
+        equals("PRODUCT", ignoreCase = true) -> BBLocalization.Current.Get(key = "4c64392f-7ac2-40dc-ae34-8d85d081db3a", fallback = "ÜRÜN DEĞERLENDİRMESİ")
+        equals("STORE", ignoreCase = true) -> BBLocalization.Current.Get(key = "72aa7cb2-ae96-46f7-844a-ceb4ab41a78c", fallback = "MAĞAZA DEĞERLENDİRMESİ")
+        equals("COMPANY", ignoreCase = true) -> BBLocalization.Current.Get(key = "46adcb80-404c-48f6-93d3-ce033d837ba7", fallback = "FİRMA DEĞERLENDİRMESİ")
+        else -> BBLocalization.Current.Get(key = "e6a2e880-cfa4-4692-8657-7e8565e7ae4c", fallback = "DEĞERLENDİRME")
     }
 }
 
 private fun String?.ToTargetActionText(): String {
     return when {
-        equals("PRODUCT", ignoreCase = true) -> "Ürünü Gör"
+        equals("PRODUCT", ignoreCase = true) -> BBLocalization.Current.Get(key = "c69b2282-265b-4550-8669-b33fc70b079f", fallback = "Ürünü Gör")
         equals("STORE", ignoreCase = true) -> BBLocalization.Current.Get(key = "d26114e4-960d-45f4-96a2-9dfb44957e0e", fallback = "Mağazayı Gör")
-        equals("COMPANY", ignoreCase = true) -> "Firmayı Gör"
-        else -> "İlgili Kaydı Gör"
+        equals("COMPANY", ignoreCase = true) -> BBLocalization.Current.Get(key = "213e0ac7-1c90-45b0-afdd-04cdb982fa8a", fallback = "Firmayı Gör")
+        else -> BBLocalization.Current.Get(key = "82227cc9-06a1-4ede-86cf-3bebdd1e81cf", fallback = "İlgili Kaydı Gör")
     }
 }
 

@@ -19,6 +19,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.bulbulustur.android.Application.Areas.b2b.Controllers.HomeController as WholesaleHomeController
 import com.bulbulustur.android.Application.Areas.b2b.Controllers.ProductController as WholesaleProductController
+import com.bulbulustur.android.Application.Areas.b2b.Controllers.SearchController as WholesaleSearchController
 import com.bulbulustur.android.Application.Areas.b2b.Controllers.RfqController
 import com.bulbulustur.android.Application.Areas.b2b.Controllers.WholesaleBuyerRequestController
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.BasketController
@@ -26,10 +27,12 @@ import com.bulbulustur.android.Application.Areas.b2c.Controllers.CampaignControl
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.DealsOfTheDayController
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.HomeController as RetailHomeController
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.ProductController as RetailProductController
+import com.bulbulustur.android.Application.Areas.b2c.Controllers.SearchController as RetailSearchController
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.ProductQuestionController
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.ProductReviewController
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.StoreController
 import com.bulbulustur.android.Application.Controllers.AccountController
+import com.bulbulustur.android.Application.Controllers.CompanyController
 import com.bulbulustur.android.Application.Controllers.LogonController
 import com.bulbulustur.android.Application.Controllers.MessageController
 import com.bulbulustur.android.Application.Controllers.ProfileController
@@ -156,9 +159,16 @@ fun BulbulusturApp(
     val sessionState by userSessionManager.State.collectAsState()
     val localizationState by localizationManager.State.collectAsState()
 
-    LaunchedEffect(sessionState.IsInitialized, sessionState.Language) {
+    LaunchedEffect(
+        sessionState.IsInitialized,
+        sessionState.Language.Id,
+        sessionState.Language.Code
+    ) {
         if (sessionState.IsInitialized) {
-            localizationManager.Load(language = sessionState.Language)
+            localizationManager.Load(
+                languageId = sessionState.Language.Id,
+                languageCode = sessionState.Language.Code
+            )
         }
     }
 
@@ -430,6 +440,13 @@ private fun BulbulusturApplicationContent(
         ProductLowPriceReportRepository()
     }
 
+    val retailSearchController = remember(executeService, productRepository) {
+        RetailSearchController(
+            executeService = executeService,
+            productRepository = productRepository
+        )
+    }
+
     val productController = remember(
         executeService,
         productRepository,
@@ -458,6 +475,13 @@ private fun BulbulusturApplicationContent(
 
     val wholesaleProductRepository = remember {
         WholesaleProductRepository()
+    }
+
+    val wholesaleSearchController = remember(executeService, wholesaleProductRepository) {
+        WholesaleSearchController(
+            executeService = executeService,
+            wholesaleProductRepository = wholesaleProductRepository
+        )
     }
 
     val wholesaleProductController = remember(
@@ -782,9 +806,11 @@ private fun BulbulusturApplicationContent(
         onAppLinkConsumed()
     }
 
+    val companyController = remember { com.bulbulustur.android.Application.Controllers.CompanyController() }
+
     NavHost(
         navController = navController,
-        startDestination = SplashRoutes.ModeSelection
+        startDestination = if (sessionState.IsAuthenticated) SplashRoutes.ModeSelection else LogonRoutes.Logon
     ) {
         splashGraph(
             navigator = appNavigator,
@@ -818,6 +844,7 @@ private fun BulbulusturApplicationContent(
             productController = productController,
             productReviewController = productReviewController,
             productQuestionController = productQuestionController,
+            searchController = retailSearchController,
             storeController = storeController,
             accountController = accountController,
             basketController = basketController,
@@ -833,13 +860,16 @@ private fun BulbulusturApplicationContent(
             ),
             homeController = wholesaleHomeController,
             productController = wholesaleProductController,
+            searchController = wholesaleSearchController,
             rfqController = rfqController,
             messageController = messageController,
             wholesaleBuyerRequestController = wholesaleBuyerRequestController
         )
 
         companyGraph(
-            navigator = appNavigator
+            navigator = appNavigator,
+            languageId = sessionState.Language.Id,
+            companyController = companyController
         )
 
         orderGraph(

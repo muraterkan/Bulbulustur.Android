@@ -47,35 +47,35 @@ fun AccountSecurityBottomMenu(
             )
 
             Text(
-                text = "Şifre, e-posta, giriş hareketleri ve hesap durumu işlemlerini buradan yönetebilirsin.",
+                text = BBLocalization.Current.Get(key = "5425a6de-02b8-4375-bf6f-0f4ac05c9f67", fallback = "Şifre, e-posta, giriş hareketleri ve hesap durumu işlemlerini buradan yönetebilirsin."),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             AccountSecurityBottomMenuRow(
                 title = BBLocalization.Current.Get(key = "7c9dea88-25ba-4bbe-97bd-de9d27c119d2", fallback = "Giriş Etkinlikleri"),
-                description = "Son giriş hareketlerini ve cihaz bilgilerini görüntüle.",
+                description = BBLocalization.Current.Get(key = "f9ea608b-b0a6-4be3-ac7e-41143f01f42b", fallback = "Son giriş hareketlerini ve cihaz bilgilerini görüntüle."),
                 selected = selectedItem == AccountSecurityMenuItem.LoginActivities,
                 onClick = onLoginActivitiesClick
             )
 
             AccountSecurityBottomMenuRow(
                 title = BBLocalization.Current.Get(key = "cee2df6f-2392-41ab-92f5-ab1a30499bc7", fallback = "Şifre Değiştir"),
-                description = "Hesabın için yeni ve güçlü bir şifre belirle.",
+                description = BBLocalization.Current.Get(key = "60379a27-205a-490f-9baa-161628e3ee6c", fallback = "Hesabın için yeni ve güçlü bir şifre belirle."),
                 selected = selectedItem == AccountSecurityMenuItem.ChangePasswordAsync,
                 onClick = onChangePasswordAsyncClick
             )
 
             AccountSecurityBottomMenuRow(
                 title = BBLocalization.Current.Get(key = "56b7b2b0-d2da-4d53-a361-88b4890ebb6c", fallback = "E-Posta Değiştir"),
-                description = "Hesabına bağlı e-posta adresini güncelle.",
+                description = BBLocalization.Current.Get(key = "b211dcc0-ad58-42e8-9e3d-6cbe372b81fd", fallback = "Hesabına bağlı e-posta adresini güncelle."),
                 selected = selectedItem == AccountSecurityMenuItem.ChangeEmail,
                 onClick = onChangeEmailClick
             )
 
             AccountSecurityBottomMenuRow(
                 title = BBLocalization.Current.Get(key = "64052773-9d1d-48ee-b933-7c387c42147d", fallback = "Hesabı Devre Dışı Bırak"),
-                description = "Hesabını geçici olarak erişime kapat.",
+                description = BBLocalization.Current.Get(key = "fbc34488-a02d-4668-abd8-2d35af43fd35", fallback = "Hesabını geçici olarak erişime kapat."),
                 selected = selectedItem == AccountSecurityMenuItem.DeactivateAccount,
                 onClick = onDeactivateAccountClick
             )

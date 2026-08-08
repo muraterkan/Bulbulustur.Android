@@ -1,7 +1,6 @@
 package com.bulbulustur.android.Application.Session
 
 import com.bulbulustur.android.Application.Datastore.UserPreferenceDataStore
-import com.bulbulustur.android.businesslayer.Core.Enums.EApplicationLanguage
 import com.bulbulustur.android.businesslayer.Core.Enums.EThemeMode
 import com.bulbulustur.android.businesslayer.Core.Model.AuthResponse
 import com.bulbulustur.android.businesslayer.Core.Security.JwtMemberIdParser
@@ -44,11 +43,15 @@ class UserSessionManager(
     }
 
     fun SetLanguage(
-        language: EApplicationLanguage
+        languageId: Int,
+        languageCode: String
     ) {
+        if (languageId <= 0) return
+
         coroutineScope.launch {
             userPreferenceDataStore.SetLanguage(
-                language
+                languageId = languageId,
+                languageCode = languageCode.trim()
             )
         }
     }

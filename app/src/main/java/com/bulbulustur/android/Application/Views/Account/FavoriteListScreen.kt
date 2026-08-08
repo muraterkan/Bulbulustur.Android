@@ -142,14 +142,14 @@ private fun FavoriteTabs(
         ) {
             FavoriteTabItem(
                 modifier = Modifier.weight(1f),
-                title = "Perakende",
+                title = BBLocalization.Current.Get(key = "f98fc2e2-635a-4404-831f-4c1fdca3885e", fallback = "Perakende"),
                 isSelected = selectedTab == FavoriteTab.Retail,
                 onClick = { onTabClick(FavoriteTab.Retail) }
             )
 
             FavoriteTabItem(
                 modifier = Modifier.weight(1f),
-                title = "Toptan",
+                title = BBLocalization.Current.Get(key = "cd90e72e-8745-4543-836b-ca914c3640f8", fallback = "Toptan"),
                 isSelected = selectedTab == FavoriteTab.Wholesale,
                 onClick = { onTabClick(FavoriteTab.Wholesale) }
             )
@@ -334,7 +334,7 @@ private fun RetailFavoriteCard(
             FavoriteMetaBox(
                 mode = FavoriteMode.Retail,
                 title = "PERAKENDE",
-                value = favorite.Note.ifBlank { "Favori perakende ürün" }
+                value = favorite.Note.ifBlank { BBLocalization.Current.Get(key = "f3dd9976-edf6-421f-b79b-100dcc70d6d7", fallback = "Favori perakende ürün") }
             )
 
             Row(
@@ -411,7 +411,7 @@ private fun WholesaleFavoriteCard(
                         )
 
                         Text(
-                            text = favorite.MemberName.orEmpty().ifBlank { "Toptan satıcı" },
+                            text = favorite.MemberName.orEmpty().ifBlank { BBLocalization.Current.Get(key = "43309c6b-5f97-4820-ace6-71bf821810d1", fallback = "Toptan satıcı") },
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             maxLines = 1,
@@ -444,7 +444,7 @@ private fun WholesaleFavoriteCard(
             FavoriteMetaBox(
                 mode = FavoriteMode.Wholesale,
                 title = "TOPTAN",
-                value = favorite.Note.ifBlank { "Teklif istenebilir" }
+                value = favorite.Note.ifBlank { BBLocalization.Current.Get(key = "7974887a-0536-422c-a772-bd7bb506d38a", fallback = "Teklif istenebilir") }
             )
 
             Row(
@@ -491,7 +491,7 @@ private fun FavoriteRemoveButton(
     ) {
         Icon(
             imageVector = Icons.Filled.Favorite,
-            contentDescription = "Favorilerden kaldır",
+            contentDescription = BBLocalization.Current.Get(key = "5b2cc9ba-c14b-4c3d-8b1b-31159085896f", fallback = "Favorilerden kaldır"),
             tint = MaterialTheme.colorScheme.error,
             modifier = Modifier.size(BBIcon.Action)
         )
@@ -608,13 +608,13 @@ private fun FavoriteEmptyState(
     tab: FavoriteTab
 ) {
     val title = when (tab) {
-        FavoriteTab.Retail -> "Henüz perakende favoriniz yok"
-        FavoriteTab.Wholesale -> "Henüz toptan favoriniz yok"
+        FavoriteTab.Retail -> BBLocalization.Current.Get(key = "8ecf702f-93a1-48b3-a815-e9cb7371904d", fallback = "Henüz perakende favoriniz yok")
+        FavoriteTab.Wholesale -> BBLocalization.Current.Get(key = "819f2386-ed74-41a4-b850-f78b4c4f3f42", fallback = "Henüz toptan favoriniz yok")
     }
 
     val description = when (tab) {
-        FavoriteTab.Retail -> "Perakende ürünlerini favorilerinize ekleyerek daha sonra hızlıca ulaşabilirsiniz."
-        FavoriteTab.Wholesale -> "Toptan ürünleri favorilerinize ekleyerek teklif süreçlerine hızlıca dönebilirsiniz."
+        FavoriteTab.Retail -> BBLocalization.Current.Get(key = "6000ef14-d7f0-4a32-b031-5b37a265eb5f", fallback = "Perakende ürünlerini favorilerinize ekleyerek daha sonra hızlıca ulaşabilirsiniz.")
+        FavoriteTab.Wholesale -> BBLocalization.Current.Get(key = "7a39dd55-87ed-4bfa-87c4-9fbd1c741c85", fallback = "Toptan ürünleri favorilerinize ekleyerek teklif süreçlerine hızlıca dönebilirsiniz.")
     }
 
     BbCard(

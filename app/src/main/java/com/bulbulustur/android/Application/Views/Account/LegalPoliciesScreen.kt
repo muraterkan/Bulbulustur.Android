@@ -65,7 +65,7 @@ fun LegalPoliciesScreen(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "Yasal Metinler ve Politikalar",
+                title = BBLocalization.Current.Get(key = "8aa96ea1-dff6-4eda-86b6-81d12a74cbb6", fallback = "Yasal Metinler ve Politikalar"),
                 onBackClick = onBackClick
             )
         }
@@ -149,14 +149,14 @@ private fun LegalNoticeCard() {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Bulbulustur Yasal Merkezi",
+                    text = BBLocalization.Current.Get(key = "69b609a0-a577-4784-a0b8-0660c4b11649", fallback = "Bulbulustur Yasal Merkezi"),
                     style = BbTypography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
                 )
 
                 Text(
-                    text = "Şeffaf platform kuralları, kullanıcı hakları ve yasal süreçler tek merkezde toplanır.",
+                    text = BBLocalization.Current.Get(key = "1e212806-038c-47e5-b255-be647c0fbaf3", fallback = "Şeffaf platform kuralları, kullanıcı hakları ve yasal süreçler tek merkezde toplanır."),
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -348,70 +348,70 @@ private data class LegalPolicyGroup(
 private fun getLegalPolicyGroups(): List<LegalPolicyGroup> {
     return listOf(
         LegalPolicyGroup(
-            title = "Politikalar",
-            description = "Gizlilik, veri işleme ve platform içerik kuralları.",
+            title = BBLocalization.Current.Get(key = "2f764267-3dba-4df6-a6ff-842f0b9aa254", fallback = "Politikalar"),
+            description = BBLocalization.Current.Get(key = "558ba2bd-604d-4743-b6f9-08e3eb7d9bd3", fallback = "Gizlilik, veri işleme ve platform içerik kuralları."),
             icon = Icons.Outlined.Policy,
             items = listOf(
                 LegalPolicyItem(
                     url = LegalPolicyUrls.Privacy,
                     title = BBLocalization.Current.Get(key = "2b5d9eab-d37e-4a08-b2ff-635ccf71620e", fallback = ""),
-                    description = "Kişisel verilerin nasıl işlendiğini ve korunduğunu inceleyin.",
+                    description = BBLocalization.Current.Get(key = "c8d874c0-d374-43bf-99a2-554dd30df97c", fallback = "Kişisel verilerin nasıl işlendiğini ve korunduğunu inceleyin."),
                     icon = Icons.Outlined.PrivacyTip
                 ),
                 LegalPolicyItem(
                     url = LegalPolicyUrls.Cookie,
                     title = BBLocalization.Current.Get(key = "9dbf472e-78f6-43a6-97cd-b748c738b6d7", fallback = "Çerez Politikası"),
-                    description = "Çerez ve benzeri teknolojilerin kullanım detayları.",
+                    description = BBLocalization.Current.Get(key = "bc357ab1-a4d5-452d-9592-efd38110d493", fallback = "Çerez ve benzeri teknolojilerin kullanım detayları."),
                     icon = Icons.Outlined.Cookie
                 ),
                 LegalPolicyItem(
                     url = LegalPolicyUrls.Kvkk,
-                    title = "KVKK Aydınlatma Metni",
-                    description = "Kişisel verilerinizle ilgili yasal bilgilendirme.",
+                    title = BBLocalization.Current.Get(key = "3cf09908-6dc6-4077-a726-c2816e317905", fallback = "KVKK Aydınlatma Metni"),
+                    description = BBLocalization.Current.Get(key = "666604ce-1230-40b6-9089-885ed01f92a1", fallback = "Kişisel verilerinizle ilgili yasal bilgilendirme."),
                     icon = Icons.Outlined.Security
                 ),
                 LegalPolicyItem(
                     url = LegalPolicyUrls.Review,
-                    title = "Değerlendirme Politikası",
-                    description = "Ürün Değerlendirme Süreçleri.",
+                    title = BBLocalization.Current.Get(key = "1dd77bb1-5544-4d8b-8c6d-b43214923852", fallback = "Değerlendirme Politikası"),
+                    description = BBLocalization.Current.Get(key = "f1b28670-67b5-4687-ba10-d7052354af3b", fallback = "Ürün Değerlendirme Süreçleri."),
                     icon = Icons.Outlined.VerifiedUser
                 ),
                 LegalPolicyItem(
                     url = LegalPolicyUrls.ContentPublishing,
-                    title = "İçerik Yayınlama Politikası",
-                    description = "Platformda yayınlanan içerikler için temel kurallar.",
+                    title = BBLocalization.Current.Get(key = "0c25ffe7-9d4c-45f1-bb52-13f82822dddd", fallback = "İçerik Yayınlama Politikası"),
+                    description = BBLocalization.Current.Get(key = "bfd367d0-59de-4b1d-a702-4783eb8f56a6", fallback = "Platformda yayınlanan içerikler için temel kurallar."),
                     icon = Icons.Outlined.Article
                 )
             )
         ),
         LegalPolicyGroup(
             title = BBLocalization.Current.Get(key = "4a78c2ab-57cb-41d3-9831-b6bf045ad4b8", fallback = "Koşullar"),
-            description = "Platform kullanımına ait temel koşullar.",
+            description = BBLocalization.Current.Get(key = "8cf34d48-72b5-4eb8-bcd1-a04fc607424a", fallback = "Platform kullanımına ait temel koşullar."),
             icon = Icons.Outlined.Rule,
             items = listOf(
                 LegalPolicyItem(
                     url = LegalPolicyUrls.Terms,
                     title = BBLocalization.Current.Get(key = "786cbd9d-09d8-4c72-97ff-17ead1eff098", fallback = "Kullanım Koşulları"),
-                    description = "Bulbulustur hizmetlerini kullanırken geçerli temel koşullar.",
+                    description = BBLocalization.Current.Get(key = "a01d9192-8f52-4c90-8118-5ab1534d2843", fallback = "Bulbulustur hizmetlerini kullanırken geçerli temel koşullar."),
                     icon = Icons.Outlined.RequestQuote
                 )
             )
         ),
         LegalPolicyGroup(
-            title = "Prosedürler",
-            description = "Soru ve destek süreçlerine ilişkin kurallar.",
+            title = BBLocalization.Current.Get(key = "037e70c7-3c1e-479b-a993-93bb337463a4", fallback = "Prosedürler"),
+            description = BBLocalization.Current.Get(key = "ea0d5a7f-f0af-4f34-916f-b1066b9f73c2", fallback = "Soru ve destek süreçlerine ilişkin kurallar."),
             icon = Icons.Outlined.SupportAgent,
             items = listOf(
                 LegalPolicyItem(
                     url = LegalPolicyUrls.Question,
-                    title = "Soru Sorma Politikası",
-                    description = "Ürün ve satıcı sorularında geçerli iletişim kuralları.",
+                    title = BBLocalization.Current.Get(key = "37d567db-8b1b-419c-88fe-07c9629df8c5", fallback = "Soru Sorma Politikası"),
+                    description = BBLocalization.Current.Get(key = "3e5f8ef5-2b5d-4d89-89b7-f95b6fdfac37", fallback = "Ürün ve satıcı sorularında geçerli iletişim kuralları."),
                     icon = Icons.Outlined.SupportAgent
                 ),
                 LegalPolicyItem(
                     url = LegalPolicyUrls.Support,
                     title = BBLocalization.Current.Get(key = "0ed62f3c-69a1-4aa7-befd-92ae1ce292c2", fallback = ""),
-                    description = "Destek süreçleri ve kullanıcı iletişim kuralları.",
+                    description = BBLocalization.Current.Get(key = "dd7dc382-3aeb-461e-93b5-8acc1f1f9a45", fallback = "Destek süreçleri ve kullanıcı iletişim kuralları."),
                     icon = Icons.Outlined.SupportAgent
                 )
             )

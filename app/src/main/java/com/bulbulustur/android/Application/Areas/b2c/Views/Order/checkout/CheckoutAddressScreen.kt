@@ -88,7 +88,7 @@ fun CheckoutAddressScreen(
                     CheckoutProgressCard(
                         currentStep = "1",
                         title = BBLocalization.Current.Get(key = "fa3df4de-7069-4a3d-9dac-5a4ea9b88b65", fallback = "Teslimat adresi"),
-                        description = "Siparişin gönderileceği adresi seç."
+                        description = BBLocalization.Current.Get(key = "e0bbed7c-8897-4e89-9b05-a569419a0f29", fallback = "Siparişin gönderileceği adresi seç.")
                     )
                 }
 
@@ -101,7 +101,7 @@ fun CheckoutAddressScreen(
                 item {
                     CheckoutAddressSectionTitle(
                         title = BBLocalization.Current.Get(key = "a5c6a1af-5860-4dc6-9f86-c80c8631f063", fallback = "Adreslerim"),
-                        description = "Teslimat için kayıtlı adreslerinden birini seç."
+                        description = BBLocalization.Current.Get(key = "1c7f4990-7435-4020-8798-b8a65de8d796", fallback = "Teslimat için kayıtlı adreslerinden birini seç.")
                     )
                 }
 
@@ -175,7 +175,7 @@ private fun CheckoutAddressTopBar(
             )
 
             Text(
-                text = "Checkout adım 1 / 4",
+                text = BBLocalization.Current.Get(key = "dc4634b7-c1aa-4a7d-9610-94e5e9878e44", fallback = "Checkout adım 1 / 4"),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -487,7 +487,7 @@ private fun CheckoutAddAddressCard(
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = "Teslimat için yeni bir adres oluştur.",
+                    text = BBLocalization.Current.Get(key = "fe333aa7-65ff-4a50-a568-febd43931d10", fallback = "Teslimat için yeni bir adres oluştur."),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -560,7 +560,7 @@ private fun CheckoutAddressBottomBar(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    text = "Seçili adres",
+                    text = BBLocalization.Current.Get(key = "833da051-8ef4-4373-86f4-c49307ebfc9c", fallback = "Seçili adres"),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -589,7 +589,7 @@ private fun CheckoutAddressBottomBar(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "Kargoya geç",
+                    text = BBLocalization.Current.Get(key = "510a43dc-8ce3-40a6-a093-41ac75b26eb6", fallback = "Kargoya geç"),
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onPrimary
@@ -654,7 +654,7 @@ private fun getCheckoutAddressScreenData(): CheckoutAddressScreenData {
         addresses = listOf(
             CheckoutAddressItem(
                 id = 1,
-                title = "Ev adresim",
+                title = BBLocalization.Current.Get(key = "8f6d0dd3-f45d-4fce-a684-47ee00038be8", fallback = "Ev adresim"),
                 fullName = "Murat Erkan",
                 phoneNumber = "+90 555 000 00 00",
                 fullAddress = "Kızılay Mah. Atatürk Bulvarı No: 12 Daire: 8 Çankaya / Ankara",
@@ -670,7 +670,7 @@ private fun getCheckoutAddressScreenData(): CheckoutAddressScreenData {
             ),
             CheckoutAddressItem(
                 id = 3,
-                title = "Kayseri adresi",
+                title = BBLocalization.Current.Get(key = "053873d1-3fbc-416e-95ed-32eda22902a7", fallback = "Kayseri adresi"),
                 fullName = "Murat Erkan",
                 phoneNumber = "+90 555 222 22 22",
                 fullAddress = "Melikgazi Mah. Cumhuriyet Cad. No: 7 Melikgazi / Kayseri",

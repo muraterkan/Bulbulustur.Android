@@ -1,7 +1,5 @@
 package com.bulbulustur.android.Application.Datastore
 
-import com.bulbulustur.android.Application.Localization.BBLocalization
-
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -10,9 +8,10 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Session.UserSessionState
-import com.bulbulustur.android.businesslayer.Core.Enums.EApplicationLanguage
 import com.bulbulustur.android.businesslayer.Core.Enums.EThemeMode
+import com.bulbulustur.android.businesslayer.Core.Model.ApplicationLanguage
 import java.io.IOException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -27,7 +26,6 @@ private val Context.UserPreferenceDataStoreInstance: DataStore<Preferences> by p
 class UserPreferenceDataStore(
     context: Context
 ) {
-
     private val DataStore: DataStore<Preferences> =
         context.applicationContext.UserPreferenceDataStoreInstance
 
@@ -46,11 +44,19 @@ class UserPreferenceDataStore(
                     ThemeMode = preferences.ReadThemeMode(),
                     Language = preferences.ReadLanguage(),
                     CountryId = preferences[PreferenceKeys.CountryId] ?: 0,
-                    CountryName = preferences[PreferenceKeys.CountryName] ?: BBLocalization.Current.Get(key = "5365b492-6a1c-4b46-b5c0-b50cbfdd17a8", fallback = "Türkiye"),
+                    CountryName = preferences[PreferenceKeys.CountryName]
+                        ?: BBLocalization.Current.Get(
+                            key = "5365b492-6a1c-4b46-b5c0-b50cbfdd17a8",
+                            fallback = "Türkiye"
+                        ),
                     CountryCode = preferences[PreferenceKeys.CountryCode] ?: "TR",
                     CurrencyId = preferences[PreferenceKeys.CurrencyId] ?: 0,
                     CurrencyCode = preferences[PreferenceKeys.CurrencyCode] ?: "TRY",
-                    CurrencyName = preferences[PreferenceKeys.CurrencyName] ?: "Türk Lirası",
+                    CurrencyName = preferences[PreferenceKeys.CurrencyName]
+                        ?: BBLocalization.Current.Get(
+                            key = "03f77d05-c54c-44f2-99f9-3dc82473eb51",
+                            fallback = "Türk Lirası"
+                        ),
                     CurrencySymbol = preferences[PreferenceKeys.CurrencySymbol] ?: "₺"
                 )
             }
@@ -61,13 +67,23 @@ class UserPreferenceDataStore(
         }
     }
 
-    suspend fun SetLanguage(language: EApplicationLanguage) {
+    suspend fun SetLanguage(
+        languageId: Int,
+        languageCode: String
+    ) {
+        if (languageId <= 0) return
+
         DataStore.edit { preferences ->
-            preferences[PreferenceKeys.LanguageCode] = language.Code
+            preferences[PreferenceKeys.LanguageId] = languageId
+            preferences[PreferenceKeys.LanguageCode] = languageCode.trim()
         }
     }
 
-    suspend fun SetCountry(countryId: Int, countryName: String, countryCode: String) {
+    suspend fun SetCountry(
+        countryId: Int,
+        countryName: String,
+        countryCode: String
+    ) {
         DataStore.edit { preferences ->
             preferences[PreferenceKeys.CountryId] = countryId
             preferences[PreferenceKeys.CountryName] = countryName
@@ -107,15 +123,17 @@ class UserPreferenceDataStore(
             ?: EThemeMode.System
     }
 
-    private fun Preferences.ReadLanguage(): EApplicationLanguage {
-        val storedCode = this[PreferenceKeys.LanguageCode]
-
-        return EApplicationLanguage.FromCode(storedCode)
+    private fun Preferences.ReadLanguage(): ApplicationLanguage {
+        return ApplicationLanguage.Create(
+            id = this[PreferenceKeys.LanguageId],
+            code = this[PreferenceKeys.LanguageCode]
+        )
     }
 
     private object PreferenceKeys {
-
         val ThemeMode = stringPreferencesKey("theme_mode")
+
+        val LanguageId = intPreferencesKey("language_id")
         val LanguageCode = stringPreferencesKey("language_code")
 
         val CountryId = intPreferencesKey("country_id")

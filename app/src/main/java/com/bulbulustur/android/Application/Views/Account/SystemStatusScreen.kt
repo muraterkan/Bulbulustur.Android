@@ -65,8 +65,8 @@ fun SystemStatusScreen(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "Sistem Durumu",
-                subtitle = "Bulbulustur servislerinin güncel çalışma durumu.",
+                title = BBLocalization.Current.Get(key = "ace0031a-6e70-445a-b319-d5a20536e669", fallback = "Sistem Durumu"),
+                subtitle = BBLocalization.Current.Get(key = "0ecd4997-38a2-415a-8747-39cd26c84baa", fallback = "Bulbulustur servislerinin güncel çalışma durumu."),
                 onBackClick = onBackClick
             )
         }
@@ -82,7 +82,7 @@ fun SystemStatusScreen(
 
             overview == null -> {
                 SystemStatusErrorContent(
-                    message = "Sistem durumu şu anda alınamıyor. Lütfen biraz sonra tekrar deneyin.",
+                    message = BBLocalization.Current.Get(key = "7876417b-370f-4747-8e4e-268a7356546c", fallback = "Sistem durumu şu anda alınamıyor. Lütfen biraz sonra tekrar deneyin."),
                     onRetryClick = onRetryClick,
                     modifier = Modifier
                         .fillMaxSize()
@@ -131,9 +131,9 @@ private fun SystemStatusContent(
 
         item {
             SystemStatusIncidentCard(
-                title = "Aktif Olaylar",
-                subtitle = "Şu anda kullanıcıları etkileyen olaylar.",
-                emptyText = "Aktif olay bulunmuyor.",
+                title = BBLocalization.Current.Get(key = "479c3d5b-b12e-4619-b00c-3125547e6fe0", fallback = "Aktif Olaylar"),
+                subtitle = BBLocalization.Current.Get(key = "bea8c8c3-547e-434b-bebd-60e878bae104", fallback = "Şu anda kullanıcıları etkileyen olaylar."),
+                emptyText = BBLocalization.Current.Get(key = "263f9ab8-6c85-45ab-8b87-94e0805f1a6b", fallback = "Aktif olay bulunmuyor."),
                 incidents = overview.ActiveIncidents
             )
         }
@@ -146,16 +146,16 @@ private fun SystemStatusContent(
 
         item {
             SystemStatusIncidentCard(
-                title = "Son Olaylar",
-                subtitle = "Yakın dönemde kapatılmış operasyon kayıtları.",
-                emptyText = "Yakın dönemde olay kaydı bulunmuyor.",
+                title = BBLocalization.Current.Get(key = "a236800c-25c4-4377-9a7b-688e6f688834", fallback = "Son Olaylar"),
+                subtitle = BBLocalization.Current.Get(key = "cc1223c8-2ffa-4d21-bfb0-5c2063eb45ea", fallback = "Yakın dönemde kapatılmış operasyon kayıtları."),
+                emptyText = BBLocalization.Current.Get(key = "1b98d9bd-7ef7-403b-9857-8b6495bccc7c", fallback = "Yakın dönemde olay kaydı bulunmuyor."),
                 incidents = overview.HistoryIncidents.take(3)
             )
         }
 
         item {
             BbButton(
-                text = "Detaylı Durum Sayfasını Aç",
+                text = BBLocalization.Current.Get(key = "1d59e1e3-6fd3-4ee1-aab7-19c6d1f6c30e", fallback = "Detaylı Durum Sayfasını Aç"),
                 onClick = onOpenStatusPageClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Light,
@@ -203,7 +203,7 @@ private fun SystemStatusHeroCard(overview: StatusOverviewDTO) {
             ) {
                 Text(
                     text = overview.OverallStateText.ifBlank {
-                        "Sistem Durumu Bilinmiyor"
+                        BBLocalization.Current.Get(key = "81ab9591-e8e0-45b1-9b4e-78b102769dbf", fallback = "Sistem Durumu Bilinmiyor")
                     },
                     style = BbTypography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
@@ -228,12 +228,12 @@ private fun SystemStatusHeroCard(overview: StatusOverviewDTO) {
 @Composable
 private fun SystemStatusComponentCard(components: List<StatusComponentDTO>) {
     SystemStatusSectionCard(
-        title = "Servis Bileşenleri",
-        subtitle = "Temel Bulbulustur servislerinin operasyon durumu."
+        title = BBLocalization.Current.Get(key = "128c1b4d-49d9-44e1-b7c6-e20b9639db14", fallback = "Servis Bileşenleri"),
+        subtitle = BBLocalization.Current.Get(key = "4a587ece-e9bc-49cd-8605-b9d462251cb4", fallback = "Temel Bulbulustur servislerinin operasyon durumu.")
     ) {
         if (components.isEmpty()) {
             SystemStatusEmptyRow(
-                text = "Servis bileşeni bulunmuyor.",
+                text = BBLocalization.Current.Get(key = "13c9fecf-c151-41fd-89c5-538a10657795", fallback = "Servis bileşeni bulunmuyor."),
                 icon = Icons.Outlined.Storage
             )
         } else {
@@ -373,7 +373,7 @@ private fun SystemStatusIncidentRow(incident: StatusIncidentDTO) {
         ) {
             Text(
                 text = incident.Title.ifBlank {
-                    "Durum Kaydı"
+                    BBLocalization.Current.Get(key = "5ab61b6d-8d0f-44ce-a619-bc9f7caf2328", fallback = "Durum Kaydı")
                 },
                 style = BbTypography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface
@@ -409,12 +409,12 @@ private fun SystemStatusMaintenanceCard(
     maintenances: List<StatusMaintenanceDTO>
 ) {
     SystemStatusSectionCard(
-        title = "Planlı Bakım",
-        subtitle = "Yaklaşan bakım ve sürüm geçişleri."
+        title = BBLocalization.Current.Get(key = "d2efe553-3848-474f-8467-b12ca9fc186a", fallback = "Planlı Bakım"),
+        subtitle = BBLocalization.Current.Get(key = "6709eb80-5a24-43c9-b32e-c94a8dd8e28f", fallback = "Yaklaşan bakım ve sürüm geçişleri.")
     ) {
         if (maintenances.isEmpty()) {
             SystemStatusEmptyRow(
-                text = "Planlı bakım bulunmuyor.",
+                text = BBLocalization.Current.Get(key = "13073d42-3401-44da-a23f-ec379b9944c6", fallback = "Planlı bakım bulunmuyor."),
                 icon = Icons.Outlined.Schedule
             )
         } else {
@@ -465,7 +465,7 @@ private fun SystemStatusMaintenanceRow(
         ) {
             Text(
                 text = maintenance.Title.ifBlank {
-                    "Planlı Bakım"
+                    BBLocalization.Current.Get(key = "d2efe553-3848-474f-8467-b12ca9fc186a", fallback = "Planlı Bakım")
                 },
                 style = BbTypography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface
@@ -643,7 +643,7 @@ private fun SystemStatusLoadingContent(
         CircularProgressIndicator()
 
         Text(
-            text = "Sistem durumu kontrol ediliyor...",
+            text = BBLocalization.Current.Get(key = "15bced5a-fca8-462f-a307-fc7a09356deb", fallback = "Sistem durumu kontrol ediliyor..."),
             style = BbTypography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(
@@ -709,9 +709,9 @@ private fun systemStatusColors(
 
     return when {
         normalizedState.contains("operational") ||
-                normalizedState.contains("çalışıyor") ||
+                normalizedState.contains(BBLocalization.Current.Get(key = "44569caa-1902-4a11-a28a-0e12a00168e6", fallback = "çalışıyor")) ||
                 normalizedState.contains("resolved") ||
-                normalizedState.contains("çözüldü") -> {
+                normalizedState.contains(BBLocalization.Current.Get(key = "2e6dd7be-5cda-4e00-a3aa-c1e9a13ca394", fallback = "çözüldü")) -> {
             SystemStatusColors(
                 Background = MaterialTheme.colorScheme.secondaryContainer,
                 Content = MaterialTheme.colorScheme.onSecondaryContainer
@@ -720,7 +720,7 @@ private fun systemStatusColors(
 
         normalizedState.contains("degraded") ||
                 normalizedState.contains("maintenance") ||
-                normalizedState.contains("bakım") ||
+                normalizedState.contains(BBLocalization.Current.Get(key = "ca4c8560-c7d5-4e11-a156-f4b19ca58e3d", fallback = "bakım")) ||
                 normalizedState.contains(BBLocalization.Current.Get(key = "fc041a2b-1878-49b7-87c2-e9c3315e0df2", fallback = "planlandı")) -> {
             SystemStatusColors(
                 Background = MaterialTheme.colorScheme.tertiaryContainer,

@@ -79,8 +79,8 @@ fun OrderSuccessScreen(
 
                 item {
                     OrderSuccessSectionTitle(
-                        title = "Sipariş paketleri",
-                        description = "Mağaza bazlı gönderim bilgileri."
+                        title = BBLocalization.Current.Get(key = "e90ea04b-714e-4f1f-92ed-7b962c39fb13", fallback = "Sipariş paketleri"),
+                        description = BBLocalization.Current.Get(key = "0ee1e938-f007-463d-9831-62fdc25ad6de", fallback = "Mağaza bazlı gönderim bilgileri.")
                     )
                 }
 
@@ -147,7 +147,7 @@ private fun OrderSuccessHero(
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "Siparişin alındı",
+                text = BBLocalization.Current.Get(key = "68da4900-3eff-41c4-863d-51cf011a164d", fallback = "Siparişin alındı"),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onPrimaryContainer
@@ -419,7 +419,7 @@ private fun OrderSuccessTotalCard(
             Spacer(modifier = Modifier.height(8.dp))
 
             OrderSuccessTotalRow(
-                title = "İndirim",
+                title = BBLocalization.Current.Get(key = "9dd8d854-ca26-4660-bcb3-b7ec8e3f458b", fallback = "İndirim"),
                 value = total.discountText
             )
 
@@ -435,7 +435,7 @@ private fun OrderSuccessTotalCard(
             Spacer(modifier = Modifier.height(12.dp))
 
             OrderSuccessTotalRow(
-                title = "Ödenen tutar",
+                title = BBLocalization.Current.Get(key = "368c0ffb-df0f-4e02-ab6c-733fa4a53e49", fallback = "Ödenen tutar"),
                 value = total.paidPriceText,
                 isStrong = true
             )
@@ -506,7 +506,7 @@ private fun OrderSuccessInfoCard() {
             modifier = Modifier.padding(BBSpacing.Space4)
         ) {
             Text(
-                text = "Sırada ne var?",
+                text = BBLocalization.Current.Get(key = "17dc9296-ed13-44eb-8228-b54473055950", fallback = "Sırada ne var?"),
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -515,7 +515,7 @@ private fun OrderSuccessInfoCard() {
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "Mağazalar siparişini hazırlamaya başladığında kargo bilgileri sipariş detayına düşer. Bildirimler ve e-posta ile süreç hakkında bilgi alırsın.",
+                text = BBLocalization.Current.Get(key = "05b110ed-bb73-42d1-9faa-38d6d3636868", fallback = "Mağazalar siparişini hazırlamaya başladığında kargo bilgileri sipariş detayına düşer. Bildirimler ve e-posta ile süreç hakkında bilgi alırsın."),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -701,12 +701,12 @@ private fun getOrderSuccessScreenData(orderId: Int): OrderSuccessScreenData {
                 storeLogoText = "OS",
                 cargoCompanyName = "Yurtiçi Kargo",
                 deliveryEstimateText = "Tahmini teslimat: 1-3 iş günü",
-                statusText = "Hazırlanıyor",
+                statusText = BBLocalization.Current.Get(key = "8e8c20e8-d05d-4d0b-898f-89d856c92e99", fallback = "Hazırlanıyor"),
                 productCount = 2,
                 products = listOf(
                     OrderSuccessProductItem(
                         id = 1,
-                        name = "Kadın klasik sneaker ayakkabı",
+                        name = BBLocalization.Current.Get(key = "cf2f4de0-711c-4308-a055-3ef7eb00d9c7", fallback = "Kadın klasik sneaker ayakkabı"),
                         variantText = "Beyaz . 38",
                         quantity = 1,
                         priceText = "₺899,90",
@@ -714,7 +714,7 @@ private fun getOrderSuccessScreenData(orderId: Int): OrderSuccessScreenData {
                     ),
                     OrderSuccessProductItem(
                         id = 2,
-                        name = "Rahat taban günlük ayakkabı",
+                        name = BBLocalization.Current.Get(key = "4948aead-b9d0-49ad-993c-0104e68e7f1c", fallback = "Rahat taban günlük ayakkabı"),
                         variantText = "Siyah . 39",
                         quantity = 1,
                         priceText = "₺749,90",

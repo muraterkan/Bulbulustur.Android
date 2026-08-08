@@ -85,7 +85,7 @@ fun CompanyContactScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Firma iletişim",
+                title = BBLocalization.Current.Get(key = "8f762765-a4f3-41b4-8b1c-95537a8a0cd7", fallback = "Firma iletişim"),
                 onBackClick = onBackClick
             )
         }
@@ -200,7 +200,7 @@ private fun CompanyContactHero(
                         )
                     ) {
                         BbChip(
-                            text = "Tedarikçi iletişimi",
+                            text = BBLocalization.Current.Get(key = "78b448f9-43d1-4d49-ac5e-80d4382c98a1", fallback = "Tedarikçi iletişimi"),
                             selected = false,
                             onClick = onCompanyProfileClick
                         )
@@ -208,7 +208,7 @@ private fun CompanyContactHero(
                         if (company.isVerified) {
                             Icon(
                                 imageVector = Icons.Outlined.Verified,
-                                contentDescription = "Doğrulanmış firma",
+                                contentDescription = BBLocalization.Current.Get(key = "c00be3e3-90d4-4f66-ac51-db9a38bac686", fallback = "Doğrulanmış firma"),
                                 tint = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.size(
                                     BBIcon.SizeSm
@@ -225,7 +225,7 @@ private fun CompanyContactHero(
                     )
 
                     Text(
-                        text = "Firma yetkilisine mesaj gönderin; ürün, teklif, numune veya özel üretim talepleriniz için doğrudan bağlantı kurun.",
+                        text = BBLocalization.Current.Get(key = "0d617433-ca0e-4ef9-aa49-8500cc28bcd4", fallback = "Firma yetkilisine mesaj gönderin; ürün, teklif, numune veya özel üretim talepleriniz için doğrudan bağlantı kurun."),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -357,7 +357,7 @@ private fun CompanyContactPersonCard(
 
                 if (contactPerson.isAuthorized) {
                     Text(
-                        text = "Firma yetkilisi",
+                        text = BBLocalization.Current.Get(key = "90899dcf-7f66-4cf3-917f-3eeea2d497b2", fallback = "Firma yetkilisi"),
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.SemiBold
@@ -701,7 +701,7 @@ private fun getCompanyContact(
         isVerified = true,
         contactPerson = CompanyContactPerson(
             fullName = "Murat Erkan",
-            title = "Toptan satış ve kurumsal iletişim",
+            title = BBLocalization.Current.Get(key = "d5930a30-ebd5-4391-9488-52649aa50e19", fallback = "Toptan satış ve kurumsal iletişim"),
             isAuthorized = true,
             imageResId = R.drawable.murat_erkan
         ),
@@ -713,7 +713,7 @@ private fun getCompanyContact(
             "Samsun",
             BBLocalization.Current.Get(key = "c6a0ff62-8828-475f-b553-37effb42efe6", fallback = "Doğrulanmış"),
             BBLocalization.Current.Get(key = "95ab742c-6bb3-47da-bb8b-c37b3a979c24", fallback = "Tedarikçi"),
-            "Hızlı yanıt"
+            BBLocalization.Current.Get(key = "a24a620e-b3de-4086-b384-e036e77074cb", fallback = "Hızlı yanıt")
         )
     )
 }

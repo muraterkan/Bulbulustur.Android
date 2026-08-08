@@ -113,7 +113,7 @@ private fun NotificationIntroCard() {
             }
 
             Text(
-                text = "Sipariş, teklif, kargo ve hesap bildirimlerini buradan takip edebilirsin.",
+                text = BBLocalization.Current.Get(key = "50040e90-e2d9-4d76-89f1-4b9969712653", fallback = "Sipariş, teklif, kargo ve hesap bildirimlerini buradan takip edebilirsin."),
                 modifier = Modifier.weight(1f),
                 style = BbTypography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -193,29 +193,29 @@ private fun NotificationCard(
 private fun getDemoNotifications(): List<NotificationItem> {
     return listOf(
         NotificationItem(
-            title = "Siparişiniz Hazırlanıyor",
+            title = BBLocalization.Current.Get(key = "617cb03c-6e55-40b4-a433-8a48be65aa90", fallback = "Siparişiniz Hazırlanıyor"),
             description = "BB-2026-0001 numaralı siparişiniz satıcı tarafından hazırlanıyor.",
             timeText = BBLocalization.Current.Get(key = "5df01635-64c2-45a2-95e2-8b37bae9b423", fallback = "Bugün"),
             icon = Icons.Outlined.ShoppingBag,
             isUnread = true
         ),
         NotificationItem(
-            title = "Yeni RFQ Cevabı Geldi",
-            description = "Toptan fiyat teklifi talebiniz için yeni bir satıcı cevabı var.",
-            timeText = "Dün",
+            title = BBLocalization.Current.Get(key = "d957d27e-30fe-4662-b5e3-56314e6b61bb", fallback = "Yeni RFQ Cevabı Geldi"),
+            description = BBLocalization.Current.Get(key = "f5660c27-7712-45f1-9f35-d15abf68b256", fallback = "Toptan fiyat teklifi talebiniz için yeni bir satıcı cevabı var."),
+            timeText = BBLocalization.Current.Get(key = "b9a3d24b-8625-4ac6-937a-52a97cc4f96a", fallback = "Dün"),
             icon = Icons.Outlined.RequestQuote,
             isUnread = true
         ),
         NotificationItem(
-            title = "Kargo Durumu Güncellendi",
-            description = "Siparişiniz kargo hazırlık aşamasına geçti.",
+            title = BBLocalization.Current.Get(key = "cfbba0e2-2b0c-4eb8-90a4-5c8fbafc192c", fallback = "Kargo Durumu Güncellendi"),
+            description = BBLocalization.Current.Get(key = "387d0d3c-3f72-4a51-8b00-c5debce88159", fallback = "Siparişiniz kargo hazırlık aşamasına geçti."),
             timeText = "2 gün önce",
             icon = Icons.Outlined.LocalShipping,
             isUnread = false
         ),
         NotificationItem(
-            title = "Güvenlik Önerisi",
-            description = "Telefon doğrulamasını tamamlayarak hesabınızı daha güvenli hale getirebilirsiniz.",
+            title = BBLocalization.Current.Get(key = "662354a4-8349-47a9-a519-2b9f6accc5a2", fallback = "Güvenlik Önerisi"),
+            description = BBLocalization.Current.Get(key = "3f346546-5d93-4771-99d9-40bb7e327851", fallback = "Telefon doğrulamasını tamamlayarak hesabınızı daha güvenli hale getirebilirsiniz."),
             timeText = "Bu hafta",
             icon = Icons.Outlined.Security,
             isUnread = false

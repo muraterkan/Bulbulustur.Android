@@ -77,7 +77,7 @@ fun BankAccountListScreen(
             item {
                 BbSectionHeader(
                     title = BBLocalization.Current.Get(key = "476c62ef-dec2-4c77-9d21-e453954c9407", fallback = ""),
-                    subtitle = "Ödeme yapmadan önce açıklama alanına sipariş numaranızı yazmayı unutmayın."
+                    subtitle = BBLocalization.Current.Get(key = "a36596dd-00ab-44b7-8117-db595f71a417", fallback = "Ödeme yapmadan önce açıklama alanına sipariş numaranızı yazmayı unutmayın.")
                 )
             }
 
@@ -134,7 +134,7 @@ private fun BankAccountIntroCard() {
                 )
 
                 Text(
-                    text = "Havale veya EFT ile ödeme yapmak için aşağıdaki Bulbulustur banka hesaplarını kullanabilirsiniz.",
+                    text = BBLocalization.Current.Get(key = "a4bb66af-1e1e-4133-a311-d60b5cfd42d1", fallback = "Havale veya EFT ile ödeme yapmak için aşağıdaki Bulbulustur banka hesaplarını kullanabilirsiniz."),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -173,7 +173,7 @@ private fun BankAccountWarningCard() {
                 )
 
                 Text(
-                    text = "Havale / EFT sonrası ödeme eşleşmesinin hızlı yapılabilmesi için açıklama kısmına sipariş numaranızı ekleyin.",
+                    text = BBLocalization.Current.Get(key = "6cfb648d-2726-42e5-9658-3dd77d25e225", fallback = "Havale / EFT sonrası ödeme eşleşmesinin hızlı yapılabilmesi için açıklama kısmına sipariş numaranızı ekleyin."),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -347,14 +347,14 @@ private fun BankAccountInfoCard() {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Ödeme Kontrolü",
+                    text = BBLocalization.Current.Get(key = "3a347823-d244-434f-9e67-277ecf9695e6", fallback = "Ödeme Kontrolü"),
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = "Ödemeniz banka hesabına ulaştıktan sonra siparişinizin ödeme durumu kontrol edilerek güncellenir.",
+                    text = BBLocalization.Current.Get(key = "b9dfbe0c-b1b7-445b-a930-dc256779ce79", fallback = "Ödemeniz banka hesabına ulaştıktan sonra siparişinizin ödeme durumu kontrol edilerek güncellenir."),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -377,15 +377,15 @@ private fun bankAccountItems(): List<BankAccountItem> {
         BankAccountItem(
             bankAccountId = 1,
             bankName = "Ziraat Bankası",
-            branchName = "Kartal Şubesi",
+            branchName = BBLocalization.Current.Get(key = "4b81c5e9-56ec-4901-8bf6-d1c854fc63fc", fallback = "Kartal Şubesi"),
             accountOwner = "BULBULUSTUR İNTERNET TEKNOLOJİLERİ VE TİCARET ANONİM ŞİRKETİ",
             iban = "TR12 0000 0000 0000 0000 0000 01",
             icon = Icons.Outlined.AccountBalance
         ),
         BankAccountItem(
             bankAccountId = 2,
-            bankName = "Garanti Bankası",
-            branchName = "Kartal Şubesi",
+            bankName = BBLocalization.Current.Get(key = "9d167008-6e7e-4ddc-a2c7-9c3759985c46", fallback = "Garanti Bankası"),
+            branchName = BBLocalization.Current.Get(key = "4b81c5e9-56ec-4901-8bf6-d1c854fc63fc", fallback = "Kartal Şubesi"),
             accountOwner = "BULBULUSTUR İNTERNET TEKNOLOJİLERİ VE TİCARET ANONİM ŞİRKETİ",
             iban = "TR12 0000 0000 0000 0000 0000 02",
             icon = Icons.Outlined.AccountBalance
@@ -393,7 +393,7 @@ private fun bankAccountItems(): List<BankAccountItem> {
         BankAccountItem(
             bankAccountId = 3,
             bankName = "Kuveyt Türk",
-            branchName = "Kartal Şubesi",
+            branchName = BBLocalization.Current.Get(key = "4b81c5e9-56ec-4901-8bf6-d1c854fc63fc", fallback = "Kartal Şubesi"),
             accountOwner = "BULBULUSTUR İNTERNET TEKNOLOJİLERİ VE TİCARET ANONİM ŞİRKETİ",
             iban = "TR12 0000 0000 0000 0000 0000 03",
             icon = Icons.Outlined.AccountBalance
@@ -401,7 +401,7 @@ private fun bankAccountItems(): List<BankAccountItem> {
         BankAccountItem(
             bankAccountId = 4,
             bankName = "Yapı Kredi Bankası",
-            branchName = "Kartal Şubesi",
+            branchName = BBLocalization.Current.Get(key = "4b81c5e9-56ec-4901-8bf6-d1c854fc63fc", fallback = "Kartal Şubesi"),
             accountOwner = "BULBULUSTUR İNTERNET TEKNOLOJİLERİ VE TİCARET ANONİM ŞİRKETİ",
             iban = "TR12 0000 0000 0000 0000 0000 04",
             icon = Icons.Outlined.AccountBalance
@@ -409,15 +409,15 @@ private fun bankAccountItems(): List<BankAccountItem> {
         BankAccountItem(
             bankAccountId = 5,
             bankName = "İş Bankası",
-            branchName = "Kartal Şubesi",
+            branchName = BBLocalization.Current.Get(key = "4b81c5e9-56ec-4901-8bf6-d1c854fc63fc", fallback = "Kartal Şubesi"),
             accountOwner = "BULBULUSTUR İNTERNET TEKNOLOJİLERİ VE TİCARET ANONİM ŞİRKETİ",
             iban = "TR12 0000 0000 0000 0000 0000 05",
             icon = Icons.Outlined.AccountBalance
         ),
         BankAccountItem(
             bankAccountId = 6,
-            bankName = "Halk Bankası",
-            branchName = "Kartal Şubesi",
+            bankName = BBLocalization.Current.Get(key = "81606759-8b00-45bf-9f06-a5799c5c455e", fallback = "Halk Bankası"),
+            branchName = BBLocalization.Current.Get(key = "4b81c5e9-56ec-4901-8bf6-d1c854fc63fc", fallback = "Kartal Şubesi"),
             accountOwner = "BULBULUSTUR İNTERNET TEKNOLOJİLERİ VE TİCARET ANONİM ŞİRKETİ",
             iban = "TR12 0000 0000 0000 0000 0000 06",
             icon = Icons.Outlined.AccountBalance
@@ -425,7 +425,7 @@ private fun bankAccountItems(): List<BankAccountItem> {
         BankAccountItem(
             bankAccountId = 7,
             bankName = "Akbank",
-            branchName = "Kartal Şubesi",
+            branchName = BBLocalization.Current.Get(key = "4b81c5e9-56ec-4901-8bf6-d1c854fc63fc", fallback = "Kartal Şubesi"),
             accountOwner = "BULBULUSTUR İNTERNET TEKNOLOJİLERİ VE TİCARET ANONİM ŞİRKETİ",
             iban = "TR12 0000 0000 0000 0000 0000 07",
             icon = Icons.Outlined.AccountBalance

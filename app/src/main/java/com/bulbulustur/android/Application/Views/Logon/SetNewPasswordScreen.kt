@@ -84,11 +84,11 @@ fun SetNewPasswordScreen(
     ) {
         LogonPublicPageTitle(
             eyebrow =
-                "Hesap Kurtarma",
+                BBLocalization.Current.Get(key = "2463a1ba-32ae-4708-83d2-2ee47a3fea4e", fallback = "Hesap Kurtarma"),
             title =
                 BBLocalization.Current.Get(key = "b950c83e-4e34-4b6d-a1fa-053f26502e63", fallback = "Yeni Şifre Belirle"),
             description =
-                "Hesabınız için yeni bir şifre oluşturun. Şifreniz 8 ile 16 karakter arasında olmalıdır."
+                BBLocalization.Current.Get(key = "42243ea5-91b4-4e60-8a4a-a768dbf9291f", fallback = "Hesabınız için yeni bir şifre oluşturun. Şifreniz 8 ile 16 karakter arasında olmalıdır.")
         )
 
         Spacer(
@@ -135,7 +135,7 @@ fun SetNewPasswordScreen(
                             if (isNewPasswordVisible) {
                                 "Gizle"
                             } else {
-                                "Göster"
+                                BBLocalization.Current.Get(key = "5a99cd16-cf8f-4a23-8f31-98feb0428fc9", fallback = "Göster")
                             },
                         style =
                             MaterialTheme.typography.labelSmall,
@@ -170,7 +170,7 @@ fun SetNewPasswordScreen(
 
         LogonPublicFieldLabel(
             text =
-                "Yeni Şifre Tekrar"
+                BBLocalization.Current.Get(key = "22e6bc04-5fef-4eda-8932-fc4a39accc77", fallback = "Yeni Şifre Tekrar")
         )
 
         Spacer(
@@ -205,7 +205,7 @@ fun SetNewPasswordScreen(
                             if (isReNewPasswordVisible) {
                                 "Gizle"
                             } else {
-                                "Göster"
+                                BBLocalization.Current.Get(key = "5a99cd16-cf8f-4a23-8f31-98feb0428fc9", fallback = "Göster")
                             },
                         style =
                             MaterialTheme.typography.labelSmall,
@@ -263,9 +263,9 @@ fun SetNewPasswordScreen(
                 Modifier.fillMaxWidth(),
             text =
                 if (isLoading) {
-                    "Şifre Güncelleniyor..."
+                    BBLocalization.Current.Get(key = "e7ce9fde-db1e-4f4a-8bac-d75ef23b6e85", fallback = "Şifre Güncelleniyor...")
                 } else {
-                    "Şifremi Güncelle"
+                    BBLocalization.Current.Get(key = "cee2df6f-2392-41ab-92f5-ab1a30499bc7", fallback = "Şifremi Güncelle")
                 },
             onClick = {
                 SubmitPassword()
@@ -289,7 +289,7 @@ fun SetNewPasswordScreen(
             modifier =
                 Modifier.fillMaxWidth(),
             text =
-                "Giriş Ekranına Dön",
+                BBLocalization.Current.Get(key = "6777bc00-123b-4116-9093-08c80fb9d405", fallback = "Giriş Ekranına Dön"),
             onClick =
                 onBackToLogonClick,
             variant =
@@ -309,7 +309,7 @@ fun SetNewPasswordScreen(
 
         Text(
             text =
-                "Şifrenizi başka hesaplarda kullandığınız şifrelerden farklı belirlemeniz önerilir.",
+                BBLocalization.Current.Get(key = "9a105820-ebe0-4738-9ae4-7a2d47b146b3", fallback = "Şifrenizi başka hesaplarda kullandığınız şifrelerden farklı belirlemeniz önerilir."),
             style =
                 MaterialTheme.typography.bodySmall,
             color =

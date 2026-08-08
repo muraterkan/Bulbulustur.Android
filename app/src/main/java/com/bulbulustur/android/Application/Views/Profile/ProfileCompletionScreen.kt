@@ -51,7 +51,7 @@ fun ProfileCompletionScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Profil Tamamlama",
+                title = BBLocalization.Current.Get(key = "9ff9d031-b6c8-44b5-9e01-f73fa19d2ed0", fallback = "Profil Tamamlama"),
                 onBackClick = onBackClick
             )
         }
@@ -77,7 +77,7 @@ fun ProfileCompletionScreen(
                         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
                     ) {
                         Text(
-                            text = "Profil puanınız",
+                            text = BBLocalization.Current.Get(key = "ff2f6cfb-17a1-4f5a-a9f2-33ee818f2302", fallback = "Profil puanınız"),
                             style = BbTypography.titleSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -111,7 +111,7 @@ fun ProfileCompletionScreen(
                         padding = BbCardPadding.Medium
                     ) {
                         Text(
-                            text = "Profil bilgileri yükleniyor...",
+                            text = BBLocalization.Current.Get(key = "c0de7721-a809-4cb5-9a9c-0671f5289c8f", fallback = "Profil bilgileri yükleniyor..."),
                             style = BbTypography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -137,7 +137,7 @@ fun ProfileCompletionScreen(
 
             item {
                 Text(
-                    text = "Profil bilgileri",
+                    text = BBLocalization.Current.Get(key = "589265c1-b3c1-4f48-ab37-47bce366de11", fallback = "Profil bilgileri"),
                     style = BbTypography.titleMedium,
                     color = MaterialTheme.colorScheme.onBackground,
                     fontWeight = FontWeight.Bold

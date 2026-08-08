@@ -180,8 +180,8 @@ fun RetailHomeScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Mağaza Keşfi",
-                    subtitle = "Seçilmiş mağaza ve marka alanları."
+                    title = BBLocalization.Current.Get(key = "a4ebc64d-5787-4b21-bd80-f1daeb6068a2", fallback = "Mağaza Keşfi"),
+                    subtitle = BBLocalization.Current.Get(key = "95717485-49c7-4c16-b6a7-585616ecac69", fallback = "Seçilmiş mağaza ve marka alanları.")
                 )
             }
 
@@ -225,7 +225,7 @@ private fun RetailHomeHeroCard() {
                 )
 
                 Text(
-                    text = "Perakende Alışveriş",
+                    text = BBLocalization.Current.Get(key = "adfb92da-e66b-4549-b73e-ebc51a56acbb", fallback = "Perakende Alışveriş"),
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.SemiBold
@@ -233,14 +233,14 @@ private fun RetailHomeHeroCard() {
             }
 
             Text(
-                text = "Ürünleri, mağazaları ve kampanya vitrinlerini keşfet.",
+                text = BBLocalization.Current.Get(key = "1e31ff0f-3b44-4965-9fcf-9dc8010c51b9", fallback = "Ürünleri, mağazaları ve kampanya vitrinlerini keşfet."),
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
-                text = "Bulbulustur Perakende; hızlı keşif, güvenli alışveriş ve seçilmiş fırsatlar için tasarlandı.",
+                text = BBLocalization.Current.Get(key = "d2aa284d-6db6-4793-baed-92051b5c8ccb", fallback = "Bulbulustur Perakende; hızlı keşif, güvenli alışveriş ve seçilmiş fırsatlar için tasarlandı."),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -361,7 +361,7 @@ private fun RetailHomeTrustStrip() {
 
             RetailHomeTrustItem(
                 icon = Icons.Outlined.WorkspacePremium,
-                title = "Seçili",
+                title = BBLocalization.Current.Get(key = "c65ecb62-610f-4a60-9664-85404fe27a5c", fallback = "Seçili"),
                 modifier = Modifier.weight(1f)
             )
 
@@ -511,7 +511,7 @@ private fun getRetailHomeGateways(): List<RetailHomeGatewayItem> {
     return listOf(
         RetailHomeGatewayItem(
             Title = BBLocalization.Current.Get(key = "e2812624-6bbc-4034-9a09-6570540d0785", fallback = "Kampanyalar"),
-            Description = "Aktif kampanya vitrinlerini keşfet",
+            Description = BBLocalization.Current.Get(key = "9dd02f4a-0504-4948-b0e0-d6bc9695a6a0", fallback = "Aktif kampanya vitrinlerini keşfet"),
             Icon = Icons.Outlined.LocalOffer,
             BackgroundColor =
                 MaterialTheme.colorScheme.primaryContainer,
@@ -521,7 +521,7 @@ private fun getRetailHomeGateways(): List<RetailHomeGatewayItem> {
         ),
         RetailHomeGatewayItem(
             Title = BBLocalization.Current.Get(key = "66913b06-a571-41d5-8a2d-dae82701da35", fallback = "Günün Fırsatları"),
-            Description = "Bugüne özel seçili fırsatları incele",
+            Description = BBLocalization.Current.Get(key = "7e8d30d8-ae65-4694-9c72-eae8465b91eb", fallback = "Bugüne özel seçili fırsatları incele"),
             Icon = Icons.Outlined.LocalOffer,
             BackgroundColor =
                 MaterialTheme.colorScheme.surfaceVariant,
@@ -531,7 +531,7 @@ private fun getRetailHomeGateways(): List<RetailHomeGatewayItem> {
         ),
         RetailHomeGatewayItem(
             Title = BBLocalization.Current.Get(key = "91be3e9a-09f2-496b-806f-952a02209bb2", fallback = "Mağazalar"),
-            Description = "Satıcı ve marka vitrinlerini keşfet",
+            Description = BBLocalization.Current.Get(key = "dfd83b43-54ab-4a40-a64b-6d1f747cb0ef", fallback = "Satıcı ve marka vitrinlerini keşfet"),
             Icon = Icons.Outlined.Storefront,
             BackgroundColor =
                 MaterialTheme.colorScheme.secondaryContainer,
@@ -541,7 +541,7 @@ private fun getRetailHomeGateways(): List<RetailHomeGatewayItem> {
         ),
         RetailHomeGatewayItem(
             Title = BBLocalization.Current.Get(key = "b4370fd4-885d-41e7-928c-36b693ce3966", fallback = "Favoriler"),
-            Description = "Beğendiğin ürün ve mağazalara dön",
+            Description = BBLocalization.Current.Get(key = "525a5767-cdbe-45cb-a279-40324a1780bf", fallback = "Beğendiğin ürün ve mağazalara dön"),
             Icon = Icons.Outlined.FavoriteBorder,
             BackgroundColor =
                 MaterialTheme.colorScheme.tertiaryContainer,
@@ -556,15 +556,15 @@ private fun getRetailHomeStores(): List<RetailHomeStoreItem> {
     return listOf(
         RetailHomeStoreItem(
             Name = "Bulbulustur Store",
-            Description = "Seçilmiş ürünler"
+            Description = BBLocalization.Current.Get(key = "70484117-ffbc-4e50-b11a-81eaec5afdf5", fallback = "Seçilmiş ürünler")
         ),
         RetailHomeStoreItem(
-            Name = "Ev & Yaşam Pazarı",
-            Description = "Ev ihtiyaçları"
+            Name = BBLocalization.Current.Get(key = "0dff2601-0707-4fb9-a69e-0de051e6ca1b", fallback = "Ev & Yaşam Pazarı"),
+            Description = BBLocalization.Current.Get(key = "37c33f8d-5a50-4fe2-9cf0-3e48c47de217", fallback = "Ev ihtiyaçları")
         ),
         RetailHomeStoreItem(
-            Name = "Tekno Vitrin",
-            Description = "Teknoloji ürünleri"
+            Name = BBLocalization.Current.Get(key = "5a21ee07-c8eb-468d-9757-313254be909a", fallback = "Tekno Vitrin"),
+            Description = BBLocalization.Current.Get(key = "9493a182-cb22-4679-91ce-ba73b34417b8", fallback = "Teknoloji ürünleri")
         )
     )
 }

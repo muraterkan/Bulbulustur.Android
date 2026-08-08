@@ -94,10 +94,10 @@ fun LoginScreen(
         }
     ) {
         LogonPublicPageTitle(
-            eyebrow = "Bulbulustur Hesabı",
+            eyebrow = BBLocalization.Current.Get(key = "911e7a06-2e2e-4786-9f00-6326642df638", fallback = "Bulbulustur Hesabı"),
             title = BBLocalization.Current.Get(key = "72289e9d-49e1-4c2a-8b0b-3ab5a67610a6", fallback = "Giriş Yap"),
             description =
-                "Hesabınıza giriş yapın, alışveriş ve toptan talep akışlarınıza devam edin."
+                BBLocalization.Current.Get(key = "30c2caf6-f3ca-4794-a40b-275d26e8c758", fallback = "Hesabınıza giriş yapın, alışveriş ve toptan talep akışlarınıza devam edin.")
         )
 
         Spacer(
@@ -174,7 +174,7 @@ fun LoginScreen(
                 password = value
                 onInputChanged()
             },
-            placeholder = "Şifreniz",
+            placeholder = BBLocalization.Current.Get(key = "f3bfe2a5-b25a-45b4-99f9-fbe3fb89bef5", fallback = "Şifreniz"),
             trailingContent = {
                 IconButton(
                     onClick = {
@@ -188,7 +188,7 @@ fun LoginScreen(
                         ) {
                             "Gizle"
                         } else {
-                            "Göster"
+                            BBLocalization.Current.Get(key = "5a99cd16-cf8f-4a23-8f31-98feb0428fc9", fallback = "Göster")
                         },
                         style =
                             MaterialTheme.typography
@@ -242,7 +242,7 @@ fun LoginScreen(
         BbButton(
             modifier = Modifier.fillMaxWidth(),
             text = if (isLoading) {
-                "Giriş Yapılıyor..."
+                BBLocalization.Current.Get(key = "1b28a6b0-8a20-4257-b0a0-f97ce8b77592", fallback = "Giriş Yapılıyor...")
             } else {
                 BBLocalization.Current.Get(key = "72289e9d-49e1-4c2a-8b0b-3ab5a67610a6", fallback = "Giriş Yap")
             },
@@ -318,7 +318,7 @@ fun LoginScreen(
         ) {
             SocialLoginButton(
                 modifier = Modifier.fillMaxWidth(),
-                label = "Google ile devam et",
+                label = BBLocalization.Current.Get(key = "ff66cbca-994d-460f-9b77-6f8c7b4492f6", fallback = "Google ile devam et"),
                 iconResId = R.drawable.ic_google,
                 isLoading = isLoading,
                 onClick = onGoogleClick
@@ -326,7 +326,7 @@ fun LoginScreen(
 
             SocialLoginButton(
                 modifier = Modifier.fillMaxWidth(),
-                label = "Facebook ile devam et",
+                label = BBLocalization.Current.Get(key = "dd286af7-06c5-4382-8370-56013200ec42", fallback = "Facebook ile devam et"),
                 iconResId = R.drawable.ic_facebook,
                 isLoading = isLoading,
                 onClick = onFacebookClick
@@ -375,7 +375,7 @@ private fun LoginScreenPreview() {
     BbTheme {
         LoginScreen(
             errorMessage =
-                "E-posta adresi veya şifre hatalı."
+                BBLocalization.Current.Get(key = "6ce3ab2f-b1ec-4df5-922d-579fc6f9f994", fallback = "E-posta adresi veya şifre hatalı.")
         )
     }
 }

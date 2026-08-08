@@ -72,8 +72,8 @@ fun ProfilePhotoSheet(
                 ) {
                     ProfilePhotoSheetActionRow(
                         icon = Icons.Outlined.CameraAlt,
-                        title = "Fotoğraf Çek",
-                        subtitle = "Kamerayı açarak yeni profil fotoğrafı çek.",
+                        title = BBLocalization.Current.Get(key = "0cc7a57d-6407-45d4-b22b-ae7ccf444457", fallback = "Fotoğraf Çek"),
+                        subtitle = BBLocalization.Current.Get(key = "a365b425-eb60-4a7c-b18d-3ef529c4cb40", fallback = "Kamerayı açarak yeni profil fotoğrafı çek."),
                         onClick = onTakePhotoClick
                     )
 
@@ -83,8 +83,8 @@ fun ProfilePhotoSheet(
 
                     ProfilePhotoSheetActionRow(
                         icon = Icons.Outlined.PhotoLibrary,
-                        title = "Albümden Seç",
-                        subtitle = "Cihaz galerinizden profil fotoğrafı seç.",
+                        title = BBLocalization.Current.Get(key = "ca9b5067-f36a-45be-b1a0-31c0d263af8e", fallback = "Albümden Seç"),
+                        subtitle = BBLocalization.Current.Get(key = "050043db-907a-4f78-9598-16e66877dab0", fallback = "Cihaz galerinizden profil fotoğrafı seç."),
                         onClick = onSelectFromGalleryClick
                     )
 
@@ -95,8 +95,8 @@ fun ProfilePhotoSheet(
 
                         ProfilePhotoSheetActionRow(
                             icon = Icons.Outlined.DeleteOutline,
-                            title = "Fotoğrafı Kaldır",
-                            subtitle = "Mevcut profil fotoğrafını kaldır.",
+                            title = BBLocalization.Current.Get(key = "42e13e1f-1d33-4f4d-85e4-0e3f2cf853e4", fallback = "Fotoğrafı Kaldır"),
+                            subtitle = BBLocalization.Current.Get(key = "1b46d99a-89d8-4967-879e-7a2d037cc7eb", fallback = "Mevcut profil fotoğrafını kaldır."),
                             danger = true,
                             onClick = onRemovePhotoClick
                         )
@@ -105,7 +105,7 @@ fun ProfilePhotoSheet(
             }
 
             BbButton(
-                text = "Vazgeç",
+                text = BBLocalization.Current.Get(key = "18a6f5c0-ab35-483d-8691-fad99e9680f2", fallback = "Vazgeç"),
                 onClick = onDismiss,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Light,
@@ -139,7 +139,7 @@ private fun ProfilePhotoSheetHeader() {
         )
 
         Text(
-            text = "Hesabınızda görünecek tek aktif profil fotoğrafını buradan yönetebilirsiniz.",
+            text = BBLocalization.Current.Get(key = "ca6cc01d-5267-4dc1-b594-b303a784a77e", fallback = "Hesabınızda görünecek tek aktif profil fotoğrafını buradan yönetebilirsiniz."),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

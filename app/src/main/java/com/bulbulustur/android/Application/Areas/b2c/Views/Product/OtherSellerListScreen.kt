@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Product
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -117,8 +119,8 @@ fun OtherSellerListScreen(
 
             item {
                 OtherSellerSectionTitle(
-                    title = "Satıcı seçenekleri",
-                    description = "Aynı ürünü satan Mağazaları fiyat, kargo ve puana göre karşılaştır."
+                    title = BBLocalization.Current.Get(key = "3e8682e0-2701-4782-8adc-03c2a13a052d", fallback = "Satıcı seçenekleri"),
+                    description = BBLocalization.Current.Get(key = "e5d9ffdf-0d2d-4bd4-b49d-5d708c471002", fallback = "Aynı ürünü satan Mağazaları fiyat, kargo ve puana göre karşılaştır.")
                 )
             }
 
@@ -215,8 +217,8 @@ private fun OtherSellerFilterSection(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
     ) {
         OtherSellerSectionTitle(
-            title = "Hızlı filtre",
-            description = "Satıcıları alışveriş önceliğine göre daralt."
+            title = BBLocalization.Current.Get(key = "825d9d14-3075-4a3a-8e4f-7eef8b04ee31", fallback = "Hızlı filtre"),
+            description = BBLocalization.Current.Get(key = "57f8d517-6746-463a-80e5-16fad0b6a5a7", fallback = "Satıcıları alışveriş önceliğine göre daralt.")
         )
 
         FlowRow(
@@ -456,7 +458,7 @@ private fun getRetailOtherSellerScreenData(
     return RetailOtherSellerScreenData(
         product = RetailOtherSellerProductSummary(
             id = productId,
-            name = "Kadın klasik sneaker ayakkabı",
+            name = BBLocalization.Current.Get(key = "cf2f4de0-711c-4308-a055-3ef7eb00d9c7", fallback = "Kadın klasik sneaker ayakkabı"),
             variantText = "Beyaz . 38 numara",
             imageText = "P1",
             sellerCount = 5
@@ -464,7 +466,7 @@ private fun getRetailOtherSellerScreenData(
         filters = listOf(
             "Tümü",
             "En düşük fiyat",
-            "Hızlı kargo",
+            BBLocalization.Current.Get(key = "6d125a4c-1b22-4449-a82e-b4e51ececea9", fallback = "Hızlı kargo"),
             "Doğrulanmış",
             "Yüksek puan"
         ),
@@ -474,19 +476,19 @@ private fun getRetailOtherSellerScreenData(
                 storeName = "Ortobella Store",
                 logoText = "OS",
                 ratingText = "4.8",
-                cargoText = "Hızlı kargo",
+                cargoText = BBLocalization.Current.Get(key = "6d125a4c-1b22-4449-a82e-b4e51ececea9", fallback = "Hızlı kargo"),
                 priceText = "₺899,90",
                 stockText = "Stokta var",
-                badgeText = "En uygun fiyat",
+                badgeText = BBLocalization.Current.Get(key = "9bb6694a-3e36-490d-9767-c6fbe2baec1c", fallback = "En uygun fiyat"),
                 isVerified = true,
-                filterTags = listOf("En düşük fiyat", "Hızlı kargo", "Doğrulanmış", "Yüksek puan")
+                filterTags = listOf("En düşük fiyat", BBLocalization.Current.Get(key = "6d125a4c-1b22-4449-a82e-b4e51ececea9", fallback = "Hızlı kargo"), "Doğrulanmış", "Yüksek puan")
             ),
             RetailOtherSellerItem(
                 id = 2,
                 storeName = "Moda Nova",
                 logoText = "MN",
                 ratingText = "4.6",
-                cargoText = "Standart kargo",
+                cargoText = BBLocalization.Current.Get(key = "e905eb3f-e2ff-4923-9b1d-1c3e792e1e08", fallback = "Standart kargo"),
                 priceText = "₺929,90",
                 stockText = "Stokta var",
                 badgeText = "",
@@ -498,19 +500,19 @@ private fun getRetailOtherSellerScreenData(
                 storeName = "Urban Touch",
                 logoText = "UT",
                 ratingText = "4.7",
-                cargoText = "Hızlı kargo",
+                cargoText = BBLocalization.Current.Get(key = "6d125a4c-1b22-4449-a82e-b4e51ececea9", fallback = "Hızlı kargo"),
                 priceText = "₺949,90",
-                stockText = "Son 3 ürün",
-                badgeText = "Az stok",
+                stockText = BBLocalization.Current.Get(key = "fcabe8cc-c42a-4f13-96f2-56f26683a544", fallback = "Son 3 ürün"),
+                badgeText = BBLocalization.Current.Get(key = "4df69315-e3c0-44ad-b7cf-e2bb62fe74ff", fallback = "Az stok"),
                 isVerified = false,
-                filterTags = listOf("Hızlı kargo", "Yüksek puan")
+                filterTags = listOf(BBLocalization.Current.Get(key = "6d125a4c-1b22-4449-a82e-b4e51ececea9", fallback = "Hızlı kargo"), "Yüksek puan")
             ),
             RetailOtherSellerItem(
                 id = 4,
                 storeName = "Sneaker House",
                 logoText = "SH",
                 ratingText = "4.4",
-                cargoText = "Standart kargo",
+                cargoText = BBLocalization.Current.Get(key = "e905eb3f-e2ff-4923-9b1d-1c3e792e1e08", fallback = "Standart kargo"),
                 priceText = "₺979,90",
                 stockText = "Stokta var",
                 badgeText = "",
@@ -522,12 +524,12 @@ private fun getRetailOtherSellerScreenData(
                 storeName = "Ayakkabı Merkezi",
                 logoText = "AM",
                 ratingText = "4.5",
-                cargoText = "Hızlı kargo",
+                cargoText = BBLocalization.Current.Get(key = "6d125a4c-1b22-4449-a82e-b4e51ececea9", fallback = "Hızlı kargo"),
                 priceText = "₺999,90",
                 stockText = "Stokta var",
-                badgeText = "Kargo avantajı",
+                badgeText = BBLocalization.Current.Get(key = "6c32e211-70dd-4c50-8be3-d870c8a610d0", fallback = "Kargo avantajı"),
                 isVerified = true,
-                filterTags = listOf("Hızlı kargo", "Doğrulanmış")
+                filterTags = listOf(BBLocalization.Current.Get(key = "6d125a4c-1b22-4449-a82e-b4e51ececea9", fallback = "Hızlı kargo"), "Doğrulanmış")
             )
         )
     )

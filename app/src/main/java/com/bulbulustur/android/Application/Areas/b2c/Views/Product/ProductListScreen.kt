@@ -77,7 +77,7 @@ fun ProductListScreen(
     }
 
     var selectedSortOption by remember {
-        mutableStateOf("Öne çıkan")
+        mutableStateOf(BBLocalization.Current.Get(key = "d02a9b8b-001b-4e99-9073-9150016441f3", fallback = "Öne çıkan"))
     }
 
     var favoriteProductIds by remember {
@@ -149,7 +149,7 @@ fun ProductListScreen(
                     }
                 }
 
-                "En yüksek fiyat" -> {
+                BBLocalization.Current.Get(key = "a6913ebd-df97-42c0-9fa5-2138d2cd73e1", fallback = "En yüksek fiyat") -> {
                     searchFilteredProducts.sortedByDescending { product ->
                         product.Price
                     }
@@ -170,9 +170,9 @@ fun ProductListScreen(
     val sortOptions =
         remember {
             listOf(
-                "Öne çıkan",
+                BBLocalization.Current.Get(key = "d02a9b8b-001b-4e99-9073-9150016441f3", fallback = "Öne çıkan"),
                 BBLocalization.Current.Get(key = "c4fa944e-eb81-40dd-80f6-4209c78db57c", fallback = "En düşük fiyat"),
-                "En yüksek fiyat",
+                BBLocalization.Current.Get(key = "a6913ebd-df97-42c0-9fa5-2138d2cd73e1", fallback = "En yüksek fiyat"),
                 BBLocalization.Current.Get(key = "6788b820-f4b2-470b-92f8-7a8470387d4e", fallback = "Yeni gelenler")
             )
         }
@@ -197,7 +197,7 @@ fun ProductListScreen(
                 onMessageClick =
                     onMessageClick,
                 placeholder =
-                    "Ürün, kategori veya marka ara",
+                    BBLocalization.Current.Get(key = "e4f653c3-8828-4934-aa3b-959cede38feb", fallback = "Ürün, kategori veya marka ara"),
                 onSearchClick = {
                     onSearchClick(
                         searchText
@@ -280,14 +280,14 @@ fun ProductListScreen(
                             ?.takeIf {
                                 it.isNotBlank()
                             }
-                            ?: "Perakende Ürünler",
+                            ?: BBLocalization.Current.Get(key = "824f1dda-7e98-4590-981e-6b7c34826978", fallback = "Perakende Ürünler"),
                     subtitle =
                         State.ProductListData
                             ?.CategoryDescription
                             ?.takeIf {
                                 it.isNotBlank()
                             }
-                            ?: "Kategorilerden, mağazalardan ve kampanyalardan ürün keşfet."
+                            ?: BBLocalization.Current.Get(key = "54b5e4b6-e6e5-42bf-95f2-b0574db5f622", fallback = "Kategorilerden, mağazalardan ve kampanyalardan ürün keşfet.")
                 )
             }
 
@@ -335,7 +335,7 @@ fun ProductListScreen(
                     RetailProductListError(
                         message =
                             State.ErrorMessage
-                                ?: "Ürünler yüklenemedi."
+                                ?: BBLocalization.Current.Get(key = "0a4c4d79-c42d-473a-8f38-23d57c89bbbe", fallback = "Ürünler yüklenemedi.")
                     )
                 }
 
@@ -571,7 +571,7 @@ private fun RetailProductListError(
     ) {
         Text(
             text =
-                "Ürünler yüklenemedi",
+                BBLocalization.Current.Get(key = "0a4c4d79-c42d-473a-8f38-23d57c89bbbe", fallback = "Ürünler yüklenemedi"),
             style =
                 MaterialTheme.typography.titleMedium,
             fontWeight =
@@ -609,7 +609,7 @@ private fun RetailProductListEmpty() {
     ) {
         Text(
             text =
-                "Ürün bulunamadı",
+                BBLocalization.Current.Get(key = "9afc052e-e2bf-413d-81c6-461bfc3c9174", fallback = "Ürün bulunamadı"),
             style =
                 MaterialTheme.typography.titleMedium,
             fontWeight =
@@ -620,7 +620,7 @@ private fun RetailProductListEmpty() {
 
         Text(
             text =
-                "Arama veya filtre seçimini değiştirerek tekrar deneyebilirsin.",
+                BBLocalization.Current.Get(key = "59f50847-365f-4959-b050-641d7c1e18cc", fallback = "Arama veya filtre seçimini değiştirerek tekrar deneyebilirsin."),
             style =
                 MaterialTheme.typography.bodyMedium,
             color =

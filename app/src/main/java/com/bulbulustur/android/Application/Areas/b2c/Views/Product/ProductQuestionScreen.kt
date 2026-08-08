@@ -152,7 +152,7 @@ fun ProductQuestionScreen(
             item {
                 ProductQuestionSectionTitle(
                     title = "Ürün soruları",
-                    description = "Müşterilerin bu ürün hakkında gönderdiği sorular."
+                    description = BBLocalization.Current.Get(key = "7d6fdd0d-289b-4313-894c-df3ea6942b0d", fallback = "Müşterilerin bu ürün hakkında gönderdiği sorular.")
                 )
             }
 
@@ -195,7 +195,7 @@ private fun ProductQuestionProductSummary(
     storeName: String,
     variantId: Int
 ) {
-    val resolvedProductName = productName.ifBlank { "Ürün Soruları" }
+    val resolvedProductName = productName.ifBlank { BBLocalization.Current.Get(key = "67267643-9c81-4171-8dae-74ef3a05ee24", fallback = "Ürün Soruları") }
     val resolvedStoreName = storeName.ifBlank { BBLocalization.Current.Get(key = "2ac4c8be-0d5d-4c84-afe8-628839892727", fallback = "") }
 
     Surface(
@@ -298,7 +298,7 @@ private fun ProductQuestionAskCard(
                         Text(text = BBLocalization.Current.Get(key = "7f62bd9f-01a0-4cd2-b208-8c84fe01adae", fallback = "Sorunuz"))
                     },
                     placeholder = {
-                        Text(text = "Ürün hakkında merak ettiğiniz konuyu yazın.")
+                        Text(text = BBLocalization.Current.Get(key = "bf3aea33-2824-459f-b7aa-a5f8298bf412", fallback = "Ürün hakkında merak ettiğiniz konuyu yazın."))
                     },
                     minLines = 3,
                     maxLines = 6,
@@ -306,7 +306,7 @@ private fun ProductQuestionAskCard(
                 )
 
                 BbButton(
-                    text = if (isSubmitting) "Gönderiliyor" else "Soruyu Gönder",
+                    text = if (isSubmitting) BBLocalization.Current.Get(key = "747533e0-13c8-4b49-82ca-ebf9fea6b37f", fallback = "Gönderiliyor") else BBLocalization.Current.Get(key = "03bc5c9c-accd-41d0-9c88-7bb2ad53590e", fallback = "Soruyu Gönder"),
                     onClick = onSubmitClick,
                     modifier = Modifier.fillMaxWidth(),
                     variant = BbButtonVariant.Primary,
@@ -315,7 +315,7 @@ private fun ProductQuestionAskCard(
                 )
             } else {
                 BbButton(
-                    text = "Giriş Yap ve Soru Sor",
+                    text = BBLocalization.Current.Get(key = "d28572e7-8179-42f1-a4af-60e1b93cf602", fallback = "Giriş Yap ve Soru Sor"),
                     onClick = onLoginRequired,
                     modifier = Modifier.fillMaxWidth(),
                     variant = BbButtonVariant.Primary,
@@ -346,14 +346,14 @@ private fun ProductQuestionSummaryCard(totalQuestionCount: Int) {
                 )
 
                 Text(
-                    text = "yayınlanmış ürün sorusu",
+                    text = BBLocalization.Current.Get(key = "5d089966-6ab3-4cce-bf89-24c9e209dca9", fallback = "yayınlanmış ürün sorusu"),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
             Text(
-                text = "Satıcı cevapları eklendiğinde burada gösterilecektir.",
+                text = BBLocalization.Current.Get(key = "4f158bce-3d8d-4984-a9ca-9afa65b06f5f", fallback = "Satıcı cevapları eklendiğinde burada gösterilecektir."),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -418,7 +418,7 @@ private fun ProductQuestionCard(
                 }
 
                 ProductQuestionStatusBadge(
-                    text = if (isAnswered) "Cevaplandı" else "Cevap bekliyor"
+                    text = if (isAnswered) BBLocalization.Current.Get(key = "3f8f8f72-2596-4eaa-a2b2-743abb1655ee", fallback = "Cevaplandı") else "Cevap bekliyor"
                 )
             }
 
@@ -481,7 +481,7 @@ private fun ProductQuestionCard(
                     )
                 ) {
                     Text(
-                        text = "Satıcı cevabı bekleniyor.",
+                        text = BBLocalization.Current.Get(key = "d407b3e7-2260-466c-9949-efaf495bc575", fallback = "Satıcı cevabı bekleniyor."),
                         modifier = Modifier.padding(BBSpacing.CardPaddingCompact),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -584,14 +584,14 @@ private fun ProductQuestionEmptyCard() {
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
         ) {
             Text(
-                text = "Henüz soru sorulmamış",
+                text = BBLocalization.Current.Get(key = "3bd4a97b-88e5-4f8d-afe4-a7534dfe98e7", fallback = "Henüz soru sorulmamış"),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
-                text = "Bu ürün hakkında ilk soruyu siz gönderebilirsiniz.",
+                text = BBLocalization.Current.Get(key = "b48eeefb-045f-4cd3-8c1a-3c7b3780046d", fallback = "Bu ürün hakkında ilk soruyu siz gönderebilirsiniz."),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

@@ -333,7 +333,7 @@ class AccountController(
 
     fun SaveAccountPreference(memberId: Int, preference: MemberPreferenceDTO, preferenceValue: Boolean, onSuccess: (() -> Unit)? = null) {
         if (!ValidateMember(memberId)) return
-        if (!ValidateId(preference.PreferenceTypeId, "Tercih tipi bulunamadı.")) return
+        if (!ValidateId(preference.PreferenceTypeId, BBLocalization.Current.Get(key = "c4c0961f-d511-4422-aba6-edca05f3a58d", fallback = "Tercih tipi bulunamadı."))) return
 
         viewModelScope.launch {
             SetLoading("SaveAccountPreference")
@@ -395,7 +395,7 @@ class AccountController(
         if (!ValidateMember(memberId)) return
 
         if (addressKey.isBlank()) {
-            SetError("Adres anahtarı bulunamadı.")
+            SetError(BBLocalization.Current.Get(key = "806bb730-7610-4f24-8870-25ff286a668c", fallback = "Adres anahtarı bulunamadı."))
             return
         }
 
@@ -459,7 +459,7 @@ class AccountController(
 
     fun DeleteAddress(memberId: Int, addressId: Int, onSuccess: (() -> Unit)? = null) {
         if (!ValidateMember(memberId)) return
-        if (!ValidateId(addressId, "Adres bilgisi bulunamadı.")) return
+        if (!ValidateId(addressId, BBLocalization.Current.Get(key = "e273b55d-124d-4e9c-89e9-4e484102fa15", fallback = "Adres bilgisi bulunamadı."))) return
 
         viewModelScope.launch {
             SetLoading("DeleteAddress")
@@ -486,17 +486,17 @@ class AccountController(
         val reNewEmail = model.ReNewEmail.trim()
 
         if (newEmail.isBlank() || reNewEmail.isBlank()) {
-            SetError("Yeni e-posta adreslerini giriniz.")
+            SetError(BBLocalization.Current.Get(key = "ce1139ec-a09b-4ef6-92af-af1157c5d68b", fallback = "Yeni e-posta adreslerini giriniz."))
             return
         }
 
         if (!newEmail.equals(reNewEmail, ignoreCase = true)) {
-            SetError("Yeni e-posta adresleri eşleşmiyor.")
+            SetError(BBLocalization.Current.Get(key = "b316ebfb-e16c-470e-b3af-d56e38e190ec", fallback = "Yeni e-posta adresleri eşleşmiyor."))
             return
         }
 
         if (model.Email.trim().equals(newEmail, ignoreCase = true)) {
-            SetError("Yeni e-posta adresi mevcut e-posta adresinizle aynı olamaz.")
+            SetError(BBLocalization.Current.Get(key = "24d892e0-f488-4a5d-895d-ad4f306eb80a", fallback = "Yeni e-posta adresi mevcut e-posta adresinizle aynı olamaz."))
             return
         }
 
@@ -528,17 +528,17 @@ class AccountController(
         if (!ValidateMember(model.MemberId)) return
 
         if (model.ActivePassword.isBlank()) {
-            SetError("Mevcut şifrenizi giriniz.")
+            SetError(BBLocalization.Current.Get(key = "3cf18dec-33c0-4f7a-b228-7299ae26bc71", fallback = "Mevcut şifrenizi giriniz."))
             return
         }
 
         if (model.NewPassword.length !in 8..16) {
-            SetError("Yeni şifreniz 8 ile 16 karakter arasında olmalıdır.")
+            SetError(BBLocalization.Current.Get(key = "5e6d507a-310f-44c0-b2ea-cbfa11a222b2", fallback = "Yeni şifreniz 8 ile 16 karakter arasında olmalıdır."))
             return
         }
 
         if (model.NewPassword != model.ReNewPassword) {
-            SetError("Yeni şifreler birbiriyle eşleşmiyor.")
+            SetError(BBLocalization.Current.Get(key = "3fbd411e-0082-41e9-a011-8e49a5c1a795", fallback = "Yeni şifreler birbiriyle eşleşmiyor."))
             return
         }
 
@@ -605,7 +605,7 @@ class AccountController(
 
     fun GetBankAccount(memberId: Int, bankAccountId: Int) {
         if (!ValidateMember(memberId)) return
-        if (!ValidateId(bankAccountId, "Banka hesabı bulunamadı.")) return
+        if (!ValidateId(bankAccountId, BBLocalization.Current.Get(key = "c85ab684-d9d7-4027-9700-5b796c2dcc3b", fallback = "Banka hesabı bulunamadı."))) return
 
         viewModelScope.launch {
             SetLoading("GetBankAccount")
@@ -667,7 +667,7 @@ class AccountController(
 
     fun DeleteBankAccount(memberId: Int, bankAccountId: Int, onSuccess: (() -> Unit)? = null) {
         if (!ValidateMember(memberId)) return
-        if (!ValidateId(bankAccountId, "Banka hesabı bulunamadı.")) return
+        if (!ValidateId(bankAccountId, BBLocalization.Current.Get(key = "c85ab684-d9d7-4027-9700-5b796c2dcc3b", fallback = "Banka hesabı bulunamadı."))) return
 
         viewModelScope.launch {
             SetLoading("DeleteBankAccount")
@@ -729,7 +729,7 @@ class AccountController(
 
     fun DeleteAlarm(memberId: Int, memberAlarmListId: Int, onSuccess: (() -> Unit)? = null) {
         if (!ValidateMember(memberId)) return
-        if (!ValidateId(memberAlarmListId, "Alarm bilgisi bulunamadı.")) return
+        if (!ValidateId(memberAlarmListId, BBLocalization.Current.Get(key = "7e4f87c2-1396-4b35-9b74-7d29dda79722", fallback = "Alarm bilgisi bulunamadı."))) return
 
         viewModelScope.launch {
             SetLoading("DeleteAlarm")
@@ -791,7 +791,7 @@ class AccountController(
 
     fun DeleteFollowedCompany(memberId: Int, followedCompanyId: Int, onSuccess: (() -> Unit)? = null) {
         if (!ValidateMember(memberId)) return
-        if (!ValidateId(followedCompanyId, "Takip edilen şirket bulunamadı.")) return
+        if (!ValidateId(followedCompanyId, BBLocalization.Current.Get(key = "0a8f1ed5-7adf-44a9-bffc-ca4a6cda37dc", fallback = "Takip edilen şirket bulunamadı."))) return
 
         viewModelScope.launch {
             SetLoading("DeleteFollowedCompany")
@@ -853,7 +853,7 @@ class AccountController(
 
     fun DeleteFollowedStore(memberId: Int, followedStoreId: Int, onSuccess: (() -> Unit)? = null) {
         if (!ValidateMember(memberId)) return
-        if (!ValidateId(followedStoreId, "Takip edilen mağaza bulunamadı.")) return
+        if (!ValidateId(followedStoreId, BBLocalization.Current.Get(key = "7b429d12-6149-485c-b6b2-c089fb70297e", fallback = "Takip edilen mağaza bulunamadı."))) return
 
         viewModelScope.launch {
             SetLoading("DeleteFollowedStore")
@@ -936,7 +936,7 @@ class AccountController(
 
     fun GetPhone(languageId: Int, memberPhoneId: Int, memberId: Int) {
         if (!ValidateMember(memberId)) return
-        if (!ValidateId(memberPhoneId, "Telefon kaydı bulunamadı.")) return
+        if (!ValidateId(memberPhoneId, BBLocalization.Current.Get(key = "5bc9e53a-69dc-47f4-a8d7-ccc5b3e4850f", fallback = "Telefon kaydı bulunamadı."))) return
 
         viewModelScope.launch {
             SetLoading("GetPhone")
@@ -969,7 +969,7 @@ class AccountController(
         val normalizedPhone = phone.trim()
 
         if (normalizedPhone.isBlank()) {
-            SetError("Telefon numarası giriniz.")
+            SetError(BBLocalization.Current.Get(key = "30c1602f-5e35-4047-8dc8-b35137202706", fallback = "Telefon numarası giriniz."))
             return
         }
 
@@ -1012,7 +1012,7 @@ class AccountController(
         onSuccess: (() -> Unit)? = null
     ) {
         if (!ValidateMember(memberId)) return
-        if (!ValidateId(memberPhoneId, "Telefon kaydı bulunamadı.")) return
+        if (!ValidateId(memberPhoneId, BBLocalization.Current.Get(key = "5bc9e53a-69dc-47f4-a8d7-ccc5b3e4850f", fallback = "Telefon kaydı bulunamadı."))) return
 
         viewModelScope.launch {
             SetLoading("DeletePhone")
@@ -1044,7 +1044,7 @@ class AccountController(
         onSuccess: (() -> Unit)? = null
     ) {
         if (!ValidateMember(memberId)) return
-        if (!ValidateId(memberPhoneId, "Telefon kaydı bulunamadı.")) return
+        if (!ValidateId(memberPhoneId, BBLocalization.Current.Get(key = "5bc9e53a-69dc-47f4-a8d7-ccc5b3e4850f", fallback = "Telefon kaydı bulunamadı."))) return
 
         viewModelScope.launch {
             SetLoading("SendPhoneVerificationSms")
@@ -1077,7 +1077,7 @@ class AccountController(
         onSuccess: (() -> Unit)? = null
     ) {
         if (!ValidateMember(memberId)) return
-        if (!ValidateId(memberPhoneId, "Telefon kaydı bulunamadı.")) return
+        if (!ValidateId(memberPhoneId, BBLocalization.Current.Get(key = "5bc9e53a-69dc-47f4-a8d7-ccc5b3e4850f", fallback = "Telefon kaydı bulunamadı."))) return
 
         val normalizedCode = verificationCode.trim()
 
@@ -1390,7 +1390,7 @@ class AccountController(
         onSuccess: (() -> Unit)? = null
     ) {
         if (!ValidateMember(memberId)) return
-        if (!ValidateId(favoriteId, "Favori ürün bilgisi bulunamadı.")) return
+        if (!ValidateId(favoriteId, BBLocalization.Current.Get(key = "c072b57e-b615-4c56-84f8-1d1501707d21", fallback = "Favori ürün bilgisi bulunamadı."))) return
 
         viewModelScope.launch {
             SetLoading("DeleteProductFavorite")
@@ -1418,7 +1418,7 @@ class AccountController(
         onSuccess: (() -> Unit)? = null
     ) {
         if (!ValidateMember(memberId)) return
-        if (!ValidateId(favoriteId, "Favori ürün bilgisi bulunamadı.")) return
+        if (!ValidateId(favoriteId, BBLocalization.Current.Get(key = "c072b57e-b615-4c56-84f8-1d1501707d21", fallback = "Favori ürün bilgisi bulunamadı."))) return
 
         viewModelScope.launch {
             SetLoading("MoveProductFavoriteToBasket")
@@ -1470,7 +1470,7 @@ class AccountController(
         onSuccess: (() -> Unit)? = null
     ) {
         if (!ValidateMember(memberId)) return
-        if (!ValidateId(wholesaleFavoriteId, "Toptan favori ürün bilgisi bulunamadı.")) return
+        if (!ValidateId(wholesaleFavoriteId, BBLocalization.Current.Get(key = "4cd6cb45-4708-4369-a35b-d644dd29c606", fallback = "Toptan favori ürün bilgisi bulunamadı."))) return
 
         viewModelScope.launch {
             SetLoading("DeleteWholesaleFavorite")
@@ -1513,7 +1513,7 @@ class AccountController(
     private fun ValidateMember(memberId: Int): Boolean {
         if (memberId > 0) return true
 
-        SetError("Bu işlem için giriş yapmalısınız.")
+        SetError(BBLocalization.Current.Get(key = "bb4ae89d-fe32-41fb-a725-e5084270f928", fallback = "Bu işlem için giriş yapmalısınız."))
         return false
     }
 

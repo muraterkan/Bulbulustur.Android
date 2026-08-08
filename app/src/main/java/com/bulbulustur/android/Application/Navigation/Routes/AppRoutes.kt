@@ -45,7 +45,16 @@ object RetailRoutes {
     const val Search =
         "retail/search"
 
-    const val Menu =
+    
+    const val ArgSearchKey = "searchKey"
+    const val SearchRoute = Search + "?" + ArgSearchKey + "={" + ArgSearchKey + "}"
+
+    fun search(searchKey: String): String {
+        val trimmedSearchKey = searchKey.trim()
+        if (trimmedSearchKey.isBlank()) return Search
+        return Search + "?" + ArgSearchKey + "=" + android.net.Uri.encode(trimmedSearchKey)
+    }
+const val Menu =
         "retail/menu"
 
     const val ProductReview =

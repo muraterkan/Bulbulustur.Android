@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Controllers
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.lifecycle.viewModelScope
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.IProductCategoryRepository
@@ -39,7 +41,7 @@ class CategoryController(
 
     fun LoadHome(languageId: Int, count: Int = 30000) {
         if (languageId <= 0) {
-            SetError("Dil bilgisi bulunamadı.")
+            SetError(BBLocalization.Current.Get(key = "a2538f8a-25cd-4e64-8572-75585c749dc0", fallback = "Dil bilgisi bulunamadı."))
             return
         }
 
@@ -68,12 +70,12 @@ class CategoryController(
 
     fun LoadDetail(languageId: Int, productCategoryId: Int) {
         if (languageId <= 0) {
-            SetError("Dil bilgisi bulunamadı.")
+            SetError(BBLocalization.Current.Get(key = "a2538f8a-25cd-4e64-8572-75585c749dc0", fallback = "Dil bilgisi bulunamadı."))
             return
         }
 
         if (productCategoryId <= 0) {
-            SetError("Kategori bilgisi bulunamadı.")
+            SetError(BBLocalization.Current.Get(key = "507c8e7a-40f0-424e-b7dc-e8f5d0a3df07", fallback = "Kategori bilgisi bulunamadı."))
             return
         }
 

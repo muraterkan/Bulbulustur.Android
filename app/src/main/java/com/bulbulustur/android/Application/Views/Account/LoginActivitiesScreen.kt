@@ -50,7 +50,7 @@ fun LoginActivitiesScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Giriş Hareketleri",
+                title = BBLocalization.Current.Get(key = "03f6fdde-44e9-4a7f-93ff-64618eb84cb9", fallback = "Giriş Hareketleri"),
                 onBackClick = onBackClick
             )
         }
@@ -140,13 +140,13 @@ private fun LoginActivitiesIntroCard() {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Oturum Geçmişi",
+                    text = BBLocalization.Current.Get(key = "b513dd09-c8de-47dd-9754-631b270b6442", fallback = "Oturum Geçmişi"),
                     style = BbTypography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = "Hesabınıza yapılan son girişleri, cihazları ve erişim bilgilerini inceleyin.",
+                    text = BBLocalization.Current.Get(key = "f796a34f-6d58-4bad-bc8c-42ca58eda947", fallback = "Hesabınıza yapılan son girişleri, cihazları ve erişim bilgilerini inceleyin."),
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -197,22 +197,22 @@ private fun LoginActivityCard(activity: MemberLoginActivityDTO) {
 
             LoginActivityInfoRow(
                 label = "IP Adresi",
-                value = activity.Ip.ifBlank { "Bilgi bulunmuyor" }
+                value = activity.Ip.ifBlank { BBLocalization.Current.Get(key = "668af518-4d02-4087-bc5c-564fa25bffd4", fallback = "Bilgi bulunmuyor") }
             )
 
             LoginActivityInfoRow(
-                label = "İşletim Sistemi",
-                value = activity.Os.ifBlank { "Bilgi bulunmuyor" }
+                label = BBLocalization.Current.Get(key = "cdd9562b-18e9-4966-83be-559dca0dfc41", fallback = "İşletim Sistemi"),
+                value = activity.Os.ifBlank { BBLocalization.Current.Get(key = "668af518-4d02-4087-bc5c-564fa25bffd4", fallback = "Bilgi bulunmuyor") }
             )
 
             LoginActivityInfoRow(
-                label = "Giriş Yöntemi",
+                label = BBLocalization.Current.Get(key = "78d10524-1652-4e92-9296-f73d4609a278", fallback = "Giriş Yöntemi"),
                 value = getLoginProviderText(activity.LoginProvider)
             )
 
             LoginActivityInfoRow(
                 label = BBLocalization.Current.Get(key = "e4602d88-9a44-4ed3-827b-8844da4a88be", fallback = "Tarih"),
-                value = activity.InsertedDate.ifBlank { "Bilgi bulunmuyor" }
+                value = activity.InsertedDate.ifBlank { BBLocalization.Current.Get(key = "668af518-4d02-4087-bc5c-564fa25bffd4", fallback = "Bilgi bulunmuyor") }
             )
         }
     }
@@ -280,13 +280,13 @@ private fun LoginActivitiesLoadingState() {
             )
 
             Text(
-                text = "Giriş hareketleri yükleniyor",
+                text = BBLocalization.Current.Get(key = "3de6b4b1-db5e-48c3-a737-9a60626f113c", fallback = "Giriş hareketleri yükleniyor"),
                 style = BbTypography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
-                text = "Hesabınıza ait son oturum kayıtları getiriliyor.",
+                text = BBLocalization.Current.Get(key = "1dbee224-aa6e-4990-9551-d1b0075e5d11", fallback = "Hesabınıza ait son oturum kayıtları getiriliyor."),
                 style = BbTypography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -331,7 +331,7 @@ private fun LoginActivitiesErrorState(
             }
 
             Text(
-                text = "Giriş Hareketleri Alınamadı",
+                text = BBLocalization.Current.Get(key = "485adf68-f0e4-4790-9e22-9beadae54195", fallback = "Giriş Hareketleri Alınamadı"),
                 style = BbTypography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -343,7 +343,7 @@ private fun LoginActivitiesErrorState(
             )
 
             Text(
-                text = "Yeniden denemek için dokunun",
+                text = BBLocalization.Current.Get(key = "246aab9a-a8a0-4961-87ac-303ad6fa3998", fallback = "Yeniden denemek için dokunun"),
                 style = BbTypography.labelLarge,
                 color = MaterialTheme.colorScheme.primary
             )
@@ -381,13 +381,13 @@ private fun LoginActivitiesEmptyState() {
             }
 
             Text(
-                text = "Giriş Kaydı Bulunmuyor",
+                text = BBLocalization.Current.Get(key = "d683033d-7217-49b7-8607-2b98041417c9", fallback = "Giriş Kaydı Bulunmuyor"),
                 style = BbTypography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
-                text = "Hesabınıza ait giriş hareketleri oluştuğunda burada listelenecektir.",
+                text = BBLocalization.Current.Get(key = "cdbc06f3-d474-419b-b24c-8b0ab50e579a", fallback = "Hesabınıza ait giriş hareketleri oluştuğunda burada listelenecektir."),
                 style = BbTypography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -400,7 +400,7 @@ private fun getLoginActivityTitle(activity: MemberLoginActivityDTO): String {
     if (activity.Os.isNotBlank()) return activity.Os
     if (activity.Browser.isNotBlank()) return activity.Browser
 
-    return "Bilinmeyen Cihaz"
+    return BBLocalization.Current.Get(key = "a8477d52-ef36-4969-8b9e-ac6f1eaaa5cd", fallback = "Bilinmeyen Cihaz")
 }
 
 private fun getLoginActivitySubtitle(activity: MemberLoginActivityDTO): String {
@@ -409,7 +409,7 @@ private fun getLoginActivitySubtitle(activity: MemberLoginActivityDTO): String {
         .distinct()
 
     return values.joinToString(" • ").ifBlank {
-        "Cihaz bilgisi bulunmuyor"
+        BBLocalization.Current.Get(key = "1e19f9cc-0122-4e44-a241-8a9188ff9620", fallback = "Cihaz bilgisi bulunmuyor")
     }
 }
 
@@ -429,13 +429,13 @@ private fun getLoginActivityShortCode(activity: MemberLoginActivityDTO): String 
 }
 
 private fun getLoginProviderText(loginProvider: String): String {
-    if (loginProvider.isBlank()) return "Standart giriş"
+    if (loginProvider.isBlank()) return BBLocalization.Current.Get(key = "2b982880-6cc4-441e-90b9-872619fe5679", fallback = "Standart giriş")
 
     return when (loginProvider.lowercase()) {
         "google" -> "Google"
         "apple" -> "Apple"
         "facebook" -> "Facebook"
-        "email", "password", "local" -> "E-posta ve şifre"
+        "email", "password", "local" -> BBLocalization.Current.Get(key = "9c43abcf-1d9e-42bf-9c48-b70389dfcc52", fallback = "E-posta ve şifre")
         else -> loginProvider
     }
 }

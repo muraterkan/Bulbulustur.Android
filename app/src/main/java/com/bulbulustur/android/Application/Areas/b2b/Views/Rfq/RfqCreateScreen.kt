@@ -181,7 +181,7 @@ fun RfqCreateScreen(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "Teklif Talebi",
+                title = BBLocalization.Current.Get(key = "d6a3a561-934c-46b0-af29-c48498e0171c", fallback = "Teklif Talebi"),
                 onBackClick = onBackClick
             )
         }
@@ -216,7 +216,7 @@ fun RfqCreateScreen(
                         )
 
                         Text(
-                            text = "Ürün, miktar ve ticari koşulları belirterek tedarikçilerden teklif alın.",
+                            text = BBLocalization.Current.Get(key = "68197456-74c2-4d7d-ab5f-ffe8c3a93929", fallback = "Ürün, miktar ve ticari koşulları belirterek tedarikçilerden teklif alın."),
                             style = BbTypography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -232,7 +232,7 @@ fun RfqCreateScreen(
                         padding = BbCardPadding.Medium
                     ) {
                         Text(
-                            text = "Form listeleri yükleniyor...",
+                            text = BBLocalization.Current.Get(key = "ebc489e0-2a6b-41e8-ab72-bfdf11b7671f", fallback = "Form listeleri yükleniyor..."),
                             style = BbTypography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -252,13 +252,13 @@ fun RfqCreateScreen(
                             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
                         ) {
                             Text(
-                                text = errorMessage ?: "RFQ form listelerinden biri veya birkaçı yüklenemedi.",
+                                text = errorMessage ?: BBLocalization.Current.Get(key = "b3dbe95f-f43f-4c7c-8f4f-870947a12735", fallback = "RFQ form listelerinden biri veya birkaçı yüklenemedi."),
                                 style = BbTypography.bodySmall,
                                 color = MaterialTheme.colorScheme.error
                             )
 
                             BbButton(
-                                text = "Listeleri Tekrar Yükle",
+                                text = BBLocalization.Current.Get(key = "8fb163da-caf2-49b6-ab8b-0062d84a4dbb", fallback = "Listeleri Tekrar Yükle"),
                                 onClick = onRetryOptionsClick,
                                 modifier = Modifier.fillMaxWidth(),
                                 variant = BbButtonVariant.Outline,
@@ -278,7 +278,7 @@ fun RfqCreateScreen(
                             validationMessage = null
                         },
                         label = BBLocalization.Current.Get(key = "6096bd2f-af02-449b-80ba-481a9f5ca31b", fallback = "Ürün Adı"),
-                        placeholder = "Örn. Endüstriyel vana",
+                        placeholder = BBLocalization.Current.Get(key = "3d190c1c-efe2-498b-b08e-6d9702a18798", fallback = "Örn. Endüstriyel vana"),
                         enabled = !isSubmitting
                     )
 
@@ -292,7 +292,7 @@ fun RfqCreateScreen(
                         options = categoryOptions,
                         label = BBLocalization.Current.Get(key = "1a132fdc-096f-42d7-835d-96b0a17b3675", fallback = ""),
                         placeholder = if (isOptionsLoading) {
-                            "Kategoriler yükleniyor..."
+                            BBLocalization.Current.Get(key = "27a77f70-0597-4a4b-b0c3-640b0c388903", fallback = "Kategoriler yükleniyor...")
                         } else {
                             BBLocalization.Current.Get(key = "4834b933-045e-4ad5-8a39-9fbfc5a2122a", fallback = "")
                         },
@@ -310,14 +310,14 @@ fun RfqCreateScreen(
                             validationMessage = null
                         },
                         label = BBLocalization.Current.Get(key = "eb7e1e0a-57ec-49bf-9968-61f0e5b75e6c", fallback = "Ürün Açıklaması"),
-                        placeholder = "Ürünün teknik ve ticari özelliklerini açıklayın.",
+                        placeholder = BBLocalization.Current.Get(key = "290a2ae0-30d1-4281-87ae-ce84f01d52fc", fallback = "Ürünün teknik ve ticari özelliklerini açıklayın."),
                         enabled = !isSubmitting
                     )
                 }
             }
 
             item {
-                RfqCreateSection(title = "Miktar ve Fiyat") {
+                RfqCreateSection(title = BBLocalization.Current.Get(key = "bd347300-ac91-49d1-921b-ea7734a6be05", fallback = "Miktar ve Fiyat")) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
@@ -409,7 +409,7 @@ fun RfqCreateScreen(
             }
 
             item {
-                RfqCreateSection(title = "Ticari Koşullar") {
+                RfqCreateSection(title = BBLocalization.Current.Get(key = "b57feb8b-30a7-4c26-a638-cce10d96c69d", fallback = "Ticari Koşullar")) {
                     BbSelectInput(
                         selectedValue = paymentTermId,
                         onValueChange = {
@@ -430,7 +430,7 @@ fun RfqCreateScreen(
                         },
                         options = tradeTermOptions,
                         label = BBLocalization.Current.Get(key = "6c7bdc8a-1a1d-465d-a2da-7b873fea5e6e", fallback = "Ticaret Şartı"),
-                        placeholder = "Ticaret şartı seçiniz",
+                        placeholder = BBLocalization.Current.Get(key = "31cd0a1c-1d7d-4bed-b816-9aa00fcf93c4", fallback = "Ticaret şartı seçiniz"),
                         enabled = !isOptionsLoading && !isSubmitting && tradeTermOptions.isNotEmpty()
                     )
 
@@ -440,8 +440,8 @@ fun RfqCreateScreen(
                             shippingTarget = it
                             validationMessage = null
                         },
-                        label = "Teslimat Hedefi",
-                        placeholder = "Örn. Türkiye / İstanbul / Ambarlı Port",
+                        label = BBLocalization.Current.Get(key = "79063e0f-af2c-4425-9c4a-90140dd6493f", fallback = "Teslimat Hedefi"),
+                        placeholder = BBLocalization.Current.Get(key = "e735f88b-1e7d-4150-909c-1bcd3607d0f3", fallback = "Örn. Türkiye / İstanbul / Ambarlı Port"),
                         enabled = !isSubmitting
                     )
                 }
@@ -467,7 +467,7 @@ fun RfqCreateScreen(
 
             item {
                 BbButton(
-                    text = "Teklif Talebini Gönder",
+                    text = BBLocalization.Current.Get(key = "9795306e-334f-4b00-8535-097e26c0fda6", fallback = "Teklif Talebini Gönder"),
                     onClick = {
                         val selectedCategory = productCategories.firstOrNull {
                             it.ProductCategoryId == categoryId.toIntOrNull()
@@ -498,19 +498,19 @@ fun RfqCreateScreen(
                         }
 
                         validationMessage = when {
-                            memberId <= 0 -> "Üye bilgisi bulunamadı."
-                            productName.isBlank() -> "Ürün adı zorunludur."
+                            memberId <= 0 -> BBLocalization.Current.Get(key = "b8f76c94-db02-44ad-b1d7-9cd3b235fb75", fallback = "Üye bilgisi bulunamadı.")
+                            productName.isBlank() -> BBLocalization.Current.Get(key = "5e1968fa-63e1-41b4-98e1-23fc9d672acf", fallback = "Ürün adı zorunludur.")
                             selectedCategory == null -> BBLocalization.Current.Get(key = "4834b933-045e-4ad5-8a39-9fbfc5a2122a", fallback = "")
-                            purchaseQuantity.toDoubleOrNull() == null -> "Geçerli bir miktar giriniz."
+                            purchaseQuantity.toDoubleOrNull() == null -> BBLocalization.Current.Get(key = "d5278341-347c-4718-bd53-d010fe5f426e", fallback = "Geçerli bir miktar giriniz.")
                             selectedUnit == null -> BBLocalization.Current.Get(key = "723120da-c41c-4722-8827-f0bce1d29c34", fallback = "Birim seçiniz.")
-                            unitPrice.toDoubleOrNull() == null -> "Geçerli bir birim fiyat giriniz."
+                            unitPrice.toDoubleOrNull() == null -> BBLocalization.Current.Get(key = "bfce72d6-713b-4c4e-89d5-68cf28d59b22", fallback = "Geçerli bir birim fiyat giriniz.")
                             selectedCurrency == null -> "Para birimi seçiniz."
                             selectedColor == null -> BBLocalization.Current.Get(key = "435c95c7-5210-4f4d-9805-b555e7e43ba2", fallback = "")
                             selectedMaterialType == null -> "Malzeme türü seçiniz."
                             selectedPaymentTerm == null -> BBLocalization.Current.Get(key = "c89a68fc-73df-440a-b534-d51ce207c623", fallback = "Ödeme şartı seçiniz.")
                             selectedTradeTerm == null -> "Ticaret şartı seçiniz."
-                            shippingTarget.isBlank() -> "Teslimat hedefi zorunludur."
-                            productDescription.isBlank() -> "Ürün açıklaması zorunludur."
+                            shippingTarget.isBlank() -> BBLocalization.Current.Get(key = "add112df-cb36-4594-ace0-b5dc04fda383", fallback = "Teslimat hedefi zorunludur.")
+                            productDescription.isBlank() -> BBLocalization.Current.Get(key = "1e181724-0c03-48c0-a49d-045484f088c5", fallback = "Ürün açıklaması zorunludur.")
                             else -> null
                         }
 

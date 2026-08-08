@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Profile
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import com.bulbulustur.android.Application.Views.Profile.Components.BbProfileStickySaveBar
 
 import androidx.compose.foundation.background
@@ -64,7 +66,7 @@ fun ProfileBioScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Hakkımda",
+                title = BBLocalization.Current.Get(key = "ab9646c9-03e3-48a1-8414-c724db187884", fallback = "Hakkımda"),
                 onBackClick = onBackClick
             )
         },
@@ -93,14 +95,14 @@ fun ProfileBioScreen(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
             Text(
-                text = "Kendinizden bahsedin",
+                text = BBLocalization.Current.Get(key = "72b9075e-02d6-430b-b2ec-0d233ef2a836", fallback = "Kendinizden bahsedin"),
                 style = BbTypography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
-                text = "Bu metin profilinizde görünür. Kendinizi, ilgi alanlarınızı ve sizi tanımayı kolaylaştıracak bilgileri kısaca paylaşın.",
+                text = BBLocalization.Current.Get(key = "46f91551-ce4c-486c-ac1a-53244a413e4a", fallback = "Bu metin profilinizde görünür. Kendinizi, ilgi alanlarınızı ve sizi tanımayı kolaylaştıracak bilgileri kısaca paylaşın."),
                 style = BbTypography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -123,7 +125,7 @@ fun ProfileBioScreen(
                     enabled = !isLoading,
                     placeholder = {
                         Text(
-                            text = "Kendiniz, ilgi alanlarınız ve profilinizde paylaşmak istediğiniz bilgiler hakkında yazın...",
+                            text = BBLocalization.Current.Get(key = "f4572630-e52a-4e1e-9ee5-d05f7a70143e", fallback = "Kendiniz, ilgi alanlarınız ve profilinizde paylaşmak istediğiniz bilgiler hakkında yazın..."),
                             style = BbTypography.bodyLarge,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )

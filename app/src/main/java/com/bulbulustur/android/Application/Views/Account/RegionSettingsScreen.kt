@@ -52,7 +52,7 @@ fun RegionSettingsScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Ülke ve Bölge",
+                title = BBLocalization.Current.Get(key = "6d04e51f-f2f0-4a9d-95e8-696daefd0929", fallback = "Ülke ve Bölge"),
                 onBackClick = onBackClick
             )
         }
@@ -85,7 +85,7 @@ fun RegionSettingsScreen(
                         RegionMessageCard(
                             message = errorMessage
                                 ?.takeIf { it.isNotBlank() }
-                                ?: "Kullanılabilir ülke bulunamadı."
+                                ?: BBLocalization.Current.Get(key = "f5b18e46-1512-45b8-93da-c4a6aa611db2", fallback = "Kullanılabilir ülke bulunamadı.")
                         )
                     }
                 }
@@ -117,7 +117,7 @@ private fun RegionIntroCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Seçiminiz ürün görünürlüğü, teslimat seçenekleri ve yerel içeriklerde kullanılacaktır.",
+            text = BBLocalization.Current.Get(key = "3426ae19-3a4b-45c9-8833-805c3a347899", fallback = "Seçiminiz ürün görünürlüğü, teslimat seçenekleri ve yerel içeriklerde kullanılacaktır."),
             style = BbTypography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -178,7 +178,7 @@ private fun RegionRow(
             if (isSelected) {
                 Icon(
                     imageVector = Icons.Outlined.CheckCircle,
-                    contentDescription = "Seçili ülke",
+                    contentDescription = BBLocalization.Current.Get(key = "112b8c81-b395-42a3-b163-aaea6033f142", fallback = "Seçili ülke"),
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(BBIcon.SizeLg)
                 )
@@ -205,7 +205,7 @@ private fun RegionLoadingCard() {
             )
 
             Text(
-                text = "Ülkeler yükleniyor...",
+                text = BBLocalization.Current.Get(key = "241a58c6-b766-4f29-b5eb-88c9e4f81d30", fallback = "Ülkeler yükleniyor..."),
                 style = BbTypography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -478,7 +478,7 @@ private fun RegionFlagFileNameByIso(
         "SN" -> "senegal.svg"
         "RS" -> "serbia.svg"
         "SC" -> "Republic of Seychelles.svg"
-        "SL" -> "Sierra Leone.svg"
+        "SL" -> BBLocalization.Current.Get(key = "865c5964-b4b5-46a9-bf99-0579979beffa", fallback = "Sierra Leone.svg")
         "SG" -> "singapore.svg"
         "SK" -> "slovakia.svg"
         "SI" -> "slovenia.svg"

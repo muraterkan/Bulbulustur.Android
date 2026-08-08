@@ -125,7 +125,7 @@ fun WholesaleCategoryDetailScreen(
                     item {
                         BbSectionHeader(
                             title = BBLocalization.Current.Get(key = "19e928cc-d4e4-426f-a1e8-fb8d9adf872f", fallback = ""),
-                            subtitle = "Bu kategoriye bağlı ürün gruplarını incele."
+                            subtitle = BBLocalization.Current.Get(key = "8f3a995c-a9b5-4018-98d1-b99eaf8dcdbb", fallback = "Bu kategoriye bağlı ürün gruplarını incele.")
                         )
                     }
 
@@ -197,7 +197,7 @@ private fun WholesaleCategoryDetailErrorState(
             )
         ) {
             Text(
-                text = "Kategori bilgisi yüklenemedi",
+                text = BBLocalization.Current.Get(key = "59050de1-3d23-41f3-8099-5c8b508e43b4", fallback = "Kategori bilgisi yüklenemedi"),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.error,
                 fontWeight = FontWeight.SemiBold
@@ -233,7 +233,7 @@ private fun WholesaleCategoryDetailEmptyState() {
             )
 
             Text(
-                text = "Kategori bilgisi bulunamadı.",
+                text = BBLocalization.Current.Get(key = "507c8e7a-40f0-424e-b7dc-e8f5d0a3df07", fallback = "Kategori bilgisi bulunamadı."),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -262,7 +262,7 @@ private fun WholesaleChildCategoryEmptyState() {
             )
 
             Text(
-                text = "Bu kategoriye bağlı alt kategori bulunamadı.",
+                text = BBLocalization.Current.Get(key = "768246a2-980d-4c21-add0-efadd2a4f584", fallback = "Bu kategoriye bağlı alt kategori bulunamadı."),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -287,7 +287,7 @@ private fun WholesaleCategoryDetailHeader(
         ) {
             WholesaleCategoryIconTitleRow(
                 icon = category.icon,
-                title = "Toptan Kategori"
+                title = BBLocalization.Current.Get(key = "f8b3417d-7a08-4b79-b94b-c048415a71b4", fallback = "Toptan Kategori")
             )
 
             Text(
@@ -329,7 +329,7 @@ private fun WholesaleCategoryDetailActions(
         ) {
             WholesaleCategoryActionCard(
                 title = BBLocalization.Current.Get(key = "5e09b1c8-93e6-4e9a-a055-2f556f57d6dc", fallback = "Ürünleri Gör"),
-                description = "Kategori ürünleri",
+                description = BBLocalization.Current.Get(key = "a4a0f1e9-0aff-4073-bf49-f0c661e20e66", fallback = "Kategori ürünleri"),
                 icon = Icons.Outlined.Inventory2,
                 modifier = Modifier.weight(1f),
                 onClick = {
@@ -338,8 +338,8 @@ private fun WholesaleCategoryDetailActions(
             )
 
             WholesaleCategoryActionCard(
-                title = "Firmalar",
-                description = "Tedarikçi firmalar",
+                title = BBLocalization.Current.Get(key = "a4d349d0-5340-4075-b2bb-1e900584f3b7", fallback = "Firmalar"),
+                description = BBLocalization.Current.Get(key = "5df4c5b2-4f87-488b-acd1-50e38a211cb5", fallback = "Tedarikçi firmalar"),
                 icon = Icons.Outlined.Business,
                 modifier = Modifier.weight(1f),
                 onClick = {
@@ -559,14 +559,14 @@ private fun WholesaleCategoryDetailScreenPreview() {
             categoryId = 1,
             categoryInfo = ProductCategoryDTO(
                 ProductCategoryId = 1,
-                CategoryName = "Elektronik",
-                Breadcrumb = "Elektronik ürünleri"
+                CategoryName = BBLocalization.Current.Get(key = "18101507-39f0-482d-80e7-491992e2915b", fallback = "Elektronik"),
+                Breadcrumb = BBLocalization.Current.Get(key = "24c60230-72a0-45c3-aaf1-ced7ede1957d", fallback = "Elektronik ürünleri")
             ),
             childCategories = listOf(
                 ProductCategoryDTO(
                     ProductCategoryId = 2,
-                    CategoryName = "Elektronik Bileşenler",
-                    Breadcrumb = "Elektronik > Elektronik Bileşenler"
+                    CategoryName = BBLocalization.Current.Get(key = "4cd27909-9fb8-4840-b99a-8ad26dbf61fc", fallback = "Elektronik Bileşenler"),
+                    Breadcrumb = BBLocalization.Current.Get(key = "4a5ea768-dc60-4e68-97d5-0c51c5635d12", fallback = "Elektronik > Elektronik Bileşenler")
                 )
             )
         )

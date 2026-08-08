@@ -41,5 +41,9 @@ data class CompanyDTO(
     val Level: Int = 0,
     val CompanyKey: String = "",
     val SeoTitle: String = "",
-    val SeoDescription: String = ""
+    val SeoDescription: String = "",
+    val Rating: String = "",
+    val BusinessTypes: String = "",
+    val CompanyCapabilities: String = "",
+    val CompanyProducts: List<WholesaleProductDTO> = emptyList()
 )

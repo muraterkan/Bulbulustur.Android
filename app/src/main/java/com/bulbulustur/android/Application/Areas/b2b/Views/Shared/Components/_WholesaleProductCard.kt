@@ -306,7 +306,7 @@ private fun WholesaleProductCardMedia(
             ) {
                 Icon(
                     imageVector = if (isFavorite) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder,
-                    contentDescription = if (isFavorite) "Favorilerden kaldır" else "Favorilere ekle",
+                    contentDescription = if (isFavorite) BBLocalization.Current.Get(key = "5b2cc9ba-c14b-4c3d-8b1b-31159085896f", fallback = "Favorilerden kaldır") else BBLocalization.Current.Get(key = "78ef79d0-8390-42b9-a896-d370aa0d3928", fallback = "Favorilere ekle"),
                     modifier = Modifier.size(BBIcon.Action),
                     tint = if (isFavorite) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface
                 )

@@ -100,8 +100,8 @@ fun OrderReviewCreateScreen(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "Ürün Değerlendirme",
-                subtitle = "Satın aldığınız ürün için yorum yazın.",
+                title = BBLocalization.Current.Get(key = "4a122fac-b49e-493c-8188-f9023d494762", fallback = "Ürün Değerlendirme"),
+                subtitle = BBLocalization.Current.Get(key = "d6ead38d-dd99-470e-9330-62839a243c02", fallback = "Satın aldığınız ürün için yorum yazın."),
                 onBackClick = onBackClick
             )
         }
@@ -228,7 +228,7 @@ private fun OrderReviewProductCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Değerlendirilecek Ürün",
+                    text = BBLocalization.Current.Get(key = "f92fb730-fadd-4e71-8ac7-769333b19083", fallback = "Değerlendirilecek Ürün"),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -264,7 +264,7 @@ private fun OrderReviewRatingCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
             OrderReviewSectionTitle(
-                title = "Puanınız",
+                title = BBLocalization.Current.Get(key = "ff8659ff-509e-444e-9c59-472a54a9af89", fallback = "Puanınız"),
                 subtitle = BBLocalization.Current.Get(key = "01c98b4a-601e-4837-a449-056329a0f9f2", fallback = "")
             )
 
@@ -315,8 +315,8 @@ private fun OrderReviewContentCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             OrderReviewSectionTitle(
-                title = "Değerlendirmeniz",
-                subtitle = "Ürün deneyiminizi birkaç cümleyle anlatın."
+                title = BBLocalization.Current.Get(key = "7d0f7ae4-b195-435e-9c17-de6fc8511e50", fallback = "Değerlendirmeniz"),
+                subtitle = BBLocalization.Current.Get(key = "9b930caf-b338-4ce8-978e-df7bb99af20c", fallback = "Ürün deneyiminizi birkaç cümleyle anlatın.")
             )
 
             OutlinedTextField(
@@ -327,7 +327,7 @@ private fun OrderReviewContentCard(
                 shape = BBRadius.Input,
                 placeholder = {
                     Text(
-                        text = "Ürün deneyiminizi yazın."
+                        text = BBLocalization.Current.Get(key = "92a8aa7f-3d51-42b9-a878-b45b532fe0a6", fallback = "Ürün deneyiminizi yazın.")
                     )
                 },
                 leadingIcon = {
@@ -369,13 +369,13 @@ private fun OrderReviewAgreementCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Değerlendirme kurallarını kabul ediyorum.",
+                    text = BBLocalization.Current.Get(key = "2f994618-0765-4476-932f-45ff0c3bbf14", fallback = "Değerlendirme kurallarını kabul ediyorum."),
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = "Değerlendirmenin gerçek ürün deneyimine dayanması gerekir.",
+                    text = BBLocalization.Current.Get(key = "9c5dcfb6-f6f0-4aac-aeb8-b461c8723529", fallback = "Değerlendirmenin gerçek ürün deneyimine dayanması gerekir."),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -402,7 +402,7 @@ private fun OrderReviewActionCard(
         ) {
             BbButton(
                 text = if (isLoading) {
-                    "Gönderiliyor"
+                    BBLocalization.Current.Get(key = "747533e0-13c8-4b49-82ca-ebf9fea6b37f", fallback = "Gönderiliyor")
                 } else {
                     BBLocalization.Current.Get(key = "000bf440-0909-4b14-b7f1-cba8861e579f", fallback = "Değerlendir")
                 },

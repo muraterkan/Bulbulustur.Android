@@ -64,14 +64,14 @@ fun ForgotPasswordScreen(
     ) {
         LogonPublicPageTitle(
             eyebrow =
-                "Hesap Kurtarma",
+                BBLocalization.Current.Get(key = "2463a1ba-32ae-4708-83d2-2ee47a3fea4e", fallback = "Hesap Kurtarma"),
             title =
                 BBLocalization.Current.Get(key = "7719d233-45c9-4a08-9de7-e5fc19c7c4f6", fallback = "Şifremi Unuttum"),
             description =
                 if (isSuccessful) {
-                    "Şifre yenileme talebiniz alındı."
+                    BBLocalization.Current.Get(key = "f97201ef-bdb9-4eba-85d1-a5f4273c9c58", fallback = "Şifre yenileme talebiniz alındı.")
                 } else {
-                    "E-posta adresinizi yazın. Şifre yenileme bağlantısını size gönderelim."
+                    BBLocalization.Current.Get(key = "4df5ca64-65e6-4185-acf6-422de95065b4", fallback = "E-posta adresinizi yazın. Şifre yenileme bağlantısını size gönderelim.")
                 }
         )
 
@@ -101,7 +101,7 @@ fun ForgotPasswordScreen(
                 modifier =
                     Modifier.fillMaxWidth(),
                 text =
-                    "Giriş Ekranına Dön",
+                    BBLocalization.Current.Get(key = "6777bc00-123b-4116-9093-08c80fb9d405", fallback = "Giriş Ekranına Dön"),
                 onClick =
                     onBackToLogonClick,
                 variant =
@@ -179,7 +179,7 @@ fun ForgotPasswordScreen(
             modifier =
                 Modifier.fillMaxWidth(),
             text =
-                "Şifre Yenileme Bağlantısı Gönder",
+                BBLocalization.Current.Get(key = "46ed67d0-2b86-45cb-86f6-4d84bd233de7", fallback = "Şifre Yenileme Bağlantısı Gönder"),
             onClick = {
                 onSendResetLinkClick(
                     email
@@ -206,7 +206,7 @@ fun ForgotPasswordScreen(
             modifier =
                 Modifier.fillMaxWidth(),
             text =
-                "Giriş Ekranına Dön",
+                BBLocalization.Current.Get(key = "6777bc00-123b-4116-9093-08c80fb9d405", fallback = "Giriş Ekranına Dön"),
             onClick =
                 onBackToLogonClick,
             variant =
@@ -241,7 +241,7 @@ fun ForgotPasswordScreen(
         ) {
             Text(
                 text =
-                    "Hesabınızı hatırladınız mı?",
+                    BBLocalization.Current.Get(key = "6ac31ec1-45b7-4055-a728-f7f977d47d26", fallback = "Hesabınızı hatırladınız mı?"),
                 style =
                     MaterialTheme.typography.bodySmall,
                 color =
@@ -341,9 +341,9 @@ private fun ForgotPasswordMessageBox(
                 Text(
                     text =
                         if (isSuccess) {
-                            "İşlem Başarılı"
+                            BBLocalization.Current.Get(key = "f5f2b290-84ab-4bed-9172-96690928ecde", fallback = "İşlem Başarılı")
                         } else {
-                            "İşlem Tamamlanamadı"
+                            BBLocalization.Current.Get(key = "aee471fe-aa14-4587-897c-f5a3489aa980", fallback = "İşlem Tamamlanamadı")
                         },
                     style =
                         MaterialTheme.typography.labelLarge,
@@ -409,7 +409,7 @@ private fun ResetPasswordInfoBox() {
 
             Text(
                 text =
-                    "Bağlantı yalnızca kısa süre geçerli olur. Hesabınızı korumak için yeni şifrenizi kimseyle paylaşmayın.",
+                    BBLocalization.Current.Get(key = "a69e0547-8db8-432e-82f2-39a39e92e4be", fallback = "Bağlantı yalnızca kısa süre geçerli olur. Hesabınızı korumak için yeni şifrenizi kimseyle paylaşmayın."),
                 style =
                     MaterialTheme.typography.bodySmall,
                 color =

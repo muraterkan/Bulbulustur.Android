@@ -78,11 +78,11 @@ fun AccountScreen(
         member?.Name?.trim()?.takeIf { it.isNotBlank() },
         member?.Surname?.trim()?.takeIf { it.isNotBlank() }
     ).joinToString(" ").ifBlank {
-        "Hesap Bilgisi Bulunamadı"
+        BBLocalization.Current.Get(key = "ceb22b30-a277-467d-92e0-d81091d697fc", fallback = "Hesap Bilgisi Bulunamadı")
     }
 
     val email = member?.Email.orEmpty().ifBlank {
-        "E-posta bilgisi bulunamadı"
+        BBLocalization.Current.Get(key = "7b48f474-d8fb-428a-b336-d189dc8547ab", fallback = "E-posta bilgisi bulunamadı")
     }
 
     val countryName = addressCascadeState.Countries
@@ -103,7 +103,7 @@ fun AccountScreen(
         .filter { it.isNotBlank() }
         .joinToString(" / ")
         .ifBlank {
-            "Konum bilgisi bulunamadı"
+            BBLocalization.Current.Get(key = "5cbc3eee-5293-4d92-ad5c-b121d7c614d6", fallback = "Konum bilgisi bulunamadı")
         }
 
     val genderText = member
@@ -121,7 +121,7 @@ fun AccountScreen(
 
     val activationText = when (member?.Activation) {
         true -> BBLocalization.Current.Get(key = "c6a0ff62-8828-475f-b553-37effb42efe6", fallback = "Doğrulanmış")
-        false -> "Doğrulanmamış"
+        false -> BBLocalization.Current.Get(key = "72ca5d6a-433a-4814-b385-d77057164bbb", fallback = "Doğrulanmamış")
         null -> "Bilinmiyor"
     }
 
@@ -192,8 +192,8 @@ fun AccountScreen(
 
                     item {
                         ProfileInfoSection(
-                            title = "Temel Bilgiler",
-                            description = "Hesabınızın görünen temel bilgileri.",
+                            title = BBLocalization.Current.Get(key = "55e6f1f8-9f12-4cfe-839d-e8d8f8931d71", fallback = "Temel Bilgiler"),
+                            description = BBLocalization.Current.Get(key = "a03e9ee7-9942-4915-abbd-86850716ac75", fallback = "Hesabınızın görünen temel bilgileri."),
                             icon = Icons.Outlined.PermIdentity
                         ) {
 
@@ -218,7 +218,7 @@ fun AccountScreen(
                             ProfileDashedDivider()
 
                             ProfileInfoRow(
-                                title = "Doğum Tarihi",
+                                title = BBLocalization.Current.Get(key = "f622784c-d8fe-46e0-adee-dcc5e8c03e57", fallback = "Doğum Tarihi"),
                                 value = birthDateText,
                                 icon = Icons.Outlined.Badge,
                                 onClick = onBirthDateClick
@@ -227,7 +227,7 @@ fun AccountScreen(
                             ProfileDashedDivider()
 
                             ProfileInfoRow(
-                                title = "Ülke / Şehir",
+                                title = BBLocalization.Current.Get(key = "538ba8f5-1132-4e1b-ace9-86562c7970c7", fallback = "Ülke / Şehir"),
                                 value = locationText,
                                 icon = Icons.Outlined.LocationOn,
                                 onClick = onAddressClick
@@ -238,7 +238,7 @@ fun AccountScreen(
                     item {
                         ProfileInfoSection(
                             title = BBLocalization.Current.Get(key = "1c188e84-b3f6-42b1-9634-c89f9cc9ffca", fallback = ""),
-                            description = "Güvenlik ve hesap doğrulama bilgileri.",
+                            description = BBLocalization.Current.Get(key = "cca0cca7-ad04-4da6-9c8e-73fb19ef03b9", fallback = "Güvenlik ve hesap doğrulama bilgileri."),
                             icon = Icons.Outlined.Security
                         ) {
                             ProfileInfoRow(
@@ -251,8 +251,8 @@ fun AccountScreen(
                             ProfileDashedDivider()
 
                             ProfileInfoRow(
-                                title = "Telefonlarım",
-                                value = "Telefon bilgilerini yönetin",
+                                title = BBLocalization.Current.Get(key = "30a80ae2-5527-4320-b805-f7a60420e71b", fallback = "Telefonlarım"),
+                                value = BBLocalization.Current.Get(key = "44522616-ee39-4bac-bf46-f30682a4485b", fallback = "Telefon bilgilerini yönetin"),
                                 icon = Icons.Outlined.PhoneIphone,
                                 onClick = onPhonesClick
                             )
@@ -260,7 +260,7 @@ fun AccountScreen(
                             ProfileDashedDivider()
 
                             ProfileInfoRow(
-                                title = "E-Posta Doğrulama",
+                                title = BBLocalization.Current.Get(key = "deb5966f-c103-442f-9385-2b05a8fe0552", fallback = "E-Posta Doğrulama"),
                                 value = activationText,
                                 icon = Icons.Outlined.Verified,
                                 onClick = onEmailClick
@@ -270,13 +270,13 @@ fun AccountScreen(
 
                     item {
                         ProfileInfoSection(
-                            title = "Kurumsal Bağlantı",
-                            description = "Şirket ve B2B görünürlük bağlantılarınız.",
+                            title = BBLocalization.Current.Get(key = "573715c0-53d4-4c11-8636-d3834c17d768", fallback = "Kurumsal Bağlantı"),
+                            description = BBLocalization.Current.Get(key = "02577eaf-6841-4e93-aa62-1b85f93c956f", fallback = "Şirket ve B2B görünürlük bağlantılarınız."),
                             icon = Icons.Outlined.Business
                         ) {
                             ProfileInfoRow(
                                 title = BBLocalization.Current.Get(key = "5d3c17c2-d063-4757-9940-62331a540e23", fallback = "Şirket Bilgileri"),
-                                value = "Türkiye Global Ticaret Limited Şirketi",
+                                value = BBLocalization.Current.Get(key = "796d73f2-bf9e-4b2a-82e4-d74a8ba96608", fallback = "Türkiye Global Ticaret Limited Şirketi"),
                                 icon = Icons.Outlined.Business,
                                 onClick = onCompanyInfoClick
                             )
@@ -284,7 +284,7 @@ fun AccountScreen(
                             ProfileDashedDivider()
 
                             ProfileInfoRow(
-                                title = "B2B Index",
+                                title = BBLocalization.Current.Get(key = "1c536c06-90cf-4dfa-a5c9-532b5276374a", fallback = "B2B Index"),
                                 value = "Aktif",
                                 icon = Icons.Outlined.Verified,
                                 onClick = onB2BStatusClick
@@ -341,7 +341,7 @@ private fun ProfileHeroCard(
                 )
 
                 Text(
-                    text = "Profili görüntüle ve düzenle",
+                    text = BBLocalization.Current.Get(key = "0befa992-b82e-4609-a48c-a018aef5e904", fallback = "Profili görüntüle ve düzenle"),
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -358,7 +358,7 @@ private fun ProfileHeroCard(
             ) {
                 Icon(
                     imageVector = Icons.Outlined.ChevronRight,
-                    contentDescription = "Profile git",
+                    contentDescription = BBLocalization.Current.Get(key = "e5398684-4ffa-417b-8849-eb2427621115", fallback = "Profile git"),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.size(BBIcon.SizeSm)
                 )
@@ -527,7 +527,7 @@ private fun ProfileNotFoundCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Profil bilgisi bulunamadı",
+            text = BBLocalization.Current.Get(key = "b6ce821b-409f-4a39-bbfb-282139032de4", fallback = "Profil bilgisi bulunamadı"),
             style = BbTypography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

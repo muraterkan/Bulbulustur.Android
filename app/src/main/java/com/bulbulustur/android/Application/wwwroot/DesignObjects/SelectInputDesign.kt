@@ -116,9 +116,9 @@ fun BbSelectInput(
                             },
                         contentDescription =
                             if (isExpanded) {
-                                "Listeyi kapat"
+                                BBLocalization.Current.Get(key = "69d34998-fbfa-493b-9c01-ba5f3d1e36eb", fallback = "Listeyi kapat")
                             } else {
-                                "Listeyi aç"
+                                BBLocalization.Current.Get(key = "c2a66b95-8864-4d9f-9377-8629678b4f8d", fallback = "Listeyi aç")
                             },
                         tint =
                             MaterialTheme.colorScheme.onSurfaceVariant,
@@ -337,9 +337,9 @@ fun BbSearchableSelectInput(
                             },
                         contentDescription =
                             if (isExpanded) {
-                                "Listeyi kapat"
+                                BBLocalization.Current.Get(key = "69d34998-fbfa-493b-9c01-ba5f3d1e36eb", fallback = "Listeyi kapat")
                             } else {
-                                "Listeyi aç"
+                                BBLocalization.Current.Get(key = "c2a66b95-8864-4d9f-9377-8629678b4f8d", fallback = "Listeyi aç")
                             },
                         tint =
                             MaterialTheme.colorScheme.onSurfaceVariant,

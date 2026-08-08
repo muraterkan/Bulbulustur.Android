@@ -180,7 +180,7 @@ private fun CouponCard(coupon: MemberCouponDTO) {
 
                 if (coupon.UpAmount > 0.0) {
                     CouponInfoBox(
-                        title = "Minimum sepet tutarı",
+                        title = BBLocalization.Current.Get(key = "f2ef1b32-9c6e-45fd-b997-f4cbc67f4ecc", fallback = "Minimum sepet tutarı"),
                         value = coupon.UpAmount.ToTurkishCurrency(),
                         icon = Icons.Outlined.LocalOffer,
                         iconColor = BBColors.Yellow.Yellow800
@@ -435,7 +435,7 @@ private fun CouponErrorState(
         )
 
         Text(
-            text = "Kuponlar alınamadı",
+            text = BBLocalization.Current.Get(key = "d6608f44-7edc-4d5d-a5a8-84449d39136a", fallback = "Kuponlar alınamadı"),
             modifier = Modifier.padding(top = BBSpacing.Space3),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface
@@ -501,14 +501,14 @@ private fun CouponEmptyState(modifier: Modifier) {
         )
 
         Text(
-            text = "Kupon bulunamadı",
+            text = BBLocalization.Current.Get(key = "bf218695-6f5d-43ec-a4aa-107007d470d8", fallback = "Kupon bulunamadı"),
             modifier = Modifier.padding(top = BBSpacing.Space3),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface
         )
 
         Text(
-            text = "Hesabınıza tanımlı kupon oluştuğunda burada listelenecek.",
+            text = BBLocalization.Current.Get(key = "db744e20-5ab1-4a6d-bb75-67e220903579", fallback = "Hesabınıza tanımlı kupon oluştuğunda burada listelenecek."),
             modifier = Modifier.padding(top = BBSpacing.Space2),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -586,5 +586,5 @@ private fun String.ToCouponLocalDate(): LocalDate? {
 private enum class CouponStatus(val Title: String) {
     Active(Title = "Etkin"),
     Used(Title = BBLocalization.Current.Get(key = "27249cd6-2134-46d6-8ac5-ff82ce3e13a8", fallback = "")),
-    Expired(Title = "Süresi Dolmuş")
+    Expired(Title = BBLocalization.Current.Get(key = "db31c467-e67d-4c4e-ab46-53f12c534ff3", fallback = "Süresi Dolmuş"))
 }

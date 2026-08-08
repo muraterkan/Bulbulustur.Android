@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -146,7 +148,7 @@ private fun ProductBrowsingHistorySectionTitle() {
         Column {
             Text(
                 text =
-                    "Görüntüleme Geçmişin",
+                    BBLocalization.Current.Get(key = "71e06242-d734-4f9a-b8c8-b304a9209e26", fallback = "Görüntüleme Geçmişin"),
                 style =
                     MaterialTheme.typography.titleMedium,
                 color =
@@ -157,7 +159,7 @@ private fun ProductBrowsingHistorySectionTitle() {
 
             Text(
                 text =
-                    "Daha önce baktığın ürünler",
+                    BBLocalization.Current.Get(key = "994ea8ef-edd8-45a6-873a-1f2cceaad745", fallback = "Daha önce baktığın ürünler"),
                 style =
                     MaterialTheme.typography.bodySmall,
                 color =

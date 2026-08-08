@@ -112,7 +112,7 @@ fun ProfileEducationWorkScreen(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "Eğitim ve İş",
+                title = BBLocalization.Current.Get(key = "abe57e95-3977-4455-8687-1671edc75506", fallback = "Eğitim ve İş"),
                 onBackClick = onBackClick
             )
         },
@@ -214,14 +214,14 @@ private fun ProfileEducationWorkIntroductionCard() {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Eğitim ve Çalışma Hayatı",
+                    text = BBLocalization.Current.Get(key = "10db27ff-2203-41f3-af22-d855fc1a8e08", fallback = "Eğitim ve Çalışma Hayatı"),
                     style = BbTypography.titleLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
                 )
 
                 Text(
-                    text = "Eğitim düzeyinizi ve iş unvanınızı profilinize ekleyin.",
+                    text = BBLocalization.Current.Get(key = "1123eed7-99af-4bc2-889e-9d706f9c4d1e", fallback = "Eğitim düzeyinizi ve iş unvanınızı profilinize ekleyin."),
                     style = BbTypography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -275,14 +275,14 @@ private fun ProfileEducationSelectionCard(
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                 ) {
                     Text(
-                        text = "Eğitim Düzeyi",
+                        text = BBLocalization.Current.Get(key = "daf0f071-a537-4ed3-a935-e461cacb51c5", fallback = "Eğitim Düzeyi"),
                         style = BbTypography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold
                     )
 
                     Text(
-                        text = "Tamamladığınız veya devam ettiğiniz eğitim düzeyini seçin.",
+                        text = BBLocalization.Current.Get(key = "92bc3338-d919-40e2-b865-e6590458389a", fallback = "Tamamladığınız veya devam ettiğiniz eğitim düzeyini seçin."),
                         style = BbTypography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -386,14 +386,14 @@ private fun ProfileJobTitleCard(
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                 ) {
                     Text(
-                        text = "İş Unvanı",
+                        text = BBLocalization.Current.Get(key = "0c9548f7-abe3-4c0b-9b3c-db52d490e8ed", fallback = "İş Unvanı"),
                         style = BbTypography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold
                     )
 
                     Text(
-                        text = "Mevcut görevinizi veya profesyonel unvanınızı yazın.",
+                        text = BBLocalization.Current.Get(key = "04fe6e61-0031-422d-b0d2-01ebad541f58", fallback = "Mevcut görevinizi veya profesyonel unvanınızı yazın."),
                         style = BbTypography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -405,7 +405,7 @@ private fun ProfileJobTitleCard(
                 onValueChange = onJobTitleChange,
                 modifier = Modifier.fillMaxWidth(),
                 label = {
-                    Text(text = "İş Unvanı")
+                    Text(text = BBLocalization.Current.Get(key = "0c9548f7-abe3-4c0b-9b3c-db52d490e8ed", fallback = "İş Unvanı"))
                 },
                 placeholder = {
                     Text(text = "Örnek: Yazılım Geliştirici")
@@ -520,7 +520,7 @@ private fun defaultEducationOptions(): List<ProfileEducationOption> {
     return listOf(
         ProfileEducationOption(
             Id = 1,
-            Content = "İlköğretim"
+            Content = BBLocalization.Current.Get(key = "4f45bc0d-8fd9-4a50-a74d-e1591035c89f", fallback = "İlköğretim")
         ),
         ProfileEducationOption(
             Id = 2,
@@ -544,7 +544,7 @@ private fun defaultEducationOptions(): List<ProfileEducationOption> {
         ),
         ProfileEducationOption(
             Id = 7,
-            Content = "Belirtmek istemiyorum"
+            Content = BBLocalization.Current.Get(key = "bcd1e959-aeea-40dd-a335-57136bff357c", fallback = "Belirtmek istemiyorum")
         )
     )
 }

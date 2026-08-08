@@ -97,7 +97,7 @@ fun AccountTcknScreen(
                 padding = BbCardPadding.Medium
             ) {
                 Text(
-                    text = "T.C. kimlik numaranızı doğrulama ve faturalandırma işlemlerinde kullanmak üzere güncelleyebilirsiniz.",
+                    text = BBLocalization.Current.Get(key = "ee032735-3454-48c2-9766-66f92c0178af", fallback = "T.C. kimlik numaranızı doğrulama ve faturalandırma işlemlerinde kullanmak üzere güncelleyebilirsiniz."),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -134,7 +134,7 @@ fun AccountTcknScreen(
 
                                 !isValid -> {
                                     Text(
-                                        text = "Geçerli bir T.C. kimlik numarası girin.",
+                                        text = BBLocalization.Current.Get(key = "5dad5943-9c84-4a4a-93ce-b28512edc952", fallback = "Geçerli bir T.C. kimlik numarası girin."),
                                         color = MaterialTheme.colorScheme.error
                                     )
                                 }

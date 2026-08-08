@@ -72,20 +72,20 @@ fun BuyerModeSheet(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
             Text(
-                text = "Alışveriş Alanları",
+                text = BBLocalization.Current.Get(key = "e68bab96-0c58-43b4-bd21-63e5166669a3", fallback = "Alışveriş Alanları"),
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
-                text = "Perakende Alışveriş ve toptan ticaret arasında geçiş yapabilirsin.",
+                text = BBLocalization.Current.Get(key = "ecffedc0-db3e-4c40-9f24-dd8b4569a9a8", fallback = "Perakende Alışveriş ve toptan ticaret arasında geçiş yapabilirsin."),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             BuyerModeOptionCard(
-                title = "Perakende Alışveriş",
-                description = "Kampanyalar, ürünler ve sepet",
+                title = BBLocalization.Current.Get(key = "adfb92da-e66b-4549-b73e-ebc51a56acbb", fallback = "Perakende Alışveriş"),
+                description = BBLocalization.Current.Get(key = "77844a6f-0213-4ed0-8c63-e6717805e0f6", fallback = "Kampanyalar, ürünler ve sepet"),
                 selected = currentMode == EBuyerMode.Retail,
                 iconContainerColor = MaterialTheme.colorScheme.primaryContainer,
                 icon = {
@@ -100,8 +100,8 @@ fun BuyerModeSheet(
             )
 
             BuyerModeOptionCard(
-                title = "Toptan Ticaret",
-                description = "RFQ, MOQ, tedarikçiler ve teklifler",
+                title = BBLocalization.Current.Get(key = "f1aa464c-b1eb-49cd-a651-3802350f4af1", fallback = "Toptan Ticaret"),
+                description = BBLocalization.Current.Get(key = "b03ffae8-e9a8-4202-8a32-a4c496b42918", fallback = "RFQ, MOQ, tedarikçiler ve teklifler"),
                 selected = currentMode == EBuyerMode.Wholesale,
                 iconContainerColor = BBColors.Orange.Orange100,
                 icon = {
@@ -120,7 +120,7 @@ fun BuyerModeSheet(
             )
 
             Text(
-                text = "Hızlı toptan aksiyon",
+                text = BBLocalization.Current.Get(key = "4631eb59-7c46-4055-8654-e747cd4b52bd", fallback = "Hızlı toptan aksiyon"),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -252,7 +252,7 @@ private fun BuyerRfqShortcutCard(
                 )
 
                 Text(
-                    text = "Toptan alım için tedarikçilerden son fiyat iste",
+                    text = BBLocalization.Current.Get(key = "2bd761fb-1995-4f2f-9a09-028a11ca693e", fallback = "Toptan alım için tedarikçilerden son fiyat iste"),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

@@ -47,7 +47,7 @@ fun AlarmListScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Alarmlarım",
+                title = BBLocalization.Current.Get(key = "83186dca-4764-4c5d-8bd5-7818d3a39358", fallback = "Alarmlarım"),
                 onBackClick = onBackClick
             )
         }
@@ -112,7 +112,7 @@ private fun AlarmCard(
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                 ) {
                     Text(
-                        text = "Takipteki Ürün",
+                        text = BBLocalization.Current.Get(key = "6175800f-ac51-44fd-b911-13771a90172d", fallback = "Takipteki Ürün"),
                         style = MaterialTheme.typography.labelSmall,
                         color = BBColors.Yellow.Yellow700
                     )
@@ -138,7 +138,7 @@ private fun AlarmCard(
                 horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
             ) {
                 BbButton(
-                    text = "Ürünü Gör",
+                    text = BBLocalization.Current.Get(key = "c69b2282-265b-4550-8669-b33fc70b079f", fallback = "Ürünü Gör"),
                     onClick = {
                         onProductClick(alarm.productId)
                     },
@@ -176,13 +176,13 @@ private fun AlarmEmptyState() {
             AlarmIconBox()
 
             Text(
-                text = "Henüz ürün alarmınız yok",
+                text = BBLocalization.Current.Get(key = "982eb692-2b15-479f-ad66-e16ec1e4624a", fallback = "Henüz ürün alarmınız yok"),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
-                text = "Ürün detay sayfalarından alarm oluşturarak takip etmek istediğiniz ürünleri buradan yönetebilirsiniz.",
+                text = BBLocalization.Current.Get(key = "a6e5138e-72db-4f1a-bf75-9899c51f0bb6", fallback = "Ürün detay sayfalarından alarm oluşturarak takip etmek istediğiniz ürünleri buradan yönetebilirsiniz."),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -222,7 +222,7 @@ private fun AlarmIconBox() {
     ) {
         Icon(
             imageVector = Icons.Outlined.NotificationsActive,
-            contentDescription = "Alarm",
+            contentDescription = BBLocalization.Current.Get(key = "ee6ef5f9-5252-4906-a950-dcf5487ce344", fallback = "Alarm"),
             tint = MaterialTheme.colorScheme.onPrimaryContainer,
             modifier = Modifier.size(BBIcon.SizeMd)
         )

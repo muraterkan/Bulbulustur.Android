@@ -95,7 +95,7 @@ fun OrderReturnRequestScreen(
         topBar = {
             BbInnerPageHeader(
                 title = BBLocalization.Current.Get(key = "c1b6be9d-c63a-494b-aa84-efbe15520640", fallback = "İade Talebi"),
-                subtitle = "Teslim edilen ürün için iade talebi oluştur.",
+                subtitle = BBLocalization.Current.Get(key = "c187534b-234f-4ea1-a928-cb7379ac5e1f", fallback = "Teslim edilen ürün için iade talebi oluştur."),
                 onBackClick = onBackClick
             )
         }
@@ -127,8 +127,8 @@ fun OrderReturnRequestScreen(
                 orderStoreLineId <= 0L || orderKey.isBlank() -> {
                     item {
                         OrderReturnMessageCard(
-                            title = "Sipariş bilgisi eksik",
-                            description = "İade talebi için sipariş satırı veya sipariş anahtarı bulunamadı."
+                            title = BBLocalization.Current.Get(key = "1202f4fc-a180-41eb-a681-417274d697e1", fallback = "Sipariş bilgisi eksik"),
+                            description = BBLocalization.Current.Get(key = "e74448c2-f7cb-4e27-853a-3e6681a7f32c", fallback = "İade talebi için sipariş satırı veya sipariş anahtarı bulunamadı.")
                         )
                     }
                 }
@@ -136,8 +136,8 @@ fun OrderReturnRequestScreen(
                 memberId <= 0 -> {
                     item {
                         OrderReturnMessageCard(
-                            title = "Oturum bilgisi bulunamadı",
-                            description = "İade talebi oluşturmak için hesabınıza giriş yapmanız gerekiyor."
+                            title = BBLocalization.Current.Get(key = "7d3eff10-e01c-4564-a290-e3542478f979", fallback = "Oturum bilgisi bulunamadı"),
+                            description = BBLocalization.Current.Get(key = "12c4b267-51c0-4fb1-8a04-d2d18a39f8a1", fallback = "İade talebi oluşturmak için hesabınıza giriş yapmanız gerekiyor.")
                         )
                     }
                 }
@@ -147,7 +147,7 @@ fun OrderReturnRequestScreen(
                         state.ReturnRequestReasons.isEmpty() -> {
                     item {
                         OrderReturnLoadingCard(
-                            text = "İade nedenleri yükleniyor"
+                            text = BBLocalization.Current.Get(key = "48fca598-6c28-470d-b44b-25f4e58c1c3f", fallback = "İade nedenleri yükleniyor")
                         )
                     }
                 }
@@ -157,7 +157,7 @@ fun OrderReturnRequestScreen(
                         state.CurrentAction == "GetReturnRequestReasonsAsync" -> {
                     item {
                         OrderReturnMessageCard(
-                            title = "İade nedenleri alınamadı",
+                            title = BBLocalization.Current.Get(key = "51369ff0-7241-4cf7-ac4a-46f4c10d122a", fallback = "İade nedenleri alınamadı"),
                             description = state.ErrorMessage.orEmpty()
                         )
                     }
@@ -166,8 +166,8 @@ fun OrderReturnRequestScreen(
                 state.ReturnRequestReasons.isEmpty() -> {
                     item {
                         OrderReturnMessageCard(
-                            title = "İade nedeni bulunamadı",
-                            description = "İade talebi için kullanılabilir neden kaydı bulunamadı."
+                            title = BBLocalization.Current.Get(key = "0e20d531-6952-4188-ad2f-3dc230fc4ea3", fallback = "İade nedeni bulunamadı"),
+                            description = BBLocalization.Current.Get(key = "b0e7a4de-368c-4cff-9652-f7f0e5677495", fallback = "İade talebi için kullanılabilir neden kaydı bulunamadı.")
                         )
                     }
                 }
@@ -203,7 +203,7 @@ fun OrderReturnRequestScreen(
                         ?.let { errorMessage ->
                             item {
                                 OrderReturnMessageCard(
-                                    title = "Talep gönderilemedi",
+                                    title = BBLocalization.Current.Get(key = "78af2bde-b828-4709-9a26-bfb63ceeeda2", fallback = "Talep gönderilemedi"),
                                     description = errorMessage
                                 )
                             }
@@ -271,13 +271,13 @@ private fun OrderReturnIntroCard(
                 )
             ) {
                 Text(
-                    text = "İade Talebi Oluştur",
+                    text = BBLocalization.Current.Get(key = "d9446a93-5d18-4704-9a74-90250ae2fcdf", fallback = "İade Talebi Oluştur"),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = "İade nedeninizi seçin. Talep gönderildikten sonra ilgili sipariş satırı üzerinden takip edilebilir.",
+                    text = BBLocalization.Current.Get(key = "a3ad7ff5-ecb2-4d12-b88d-63d792b55a8c", fallback = "İade nedeninizi seçin. Talep gönderildikten sonra ilgili sipariş satırı üzerinden takip edilebilir."),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -310,8 +310,8 @@ private fun OrderReturnReasonCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
             OrderReturnSectionTitle(
-                title = "İade Nedeni",
-                subtitle = "Bu ürünü neden iade etmek istediğinizi seçin."
+                title = BBLocalization.Current.Get(key = "64d00b3b-3243-4fe4-820a-ef42ca837d51", fallback = "İade Nedeni"),
+                subtitle = BBLocalization.Current.Get(key = "6c7c9405-422b-47ac-9cab-69ba289c9c0b", fallback = "Bu ürünü neden iade etmek istediğinizi seçin.")
             )
 
             Column(
@@ -377,7 +377,7 @@ private fun OrderReturnReasonRow(
             )
 
             Text(
-                text = text.ifBlank { "İade nedeni" },
+                text = text.ifBlank { BBLocalization.Current.Get(key = "64d00b3b-3243-4fe4-820a-ef42ca837d51", fallback = "İade nedeni") },
                 modifier = Modifier.weight(1f),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface
@@ -404,7 +404,7 @@ private fun OrderReturnDescriptionCard(
         ) {
             OrderReturnSectionTitle(
                 title = BBLocalization.Current.Get(key = "db0a3356-2fa4-4c1f-9432-2c299ac52b92", fallback = "Açıklama"),
-                subtitle = "İade talebinizin gönderilebilmesi için kısa bir açıklama yazın."
+                subtitle = BBLocalization.Current.Get(key = "df119682-69af-4c11-aacb-9bff6544726b", fallback = "İade talebinizin gönderilebilmesi için kısa bir açıklama yazın.")
             )
 
             OutlinedTextField(
@@ -415,7 +415,7 @@ private fun OrderReturnDescriptionCard(
                 shape = BBRadius.Input,
                 placeholder = {
                     Text(
-                        text = "Üründe yaşadığınız sorunu kısaca açıklayın."
+                        text = BBLocalization.Current.Get(key = "6d87d5eb-7c8b-4b3b-96e1-10454375231c", fallback = "Üründe yaşadığınız sorunu kısaca açıklayın.")
                     )
                 },
                 leadingIcon = {
@@ -456,13 +456,13 @@ private fun OrderReturnProcessCard() {
                 )
             ) {
                 Text(
-                    text = "Talep süreci",
+                    text = BBLocalization.Current.Get(key = "41e630b9-e401-4aa5-9df3-6ada6e7e47a5", fallback = "Talep süreci"),
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = "Talebiniz satıcı veya destek ekibi tarafından incelenir. Gerekirse sizinle iletişime geçilebilir.",
+                    text = BBLocalization.Current.Get(key = "63766e5e-33a1-4851-8c24-9634b5d5c567", fallback = "Talebiniz satıcı veya destek ekibi tarafından incelenir. Gerekirse sizinle iletişime geçilebilir."),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

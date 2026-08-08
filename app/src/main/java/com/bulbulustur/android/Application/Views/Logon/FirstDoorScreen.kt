@@ -54,9 +54,9 @@ fun FirstDoorScreen(
         }
     ) {
         LogonPublicPageTitle(
-            eyebrow = "Yeni Üyelik",
+            eyebrow = BBLocalization.Current.Get(key = "67f4719d-9886-4fbc-9fad-0ef6a100db26", fallback = "Yeni Üyelik"),
             title = BBLocalization.Current.Get(key = "e6f44bb3-1a51-4db7-86d7-ab38d008440a", fallback = "E-posta Adresinizi Girin"),
-            description = "Kayıt işlemini başlatmak için e-posta adresinize bir doğrulama bağlantısı göndereceğiz."
+            description = BBLocalization.Current.Get(key = "ff3bf20d-7ddc-4034-a9d5-000c7ea4a69c", fallback = "Kayıt işlemini başlatmak için e-posta adresinize bir doğrulama bağlantısı göndereceğiz.")
         )
 
         Spacer(
@@ -120,9 +120,9 @@ fun FirstDoorScreen(
                 Modifier.fillMaxWidth(),
             text =
                 if (isLoading) {
-                    "Gönderiliyor"
+                    BBLocalization.Current.Get(key = "747533e0-13c8-4b49-82ca-ebf9fea6b37f", fallback = "Gönderiliyor")
                 } else {
-                    "Doğrulama Bağlantısı Gönder"
+                    BBLocalization.Current.Get(key = "3bd173f1-2a4e-41b6-a560-738fee4b4324", fallback = "Doğrulama Bağlantısı Gönder")
                 },
             onClick = {
                 if (!isLoading) {
@@ -161,7 +161,7 @@ fun FirstDoorScreen(
                 )
 
                 Text(
-                    text = "Doğrulama e-postası hazırlanıyor.",
+                    text = BBLocalization.Current.Get(key = "0b721994-9d50-4a43-8fcf-82c33dfde21e", fallback = "Doğrulama e-postası hazırlanıyor."),
                     style =
                         MaterialTheme.typography.bodySmall,
                     color =
@@ -184,7 +184,7 @@ fun FirstDoorScreen(
                 Alignment.CenterVertically
         ) {
             Text(
-                text = "Zaten hesabınız var mı?",
+                text = BBLocalization.Current.Get(key = "450a3be3-a073-4365-a1a5-5d8a0e7ae4e7", fallback = "Zaten hesabınız var mı?"),
                 style =
                     MaterialTheme.typography.bodySmall,
                 color =

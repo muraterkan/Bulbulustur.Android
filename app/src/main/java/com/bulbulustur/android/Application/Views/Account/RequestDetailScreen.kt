@@ -228,7 +228,7 @@ private fun RequestDetailProductCard(
         ) {
             RequestDetailSectionTitle(
                 title = BBLocalization.Current.Get(key = "90509413-3f80-4a57-b43b-21738dc74b50", fallback = "Ürün Bilgileri"),
-                subtitle = "Talebe konu ürün ve satıcı bilgileri"
+                subtitle = BBLocalization.Current.Get(key = "b8b54779-6033-436c-af37-6b16a3e3d476", fallback = "Talebe konu ürün ve satıcı bilgileri")
             )
 
             Row(
@@ -294,7 +294,7 @@ private fun RequestDetailProductCard(
                     )
 
                     Text(
-                        text = "Satıcı mağaza bilgileri",
+                        text = BBLocalization.Current.Get(key = "279ac0c5-d80e-4e59-8f0f-6d74b4752df3", fallback = "Satıcı mağaza bilgileri"),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -362,8 +362,8 @@ private fun RequestDetailPropertiesCard(request: ReturnRequestDTO) {
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             RequestDetailSectionTitle(
-                title = "Talep Bilgileri",
-                subtitle = "Ürün varyantı ve teslim edilen içerikler"
+                title = BBLocalization.Current.Get(key = "fd68636e-aa8c-4d25-997d-289cc46d0a9e", fallback = "Talep Bilgileri"),
+                subtitle = BBLocalization.Current.Get(key = "62e3170e-0c8b-45be-965d-e72f75478ef2", fallback = "Ürün varyantı ve teslim edilen içerikler")
             )
 
             RequestDetailPropertyRow(
@@ -374,22 +374,22 @@ private fun RequestDetailPropertiesCard(request: ReturnRequestDTO) {
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
             RequestDetailPropertyRow(
-                title = "Beden",
+                title = BBLocalization.Current.Get(key = "f567eaeb-18cf-4fa6-a06e-b6b9bf33f1fc", fallback = "Beden"),
                 value = request.Size.OrDash()
             )
 
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
             RequestDetailPropertyRow(
-                title = "Fatura",
-                value = if (request.HaveInvoice == 1) "Mevcut" else "Mevcut Değil"
+                title = BBLocalization.Current.Get(key = "58ebf641-5920-4eb6-98a6-aaff73900cbc", fallback = "Fatura"),
+                value = if (request.HaveInvoice == 1) "Mevcut" else BBLocalization.Current.Get(key = "0e171c07-64f6-4779-b1fc-8a3bc49b9692", fallback = "Mevcut Değil")
             )
 
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
             RequestDetailPropertyRow(
                 title = BBLocalization.Current.Get(key = "053ae8f0-d8f8-46b1-b062-bc65615ce7a1", fallback = "Aksesuar"),
-                value = if (request.HaveAccessory == 1) "Mevcut" else "Mevcut Değil"
+                value = if (request.HaveAccessory == 1) "Mevcut" else BBLocalization.Current.Get(key = "0e171c07-64f6-4779-b1fc-8a3bc49b9692", fallback = "Mevcut Değil")
             )
         }
     }
@@ -408,12 +408,12 @@ private fun RequestDetailPhotosCard(pictures: List<ReturnRequestPictureDTO>) {
         ) {
             RequestDetailSectionTitle(
                 title = "Fotoğraflar",
-                subtitle = "Talep sırasında eklenen ürün fotoğrafları"
+                subtitle = BBLocalization.Current.Get(key = "465e539c-e9cc-400f-8eba-174dd071f495", fallback = "Talep sırasında eklenen ürün fotoğrafları")
             )
 
             if (pictures.isEmpty()) {
                 Text(
-                    text = "Bu talebe ait fotoğraf bulunmuyor.",
+                    text = BBLocalization.Current.Get(key = "63a94f71-69cc-4a1a-b7f2-d09eb820159e", fallback = "Bu talebe ait fotoğraf bulunmuyor."),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -465,7 +465,7 @@ private fun RequestDetailPhotoThumbnail(
 
             Text(
                 text = if (picture.PictureName.isBlank()) {
-                    "Fotoğraf"
+                    BBLocalization.Current.Get(key = "6cf3bd82-8926-4836-bb76-58aad83719b1", fallback = "Fotoğraf")
                 } else {
                     "Görsel ${index + 1}"
                 },
@@ -492,11 +492,11 @@ private fun RequestDetailActionsCard(
         ) {
             RequestDetailSectionTitle(
                 title = BBLocalization.Current.Get(key = "be05ea07-1402-4690-9e84-ed7188006edb", fallback = "İşlemler"),
-                subtitle = "Talebe bağlı hızlı aksiyonlar"
+                subtitle = BBLocalization.Current.Get(key = "709d81d4-2924-4060-b0d3-9d6fb511d83a", fallback = "Talebe bağlı hızlı aksiyonlar")
             )
 
             BbButton(
-                text = "Mağazaya Git",
+                text = BBLocalization.Current.Get(key = "42b4b6c0-6b31-4841-aa23-e5eb4e3f9acc", fallback = "Mağazaya Git"),
                 onClick = {
                     onStoreClick(request.StoreId)
                 },
@@ -699,7 +699,7 @@ private fun RequestDetailErrorState(
                 )
 
                 Text(
-                    text = "Talep Yüklenemedi",
+                    text = BBLocalization.Current.Get(key = "9983a80d-bfeb-4bff-8d16-23b6fbcf6f07", fallback = "Talep Yüklenemedi"),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -751,13 +751,13 @@ private fun RequestDetailNotFoundState(modifier: Modifier = Modifier) {
                 )
 
                 Text(
-                    text = "Talep Bulunamadı",
+                    text = BBLocalization.Current.Get(key = "62c9769b-cc14-46a8-a944-e2bb479916bc", fallback = "Talep Bulunamadı"),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = "İade talebi silinmiş veya erişime kapatılmış olabilir.",
+                    text = BBLocalization.Current.Get(key = "375c851e-6fc9-4cf7-8eff-03ca88eef452", fallback = "İade talebi silinmiş veya erişime kapatılmış olabilir."),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -770,12 +770,12 @@ private fun String?.OrDash(): String = this?.takeIf { it.isNotBlank() } ?: "-"
 
 private fun GetReturnRequestDetailStatusFallback(statusId: Int): String {
     return when (statusId) {
-        1 -> "Talep Alındı"
-        2 -> "İncelemede"
+        1 -> BBLocalization.Current.Get(key = "6b04a632-6a4a-4b5a-bc8c-235753a8c8b2", fallback = "Talep Alındı")
+        2 -> BBLocalization.Current.Get(key = "968498ba-6375-489a-9ece-b790e6cb4975", fallback = "İncelemede")
         3 -> BBLocalization.Current.Get(key = "f160b198-ab2d-4515-8126-2ee3143329ec", fallback = "Onaylandı")
         4 -> "Reddedildi"
         5 -> BBLocalization.Current.Get(key = "60ae9048-3404-4ea6-a789-f75e02e0b4ea", fallback = "Tamamlandı")
-        else -> "Talep Alındı"
+        else -> BBLocalization.Current.Get(key = "6b04a632-6a4a-4b5a-bc8c-235753a8c8b2", fallback = "Talep Alındı")
     }
 }
 

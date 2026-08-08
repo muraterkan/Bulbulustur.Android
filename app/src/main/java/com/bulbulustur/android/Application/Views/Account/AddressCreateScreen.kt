@@ -101,13 +101,13 @@ fun AddressCreateScreen(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.SectionGap)
         ) {
             AddressCreateSection(
-                title = "Alıcı Bilgileri",
-                description = "Teslimatı alacak kişinin bilgilerini girin."
+                title = BBLocalization.Current.Get(key = "1d0cb70f-85fe-425d-b8b8-08399ee986c3", fallback = "Alıcı Bilgileri"),
+                description = BBLocalization.Current.Get(key = "38877473-61f3-4524-8a16-e1569a151155", fallback = "Teslimatı alacak kişinin bilgilerini girin.")
             ) {
                 AddressCreateTextField(
                     value = name,
                     onValueChange = { name = it },
-                    label = "Ad",
+                    label = BBLocalization.Current.Get(key = "9b9cf3d0-0463-4f28-83de-c750f16963e4", fallback = "Ad"),
                     placeholder = "Adınız"
                 )
 
@@ -129,15 +129,15 @@ fun AddressCreateScreen(
                 AddressCreateTextField(
                     value = postCode,
                     onValueChange = { postCode = it },
-                    label = "Posta Kodu",
+                    label = BBLocalization.Current.Get(key = "074c5091-b376-4dc7-9898-b77fddaae9d8", fallback = "Posta Kodu"),
                     placeholder = "Posta kodu",
                     keyboardType = KeyboardType.Number
                 )
             }
 
             AddressCreateSection(
-                title = "Konum Bilgileri",
-                description = "Adresin ülke, bölge, şehir ve ilçe bilgilerini seçin."
+                title = BBLocalization.Current.Get(key = "73a67a8a-8c74-40a7-ab6e-09100c4918f0", fallback = "Konum Bilgileri"),
+                description = BBLocalization.Current.Get(key = "b18f476f-2281-4cfc-8198-3d0edc3ed1f6", fallback = "Adresin ülke, bölge, şehir ve ilçe bilgilerini seçin.")
             ) {
                 AddressCascadeFields(
                     state = addressCascadeState,
@@ -152,21 +152,21 @@ fun AddressCreateScreen(
             }
 
             AddressCreateSection(
-                title = "Adres Detayı",
-                description = "Açık adresi ve adres başlığını girin."
+                title = BBLocalization.Current.Get(key = "6ec6d9c7-1640-4941-a059-742f80d10a5a", fallback = "Adres Detayı"),
+                description = BBLocalization.Current.Get(key = "968fee6c-8498-4f79-8dea-dfc5bee7ec9e", fallback = "Açık adresi ve adres başlığını girin.")
             ) {
                 AddressCreateTextArea(
                     value = addressText,
                     onValueChange = { addressText = it },
-                    label = "Açık Adres",
-                    placeholder = "Mahalle, cadde, sokak, bina, kat ve daire bilgisi"
+                    label = BBLocalization.Current.Get(key = "7dd4d1d8-64bd-448a-848e-8bfadd0553aa", fallback = "Açık Adres"),
+                    placeholder = BBLocalization.Current.Get(key = "0f207740-61e2-47e1-bca3-90bcb3926066", fallback = "Mahalle, cadde, sokak, bina, kat ve daire bilgisi")
                 )
 
                 AddressCreateTextField(
                     value = addressTitle,
                     onValueChange = { addressTitle = it },
                     label = "Adres Başlığı",
-                    placeholder = "Ev Adresim"
+                    placeholder = BBLocalization.Current.Get(key = "8d02a590-e33e-4798-adea-4794c5a4a590", fallback = "Ev Adresim")
                 )
 
                 AddressCreateDefaultField(
@@ -181,7 +181,7 @@ fun AddressCreateScreen(
             }
 
             BbButton(
-                text = "Adresi Kaydet",
+                text = BBLocalization.Current.Get(key = "858ae44b-ea3e-4b73-a73f-28158cb354fa", fallback = "Adresi Kaydet"),
                 onClick = {
                     onSaveClick(
                         MemberAddressInsertModel(
@@ -375,7 +375,7 @@ private fun AddressCreateDefaultField(
                 )
 
                 Text(
-                    text = "Siparişlerde öncelikli olarak bu adres kullanılır.",
+                    text = BBLocalization.Current.Get(key = "40e684d5-e4ec-4e72-ac8d-293fce44664f", fallback = "Siparişlerde öncelikli olarak bu adres kullanılır."),
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

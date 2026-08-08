@@ -95,7 +95,7 @@ fun CheckoutSummaryScreen(
                     CheckoutProgressCard(
                         currentStep = "4",
                         title = "Sipariş özeti",
-                        description = "Ödeme öncesi bilgilerini son kez kontrol et."
+                        description = BBLocalization.Current.Get(key = "99eac621-651c-4e57-899a-84387968abc5", fallback = "Ödeme öncesi bilgilerini son kez kontrol et.")
                     )
                 }
 
@@ -122,7 +122,7 @@ fun CheckoutSummaryScreen(
 
                 item {
                     CheckoutSummarySectionTitle(
-                        title = "Sipariş ürünleri",
+                        title = BBLocalization.Current.Get(key = "cfb10390-aea0-4edc-bbef-486b6b1bb4ad", fallback = "Sipariş ürünleri"),
                         description = "${screenData.products.size} ürün siparişe dahil."
                     )
                 }
@@ -207,7 +207,7 @@ private fun CheckoutSummaryTopBar(
             )
 
             Text(
-                text = "Checkout adım 4 / 4",
+                text = BBLocalization.Current.Get(key = "e0226be6-57f6-40af-90cd-b1bc5f97dc06", fallback = "Checkout adım 4 / 4"),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -310,7 +310,7 @@ private fun CheckoutSummaryCargoCard(
     onEditCargoClick: () -> Unit
 ) {
     CheckoutSummaryInfoCard(
-        title = "Kargo bilgisi",
+        title = BBLocalization.Current.Get(key = "6c957f50-239c-4774-aa4e-318a17703e0a", fallback = "Kargo bilgisi"),
         actionText = BBLocalization.Current.Get(key = "46abcd8f-976d-4c12-a55f-8aa3c4abb38b", fallback = ""),
         onActionClick = onEditCargoClick
     ) {
@@ -502,7 +502,7 @@ private fun CheckoutSummaryTotalCard(
             )
 
             CheckoutSummaryTotalRow(
-                title = "İndirim",
+                title = BBLocalization.Current.Get(key = "9dd8d854-ca26-4660-bcb3-b7ec8e3f458b", fallback = "İndirim"),
                 value = total.discountText
             )
 
@@ -583,8 +583,8 @@ private fun CheckoutSummaryAgreementCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             CheckoutSummarySectionTitle(
-                title = "Sözleşme onayları",
-                description = "Siparişi tamamlamadan önce gerekli bilgilendirmeleri onayla."
+                title = BBLocalization.Current.Get(key = "288a0809-43cf-4248-8667-2478284c934f", fallback = "Sözleşme onayları"),
+                description = BBLocalization.Current.Get(key = "792ef824-f513-47b7-85ee-66f8a3a1b022", fallback = "Siparişi tamamlamadan önce gerekli bilgilendirmeleri onayla.")
             )
 
             BbCheckboxRow(
@@ -596,7 +596,7 @@ private fun CheckoutSummaryAgreementCard(
             BbCheckboxRow(
                 checked = preliminaryInformationApproved,
                 onCheckedChange = onPreliminaryInformationChange,
-                title = "Ön bilgilendirme formunu okudum ve onaylıyorum."
+                title = BBLocalization.Current.Get(key = "17138ad0-a92d-4545-a322-7084bccc6cb7", fallback = "Ön bilgilendirme formunu okudum ve onaylıyorum.")
             )
         }
     }
@@ -646,7 +646,7 @@ private fun CheckoutSummaryBottomBar(
             Spacer(modifier = Modifier.width(BBSpacing.Space3))
 
             BbButton(
-                text = "Siparişi tamamla",
+                text = BBLocalization.Current.Get(key = "e07ad224-7f9f-4399-8920-8f0072f48d66", fallback = "Siparişi tamamla"),
                 onClick = onCompleteOrderClick,
                 variant = BbButtonVariant.Primary,
                 size = BbButtonSize.Medium,
@@ -731,7 +731,7 @@ data class CheckoutSummaryApproval(
 private fun getCheckoutSummaryScreenData(): CheckoutSummaryScreenData {
     return CheckoutSummaryScreenData(
         address = CheckoutSummaryAddress(
-            title = "Ev adresim",
+            title = BBLocalization.Current.Get(key = "8f6d0dd3-f45d-4fce-a684-47ee00038be8", fallback = "Ev adresim"),
             fullName = "Murat Erkan",
             fullAddress = "Kızılay Mah. Atatürk Bulvarı No: 12 Daire: 8 Çankaya / Ankara"
         ),
@@ -741,13 +741,13 @@ private fun getCheckoutSummaryScreenData(): CheckoutSummaryScreenData {
             packageSummaryText = "2 ayrı paket gönderimi"
         ),
         payment = CheckoutSummaryPayment(
-            methodTitle = "Yeni kart ile ödeme",
+            methodTitle = BBLocalization.Current.Get(key = "7f6de62f-c609-44f5-b796-8ae5b2121b10", fallback = "Yeni kart ile ödeme"),
             description = "3D Secure doğrulama ödeme sağlayıcısı üzerinden tamamlanır."
         ),
         products = listOf(
             CheckoutSummaryProductItem(
                 id = 1,
-                name = "Kadın klasik sneaker ayakkabı",
+                name = BBLocalization.Current.Get(key = "cf2f4de0-711c-4308-a055-3ef7eb00d9c7", fallback = "Kadın klasik sneaker ayakkabı"),
                 storeName = "Ortobella Store",
                 variantText = "Beyaz . 38",
                 priceText = "₺899,90",
@@ -756,7 +756,7 @@ private fun getCheckoutSummaryScreenData(): CheckoutSummaryScreenData {
             ),
             CheckoutSummaryProductItem(
                 id = 2,
-                name = "Rahat taban günlük ayakkabı",
+                name = BBLocalization.Current.Get(key = "4948aead-b9d0-49ad-993c-0104e68e7f1c", fallback = "Rahat taban günlük ayakkabı"),
                 storeName = "Ortobella Store",
                 variantText = "Siyah . 39",
                 priceText = "₺749,90",

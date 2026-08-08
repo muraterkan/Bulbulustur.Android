@@ -176,7 +176,7 @@ private fun FollowedStoreCard(
                 )
 
                 BbButton(
-                    text = "Mağaza Profilini Görüntüle",
+                    text = BBLocalization.Current.Get(key = "a5c8a796-b251-4c50-a0c8-74d076475919", fallback = "Mağaza Profilini Görüntüle"),
                     onClick = {
                         onStoreClick(store.StoreId)
                     },
@@ -186,7 +186,7 @@ private fun FollowedStoreCard(
                 )
 
                 BbButton(
-                    text = "Takipten Çıkar",
+                    text = BBLocalization.Current.Get(key = "0e6b4d71-96af-4d58-a4de-e257d04cddec", fallback = "Takipten Çıkar"),
                     onClick = {
                         onUnfollowStoreClick(
                             store.MemberFollowedStoreId
@@ -249,7 +249,7 @@ private fun FollowStatusBadge() {
             )
     ) {
         Text(
-            text = "Takip Ediyor",
+            text = BBLocalization.Current.Get(key = "907e5738-1d10-4412-a576-973c308a0bcc", fallback = "Takip Ediyor"),
             style = MaterialTheme.typography.labelSmall,
             color = BBColors.Yellow.Yellow800,
             fontWeight = FontWeight.Bold
@@ -327,7 +327,7 @@ private fun FollowedStoreErrorState(
                 StoreEmptyIconBox()
 
                 Text(
-                    text = "Mağazalar Alınamadı",
+                    text = BBLocalization.Current.Get(key = "543d9824-3042-4068-bba0-e981a644105d", fallback = "Mağazalar Alınamadı"),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
@@ -374,7 +374,7 @@ private fun FollowedStoreEmptyState() {
             )
 
             Text(
-                text = "Henüz takip ettiğiniz mağaza bulunmuyor. Mağaza profillerini takip ederek burada hızlı erişim listesi oluşturabilirsiniz.",
+                text = BBLocalization.Current.Get(key = "e0cd157d-2cab-4cf5-8fde-f0bec75113ac", fallback = "Henüz takip ettiğiniz mağaza bulunmuyor. Mağaza profillerini takip ederek burada hızlı erişim listesi oluşturabilirsiniz."),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
@@ -437,6 +437,6 @@ private fun MemberFollowedStoreDTO.followedStoreDescription(): String {
             FollowedStoresType
 
         else ->
-            "Takip ettiğiniz mağaza"
+            BBLocalization.Current.Get(key = "cda224ce-1204-4a35-b4aa-b5a61e0d7f58", fallback = "Takip ettiğiniz mağaza")
     }
 }

@@ -92,14 +92,14 @@ fun BankAccountCreateScreen(
             BankAccountCreateIntroCard()
 
             BbFormSection(
-                title = "IBAN Bilgisi"
+                title = BBLocalization.Current.Get(key = "cd9e75c2-c960-4df6-9348-e01d058beef2", fallback = "IBAN Bilgisi")
             ) {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        text = "IBAN bilgisini boşluk bırakmadan ya da boşluklu olarak girebilirsin. Sistem doğrulama kurallarını çalıştırmaya devam eder.",
+                        text = BBLocalization.Current.Get(key = "c0f6d95e-c5c9-45b0-bdae-8034fddd80f7", fallback = "IBAN bilgisini boşluk bırakmadan ya da boşluklu olarak girebilirsin. Sistem doğrulama kurallarını çalıştırmaya devam eder."),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -166,7 +166,7 @@ private fun BankAccountCreateIntroCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Para aktarımı ve ödeme sürecinde kullanılacak banka hesabını güvenli şekilde kaydet. Girdiğin IBAN numarası vadeli bir hesaba ait olmamalıdır.",
+            text = BBLocalization.Current.Get(key = "5ef49503-26d4-4491-8789-05da9fd65186", fallback = "Para aktarımı ve ödeme sürecinde kullanılacak banka hesabını güvenli şekilde kaydet. Girdiğin IBAN numarası vadeli bir hesaba ait olmamalıdır."),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -187,7 +187,7 @@ private fun BankAccountValidationInfoCard(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = "IBAN Kontrolü",
+                text = BBLocalization.Current.Get(key = "409e5b15-7913-4306-a273-28af1c3fe334", fallback = "IBAN Kontrolü"),
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -227,13 +227,13 @@ private fun BankAccountFinancialInfoCard() {
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = "Finansal Bilgi Kontrolü",
+                text = BBLocalization.Current.Get(key = "4f771ca4-6742-4da2-b499-e3421a729511", fallback = "Finansal Bilgi Kontrolü"),
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
-                text = "Banka hesabı bilgileri ödeme ve aktarım süreçlerinde kullanılacağı için doğru girilmelidir.",
+                text = BBLocalization.Current.Get(key = "a534851f-2876-4d92-9727-38f47dc84c2a", fallback = "Banka hesabı bilgileri ödeme ve aktarım süreçlerinde kullanılacağı için doğru girilmelidir."),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -245,42 +245,42 @@ private fun getIbanPrefixMessage(
     formState: BankAccountCreateFormState
 ): String {
     if (formState.iban.isBlank()) {
-        return "IBAN numarası TR ile başlamalıdır."
+        return BBLocalization.Current.Get(key = "49d652d9-e25c-4444-80b5-56938b629f14", fallback = "IBAN numarası TR ile başlamalıdır.")
     }
 
     if (formState.hasValidTurkeyIbanPrefix) {
-        return "IBAN ülke kodu uygun görünüyor."
+        return BBLocalization.Current.Get(key = "8d07611b-1b27-4fad-95ac-bdee9235fb1b", fallback = "IBAN ülke kodu uygun görünüyor.")
     }
 
-    return "Türkiye IBAN numarası TR ile başlamalıdır."
+    return BBLocalization.Current.Get(key = "0c5b40e9-09dc-46a8-aa8e-ddbcc34f8677", fallback = "Türkiye IBAN numarası TR ile başlamalıdır.")
 }
 
 private fun getIbanLengthMessage(
     formState: BankAccountCreateFormState
 ): String {
     if (formState.iban.isBlank()) {
-        return "Türkiye IBAN numarası 26 karakter olmalıdır."
+        return BBLocalization.Current.Get(key = "113b9c40-09c9-4af1-a746-3bc14dddcbec", fallback = "Türkiye IBAN numarası 26 karakter olmalıdır.")
     }
 
     if (formState.hasExpectedLength) {
-        return "IBAN uzunluğu uygun görünüyor."
+        return BBLocalization.Current.Get(key = "71b0db09-f1df-4d81-ba57-781ae5d652f5", fallback = "IBAN uzunluğu uygun görünüyor.")
     }
 
-    return "IBAN uzunluğu kontrol edilmeli. Türkiye IBAN numarası 26 karakter olmalıdır."
+    return BBLocalization.Current.Get(key = "30dc9bf1-dc06-45fa-8aa6-7336ebef89dd", fallback = "IBAN uzunluğu kontrol edilmeli. Türkiye IBAN numarası 26 karakter olmalıdır.")
 }
 
 private fun getBankAccountCreateValidationMessage(
     formState: BankAccountCreateFormState
 ): String {
     if (!formState.hasValidTurkeyIbanPrefix) {
-        return "IBAN numarası TR ile başlamalıdır."
+        return BBLocalization.Current.Get(key = "49d652d9-e25c-4444-80b5-56938b629f14", fallback = "IBAN numarası TR ile başlamalıdır.")
     }
 
     if (!formState.hasExpectedLength) {
-        return "Türkiye IBAN numarası 26 karakter olmalıdır."
+        return BBLocalization.Current.Get(key = "113b9c40-09c9-4af1-a746-3bc14dddcbec", fallback = "Türkiye IBAN numarası 26 karakter olmalıdır.")
     }
 
-    return "IBAN bilgisini kontrol etmelisin."
+    return BBLocalization.Current.Get(key = "b7fd8ac3-3a01-4bee-8bb5-30ce02427d12", fallback = "IBAN bilgisini kontrol etmelisin.")
 }
 
 

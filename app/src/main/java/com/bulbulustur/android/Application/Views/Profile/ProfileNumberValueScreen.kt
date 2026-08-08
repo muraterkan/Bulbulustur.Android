@@ -243,7 +243,7 @@ private fun ProfileMeasurementPickerCard(
                 ProfileMeasurementStepButton(
                     modifier = Modifier.weight(1f),
                     icon = Icons.Outlined.Remove,
-                    contentDescription = "Azalt",
+                    contentDescription = BBLocalization.Current.Get(key = "cecc4b34-9c8c-4e90-a3cb-6f8fbab87c3e", fallback = "Azalt"),
                     enabled = !isLoading && selectedValue > minimumValue,
                     onClick = {
                         onValueChange(selectedValue - 1)
@@ -275,7 +275,7 @@ private fun ProfileMeasurementPickerCard(
                 ProfileMeasurementStepButton(
                     modifier = Modifier.weight(1f),
                     icon = Icons.Outlined.Add,
-                    contentDescription = "Artır",
+                    contentDescription = BBLocalization.Current.Get(key = "9abddeea-7ef3-47dc-9bcc-5cbf2912efed", fallback = "Artır"),
                     enabled = !isLoading && selectedValue < maximumValue,
                     onClick = {
                         onValueChange(selectedValue + 1)
@@ -451,7 +451,7 @@ private fun ProfileMeasurementRangeCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Seçim aralığı",
+                    text = BBLocalization.Current.Get(key = "bd757545-6ee3-4a89-8fd2-82d9c6c36035", fallback = "Seçim aralığı"),
                     style = BbTypography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

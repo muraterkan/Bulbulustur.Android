@@ -105,7 +105,7 @@ fun WholesaleHomeScreen(
                 },
                 onMenuClick = onMenuClick,
                 onFavoriteClick = onFavoriteClick,
-                placeholder = "Ürün, firma veya RFQ ara",
+                placeholder = BBLocalization.Current.Get(key = "157e8207-fc00-4788-b847-62900c8daa48", fallback = "Ürün, firma veya RFQ ara"),
                 onSearchClick = {
                     onSearchClick(searchText)
                 },
@@ -176,8 +176,8 @@ fun WholesaleHomeScreen(
 
             item {
                 WholesaleSectionTitle(
-                    title = "Tedarik Aksiyonları",
-                    description = "Teklif, son fiyat, numune ve özel üretim kanalları."
+                    title = BBLocalization.Current.Get(key = "58936c35-8484-4305-b5e8-ede7c8119380", fallback = "Tedarik Aksiyonları"),
+                    description = BBLocalization.Current.Get(key = "c8ef2e92-25f3-4297-add2-2e60891d23df", fallback = "Teklif, son fiyat, numune ve özel üretim kanalları.")
                 )
             }
 
@@ -218,14 +218,14 @@ private fun WholesaleHeroCard(
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                 ) {
                     Text(
-                        text = "Toptan Ticaret Merkezi",
+                        text = BBLocalization.Current.Get(key = "9d2bf54d-124e-4b23-88c8-4410d9a568d7", fallback = "Toptan Ticaret Merkezi"),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.SemiBold
                     )
 
                     Text(
-                        text = "Ürün, firma ve teklif akışını tek yerden yönet.",
+                        text = BBLocalization.Current.Get(key = "e99ef2ad-0ba6-49f6-80bf-67aaa4951e0b", fallback = "Ürün, firma ve teklif akışını tek yerden yönet."),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -238,7 +238,7 @@ private fun WholesaleHeroCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 BbButton(
-                    text = "Teklif Talebi",
+                    text = BBLocalization.Current.Get(key = "d6a3a561-934c-46b0-af29-c48498e0171c", fallback = "Teklif Talebi"),
                     onClick = onRfqCreateClick,
                     modifier = Modifier.weight(1f),
                     variant = BbButtonVariant.Primary,
@@ -464,7 +464,7 @@ private fun wholesaleActionItems(
     return listOf(
         WholesaleHomeActionItem(
             Title = BBLocalization.Current.Get(key = "05ce926b-485a-4872-b758-ac3eea7a80a2", fallback = ""),
-            Description = "RFQ kayıtlarını gör",
+            Description = BBLocalization.Current.Get(key = "bf6044d6-a44c-4bdb-ba5b-41cf3146107f", fallback = "RFQ kayıtlarını gör"),
             Icon = Icons.Outlined.RequestQuote,
             Tint = BBColors.Orange.Orange700,
             BackgroundColor = BBColors.Orange.Orange50,
@@ -472,22 +472,22 @@ private fun wholesaleActionItems(
         ),
         WholesaleHomeActionItem(
             Title = BBLocalization.Current.Get(key = "9aa9e9a4-18b3-427b-943f-36170e46cb37", fallback = "Teklif Al"),
-            Description = "Yeni teklif iste",
+            Description = BBLocalization.Current.Get(key = "77029d47-2540-4336-a673-4d6d1d9b5d96", fallback = "Yeni teklif iste"),
             Icon = Icons.Outlined.LocalOffer,
             Tint = BBColors.Orange.Orange700,
             BackgroundColor = BBColors.Orange.Orange50,
             OnClick = onRfqCreateClick
         ),
         WholesaleHomeActionItem(
-            Title = "Son fiyat",
-            Description = "Fiyat pazarlığı başlat",
+            Title = BBLocalization.Current.Get(key = "1cfc3769-add7-41d6-b18b-117466c6e19f", fallback = "Son fiyat"),
+            Description = BBLocalization.Current.Get(key = "3379259c-02d5-4e8c-a463-8c996526d7ef", fallback = "Fiyat pazarlığı başlat"),
             Icon = Icons.Outlined.LocalOffer,
             Tint = BBColors.Red.Red700,
             BackgroundColor = BBColors.Red.Red50,
             OnClick = onLastPriceRequestClick
         ),
         WholesaleHomeActionItem(
-            Title = "Numune",
+            Title = BBLocalization.Current.Get(key = "76f040d9-6f98-4e10-aeba-fcbf5a6691ba", fallback = "Numune"),
             Description = BBLocalization.Current.Get(key = "a2568540-dd6c-4296-a2a2-0cea6adf103f", fallback = "Numune talebi gönder"),
             Icon = Icons.Outlined.Inventory2,
             Tint = BBColors.Blue.Blue700,
@@ -496,7 +496,7 @@ private fun wholesaleActionItems(
         ),
         WholesaleHomeActionItem(
             Title = BBLocalization.Current.Get(key = "44b76fc9-f305-4368-80ce-fea7d160eb17", fallback = ""),
-            Description = "Logo, renk ve üretim detayı",
+            Description = BBLocalization.Current.Get(key = "86604f42-023c-4e3c-9dbe-0c3207dbaf1a", fallback = "Logo, renk ve üretim detayı"),
             Icon = Icons.Outlined.Category,
             Tint = BBColors.Purple.Purple700,
             BackgroundColor = BBColors.Purple.Purple50,

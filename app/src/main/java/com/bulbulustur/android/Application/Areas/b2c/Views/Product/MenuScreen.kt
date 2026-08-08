@@ -190,7 +190,7 @@ private fun RetailMenuHero() {
             .padding(BBSpacing.Space5)
     ) {
         RetailMenuBadge(
-            text = "Perakende Kategori Keşfi"
+            text = BBLocalization.Current.Get(key = "ccca2262-6003-4090-bea9-406fed2fec51", fallback = "Perakende Kategori Keşfi")
         )
 
         Spacer(
@@ -198,7 +198,7 @@ private fun RetailMenuHero() {
         )
 
         Text(
-            text = "Alışveriş dünyasına kategori kapısından gir",
+            text = BBLocalization.Current.Get(key = "35e0cfbb-bcb2-46dc-858e-d248fd51134e", fallback = "Alışveriş dünyasına kategori kapısından gir"),
             style = MaterialTheme.typography.headlineSmall,
             color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold
@@ -209,7 +209,7 @@ private fun RetailMenuHero() {
         )
 
         Text(
-            text = "Ana kategorileri keşfet, kategori ana sayfasında alt kırılımlar, ürün Vitrinleri ve kampanyalara ulaş.",
+            text = BBLocalization.Current.Get(key = "cbd94b59-9665-4dad-9d61-953bbbd38e00", fallback = "Ana kategorileri keşfet, kategori ana sayfasında alt kırılımlar, ürün Vitrinleri ve kampanyalara ulaş."),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -316,7 +316,7 @@ private fun RetailMenuSectionTitle() {
             .padding(top = BBSpacing.Space2)
     ) {
         Text(
-            text = "Ana Kategoriler",
+            text = BBLocalization.Current.Get(key = "c0b1dbee-2ead-42f0-9803-724dc48c055c", fallback = "Ana Kategoriler"),
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold
@@ -327,7 +327,7 @@ private fun RetailMenuSectionTitle() {
         )
 
         Text(
-            text = "Alt Kategoriler kategori ana sayfasında listelenecek.",
+            text = BBLocalization.Current.Get(key = "9fa20011-37a2-4328-95a2-9bad52bbf8b4", fallback = "Alt Kategoriler kategori ana sayfasında listelenecek."),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -440,23 +440,23 @@ private data class RetailMenuCategory(
 private fun retailMenuCategories(): List<RetailMenuCategory> {
     return listOf(
         RetailMenuCategory(1, "Otomobil Parça ve Aksesuarları"),
-        RetailMenuCategory(2, "Tüketici Elektroniği"),
-        RetailMenuCategory(3, "Elektronik Parçalar"),
+        RetailMenuCategory(2, BBLocalization.Current.Get(key = "fafed4f2-263a-4555-816b-3ccc58c31b77", fallback = "Tüketici Elektroniği")),
+        RetailMenuCategory(3, BBLocalization.Current.Get(key = "3fef55c6-116c-43de-bc54-9d81d571e7dd", fallback = "Elektronik Parçalar")),
         RetailMenuCategory(4, "Moda Aksesuarları ve Ayakkabılar"),
         RetailMenuCategory(5, "Moda Giyim ve Kumaşlar"),
-        RetailMenuCategory(6, "Yiyecek, Ev ve Evcil Hayvanlar"),
+        RetailMenuCategory(6, BBLocalization.Current.Get(key = "30b90139-2535-4203-8f21-2899850dd34e", fallback = "Yiyecek, Ev ve Evcil Hayvanlar")),
         RetailMenuCategory(7, "Mobilya ve Ev Dekorasyonu"),
-        RetailMenuCategory(8, "Hediyeler ve Primer"),
-        RetailMenuCategory(9, "Donanım"),
+        RetailMenuCategory(8, BBLocalization.Current.Get(key = "6d690260-bfdc-4076-8f76-6ba927051199", fallback = "Hediyeler ve Primer")),
+        RetailMenuCategory(9, BBLocalization.Current.Get(key = "e2d9ee4a-f543-4223-a2a9-729651759f4a", fallback = "Donanım")),
         RetailMenuCategory(10, "Sağlık ve Kişisel Bakım"),
-        RetailMenuCategory(11, "Ev Aletleri"),
-        RetailMenuCategory(12, "Endüstriyel Malzemeler"),
-        RetailMenuCategory(13, "Makine ve Ekipman"),
+        RetailMenuCategory(11, BBLocalization.Current.Get(key = "ef6ae962-4218-4763-83be-64fd949ff2af", fallback = "Ev Aletleri")),
+        RetailMenuCategory(12, BBLocalization.Current.Get(key = "2ac5d1f3-1bf3-4f8d-b873-c05e097d643c", fallback = "Endüstriyel Malzemeler")),
+        RetailMenuCategory(13, BBLocalization.Current.Get(key = "0ad29899-bac8-4bc2-88f7-cc2af6be001e", fallback = "Makine ve Ekipman")),
         RetailMenuCategory(14, "Mobil Elektronik"),
         RetailMenuCategory(15, "Anne, Çocuk ve Oyuncaklar"),
         RetailMenuCategory(16, "Baskı ve Paketleme"),
         RetailMenuCategory(17, "Akıllı Yaşam Elektroniği"),
-        RetailMenuCategory(18, "Spor ve Dış Mekan")
+        RetailMenuCategory(18, BBLocalization.Current.Get(key = "5deb432b-d645-40d7-abc6-d4334d58312e", fallback = "Spor ve Dış Mekan"))
     )
 }
 

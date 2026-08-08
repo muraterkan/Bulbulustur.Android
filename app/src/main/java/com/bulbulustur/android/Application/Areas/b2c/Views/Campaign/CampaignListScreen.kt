@@ -144,7 +144,7 @@ fun CampaignListScreen(
             item {
                 CampaignSectionTitle(
                     title = BBLocalization.Current.Get(key = "e2812624-6bbc-4034-9a09-6570540d0785", fallback = "Tüm Kampanyalar"),
-                    description = "Bulbulustur içinde öne çıkan kampanya alanlarını ve avantajlı alışveriş fırsatlarını görüntüle."
+                    description = BBLocalization.Current.Get(key = "387b8cfc-5009-4880-92f1-4ba72f11e883", fallback = "Bulbulustur içinde öne çıkan kampanya alanlarını ve avantajlı alışveriş fırsatlarını görüntüle.")
                 )
             }
 
@@ -152,7 +152,7 @@ fun CampaignListScreen(
                 isLoading -> {
                     item {
                         CampaignListInfoCard(
-                            title = "Kampanyalar yükleniyor",
+                            title = BBLocalization.Current.Get(key = "b0232075-fe70-45c8-aabf-7f0e54f81ce5", fallback = "Kampanyalar yükleniyor"),
                             description = BBLocalization.Current.Get(key = "20b5f12d-1dbf-467c-af8e-3138533bedcc", fallback = ""),
                             showProgress = true
                         )
@@ -163,7 +163,7 @@ fun CampaignListScreen(
                         campaigns.isEmpty() -> {
                     item {
                         CampaignListInfoCard(
-                            title = "Kampanyalar alınamadı",
+                            title = BBLocalization.Current.Get(key = "bdf61c70-ebbc-45bc-bb86-a8c7e4d90fe0", fallback = "Kampanyalar alınamadı"),
                             description = errorMessage
                         )
                     }
@@ -172,11 +172,11 @@ fun CampaignListScreen(
                 filteredCampaigns.isEmpty() -> {
                     item {
                         CampaignListInfoCard(
-                            title = "Kampanya bulunamadı",
+                            title = BBLocalization.Current.Get(key = "e59db449-f1ba-4c09-b6ea-0c60689bfd19", fallback = "Kampanya bulunamadı"),
                             description = if (searchText.isBlank()) {
-                                "Gösterilecek aktif kampanya bulunmuyor."
+                                BBLocalization.Current.Get(key = "53cbf453-6e41-4101-b87b-a8fc1d657774", fallback = "Gösterilecek aktif kampanya bulunmuyor.")
                             } else {
-                                "Arama kriterine uygun kampanya bulunamadı."
+                                BBLocalization.Current.Get(key = "9bde1108-7242-4562-8e63-2e4c42e8d8da", fallback = "Arama kriterine uygun kampanya bulunamadı.")
                             }
                         )
                     }
@@ -229,11 +229,11 @@ private fun CampaignListHero(
             )
         ) {
             CampaignLabel(
-                text = "Güncel Kampanyalar"
+                text = BBLocalization.Current.Get(key = "020751bc-1a5b-4d88-b23b-37b77a471c2f", fallback = "Güncel Kampanyalar")
             )
 
             Text(
-                text = "Alışveriş Fırsatlarını Keşfet",
+                text = BBLocalization.Current.Get(key = "fa54b6d9-199b-4867-99e8-ff8865857ce0", fallback = "Alışveriş Fırsatlarını Keşfet"),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color =
@@ -241,7 +241,7 @@ private fun CampaignListHero(
             )
 
             Text(
-                text = "Seçili kampanyaları, avantajlı ürün gruplarını ve fırsat alanlarını tek yerden incele.",
+                text = BBLocalization.Current.Get(key = "bb280593-2026-4351-8976-11a701bde6a9", fallback = "Seçili kampanyaları, avantajlı ürün gruplarını ve fırsat alanlarını tek yerden incele."),
                 style = MaterialTheme.typography.bodyMedium,
                 color =
                     MaterialTheme.colorScheme.onPrimaryContainer
@@ -269,7 +269,7 @@ private fun CampaignSectionTitle(
         )
     ) {
         Text(
-            text = "GÜNCEL KAMPANYALAR",
+            text = BBLocalization.Current.Get(key = "f37b300a-de24-47cd-8e2e-df828a9bde38", fallback = "GÜNCEL KAMPANYALAR"),
             style = MaterialTheme.typography.labelSmall,
             fontWeight = FontWeight.SemiBold,
             color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -338,12 +338,12 @@ private fun CampaignListCard(
     val description =
         campaign.Description
             ?.takeIf { it.isNotBlank() }
-            ?: "Avantajlı kampanya fırsatlarını keşfet."
+            ?: BBLocalization.Current.Get(key = "1f5aca93-a0a5-4cbf-9294-4d01d58415d5", fallback = "Avantajlı kampanya fırsatlarını keşfet.")
 
     val campaignCondition =
         campaign.CampaignCondition
             ?.takeIf { it.isNotBlank() }
-            ?: "Süreli kampanya"
+            ?: BBLocalization.Current.Get(key = "72a2d2e6-646c-417f-9353-98d3a3f2b490", fallback = "Süreli kampanya")
 
     val campaignPicture =
         campaign.Picture

@@ -84,7 +84,7 @@ fun CompanyDetailScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Firma Profili",
+                title = BBLocalization.Current.Get(key = "24346286-0656-43c8-ae61-fe89a658f495", fallback = "Firma Profili"),
                 onBackClick = onBackClick
             )
         }
@@ -126,8 +126,8 @@ fun CompanyDetailScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Firma Vitrini",
-                    subtitle = "Üretim, tesis, showroom veya kurumsal görseller"
+                    title = BBLocalization.Current.Get(key = "e8a21e2e-de5d-4682-b64a-7cdd977fc29e", fallback = "Firma Vitrini"),
+                    subtitle = BBLocalization.Current.Get(key = "cc80154e-6e00-4166-8b5a-9810cb5be734", fallback = "Üretim, tesis, showroom veya kurumsal görseller")
                 )
             }
 
@@ -142,8 +142,8 @@ fun CompanyDetailScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Detaylı Firma Profili",
-                    subtitle = "Firma hakkında, iş modeli ve ticari bilgiler"
+                    title = BBLocalization.Current.Get(key = "a8b9df1a-fadf-45e8-9ec8-9b369024ea5e", fallback = "Detaylı Firma Profili"),
+                    subtitle = BBLocalization.Current.Get(key = "53981d8b-c53b-4b78-a8eb-e78b2399d6fc", fallback = "Firma hakkında, iş modeli ve ticari bilgiler")
                 )
             }
 
@@ -163,7 +163,7 @@ fun CompanyDetailScreen(
             item {
                 BbSectionHeader(
                     title = BBLocalization.Current.Get(key = "e8333e34-ffbb-4135-82fa-f847eb8929b1", fallback = "Ürün Grupları"),
-                    subtitle = "Firmanın öne çıkan toptan ürün aileleri"
+                    subtitle = BBLocalization.Current.Get(key = "86524b7d-8604-431b-bb9c-e3aae1942af9", fallback = "Firmanın öne çıkan toptan ürün aileleri")
                 )
             }
 
@@ -183,8 +183,8 @@ fun CompanyDetailScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Belgeler ve Sertifikalar",
-                    subtitle = "Firma güveni için doğrulama bilgileri"
+                    title = BBLocalization.Current.Get(key = "fa8e443e-e497-4a9d-85f7-1e1e20c69892", fallback = "Belgeler ve Sertifikalar"),
+                    subtitle = BBLocalization.Current.Get(key = "371c81db-38aa-41ab-bace-f03f8777d460", fallback = "Firma güveni için doğrulama bilgileri")
                 )
             }
 
@@ -264,7 +264,7 @@ private fun CompanyDetailHero(
                             horizontalArrangement = Arrangement.spacedBy(BBSpacing.IconTextGapSmall)
                         ) {
                             Text(
-                                text = "Firma Profili",
+                                text = BBLocalization.Current.Get(key = "24346286-0656-43c8-ae61-fe89a658f495", fallback = "Firma Profili"),
                                 style = MaterialTheme.typography.labelLarge,
                                 color = MaterialTheme.colorScheme.primary,
                                 fontWeight = FontWeight.SemiBold
@@ -358,7 +358,7 @@ private fun CompanyDetailMainActions(
 
             CompanyActionCard(
                 title = BBLocalization.Current.Get(key = "a439130c-b2cf-496f-9868-93ef084d9aec", fallback = "İletişime Geç"),
-                description = "Yetkili kişiye ulaş",
+                description = BBLocalization.Current.Get(key = "dc33c096-fffb-4e72-8e0d-b7f62e6d3cbf", fallback = "Yetkili kişiye ulaş"),
                 icon = Icons.Outlined.Mail,
                 modifier = Modifier.weight(1f),
                 onClick = {
@@ -543,7 +543,7 @@ private fun CompanyGalleryPreview(
             )
 
             Text(
-                text = "Firma Vitrini API sonrası gerçek görsellerle yatay galeri olarak beslenecek.",
+                text = BBLocalization.Current.Get(key = "4dcd5916-7915-452c-970d-80a036f27858", fallback = "Firma Vitrini API sonrası gerçek görsellerle yatay galeri olarak beslenecek."),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -817,11 +817,11 @@ private fun CompanyTrustPanel(
         ) {
             CompanyIconTitleRow(
                 icon = Icons.Outlined.Security,
-                title = "Firma Güveni"
+                title = BBLocalization.Current.Get(key = "1ee2c81d-9d32-4a97-9334-f55d68c40b6d", fallback = "Firma Güveni")
             )
 
             Text(
-                text = "Firma profili, ürünleri ve belgeleri üzerinden firmayı daha yakından değerlendirin.",
+                text = BBLocalization.Current.Get(key = "2dfe6d94-be7c-4a5a-bbaf-1835ca4cd20d", fallback = "Firma profili, ürünleri ve belgeleri üzerinden firmayı daha yakından değerlendirin."),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -968,12 +968,12 @@ private fun getCompanyDetail(companyId: Int): CompanyDetail {
     return CompanyDetail(
         companyId = companyId,
         name = "Bulbulustur İnternet Teknolojileri ve Tic. A.Ş.",
-        shortDescription = "Yazılım, dijital dönüşüm ve ticaret altyapıları alanında çözüm sağlayan firma.",
-        about = "Firma; üretim, tedarik, satış ve e-ticaret operasyonlarını dijital altyapılarla güçlendiren çözümler geliştirir. Mobil uygulamada bu alan ileride gerçek firma açıklaması, yetenekler ve ticari profil bilgileriyle beslenecek.",
-        whyUs = "Firma profili, ürünleri, belgeleri ve iletişim bilgileri tek ekranda sunularak alıcının daha hızlı karar vermesine yardımcı olur.",
+        shortDescription = BBLocalization.Current.Get(key = "306c7bf9-f386-4e9e-8ea9-055c4955f35b", fallback = "Yazılım, dijital dönüşüm ve ticaret altyapıları alanında çözüm sağlayan firma."),
+        about = BBLocalization.Current.Get(key = "620a5c66-4b17-440c-bf31-78538af1cac9", fallback = "Firma; üretim, tedarik, satış ve e-ticaret operasyonlarını dijital altyapılarla güçlendiren çözümler geliştirir. Mobil uygulamada bu alan ileride gerçek firma açıklaması, yetenekler ve ticari profil bilgileriyle beslenecek."),
+        whyUs = BBLocalization.Current.Get(key = "aab29855-9e86-4cd9-aed3-2d2c5974db80", fallback = "Firma profili, ürünleri, belgeleri ve iletişim bilgileri tek ekranda sunularak alıcının daha hızlı karar vermesine yardımcı olur."),
         country = BBLocalization.Current.Get(key = "5365b492-6a1c-4b46-b5c0-b50cbfdd17a8", fallback = "Türkiye"),
-        city = "İstanbul",
-        businessModel = "Perakendeci, Toptancı",
+        city = BBLocalization.Current.Get(key = "0f7353b3-7eb8-4195-970a-08a0d0bc7531", fallback = "İstanbul"),
+        businessModel = BBLocalization.Current.Get(key = "1f3c5f10-f9b3-4200-8609-b399df313c22", fallback = "Perakendeci, Toptancı"),
         productCount = 12,
         foundationYear = "2025",
         employeeCount = "1-5 kişi",
@@ -985,12 +985,12 @@ private fun getCompanyDetail(companyId: Int): CompanyDetail {
         galleryTags = listOf(
             "Ofis",
             "Showroom",
-            "Üretim",
+            BBLocalization.Current.Get(key = "258ef06f-3409-4ba9-bb78-4a2bd035f81c", fallback = "Üretim"),
             "Galeri"
         ),
         trustTags = listOf(
-            "Firma Bilgileri",
-            "Ürün Portföyü",
+            BBLocalization.Current.Get(key = "c32f13d0-5b2f-44e4-a6bf-9545244082fe", fallback = "Firma Bilgileri"),
+            BBLocalization.Current.Get(key = "cbf494a3-65f0-463f-9ca2-fe04f8bedabb", fallback = "Ürün Portföyü"),
             "Sertifika",
             BBLocalization.Current.Get(key = "74d3bcb0-a3c9-477f-82f1-c091809c5a00", fallback = "Mesaj")
         ),
@@ -1004,21 +1004,21 @@ private fun getCompanyProductGroups(): List<CompanyProductGroup> {
         CompanyProductGroup(
             productGroupId = 1,
             name = "Philips Antifreeze",
-            description = "Endüstriyel ürün grubu için dummy ürün Vitrini.",
+            description = BBLocalization.Current.Get(key = "edf39a52-67ae-4b13-87dd-005fa28d9e4e", fallback = "Endüstriyel ürün grubu için dummy ürün Vitrini."),
             productCount = 4,
             icon = Icons.Outlined.Inventory2
         ),
         CompanyProductGroup(
             productGroupId = 2,
-            name = "Tovolo Mikrodalga Ürünleri",
-            description = "Toptan ürün ailesi örnek gösterimi.",
+            name = BBLocalization.Current.Get(key = "409e144b-7865-4cda-b6da-40fbcd49027e", fallback = "Tovolo Mikrodalga Ürünleri"),
+            description = BBLocalization.Current.Get(key = "6f86f542-0123-4218-a80f-a04d077fa98e", fallback = "Toptan ürün ailesi örnek gösterimi."),
             productCount = 6,
             icon = Icons.Outlined.Storefront
         ),
         CompanyProductGroup(
             productGroupId = 3,
-            name = "Elektrolux Ekipman",
-            description = "Firma profilinde listelenecek ürün grubu.",
+            name = BBLocalization.Current.Get(key = "e8c4211d-2b79-4516-9dd0-c8e7f6d866b4", fallback = "Elektrolux Ekipman"),
+            description = BBLocalization.Current.Get(key = "21f92401-f4a0-4a16-902a-e6966d43046d", fallback = "Firma profilinde listelenecek ürün grubu."),
             productCount = 2,
             icon = Icons.Outlined.Factory
         )
@@ -1035,12 +1035,12 @@ private fun getCompanyCertificates(): List<CompanyCertificate> {
         CompanyCertificate(
             certificateId = 2,
             name = "ISO 14001",
-            description = "Çevre yönetim sistemi sertifikası."
+            description = BBLocalization.Current.Get(key = "542c446a-d68d-4989-aaae-3c205b89859e", fallback = "Çevre yönetim sistemi sertifikası.")
         ),
         CompanyCertificate(
             certificateId = 3,
             name = "ISO 45001",
-            description = "İş sağlığı ve güvenliği yönetim sistemi sertifikası."
+            description = BBLocalization.Current.Get(key = "2af7ee96-f0e4-498f-89c7-5723388d3130", fallback = "İş sağlığı ve güvenliği yönetim sistemi sertifikası.")
         )
     )
 }

@@ -187,11 +187,18 @@ fun ProductDetailScreen(
                     selectedVariant =
                         selectedVariant
                 )
-                ?: getRetailProductDetail(
-                    productId =
-                        productId
-                )
+
         }
+    if (product == null) {
+        RetailProductDetailEmptyState(
+            onBackClick =
+                onBackClick
+        )
+
+        return
+    }
+
+
 
     var searchText by remember {
         mutableStateOf("")
@@ -275,7 +282,7 @@ fun ProductDetailScreen(
             ?: product.colorVariants.firstOrNull()
             ?: RetailProductColorVariant(
                 id = "default",
-                name = "Standart",
+                name = BBLocalization.Current.Get(key = "081fb0ca-4f68-4277-9ca0-028d1e9d147f", fallback = "Standart"),
                 swatchColor = BBColors.Gray.Gray400,
                 images = emptyList()
             )
@@ -292,7 +299,7 @@ fun ProductDetailScreen(
                 id =
                     "default",
                 label =
-                    "Standart",
+                    BBLocalization.Current.Get(key = "081fb0ca-4f68-4277-9ca0-028d1e9d147f", fallback = "Standart"),
                 state =
                     if (
                         product.isInStock
@@ -809,6 +816,105 @@ fun ProductDetailScreen(
 }
 
 @Composable
+private fun RetailProductDetailEmptyState(
+    onBackClick: () -> Unit
+) {
+    Scaffold(
+        containerColor =
+            MaterialTheme.colorScheme.surfaceVariant,
+        topBar = {
+            RetailSearchHeader(
+                searchText =
+                    "",
+                onSearchTextChange = {},
+                onMenuClick =
+                    onBackClick,
+                onFavoriteClick = {},
+                onMessageClick = {},
+                placeholder =
+                    BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = "Ürün bilgisi bulunamadı"),
+                onSearchClick = {},
+                onClearClick = {},
+                leadingAction =
+                    RetailSearchHeaderLeadingAction.Back,
+                onBackClick =
+                    onBackClick
+            )
+        }
+    ) { innerPadding ->
+        Box(
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(
+                        MaterialTheme.colorScheme.surfaceVariant
+                    )
+                    .padding(
+                        innerPadding
+                    )
+                    .padding(
+                        BBSpacing.PageHorizontal
+                    ),
+            contentAlignment =
+                Alignment.Center
+        ) {
+            BbCard(
+                modifier =
+                    Modifier.fillMaxWidth(),
+                variant =
+                    BbCardVariant.Outlined,
+                padding =
+                    BbCardPadding.Large
+            ) {
+                Column(
+                    modifier =
+                        Modifier.fillMaxWidth(),
+                    horizontalAlignment =
+                        Alignment.CenterHorizontally,
+                    verticalArrangement =
+                        Arrangement.spacedBy(
+                            BBSpacing.Space3
+                        )
+                ) {
+                    Icon(
+                        imageVector =
+                            Icons.Outlined.WarningAmber,
+                        contentDescription =
+                            null,
+                        tint =
+                            MaterialTheme.colorScheme.error,
+                        modifier =
+                            Modifier.size(
+                                BBIcon.SizeLg
+                            )
+                    )
+
+                    Text(
+                        text =
+                            BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = "Ürün bilgisi bulunamadı"),
+                        style =
+                            MaterialTheme.typography.titleMedium,
+                        color =
+                            MaterialTheme.colorScheme.onSurface,
+                        fontWeight =
+                            FontWeight.Bold
+                    )
+
+                    Text(
+                        text =
+                            "Bu ürün için gösterilecek kayıt bulunamadı.",
+                        style =
+                            MaterialTheme.typography.bodySmall,
+                        color =
+                            MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
 private fun RetailProductDetailGallery(
     product: RetailProductDetail,
     images: List<RetailProductImage>,
@@ -1164,7 +1270,7 @@ private fun RetailProductDetailVariantCard(
                     )
 
                     Text(
-                        text = "Sepete Eklenecek ürün adedi",
+                        text = BBLocalization.Current.Get(key = "76eb0d00-cf28-4ecf-9d0d-1ef53108ff6c", fallback = "Sepete Eklenecek ürün adedi"),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -1794,7 +1900,7 @@ private fun RetailSellerProductsCarousel(
     ) {
         RetailSectionTitle(
             title = BBLocalization.Current.Get(key = "ad7af87b-c03a-46ef-b824-d0a5bbcf4b5c", fallback = "Satıcının Diğer Ürünleri"),
-            actionText = "Mağazaya Git",
+            actionText = BBLocalization.Current.Get(key = "42b4b6c0-6b31-4841-aa23-e5eb4e3f9acc", fallback = "Mağazaya Git"),
             onActionClick = onStoreClick
         )
 
@@ -1914,14 +2020,14 @@ private fun RetailSellerMoreProductsCard(
             )
 
             Text(
-                text = "Diğer Ürünler",
+                text = BBLocalization.Current.Get(key = "b887b6db-09d5-4af0-bd67-4df72e047ba1", fallback = "Diğer Ürünler"),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
-                text = "Mağazaya Git",
+                text = BBLocalization.Current.Get(key = "42b4b6c0-6b31-4841-aa23-e5eb4e3f9acc", fallback = "Mağazaya Git"),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -1943,7 +2049,7 @@ private fun RetailReviewCarousel(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
     ) {
         RetailSectionTitle(
-            title = "Ürün Değerlendirmeleri",
+            title = BBLocalization.Current.Get(key = "47459db5-2c10-463e-9c78-aba51e39f219", fallback = "Ürün Değerlendirmeleri"),
             actionText = BBLocalization.Current.Get(key = "6bfa7925-24fa-4094-b338-c698d6ad5a5a", fallback = "Tüm Yorumlar"),
             onActionClick = onReviewClick
         )
@@ -2197,7 +2303,7 @@ private fun RetailProductDetailQuickActions(
             subtitle = if (otherSellerCount > 0) {
                 "$otherSellerCount Satıcı daha bu ürünü sunuyor"
             } else {
-                "Diğer satıcı seçeneklerini görüntüle"
+                BBLocalization.Current.Get(key = "15c2fd72-3c90-4d21-8dd3-ccdc1d3128f7", fallback = "Diğer satıcı seçeneklerini görüntüle")
             },
             onClick = onOtherSellerClick
         )
@@ -2207,7 +2313,7 @@ private fun RetailProductDetailQuickActions(
             subtitle = if (product.questionCount > 0) {
                 "${product.questionCount} Ürün sorusu"
             } else {
-                "Ürün sorularını ve cevaplarını görüntüle"
+                BBLocalization.Current.Get(key = "b34c3b24-a6b5-4af8-ab9a-b0fcf87a0df6", fallback = "Ürün sorularını ve cevaplarını görüntüle")
             },
             onClick = onQuestionClick
         )
@@ -2416,7 +2522,7 @@ private fun RetailProductDetailBottomBar(
                     )
 
                     RetailProductBottomActionButton(
-                        text = "Hemen Al",
+                        text = BBLocalization.Current.Get(key = "77a8dece-4640-4341-8233-6f0a878c7da7", fallback = "Hemen Al"),
                         onClick = onBuyNowClick,
                         modifier = Modifier.weight(1f),
                         containerColor = MaterialTheme.colorScheme.primary,
@@ -2642,13 +2748,13 @@ private fun RetailSizeGuideSheet(
 ) {
     RetailSheetContainer(
         title = BBLocalization.Current.Get(key = "6325a788-9f55-423d-8366-2b15a8b575e7", fallback = "Ölçü Rehberi"),
-        subtitle = "Doğru beden seçimi için kısa rehber",
+        subtitle = BBLocalization.Current.Get(key = "245ef3d3-a68a-4ea2-9d24-3135de74df9e", fallback = "Doğru beden seçimi için kısa rehber"),
         icon = Icons.Outlined.Straighten,
         onCloseClick = onCloseClick
     ) {
         RetailSheetInfoBox(
             title = BBLocalization.Current.Get(key = "b6e9d036-e602-4893-9dd4-63474c7b4bd7", fallback = "Pratik Öneri"),
-            description = "Ölçüm yaparken ürünü kullanacağınız koşulları dikkate alın. Ayakkabı için çorap kalınlığı, kıyafet için kullanım rahatlığı önemlidir."
+            description = BBLocalization.Current.Get(key = "557b508e-01bd-4f84-922f-46a89460aa03", fallback = "Ölçüm yaparken ürünü kullanacağınız koşulları dikkate alın. Ayakkabı için çorap kalınlığı, kıyafet için kullanım rahatlığı önemlidir.")
         )
 
         RetailSizeGuideTable()
@@ -2658,7 +2764,7 @@ private fun RetailSizeGuideSheet(
         )
 
         RetailSheetPrimaryButton(
-            text = "Anladım",
+            text = BBLocalization.Current.Get(key = "f1b065f5-16f7-4179-870a-ed49b1670d16", fallback = "Anladım"),
             onClick = onCloseClick
         )
     }
@@ -2701,11 +2807,11 @@ private fun RetailReturnPolicySheet(
         )
 
         RetailSheetMutedBox(
-            text = "Ürünü iade etmeden önce kullanılmamış ve mümkünse orijinal ambalajında olmasına dikkat edin."
+            text = BBLocalization.Current.Get(key = "1625c007-9af9-4727-9195-f22c0f22b212", fallback = "Ürünü iade etmeden önce kullanılmamış ve mümkünse orijinal ambalajında olmasına dikkat edin.")
         )
 
         RetailSheetPrimaryButton(
-            text = "Mağazaya Git",
+            text = BBLocalization.Current.Get(key = "42b4b6c0-6b31-4841-aa23-e5eb4e3f9acc", fallback = "Mağazaya Git"),
             onClick = onStoreClick
         )
     }
@@ -2731,7 +2837,7 @@ private fun RetailLowerPriceSheet(
 
     RetailSheetContainer(
         title = BBLocalization.Current.Get(key = "eec1b9fa-9533-4761-873d-da4159c457d1", fallback = "Daha Düşük Fiyat mı Gördünüz?"),
-        subtitle = "Fiyat geri bildirimi",
+        subtitle = BBLocalization.Current.Get(key = "ed663909-38e5-448e-8741-d07becc06c57", fallback = "Fiyat geri bildirimi"),
         icon = Icons.Outlined.WarningAmber,
         onCloseClick = onCloseClick
     ) {
@@ -2740,14 +2846,14 @@ private fun RetailLowerPriceSheet(
         )
 
         Text(
-            text = "Fiyat Bilgilerini Gönder",
+            text = BBLocalization.Current.Get(key = "252cc6b4-aa39-4318-b02e-6fb7d74c101a", fallback = "Fiyat Bilgilerini Gönder"),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold
         )
 
         Text(
-            text = "Aynı ürünü başka bir platformda daha uygun fiyata gördüyseniz bize bildirin. Bilgiler kontrol edilerek değerlendirilecektir.",
+            text = BBLocalization.Current.Get(key = "a296fab3-f313-49a9-81f0-48cbbdcf7141", fallback = "Aynı ürünü başka bir platformda daha uygun fiyata gördüyseniz bize bildirin. Bilgiler kontrol edilerek değerlendirilecektir."),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -2757,7 +2863,7 @@ private fun RetailLowerPriceSheet(
             onValueChange = {
                 competitorName = it
             },
-            label = "Rakip Firma Adı",
+            label = BBLocalization.Current.Get(key = "d5110751-52b2-4175-a3b6-10210007a01c", fallback = "Rakip Firma Adı"),
             placeholder = "Örn: Amazon, Trendyol, Hepsiburada"
         )
 
@@ -2766,7 +2872,7 @@ private fun RetailLowerPriceSheet(
             onValueChange = {
                 competitorLink = it
             },
-            label = "Rakip Linki",
+            label = BBLocalization.Current.Get(key = "3f05e595-e48a-4a5e-813c-b06b49090703", fallback = "Rakip Linki"),
             placeholder = "https://..."
         )
 
@@ -2775,13 +2881,13 @@ private fun RetailLowerPriceSheet(
             onValueChange = {
                 competitorPrice = it
             },
-            label = "Rakip Fiyatı",
+            label = BBLocalization.Current.Get(key = "85297dd7-e426-4cf4-898f-982773fb31f1", fallback = "Rakip Fiyatı"),
             placeholder = "0,00",
             keyboardType = KeyboardType.Decimal
         )
 
         RetailSheetMutedBox(
-            text = "Lütfen yalnızca herkesin erişebileceği ürün linklerini paylaşın. Sepet, kişisel hesap veya ödeme ekranı bağlantıları göndermeyin."
+            text = BBLocalization.Current.Get(key = "1d47acd1-1d52-499c-9e40-bbd77682b116", fallback = "Lütfen yalnızca herkesin erişebileceği ürün linklerini paylaşın. Sepet, kişisel hesap veya ödeme ekranı bağlantıları göndermeyin.")
         )
 
         RetailSheetPrimaryButton(
@@ -2799,9 +2905,9 @@ private fun RetailReportAbuseSheet(
 ) {
     val reasons = listOf(
         "Yanıltıcı Bilgi",
-        "Uygunsuz Görsel",
-        "Sahte Ürün",
-        "Yasaklı İçerik"
+        BBLocalization.Current.Get(key = "3cd8ed64-d8e2-46e6-b572-97fda8fb3bb5", fallback = "Uygunsuz Görsel"),
+        BBLocalization.Current.Get(key = "6a271439-2338-4b4a-87e5-f549f1abc970", fallback = "Sahte Ürün"),
+        BBLocalization.Current.Get(key = "d0ab628a-523b-461e-bee4-06b533138078", fallback = "Yasaklı İçerik")
     )
 
     var selectedReason by remember {
@@ -2823,7 +2929,7 @@ private fun RetailReportAbuseSheet(
         )
 
         Text(
-            text = "Şikayet Nedeni",
+            text = BBLocalization.Current.Get(key = "b74c7e5e-f3e9-44b6-9f7c-aa8d7766ca2a", fallback = "Şikayet Nedeni"),
             style = MaterialTheme.typography.labelLarge,
             color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold
@@ -2851,13 +2957,13 @@ private fun RetailReportAbuseSheet(
             onValueChange = {
                 detailText = it
             },
-            label = "Detay",
-            placeholder = "Bildirmek istediğiniz durumu kısaca yazın.",
+            label = BBLocalization.Current.Get(key = "3feff293-3c00-44ae-a23f-0a2c613ee66f", fallback = "Detay"),
+            placeholder = BBLocalization.Current.Get(key = "7f2df4d2-737b-4b43-8d0a-7c82562df920", fallback = "Bildirmek istediğiniz durumu kısaca yazın."),
             minLines = 4
         )
 
         RetailSheetMutedBox(
-            text = "Kişisel bilgi, ödeme bilgisi veya üçüncü kişilere ait özel bilgi paylaşmayın."
+            text = BBLocalization.Current.Get(key = "82e06416-ba89-4bc8-8666-5e8ceb87197f", fallback = "Kişisel bilgi, ödeme bilgisi veya üçüncü kişilere ait özel bilgi paylaşmayın.")
         )
 
         RetailSheetPrimaryButton(
@@ -3023,29 +3129,29 @@ private fun RetailSizeGuideTable() {
             modifier = Modifier.fillMaxWidth()
         ) {
             RetailSizeGuideTableRow(
-                first = "Beden",
-                second = "Önerilen Ölçü",
+                first = BBLocalization.Current.Get(key = "f567eaeb-18cf-4fa6-a06e-b6b9bf33f1fc", fallback = "Beden"),
+                second = BBLocalization.Current.Get(key = "7cd42f9b-5809-40ee-a289-0144ded02a73", fallback = "Önerilen Ölçü"),
                 third = "Not",
                 strong = true,
                 backgroundColor = MaterialTheme.colorScheme.surfaceVariant
             )
 
             RetailSizeGuideTableRow(
-                first = "Standart",
-                second = "Ürün Açıklamasını Kontrol Edin",
-                third = "Marka ve Modele Göre Değişebilir"
+                first = BBLocalization.Current.Get(key = "081fb0ca-4f68-4277-9ca0-028d1e9d147f", fallback = "Standart"),
+                second = BBLocalization.Current.Get(key = "515fa5ff-25f2-4740-affa-073cb30a18bb", fallback = "Ürün Açıklamasını Kontrol Edin"),
+                third = BBLocalization.Current.Get(key = "439ff072-6103-4ace-b5e4-da8cffb397e6", fallback = "Marka ve Modele Göre Değişebilir")
             )
 
             RetailSizeGuideTableRow(
-                first = "Dar Kalıp",
-                second = "Bir Beden Büyük Tercih Edilebilir",
-                third = "Satıcı Notlarını Kontrol Edin"
+                first = BBLocalization.Current.Get(key = "f04bfd1f-f8f8-4397-a85c-ad516cdc0d0a", fallback = "Dar Kalıp"),
+                second = BBLocalization.Current.Get(key = "3e813e19-b4fb-4cfe-ad1a-565c4290d58f", fallback = "Bir Beden Büyük Tercih Edilebilir"),
+                third = BBLocalization.Current.Get(key = "20286d87-8b1e-46f9-b7ff-fb6a5572172a", fallback = "Satıcı Notlarını Kontrol Edin")
             )
 
             RetailSizeGuideTableRow(
-                first = "Geniş Kalıp",
-                second = "Normal Beden Tercih Edilebilir",
-                third = "Müşteri Sorularını İnceleyin"
+                first = BBLocalization.Current.Get(key = "e6c79bd3-fadf-42a0-bc60-50d190d51984", fallback = "Geniş Kalıp"),
+                second = BBLocalization.Current.Get(key = "b3d067a6-6ac7-4053-b7d9-1bd08bbb338e", fallback = "Normal Beden Tercih Edilebilir"),
+                third = BBLocalization.Current.Get(key = "f734ad2b-1270-4f05-b3fa-280c947d6df8", fallback = "Müşteri Sorularını İnceleyin")
             )
         }
     }
@@ -3399,7 +3505,7 @@ data class RetailRelatedCategoryChip(
 private fun ResolveRetailProductImageUrl(
     imagePath: String
 ): String {
-    return ApiRoutes.B2C_TEST_PRODUCT_IMAGE_URL
+    return imagePath.trim()
 }
 
 private fun ProductDTO.ToRetailProductDetail(
@@ -3410,12 +3516,6 @@ private fun ProductDTO.ToRetailProductDetail(
     smallestPrice: ProductVariantDTO?,
     selectedVariant: ProductVariantDTO?
 ): RetailProductDetail {
-    val fallbackProduct =
-        getRetailProductDetail(
-            productId =
-                ProductId
-        )
-
     val activeVariant =
         selectedVariant
             ?: ProductVariantDTO(
@@ -3574,7 +3674,7 @@ private fun ProductDTO.ToRetailProductDetail(
                             .takeIf {
                                 it.isNotBlank()
                             }
-                            ?: "Standart",
+                            ?: BBLocalization.Current.Get(key = "081fb0ca-4f68-4277-9ca0-028d1e9d147f", fallback = "Standart"),
                     swatchColor =
                         BBColors.Gray.Gray400,
                     images =
@@ -3635,7 +3735,7 @@ private fun ProductDTO.ToRetailProductDetail(
                             .takeIf {
                                 it.isNotBlank()
                             }
-                            ?: "Standart",
+                            ?: BBLocalization.Current.Get(key = "081fb0ca-4f68-4277-9ca0-028d1e9d147f", fallback = "Standart"),
                     state =
                         when {
                             sizeVariant.VariantId ==
@@ -3697,7 +3797,7 @@ private fun ProductDTO.ToRetailProductDetail(
             ?: Color.orEmpty().takeIf {
                 it.isNotBlank()
             }
-            ?: "Standart"
+            ?: BBLocalization.Current.Get(key = "081fb0ca-4f68-4277-9ca0-028d1e9d147f", fallback = "Standart")
 
     val resolvedColorId =
         activeVariantId
@@ -3720,7 +3820,7 @@ private fun ProductDTO.ToRetailProductDetail(
             ?: Size.takeIf {
                 it.isNotBlank()
             }
-            ?: "Standart"
+            ?: BBLocalization.Current.Get(key = "081fb0ca-4f68-4277-9ca0-028d1e9d147f", fallback = "Standart")
 
     val resolvedSizeId =
         activeVariantId
@@ -3741,7 +3841,7 @@ private fun ProductDTO.ToRetailProductDetail(
             ?.takeIf {
                 it.isNotBlank()
             }
-            ?: fallbackProduct.brandName
+            ?: ""
 
     val resolvedStoreName =
         Store.takeIf {
@@ -3791,12 +3891,12 @@ private fun ProductDTO.ToRetailProductDetail(
     val resolvedDescription =
         Description.takeIf {
             it.isNotBlank()
-        } ?: "Bu ürün için açıklama bilgisi bulunmamaktadır."
+        } ?: BBLocalization.Current.Get(key = "906bc9cf-2d29-48a9-8f76-23e1dfd441cb", fallback = "Bu ürün için açıklama bilgisi bulunmamaktadır.")
 
     val resolvedCategoryName =
         CategoryName.takeIf {
             it.isNotBlank()
-        } ?: fallbackProduct.categoryName
+        } ?: ""
 
     val resolvedPicture =
         DefaultPicture
@@ -3849,7 +3949,7 @@ private fun ProductDTO.ToRetailProductDetail(
         brandName =
             resolvedBrandName,
         searchPlaceholder =
-            "Ürün, kategori veya marka ara",
+            BBLocalization.Current.Get(key = "e4f653c3-8828-4934-aa3b-959cede38feb", fallback = "Ürün, kategori veya marka ara"),
         shortDescription =
             resolvedDescription,
         description =
@@ -4005,193 +4105,6 @@ private fun FormatRetailProductPrice(
             )
         )
     }
-}
-
-private fun getRetailProductDetail(
-    productId: Int
-): RetailProductDetail {
-    val sellerProducts = (1..12).map { index ->
-        RetailSellerProductItem(
-            id = index,
-            name = "Ortobella Günlük Sneaker Modeli $index",
-            priceText = "₺${799 + index * 20},90",
-            imageLabel = "P$index"
-        )
-    }
-
-    return RetailProductDetail(
-        id = productId,
-        name = "Kadın Klasik Sneaker Ayakkabı",
-        brandName = "Ortobella",
-        searchPlaceholder = "Ürün, kategori veya marka ara",
-        shortDescription = "Günlük kullanım için rahat tabanlı, sade ve modern sneaker modeli.",
-        description = "Hafif tabanı, yumuşak iç yüzeyi ve günlük kombinlere uyum sağlayan sade tasarımıyla şehir içi kullanım için hazırlanmıştır. Ürün kalıbı standarttır. Taraklı ayaklarda yarım numara büyük tercih edilebilir.",
-        categoryName = "Ayakkabı",
-        priceText = "₺899,90",
-        oldPriceText = "₺1.099,90",
-        discountText = "%20 İndirim",
-        badgeText = "%20",
-        ratingText = "★ 4.8",
-        cargoText = "Hızlı Kargo",
-        stockText = BBLocalization.Current.Get(key = "ec4ad593-1712-4c53-9046-77e3a09f0d1a", fallback = "Stokta Var"),
-        isInStock = true,
-        reviewCount = 126,
-        questionCount = 18,
-        otherSellerCount = 5,
-        colorVariants = listOf(
-            RetailProductColorVariant(
-                id = "white",
-                name = "Beyaz",
-                swatchColor = BBColors.White,
-                images = listOf(
-                    RetailProductImage(
-                        label = "Beyaz 1",
-                        backgroundColor = BBColors.White,
-                        foregroundColor = BBColors.Gray.Gray500
-                    ),
-                    RetailProductImage(
-                        label = "Beyaz 2",
-                        backgroundColor = BBColors.White,
-                        foregroundColor = BBColors.Gray.Gray500
-                    ),
-                    RetailProductImage(
-                        label = "Beyaz 3",
-                        backgroundColor = BBColors.White,
-                        foregroundColor = BBColors.Gray.Gray500
-                    )
-                )
-            ),
-            RetailProductColorVariant(
-                id = "black",
-                name = "Siyah",
-                swatchColor = BBColors.Black,
-                images = listOf(
-                    RetailProductImage(
-                        label = "Siyah 1",
-                        backgroundColor = BBColors.Coal.Coal100,
-                        foregroundColor = BBColors.Gray.Gray300
-                    ),
-                    RetailProductImage(
-                        label = "Siyah 2",
-                        backgroundColor = BBColors.Coal.Coal200,
-                        foregroundColor = BBColors.Gray.Gray200
-                    )
-                )
-            ),
-            RetailProductColorVariant(
-                id = "beige",
-                name = "Bej",
-                swatchColor = BBColors.Beige.Beige400,
-                images = listOf(
-                    RetailProductImage(
-                        label = "Bej 1",
-                        backgroundColor = BBColors.Beige.Beige100,
-                        foregroundColor = BBColors.Beige.Beige700
-                    ),
-                    RetailProductImage(
-                        label = "Bej 2",
-                        backgroundColor = BBColors.Beige.Beige200,
-                        foregroundColor = BBColors.Beige.Beige800
-                    )
-                )
-            ),
-            RetailProductColorVariant(
-                id = "gray",
-                name = "Gri",
-                swatchColor = BBColors.Gray.Gray400,
-                images = listOf(
-                    RetailProductImage(
-                        label = "Gri 1",
-                        backgroundColor = BBColors.Gray.Gray100,
-                        foregroundColor = BBColors.Gray.Gray600
-                    ),
-                    RetailProductImage(
-                        label = "Gri 2",
-                        backgroundColor = BBColors.Gray.Gray200,
-                        foregroundColor = BBColors.Gray.Gray700
-                    )
-                )
-            )
-        ),
-        sizeOptions = listOf(
-            RetailProductSizeOption(
-                id = "36",
-                label = "36",
-                state = RetailProductSizeState.Selected
-            ),
-            RetailProductSizeOption(
-                id = "37",
-                label = "37",
-                state = RetailProductSizeState.Disabled
-            ),
-            RetailProductSizeOption(
-                id = "38",
-                label = "38",
-                state = RetailProductSizeState.OutOfStock
-            ),
-            RetailProductSizeOption(
-                id = "39",
-                label = "39",
-                state = RetailProductSizeState.Limited
-            ),
-            RetailProductSizeOption(
-                id = "40",
-                label = "40",
-                state = RetailProductSizeState.Available
-            )
-        ),
-        sellerProducts = sellerProducts,
-        reviews = listOf(
-            RetailReviewItem(
-                id = 1,
-                customerName = "Ayşe K.",
-                avatarText = "AK",
-                rating = 5,
-                dateText = "2 gün önce",
-                comment = "Kalıbı rahat, günlük kullanım için gayet başarılı. Rengi fotoğraftaki gibi geldi."
-            ),
-            RetailReviewItem(
-                id = 2,
-                customerName = "Merve D.",
-                avatarText = "MD",
-                rating = 5,
-                dateText = "1 hafta önce",
-                comment = "Tabanı yumuşak ve hafif. Paketleme de iyiydi."
-            ),
-            RetailReviewItem(
-                id = 3,
-                customerName = "Selin A.",
-                avatarText = "SA",
-                rating = 4,
-                dateText = "12 gün önce",
-                comment = "Model güzel. Taraklı ayaklar için yarım numara büyük alınabilir."
-            ),
-            RetailReviewItem(
-                id = 4,
-                customerName = "Buse T.",
-                avatarText = "BT",
-                rating = 5,
-                dateText = "3 hafta önce",
-                comment = "Fiyatına göre kaliteli duruyor, hızlı kargolandı."
-            ),
-            RetailReviewItem(
-                id = 5,
-                customerName = "Elif Y.",
-                avatarText = "EY",
-                rating = 4,
-                dateText = "1 ay önce",
-                comment = "Rahat ve şık. Günlük kombinlerde iyi duruyor."
-            )
-        ),
-        store = RetailProductDetailStore(
-            id = 1,
-            name = "Ortobella Store",
-            logoText = "OS",
-            ratingText = "4.8",
-            productCount = 248,
-            isVerified = true
-        )
-    )
 }
 
 @Preview(showBackground = true)

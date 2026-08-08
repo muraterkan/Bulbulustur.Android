@@ -1,12 +1,11 @@
 package com.bulbulustur.android.Application.Localization
 
 import com.bulbulustur.android.businesslayer.Core.DTO.ResourceDTO
-import com.bulbulustur.android.businesslayer.Core.Enums.EApplicationLanguage
 import com.bulbulustur.android.businesslayer.Core.Interface.ILocalizationRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
@@ -14,52 +13,46 @@ class LocalizationManager(
     private val localizationRepository: ILocalizationRepository,
     private val coroutineScope: CoroutineScope
 ) {
+    private val _State = MutableStateFlow(LocalizationState())
+    val State: StateFlow<LocalizationState> = _State.asStateFlow()
 
-    private val _State = MutableStateFlow(
-        LocalizationState()
-    )
-
-    val State: StateFlow<LocalizationState> =
-        _State.asStateFlow()
-
-    private val MemoryCache:
-            MutableMap<EApplicationLanguage, LocalizationCacheEntry> =
-        mutableMapOf()
-
+    private val MemoryCache = mutableMapOf<Int, LocalizationCacheEntry>()
     private var LoadJob: Job? = null
 
-    fun Load(
-        language: EApplicationLanguage,
-        forceRefresh: Boolean = false
-    ) {
+    fun Load(languageId: Int, languageCode: String, forceRefresh: Boolean = false) {
+        if (languageId <= 0) return
+
+        val normalizedLanguageCode = languageCode.trim()
+
         if (!forceRefresh) {
-            val cachedEntry = MemoryCache[language]
+            val cachedEntry = MemoryCache[languageId]
 
             if (cachedEntry != null && !cachedEntry.IsExpired()) {
                 _State.value = LocalizationState(
                     IsInitialized = true,
                     IsLoading = false,
-                    Language = language,
+                    LanguageId = languageId,
+                    LanguageCode = normalizedLanguageCode,
                     Resources = cachedEntry.Resources,
                     ErrorMessage = null
                 )
-
                 return
             }
         }
 
         LoadJob?.cancel()
-
         LoadJob = coroutineScope.launch {
             LoadFromRepository(
-                language = language
+                languageId = languageId,
+                languageCode = normalizedLanguageCode
             )
         }
     }
 
     fun Refresh() {
         Load(
-            language = _State.value.Language,
+            languageId = _State.value.LanguageId,
+            languageCode = _State.value.LanguageCode,
             forceRefresh = true
         )
     }
@@ -68,37 +61,32 @@ class LocalizationManager(
         MemoryCache.clear()
     }
 
-    private suspend fun LoadFromRepository(
-        language: EApplicationLanguage
-    ) {
-        val previousState = _State.value
-
-        _State.value = previousState.copy(
+    private suspend fun LoadFromRepository(languageId: Int, languageCode: String) {
+        _State.value = _State.value.copy(
             IsLoading = true,
-            Language = language,
+            LanguageId = languageId,
+            LanguageCode = languageCode,
             ErrorMessage = null
         )
 
         try {
             val result = localizationRepository.GetResourcesAsync(
-                language = language,
+                languageId = languageId,
                 count = ResourceCount
             )
 
             if (!result.Success) {
                 ApplyFailure(
-                    language = language,
+                    languageId = languageId,
+                    languageCode = languageCode,
                     errorMessage = result.Message
                 )
-
                 return
             }
 
-            val resources = result.Data
-                .orEmpty()
-                .ToResourceMap()
+            val resources = result.Data.orEmpty().ToResourceMap()
 
-            MemoryCache[language] = LocalizationCacheEntry(
+            MemoryCache[languageId] = LocalizationCacheEntry(
                 Resources = resources,
                 LoadedAtMillis = System.currentTimeMillis()
             )
@@ -106,64 +94,48 @@ class LocalizationManager(
             _State.value = LocalizationState(
                 IsInitialized = true,
                 IsLoading = false,
-                Language = language,
+                LanguageId = languageId,
+                LanguageCode = languageCode,
                 Resources = resources,
                 ErrorMessage = null
             )
         } catch (exception: Exception) {
             ApplyFailure(
-                language = language,
-                errorMessage = exception.message
-                    ?: "Localization kaynakları yüklenemedi."
+                languageId = languageId,
+                languageCode = languageCode,
+                errorMessage = exception.message ?: "Localization kaynakları yüklenemedi."
             )
         }
     }
 
-    private fun ApplyFailure(
-        language: EApplicationLanguage,
-        errorMessage: String
-    ) {
-        val cachedResources = MemoryCache[language]
-            ?.Resources
-            .orEmpty()
-
+    private fun ApplyFailure(languageId: Int, languageCode: String, errorMessage: String) {
         _State.value = LocalizationState(
             IsInitialized = true,
             IsLoading = false,
-            Language = language,
-            Resources = cachedResources,
+            LanguageId = languageId,
+            LanguageCode = languageCode,
+            Resources = MemoryCache[languageId]?.Resources.orEmpty(),
             ErrorMessage = errorMessage
         )
     }
 
     private fun List<ResourceDTO>.ToResourceMap(): Map<String, String> {
         return asSequence()
-            .filter { resource ->
-                resource.Key.isNotBlank()
-            }
-            .associate { resource ->
-                resource.Key.trim() to resource.Value
-            }
+            .filter { it.Key.isNotBlank() }
+            .associate { it.Key.trim() to it.Value }
     }
 
     private data class LocalizationCacheEntry(
         val Resources: Map<String, String>,
         val LoadedAtMillis: Long
     ) {
-
         fun IsExpired(): Boolean {
-            val ageMillis =
-                System.currentTimeMillis() - LoadedAtMillis
-
-            return ageMillis >= CacheDurationMillis
+            return System.currentTimeMillis() - LoadedAtMillis >= CacheDurationMillis
         }
     }
 
     private companion object {
-
         const val ResourceCount = 10000
-
-        const val CacheDurationMillis =
-            24L * 60L * 60L * 1000L
+        const val CacheDurationMillis = 24L * 60L * 60L * 1000L
     }
 }

@@ -152,7 +152,7 @@ class ProfileController(
         val bio = model.Bio?.trim()
 
         if (!bio.isNullOrEmpty() && bio.length > 500) {
-            SetError("Hakkımda bilgisi en fazla 500 karakter olabilir.")
+            SetError(BBLocalization.Current.Get(key = "6290c815-7e70-4a94-aa47-8d9234876ce4", fallback = "Hakkımda bilgisi en fazla 500 karakter olabilir."))
             return
         }
 
@@ -197,7 +197,7 @@ class ProfileController(
         val jobTitle = model.JobTitle?.trim()
 
         if (!jobTitle.isNullOrEmpty() && jobTitle.length > 100) {
-            SetError("İş unvanı en fazla 100 karakter olabilir.")
+            SetError(BBLocalization.Current.Get(key = "355a8d25-3f5a-4c50-a564-80ddefc707ff", fallback = "İş unvanı en fazla 100 karakter olabilir."))
             return
         }
 
@@ -301,7 +301,7 @@ class ProfileController(
     fun UpdateGender(languageId: Int, model: MemberUpdateGenderModel, onSuccess: (() -> Unit)? = null) {
         if (!ValidateLanguage(languageId)) return
         if (!ValidateMember(model.MemberId)) return
-        if (!ValidateId(model.GenderId, "Cinsiyet bilgisi seçiniz.")) return
+        if (!ValidateId(model.GenderId, BBLocalization.Current.Get(key = "198a5c27-c172-409d-8f73-8f89d2cd1194", fallback = "Cinsiyet bilgisi seçiniz."))) return
 
         viewModelScope.launch {
             SetLoading("UpdateGender")
@@ -326,7 +326,7 @@ class ProfileController(
         if (!ValidateMember(model.MemberId)) return
 
         if (model.BirthDate.isNullOrBlank()) {
-            SetError("Doğum tarihi bilgisi zorunludur.")
+            SetError(BBLocalization.Current.Get(key = "d865cc14-3bb8-4773-b341-78af83d6694d", fallback = "Doğum tarihi bilgisi zorunludur."))
             return
         }
 
@@ -351,7 +351,7 @@ class ProfileController(
     fun UpdateAddress(languageId: Int, model: MemberUpdateAddressModel, onSuccess: (() -> Unit)? = null) {
         if (!ValidateLanguage(languageId)) return
         if (!ValidateMember(model.MemberId)) return
-        if (!ValidateId(model.CountryId, "Ülke bilgisi seçiniz.")) return
+        if (!ValidateId(model.CountryId, BBLocalization.Current.Get(key = "66f14d6a-0805-44ba-bfce-b6e24b158df9", fallback = "Ülke bilgisi seçiniz."))) return
         if (!ValidateId(model.CityId, "Şehir bilgisi seçiniz.")) return
 
         viewModelScope.launch {
@@ -381,7 +381,7 @@ class ProfileController(
         if (!ValidateMember(model.MemberId)) return
 
         if (model.Profession.isBlank()) {
-            SetError("Meslek bilgisi zorunludur.")
+            SetError(BBLocalization.Current.Get(key = "74e8572d-ad05-44e8-8648-d0174c85a3e6", fallback = "Meslek bilgisi zorunludur."))
             return
         }
 
@@ -490,7 +490,7 @@ systemDescLanguageLevelRepository.GetSystemDescLanguageLevelsAsync(
     ) {
         if (!ValidateMember(memberId)) return
         if (!ValidateId(languageId, BBLocalization.Current.Get(key = "387bcc7b-e309-4099-8f1d-0ee062d4b7f4", fallback = ""))) return
-        if (!ValidateId(languageLevelId, "Dil seviyesi seçiniz.")) return
+        if (!ValidateId(languageLevelId, BBLocalization.Current.Get(key = "c8781d6f-01e3-4be0-a034-ea232b9a078c", fallback = "Dil seviyesi seçiniz."))) return
 
         val model = MemberLanguageInsertModel(
             InsertedBy = memberId,
@@ -628,14 +628,14 @@ systemDescLanguageLevelRepository.GetSystemDescLanguageLevelsAsync(
     private fun ValidateLanguage(languageId: Int): Boolean {
         if (languageId > 0) return true
 
-        SetError("Dil bilgisi bulunamadı.")
+        SetError(BBLocalization.Current.Get(key = "a2538f8a-25cd-4e64-8572-75585c749dc0", fallback = "Dil bilgisi bulunamadı."))
         return false
     }
 
     private fun ValidateMember(memberId: Int): Boolean {
         if (memberId > 0) return true
 
-        SetError("Bu işlem için giriş yapmalısınız.")
+        SetError(BBLocalization.Current.Get(key = "bb4ae89d-fe32-41fb-a725-e5084270f928", fallback = "Bu işlem için giriş yapmalısınız."))
         return false
     }
 

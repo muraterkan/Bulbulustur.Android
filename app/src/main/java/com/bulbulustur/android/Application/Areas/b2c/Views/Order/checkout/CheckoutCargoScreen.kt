@@ -72,7 +72,7 @@ fun CheckoutCargoScreen(
         }
 
         if (totalCargoPrice == 0.0) {
-            "Ücretsiz"
+            BBLocalization.Current.Get(key = "bebf2e88-e365-492b-9376-25547df90b7c", fallback = "Ücretsiz")
         } else {
             "₺${String.format("%.2f", totalCargoPrice).replace(".", ",")}"
         }
@@ -106,8 +106,8 @@ fun CheckoutCargoScreen(
                 item {
                     CheckoutProgressCard(
                         currentStep = "2",
-                        title = "Kargo seçimi",
-                        description = "Mağaza bazlı kargo seçeneklerini belirle."
+                        title = BBLocalization.Current.Get(key = "4a269f07-f7cb-47b1-ad1d-70a97dbc2156", fallback = "Kargo seçimi"),
+                        description = BBLocalization.Current.Get(key = "59a23ed4-dda0-42e8-840b-acd1078f0ea2", fallback = "Mağaza bazlı kargo seçeneklerini belirle.")
                     )
                 }
 
@@ -119,8 +119,8 @@ fun CheckoutCargoScreen(
 
                 item {
                     CheckoutCargoSectionTitle(
-                        title = "Kargo paketleri",
-                        description = "Her mağaza kendi kargo seçeneğiyle ayrı paketlenebilir."
+                        title = BBLocalization.Current.Get(key = "f9544e16-222d-4ce8-a182-f603e604d29c", fallback = "Kargo paketleri"),
+                        description = BBLocalization.Current.Get(key = "0059ee39-71df-4650-aca4-6057c0c5c0ca", fallback = "Her mağaza kendi kargo seçeneğiyle ayrı paketlenebilir.")
                     )
                 }
 
@@ -178,14 +178,14 @@ private fun CheckoutCargoTopBar(
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = "Kargo seçimi",
+                text = BBLocalization.Current.Get(key = "4a269f07-f7cb-47b1-ad1d-70a97dbc2156", fallback = "Kargo seçimi"),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onBackground
             )
 
             Text(
-                text = "Checkout adım 2 / 4",
+                text = BBLocalization.Current.Get(key = "ec7e3d00-810a-4ecf-85cd-be5550f74e91", fallback = "Checkout adım 2 / 4"),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -475,7 +475,7 @@ private fun CheckoutCargoInfoCard() {
             modifier = Modifier.padding(BBSpacing.Space4)
         ) {
             Text(
-                text = "Kargo bilgilendirmesi",
+                text = BBLocalization.Current.Get(key = "9d03853a-1657-49d2-87e4-a30a6fc1f26f", fallback = "Kargo bilgilendirmesi"),
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -484,7 +484,7 @@ private fun CheckoutCargoInfoCard() {
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "Siparişin birden fazla mağazadan oluşuyorsa ürünler ayrı paketler halinde gönderilebilir. Teslimat süreleri mağaza ve kargo firmasına göre değişebilir.",
+                text = BBLocalization.Current.Get(key = "a3a38516-5c3f-4c88-816c-8b516e54e990", fallback = "Siparişin birden fazla mağazadan oluşuyorsa ürünler ayrı paketler halinde gönderilebilir. Teslimat süreleri mağaza ve kargo firmasına göre değişebilir."),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -517,7 +517,7 @@ private fun CheckoutCargoBottomBar(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    text = "Kargo toplamı",
+                    text = BBLocalization.Current.Get(key = "2456f709-8316-4109-99f7-d6d35341d61b", fallback = "Kargo toplamı"),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -546,7 +546,7 @@ private fun CheckoutCargoBottomBar(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "Ödemeye geç",
+                    text = BBLocalization.Current.Get(key = "9fe1660d-5aeb-4808-bdbb-0d3be6fca8b9", fallback = "Ödemeye geç"),
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onPrimary
@@ -612,7 +612,7 @@ data class CheckoutCargoOptionItem(
 private fun getCheckoutCargoScreenData(): CheckoutCargoScreenData {
     return CheckoutCargoScreenData(
         deliveryAddress = CheckoutCargoDeliveryAddress(
-            title = "Ev adresim",
+            title = BBLocalization.Current.Get(key = "8f6d0dd3-f45d-4fce-a684-47ee00038be8", fallback = "Ev adresim"),
             fullAddress = "Kızılay Mah. Atatürk Bulvarı No: 12 Daire: 8 Çankaya / Ankara"
         ),
         storeCargoGroups = listOf(
@@ -629,15 +629,15 @@ private fun getCheckoutCargoScreenData(): CheckoutCargoScreenData {
                         deliveryEstimateText = "Tahmini teslimat: 1-3 iş günü",
                         priceText = "₺49,90",
                         priceValue = 49.90,
-                        note = "Hızlı gönderim"
+                        note = BBLocalization.Current.Get(key = "8f015fcc-7ded-464e-82c0-475faccfcd1f", fallback = "Hızlı gönderim")
                     ),
                     CheckoutCargoOptionItem(
                         id = 2,
-                        companyName = "Standart Kargo",
+                        companyName = BBLocalization.Current.Get(key = "e905eb3f-e2ff-4923-9b1d-1c3e792e1e08", fallback = "Standart Kargo"),
                         deliveryEstimateText = "Tahmini teslimat: 3-5 iş günü",
-                        priceText = "Ücretsiz",
+                        priceText = BBLocalization.Current.Get(key = "bebf2e88-e365-492b-9376-25547df90b7c", fallback = "Ücretsiz"),
                         priceValue = 0.0,
-                        note = "Mağaza kampanyası"
+                        note = BBLocalization.Current.Get(key = "f77449bf-f01e-4599-8870-dcdb71ea1ab3", fallback = "Mağaza kampanyası")
                     )
                 )
             ),
@@ -658,11 +658,11 @@ private fun getCheckoutCargoScreenData(): CheckoutCargoScreenData {
                     ),
                     CheckoutCargoOptionItem(
                         id = 4,
-                        companyName = "Ekonomik Kargo",
+                        companyName = BBLocalization.Current.Get(key = "1dd5843e-4611-4525-99ad-2f823696ae24", fallback = "Ekonomik Kargo"),
                         deliveryEstimateText = "Tahmini teslimat: 4-6 iş günü",
                         priceText = "₺19,90",
                         priceValue = 19.90,
-                        note = "Ekonomik seçenek"
+                        note = BBLocalization.Current.Get(key = "c84a464a-e8ee-418b-b5b9-6f35626862d5", fallback = "Ekonomik seçenek")
                     )
                 )
             )

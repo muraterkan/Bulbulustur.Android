@@ -78,7 +78,7 @@ fun AccountEditScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Kullanıcı Bilgileri",
+                title = BBLocalization.Current.Get(key = "e66d7c28-50ce-4edb-8143-7d46275b90f4", fallback = "Kullanıcı Bilgileri"),
                 onBackClick = onBackClick
             )
         }
@@ -121,7 +121,7 @@ fun AccountEditScreen(
                             nameState.value = it
                         },
                         label = BBLocalization.Current.Get(key = "b42e911f-ca30-455e-8ba7-3659b55f2072", fallback = "İsim"),
-                        placeholder = "İsminiz",
+                        placeholder = BBLocalization.Current.Get(key = "aad9c9ae-71ac-4ca0-9a5f-dd8b0873058a", fallback = "İsminiz"),
                         enabled = !isLoading
                     )
 
@@ -131,7 +131,7 @@ fun AccountEditScreen(
                             surnameState.value = it
                         },
                         label = BBLocalization.Current.Get(key = "15a15b53-974d-413d-9cee-f8622397c2d8", fallback = ""),
-                        placeholder = "Soyisminiz",
+                        placeholder = BBLocalization.Current.Get(key = "6ea7fada-0cc7-4ff4-b53d-c078cf656323", fallback = "Soyisminiz"),
                         enabled = !isLoading
                     )
 
@@ -141,7 +141,7 @@ fun AccountEditScreen(
                             professionState.value = it
                         },
                         label = BBLocalization.Current.Get(key = "5b1fbdba-1161-4716-966e-e40a815df70f", fallback = "Meslek"),
-                        placeholder = "Mesleğiniz",
+                        placeholder = BBLocalization.Current.Get(key = "09df202b-b0bf-41cb-839c-84c772bc9993", fallback = "Mesleğiniz"),
                         enabled = !isLoading
                     )
                 }
@@ -183,7 +183,7 @@ private fun ProfileEditIntroCard() {
         padding = BbCardPadding.Medium
     ) {
         Text(
-            text = "Ad, soyad ve meslek bilgilerinizi buradan güncelleyebilirsiniz.",
+            text = BBLocalization.Current.Get(key = "927fb081-a8c4-426a-822c-032424f5f75e", fallback = "Ad, soyad ve meslek bilgilerinizi buradan güncelleyebilirsiniz."),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

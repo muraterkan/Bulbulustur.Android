@@ -66,7 +66,7 @@ fun AccountAddressScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Ülke ve Şehir",
+                title = BBLocalization.Current.Get(key = "cbefdb0e-85b4-47f1-8d73-c281dc026149", fallback = "Ülke ve Şehir"),
                 onBackClick = onBackClick
             )
         }
@@ -93,7 +93,7 @@ fun AccountAddressScreen(
                 padding = BbCardPadding.Medium
             ) {
                 Text(
-                    text = "Profilinizde kullanılacak ülke, şehir ve varsa yönetimsel bölge bilgilerini seçin.",
+                    text = BBLocalization.Current.Get(key = "3dfb92b9-34f2-4cb3-9337-10237d2fec0a", fallback = "Profilinizde kullanılacak ülke, şehir ve varsa yönetimsel bölge bilgilerini seçin."),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

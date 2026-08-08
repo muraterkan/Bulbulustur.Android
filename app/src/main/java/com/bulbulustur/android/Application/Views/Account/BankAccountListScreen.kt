@@ -294,7 +294,7 @@ private fun BankAccountCardHeader(item: MemberBankAccountDTO) {
 
             Text(
                 text = item.BankName.ifBlank {
-                    "Banka bilgisi bulunamadı"
+                    BBLocalization.Current.Get(key = "68cf94b3-e7e0-4777-82ee-dd89495433a0", fallback = "Banka bilgisi bulunamadı")
                 },
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface,
@@ -304,7 +304,7 @@ private fun BankAccountCardHeader(item: MemberBankAccountDTO) {
 
             Text(
                 text = item.BankHolder.ifBlank {
-                    "Hesap sahibi bilgisi bulunamadı"
+                    BBLocalization.Current.Get(key = "8a8839e0-2eb3-4bf5-8ec4-e5b12928165e", fallback = "Hesap sahibi bilgisi bulunamadı")
                 },
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -337,7 +337,7 @@ private fun BankAccountIbanBox(iban: String) {
 
             Text(
                 text = iban.ifBlank {
-                    "IBAN bilgisi bulunamadı"
+                    BBLocalization.Current.Get(key = "8a5a9f13-66c3-4e81-a21d-0cb5684727a4", fallback = "IBAN bilgisi bulunamadı")
                 },
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface,
@@ -375,13 +375,13 @@ private fun BankAccountWarningBox() {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Geri Ödeme İçin Doğru IBAN Bilgisi Kullanılır.",
+                    text = BBLocalization.Current.Get(key = "fa4bc144-97cf-4b31-9961-f141c7bb8e90", fallback = "Geri Ödeme İçin Doğru IBAN Bilgisi Kullanılır."),
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onErrorContainer
                 )
 
                 Text(
-                    text = "Sipariş iptali veya ürün iadesi nedeniyle yapılacak geri ödemelerde kayıtlı banka hesaplarınızdan uygun olan IBAN kullanılabilir.",
+                    text = BBLocalization.Current.Get(key = "2bb22256-f908-477b-9956-19bf346a7420", fallback = "Sipariş iptali veya ürün iadesi nedeniyle yapılacak geri ödemelerde kayıtlı banka hesaplarınızdan uygun olan IBAN kullanılabilir."),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -408,7 +408,7 @@ private fun BankAccountLoadingState() {
             )
 
             Text(
-                text = "Banka hesapları yükleniyor.",
+                text = BBLocalization.Current.Get(key = "52abfd9f-9df9-453e-b4ef-876dc4e7a448", fallback = "Banka hesapları yükleniyor."),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -478,7 +478,7 @@ private fun BankAccountEmptyState(
             )
 
             Text(
-                text = "Henüz kayıtlı banka hesabınız bulunmuyor. Geri ödeme süreçleri için IBAN ekleyebilirsiniz.",
+                text = BBLocalization.Current.Get(key = "49e5c046-3a73-4e9a-bfc0-6f135bfcf376", fallback = "Henüz kayıtlı banka hesabınız bulunmuyor. Geri ödeme süreçleri için IBAN ekleyebilirsiniz."),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
@@ -562,13 +562,13 @@ private fun BankAccountDeleteSheet(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
             ) {
                 Text(
-                    text = "Banka Hesabını Sil",
+                    text = BBLocalization.Current.Get(key = "d69b7f33-6fcb-4239-89de-f922f817a429", fallback = "Banka Hesabını Sil"),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = "Bu banka hesabını silmek istediğinize emin misiniz? Silinen hesap geri ödeme ve para aktarımı işlemlerinde kullanılamaz.",
+                    text = BBLocalization.Current.Get(key = "d80b81ba-b06f-47d2-8cf5-401acbb5783d", fallback = "Bu banka hesabını silmek istediğinize emin misiniz? Silinen hesap geri ödeme ve para aktarımı işlemlerinde kullanılamaz."),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -579,7 +579,7 @@ private fun BankAccountDeleteSheet(
                 horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
             ) {
                 BbButton(
-                    text = "Vazgeç",
+                    text = BBLocalization.Current.Get(key = "18a6f5c0-ab35-483d-8691-fad99e9680f2", fallback = "Vazgeç"),
                     onClick = onDismissClick,
                     modifier = Modifier.weight(1f),
                     variant = BbButtonVariant.Light,
@@ -588,7 +588,7 @@ private fun BankAccountDeleteSheet(
                 )
 
                 BbButton(
-                    text = "Hesabı Sil",
+                    text = BBLocalization.Current.Get(key = "5516ed8d-a97c-4587-bdcf-5b9a91b74d6e", fallback = "Hesabı Sil"),
                     onClick = onConfirmClick,
                     modifier = Modifier.weight(1f),
                     variant = BbButtonVariant.Danger,

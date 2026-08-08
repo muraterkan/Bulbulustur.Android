@@ -5,5 +5,6 @@ data class SystemDescEducationDTO(
     val EmployeeId: Int = 0,
     val InsertedDate: String = "",
     val StatusId: Int = 0,
-    val Content: String = ""
+    val Content: String = "",
+    val EducationName: String = ""
 )

@@ -11,7 +11,6 @@ import com.bulbulustur.android.Application.Navigation.Routes.SplashRoutes
 import com.bulbulustur.android.Application.Session.UserSessionManager
 import com.bulbulustur.android.Application.Session.UserSessionState
 import com.bulbulustur.android.Application.Views.Home.ModeSelectionScreen
-import com.bulbulustur.android.businesslayer.Core.Enums.EApplicationLanguage
 
 fun NavGraphBuilder.splashGraph(
     navigator: BulbulusturNavigator,
@@ -21,11 +20,7 @@ fun NavGraphBuilder.splashGraph(
 ) {
     composable(SplashRoutes.ModeSelection) {
         val settingsState by settingsController.State.collectAsState()
-
-        val languageId = when (sessionState.Language) {
-            EApplicationLanguage.Turkish -> 1
-            EApplicationLanguage.English -> 2
-        }
+        val languageId = sessionState.Language.Id
 
         LaunchedEffect(languageId) {
             settingsController.GetLanguages(languageId)
@@ -38,11 +33,11 @@ fun NavGraphBuilder.splashGraph(
             languageErrorMessage = settingsState.LanguageResult
                 ?.takeIf { !it.Success }
                 ?.Message,
-            onLanguageSelected = { selectedLanguageId ->
-                when (selectedLanguageId) {
-                    1 -> userSessionManager.SetLanguage(EApplicationLanguage.Turkish)
-                    2 -> userSessionManager.SetLanguage(EApplicationLanguage.English)
-                }
+            onLanguageSelected = { selectedLanguageId, selectedLanguageCode ->
+                userSessionManager.SetLanguage(
+                    languageId = selectedLanguageId,
+                    languageCode = selectedLanguageCode
+                )
             },
             onRetailClick = {
                 navigator.navigateFromModeSelectionToRetail()

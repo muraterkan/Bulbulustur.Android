@@ -1,8 +1,11 @@
 package com.bulbulustur.android.Application.Navigation.Graph
 
+import android.util.Log
+
 import com.bulbulustur.android.Application.Areas.b2b.Controllers.CategoryController
 import com.bulbulustur.android.Application.Areas.b2b.Controllers.HomeController
 import com.bulbulustur.android.Application.Areas.b2b.Controllers.ProductController
+import com.bulbulustur.android.Application.Areas.b2b.Controllers.SearchController
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -16,6 +19,7 @@ import com.bulbulustur.android.Application.Areas.b2b.Controllers.WholesaleBuyerR
 import com.bulbulustur.android.Application.Areas.b2b.Views.Category.WholesaleCategoryDetailScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Category.WholesaleCategoryHomeScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Home.WholesaleHomeScreen
+import com.bulbulustur.android.Application.Areas.b2b.Views.Search.SearchScreen as WholesaleSearchScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Product.WholesaleProductListScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Product.WholesaleProductDetailScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Product.LastPriceRequestScreen
@@ -33,7 +37,6 @@ import com.bulbulustur.android.Application.Navigation.Routes.CompanyRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.RfqRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.WholesaleRoutes
 import com.bulbulustur.android.Application.Session.UserSessionState
-import com.bulbulustur.android.businesslayer.Core.Enums.EApplicationLanguage
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.WholesaleBuyerCustomizeRequestInsertModel
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.WholesaleBuyerLastPriceRequestInsertModel
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.WholesaleBuyerSampleRequestInsertModel
@@ -49,6 +52,7 @@ fun NavGraphBuilder.wholesaleGraph(
     categoryController: CategoryController,
     homeController: HomeController,
     productController: ProductController,
+    searchController: SearchController,
     rfqController: RfqController,
     messageController: MessageController,
     wholesaleBuyerRequestController: WholesaleBuyerRequestController
@@ -109,6 +113,41 @@ fun NavGraphBuilder.wholesaleGraph(
             onAccountClick = {
                 navigator.navigateToAccount()
             }
+        )
+    }
+
+    composable(route = WholesaleRoutes.Search) {
+        val searchState by searchController.State.collectAsState()
+
+        WholesaleSearchScreen(
+            onBackClick = {
+                navigator.back()
+            },
+            onFavoriteClick = {
+                navigator.navController.navigate(AccountRoutes.Favorites)
+            },
+            onMessageClick = {
+                navigator.navigateToInbox()
+            },
+            onProductSearchClick = { key ->
+                searchController.SearchProducts(
+                    companyId = 0,
+                    key = key,
+                    page = 1,
+                    pageSize = 20
+                )
+            },
+            onCompanySearchClick = {
+                navigator.navController.navigate(CompanyRoutes.CompanyList)
+            },
+            onProductClick = { productId ->
+                navigator.navController.navigate(WholesaleRoutes.productDetail(productId))
+            },
+            onRfqCreateClick = {
+                navigator.navController.navigate(RfqRoutes.Create)
+            },
+            productResults = searchState.ProductSearchResult?.Data?.Items.orEmpty(),
+            hasProductSearch = searchState.ProductSearchResult != null
         )
     }
 
@@ -423,9 +462,11 @@ fun NavGraphBuilder.wholesaleGraph(
     ) { backStackEntry ->
         val productState by productController.State.collectAsState()
         val requestState by wholesaleBuyerRequestController.State.collectAsState()
+        val rfqState by rfqController.State.collectAsState()
         val requestProductId = backStackEntry.arguments?.getInt(WholesaleRoutes.ArgProductId) ?: 0
         LaunchedEffect(requestProductId, sessionState.Language.Id) {
             if (requestProductId > 0) {
+                rfqController.LoadCreateOptions(sessionState.Language.Id)
                 productController.Detail(
                     languageId = sessionState.Language.Id,
                     wholesaleProductId = requestProductId
@@ -438,9 +479,12 @@ fun NavGraphBuilder.wholesaleGraph(
             productId = requestProductId,
             productName = product?.ProductName?.takeIf { it.isNotBlank() } ?: BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = ""),
             companyName = product?.CompanyName?.takeIf { it.isNotBlank() } ?: "Tedarikçi",
-            currentPriceLabel = product?.Price?.takeIf { it > 0.0 }?.let { "" } ?: "",
+            currentPriceLabel = product?.Price?.takeIf { it > 0.0 }?.toString() ?: "",
+            paymentTerms = rfqState.PaymentTerms,
+            units = rfqState.Units,
             onBackClick = { navigator.back() },
-            onSendClick = { quantity, targetPrice, paymentTerm, deliveryTarget, detail ->
+            onSendClick = { quantity, unitId, targetPrice, paymentTerm, deliveryTarget, detail ->
+                Log.d("BB_LAST_PRICE", "CLICK memberId=${sessionState.MemberId} languageId=${sessionState.Language.Id} productId=$requestProductId productNull=${product == null} companyId=${product?.CompanyId} unitId=$unitId paymentTerm=$paymentTerm quantity=$quantity targetPrice=$targetPrice")
                 val selectedProduct = product
                 if (selectedProduct != null) {
                     wholesaleBuyerRequestController.InsertLastPriceRequest(
@@ -455,7 +499,7 @@ fun NavGraphBuilder.wholesaleGraph(
                             UnitPriceRequested = targetPrice.replace(",", ".").toDoubleOrNull(),
                             CurrencyId = selectedProduct.Prices.firstOrNull()?.CurrencyId ?: 0,
                             EstimatedOrderQuantity = quantity.replace(",", ".").toDoubleOrNull() ?: 0.0,
-                            UnitId = selectedProduct.Prices.firstOrNull()?.UnitId ?: 0,
+                            UnitId = unitId.toIntOrNull() ?: 0,
                             CargoTarget = deliveryTarget
                         ),
                         onSuccess = {
@@ -651,10 +695,7 @@ fun NavGraphBuilder.wholesaleGraph(
     composable(route = RfqRoutes.Create) {
         val rfqState by rfqController.State.collectAsState()
 
-        val languageId = when (sessionState.Language) {
-            EApplicationLanguage.Turkish -> 1
-            EApplicationLanguage.English -> 2
-        }
+        val languageId = sessionState.Language.Id
 
         LaunchedEffect(languageId) {
             rfqController.ClearInsertResult()

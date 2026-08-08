@@ -238,7 +238,7 @@ class BasketController(
             _state.update { currentState ->
                 currentState.copy(
                     ErrorMessage =
-                        "Geçerli bir sepet satırı bulunamadı."
+                        BBLocalization.Current.Get(key = "f07713a9-374e-47b6-bc35-7d78212cd17b", fallback = "Geçerli bir sepet satırı bulunamadı.")
                 )
             }
 
@@ -345,7 +345,7 @@ class BasketController(
             _state.update { currentState ->
                 currentState.copy(
                     ErrorMessage =
-                        "Geçerli bir sepet satırı bulunamadı."
+                        BBLocalization.Current.Get(key = "f07713a9-374e-47b6-bc35-7d78212cd17b", fallback = "Geçerli bir sepet satırı bulunamadı.")
                 )
             }
 
@@ -417,7 +417,7 @@ class BasketController(
             _state.update { currentState ->
                 currentState.copy(
                     ErrorMessage =
-                        "Geçerli bir sepet satırı bulunamadı."
+                        BBLocalization.Current.Get(key = "f07713a9-374e-47b6-bc35-7d78212cd17b", fallback = "Geçerli bir sepet satırı bulunamadı.")
                 )
             }
 
@@ -534,7 +534,7 @@ class BasketController(
                 IsLoading =
                     false,
                 ErrorMessage =
-                    "Sepet işlemi için giriş yapmalısınız."
+                    BBLocalization.Current.Get(key = "e1783e80-755c-42bb-b996-6af48da03db2", fallback = "Sepet işlemi için giriş yapmalısınız.")
             )
         }
     }

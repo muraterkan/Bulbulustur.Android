@@ -109,8 +109,8 @@ fun DeactivateDashboardScreen(
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
                 ) {
                     DeactivateSectionHeader(
-                        title = "Devre Dışı Bırakma Nedeni",
-                        description = "Hesabınızı neden devre dışı bırakmak istediğinizi kısaca yazın."
+                        title = BBLocalization.Current.Get(key = "6403c207-18d4-4730-88f2-1ae1a4fd37d9", fallback = "Devre Dışı Bırakma Nedeni"),
+                        description = BBLocalization.Current.Get(key = "77425e39-365d-473f-bd18-e52e5819bc31", fallback = "Hesabınızı neden devre dışı bırakmak istediğinizi kısaca yazın.")
                     )
 
                     OutlinedTextField(
@@ -123,7 +123,7 @@ fun DeactivateDashboardScreen(
                             Text(text = BBLocalization.Current.Get(key = "db0a3356-2fa4-4c1f-9432-2c299ac52b92", fallback = "Açıklama"))
                         },
                         placeholder = {
-                            Text(text = "Kısa bir açıklama yazabilirsiniz")
+                            Text(text = BBLocalization.Current.Get(key = "a2462a3b-d507-4e80-94a8-a497c534a9a4", fallback = "Kısa bir açıklama yazabilirsiniz"))
                         },
                         minLines = 4,
                         shape = BBRadius.Input,
@@ -160,7 +160,7 @@ fun DeactivateDashboardScreen(
                         message.isNotBlank()
                     }?.let { message ->
                         DeactivateMessageBox(
-                            title = "İşlem Tamamlanamadı",
+                            title = BBLocalization.Current.Get(key = "aee471fe-aa14-4587-897c-f5a3489aa980", fallback = "İşlem Tamamlanamadı"),
                             message = message,
                             type = DeactivateMessageType.Error
                         )
@@ -170,7 +170,7 @@ fun DeactivateDashboardScreen(
                         message.isNotBlank()
                     }?.let { message ->
                         DeactivateMessageBox(
-                            title = "İşlem Alındı",
+                            title = BBLocalization.Current.Get(key = "60bcbeb4-25cd-4a8b-9f12-030e4a75b2b3", fallback = "İşlem Alındı"),
                             message = message,
                             type = DeactivateMessageType.Success
                         )
@@ -208,13 +208,13 @@ private fun DeactivateWarningCard() {
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             Text(
-                text = "Bu İşlem Dikkat Gerektirir",
+                text = BBLocalization.Current.Get(key = "eb1f182e-9533-4577-b0a3-d39abcd42468", fallback = "Bu İşlem Dikkat Gerektirir"),
                 style = MaterialTheme.typography.titleSmall,
                 color = BBColors.Red.Red700
             )
 
             Text(
-                text = "Hesabınızı devre dışı bırakmadan önce açık sipariş, ödeme, talep ve iletişim süreçlerinizi kontrol etmeniz önerilir.",
+                text = BBLocalization.Current.Get(key = "bcc8f323-2cda-420f-aee0-b17fabcde9bb", fallback = "Hesabınızı devre dışı bırakmadan önce açık sipariş, ödeme, talep ve iletişim süreçlerinizi kontrol etmeniz önerilir."),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -232,13 +232,13 @@ private fun DeactivateWarningCard() {
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                 ) {
                     Text(
-                        text = "Kritik Uyarı",
+                        text = BBLocalization.Current.Get(key = "4e0a8573-70cb-4cf2-b843-e6b140fd7774", fallback = "Kritik Uyarı"),
                         style = MaterialTheme.typography.labelLarge,
                         color = BBColors.Red.Red700
                     )
 
                     Text(
-                        text = "Devre dışı bırakma işlemi geri dönüş ve hesap kurtarma süreçlerine tabi olabilir.",
+                        text = BBLocalization.Current.Get(key = "79703e78-03ae-43b2-bca6-ff247c67406e", fallback = "Devre dışı bırakma işlemi geri dönüş ve hesap kurtarma süreçlerine tabi olabilir."),
                         style = MaterialTheme.typography.bodySmall,
                         color = BBColors.Red.Red700
                     )
@@ -277,7 +277,7 @@ private fun DeactivateReasonSupportingText(
 ) {
     if (reason.isBlank()) {
         Text(
-            text = "Devre dışı bırakma nedeni yazın.",
+            text = BBLocalization.Current.Get(key = "153322d5-f390-4de2-b9aa-86f0ac15edc2", fallback = "Devre dışı bırakma nedeni yazın."),
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
@@ -286,7 +286,7 @@ private fun DeactivateReasonSupportingText(
 
     if (!validation.hasReason) {
         Text(
-            text = "Açıklama en az 10 karakter olmalı.",
+            text = BBLocalization.Current.Get(key = "69137feb-df7d-4dbb-8fad-29b4a10a75a9", fallback = "Açıklama en az 10 karakter olmalı."),
             color = MaterialTheme.colorScheme.error
         )
 
@@ -294,7 +294,7 @@ private fun DeactivateReasonSupportingText(
     }
 
     Text(
-        text = "Açıklama uygun görünüyor.",
+        text = BBLocalization.Current.Get(key = "b9083e02-b948-43f4-868f-1b1da9cb221d", fallback = "Açıklama uygun görünüyor."),
         color = BBColors.Green.Green700
     )
 }
@@ -341,7 +341,7 @@ private fun DeactivateConfirmationCard(
                 )
 
                 Text(
-                    text = "Hesabımı devre dışı bırakma işleminin etkilerini anladım ve bu işlemi başlatmak istiyorum.",
+                    text = BBLocalization.Current.Get(key = "d6ec5438-30ce-45a1-bbec-2699f8ffd9df", fallback = "Hesabımı devre dışı bırakma işleminin etkilerini anladım ve bu işlemi başlatmak istiyorum."),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

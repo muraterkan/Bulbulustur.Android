@@ -69,8 +69,8 @@ fun OrderShipmentTrackingScreen(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "Kargom Nerede?",
-                subtitle = "Sipariş kargo durumunu takip edin.",
+                title = BBLocalization.Current.Get(key = "aae1659a-e21e-4b62-8a79-ba17a842feab", fallback = "Kargom Nerede?"),
+                subtitle = BBLocalization.Current.Get(key = "7fab7182-3457-41a3-a2bf-17e321b80972", fallback = "Sipariş kargo durumunu takip edin."),
                 onBackClick = onBackClick
             )
         }
@@ -93,8 +93,8 @@ fun OrderShipmentTrackingScreen(
                 cargoTrackingNumber <= 0 -> {
                     item {
                         OrderShipmentMessageCard(
-                            title = "Kargo takip numarası bulunamadı",
-                            description = "Gönderi bilgisi görüntülenemedi."
+                            title = BBLocalization.Current.Get(key = "419451ce-69ba-45e6-80b9-5f05ca872706", fallback = "Kargo takip numarası bulunamadı"),
+                            description = BBLocalization.Current.Get(key = "f35e0f0d-556e-4289-8706-568376bfd74f", fallback = "Gönderi bilgisi görüntülenemedi.")
                         )
                     }
                 }
@@ -102,8 +102,8 @@ fun OrderShipmentTrackingScreen(
                 memberId <= 0 -> {
                     item {
                         OrderShipmentMessageCard(
-                            title = "Oturum bilgisi bulunamadı",
-                            description = "Kargo bilgisini görüntülemek için hesabınıza giriş yapmanız gerekiyor."
+                            title = BBLocalization.Current.Get(key = "7d3eff10-e01c-4564-a290-e3542478f979", fallback = "Oturum bilgisi bulunamadı"),
+                            description = BBLocalization.Current.Get(key = "ef411e74-cfd6-497c-9add-f55462225a84", fallback = "Kargo bilgisini görüntülemek için hesabınıza giriş yapmanız gerekiyor.")
                         )
                     }
                 }
@@ -117,7 +117,7 @@ fun OrderShipmentTrackingScreen(
                 state.ErrorMessage != null && state.OrderTracking == null -> {
                     item {
                         OrderShipmentMessageCard(
-                            title = "Kargo bilgisi alınamadı",
+                            title = BBLocalization.Current.Get(key = "e3327e09-5c59-4b0e-b895-d544194aa9b5", fallback = "Kargo bilgisi alınamadı"),
                             description = state.ErrorMessage.orEmpty()
                         )
                     }
@@ -127,7 +127,7 @@ fun OrderShipmentTrackingScreen(
                     item {
                         OrderShipmentMessageCard(
                             title = "Kargo kaydı bulunamadı",
-                            description = "Bu takip numarasına ait gönderi bilgisi bulunamadı."
+                            description = BBLocalization.Current.Get(key = "82ff65b9-a7b7-47a0-a133-77dd2780093e", fallback = "Bu takip numarasına ait gönderi bilgisi bulunamadı.")
                         )
                     }
                 }
@@ -181,7 +181,7 @@ private fun OrderShipmentSummaryCard(
 ) {
     val statusText = tracking.OrderStoreLineStatus.ifBlank {
         tracking.OrderStatus.ifBlank {
-            "Kargo süreci devam ediyor"
+            BBLocalization.Current.Get(key = "076a9fc8-d193-4cda-a0b6-3db1f3cfe627", fallback = "Kargo süreci devam ediyor")
         }
     }
 
@@ -213,7 +213,7 @@ private fun OrderShipmentSummaryCard(
 
                 Text(
                     text = tracking.CargoCompany.ifBlank {
-                        "Kargo firması bilgisi bulunamadı"
+                        BBLocalization.Current.Get(key = "af750da7-a2f1-46e7-8e7b-94e8e207c2da", fallback = "Kargo firması bilgisi bulunamadı")
                     },
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -270,8 +270,8 @@ private fun OrderShipmentDetailCard(tracking: OrderStoreLineDTO) {
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
             OrderShipmentSectionTitle(
-                title = "Gönderi Bilgileri",
-                subtitle = "Sipariş satırına ait güncel kargo bilgileri"
+                title = BBLocalization.Current.Get(key = "bf42f807-7855-4b94-a7f2-364170f2a705", fallback = "Gönderi Bilgileri"),
+                subtitle = BBLocalization.Current.Get(key = "14165fa1-07dd-49d9-9b83-854ec1c8c013", fallback = "Sipariş satırına ait güncel kargo bilgileri")
             )
 
             OrderShipmentDetailRow(
@@ -296,7 +296,7 @@ private fun OrderShipmentDetailCard(tracking: OrderStoreLineDTO) {
             )
 
             OrderShipmentDetailRow(
-                title = "Kargo Durumu",
+                title = BBLocalization.Current.Get(key = "db9954c5-f327-43a2-8b05-9d5abb1a60ab", fallback = "Kargo Durumu"),
                 value = tracking.OrderStoreLineStatus.ifBlank {
                     tracking.OrderStatus.ifBlank { "-" }
                 }
@@ -365,13 +365,13 @@ private fun OrderShipmentHelpCard() {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Kargo bilgisi hakkında",
+                    text = BBLocalization.Current.Get(key = "623205d6-0f90-4cf7-a442-79271a8362cf", fallback = "Kargo bilgisi hakkında"),
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = "Kargo durumu sipariş ve taşıyıcı firma kayıtlarına göre güncellenir.",
+                    text = BBLocalization.Current.Get(key = "749a9d5e-f7fb-4d68-8a78-837fa7cd2d7c", fallback = "Kargo durumu sipariş ve taşıyıcı firma kayıtlarına göre güncellenir."),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -481,7 +481,7 @@ private fun OrderShipmentLoadingCard() {
             CircularProgressIndicator()
 
             Text(
-                text = "Kargo bilgisi yükleniyor",
+                text = BBLocalization.Current.Get(key = "b76059f6-223c-43e1-a308-2f234d6bdca1", fallback = "Kargo bilgisi yükleniyor"),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface
             )

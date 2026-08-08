@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Controllers
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.lifecycle.viewModelScope
 import com.bulbulustur.android.businesslayer.Core.Util.Execute.IExecuteService
 import com.bulbulustur.android.businesslayer.Core.Util.Result
@@ -64,7 +66,7 @@ class SearchController(
                 it.copy(
                     IsLoading = true,
                     ErrorMessage = null,
-                    CurrentAction = "Result"
+                    CurrentAction = BBLocalization.Current.Get(key = "acdeca0e-10dc-40c3-879d-9834eb11644f", fallback = "Result")
                 )
             }
 
@@ -72,7 +74,7 @@ class SearchController(
                 cacheKey = "App.Search.Result." + parameters.toString()
             ) {
                 defaultRepository.GetAsync(
-                    actionName = "Result",
+                    actionName = BBLocalization.Current.Get(key = "acdeca0e-10dc-40c3-879d-9834eb11644f", fallback = "Result"),
                     parameters = parameters
                 )
             }

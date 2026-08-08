@@ -398,7 +398,7 @@ private fun RequestPhotoBox(photoCount: Int) {
                     text = if (photoCount > 0) {
                         "$photoCount fotoğraf eklendi"
                     } else {
-                        "Fotoğraf bulunmuyor"
+                        BBLocalization.Current.Get(key = "3f3c7c3d-754f-480b-aa36-7937b4b1fbe7", fallback = "Fotoğraf bulunmuyor")
                     },
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurface
@@ -505,7 +505,7 @@ private fun RequestErrorState(
                 )
 
                 Text(
-                    text = "Talepler Yüklenemedi",
+                    text = BBLocalization.Current.Get(key = "1f53e12e-26f2-4f2c-8906-a60d32b3b490", fallback = "Talepler Yüklenemedi"),
                     style = BbTypography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -557,7 +557,7 @@ private fun RequestEmptyState(onOrderListClick: () -> Unit) {
             )
 
             Text(
-                text = "Henüz oluşturulmuş iade talebiniz bulunmuyor. Sipariş detayından yeni bir iade talebi oluşturabilirsiniz.",
+                text = BBLocalization.Current.Get(key = "d3e06bd9-052d-420a-813f-e89b70a64217", fallback = "Henüz oluşturulmuş iade talebiniz bulunmuyor. Sipariş detayından yeni bir iade talebi oluşturabilirsiniz."),
                 style = BbTypography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -576,12 +576,12 @@ private fun String?.OrDash(): String = this?.takeIf { it.isNotBlank() } ?: "-"
 
 private fun GetReturnRequestStatusFallback(statusId: Int): String {
     return when (statusId) {
-        1 -> "Talep Alındı"
-        2 -> "İncelemede"
+        1 -> BBLocalization.Current.Get(key = "6b04a632-6a4a-4b5a-bc8c-235753a8c8b2", fallback = "Talep Alındı")
+        2 -> BBLocalization.Current.Get(key = "968498ba-6375-489a-9ece-b790e6cb4975", fallback = "İncelemede")
         3 -> BBLocalization.Current.Get(key = "f160b198-ab2d-4515-8126-2ee3143329ec", fallback = "Onaylandı")
         4 -> "Reddedildi"
         5 -> BBLocalization.Current.Get(key = "60ae9048-3404-4ea6-a789-f75e02e0b4ea", fallback = "Tamamlandı")
-        else -> "Talep Alındı"
+        else -> BBLocalization.Current.Get(key = "6b04a632-6a4a-4b5a-bc8c-235753a8c8b2", fallback = "Talep Alındı")
     }
 }
 

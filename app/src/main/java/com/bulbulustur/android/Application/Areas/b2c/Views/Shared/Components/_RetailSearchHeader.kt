@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components
+package com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -51,7 +51,7 @@ fun RetailSearchHeader(
     onMenuClick: () -> Unit,
     onFavoriteClick: () -> Unit,
     modifier: Modifier = Modifier,
-    placeholder: String = "Ürün, kategori veya marka ara",
+    placeholder: String = BBLocalization.Current.Get(key = "e4f653c3-8828-4934-aa3b-959cede38feb", fallback = "Ürün, kategori veya marka ara"),
     onSearchClick: (() -> Unit)? = null,
     onClearClick: (() -> Unit)? = null,
     leadingAction: RetailSearchHeaderLeadingAction = RetailSearchHeaderLeadingAction.Menu,
@@ -97,7 +97,7 @@ fun RetailSearchHeader(
                     ) {
                         BBLocalization.Current.Get(key = "d94f43b6-5081-4e7d-b66e-8d19b37e9751", fallback = "Geri")
                     } else {
-                        "Menü"
+                        BBLocalization.Current.Get(key = "06fd752c-0184-4e9e-92e1-9d28781807a0", fallback = "Menü")
                     },
                     onClick = {
                         if (
@@ -207,7 +207,7 @@ private fun RetailSearchInput(
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.Close,
-                            contentDescription = "Temizle",
+                            contentDescription = BBLocalization.Current.Get(key = "0bff2074-48a3-4ba4-808f-2583f63aa227", fallback = "Temizle"),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }

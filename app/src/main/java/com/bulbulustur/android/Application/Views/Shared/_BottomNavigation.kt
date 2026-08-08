@@ -1,4 +1,4 @@
-﻿package com.bulbulustur.android.Application.Views.Shared
+package com.bulbulustur.android.Application.Views.Shared
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -277,7 +277,7 @@ private fun BuyerBottomNavigationCenterAction(
         }
 
         Text(
-            text = "Geçiş",
+            text = BBLocalization.Current.Get(key = "59c8160b-b937-47cc-9ed5-02963b02e394", fallback = "Geçiş"),
             style = BbTypography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

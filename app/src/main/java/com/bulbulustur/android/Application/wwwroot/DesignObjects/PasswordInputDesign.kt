@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.wwwroot.DesignObjects
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
@@ -76,7 +78,7 @@ fun BbPasswordInput(
                         text = if (isPasswordVisible) {
                             "Gizle"
                         } else {
-                            "Göster"
+                            BBLocalization.Current.Get(key = "5a99cd16-cf8f-4a23-8f31-98feb0428fc9", fallback = "Göster")
                         },
                         style = MaterialTheme.typography.labelSmall
                     )

@@ -55,7 +55,7 @@ fun SubscriptionDetailScreen(
 ) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
-        topBar = { BbInnerPageHeader(title = "Abonelik Detayı", onBackClick = onBackClick) }
+        topBar = { BbInnerPageHeader(title = BBLocalization.Current.Get(key = "ba4887da-3926-412f-8f5f-b1eefdd3f914", fallback = "Abonelik Detayı"), onBackClick = onBackClick) }
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surfaceVariant).padding(innerPadding),
@@ -72,7 +72,7 @@ fun SubscriptionDetailScreen(
                     item {
                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)) {
                             SubscriptionDetailInfoBox(modifier = Modifier.weight(1f), title = "BAŞLANGIÇ", value = subscription.StartDate.ToSubscriptionDateText(), iconColor = BBColors.Blue.Blue600)
-                            SubscriptionDetailInfoBox(modifier = Modifier.weight(1f), title = "BİTİŞ", value = subscription.EndDate.ToSubscriptionDateText(), iconColor = BBColors.Orange.Orange600)
+                            SubscriptionDetailInfoBox(modifier = Modifier.weight(1f), title = BBLocalization.Current.Get(key = "ba2cca15-1d43-4b16-a4a9-e2e2bfbdcba6", fallback = "BİTİŞ"), value = subscription.EndDate.ToSubscriptionDateText(), iconColor = BBColors.Orange.Orange600)
                         }
                     }
 
@@ -81,7 +81,7 @@ fun SubscriptionDetailScreen(
 
                     item {
                         BbButton(
-                            text = "Aboneliklerime Dön",
+                            text = BBLocalization.Current.Get(key = "aae5c3b0-5107-423f-aa4c-9fbf4e907b56", fallback = "Aboneliklerime Dön"),
                             onClick = onBackClick,
                             modifier = Modifier.fillMaxWidth(),
                             variant = BbButtonVariant.Light,
@@ -106,9 +106,9 @@ private fun SubscriptionHeroCard(subscription: MemberSubscriptionDTO) {
             }
 
             Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)) {
-                Text(text = if (active) "AKTİF ABONELİK" else "SÜRESİ DOLMUŞ ABONELİK", style = MaterialTheme.typography.labelSmall, color = if (active) BBColors.Green.Green700 else MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(text = if (active) BBLocalization.Current.Get(key = "148ec215-cb3a-4389-85d1-c1a96291a122", fallback = "AKTİF ABONELİK") else BBLocalization.Current.Get(key = "b9a725c5-44a0-43c9-970d-a6e8ac4fe4c3", fallback = "SÜRESİ DOLMUŞ ABONELİK"), style = MaterialTheme.typography.labelSmall, color = if (active) BBColors.Green.Green700 else MaterialTheme.colorScheme.onSurfaceVariant)
                 Text(text = subscription.GetSubscriptionTitle(), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
-                Text(text = "Abonelik dönemi ve plan ücretiniz aşağıdaki bilgilerle kayıtlıdır.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(text = BBLocalization.Current.Get(key = "47736e17-e9c7-4e85-9b91-a55d37318089", fallback = "Abonelik dönemi ve plan ücretiniz aşağıdaki bilgilerle kayıtlıdır."), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
     }
@@ -139,7 +139,7 @@ private fun SubscriptionDetailPriceCard(subscription: MemberSubscriptionDTO) {
             }
 
             Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)) {
-                Text(text = "Plan Ücreti", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(text = BBLocalization.Current.Get(key = "4091038a-03f0-4a83-bb54-432f9cab6641", fallback = "Plan Ücreti"), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Text(text = subscription.GetPriceText(), style = MaterialTheme.typography.titleMedium, color = BBColors.Yellow.Yellow800)
             }
         }
@@ -151,13 +151,13 @@ private fun SubscriptionPlanInfoCard(subscription: MemberSubscriptionDTO) {
     BbCard(modifier = Modifier.fillMaxWidth(), variant = BbCardVariant.Outlined, padding = BbCardPadding.None) {
         Column(modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.fillMaxWidth().padding(BBSpacing.CardPadding), verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)) {
-                Text(text = "Plan Bilgileri", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
-                Text(text = "Aboneliğinize ait temel plan, dönem ve ücret bilgileri.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(text = BBLocalization.Current.Get(key = "155512c9-4b2d-4e34-99f3-1affa5af01d6", fallback = "Plan Bilgileri"), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
+                Text(text = BBLocalization.Current.Get(key = "ae3388c8-93d3-4391-a399-20e274cbf3b3", fallback = "Aboneliğinize ait temel plan, dönem ve ücret bilgileri."), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
 
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
             SubscriptionPlanRow(BBLocalization.Current.Get(key = "80de5ea4-3edc-40a7-a9c2-fd86ec8f75dc", fallback = "Abonelik Tipi"), subscription.SubscriptionTypeName?.takeIf { it.isNotBlank() } ?: "-")
-            SubscriptionPlanRow("Plan Tipi", subscription.SubscriptionPlanTypeName?.takeIf { it.isNotBlank() } ?: "-")
+            SubscriptionPlanRow(BBLocalization.Current.Get(key = "6bc71665-1849-41e1-8bb1-0395a95c0036", fallback = "Plan Tipi"), subscription.SubscriptionPlanTypeName?.takeIf { it.isNotBlank() } ?: "-")
             SubscriptionPlanRow(BBLocalization.Current.Get(key = "53e831f1-50ef-4ad1-a5f0-8e84aaa110da", fallback = "Başlangıç Tarihi"), subscription.StartDate.ToSubscriptionDateText())
             SubscriptionPlanRow(BBLocalization.Current.Get(key = "ca02fdc1-6f0f-41b0-9fca-f1874b867da3", fallback = "Bitiş Tarihi"), subscription.EndDate.ToSubscriptionDateText())
             SubscriptionPlanRow(BBLocalization.Current.Get(key = "434680f3-de2d-48b2-a7ac-124926fe8196", fallback = ""), subscription.GetPriceText(), valueColor = BBColors.Yellow.Yellow800)
@@ -205,7 +205,7 @@ private fun SubscriptionDetailNotFoundState(onRetryClick: () -> Unit) {
         Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)) {
             Icon(imageVector = Icons.Outlined.Subscriptions, contentDescription = null, tint = BBColors.Yellow.Yellow800, modifier = Modifier.size(BBIcon.Empty))
             Text(text = BBLocalization.Current.Get(key = "cf668625-d6eb-4c14-97de-fee71a127b64", fallback = "Abonelik bulunamadı"), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
-            Text(text = "İstenen abonelik kaydı bulunamadı veya görüntülenemiyor.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(text = BBLocalization.Current.Get(key = "d5856f3b-8e79-4182-8046-8ef4402dbae6", fallback = "İstenen abonelik kaydı bulunamadı veya görüntülenemiyor."), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             BbButton(text = BBLocalization.Current.Get(key = "9d1ce783-da20-464b-9203-cd1ce09918c6", fallback = "Tekrar Dene"), onClick = onRetryClick, variant = BbButtonVariant.Primary, size = BbButtonSize.Small)
         }
     }

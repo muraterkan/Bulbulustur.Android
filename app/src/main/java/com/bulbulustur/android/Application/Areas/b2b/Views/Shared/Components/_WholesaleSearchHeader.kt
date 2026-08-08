@@ -53,7 +53,7 @@ fun WholesaleSearchHeader(
     onMenuClick: () -> Unit,
     onFavoriteClick: () -> Unit,
     modifier: Modifier = Modifier,
-    placeholder: String = "Toptan ürün, kategori veya tedarikçi ara",
+    placeholder: String = BBLocalization.Current.Get(key = "8d009caa-1db4-42e9-b394-dc818277d259", fallback = "Toptan ürün, kategori veya tedarikçi ara"),
     onSearchClick: (() -> Unit)? = null,
     onClearClick: (() -> Unit)? = null,
     leadingAction: WholesaleSearchHeaderLeadingAction = WholesaleSearchHeaderLeadingAction.Menu,
@@ -99,7 +99,7 @@ fun WholesaleSearchHeader(
                     ) {
                         BBLocalization.Current.Get(key = "d94f43b6-5081-4e7d-b66e-8d19b37e9751", fallback = "Geri")
                     } else {
-                        "Menü"
+                        BBLocalization.Current.Get(key = "06fd752c-0184-4e9e-92e1-9d28781807a0", fallback = "Menü")
                     },
                     onClick = {
                         if (
@@ -216,7 +216,7 @@ private fun WholesaleSearchInput(
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.Close,
-                            contentDescription = "Temizle",
+                            contentDescription = BBLocalization.Current.Get(key = "0bff2074-48a3-4ba4-808f-2583f63aa227", fallback = "Temizle"),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }

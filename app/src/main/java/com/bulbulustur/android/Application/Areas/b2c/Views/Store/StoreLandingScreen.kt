@@ -36,6 +36,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,17 +44,22 @@ import androidx.compose.ui.unit.dp
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 
 @Composable
-fun SellerLandingScreen(
+fun StoreLandingScreen(
     onBackClick: () -> Unit = {},
-    onStartSellerApplicationClick: () -> Unit = {},
-    onSellerInfoClick: (RetailSellerInfoItem) -> Unit = {}
+    onStartStoreApplicationClick: () -> Unit = {},
+    onStoreInfoClick: (RetailStoreInfoItem) -> Unit = {}
 ) {
     val screenData = remember {
-        getRetailSellerLandingScreenData()
+        getRetailStoreLandingScreenData()
+    }
+
+    val uriHandler = LocalUriHandler.current
+    val openStoreApplicationPage = {
+        uriHandler.openUri("https://www.bulbulustur.com/home/now")
     }
 
     var selectedTab by remember {
-        mutableStateOf("Avantajlar")
+        mutableStateOf(BBLocalization.Current.Get(key = "ed566da7-8c17-4c61-a08e-e7a24db4c901", fallback = "Avantajlar"))
     }
 
     val visibleItems = remember(selectedTab, screenData.infoItems) {
@@ -77,26 +83,26 @@ fun SellerLandingScreen(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
             item {
-                SellerLandingTopBar(
+                StoreLandingTopBar(
                     onBackClick = onBackClick
                 )
             }
 
             item {
-                SellerLandingHero(
+                StoreLandingHero(
                     summary = screenData.summary,
-                    onStartSellerApplicationClick = onStartSellerApplicationClick
+                    onStartStoreApplicationClick = openStoreApplicationPage
                 )
             }
 
             item {
-                SellerLandingStatSection(
+                StoreLandingStatSection(
                     summary = screenData.summary
                 )
             }
 
             item {
-                SellerLandingTabSection(
+                StoreLandingTabSection(
                     tabs = screenData.tabs,
                     selectedTab = selectedTab,
                     onTabChange = {
@@ -106,24 +112,24 @@ fun SellerLandingScreen(
             }
 
             item {
-                SellerLandingSectionTitle(
+                StoreLandingSectionTitle(
                     title = selectedTab,
-                    description = "Bulbulustur'da satışa başlamak isteyen Mağazalar için kısa bilgiler."
+                    description = BBLocalization.Current.Get(key = "e08c8c8a-1d27-4858-b380-88a1dc302d13", fallback = "Bulbulustur'da satışa başlamak isteyen mağazalar için kısa bilgiler.")
                 )
             }
 
             items(visibleItems) { infoItem ->
-                SellerLandingInfoCard(
+                StoreLandingInfoCard(
                     infoItem = infoItem,
                     onClick = {
-                        onSellerInfoClick(infoItem)
+                        onStoreInfoClick(infoItem)
                     }
                 )
             }
 
             item {
-                SellerLandingBottomCta(
-                    onStartSellerApplicationClick = onStartSellerApplicationClick
+                StoreLandingBottomCta(
+                    onStartStoreApplicationClick = openStoreApplicationPage
                 )
             }
         }
@@ -131,7 +137,7 @@ fun SellerLandingScreen(
 }
 
 @Composable
-private fun SellerLandingTopBar(
+private fun StoreLandingTopBar(
     onBackClick: () -> Unit
 ) {
     Row(
@@ -159,14 +165,14 @@ private fun SellerLandingTopBar(
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = BBLocalization.Current.Get(key = "37c64a4d-b74c-4474-bfa0-e8a07d376be8", fallback = ""),
+                text = BBLocalization.Current.Get(key = "37c64a4d-b74c-4474-bfa0-e8a07d376be8", fallback = "Bulbulustur’da Satış"),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onBackground
             )
 
             Text(
-                text = "Mağaza açma ve satış başlangıç rehberi.",
+                text = BBLocalization.Current.Get(key = "2eba3b33-ee20-4b6d-ac08-d1a85fb44ed8", fallback = "Mağaza açma ve satış başlangıç rehberi."),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -175,9 +181,9 @@ private fun SellerLandingTopBar(
 }
 
 @Composable
-private fun SellerLandingHero(
-    summary: RetailSellerLandingSummary,
-    onStartSellerApplicationClick: () -> Unit
+private fun StoreLandingHero(
+    summary: RetailStoreLandingSummary,
+    onStartStoreApplicationClick: () -> Unit
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -195,7 +201,7 @@ private fun SellerLandingHero(
                 .padding(18.dp)
         ) {
             Text(
-                text = "Ürünlerini Bulbulustur'da Vitrine Çıkar",
+                text = BBLocalization.Current.Get(key = "b3c12fd8-1f0e-4f4c-8f3e-c1c4e24f8d21", fallback = "Sadece mağaza açmayın, ticaret ekosistemine katılın."),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onPrimaryContainer
@@ -204,7 +210,7 @@ private fun SellerLandingHero(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Perakende ve toptan satış kanallarına tek ekosistemden ulaşmak isteyen Mağazalar için başlangıç alanı.",
+                text = BBLocalization.Current.Get(key = "25fda1cc-0c96-4a41-a5b1-358813707de0", fallback = "Ürünlerinizi perakende ve toptan satış kanallarına açın. RFQ taleplerine yanıt verin, markanızı yönetin ve satış kanallarınızı Bulbulustur ekosistemiyle birlikte büyütün."),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onPrimaryContainer
             )
@@ -214,19 +220,19 @@ private fun SellerLandingHero(
             Row(
                 horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
             ) {
-                SellerLandingHeroPill(
+                StoreLandingHeroPill(
                     title = summary.storeCountText,
-                    subtitle = BBLocalization.Current.Get(key = "a4bd79dd-e7ee-4407-9e7d-00582840c43a", fallback = "mağaza")
+                    subtitle = BBLocalization.Current.Get(key = "f6b3d225-42e2-4668-95b8-195ec74bb3d7", fallback = "satış kanalı")
                 )
 
-                SellerLandingHeroPill(
+                StoreLandingHeroPill(
                     title = summary.categoryCountText,
-                    subtitle = "kategori"
+                    subtitle = BBLocalization.Current.Get(key = "be65a706-5b1a-417e-a05f-8266bbdbdc48", fallback = "teklif sistemi")
                 )
 
-                SellerLandingHeroPill(
+                StoreLandingHeroPill(
                     title = summary.modeText,
-                    subtitle = "kanal"
+                    subtitle = BBLocalization.Current.Get(key = "a7f4f1c8-3522-4dd4-848e-dc98b971aa72", fallback = "bağımsız kanal")
                 )
             }
 
@@ -237,7 +243,7 @@ private fun SellerLandingHero(
                     .clip(RoundedCornerShape(999.dp))
                     .background(MaterialTheme.colorScheme.primary)
                     .clickable {
-                        onStartSellerApplicationClick()
+                        onStartStoreApplicationClick()
                     }
                     .padding(
                         horizontal = 18.dp,
@@ -246,7 +252,7 @@ private fun SellerLandingHero(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "Mağaza başvurusu başlat",
+                    text = BBLocalization.Current.Get(key = "c8c9ae14-5fd3-4e8a-8f28-1b4b270d13c8", fallback = "Mağaza başvurusu başlat"),
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onPrimary
@@ -257,7 +263,7 @@ private fun SellerLandingHero(
 }
 
 @Composable
-private fun SellerLandingHeroPill(
+private fun StoreLandingHeroPill(
     title: String,
     subtitle: String
 ) {
@@ -288,35 +294,35 @@ private fun SellerLandingHeroPill(
 }
 
 @Composable
-private fun SellerLandingStatSection(
-    summary: RetailSellerLandingSummary
+private fun StoreLandingStatSection(
+    summary: RetailStoreLandingSummary
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        SellerLandingStatCard(
+        StoreLandingStatCard(
             modifier = Modifier.weight(1f),
             title = summary.applicationTimeText,
-            subtitle = "başvuru"
+            subtitle = BBLocalization.Current.Get(key = "a47ec7b5-d822-436e-a834-f198b1c4fdd2", fallback = "başvuru")
         )
 
-        SellerLandingStatCard(
+        StoreLandingStatCard(
             modifier = Modifier.weight(1f),
             title = summary.supportText,
-            subtitle = BBLocalization.Current.Get(key = "d7a5b38c-266c-4559-885a-309bb75d011f", fallback = "destek")
+            subtitle = BBLocalization.Current.Get(key = "bbec2ea2-e11e-4950-a035-93864f9a9209", fallback = "süreç")
         )
 
-        SellerLandingStatCard(
+        StoreLandingStatCard(
             modifier = Modifier.weight(1f),
             title = summary.paymentText,
-            subtitle = "ödeme"
+            subtitle = BBLocalization.Current.Get(key = "acba3cb8-5e99-4f21-a53f-d940cf132772", fallback = "altyapı")
         )
     }
 }
 
 @Composable
-private fun SellerLandingStatCard(
+private fun StoreLandingStatCard(
     modifier: Modifier,
     title: String,
     subtitle: String
@@ -355,7 +361,7 @@ private fun SellerLandingStatCard(
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun SellerLandingTabSection(
+private fun StoreLandingTabSection(
     tabs: List<String>,
     selectedTab: String,
     onTabChange: (String) -> Unit
@@ -380,8 +386,8 @@ private fun SellerLandingTabSection(
 }
 
 @Composable
-private fun SellerLandingInfoCard(
-    infoItem: RetailSellerInfoItem,
+private fun StoreLandingInfoCard(
+    infoItem: RetailStoreInfoItem,
     onClick: () -> Unit
 ) {
     Card(
@@ -450,14 +456,14 @@ private fun SellerLandingInfoCard(
 }
 
 @Composable
-private fun SellerLandingBottomCta(
-    onStartSellerApplicationClick: () -> Unit
+private fun StoreLandingBottomCta(
+    onStartStoreApplicationClick: () -> Unit
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
-                onStartSellerApplicationClick()
+                onStartStoreApplicationClick()
             },
         shape = RoundedCornerShape(26.dp),
         colors = CardDefaults.cardColors(
@@ -471,7 +477,7 @@ private fun SellerLandingBottomCta(
             modifier = Modifier.padding(18.dp)
         ) {
             Text(
-                text = "Hazırsan başvurunu başlat",
+                text = BBLocalization.Current.Get(key = "e1eb83c2-1f3f-4d8a-9b8c-4adcb9c57d31", fallback = "Satışa başlamak için hazır mısınız?"),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -480,7 +486,7 @@ private fun SellerLandingBottomCta(
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "Mağaza bilgilerini, şirket bilgilerini ve ürün satış tercihlerini tamamlayarak başvuru sürecine geçebilirsin.",
+                text = BBLocalization.Current.Get(key = "cbfa4b35-f7b8-4417-9a2d-9e6ec3fb5c46", fallback = "Mağaza, şirket ve satış kanalı bilgilerinizi tamamlayarak Bulbulustur ekosistemine katılma sürecini başlatın."),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -498,7 +504,7 @@ private fun SellerLandingBottomCta(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "Başvuruyu başlat",
+                    text = BBLocalization.Current.Get(key = "e2ac8873-888f-43fd-9423-9cf5586be8d7", fallback = "Mağazamı Açıyorum"),
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onPrimary
@@ -509,7 +515,7 @@ private fun SellerLandingBottomCta(
 }
 
 @Composable
-private fun SellerLandingSectionTitle(
+private fun StoreLandingSectionTitle(
     title: String,
     description: String
 ) {
@@ -533,13 +539,13 @@ private fun SellerLandingSectionTitle(
     }
 }
 
-data class RetailSellerLandingScreenData(
-    val summary: RetailSellerLandingSummary,
+data class RetailStoreLandingScreenData(
+    val summary: RetailStoreLandingSummary,
     val tabs: List<String>,
-    val infoItems: List<RetailSellerInfoItem>
+    val infoItems: List<RetailStoreInfoItem>
 )
 
-data class RetailSellerLandingSummary(
+data class RetailStoreLandingSummary(
     val storeCountText: String,
     val categoryCountText: String,
     val modeText: String,
@@ -548,7 +554,7 @@ data class RetailSellerLandingSummary(
     val paymentText: String
 )
 
-data class RetailSellerInfoItem(
+data class RetailStoreInfoItem(
     val id: Int,
     val groupName: String,
     val title: String,
@@ -556,84 +562,91 @@ data class RetailSellerInfoItem(
     val iconText: String
 )
 
-private fun getRetailSellerLandingScreenData(): RetailSellerLandingScreenData {
-    return RetailSellerLandingScreenData(
-        summary = RetailSellerLandingSummary(
-            storeCountText = "19K+",
-            categoryCountText = "1000+",
-            modeText = "B2B+B2C",
-            applicationTimeText = "5 dk",
-            supportText = "Rehberli",
+private fun getRetailStoreLandingScreenData(): RetailStoreLandingScreenData {
+    return RetailStoreLandingScreenData(
+        summary = RetailStoreLandingSummary(
+            storeCountText = BBLocalization.Current.Get(key = "a8b0e4c9-11f1-4a51-9c24-79d4f0e7b101", fallback = "B2B + B2C"),
+            categoryCountText = BBLocalization.Current.Get(key = "d8e91c6a-0e83-4e68-baf6-15667bb71202", fallback = "RFQ"),
+            modeText = BBLocalization.Current.Get(key = "a74d0aa5-0a08-4fe4-b3cf-2e7b05a72003", fallback = "Draugr"),
+            applicationTimeText = BBLocalization.Current.Get(key = "e67603d6-2489-4548-a879-577451be2311", fallback = "Kolay"),
+            supportText = BBLocalization.Current.Get(key = "c6a5f9b4-2e10-43f0-a482-2350b4f65f12", fallback = "Rehberli"),
             paymentText = BBLocalization.Current.Get(key = "aba99f7e-0b0a-45aa-96b2-6ac03f36582a", fallback = "Güvenli")
         ),
         tabs = listOf(
-            "Avantajlar",
-            "Başvuru",
-            "Satış kanalları"
+            BBLocalization.Current.Get(key = "ed566da7-8c17-4c61-a08e-e7a24db4c901", fallback = "Avantajlar"),
+            BBLocalization.Current.Get(key = "72592026-f7ec-41cb-aaae-7f8c86402fba", fallback = "Başvuru"),
+            BBLocalization.Current.Get(key = "e930b5cb-d469-4ddc-81d0-a3b6232ef783", fallback = "Satış kanalları")
         ),
         infoItems = listOf(
-            RetailSellerInfoItem(
+            RetailStoreInfoItem(
                 id = 1,
-                groupName = "Avantajlar",
-                title = "Tek ekosistemde satış",
-                description = "Perakende ve toptan satış kanallarına aynı Bulbulustur çatısı altında hazırlanırsın.",
+                groupName = BBLocalization.Current.Get(key = "ed566da7-8c17-4c61-a08e-e7a24db4c901", fallback = BBLocalization.Current.Get(key = "ed566da7-8c17-4c61-a08e-e7a24db4c901", fallback = "Avantajlar")),
+                title = BBLocalization.Current.Get(key = "2c148a15-5b59-4d4b-a12d-4c84233ed125", fallback = "Tek ekosistemde satış"),
+                description = BBLocalization.Current.Get(key = "6995eec9-c2fb-4614-ac6b-13690aa85277", fallback = "Perakende, toptan ve RFQ fırsatlarını aynı Bulbulustur çatısı altında yönetin."),
                 iconText = "TE"
             ),
-            RetailSellerInfoItem(
+            RetailStoreInfoItem(
                 id = 2,
-                groupName = "Avantajlar",
-                title = "Kategori bazlı görünürlük",
-                description = "Ürünlerin kategori, mağaza ve kampanya akışlarında Keşfedilebilir hale gelir.",
+                groupName = BBLocalization.Current.Get(key = "ed566da7-8c17-4c61-a08e-e7a24db4c901", fallback = BBLocalization.Current.Get(key = "ed566da7-8c17-4c61-a08e-e7a24db4c901", fallback = "Avantajlar")),
+                title = BBLocalization.Current.Get(key = "c57c0745-93d3-4820-b17a-bd0ee91cd979", fallback = "Kategori bazlı görünürlük"),
+                description = BBLocalization.Current.Get(key = "d99da23a-3200-4164-bc55-0540b22e48ec", fallback = "Ürünlerinizi kategori, mağaza, marka ve kampanya akışlarında daha görünür hale getirin."),
                 iconText = "KG"
             ),
-            RetailSellerInfoItem(
+            RetailStoreInfoItem(
                 id = 3,
-                groupName = "Avantajlar",
-                title = "Güven veren mağaza profili",
-                description = "Mağaza Vitrini, puanlama, ürün listeleri ve sipariş akışıyla profesyonel görünüm sağlanır.",
+                groupName = BBLocalization.Current.Get(key = "ed566da7-8c17-4c61-a08e-e7a24db4c901", fallback = BBLocalization.Current.Get(key = "ed566da7-8c17-4c61-a08e-e7a24db4c901", fallback = "Avantajlar")),
+                title = BBLocalization.Current.Get(key = "da74bcdc-3e3e-4d65-a165-042ee4e38f8b", fallback = "Güven veren mağaza profili"),
+                description = BBLocalization.Current.Get(key = "5fa7210f-ed7c-4579-b061-111b12aea422", fallback = "Mağaza vitrini, şirket bilgileri, ürün listeleri ve iletişim akışıyla profesyonel görünüm sağlayın."),
                 iconText = "GP"
             ),
-            RetailSellerInfoItem(
+            RetailStoreInfoItem(
                 id = 4,
-                groupName = "Başvuru",
-                title = "Mağaza bilgileri",
-                description = "Mağaza adı, iletişim bilgileri ve temel ticari bilgiler başvuru sırasında alınır.",
+                groupName = BBLocalization.Current.Get(key = "72592026-f7ec-41cb-aaae-7f8c86402fba", fallback = "Başvuru"),
+                title = BBLocalization.Current.Get(key = "fb16c1c7-9aed-4fc9-a104-d7e8925fd672", fallback = "Başvurunuzu oluşturun"),
+                description = BBLocalization.Current.Get(key = "f2021668-cde7-41b2-aa51-e783b399abed", fallback = "Şirket, mağaza ve iletişim bilgilerinizi tamamlayarak süreci başlatın."),
                 iconText = "MB"
             ),
-            RetailSellerInfoItem(
+            RetailStoreInfoItem(
                 id = 5,
-                groupName = "Başvuru",
-                title = "Şirket doğrulama",
-                description = "Satıcı güvenliği için şirket ve yetkili bilgileri doğrulama sürecine alınır.",
+                groupName = BBLocalization.Current.Get(key = "72592026-f7ec-41cb-aaae-7f8c86402fba", fallback = "Başvuru"),
+                title = BBLocalization.Current.Get(key = "87a211bb-7ba1-4607-966a-a877da8184f8", fallback = "Profilinizi hazırlayın"),
+                description = BBLocalization.Current.Get(key = "e1937497-c3d9-47ed-8c1a-317fcb1e4d4e", fallback = "Mağaza, marka ve tedarikçi görünümünüzü güven veren bir yapıya taşıyın."),
                 iconText = "ŞD"
             ),
-            RetailSellerInfoItem(
+            RetailStoreInfoItem(
                 id = 6,
-                groupName = "Başvuru",
-                title = "Ürün hazırlığı",
-                description = "Ürünlerin kategori, fiyat, stok ve görsel bilgileri satışa hazır hale getirilir.",
+                groupName = BBLocalization.Current.Get(key = "72592026-f7ec-41cb-aaae-7f8c86402fba", fallback = "Başvuru"),
+                title = BBLocalization.Current.Get(key = "abe9aa28-4aa6-435f-b5cc-a5b57336bc91", fallback = "Ürün ve kanalları seçin"),
+                description = BBLocalization.Current.Get(key = "149a7abd-b841-4553-9540-0b3e1d3450b7", fallback = "B2C, B2B, RFQ veya Draugr gibi uygun satış alanlarını belirleyin."),
                 iconText = "ÜH"
             ),
-            RetailSellerInfoItem(
+            RetailStoreInfoItem(
                 id = 7,
-                groupName = "Satış kanalları",
-                title = "Perakende satış",
-                description = "B2C ürün listeleme, ürün detayı, sepet ve ödeme akışıyla müşteriye ulaşılır.",
+                groupName = BBLocalization.Current.Get(key = "e930b5cb-d469-4ddc-81d0-a3b6232ef783", fallback = "Satış kanalları"),
+                title = BBLocalization.Current.Get(key = "4e4bd400-c8c7-4da5-b676-7809722b1218", fallback = "Perakende satış"),
+                description = BBLocalization.Current.Get(key = "44b8f9ca-8f02-474b-9754-e6ef87b01fae", fallback = "B2C ürün listeleme, ürün detayı, sepet ve sipariş akışıyla müşterilere ulaşın."),
                 iconText = "PS"
             ),
-            RetailSellerInfoItem(
+            RetailStoreInfoItem(
                 id = 8,
-                groupName = "Satış kanalları",
-                title = "Toptan satış",
-                description = "Toptan ürün, tedarikçi görünürlüğü ve RFQ akışlarıyla işletmelere erişim sağlanır.",
+                groupName = BBLocalization.Current.Get(key = "e930b5cb-d469-4ddc-81d0-a3b6232ef783", fallback = "Satış kanalları"),
+                title = BBLocalization.Current.Get(key = "9c8ef1bf-b73f-453c-9e24-0de721db23bc", fallback = "Toptan satış"),
+                description = BBLocalization.Current.Get(key = "2eaae511-2abf-475b-b0e3-188629ff3052", fallback = "Kurumsal alıcılar, toplu alım talepleri ve kategori bazlı B2B görünürlük için ürünlerinizi açın."),
                 iconText = "TS"
             ),
-            RetailSellerInfoItem(
+            RetailStoreInfoItem(
                 id = 9,
-                groupName = "Satış kanalları",
-                title = "Kampanya ve Vitrinler",
-                description = "Seçili ürünleri ve mağaza fırsatlarını kampanya alanlarında öne çıkarabilirsin.",
-                iconText = "KV"
+                groupName = BBLocalization.Current.Get(key = "e930b5cb-d469-4ddc-81d0-a3b6232ef783", fallback = "Satış kanalları"),
+                title = BBLocalization.Current.Get(key = "bfc3945d-66e9-4b14-a6ea-7f7c2fd48a36", fallback = "RFQ sistemi"),
+                description = BBLocalization.Current.Get(key = "52a9358d-bc16-4415-96c1-0d45e0da73c1", fallback = "Alıcılardan gelen özel fiyat ve toplu alım taleplerine teklif vererek yeni fırsatlar yakalayın."),
+                iconText = "RFQ"
+            ),
+            RetailStoreInfoItem(
+                id = 10,
+                groupName = BBLocalization.Current.Get(key = "e930b5cb-d469-4ddc-81d0-a3b6232ef783", fallback = "Satış kanalları"),
+                title = BBLocalization.Current.Get(key = "a9a4d3be-7b26-4c49-8970-e889b248ba01", fallback = "Draugr bağlantısı"),
+                description = BBLocalization.Current.Get(key = "edb80e7d-6d7c-4f09-9af4-8489090168b7", fallback = "Kendi satış kanalınızı Bulbulustur ekosistemiyle birlikte yönetin."),
+                iconText = "DR"
             )
         )
     )
@@ -641,9 +654,9 @@ private fun getRetailSellerLandingScreenData(): RetailSellerLandingScreenData {
 
 @Preview(showBackground = true)
 @Composable
-private fun SellerLandingScreenPreview() {
+private fun StoreLandingScreenPreview() {
     MaterialTheme {
-        SellerLandingScreen()
+        StoreLandingScreen()
     }
 }
 

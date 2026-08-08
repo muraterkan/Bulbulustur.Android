@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Shared.Address
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.lifecycle.viewModelScope
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.BaseController
 import com.bulbulustur.android.businesslayer.Core.DTO.AddressCityDTO
@@ -250,7 +252,7 @@ class AddressCascadeController(
                                 ?: DEFAULT_COUNTRY_ERROR
 
                         countries.isEmpty() ->
-                            "Ülke verisi bulunamadı."
+                            BBLocalization.Current.Get(key = "8e923637-2574-47be-837e-30dde5e39a31", fallback = "Ülke verisi bulunamadı.")
 
                         else ->
                             null
@@ -283,7 +285,7 @@ class AddressCascadeController(
             _state.update {
                 it.ClearCountrySelection().copy(
                     CountryError =
-                        "Seçilen ülke bulunamadı."
+                        BBLocalization.Current.Get(key = "d3b3cf06-338f-4566-afb6-e27ae355b2b2", fallback = "Seçilen ülke bulunamadı.")
                 )
             }
 
@@ -434,7 +436,7 @@ class AddressCascadeController(
                         0
                 ).copy(
                     CountryStateError =
-                        "Seçilen state veya bölge bu ülkeye ait değil."
+                        BBLocalization.Current.Get(key = "93919901-73b4-4131-bb2c-a422c7388b0f", fallback = "Seçilen state veya bölge bu ülkeye ait değil.")
                 )
             }
 
@@ -590,7 +592,7 @@ class AddressCascadeController(
             _state.update {
                 it.copy(
                     CountryDepartmentError =
-                        "Seçilen departman bu state veya bölgeye ait değil."
+                        BBLocalization.Current.Get(key = "ba0dbb42-1c15-447e-aa54-bf7e7902411f", fallback = "Seçilen departman bu state veya bölgeye ait değil.")
                 )
             }
 
@@ -673,7 +675,7 @@ class AddressCascadeController(
                             response.Message ?: DEFAULT_CITY_ERROR
 
                         cities.isEmpty() ->
-                            "Bu ülke için şehir bulunamadı."
+                            BBLocalization.Current.Get(key = "98c9713e-7c0d-4065-b7ef-14b59014cd3e", fallback = "Bu ülke için şehir bulunamadı.")
 
                         else ->
                             null
@@ -698,7 +700,7 @@ class AddressCascadeController(
                     Districts =
                         emptyList(),
                     CityError =
-                        "Şehir yüklemek için ülke ve state seçilmelidir."
+                        BBLocalization.Current.Get(key = "58b8f8dd-e1c7-477a-a742-404feb9440fc", fallback = "Şehir yüklemek için ülke ve state seçilmelidir.")
                 )
             }
 
@@ -778,7 +780,7 @@ class AddressCascadeController(
                                 ?: DEFAULT_CITY_ERROR
 
                         cities.isEmpty() ->
-                            "Seçilen coğrafi zincir için şehir bulunamadı."
+                            BBLocalization.Current.Get(key = "305fc4be-2a2b-4229-a032-0b12b27d27b7", fallback = "Seçilen coğrafi zincir için şehir bulunamadı.")
 
                         else ->
                             null
@@ -850,7 +852,7 @@ class AddressCascadeController(
                         0
                 ).copy(
                     CityError =
-                        "Seçilen şehir mevcut coğrafi zincire ait değil."
+                        BBLocalization.Current.Get(key = "9df7df54-7d3b-466e-851d-d3ad059bb69a", fallback = "Seçilen şehir mevcut coğrafi zincire ait değil.")
                 )
             }
 
@@ -986,25 +988,25 @@ class AddressCascadeController(
 
     companion object {
 
-        private const val COUNTRY_COUNT: Int =
+        private val COUNTRY_COUNT: Int =
             300
 
-        private const val ITEM_COUNT: Int =
+        private val ITEM_COUNT: Int =
             10000
 
-        private const val DEFAULT_COUNTRY_ERROR: String =
-            "Ülkeler yüklenemedi."
+        private val DEFAULT_COUNTRY_ERROR: String =
+            BBLocalization.Current.Get(key = "ee41820b-49bb-4918-a52c-6a2d8da76c56", fallback = "Ülkeler yüklenemedi.")
 
-        private const val DEFAULT_COUNTRY_STATE_ERROR: String =
-            "Eyalet veya bölge listesi yüklenemedi."
+        private val DEFAULT_COUNTRY_STATE_ERROR: String =
+            BBLocalization.Current.Get(key = "1e608c83-f6da-4099-a5ff-27630c4c7fb9", fallback = "Eyalet veya bölge listesi yüklenemedi.")
 
-        private const val DEFAULT_COUNTRY_DEPARTMENT_ERROR: String =
-            "Departman listesi yüklenemedi."
+        private val DEFAULT_COUNTRY_DEPARTMENT_ERROR: String =
+            BBLocalization.Current.Get(key = "a4d204cd-6744-466f-b136-ea7dad3f4a12", fallback = "Departman listesi yüklenemedi.")
 
-        private const val DEFAULT_CITY_ERROR: String =
-            "Şehirler yüklenemedi."
+        private val DEFAULT_CITY_ERROR: String =
+            BBLocalization.Current.Get(key = "c72a9644-9dbe-4f63-b9c2-82dac9717601", fallback = "Şehirler yüklenemedi.")
 
-        private const val DEFAULT_DISTRICT_ERROR: String =
-            "İlçeler yüklenemedi."
+        private val DEFAULT_DISTRICT_ERROR: String =
+            BBLocalization.Current.Get(key = "8eb58a9b-7e21-4a3a-9b1d-675b03410483", fallback = "İlçeler yüklenemedi.")
     }
 }

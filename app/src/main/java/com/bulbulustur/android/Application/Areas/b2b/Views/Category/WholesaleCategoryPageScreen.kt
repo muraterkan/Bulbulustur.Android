@@ -100,7 +100,7 @@ fun WholesaleCategoryHomeScreen(
                     BBLocalization.Current.Get(key = "1a132fdc-096f-42d7-835d-96b0a17b3675", fallback = "")
                 },
                 description = category.Breadcrumb.ifBlank {
-                    "Toptan kategori ürünlerini keşfet"
+                    BBLocalization.Current.Get(key = "9eb4ea20-1955-4ce0-9126-7c9a396c6bcc", fallback = "Toptan kategori ürünlerini keşfet")
                 },
                 icon = Icons.Outlined.Category,
                 backgroundColor = when (index % 4) {
@@ -129,7 +129,7 @@ fun WholesaleCategoryHomeScreen(
                 onMenuClick = onMenuClick,
                 onFavoriteClick = onFavoriteClick,
                 onMessageClick = onMessageClick,
-                placeholder = "Toptan ürün, kategori veya tedarikçi ara",
+                placeholder = BBLocalization.Current.Get(key = "8d009caa-1db4-42e9-b394-dc818277d259", fallback = "Toptan ürün, kategori veya tedarikçi ara"),
                 onSearchClick = {
                     onSearchClick(searchText)
                 },
@@ -189,8 +189,8 @@ fun WholesaleCategoryHomeScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Toptan Kategoriler",
-                    subtitle = "Ürün gruplarını ve alt kategori yapılarını incele."
+                    title = BBLocalization.Current.Get(key = "c5fd418b-c93c-4495-87c3-643f24fbde2d", fallback = "Toptan Kategoriler"),
+                    subtitle = BBLocalization.Current.Get(key = "d820fdf3-d021-4654-ba31-e2a30181780d", fallback = "Ürün gruplarını ve alt kategori yapılarını incele.")
                 )
             }
 
@@ -234,8 +234,8 @@ fun WholesaleCategoryHomeScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Toptan Ticaret Akışı",
-                    subtitle = "Ürün, tedarikçi ve teklif kanallarına hızlı geç."
+                    title = BBLocalization.Current.Get(key = "06e02e92-8cf3-4ace-bbc9-31c5255f24bf", fallback = "Toptan Ticaret Akışı"),
+                    subtitle = BBLocalization.Current.Get(key = "d65eae8b-22c0-41b3-a61a-b5bb210a8dd9", fallback = "Ürün, tedarikçi ve teklif kanallarına hızlı geç.")
                 )
             }
 
@@ -289,7 +289,7 @@ private fun WholesaleCategoryErrorState(
             )
         ) {
             Text(
-                text = "Kategoriler yüklenemedi",
+                text = BBLocalization.Current.Get(key = "0fbe628e-e5fb-4f84-8bdd-b7172065d2c6", fallback = "Kategoriler yüklenemedi"),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.error,
                 fontWeight = FontWeight.SemiBold
@@ -325,7 +325,7 @@ private fun WholesaleCategoryEmptyState() {
             )
 
             Text(
-                text = "Gösterilecek toptan kategori bulunamadı.",
+                text = BBLocalization.Current.Get(key = "9bff57b4-bc7a-4b4e-b655-7a1d63b4df56", fallback = "Gösterilecek toptan kategori bulunamadı."),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -369,7 +369,7 @@ private fun WholesaleCategoryHeroCard(
                 )
 
                 Text(
-                    text = "Toptan Ticaret",
+                    text = BBLocalization.Current.Get(key = "f1aa464c-b1eb-49cd-a651-3802350f4af1", fallback = "Toptan Ticaret"),
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.SemiBold
@@ -377,14 +377,14 @@ private fun WholesaleCategoryHeroCard(
             }
 
             Text(
-                text = "Toptan ürün kategorilerini keşfet",
+                text = BBLocalization.Current.Get(key = "243b21cb-d0b0-4a37-852b-6fe2e8a63f85", fallback = "Toptan ürün kategorilerini keşfet"),
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
-                text = "Ürün gruplarını incele, tedarikçilere ulaş ve teklif süreçlerini başlat.",
+                text = BBLocalization.Current.Get(key = "d96a80bd-840a-4a7b-9ee8-a0897c32328a", fallback = "Ürün gruplarını incele, tedarikçilere ulaş ve teklif süreçlerini başlat."),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -714,7 +714,7 @@ private fun getWholesaleQuickActions(): List<WholesaleCategoryQuickActionItem> {
     return listOf(
         WholesaleCategoryQuickActionItem(
             title = BBLocalization.Current.Get(key = "9346820b-56b1-4be1-9ac2-4d6f22fa18b5", fallback = "Tedarikçiler"),
-            description = "Toptan satış yapan firmalar",
+            description = BBLocalization.Current.Get(key = "3372543b-f704-405e-af2e-bb2fec721b48", fallback = "Toptan satış yapan firmalar"),
             icon = Icons.Outlined.Business,
             backgroundColor = MaterialTheme.colorScheme.primaryContainer,
             iconColor = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -722,23 +722,23 @@ private fun getWholesaleQuickActions(): List<WholesaleCategoryQuickActionItem> {
         ),
         WholesaleCategoryQuickActionItem(
             title = BBLocalization.Current.Get(key = "9aa9e9a4-18b3-427b-943f-36170e46cb37", fallback = "Teklif Al"),
-            description = "İhtiyacını firmalara ilet",
+            description = BBLocalization.Current.Get(key = "b372f794-1665-42e3-b543-1d7b1f9ab0be", fallback = "İhtiyacını firmalara ilet"),
             icon = Icons.Outlined.RequestQuote,
             backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
             iconColor = MaterialTheme.colorScheme.onSurfaceVariant,
             target = WholesaleCategoryQuickActionTarget.Rfq
         ),
         WholesaleCategoryQuickActionItem(
-            title = "Son Fiyat",
-            description = "Güncel toptan fiyat al",
+            title = BBLocalization.Current.Get(key = "1cfc3769-add7-41d6-b18b-117466c6e19f", fallback = "Son Fiyat"),
+            description = BBLocalization.Current.Get(key = "e5b83084-8ef7-4ff8-8dff-df7117bbd2c0", fallback = "Güncel toptan fiyat al"),
             icon = Icons.Outlined.Search,
             backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
             iconColor = MaterialTheme.colorScheme.onSecondaryContainer,
             target = WholesaleCategoryQuickActionTarget.LastPrice
         ),
         WholesaleCategoryQuickActionItem(
-            title = "Numune",
-            description = "Sipariş öncesi numune iste",
+            title = BBLocalization.Current.Get(key = "76f040d9-6f98-4e10-aeba-fcbf5a6691ba", fallback = "Numune"),
+            description = BBLocalization.Current.Get(key = "0b9b7506-3593-4f44-b8b9-c68c8e19e1ab", fallback = "Sipariş öncesi numune iste"),
             icon = Icons.Outlined.LocalShipping,
             backgroundColor = MaterialTheme.colorScheme.tertiaryContainer,
             iconColor = MaterialTheme.colorScheme.onTertiaryContainer,
@@ -746,7 +746,7 @@ private fun getWholesaleQuickActions(): List<WholesaleCategoryQuickActionItem> {
         ),
         WholesaleCategoryQuickActionItem(
             title = BBLocalization.Current.Get(key = "44b76fc9-f305-4368-80ce-fea7d160eb17", fallback = ""),
-            description = "Özel üretim talebi oluştur",
+            description = BBLocalization.Current.Get(key = "5534f745-5831-49cb-abd0-6ef43c11f684", fallback = "Özel üretim talebi oluştur"),
             icon = Icons.Outlined.Tune,
             backgroundColor = MaterialTheme.colorScheme.tertiaryContainer,
             iconColor = MaterialTheme.colorScheme.onTertiaryContainer,
@@ -760,7 +760,7 @@ private fun getWholesaleCategoryShowcases(): List<WholesaleCategoryShowcaseItem>
     return listOf(
         WholesaleCategoryShowcaseItem(
             title = BBLocalization.Current.Get(key = "1d7da276-0c79-47a8-b8f5-d8aa0967d923", fallback = ""),
-            description = "Yayınlanan toptan ürünleri listele.",
+            description = BBLocalization.Current.Get(key = "b7475249-6170-4080-91cb-2ebdf328f1fc", fallback = "Yayınlanan toptan ürünleri listele."),
             icon = Icons.Outlined.ShoppingBasket,
             backgroundColor = MaterialTheme.colorScheme.primaryContainer,
             iconColor = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -768,14 +768,14 @@ private fun getWholesaleCategoryShowcases(): List<WholesaleCategoryShowcaseItem>
         ),
         WholesaleCategoryShowcaseItem(
             title = BBLocalization.Current.Get(key = "9346820b-56b1-4be1-9ac2-4d6f22fa18b5", fallback = "Tedarikçiler"),
-            description = "Toptan satış yapan firmalara ulaş.",
+            description = BBLocalization.Current.Get(key = "3dbf85eb-9bcd-467f-9f6f-086a7c36636e", fallback = "Toptan satış yapan firmalara ulaş."),
             icon = Icons.Outlined.Verified,
             backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
             iconColor = MaterialTheme.colorScheme.onSurfaceVariant,
             target = WholesaleCategoryShowcaseTarget.Companies
         ),
         WholesaleCategoryShowcaseItem(
-            title = "Teklif Topla",
+            title = BBLocalization.Current.Get(key = "eae7aed0-a290-48a4-ba80-f43ea6642a3b", fallback = "Teklif Topla"),
             description = BBLocalization.Current.Get(key = "203882aa-6872-41de-a0db-26b13a6389e3", fallback = ""),
             icon = Icons.Outlined.RequestQuote,
             backgroundColor = MaterialTheme.colorScheme.secondaryContainer,

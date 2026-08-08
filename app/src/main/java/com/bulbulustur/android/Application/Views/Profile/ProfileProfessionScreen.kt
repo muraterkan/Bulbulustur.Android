@@ -15,7 +15,7 @@ fun ProfileProfessionScreen(
 ) {
     ProfileTextValueScreen(
         title = BBLocalization.Current.Get(key = "5b1fbdba-1161-4716-966e-e40a815df70f", fallback = "Meslek"),
-        description = "Meslek bilginizi girin.",
+        description = BBLocalization.Current.Get(key = "57524fef-7052-4c59-ab05-935ea26c0ce3", fallback = "Meslek bilginizi girin."),
         label = BBLocalization.Current.Get(key = "5b1fbdba-1161-4716-966e-e40a815df70f", fallback = "Meslek"),
         value = value,
         isLoading = isLoading,

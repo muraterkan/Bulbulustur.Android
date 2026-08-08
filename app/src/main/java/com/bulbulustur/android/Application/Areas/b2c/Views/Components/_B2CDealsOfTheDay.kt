@@ -57,14 +57,14 @@ fun B2CDealsOfTheDay(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Öne Çıkan Fırsatlar",
+                    text = BBLocalization.Current.Get(key = "83613cf2-ba14-4b57-afc9-21e96356d60b", fallback = "Öne Çıkan Fırsatlar"),
                     style = MaterialTheme.typography.headlineSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
                 )
 
                 Text(
-                    text = "Sınırlı süreli fiyatları ve seçilmiş ürünleri keşfedin.",
+                    text = BBLocalization.Current.Get(key = "071be5f6-6ad4-4c4c-9e83-b43515344fe6", fallback = "Sınırlı süreli fiyatları ve seçilmiş ürünleri keşfedin."),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -188,7 +188,7 @@ private fun B2CDealOfTheDayCard(
                 }
 
                 Text(
-                    text = "Fırsatı İncele",
+                    text = BBLocalization.Current.Get(key = "d0ba4204-4127-4b62-a146-5d0cd9327dec", fallback = "Fırsatı İncele"),
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.SemiBold

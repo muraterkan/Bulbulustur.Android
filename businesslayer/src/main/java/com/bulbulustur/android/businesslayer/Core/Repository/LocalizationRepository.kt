@@ -1,7 +1,6 @@
 package com.bulbulustur.android.businesslayer.Core.Repository
 
 import com.bulbulustur.android.businesslayer.Core.DTO.ResourceDTO
-import com.bulbulustur.android.businesslayer.Core.Enums.EApplicationLanguage
 import com.bulbulustur.android.businesslayer.Core.Interface.ILocalizationRepository
 import com.bulbulustur.android.businesslayer.Core.Network.ApiClient
 import com.bulbulustur.android.businesslayer.Core.Util.ErrorType
@@ -12,7 +11,7 @@ import java.nio.charset.StandardCharsets
 class LocalizationRepository : ILocalizationRepository {
 
     override suspend fun GetResourcesAsync(
-        language: EApplicationLanguage,
+        languageId: Int,
         count: Int
     ): Result<List<ResourceDTO>> {
         return try {
@@ -22,7 +21,7 @@ class LocalizationRepository : ILocalizationRepository {
             )
 
             val query = BuildQuery(
-                languageId = language.Id,
+                languageId = languageId,
                 count = safeCount
             )
 

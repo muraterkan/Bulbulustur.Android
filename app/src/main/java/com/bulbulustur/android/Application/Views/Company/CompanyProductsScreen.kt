@@ -115,7 +115,7 @@ fun CompanyProductsScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = "Firma ürünleri",
+                title = BBLocalization.Current.Get(key = "5441c892-ca73-4202-8a98-e5dcb7893bee", fallback = "Firma ürünleri"),
                 onBackClick = onBackClick
             )
         }
@@ -268,7 +268,7 @@ private fun CompanyProductsHero(
                         )
                     ) {
                         BbChip(
-                            text = "Tedarikçi Ürünleri",
+                            text = BBLocalization.Current.Get(key = "98067ca3-741f-4b7a-ba55-e22bbc1478b7", fallback = "Tedarikçi Ürünleri"),
                             selected = false,
                             onClick = onCompanyProfileClick
                         )
@@ -276,7 +276,7 @@ private fun CompanyProductsHero(
                         if (company.IsVerified) {
                             Icon(
                                 imageVector = Icons.Outlined.Verified,
-                                contentDescription = "Doğrulanmış firma",
+                                contentDescription = BBLocalization.Current.Get(key = "c00be3e3-90d4-4f66-ac51-db9a38bac686", fallback = "Doğrulanmış firma"),
                                 tint = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.size(
                                     BBIcon.SizeSm
@@ -485,7 +485,7 @@ private fun getCompanyProducts(
         CompanyId = companyId,
         Name = "Ortobella Comfort",
         LogoText = "OC",
-        Description = "Firmanın toptan satışa sunduğu ürünleri kategori bazında inceleyin, fiyat aralıklarını karşılaştırın ve ürün detaylarından tedarik sürecine geçin.",
+        Description = BBLocalization.Current.Get(key = "8d5857cf-765d-47cc-bb23-dc16e7dfafc8", fallback = "Firmanın toptan satışa sunduğu ürünleri kategori bazında inceleyin, fiyat aralıklarını karşılaştırın ve ürün detaylarından tedarik sürecine geçin."),
         IsVerified = true,
         Chips = listOf(
             BBLocalization.Current.Get(key = "5365b492-6a1c-4b46-b5c0-b50cbfdd17a8", fallback = "Türkiye"),
@@ -504,12 +504,12 @@ private fun getCompanyProducts(
         Products = listOf(
             CompanyWholesaleProduct(
                 Id = 1,
-                Title = "Endüstriyel karton koli seti",
+                Title = BBLocalization.Current.Get(key = "3274fed0-f5d8-4bb5-8b49-31432b972e4c", fallback = "Endüstriyel karton koli seti"),
                 Category = "Ambalaj ve paketleme",
                 PriceText = "₺12,40 / adet",
                 MoqText = "MOQ 1.000",
                 SupplierText = "Ortobella",
-                BadgeText = "Toptan",
+                BadgeText = BBLocalization.Current.Get(key = "cd90e72e-8745-4543-836b-ca914c3640f8", fallback = "Toptan"),
                 ImageResId =
                     R.drawable.h3ff3b33d6a1447c898cee6e336867bach,
                 IsLowMoq = false,
@@ -517,8 +517,8 @@ private fun getCompanyProducts(
             ),
             CompanyWholesaleProduct(
                 Id = 2,
-                Title = "Paslanmaz makine yedek parçası",
-                Category = "Makine ve sanayi",
+                Title = BBLocalization.Current.Get(key = "a18770e5-d086-4fca-bff8-164613a66a26", fallback = "Paslanmaz makine yedek parçası"),
+                Category = BBLocalization.Current.Get(key = "4f14fddb-41e6-48fd-bb94-473cdee47746", fallback = "Makine ve sanayi"),
                 PriceText = BBLocalization.Current.Get(key = "dbb6b4e4-1a23-423d-9b87-5b0c8cbeb64d", fallback = "Teklif iste"),
                 MoqText = "MOQ 50",
                 SupplierText = "Ortobella",
@@ -530,8 +530,8 @@ private fun getCompanyProducts(
             ),
             CompanyWholesaleProduct(
                 Id = 3,
-                Title = "Elektronik güç modülü",
-                Category = "Elektronik bileşen",
+                Title = BBLocalization.Current.Get(key = "6949dd49-227e-483b-8700-0022a03a24f1", fallback = "Elektronik güç modülü"),
+                Category = BBLocalization.Current.Get(key = "74d119ba-c33b-4865-83a2-a575f717c2b2", fallback = "Elektronik bileşen"),
                 PriceText = "₺420,00 / adet",
                 MoqText = "MOQ 200",
                 SupplierText = "Ortobella",
@@ -543,8 +543,8 @@ private fun getCompanyProducts(
             ),
             CompanyWholesaleProduct(
                 Id = 4,
-                Title = "Toptan pamuklu kumaş rulosu",
-                Category = "Tekstil ve giyim",
+                Title = BBLocalization.Current.Get(key = "7f6dd955-1fcb-43fa-9b36-c31abcc653ab", fallback = "Toptan pamuklu kumaş rulosu"),
+                Category = BBLocalization.Current.Get(key = "5ab810a5-0d93-4129-8b8f-6efba4d8407b", fallback = "Tekstil ve giyim"),
                 PriceText = "₺78,50 / metre",
                 MoqText = "MOQ 500",
                 SupplierText = "Ortobella",
@@ -557,7 +557,7 @@ private fun getCompanyProducts(
             CompanyWholesaleProduct(
                 Id = 5,
                 Title = "Özel baskılı promosyon çanta",
-                Category = "Promosyon ürünleri",
+                Category = BBLocalization.Current.Get(key = "33041afc-d5e4-4372-9cf0-0be5cb94519d", fallback = "Promosyon ürünleri"),
                 PriceText = BBLocalization.Current.Get(key = "dbb6b4e4-1a23-423d-9b87-5b0c8cbeb64d", fallback = "Teklif iste"),
                 MoqText = "MOQ 300",
                 SupplierText = "Ortobella",

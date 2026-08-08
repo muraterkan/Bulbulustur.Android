@@ -67,14 +67,14 @@ fun CampaignBanners(
                 )
 
                 Text(
-                    text = "Alışveriş Fırsatlarını Keşfet",
+                    text = BBLocalization.Current.Get(key = "fa54b6d9-199b-4867-99e8-ff8865857ce0", fallback = "Alışveriş Fırsatlarını Keşfet"),
                     style = MaterialTheme.typography.headlineSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
                 )
 
                 Text(
-                    text = "Seçili kampanyalar, avantajlı alışveriş alanları ve öne çıkan fırsatlar burada.",
+                    text = BBLocalization.Current.Get(key = "5f890756-3d46-4903-a7e8-db5f95d96f87", fallback = "Seçili kampanyalar, avantajlı alışveriş alanları ve öne çıkan fırsatlar burada."),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -182,7 +182,7 @@ private fun CampaignBannerCard(
                     horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                 ) {
                     Text(
-                        text = "Şimdi Gör",
+                        text = BBLocalization.Current.Get(key = "02d77c71-e8dc-4ff3-825d-9775f263f006", fallback = "Şimdi Gör"),
                         style = MaterialTheme.typography.labelLarge,
                         color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.Bold

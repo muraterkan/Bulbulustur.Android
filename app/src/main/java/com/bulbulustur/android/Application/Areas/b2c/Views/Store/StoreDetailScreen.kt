@@ -99,7 +99,7 @@ fun StoreDetailScreen(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "Mağaza Detayı",
+                title = BBLocalization.Current.Get(key = "a97998ac-8e30-4f27-ba9c-f6be45243d04", fallback = "Mağaza Detayı"),
                 onBackClick = onBackClick,
                 actionContent = {
                     StoreFollowButton(
@@ -130,8 +130,8 @@ fun StoreDetailScreen(
             if (isLoading && storeDetail == null) {
                 item {
                     StoreDetailStatusCard(
-                        title = "Mağaza bilgileri yükleniyor",
-                        description = "Mağaza bilgileri sunucudan alınıyor."
+                        title = BBLocalization.Current.Get(key = "f58ed75d-1b29-43cc-8eec-5ca92118d7dd", fallback = "Mağaza bilgileri yükleniyor"),
+                        description = BBLocalization.Current.Get(key = "e1f51cc1-c58d-4d80-80d2-bfeb1c7635c9", fallback = "Mağaza bilgileri sunucudan alınıyor.")
                     )
                 }
             }
@@ -139,7 +139,7 @@ fun StoreDetailScreen(
             if (!errorMessage.isNullOrBlank() && storeDetail == null) {
                 item {
                     StoreDetailStatusCard(
-                        title = "Mağaza bilgileri alınamadı",
+                        title = BBLocalization.Current.Get(key = "c466e1d0-f104-4b5b-b0e3-b0d51ca833fe", fallback = "Mağaza bilgileri alınamadı"),
                         description = errorMessage
                     )
                 }
@@ -274,14 +274,14 @@ private fun StoreProductsCallout(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Mağazanın Tüm Ürünleri",
+                    text = BBLocalization.Current.Get(key = "1d6f30bb-859a-436a-a205-92219421ccaa", fallback = "Mağazanın Tüm Ürünleri"),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
                 )
 
                 Text(
-                    text = "Bu mağazaya ait gerçek ürün listesini görüntüle.",
+                    text = BBLocalization.Current.Get(key = "ea348216-7750-4545-8a78-1d70302e2158", fallback = "Bu mağazaya ait gerçek ürün listesini görüntüle."),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -335,14 +335,14 @@ private fun StoreDetailEmptyProductCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Ürün listesi ayrı ekranda",
+                    text = BBLocalization.Current.Get(key = "d6dbe940-3d82-44c0-8244-759c555aac1e", fallback = "Ürün listesi ayrı ekranda"),
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
                 )
 
                 Text(
-                    text = "Gerçek mağaza ürünlerini listelemek için dokunun.",
+                    text = BBLocalization.Current.Get(key = "e037c89a-d78b-4a68-8d81-6833a8718b6b", fallback = "Gerçek mağaza ürünlerini listelemek için dokunun."),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -546,7 +546,7 @@ private fun StoreInfoStatSection(
         StoreInfoStatCard(
             modifier = Modifier.weight(1f),
             title = store.ratingText,
-            subtitle = "Puan"
+            subtitle = BBLocalization.Current.Get(key = "3b38b896-9858-47a3-a4c5-e6792e7eca82", fallback = "Puan")
         )
 
         StoreInfoStatCard(
@@ -684,7 +684,7 @@ private fun StoreOtherStoresCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = "Diğer Mağazalar",
+                    text = BBLocalization.Current.Get(key = "d911c86a-c16b-4b36-b7d8-32b8b80b2ac4", fallback = "Diğer Mağazalar"),
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
@@ -720,7 +720,7 @@ private fun StoreCategoryFilterSection(
     ) {
         StoreDetailSectionTitle(
             title = BBLocalization.Current.Get(key = "bc3a7952-0d83-44ca-a8fa-c5a4dac434b4", fallback = "Ürün Kategorileri"),
-            description = "Mağaza kategorilerine göre ürünleri keşfedin."
+            description = BBLocalization.Current.Get(key = "cf6fa404-afd3-4ec6-b671-3067a0f1f49b", fallback = "Mağaza kategorilerine göre ürünleri keşfedin.")
         )
 
         FlowRow(
@@ -883,7 +883,7 @@ private fun StoreProductCard(
                 )
 
                 StoreSmallActionButton(
-                    text = "Favori",
+                    text = BBLocalization.Current.Get(key = "f5008ba2-ccb2-4dfd-85bb-d3b7a84ffd14", fallback = "Favori"),
                     icon = Icons.Outlined.FavoriteBorder,
                     modifier = Modifier.weight(1f),
                     onClick = onFavoriteClick
@@ -1029,17 +1029,17 @@ private fun StoreDTO.ToRetailStoreDetail(): RetailStoreDetail {
         logoText = resolvedName.take(2).uppercase(),
         logoUrl = ResolveStoreLogoUrl(Picture),
         shortDescription = StoreDescription.ifBlank {
-            "Mağaza vitrini"
+            BBLocalization.Current.Get(key = "7ef0bc22-35db-4470-a426-670c1408e856", fallback = "Mağaza vitrini")
         },
         description = StoreDescription.ifBlank {
-            "Bu mağazaya ait ürünleri ve mağaza bilgilerini inceleyebilirsiniz."
+            BBLocalization.Current.Get(key = "8e6ffde2-f883-41f3-aad0-b954b910a581", fallback = "Bu mağazaya ait ürünleri ve mağaza bilgilerini inceleyebilirsiniz.")
         },
         productCount = ReviewNumber,
         ratingText = if (Rating > 0.0) Rating.toString() else "-",
         cargoText = if (DefaultEstimatedShippingTime > 0) {
             "${DefaultEstimatedShippingTime} gün"
         } else {
-            "Standart"
+            BBLocalization.Current.Get(key = "081fb0ca-4f68-4277-9ca0-028d1e9d147f", fallback = "Standart")
         },
         isVerified = CompanyId > 0 || StoreKey.isNotBlank(),
         categories = listOf(BBLocalization.Current.Get(key = "40b32a95-e0ec-4b16-b54d-12b6fe90cced", fallback = "Tümü")),
@@ -1059,7 +1059,7 @@ private fun getRetailStoreDetail(
         description = "Ortobella Store, seçili ayakkabı ve günlük kullanım ürünlerini perakende alışveriş akışında sunan doğrulanmış mağaza vitrinidir.",
         productCount = 248,
         ratingText = "4.8",
-        cargoText = "Hızlı",
+        cargoText = BBLocalization.Current.Get(key = "e21d608b-5771-4e33-b57e-4aa1597fe6ed", fallback = "Hızlı"),
         isVerified = true,
         categories = listOf(
             BBLocalization.Current.Get(key = "40b32a95-e0ec-4b16-b54d-12b6fe90cced", fallback = "Tümü"),
@@ -1071,7 +1071,7 @@ private fun getRetailStoreDetail(
         products = listOf(
             RetailStoreProductItem(
                 id = 1,
-                name = "Kadın Klasik Sneaker Ayakkabı",
+                name = BBLocalization.Current.Get(key = "eb8d15f2-e540-461d-bd3d-015033d93512", fallback = "Kadın Klasik Sneaker Ayakkabı"),
                 categoryName = "Ayakkabı",
                 priceText = "₺899,90",
                 badgeText = "%20",
@@ -1079,7 +1079,7 @@ private fun getRetailStoreDetail(
             ),
             RetailStoreProductItem(
                 id = 2,
-                name = "Rahat Taban Günlük Ayakkabı",
+                name = BBLocalization.Current.Get(key = "362a7dca-0496-42b5-a62c-2f605d7befc8", fallback = "Rahat Taban Günlük Ayakkabı"),
                 categoryName = "Ayakkabı",
                 priceText = "₺749,90",
                 badgeText = BBLocalization.Current.Get(key = "557ea0c9-948d-4e62-8ddc-948294a55b11", fallback = "Yeni"),
@@ -1087,7 +1087,7 @@ private fun getRetailStoreDetail(
             ),
             RetailStoreProductItem(
                 id = 3,
-                name = "Günlük Kullanım Omuz Çantası",
+                name = BBLocalization.Current.Get(key = "a36cb9c0-b208-452a-ba5b-65604d0a9f19", fallback = "Günlük Kullanım Omuz Çantası"),
                 categoryName = "Çanta",
                 priceText = "₺649,90",
                 badgeText = "",

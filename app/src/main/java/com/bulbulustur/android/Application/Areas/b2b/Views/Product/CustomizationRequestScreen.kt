@@ -106,8 +106,8 @@ fun CustomizationRequestScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Özelleştirme Detayları",
-                    subtitle = "Tedarikçinin doğru dönüş yapabilmesi için değişiklikleri açık yazın"
+                    title = BBLocalization.Current.Get(key = "0cc7e89c-1933-4ec9-8cd4-f3cf9a6d55b4", fallback = "Özelleştirme Detayları"),
+                    subtitle = BBLocalization.Current.Get(key = "623167d9-dcfe-4ff4-ba73-72051793fe97", fallback = "Tedarikçinin doğru dönüş yapabilmesi için değişiklikleri açık yazın")
                 )
             }
 
@@ -132,8 +132,8 @@ fun CustomizationRequestScreen(
 
             item {
                 BbSectionHeader(
-                    title = "Hızlı Detay Alanları",
-                    subtitle = "İsterseniz özelleştirme bilgisini ayrı ayrı da yazabilirsiniz"
+                    title = BBLocalization.Current.Get(key = "b9c5b4b4-1ba6-4a6a-95be-9e08acd2f3c8", fallback = "Hızlı Detay Alanları"),
+                    subtitle = BBLocalization.Current.Get(key = "e6ed8a08-71de-4aae-880b-fa6dc43c0981", fallback = "İsterseniz özelleştirme bilgisini ayrı ayrı da yazabilirsiniz")
                 )
             }
 
@@ -144,7 +144,7 @@ fun CustomizationRequestScreen(
                         colorMaterial.value = it
                     },
                     label = BBLocalization.Current.Get(key = "085e068b-d094-4f24-bbbd-dba4922bdb44", fallback = ""),
-                    placeholder = "Örn. siyah, metal, mat yüzey, titanyum",
+                    placeholder = BBLocalization.Current.Get(key = "a1cb90fd-1d36-4636-bf1e-dd5c326233f0", fallback = "Örn. siyah, metal, mat yüzey, titanyum"),
                     icon = Icons.Outlined.ColorLens
                 )
             }
@@ -155,8 +155,8 @@ fun CustomizationRequestScreen(
                     onValueChange = {
                         sizeTechnical.value = it
                     },
-                    label = "Ölçü / Teknik Detay",
-                    placeholder = "Örn. 30x20 cm, kalınlık, bağlantı detayı",
+                    label = BBLocalization.Current.Get(key = "c876b0ed-5ded-4383-b970-851148e6fcfe", fallback = "Ölçü / Teknik Detay"),
+                    placeholder = BBLocalization.Current.Get(key = "a497ea17-1750-4806-b5b1-2ab57da49fc2", fallback = "Örn. 30x20 cm, kalınlık, bağlantı detayı"),
                     icon = Icons.Outlined.Straighten
                 )
             }
@@ -168,7 +168,7 @@ fun CustomizationRequestScreen(
                         packageLogo.value = it
                     },
                     label = "Ambalaj / Logo",
-                    placeholder = "Örn. logolu ambalaj, özel kutu, etiket baskısı",
+                    placeholder = BBLocalization.Current.Get(key = "92d96cd7-7c2d-4270-9775-f98d41b012ae", fallback = "Örn. logolu ambalaj, özel kutu, etiket baskısı"),
                     icon = Icons.Outlined.Style
                 )
             }
@@ -227,14 +227,14 @@ private fun CustomizationRequestHeader(
             }
 
             Text(
-                text = "Ürün Özelleştirme İsteği Oluştur",
+                text = BBLocalization.Current.Get(key = "be3c60fc-fae3-448b-a846-2e4fdb57b58a", fallback = "Ürün Özelleştirme İsteği Oluştur"),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
-                text = "Ürün üzerinde ölçü, renk, malzeme, ambalaj, logo veya üretim detayları için tedarikçiye özel talep gönderin.",
+                text = BBLocalization.Current.Get(key = "a482ae05-d941-48b0-9086-dd22ccb60878", fallback = "Ürün üzerinde ölçü, renk, malzeme, ambalaj, logo veya üretim detayları için tedarikçiye özel talep gönderin."),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -292,7 +292,7 @@ private fun CustomizationProductSummaryCard(
                 )
 
                 BbChip(
-                    text = "Özel Üretim Desteklenir",
+                    text = BBLocalization.Current.Get(key = "6d147934-75a3-4dba-b966-b1f6bd1bc8a0", fallback = "Özel Üretim Desteklenir"),
                     selected = false,
                     onClick = {}
                 )
@@ -414,7 +414,7 @@ private fun CustomizationHintCard() {
             )
 
             Text(
-                text = "Özelleştirme talebinde ölçü, renk, malzeme, kullanım amacı ve minimum sipariş miktarını belirtmek tedarikçi dönüşünü hızlandırır.",
+                text = BBLocalization.Current.Get(key = "c51fc92c-6fb0-407c-83c9-e259143d8c78", fallback = "Özelleştirme talebinde ölçü, renk, malzeme, kullanım amacı ve minimum sipariş miktarını belirtmek tedarikçi dönüşünü hızlandırır."),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.weight(1f)
@@ -480,19 +480,19 @@ private fun customizationSuggestionTexts(): List<CustomizationSuggestionText> {
     return listOf(
         CustomizationSuggestionText(
             title = BBLocalization.Current.Get(key = "085e068b-d094-4f24-bbbd-dba4922bdb44", fallback = ""),
-            description = "Ürün için özel renk, malzeme ve yüzey seçenekleri hakkında teklif almak istiyorum."
+            description = BBLocalization.Current.Get(key = "1ec38a2a-bc67-4b05-970b-bfcc9d70b931", fallback = "Ürün için özel renk, malzeme ve yüzey seçenekleri hakkında teklif almak istiyorum.")
         ),
         CustomizationSuggestionText(
-            title = "Ölçü / Teknik Detay",
-            description = "Ürün ölçülerinin ve teknik detayların ihtiyacıma göre özelleştirilmesini istiyorum."
+            title = BBLocalization.Current.Get(key = "c876b0ed-5ded-4383-b970-851148e6fcfe", fallback = "Ölçü / Teknik Detay"),
+            description = BBLocalization.Current.Get(key = "c6e6da8c-40f8-4587-a933-5c526cbbf5d3", fallback = "Ürün ölçülerinin ve teknik detayların ihtiyacıma göre özelleştirilmesini istiyorum.")
         ),
         CustomizationSuggestionText(
             title = "Ambalaj / Logo",
-            description = "Ürün ambalajı, logo baskısı ve etiketleme seçenekleriyle birlikte fiyat almak istiyorum."
+            description = BBLocalization.Current.Get(key = "6245a8fb-1fa4-419c-9586-5940cb4c61cb", fallback = "Ürün ambalajı, logo baskısı ve etiketleme seçenekleriyle birlikte fiyat almak istiyorum.")
         ),
         CustomizationSuggestionText(
-            title = "Özel Üretim",
-            description = "Bu ürünün özel üretim koşulları, minimum sipariş miktarı ve teslim süresi hakkında bilgi almak istiyorum."
+            title = BBLocalization.Current.Get(key = "fdc80137-c3bb-4017-a138-58ab80835b9e", fallback = "Özel Üretim"),
+            description = BBLocalization.Current.Get(key = "c2fe6514-7b7f-400e-bbba-fc9be83a1134", fallback = "Bu ürünün özel üretim koşulları, minimum sipariş miktarı ve teslim süresi hakkında bilgi almak istiyorum.")
         )
     )
 }

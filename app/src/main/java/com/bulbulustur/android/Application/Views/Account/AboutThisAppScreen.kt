@@ -108,7 +108,7 @@ fun AboutThisAppScreen(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = "Uygulama Hakkında",
+                title = BBLocalization.Current.Get(key = "fc0a3fe5-4123-4ec5-8499-fccd3efd88d3", fallback = "Uygulama Hakkında"),
                 onBackClick = onBackClick
             )
         }
@@ -139,8 +139,8 @@ fun AboutThisAppScreen(
                 AboutMenuGroup {
                     AboutMenuRow(
                         icon = Icons.Outlined.Cached,
-                        title = "Güncellemeleri Kontrol Et",
-                        value = "Güncel",
+                        title = BBLocalization.Current.Get(key = "46e78f90-865d-4e0c-8f28-0fa5e001cee1", fallback = "Güncellemeleri Kontrol Et"),
+                        value = BBLocalization.Current.Get(key = "ce184222-2c25-4e57-ba10-80c9e6da557c", fallback = "Güncel"),
                         showArrow = true,
                         enabled = true,
                         onClick = onCheckUpdatesClick
@@ -150,8 +150,8 @@ fun AboutThisAppScreen(
 
                     AboutMenuRow(
                         icon = Icons.Outlined.Dns,
-                        title = "Sistem Durumu",
-                        value = "Tüm sistemler çalışıyor",
+                        title = BBLocalization.Current.Get(key = "ace0031a-6e70-445a-b319-d5a20536e669", fallback = "Sistem Durumu"),
+                        value = BBLocalization.Current.Get(key = "81a0f528-96b8-45e9-892e-461b524cc16e", fallback = "Tüm sistemler çalışıyor"),
                         showArrow = true,
                         enabled = true,
                         onClick = onSystemStatusClick
@@ -161,7 +161,7 @@ fun AboutThisAppScreen(
 
                     AboutMenuRow(
                         icon = Icons.Outlined.Cached,
-                        title = "Önbelleği Temizle",
+                        title = BBLocalization.Current.Get(key = "ec31421d-7f8c-4b5a-94f2-37da5ef4e4ca", fallback = "Önbelleği Temizle"),
                         value = null,
                         showArrow = true,
                         enabled = true,
@@ -174,7 +174,7 @@ fun AboutThisAppScreen(
 
                     AboutMenuRow(
                         icon = Icons.Outlined.StarRate,
-                        title = "Bizi Değerlendir",
+                        title = BBLocalization.Current.Get(key = "849aeaa5-c640-414d-ad0a-14af0e50deaa", fallback = "Bizi Değerlendir"),
                         value = null,
                         showArrow = true,
                         enabled = true,
@@ -270,7 +270,7 @@ private fun AboutAppHero(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
         ) {
             Text(
-                text = "Toptan ve Perakende Ticaret Platformu",
+                text = BBLocalization.Current.Get(key = "4a6e572d-68fd-4f1c-84cc-9bf8bf96f1f7", fallback = "Toptan ve Perakende Ticaret Platformu"),
                 style = BbTypography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -433,13 +433,13 @@ private fun AboutBrandLinksSheet(
     ) {
         AboutBottomSheetHeader(
             title = "Bulbulustur",
-            subtitle = "Platform bilgileri ve güven bağlantıları."
+            subtitle = BBLocalization.Current.Get(key = "0377a7fd-70dc-4087-b569-1d399cbfe85c", fallback = "Platform bilgileri ve güven bağlantıları.")
         )
 
         AboutMenuGroup {
             AboutSheetLinkRow(
                 icon = Icons.Outlined.Info,
-                title = "Bulbulustur Hakkında",
+                title = BBLocalization.Current.Get(key = "c08b2887-d9b2-4671-b9ad-8e59f296b7c1", fallback = "Bulbulustur Hakkında"),
                 onClick = onAboutBulbulusturClick
             )
 
@@ -447,7 +447,7 @@ private fun AboutBrandLinksSheet(
 
             AboutSheetLinkRow(
                 icon = Icons.Outlined.Language,
-                title = "Kurumsal Sayfa",
+                title = BBLocalization.Current.Get(key = "192a4f4b-1552-4ade-a4c4-f66382827366", fallback = "Kurumsal Sayfa"),
                 onClick = onCompanyPageClick
             )
 
@@ -455,7 +455,7 @@ private fun AboutBrandLinksSheet(
 
             AboutSheetLinkRow(
                 icon = Icons.Outlined.SupportAgent,
-                title = "Yardım ve İletişim",
+                title = BBLocalization.Current.Get(key = "2acff229-060f-4f8a-9232-e2dfa9c4f75b", fallback = "Yardım ve İletişim"),
                 onClick = onContactUsClick
             )
 
@@ -463,7 +463,7 @@ private fun AboutBrandLinksSheet(
 
             AboutSheetLinkRow(
                 icon = Icons.Outlined.Policy,
-                title = "Yasal Metinler ve Politikalar",
+                title = BBLocalization.Current.Get(key = "8aa96ea1-dff6-4eda-86b6-81d12a74cbb6", fallback = "Yasal Metinler ve Politikalar"),
                 onClick = onLegalPoliciesClick
             )
         }
@@ -487,12 +487,12 @@ private fun AboutClearCacheSheet(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
     ) {
         AboutBottomSheetTopBar(
-            title = "Önbelleği Temizle",
+            title = BBLocalization.Current.Get(key = "ec31421d-7f8c-4b5a-94f2-37da5ef4e4ca", fallback = "Önbelleği Temizle"),
             onCloseClick = onDismissClick
         )
 
         Text(
-            text = "Bu işlem geçici uygulama verilerini temizler. Hesabınız, siparişleriniz, favorileriniz ve kayıtlı bilgileriniz etkilenmez.",
+            text = BBLocalization.Current.Get(key = "081ea7ae-003f-4a85-8a8d-0ee20a17a187", fallback = "Bu işlem geçici uygulama verilerini temizler. Hesabınız, siparişleriniz, favorileriniz ve kayıtlı bilgileriniz etkilenmez."),
             style = BbTypography.bodyMedium.copy(
                 lineHeight = 20.sp
             ),
@@ -513,7 +513,7 @@ private fun AboutClearCacheSheet(
             )
 
             AboutSheetButton(
-                text = "Temizle",
+                text = BBLocalization.Current.Get(key = "0bff2074-48a3-4ba4-808f-2583f63aa227", fallback = "Temizle"),
                 modifier = Modifier.weight(1f),
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onSurface,
@@ -549,7 +549,7 @@ private fun AboutRateAppSheet(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
     ) {
         AboutBottomSheetTopBar(
-            title = "Bizi Değerlendir",
+            title = BBLocalization.Current.Get(key = "849aeaa5-c640-414d-ad0a-14af0e50deaa", fallback = "Bizi Değerlendir"),
             onCloseClick = onDismissClick
         )
 
@@ -557,7 +557,7 @@ private fun AboutRateAppSheet(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
         ) {
             Text(
-                text = "Bulbulustur deneyimini nasıl buldun?",
+                text = BBLocalization.Current.Get(key = "52735531-2e7b-445c-a873-a2937716f0c2", fallback = "Bulbulustur deneyimini nasıl buldun?"),
                 style = BbTypography.titleLarge.copy(
                     lineHeight = 28.sp
                 ),
@@ -566,7 +566,7 @@ private fun AboutRateAppSheet(
             )
 
             Text(
-                text = "Görüşün, uygulamayı daha iyi hale getirmemize yardımcı olur.",
+                text = BBLocalization.Current.Get(key = "e593a59b-2e4f-4ce2-89c2-1131c1b8379d", fallback = "Görüşün, uygulamayı daha iyi hale getirmemize yardımcı olur."),
                 style = BbTypography.bodyMedium.copy(
                     lineHeight = 20.sp
                 ),
@@ -617,8 +617,8 @@ private fun AboutRateAppSheet(
 
                 Text(
                     text = when {
-                        selectedRating == 0 -> "Bir puan seçerek devam edebilirsin."
-                        selectedRating <= 3 -> "Neyi daha iyi yapabileceğimizi yazabilirsin."
+                        selectedRating == 0 -> BBLocalization.Current.Get(key = "9b28baed-94c3-4dce-af33-ac9fc1d86c8c", fallback = "Bir puan seçerek devam edebilirsin.")
+                        selectedRating <= 3 -> BBLocalization.Current.Get(key = "981b925c-0893-429c-ad3a-1f523b490a8f", fallback = "Neyi daha iyi yapabileceğimizi yazabilirsin.")
                         else -> "Teşekkürler. İstersen Google Play'de değerlendirebilirsin."
                     },
                     style = BbTypography.bodySmall.copy(
@@ -637,13 +637,13 @@ private fun AboutRateAppSheet(
                     feedbackText = it
                 },
                 label = {
-                    Text("Neyi daha iyi yapabiliriz?")
+                    Text(BBLocalization.Current.Get(key = "834ed3a0-81fc-413c-bc92-7818d4ab2945", fallback = "Neyi daha iyi yapabiliriz?"))
                 },
                 minLines = 3
             )
 
             AboutSheetButton(
-                text = "Geri Bildirim Gönder",
+                text = BBLocalization.Current.Get(key = "be6a9448-d0f1-4487-a852-1ec522ad362b", fallback = "Geri Bildirim Gönder"),
                 modifier = Modifier.fillMaxWidth(),
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onSurface,
@@ -664,7 +664,7 @@ private fun AboutRateAppSheet(
         }
 
         AboutSheetButton(
-            text = "Şimdi Değil",
+            text = BBLocalization.Current.Get(key = "0291a585-1ee1-459e-b4cc-0475784f8646", fallback = "Şimdi Değil"),
             modifier = Modifier.fillMaxWidth(),
             containerColor = MaterialTheme.colorScheme.onSurface,
             contentColor = MaterialTheme.colorScheme.inverseOnSurface,

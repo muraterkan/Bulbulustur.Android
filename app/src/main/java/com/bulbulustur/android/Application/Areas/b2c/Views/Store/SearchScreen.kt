@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbIconBoxSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbIconBox
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -43,6 +44,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
+import com.bulbulustur.android.businesslayer.Core.DTO.ProductDTO
 
 @Composable
 fun SearchScreen(
@@ -52,7 +54,9 @@ fun SearchScreen(
     onProductClick: (RetailSearchProductItem) -> Unit = {},
     onCategoryClick: (RetailSearchCategoryItem) -> Unit = {},
     onBrandClick: (RetailSearchBrandItem) -> Unit = {},
-    onStoreClick: (RetailSearchStoreItem) -> Unit = {}
+    onStoreClick: (RetailSearchStoreItem) -> Unit = {},
+    productResults: List<ProductDTO> = emptyList(),
+    hasProductSearch: Boolean = false
 ) {
     var searchText by remember {
         mutableStateOf(initialSearchText)
@@ -64,6 +68,14 @@ fun SearchScreen(
 
     val searchData = remember {
         getRetailSearchScreenData()
+    }
+
+    val displayedProducts = if (hasProductSearch) {
+        productResults.map { product ->
+            product.toRetailSearchProductItem()
+        }
+    } else {
+        searchData.products
     }
 
     Surface(
@@ -133,12 +145,12 @@ fun SearchScreen(
                 RetailSearchType.Product -> {
                     item {
                         SearchSectionTitle(
-                            title = "Ürün sonuçları",
-                            description = "Aramana yakın ürün önerileri."
+                            title = BBLocalization.Current.Get(key = "71aeca46-c5db-45dc-be29-b8041d0a30aa", fallback = "Ürün sonuçları"),
+                            description = BBLocalization.Current.Get(key = "bd212e25-400e-41b6-bc99-51a1a0b8fc75", fallback = "Aramana yakın ürün önerileri.")
                         )
                     }
 
-                    items(searchData.products) { product ->
+                    itemsIndexed(displayedProducts) { index, product ->
                         SearchProductCard(
                             product = product,
                             onClick = {
@@ -151,8 +163,8 @@ fun SearchScreen(
                 RetailSearchType.Category -> {
                     item {
                         SearchSectionTitle(
-                            title = "Kategori sonuçları",
-                            description = "İlgili kategori ve alt kategori önerileri."
+                            title = BBLocalization.Current.Get(key = "d6c8fa15-ec8a-42d8-a3c9-9003b906dbc0", fallback = "Kategori sonuçları"),
+                            description = BBLocalization.Current.Get(key = "99d44e85-9e40-4f16-bde3-9532f2576699", fallback = "İlgili kategori ve alt kategori önerileri.")
                         )
                     }
 
@@ -169,8 +181,8 @@ fun SearchScreen(
                 RetailSearchType.Brand -> {
                     item {
                         SearchSectionTitle(
-                            title = "Marka sonuçları",
-                            description = "Bulbulustur içindeki marka eşleşmeleri."
+                            title = BBLocalization.Current.Get(key = "89a09255-46a7-46ca-8b88-6024aa56f2b3", fallback = "Marka sonuçları"),
+                            description = BBLocalization.Current.Get(key = "61b0234b-c39d-40f1-857a-e2f57a0587df", fallback = "Bulbulustur içindeki marka eşleşmeleri.")
                         )
                     }
 
@@ -187,7 +199,7 @@ fun SearchScreen(
                 RetailSearchType.Store -> {
                     item {
                         SearchSectionTitle(
-                            title = "Mağaza sonuçları",
+                            title = BBLocalization.Current.Get(key = "3567ac84-e92a-4399-a3fa-07d85c69bdd1", fallback = "Mağaza sonuçları"),
                             description = "Ürün satan mağaza ve Vitrinler."
                         )
                     }
@@ -235,14 +247,14 @@ private fun SearchTopBar(
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = "Perakende arama",
+                text = BBLocalization.Current.Get(key = "9d1f3b0b-d99f-4bf0-8f30-e2f8a399000f", fallback = "Perakende arama"),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onBackground
             )
 
             Text(
-                text = "Ürün, kategori, marka veya mağaza bul.",
+                text = BBLocalization.Current.Get(key = "d462dea8-e1d4-4693-a5ae-bef2950aa4cd", fallback = "Ürün, kategori, marka veya mağaza bul."),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -263,7 +275,7 @@ private fun SearchInputArea(
             .fillMaxWidth()
             .clip(RoundedCornerShape(18.dp)),
         placeholder = {
-            Text(text = "Ne arıyorsun?")
+            Text(text = BBLocalization.Current.Get(key = "118523bc-e7a6-44c0-8b4e-284c271500c7", fallback = "Ne arıyorsun?"))
         },
         singleLine = true,
         shape = RoundedCornerShape(18.dp),
@@ -323,7 +335,7 @@ private fun RecentSearchSection(
     ) {
         SearchSectionTitle(
             title = BBLocalization.Current.Get(key = "ff16d4fd-2eec-49e2-b43b-cdb4a15f8ce2", fallback = "Son Aramalar"),
-            description = "Tek dokunuşla tekrar ara."
+            description = BBLocalization.Current.Get(key = "0b1d55b7-f17f-4379-9619-6990256b26a7", fallback = "Tek dokunuşla tekrar ara.")
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -358,8 +370,8 @@ private fun PopularSearchSection(
         modifier = Modifier.fillMaxWidth()
     ) {
         SearchSectionTitle(
-            title = "Popüler Aramalar",
-            description = "Şu an en çok bakılan Aramalar."
+            title = BBLocalization.Current.Get(key = "7b4d8fc2-76a4-4cdb-aacf-b52bb67c4661", fallback = "Popüler Aramalar"),
+            description = BBLocalization.Current.Get(key = "563b5cd8-0942-433f-8506-4103b934ed12", fallback = "Şu an en çok bakılan Aramalar.")
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -657,6 +669,22 @@ data class RetailSearchStoreItem(
     val ratingText: String
 )
 
+private fun ProductDTO.toRetailSearchProductItem(): RetailSearchProductItem {
+    val price = if (Price > 0.0) {
+        "${CurrencySymbol.ifBlank { "₺" }}${Price}"
+    } else {
+        ""
+    }
+
+    return RetailSearchProductItem(
+        id = ProductId,
+        name = ProductName.ifBlank { SeoTitle },
+        storeName = Store.ifBlank { CategoryName },
+        priceText = price,
+        imageText = ProductName.take(2).uppercase().ifBlank { "P" }
+    )
+}
+
 private fun getRetailSearchScreenData(): RetailSearchScreenData {
     return RetailSearchScreenData(
         recentSearches = listOf(
@@ -666,23 +694,23 @@ private fun getRetailSearchScreenData(): RetailSearchScreenData {
             "oversize tişört"
         ),
         popularSearches = listOf(
-            "kampanyalı ayakkabı",
-            "telefon aksesuarı",
+            BBLocalization.Current.Get(key = "516f6e72-596b-4482-8aaf-3c766520da99", fallback = "kampanyalı ayakkabı"),
+            BBLocalization.Current.Get(key = "e4da9fca-05ee-4489-8579-320e844aad7f", fallback = "telefon aksesuarı"),
             "mutfak düzenleyici",
             "cilt bakım"
         ),
         products = listOf(
             RetailSearchProductItem(
                 id = 1,
-                name = "Kadın klasik sneaker ayakkabı",
+                name = BBLocalization.Current.Get(key = "cf2f4de0-711c-4308-a055-3ef7eb00d9c7", fallback = "Kadın klasik sneaker ayakkabı"),
                 storeName = "Ortobella",
                 priceText = "₺899,90",
                 imageText = "P1"
             ),
             RetailSearchProductItem(
                 id = 2,
-                name = "Kablosuz bluetooth kulaklık",
-                storeName = "Tekno Sepet",
+                name = BBLocalization.Current.Get(key = "4d8d3a59-db93-45f0-8d29-5871bc1176bc", fallback = "Kablosuz bluetooth kulaklık"),
+                storeName = BBLocalization.Current.Get(key = "4974118f-ecd1-486b-a149-c967127479a9", fallback = "Tekno Sepet"),
                 priceText = "₺649,90",
                 imageText = "P2"
             ),
@@ -704,14 +732,14 @@ private fun getRetailSearchScreenData(): RetailSearchScreenData {
             ),
             RetailSearchCategoryItem(
                 id = 2,
-                name = "Elektronik",
+                name = BBLocalization.Current.Get(key = "18101507-39f0-482d-80e7-491992e2915b", fallback = "Elektronik"),
                 iconText = "EL",
                 productCount = 9350,
                 subCategoryCount = 28
             ),
             RetailSearchCategoryItem(
                 id = 3,
-                name = "Ev & Yaşam",
+                name = BBLocalization.Current.Get(key = "24959041-b704-404d-9576-4a3674a4c3a4", fallback = "Ev & Yaşam"),
                 iconText = "EV",
                 productCount = 12680,
                 subCategoryCount = 42
@@ -734,7 +762,7 @@ private fun getRetailSearchScreenData(): RetailSearchScreenData {
             ),
             RetailSearchBrandItem(
                 id = 3,
-                name = "Tekno Viva",
+                name = BBLocalization.Current.Get(key = "92577d95-6c19-466b-8c10-6562318f8cca", fallback = "Tekno Viva"),
                 logoText = "TV",
                 productCount = 96,
                 storeCount = 4
@@ -757,7 +785,7 @@ private fun getRetailSearchScreenData(): RetailSearchScreenData {
             ),
             RetailSearchStoreItem(
                 id = 3,
-                name = "Tekno Sepet",
+                name = BBLocalization.Current.Get(key = "4974118f-ecd1-486b-a149-c967127479a9", fallback = "Tekno Sepet"),
                 logoText = "TS",
                 productCount = 511,
                 ratingText = "4.7"

@@ -119,10 +119,10 @@ fun DashboardScreen(
     val accountData = remember {
         DashboardHomeData(
             userName = "Murat Erkan",
-            profileSubtitle = "Profili Görüntüle veya Düzenle",
+            profileSubtitle = BBLocalization.Current.Get(key = "c8f04521-ab0d-4701-ad2b-6b4882092d37", fallback = "Profili Görüntüle veya Düzenle"),
             initials = "ME",
             profileId = "ID: 54108878",
-            city = "İstanbul"
+            city = BBLocalization.Current.Get(key = "0f7353b3-7eb8-4195-970a-08a0d0bc7531", fallback = "İstanbul")
         )
     }
 
@@ -184,11 +184,11 @@ fun DashboardScreen(
 
             item {
                 AccountMenuSection(
-                    title = "Alışveriş İşlemleri"
+                    title = BBLocalization.Current.Get(key = "d7296566-8cda-48a0-8a11-44e5f928c65c", fallback = "Alışveriş İşlemleri")
                 ) {
                     AccountMenuRow(
                         title = BBLocalization.Current.Get(key = "2c20dfd9-18d2-44a2-8298-95d7f91ea8e8", fallback = ""),
-                        description = "Geçmiş ve aktif siparişlerini görüntüle.",
+                        description = BBLocalization.Current.Get(key = "a3cfa134-70ee-4ff9-800d-e70df322459b", fallback = "Geçmiş ve aktif siparişlerini görüntüle."),
                         icon = Icons.Outlined.ProductionQuantityLimits,
                         onClick = onOrdersClick
                     )
@@ -197,7 +197,7 @@ fun DashboardScreen(
 
                     AccountMenuRow(
                         title = BBLocalization.Current.Get(key = "655d2dca-997f-41c6-aafe-479e03712a0a", fallback = "Favorilerim"),
-                        description = "Perakende ve toptan favorilerini yönet.",
+                        description = BBLocalization.Current.Get(key = "7efa0cb7-b45e-44b7-821b-936915323aaa", fallback = "Perakende ve toptan favorilerini yönet."),
                         icon = Icons.Outlined.FavoriteBorder,
                         onClick = onFavoritesClick
                     )
@@ -206,7 +206,7 @@ fun DashboardScreen(
 
                     AccountMenuRow(
                         title = BBLocalization.Current.Get(key = "d497388f-3bab-40fd-af5e-e6294231b04f", fallback = "Fiyat Teklifi İstekleri"),
-                        description = "Toptan teklif ve RFQ süreçlerini takip et.",
+                        description = BBLocalization.Current.Get(key = "5b9bdd17-f7a7-4554-9dbe-da0aedb1c6c3", fallback = "Toptan teklif ve RFQ süreçlerini takip et."),
                         icon = Icons.Outlined.RequestQuote,
                         onClick = onQuotationRequestsClick
                     )
@@ -215,7 +215,7 @@ fun DashboardScreen(
 
                     AccountMenuRow(
                         title = BBLocalization.Current.Get(key = "a5c6a1af-5860-4dc6-9f86-c80c8631f063", fallback = "Adreslerim"),
-                        description = "Teslimat ve fatura adreslerini düzenle.",
+                        description = BBLocalization.Current.Get(key = "b790df2b-f39f-4b0f-a551-e78c00eceba8", fallback = "Teslimat ve fatura adreslerini düzenle."),
                         icon = Icons.Outlined.Home,
                         onClick = onAddressClick
                     )
@@ -224,7 +224,7 @@ fun DashboardScreen(
 
                     AccountMenuRow(
                         title = BBLocalization.Current.Get(key = "56bb1452-c8f8-4bb0-8501-0947118999df", fallback = "Banka Hesaplarım"),
-                        description = "IBAN ve banka hesap bilgilerini yönet.",
+                        description = BBLocalization.Current.Get(key = "e0c413ce-ef4d-405c-ae44-6addaab2ce40", fallback = "IBAN ve banka hesap bilgilerini yönet."),
                         icon = Icons.Outlined.AccountBalance,
                         onClick = onBankAccountsClick
                     )
@@ -233,11 +233,11 @@ fun DashboardScreen(
 
             item {
                 AccountMenuSection(
-                    title = "Ticari Profil"
+                    title = BBLocalization.Current.Get(key = "b883599e-fd54-4f60-a8bf-7be6ee723dcf", fallback = "Ticari Profil")
                 ) {
                     AccountMenuRow(
                         title = BBLocalization.Current.Get(key = "5d3c17c2-d063-4757-9940-62331a540e23", fallback = "Şirket Bilgileri"),
-                        description = "Firma ve ticari hesap bilgilerini yönet.",
+                        description = BBLocalization.Current.Get(key = "a89a7786-dfa0-4e8f-a3a1-fe2e3bce7e3a", fallback = "Firma ve ticari hesap bilgilerini yönet."),
                         icon = Icons.Outlined.Business,
                         onClick = onCompanyInfoClick
                     )
@@ -245,8 +245,8 @@ fun DashboardScreen(
                     AccountDashedDivider()
 
                     AccountMenuRow(
-                        title = "Takip Ettiğim Mağazalar",
-                        description = "Takip ettiğin mağaza ve firmaları görüntüle.",
+                        title = BBLocalization.Current.Get(key = "ebf4cd36-c030-48c3-81e5-cdf9e66e1f28", fallback = "Takip Ettiğim Mağazalar"),
+                        description = BBLocalization.Current.Get(key = "d36c3f02-ea52-47ec-8bc2-f07b5ed7130a", fallback = "Takip ettiğin mağaza ve firmaları görüntüle."),
                         icon = Icons.Outlined.Storefront,
                         onClick = onFollowedStoresClick
                     )
@@ -254,8 +254,8 @@ fun DashboardScreen(
                     AccountDashedDivider()
 
                     AccountMenuRow(
-                        title = "Kullanım Amacı",
-                        description = "Toptan, perakende veya karma kullanım tercihini düzenle.",
+                        title = BBLocalization.Current.Get(key = "ff489322-baaf-495e-b71a-9a9a37ad401e", fallback = "Kullanım Amacı"),
+                        description = BBLocalization.Current.Get(key = "4a3735c7-a0bb-4bb2-8ca4-b841ff3a577f", fallback = "Toptan, perakende veya karma kullanım tercihini düzenle."),
                         icon = Icons.Outlined.Tune,
                         onClick = onUsagePurposeClick
                     )
@@ -264,11 +264,11 @@ fun DashboardScreen(
 
             item {
                 AccountMenuSection(
-                    title = "Alışveriş ve Etkileşim"
+                    title = BBLocalization.Current.Get(key = "2d3a9e98-76d1-471c-83ef-3d08e86f5982", fallback = "Alışveriş ve Etkileşim")
                 ) {
                     AccountMenuRow(
-                        title = "Soru ve Cevaplarım",
-                        description = "Sorularını ve satıcı cevaplarını görüntüle.",
+                        title = BBLocalization.Current.Get(key = "4881f11f-fde1-4813-9924-64c21b61980c", fallback = "Soru ve Cevaplarım"),
+                        description = BBLocalization.Current.Get(key = "8212c06b-d32d-4fd2-9a0e-5f239e753bc4", fallback = "Sorularını ve satıcı cevaplarını görüntüle."),
                         icon = Icons.Outlined.QuestionAnswer,
                         onClick = onQuestionsClick
                     )
@@ -277,7 +277,7 @@ fun DashboardScreen(
 
                     AccountMenuRow(
                         title = BBLocalization.Current.Get(key = "e6bb3a6c-5706-4ecd-8cab-8cb37ba1359b", fallback = "Değerlendirmelerim"),
-                        description = "Yorum ve değerlendirmelerini görüntüle.",
+                        description = BBLocalization.Current.Get(key = "fb1e4bfc-29e9-4bbc-ad77-d641fe384046", fallback = "Yorum ve değerlendirmelerini görüntüle."),
                         icon = Icons.Outlined.Reviews,
                         onClick = onReviewsClick
                     )
@@ -286,7 +286,7 @@ fun DashboardScreen(
 
                     AccountMenuRow(
                         title = BBLocalization.Current.Get(key = "fd0f23de-98a8-4544-ac77-1d2ce02750af", fallback = "Kuponlarım"),
-                        description = "Tanımlı kampanya ve kuponlarını incele.",
+                        description = BBLocalization.Current.Get(key = "6a4ba614-9b5b-4440-bff4-ed218f256df1", fallback = "Tanımlı kampanya ve kuponlarını incele."),
                         icon = Icons.Outlined.LocalOffer,
                         onClick = onCouponsClick
                     )
@@ -295,7 +295,7 @@ fun DashboardScreen(
 
                     AccountMenuRow(
                         title = BBLocalization.Current.Get(key = "edf6011a-a790-4d23-8a93-c539be6986ae", fallback = "Taleplerim"),
-                        description = "İade, destek ve işlem taleplerini takip et.",
+                        description = BBLocalization.Current.Get(key = "4aa8ba5f-4a2e-44db-8487-937f48674f45", fallback = "İade, destek ve işlem taleplerini takip et."),
                         icon = Icons.Outlined.HelpOutline,
                         onClick = onRequestsClick
                     )
@@ -304,11 +304,11 @@ fun DashboardScreen(
 
             item {
                 AccountMenuSection(
-                    title = "Finansal"
+                    title = BBLocalization.Current.Get(key = "af673a72-7193-42a3-bc6f-c0d18fc17797", fallback = "Finansal")
                 ) {
                     AccountMenuRow(
                         title = BBLocalization.Current.Get(key = "1ef8a30c-4837-40d1-b6eb-c0493e23e740", fallback = ""),
-                        description = "Paket ve üyelik süreçlerini görüntüle.",
+                        description = BBLocalization.Current.Get(key = "aeb6d29e-ad2e-4ba2-b764-a2c2f75f0cfb", fallback = "Paket ve üyelik süreçlerini görüntüle."),
                         icon = Icons.Outlined.CreditCard,
                         onClick = onSubscriptionsClick
                     )
@@ -316,8 +316,8 @@ fun DashboardScreen(
                     AccountDashedDivider()
 
                     AccountMenuRow(
-                        title = "Cüzdan ve Bakiye",
-                        description = "Bakiye, ödeme ve finansal hareketlerini incele.",
+                        title = BBLocalization.Current.Get(key = "08e11cee-13cd-4f6f-91b0-fe3c169015c3", fallback = "Cüzdan ve Bakiye"),
+                        description = BBLocalization.Current.Get(key = "a41524fb-c788-469f-9e2e-d50f995ba91e", fallback = "Bakiye, ödeme ve finansal hareketlerini incele."),
                         icon = Icons.Outlined.Wallet,
                         onClick = onWalletBalanceClick
                     )
@@ -572,7 +572,7 @@ private fun AccountPrimaryActions(
         AccountPrimaryActionCard(
             modifier = Modifier.weight(1f),
             title = BBLocalization.Current.Get(key = "9aa9e9a4-18b3-427b-943f-36170e46cb37", fallback = "Toptan Teklif Al"),
-            description = "Özel fiyat iste.",
+            description = BBLocalization.Current.Get(key = "6ca25794-a98d-4677-9991-d621b3ee525a", fallback = "Özel fiyat iste."),
             icon = Icons.Outlined.RequestQuote,
             accent = DashboardActionAccent.Primary,
             onClick = onQuotationRequestsClick
@@ -580,8 +580,8 @@ private fun AccountPrimaryActions(
 
         AccountPrimaryActionCard(
             modifier = Modifier.weight(1f),
-            title = "Şirketini Kaydet",
-            description = "Ticari profilini güçlendir.",
+            title = BBLocalization.Current.Get(key = "35b7fb34-7182-4d71-99e2-5e5e43f2b0c8", fallback = "Şirketini Kaydet"),
+            description = BBLocalization.Current.Get(key = "6f82915a-8f3e-4c7f-b561-6609acc9be0f", fallback = "Ticari profilini güçlendir."),
             icon = Icons.Outlined.Business,
             accent = DashboardActionAccent.Secondary,
             onClick = onCompanyInfoClick
@@ -735,7 +735,7 @@ private fun DashboardAccountCard(
                 )
 
                 Text(
-                    text = "Kişisel bilgilerini, güvenlik ayarlarını ve hesap tercihlerini yönet.",
+                    text = BBLocalization.Current.Get(key = "1bc010f5-a7b0-453e-acba-b75b7456b7f7", fallback = "Kişisel bilgilerini, güvenlik ayarlarını ve hesap tercihlerini yönet."),
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -808,7 +808,7 @@ private fun AccountUsagePurposeDarkCard(
                 )
 
                 Text(
-                    text = "Toptan, perakende veya her ikisi için deneyimini kişiselleştirelim.",
+                    text = BBLocalization.Current.Get(key = "e2a4ff9c-4e86-4bfb-adbe-ebd470f78ea0", fallback = "Toptan, perakende veya her ikisi için deneyimini kişiselleştirelim."),
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.inverseOnSurface.copy(
                         alpha = BBAlpha.Muted
@@ -962,11 +962,11 @@ private fun AccountSupportAndSettingsGroup(
     onSettingsClick: () -> Unit
 ) {
     AccountMenuSection(
-        title = "Destek ve Ayarlar"
+        title = BBLocalization.Current.Get(key = "8f2c8ee8-2a9e-4546-862c-1c2abc43b78b", fallback = "Destek ve Ayarlar")
     ) {
         AccountMenuRow(
-            title = "Yardıma mı İhtiyacın Var?",
-            description = "Destek merkezi, sipariş, iade ve hesap yardımına ulaş.",
+            title = BBLocalization.Current.Get(key = "10fa5c5e-ee88-4d0b-9527-d8355adbb063", fallback = "Yardıma mı İhtiyacın Var?"),
+            description = BBLocalization.Current.Get(key = "e48f7e6f-8bcd-4627-8e35-353cd0b93f19", fallback = "Destek merkezi, sipariş, iade ve hesap yardımına ulaş."),
             icon = Icons.Outlined.SupportAgent,
             onClick = onSupportClick
         )
@@ -974,8 +974,8 @@ private fun AccountSupportAndSettingsGroup(
         AccountDashedDivider()
 
         AccountMenuRow(
-            title = "Uygulama Ayarları",
-            description = "Dil, görünüm, bildirim ve uygulama tercihleri.",
+            title = BBLocalization.Current.Get(key = "0922dd57-03f9-47a3-a4de-8aaddad92aba", fallback = "Uygulama Ayarları"),
+            description = BBLocalization.Current.Get(key = "afef7635-1a94-4481-99a5-bde9954a09c6", fallback = "Dil, görünüm, bildirim ve uygulama tercihleri."),
             icon = Icons.Outlined.Settings,
             onClick = onSettingsClick
         )
@@ -988,20 +988,20 @@ private fun AccountLogoutSection(
     isLogoutLoading: Boolean
 ) {
     AccountMenuSection(
-        title = "Oturum"
+        title = BBLocalization.Current.Get(key = "28bb1e37-ebdd-47f2-a0ec-a375202065df", fallback = "Oturum")
     ) {
         AccountMenuRow(
             title =
                 if (isLogoutLoading) {
-                    "Çıkış Yapılıyor"
+                    BBLocalization.Current.Get(key = "b283d6c6-4d79-42e6-9ff9-05010869e0c0", fallback = "Çıkış Yapılıyor")
                 } else {
                     BBLocalization.Current.Get(key = "2449e852-d554-48ff-b7a5-e29a3e096a81", fallback = "")
                 },
             description =
                 if (isLogoutLoading) {
-                    "Oturumunuz güvenli şekilde kapatılıyor."
+                    BBLocalization.Current.Get(key = "1f0c7629-3521-4351-b8d0-eabedd262fe7", fallback = "Oturumunuz güvenli şekilde kapatılıyor.")
                 } else {
-                    "Bu cihazdaki Bulbulustur oturumunu kapat."
+                    BBLocalization.Current.Get(key = "f358ef0e-73ee-47eb-a964-2f9451c33b73", fallback = "Bu cihazdaki Bulbulustur oturumunu kapat.")
                 },
             icon = Icons.Outlined.Logout,
             enabled = !isLogoutLoading,

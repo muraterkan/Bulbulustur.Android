@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Controllers
 
+import com.bulbulustur.android.Application.Localization.BBLocalization
+
 import androidx.lifecycle.viewModelScope
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleMessageDTO
@@ -69,7 +71,7 @@ class MessageController(
         if (!ValidateSession(languageId, memberId)) return
 
         if (messageThreadId <= 0) {
-            SetError("Geçerli bir mesaj konusu bulunamadı.")
+            SetError(BBLocalization.Current.Get(key = "13132b71-d5fc-4364-8b44-dbb07c93a8a8", fallback = "Geçerli bir mesaj konusu bulunamadı."))
             return
         }
 
@@ -94,7 +96,7 @@ class MessageController(
         if (!ValidateSession(languageId, memberId)) return
 
         if (messageThreadId <= 0) {
-            SetError("Geçerli bir mesaj konusu bulunamadı.")
+            SetError(BBLocalization.Current.Get(key = "13132b71-d5fc-4364-8b44-dbb07c93a8a8", fallback = "Geçerli bir mesaj konusu bulunamadı."))
             return
         }
 
@@ -117,7 +119,7 @@ class MessageController(
 
     fun UnreadCount(memberId: Int) {
         if (memberId <= 0) {
-            SetError("Oturum açmanız gerekiyor.")
+            SetError(BBLocalization.Current.Get(key = "44ec4745-86b3-4549-9d2b-5204ba073fdc", fallback = "Oturum açmanız gerekiyor."))
             return
         }
 
@@ -145,7 +147,7 @@ class MessageController(
         onSuccess: ((Int) -> Unit)? = null
     ) {
         if (memberId <= 0) {
-            SetError("Oturum açmanız gerekiyor.")
+            SetError(BBLocalization.Current.Get(key = "44ec4745-86b3-4549-9d2b-5204ba073fdc", fallback = "Oturum açmanız gerekiyor."))
             return
         }
 
@@ -155,7 +157,7 @@ class MessageController(
         }
 
         if (body.isBlank()) {
-            SetError("Mesaj içeriği boş olamaz.")
+            SetError(BBLocalization.Current.Get(key = "35334200-711e-4e03-8b46-8810d2dc660c", fallback = "Mesaj içeriği boş olamaz."))
             return
         }
 
@@ -196,17 +198,17 @@ class MessageController(
         onSuccess: (() -> Unit)? = null
     ) {
         if (memberId <= 0) {
-            SetError("Oturum açmanız gerekiyor.")
+            SetError(BBLocalization.Current.Get(key = "44ec4745-86b3-4549-9d2b-5204ba073fdc", fallback = "Oturum açmanız gerekiyor."))
             return
         }
 
         if (messageThreadId <= 0) {
-            SetError("Geçerli bir mesaj konusu bulunamadı.")
+            SetError(BBLocalization.Current.Get(key = "13132b71-d5fc-4364-8b44-dbb07c93a8a8", fallback = "Geçerli bir mesaj konusu bulunamadı."))
             return
         }
 
         if (body.isBlank()) {
-            SetError("Mesaj içeriği boş olamaz.")
+            SetError(BBLocalization.Current.Get(key = "35334200-711e-4e03-8b46-8810d2dc660c", fallback = "Mesaj içeriği boş olamaz."))
             return
         }
 
@@ -259,12 +261,12 @@ class MessageController(
 
     private fun ValidateSession(languageId: Int, memberId: Int): Boolean {
         if (languageId <= 0) {
-            SetError("Geçerli bir dil bilgisi bulunamadı.")
+            SetError(BBLocalization.Current.Get(key = "7f0d8334-1cf8-470b-a8f4-69f237488cde", fallback = "Geçerli bir dil bilgisi bulunamadı."))
             return false
         }
 
         if (memberId <= 0) {
-            SetError("Oturum açmanız gerekiyor.")
+            SetError(BBLocalization.Current.Get(key = "44ec4745-86b3-4549-9d2b-5204ba073fdc", fallback = "Oturum açmanız gerekiyor."))
             return false
         }
 

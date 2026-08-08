@@ -110,7 +110,7 @@ private fun HomepageFeaturedProductsHeader(
             )
 
             Text(
-                text = "Minimum sipariş bilgilerini incele.",
+                text = BBLocalization.Current.Get(key = "f5f5e279-1f6e-412b-bf54-bff171fe9b72", fallback = "Minimum sipariş bilgilerini incele."),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -147,7 +147,7 @@ private fun WholesaleHomepageFeaturedProductDTO.ToWholesaleProductCardModel(
         } else {
             ""
         },
-        BadgeText = "Öne Çıkan",
+        BadgeText = BBLocalization.Current.Get(key = "d02a9b8b-001b-4e99-9073-9150016441f3", fallback = "Öne Çıkan"),
         ImageUrl = ResolveWholesaleHomepageFeaturedProductImageUrl(DefaultPicture),
         IsFavorite = isFavorite
     )

@@ -9,10 +9,10 @@ object ApiRoutes {
      * Diğer mikroservisler ana uygulama sunucusunda çalışır.
      */
     private const val APPLICATION_SERVER_HOST =
-        "37.60.239.76"
+        "77.92.144.197"
 
     private const val GLOBALIZATION_SERVER_HOST =
-        "37.60.239.76"
+        "77.92.144.197"
 
     /*
      * ApiClient tarafından kullanılan varsayılan adres.
@@ -106,7 +106,7 @@ object ApiRoutes {
     // -------------------------------------------------------------------------
 
     const val AUTHENTICATION_BASE_URL =
-        "http://37.60.239.76:30135/api/Auth/"
+        "http://77.92.144.197:30135/api/Auth/"
 
     // -------------------------------------------------------------------------
     // Globalization API - 30215

@@ -40,6 +40,7 @@ import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBAlpha
+import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
@@ -55,12 +56,14 @@ fun QuestionAnswerScreen(
     onRetryClick: () -> Unit = {},
     onProductClick: (productId: Int, storeId: Int, variantId: Int) -> Unit = { _, _, _ -> }
 ) {
-
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = BBLocalization.Current.Get(key = "4881f11f-fde1-4813-9924-64c21b61980c", fallback = "Soru ve Cevaplarım"),
+                title = BBLocalization.Current.Get(
+                    key = "4881f11f-fde1-4813-9924-64c21b61980c",
+                    fallback = "Soru ve Cevaplarım"
+                ),
                 onBackClick = onBackClick
             )
         }
@@ -83,9 +86,15 @@ fun QuestionAnswerScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(innerPadding),
-                    title = BBLocalization.Current.Get(key = "84c9e4f1-53d1-4618-91ae-d916e4b59695", fallback = "Sorular alınamadı"),
+                    title = BBLocalization.Current.Get(
+                        key = "84c9e4f1-53d1-4618-91ae-d916e4b59695",
+                        fallback = "Sorular alınamadı"
+                    ),
                     message = errorMessage,
-                    buttonText = BBLocalization.Current.Get(key = "9d1ce783-da20-464b-9203-cd1ce09918c6", fallback = "Tekrar Dene"),
+                    buttonText = BBLocalization.Current.Get(
+                        key = "9d1ce783-da20-464b-9203-cd1ce09918c6",
+                        fallback = "Tekrar Dene"
+                    ),
                     onButtonClick = onRetryClick
                 )
             }
@@ -95,8 +104,14 @@ fun QuestionAnswerScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(innerPadding),
-                    title = BBLocalization.Current.Get(key = "f54fd5f7-8faf-48eb-a06d-3330fb8a1a53", fallback = "Henüz soru sormadın"),
-                    message = BBLocalization.Current.Get(key = "3a867ac6-89f1-450a-95ba-100a9801cae5", fallback = "Ürünler hakkında sorduğun sorular ve satıcı cevapları burada görüntülenir.")
+                    title = BBLocalization.Current.Get(
+                        key = "f54fd5f7-8faf-48eb-a06d-3330fb8a1a53",
+                        fallback = "Henüz soru sormadın"
+                    ),
+                    message = BBLocalization.Current.Get(
+                        key = "3a867ac6-89f1-450a-95ba-100a9801cae5",
+                        fallback = "Ürünler hakkında sorduğun sorular ve satıcı cevapları burada görüntülenir."
+                    )
                 )
             }
 
@@ -172,13 +187,19 @@ private fun QuestionAnswerIntroCard() {
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = BBLocalization.Current.Get(key = "93509f61-b97a-4044-9944-3d811d2924fa", fallback = "Ürün Soruları ve Satıcı Cevapları"),
+                    text = BBLocalization.Current.Get(
+                        key = "93509f61-b97a-4044-9944-3d811d2924fa",
+                        fallback = "Ürün Soruları ve Satıcı Cevapları"
+                    ),
                     style = BbTypography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = BBLocalization.Current.Get(key = "abb52a93-9663-40f9-929a-b7627f025ac4", fallback = "Ürün sorularını, satıcı cevaplarını ve bekleyen yanıtlarını buradan takip edebilirsin."),
+                    text = BBLocalization.Current.Get(
+                        key = "abb52a93-9663-40f9-929a-b7627f025ac4",
+                        fallback = "Ürün sorularını, satıcı cevaplarını ve bekleyen yanıtlarını buradan takip edebilirsin."
+                    ),
                     style = BbTypography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -193,7 +214,14 @@ private fun QuestionAnswerCard(
     onClick: () -> Unit
 ) {
     val isAnswered = item.IsAnswered && !item.Message.isNullOrBlank()
-    val statusText = if (isAnswered) BBLocalization.Current.Get(key = "3f8f8f72-2596-4eaa-a2b2-743abb1655ee", fallback = "Cevaplandı") else "Cevap Bekliyor"
+    val statusText = if (isAnswered) {
+        BBLocalization.Current.Get(
+            key = "3f8f8f72-2596-4eaa-a2b2-743abb1655ee",
+            fallback = "Cevaplandı"
+        )
+    } else {
+        "Cevap Bekliyor"
+    }
     val statusIcon = if (isAnswered) Icons.Outlined.CheckCircle else Icons.Outlined.Schedule
 
     BbCard(
@@ -232,13 +260,23 @@ private fun QuestionAnswerCard(
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                 ) {
                     Text(
-                        text = item.ProductName.orEmpty().ifBlank { BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = "") },
+                        text = item.ProductName.orEmpty().ifBlank {
+                            BBLocalization.Current.Get(
+                                key = "37f5db70-845d-4498-96d4-fb3a2d29326c",
+                                fallback = ""
+                            )
+                        },
                         style = BbTypography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurface
                     )
 
                     Text(
-                        text = item.StoreName.orEmpty().ifBlank { BBLocalization.Current.Get(key = "a4bd79dd-e7ee-4407-9e7d-00582840c43a", fallback = "Mağaza") },
+                        text = item.StoreName.orEmpty().ifBlank {
+                            BBLocalization.Current.Get(
+                                key = "a4bd79dd-e7ee-4407-9e7d-00582840c43a",
+                                fallback = "Mağaza"
+                            )
+                        },
                         style = BbTypography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -261,13 +299,19 @@ private fun QuestionAnswerCard(
             AccountQuestionDivider()
 
             QuestionTextBlock(
-                label = BBLocalization.Current.Get(key = "d1af1899-4d10-4568-a72a-1fd2028063d1", fallback = "Soru"),
+                label = BBLocalization.Current.Get(
+                    key = "d1af1899-4d10-4568-a72a-1fd2028063d1",
+                    fallback = "Soru"
+                ),
                 text = item.Question
             )
 
             if (isAnswered) {
                 QuestionTextBlock(
-                    label = BBLocalization.Current.Get(key = "8fcffd2a-a535-475d-9afa-bb88465a11fd", fallback = "Cevap"),
+                    label = BBLocalization.Current.Get(
+                        key = "8fcffd2a-a535-475d-9afa-bb88465a11fd",
+                        fallback = "Cevap"
+                    ),
                     text = item.Message.orEmpty()
                 )
             } else {
@@ -281,7 +325,10 @@ private fun QuestionAnswerCard(
                         .padding(BBSpacing.CardPaddingCompact)
                 ) {
                     Text(
-                        text = BBLocalization.Current.Get(key = "d407b3e7-2260-466c-9949-efaf495bc575", fallback = "Satıcı cevabı bekleniyor."),
+                        text = BBLocalization.Current.Get(
+                            key = "d407b3e7-2260-466c-9949-efaf495bc575",
+                            fallback = "Satıcı cevabı bekleniyor."
+                        ),
                         style = BbTypography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -347,6 +394,26 @@ private fun QuestionTextBlock(
 }
 
 @Composable
+private fun QuestionAnswerIconBox(icon: ImageVector) {
+    Box(
+        modifier = Modifier
+            .size(BBSpacing.Space12)
+            .background(
+                color = MaterialTheme.colorScheme.primaryContainer,
+                shape = BBRadius.LgShape
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = BBColors.Yellow.Yellow800,
+            modifier = Modifier.size(BBSpacing.Space6)
+        )
+    }
+}
+
+@Composable
 private fun QuestionAnswerMessageState(
     modifier: Modifier,
     title: String,
@@ -354,39 +421,48 @@ private fun QuestionAnswerMessageState(
     buttonText: String? = null,
     onButtonClick: () -> Unit = {}
 ) {
-    Column(
-        modifier = modifier.padding(BBSpacing.PageHorizontal),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+    Box(
+        modifier = modifier.padding(
+            start = BBSpacing.PageHorizontal,
+            top = BBSpacing.PageTopCompact,
+            end = BBSpacing.PageHorizontal
+        ),
+        contentAlignment = Alignment.TopCenter
     ) {
-        Icon(
-            imageVector = Icons.Outlined.QuestionAnswer,
-            contentDescription = null,
-            modifier = Modifier.size(BBIcon.Empty),
-            tint = MaterialTheme.colorScheme.onSurfaceVariant
-        )
+        BbCard(
+            modifier = Modifier.fillMaxWidth(),
+            variant = BbCardVariant.Outlined,
+            padding = BbCardPadding.Large
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+            ) {
+                QuestionAnswerIconBox(
+                    icon = Icons.Outlined.QuestionAnswer
+                )
 
-        Text(
-            text = title,
-            modifier = Modifier.padding(top = BBSpacing.Space4),
-            style = BbTypography.titleSmall,
-            color = MaterialTheme.colorScheme.onSurface
-        )
+                Text(
+                    text = title,
+                    style = BbTypography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
 
-        Text(
-            text = message,
-            modifier = Modifier.padding(top = BBSpacing.Space2),
-            style = BbTypography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
+                Text(
+                    text = message,
+                    style = BbTypography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
 
-        if (buttonText != null) {
-            BbButton(
-                text = buttonText,
-                onClick = onButtonClick,
-                modifier = Modifier.padding(top = BBSpacing.Space4),
-                variant = BbButtonVariant.Primary
-            )
+                if (buttonText != null) {
+                    BbButton(
+                        text = buttonText,
+                        onClick = onButtonClick,
+                        variant = BbButtonVariant.Primary
+                    )
+                }
+            }
         }
     }
 }

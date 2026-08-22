@@ -13,6 +13,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -21,8 +22,10 @@ import androidx.navigation.navArgument
 import com.bulbulustur.android.Application.Authentication.GoogleCredentialResult
 import com.bulbulustur.android.Application.Authentication.GoogleCredentialService
 import com.bulbulustur.android.Application.Controllers.LogonController
+import com.bulbulustur.android.Application.Controllers.SettingsController
 import com.bulbulustur.android.Application.Navigation.Routes.LogonRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.RetailRoutes
+import com.bulbulustur.android.Application.Session.UserSessionManager
 import com.bulbulustur.android.Application.Session.UserSessionState
 import com.bulbulustur.android.Application.Shared.Address.AddressCascadeController
 import com.bulbulustur.android.Application.Shared.Address.AddressCascadeEvent
@@ -37,69 +40,51 @@ import com.bulbulustur.android.Application.Views.Logon.SetNewPasswordScreen
 import com.bulbulustur.android.R
 import com.bulbulustur.android.businesslayer.Core.Model.MemberRegisterModel
 import kotlinx.coroutines.launch
-import androidx.compose.ui.res.stringResource
 
 fun NavGraphBuilder.logonGraph(
     navController: NavHostController,
     sessionState: UserSessionState,
     logonController: LogonController,
-    addressCascadeController: AddressCascadeController
+    addressCascadeController: AddressCascadeController,
+    settingsController: SettingsController,
+    userSessionManager: UserSessionManager
 ) {
-    composable(
-        route =
-            LogonRoutes.Logon
-    ) {
-        val logonState by
-        logonController.State.collectAsState()
-
-        val context =
-            LocalContext.current
-
-        val coroutineScope =
-            rememberCoroutineScope()
-
-        val googleCredentialService =
-            remember(
-                context
-            ) {
-                GoogleCredentialService(
-                    context =
-                        context
-                )
-            }
-
-        var isGoogleCredentialLoading by
-        remember {
-            mutableStateOf(
-                false
-            )
-        }
-
-        val googleWebClientId = stringResource(R.string.google_web_client_id)
-
+    composable(route = LogonRoutes.Logon) {
+        val logonState by logonController.State.collectAsState()
+        val settingsState by settingsController.State.collectAsState()
         val languageId = sessionState.Language.Id
 
-        LaunchedEffect(
-            logonState.IsLoginSuccessful
-        ) {
+        val context = LocalContext.current
+        val coroutineScope = rememberCoroutineScope()
+
+        val googleCredentialService = remember(context) {
+            GoogleCredentialService(context = context)
+        }
+
+        var isGoogleCredentialLoading by remember {
+            mutableStateOf(false)
+        }
+
+        val googleWebClientId =
+            stringResource(R.string.google_web_client_id)
+
+        LaunchedEffect(languageId) {
+            settingsController.GetLanguages(languageId)
+        }
+
+        LaunchedEffect(logonState.IsLoginSuccessful) {
             if (!logonState.IsLoginSuccessful) {
                 return@LaunchedEffect
             }
 
             logonController.ConsumeLoginSuccess()
 
-            navController.navigate(
-                RetailRoutes.Home
-            ) {
-                popUpTo(
-                    LogonRoutes.Logon
-                ) {
-                    inclusive =
-                        true
+            navController.navigate(RetailRoutes.Home) {
+                popUpTo(LogonRoutes.Logon) {
+                    inclusive = true
                 }
 
-                launchSingleTop =
-                    true
+                launchSingleTop = true
             }
         }
 
@@ -107,19 +92,12 @@ fun NavGraphBuilder.logonGraph(
             isLoading =
                 logonState.IsLoading ||
                         isGoogleCredentialLoading,
-            errorMessage =
-                logonState.ErrorMessage,
-            onLogonClick = {
-                    email,
-                    password ->
-
+            errorMessage = logonState.ErrorMessage,
+            onLogonClick = { email, password ->
                 logonController.LoginPost(
-                    email =
-                        email,
-                    password =
-                        password,
-                    languageId =
-                        languageId
+                    email = email,
+                    password = password,
+                    languageId = languageId
                 )
             },
             onInputChanged = {
@@ -141,20 +119,16 @@ fun NavGraphBuilder.logonGraph(
                     !logonState.IsLoading
                 ) {
                     logonController.ClearError()
-
-                    isGoogleCredentialLoading =
-                        true
+                    isGoogleCredentialLoading = true
 
                     coroutineScope.launch {
                         try {
-                            val credentialResult =
-                                googleCredentialService.SignIn(
-                                    serverClientId =
-                                        googleWebClientId
-                                )
-
                             when (
-                                credentialResult
+                                val credentialResult =
+                                    googleCredentialService.SignIn(
+                                        serverClientId =
+                                            googleWebClientId
+                                    )
                             ) {
                                 is GoogleCredentialResult.Success -> {
                                     logonController.GoogleLoginPost(
@@ -176,31 +150,55 @@ fun NavGraphBuilder.logonGraph(
                                 }
                             }
                         } finally {
-                            isGoogleCredentialLoading =
-                                false
+                            isGoogleCredentialLoading = false
                         }
                     }
                 }
             },
             onFacebookClick = {
             },
-            onLanguageClick = {
+            languages = settingsState.Languages,
+            selectedLanguageId = languageId,
+            isLanguageLoading =
+                settingsState.IsLoadingLanguages,
+            languageErrorMessage =
+                settingsState.LanguageResult
+                    ?.takeIf { !it.Success }
+                    ?.Message,
+            onLanguageSelected = { selectedLanguageId ->
+                val selectedLanguage =
+                    settingsState.Languages.firstOrNull {
+                        it.SystemDescLanguageId ==
+                                selectedLanguageId
+                    }
+
+                if (selectedLanguage != null) {
+                    userSessionManager.SetLanguage(
+                        languageId =
+                            selectedLanguage.SystemDescLanguageId,
+                        languageCode =
+                            selectedLanguage.LanguageIsoCode.trim()
+                    )
+                }
             }
         )
     }
 
-    composable(
-        route =
-            LogonRoutes.ForgotPassword
-    ) {
+    composable(route = LogonRoutes.ForgotPassword) {
         val logonState by
         logonController.State.collectAsState()
 
-        val languageId = sessionState.Language.Id
+        val settingsState by
+        settingsController.State.collectAsState()
 
-        LaunchedEffect(
-            Unit
-        ) {
+        val languageId =
+            sessionState.Language.Id
+
+        LaunchedEffect(languageId) {
+            settingsController.GetLanguages(languageId)
+        }
+
+        LaunchedEffect(Unit) {
             logonController.ForgotPassword()
         }
 
@@ -213,10 +211,8 @@ fun NavGraphBuilder.logonGraph(
                 logonState.ForgotPasswordMessage,
             onSendResetLinkClick = { email ->
                 logonController.ForgotPasswordPost(
-                    email =
-                        email,
-                    languageId =
-                        languageId
+                    email = email,
+                    languageId = languageId
                 )
             },
             onInputChanged = {
@@ -224,34 +220,53 @@ fun NavGraphBuilder.logonGraph(
             },
             onBackToLogonClick = {
                 navController.popBackStack(
-                    route =
-                        LogonRoutes.Logon,
-                    inclusive =
-                        false
+                    route = LogonRoutes.Logon,
+                    inclusive = false
                 )
             },
-            onLanguageClick = {
+            languages = settingsState.Languages,
+            selectedLanguageId = languageId,
+            isLanguageLoading =
+                settingsState.IsLoadingLanguages,
+            languageErrorMessage =
+                settingsState.LanguageResult
+                    ?.takeIf { !it.Success }
+                    ?.Message,
+            onLanguageSelected = { selectedLanguageId ->
+                val selectedLanguage =
+                    settingsState.Languages.firstOrNull {
+                        it.SystemDescLanguageId ==
+                                selectedLanguageId
+                    }
+
+                if (selectedLanguage != null) {
+                    userSessionManager.SetLanguage(
+                        languageId =
+                            selectedLanguage.SystemDescLanguageId,
+                        languageCode =
+                            selectedLanguage.LanguageIsoCode.trim()
+                    )
+                }
             }
         )
     }
 
     composable(
-        route =
-            LogonRoutes.SetNewPassword,
+        route = LogonRoutes.SetNewPassword,
         arguments =
             listOf(
                 navArgument(
                     LogonRoutes.SetNewPasswordArgument
                 ) {
-                    type =
-                        NavType.StringType
+                    type = NavType.StringType
                 }
             )
     ) { backStackEntry ->
         val logonState by
         logonController.State.collectAsState()
 
-        val languageId = sessionState.Language.Id
+        val languageId =
+            sessionState.Language.Id
 
         val activationCode =
             backStackEntry.arguments
@@ -261,9 +276,7 @@ fun NavGraphBuilder.logonGraph(
                 ?.trim()
                 .orEmpty()
 
-        LaunchedEffect(
-            activationCode
-        ) {
+        LaunchedEffect(activationCode) {
             if (activationCode.isBlank()) {
                 navController.navigate(
                     LogonRoutes.Expired
@@ -271,12 +284,10 @@ fun NavGraphBuilder.logonGraph(
                     popUpTo(
                         LogonRoutes.SetNewPassword
                     ) {
-                        inclusive =
-                            true
+                        inclusive = true
                     }
 
-                    launchSingleTop =
-                        true
+                    launchSingleTop = true
                 }
 
                 return@LaunchedEffect
@@ -300,12 +311,10 @@ fun NavGraphBuilder.logonGraph(
                 popUpTo(
                     LogonRoutes.SetNewPassword
                 ) {
-                    inclusive =
-                        true
+                    inclusive = true
                 }
 
-                launchSingleTop =
-                    true
+                launchSingleTop = true
             }
         }
 
@@ -319,14 +328,10 @@ fun NavGraphBuilder.logonGraph(
                     reNewPassword ->
 
                 logonController.SetNewPasswordPost(
-                    activationCode =
-                        activationCode,
-                    newPassword =
-                        newPassword,
-                    reNewPassword =
-                        reNewPassword,
-                    languageId =
-                        languageId
+                    activationCode = activationCode,
+                    newPassword = newPassword,
+                    reNewPassword = reNewPassword,
+                    languageId = languageId
                 )
             },
             onInputChanged = {
@@ -339,12 +344,10 @@ fun NavGraphBuilder.logonGraph(
                     popUpTo(
                         LogonRoutes.SetNewPassword
                     ) {
-                        inclusive =
-                            true
+                        inclusive = true
                     }
 
-                    launchSingleTop =
-                        true
+                    launchSingleTop = true
                 }
             },
             onLanguageClick = {
@@ -352,14 +355,19 @@ fun NavGraphBuilder.logonGraph(
         )
     }
 
-    composable(
-        route =
-            LogonRoutes.FirstDoor
-    ) {
+    composable(route = LogonRoutes.FirstDoor) {
         val logonState by
         logonController.State.collectAsState()
 
-        val languageId = sessionState.Language.Id
+        val settingsState by
+        settingsController.State.collectAsState()
+
+        val languageId =
+            sessionState.Language.Id
+
+        LaunchedEffect(languageId) {
+            settingsController.GetLanguages(languageId)
+        }
 
         LaunchedEffect(
             logonState.IsFirstDoorSuccessful
@@ -373,8 +381,7 @@ fun NavGraphBuilder.logonGraph(
             navController.navigate(
                 LogonRoutes.RegisterFinal
             ) {
-                launchSingleTop =
-                    true
+                launchSingleTop = true
             }
         }
 
@@ -385,10 +392,8 @@ fun NavGraphBuilder.logonGraph(
                 logonState.ErrorMessage,
             onContinueClick = { email ->
                 logonController.FirstDoorPost(
-                    email =
-                        email,
-                    languageId =
-                        languageId
+                    email = email,
+                    languageId = languageId
                 )
             },
             onInputChanged = {
@@ -396,27 +401,45 @@ fun NavGraphBuilder.logonGraph(
             },
             onBackToLogonClick = {
                 navController.popBackStack(
-                    route =
-                        LogonRoutes.Logon,
-                    inclusive =
-                        false
+                    route = LogonRoutes.Logon,
+                    inclusive = false
                 )
             },
-            onLanguageClick = {
+            languages = settingsState.Languages,
+            selectedLanguageId = languageId,
+            isLanguageLoading =
+                settingsState.IsLoadingLanguages,
+            languageErrorMessage =
+                settingsState.LanguageResult
+                    ?.takeIf { !it.Success }
+                    ?.Message,
+            onLanguageSelected = { selectedLanguageId ->
+                val selectedLanguage =
+                    settingsState.Languages.firstOrNull {
+                        it.SystemDescLanguageId ==
+                                selectedLanguageId
+                    }
+
+                if (selectedLanguage != null) {
+                    userSessionManager.SetLanguage(
+                        languageId =
+                            selectedLanguage.SystemDescLanguageId,
+                        languageCode =
+                            selectedLanguage.LanguageIsoCode.trim()
+                    )
+                }
             }
         )
     }
 
     composable(
-        route =
-            LogonRoutes.RegisterActivation,
+        route = LogonRoutes.RegisterActivation,
         arguments =
             listOf(
                 navArgument(
                     LogonRoutes.RegisterActivationArgument
                 ) {
-                    type =
-                        NavType.StringType
+                    type = NavType.StringType
                 }
             )
     ) { backStackEntry ->
@@ -434,7 +457,8 @@ fun NavGraphBuilder.logonGraph(
                 ?.trim()
                 .orEmpty()
 
-        val languageId = sessionState.Language.Id
+        val languageId =
+            sessionState.Language.Id
 
         LaunchedEffect(
             uuid,
@@ -447,12 +471,10 @@ fun NavGraphBuilder.logonGraph(
                     popUpTo(
                         LogonRoutes.RegisterActivation
                     ) {
-                        inclusive =
-                            true
+                        inclusive = true
                     }
 
-                    launchSingleTop =
-                        true
+                    launchSingleTop = true
                 }
 
                 return@LaunchedEffect
@@ -465,10 +487,8 @@ fun NavGraphBuilder.logonGraph(
             )
 
             logonController.GetMemberTempByActivationCode(
-                activationCode =
-                    uuid,
-                languageId =
-                    languageId
+                activationCode = uuid,
+                languageId = languageId
             )
         }
 
@@ -495,12 +515,10 @@ fun NavGraphBuilder.logonGraph(
                 popUpTo(
                     LogonRoutes.RegisterActivation
                 ) {
-                    inclusive =
-                        true
+                    inclusive = true
                 }
 
-                launchSingleTop =
-                    true
+                launchSingleTop = true
             }
         }
 
@@ -543,12 +561,10 @@ fun NavGraphBuilder.logonGraph(
                 popUpTo(
                     LogonRoutes.RegisterActivation
                 ) {
-                    inclusive =
-                        true
+                    inclusive = true
                 }
 
-                launchSingleTop =
-                    true
+                launchSingleTop = true
             }
         }
 
@@ -588,7 +604,9 @@ fun NavGraphBuilder.logonGraph(
                             )
                         )
                     },
-                    onCountryStateSelected = { countryStateId ->
+                    onCountryStateSelected = {
+                            countryStateId ->
+
                         addressCascadeController.OnEvent(
                             AddressCascadeEvent.SelectCountryState(
                                 CountryStateId =
@@ -598,7 +616,9 @@ fun NavGraphBuilder.logonGraph(
                             )
                         )
                     },
-                    onCountryDepartmentSelected = { countryDepartmentId ->
+                    onCountryDepartmentSelected = {
+                            countryDepartmentId ->
+
                         addressCascadeController.OnEvent(
                             AddressCascadeEvent.SelectCountryDepartment(
                                 CountryDepartmentId =
@@ -630,14 +650,10 @@ fun NavGraphBuilder.logonGraph(
                         logonController.RegisterPost(
                             model =
                                 MemberRegisterModel(
-                                    Email =
-                                        form.Email,
-                                    Name =
-                                        form.Name,
-                                    Surname =
-                                        form.Surname,
-                                    Password =
-                                        form.Password,
+                                    Email = form.Email,
+                                    Name = form.Name,
+                                    Surname = form.Surname,
+                                    Password = form.Password,
                                     PasswordAgain =
                                         form.PasswordAgain,
                                     ActivationCode =
@@ -648,16 +664,12 @@ fun NavGraphBuilder.logonGraph(
                                         form.CountryStateId,
                                     CountryDepartmentId =
                                         form.CountryDepartmentId,
-                                    CityId =
-                                        form.CityId,
+                                    CityId = form.CityId,
                                     DistrictId =
                                         form.DistrictId,
-                                    LoginProvider =
-                                        "Email",
-                                    Uuid =
-                                        uuid,
-                                    MemberSecureKey =
-                                        "",
+                                    LoginProvider = "Email",
+                                    Uuid = uuid,
+                                    MemberSecureKey = "",
                                     LanguageId =
                                         languageId
                                 ),
@@ -678,12 +690,10 @@ fun NavGraphBuilder.logonGraph(
                             popUpTo(
                                 LogonRoutes.RegisterActivation
                             ) {
-                                inclusive =
-                                    true
+                                inclusive = true
                             }
 
-                            launchSingleTop =
-                                true
+                            launchSingleTop = true
                         }
                     },
                     onLanguageClick = {
@@ -705,8 +715,7 @@ fun NavGraphBuilder.logonGraph(
     }
 
     composable(
-        route =
-            LogonRoutes.RegisterFinal
+        route = LogonRoutes.RegisterFinal
     ) {
         val logonState by
         logonController.State.collectAsState()
@@ -734,12 +743,10 @@ fun NavGraphBuilder.logonGraph(
                     popUpTo(
                         LogonRoutes.RegisterFinal
                     ) {
-                        inclusive =
-                            true
+                        inclusive = true
                     }
 
-                    launchSingleTop =
-                        true
+                    launchSingleTop = true
                 }
             },
             onResendVerificationClick = {
@@ -747,13 +754,12 @@ fun NavGraphBuilder.logonGraph(
                     logonState.FirstDoorEmail
 
                 if (email.isNotBlank()) {
-                    val languageId = sessionState.Language.Id
+                    val languageId =
+                        sessionState.Language.Id
 
                     logonController.FirstDoorPost(
-                        email =
-                            email,
-                        languageId =
-                            languageId
+                        email = email,
+                        languageId = languageId
                     )
                 }
             },
@@ -763,8 +769,7 @@ fun NavGraphBuilder.logonGraph(
     }
 
     composable(
-        route =
-            LogonRoutes.Expired
+        route = LogonRoutes.Expired
     ) {
         ExpiredScreen(
             onSendAgainClick = {
@@ -780,12 +785,10 @@ fun NavGraphBuilder.logonGraph(
                     popUpTo(
                         LogonRoutes.Expired
                     ) {
-                        inclusive =
-                            true
+                        inclusive = true
                     }
 
-                    launchSingleTop =
-                        true
+                    launchSingleTop = true
                 }
             },
             onGoToLogonClick = {
@@ -801,12 +804,10 @@ fun NavGraphBuilder.logonGraph(
                     popUpTo(
                         LogonRoutes.Expired
                     ) {
-                        inclusive =
-                            true
+                        inclusive = true
                     }
 
-                    launchSingleTop =
-                        true
+                    launchSingleTop = true
                 }
             },
             onLanguageClick = {

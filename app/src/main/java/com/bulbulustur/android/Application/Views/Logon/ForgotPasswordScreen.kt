@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CheckCircle
@@ -25,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.foundation.layout.width
 import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.LogonPublicFieldLabel
 import com.bulbulustur.android.Application.Views.Shared.LogonPublicPageTitle
@@ -39,6 +39,7 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
+import com.bulbulustur.android.businesslayer.Core.DTO.SystemDescLanguageDTO
 
 @Composable
 fun ForgotPasswordScreen(
@@ -48,7 +49,11 @@ fun ForgotPasswordScreen(
     onSendResetLinkClick: (email: String) -> Unit = {},
     onInputChanged: () -> Unit = {},
     onBackToLogonClick: () -> Unit = {},
-    onLanguageClick: () -> Unit = {}
+    languages: List<SystemDescLanguageDTO> = emptyList(),
+    selectedLanguageId: Int = 1,
+    isLanguageLoading: Boolean = false,
+    languageErrorMessage: String? = null,
+    onLanguageSelected: (Int) -> Unit = {}
 ) {
     var email by remember {
         mutableStateOf("")
@@ -58,9 +63,11 @@ fun ForgotPasswordScreen(
         !successMessage.isNullOrBlank()
 
     LogonPublicScaffold(
-        onLanguageSelected = {
-            onLanguageClick()
-        }
+        languages = languages,
+        selectedLanguageId = selectedLanguageId,
+        isLanguageLoading = isLanguageLoading,
+        languageErrorMessage = languageErrorMessage,
+        onLanguageIdSelected = onLanguageSelected
     ) {
         LogonPublicPageTitle(
             eyebrow =
@@ -76,45 +83,35 @@ fun ForgotPasswordScreen(
         )
 
         Spacer(
-            modifier =
-                Modifier.height(
-                    BBSpacing.Space8
-                )
+            modifier = Modifier.height(
+                BBSpacing.Space8
+            )
         )
 
         if (isSuccessful) {
             ForgotPasswordMessageBox(
-                message =
-                    successMessage.orEmpty(),
-                isSuccess =
-                    true
+                message = successMessage.orEmpty(),
+                isSuccess = true
             )
 
             Spacer(
-                modifier =
-                    Modifier.height(
-                        BBSpacing.Space5
-                    )
+                modifier = Modifier.height(
+                    BBSpacing.Space5
+                )
             )
 
             BbButton(
-                modifier =
-                    Modifier.fillMaxWidth(),
-                text =
-                    BBLocalization.Current.Get(key = "6777bc00-123b-4116-9093-08c80fb9d405", fallback = "Giriş Ekranına Dön"),
-                onClick =
-                    onBackToLogonClick,
-                variant =
-                    BbButtonVariant.Primary,
-                size =
-                    BbButtonSize.Large
+                modifier = Modifier.fillMaxWidth(),
+                text = BBLocalization.Current.Get(key = "6777bc00-123b-4116-9093-08c80fb9d405", fallback = "Giriş Ekranına Dön"),
+                onClick = onBackToLogonClick,
+                variant = BbButtonVariant.Primary,
+                size = BbButtonSize.Large
             )
 
             Spacer(
-                modifier =
-                    Modifier.height(
-                        BBSpacing.Space6
-                    )
+                modifier = Modifier.height(
+                    BBSpacing.Space6
+                )
             )
 
             ResetPasswordInfoBox()
@@ -128,141 +125,108 @@ fun ForgotPasswordScreen(
         )
 
         Spacer(
-            modifier =
-                Modifier.height(
-                    BBSpacing.Space2
-                )
+            modifier = Modifier.height(
+                BBSpacing.Space2
+            )
         )
 
         LogonPublicTextField(
-            value =
-                email,
+            value = email,
             onValueChange = { value ->
-                email =
-                    value
-
+                email = value
                 onInputChanged()
             },
             placeholder =
                 BBLocalization.Current.Get(key = "457d3d09-532e-4d44-b7fc-b6f18f43d5f7", fallback = ""),
             keyboardOptions =
                 KeyboardOptions(
-                    keyboardType =
-                        KeyboardType.Email
+                    keyboardType = KeyboardType.Email
                 )
         )
 
         if (!errorMessage.isNullOrBlank()) {
             Spacer(
-                modifier =
-                    Modifier.height(
-                        BBSpacing.Space3
-                    )
+                modifier = Modifier.height(
+                    BBSpacing.Space3
+                )
             )
 
             ForgotPasswordMessageBox(
-                message =
-                    errorMessage,
-                isSuccess =
-                    false
+                message = errorMessage,
+                isSuccess = false
             )
         }
 
         Spacer(
-            modifier =
-                Modifier.height(
-                    BBSpacing.Space7
-                )
+            modifier = Modifier.height(
+                BBSpacing.Space7
+            )
         )
 
         BbButton(
-            modifier =
-                Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             text =
                 BBLocalization.Current.Get(key = "46ed67d0-2b86-45cb-86f6-4d84bd233de7", fallback = "Şifre Yenileme Bağlantısı Gönder"),
             onClick = {
-                onSendResetLinkClick(
-                    email
-                )
+                onSendResetLinkClick(email)
             },
-            variant =
-                BbButtonVariant.Primary,
-            size =
-                BbButtonSize.Large,
-            enabled =
-                !isLoading,
-            isLoading =
-                isLoading
+            variant = BbButtonVariant.Primary,
+            size = BbButtonSize.Large,
+            enabled = !isLoading,
+            isLoading = isLoading
         )
 
         Spacer(
-            modifier =
-                Modifier.height(
-                    BBSpacing.Space4
-                )
+            modifier = Modifier.height(
+                BBSpacing.Space4
+            )
         )
 
         BbButton(
-            modifier =
-                Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             text =
                 BBLocalization.Current.Get(key = "6777bc00-123b-4116-9093-08c80fb9d405", fallback = "Giriş Ekranına Dön"),
-            onClick =
-                onBackToLogonClick,
-            variant =
-                BbButtonVariant.Outline,
-            size =
-                BbButtonSize.Large,
-            enabled =
-                !isLoading
+            onClick = onBackToLogonClick,
+            variant = BbButtonVariant.Outline,
+            size = BbButtonSize.Large,
+            enabled = !isLoading
         )
 
         Spacer(
-            modifier =
-                Modifier.height(
-                    BBSpacing.Space6
-                )
+            modifier = Modifier.height(
+                BBSpacing.Space6
+            )
         )
 
         ResetPasswordInfoBox()
 
         Spacer(
-            modifier =
-                Modifier.height(
-                    BBSpacing.Space5
-                )
+            modifier = Modifier.height(
+                BBSpacing.Space5
+            )
         )
 
         Row(
-            modifier =
-                Modifier.fillMaxWidth(),
-            verticalAlignment =
-                Alignment.CenterVertically
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text =
                     BBLocalization.Current.Get(key = "6ac31ec1-45b7-4055-a728-f7f977d47d26", fallback = "Hesabınızı hatırladınız mı?"),
-                style =
-                    MaterialTheme.typography.bodySmall,
-                color =
-                    MaterialTheme.colorScheme.onSurfaceVariant
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             TextButton(
-                onClick =
-                    onBackToLogonClick,
-                enabled =
-                    !isLoading
+                onClick = onBackToLogonClick,
+                enabled = !isLoading
             ) {
                 Text(
                     text =
                         BBLocalization.Current.Get(key = "72289e9d-49e1-4c2a-8b0b-3ab5a67610a6", fallback = "Giriş Yap"),
-                    style =
-                        MaterialTheme.typography.labelLarge,
-                    fontWeight =
-                        FontWeight.Bold,
-                    color =
-                        MaterialTheme.colorScheme.onSurface
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
         }
@@ -289,22 +253,17 @@ private fun ForgotPasswordMessageBox(
         }
 
     Surface(
-        modifier =
-            Modifier.fillMaxWidth(),
-        color =
-            containerColor,
-        contentColor =
-            contentColor,
-        shape =
-            BBRadius.Card
+        modifier = Modifier.fillMaxWidth(),
+        color = containerColor,
+        contentColor = contentColor,
+        shape = BBRadius.Card
     ) {
         Row(
             modifier =
                 Modifier.padding(
                     BBSpacing.CardPaddingCompact
                 ),
-            verticalAlignment =
-                Alignment.Top
+            verticalAlignment = Alignment.Top
         ) {
             Icon(
                 imageVector =
@@ -313,30 +272,22 @@ private fun ForgotPasswordMessageBox(
                     } else {
                         Icons.Outlined.ErrorOutline
                     },
-                contentDescription =
-                    null,
+                contentDescription = null,
                 modifier =
                     Modifier.padding(
-                        top =
-                            BBSpacing.Space1
+                        top = BBSpacing.Space1
                     ),
-                tint =
-                    contentColor
+                tint = contentColor
             )
 
             Spacer(
-                modifier =
-                    Modifier.width(
-                        BBSpacing.Space3
-                    )
+                modifier = Modifier.width(
+                    BBSpacing.Space3
+                )
             )
 
             Column(
-                modifier =
-                    Modifier
-                        .weight(
-                            1f
-                        )
+                modifier = Modifier.weight(1f)
             ) {
                 Text(
                     text =
@@ -345,28 +296,21 @@ private fun ForgotPasswordMessageBox(
                         } else {
                             BBLocalization.Current.Get(key = "aee471fe-aa14-4587-897c-f5a3489aa980", fallback = "İşlem Tamamlanamadı")
                         },
-                    style =
-                        MaterialTheme.typography.labelLarge,
-                    fontWeight =
-                        FontWeight.Bold,
-                    color =
-                        contentColor
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = contentColor
                 )
 
                 Spacer(
-                    modifier =
-                        Modifier.height(
-                            BBSpacing.Space1
-                        )
+                    modifier = Modifier.height(
+                        BBSpacing.Space1
+                    )
                 )
 
                 Text(
-                    text =
-                        message,
-                    style =
-                        MaterialTheme.typography.bodySmall,
-                    color =
-                        contentColor
+                    text = message,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = contentColor
                 )
             }
         }
@@ -376,12 +320,9 @@ private fun ForgotPasswordMessageBox(
 @Composable
 private fun ResetPasswordInfoBox() {
     Surface(
-        modifier =
-            Modifier.fillMaxWidth(),
-        color =
-            MaterialTheme.colorScheme.surfaceVariant,
-        shape =
-            BBRadius.Card
+        modifier = Modifier.fillMaxWidth(),
+        color = MaterialTheme.colorScheme.surfaceVariant,
+        shape = BBRadius.Card
     ) {
         Column(
             modifier =
@@ -392,36 +333,29 @@ private fun ResetPasswordInfoBox() {
             Text(
                 text =
                     BBLocalization.Current.Get(key = "545e09b0-df75-4578-8b69-d0b818cb0eda", fallback = "Güvenlik notu"),
-                style =
-                    MaterialTheme.typography.labelLarge,
-                fontWeight =
-                    FontWeight.Bold,
-                color =
-                    MaterialTheme.colorScheme.onSurface
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Spacer(
-                modifier =
-                    Modifier.height(
-                        BBSpacing.Space1
-                    )
+                modifier = Modifier.height(
+                    BBSpacing.Space1
+                )
             )
 
             Text(
                 text =
                     BBLocalization.Current.Get(key = "a69e0547-8db8-432e-82f2-39a39e92e4be", fallback = "Bağlantı yalnızca kısa süre geçerli olur. Hesabınızı korumak için yeni şifrenizi kimseyle paylaşmayın."),
-                style =
-                    MaterialTheme.typography.bodySmall,
-                color =
-                    MaterialTheme.colorScheme.onSurfaceVariant
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
 }
 
 @Preview(
-    showBackground =
-        true
+    showBackground = true
 )
 @Composable
 private fun ForgotPasswordScreenPreview() {

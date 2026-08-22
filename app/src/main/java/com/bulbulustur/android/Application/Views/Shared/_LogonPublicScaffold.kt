@@ -301,13 +301,10 @@ fun LogonPublicHeader(
         }
 
         Surface(
-            modifier = Modifier
-                .defaultMinSize(
-                    minHeight = BBIcon.BoxMd
-                )
-                .clickable {
-                    isLanguageDialogVisible = true
-                },
+            onClick = { isLanguageDialogVisible = true },
+            modifier = Modifier.defaultMinSize(
+                minHeight = BBIcon.BoxMd
+            ),
             shape = BBRadius.XlShape,
             color = MaterialTheme.colorScheme.surface,
             border = BorderStroke(
@@ -514,11 +511,8 @@ private fun LogonPublicLanguageRow(
     onClick: () -> Unit
 ) {
     Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-                onClick()
-            },
+        onClick = onClick,
+        modifier = Modifier.fillMaxWidth(),
         shape = BBRadius.XlShape,
         color = if (isSelected) {
             BBColors.Yellow.Yellow100

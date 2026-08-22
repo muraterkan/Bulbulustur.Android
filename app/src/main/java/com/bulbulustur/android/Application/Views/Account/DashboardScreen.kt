@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountBalance
-import androidx.compose.material.icons.outlined.Badge
 import androidx.compose.material.icons.outlined.Business
 import androidx.compose.material.icons.outlined.ChevronRight
 import androidx.compose.material.icons.outlined.CreditCard
@@ -31,7 +30,6 @@ import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.LocalOffer
-import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.MailOutline
 import androidx.compose.material.icons.outlined.ProductionQuantityLimits
 import androidx.compose.material.icons.outlined.QuestionAnswer
@@ -51,6 +49,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.remember
 import androidx.compose.material.icons.outlined.Logout
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -120,9 +119,7 @@ fun DashboardScreen(
         DashboardHomeData(
             userName = "Murat Erkan",
             profileSubtitle = BBLocalization.Current.Get(key = "c8f04521-ab0d-4701-ad2b-6b4882092d37", fallback = "Profili Görüntüle veya Düzenle"),
-            initials = "ME",
-            profileId = "ID: 54108878",
-            city = BBLocalization.Current.Get(key = "0f7353b3-7eb8-4195-970a-08a0d0bc7531", fallback = "İstanbul")
+            initials = "ME"
         )
     }
 
@@ -251,14 +248,6 @@ fun DashboardScreen(
                         onClick = onFollowedStoresClick
                     )
 
-                    AccountDashedDivider()
-
-                    AccountMenuRow(
-                        title = BBLocalization.Current.Get(key = "ff489322-baaf-495e-b71a-9a9a37ad401e", fallback = "Kullanım Amacı"),
-                        description = BBLocalization.Current.Get(key = "4a3735c7-a0bb-4bb2-8ca4-b841ff3a577f", fallback = "Toptan, perakende veya karma kullanım tercihini düzenle."),
-                        icon = Icons.Outlined.Tune,
-                        onClick = onUsagePurposeClick
-                    )
                 }
             }
 
@@ -327,7 +316,8 @@ fun DashboardScreen(
             item {
                 AccountSupportAndSettingsGroup(
                     onSupportClick = onSupportClick,
-                    onSettingsClick = onSettingsClick
+                    onSettingsClick = onSettingsClick,
+                    onUsagePurposeClick = onUsagePurposeClick
                 )
             }
 
@@ -335,12 +325,6 @@ fun DashboardScreen(
                 AccountLogoutSection(
                     onLogoutClick = onLogoutClick,
                     isLogoutLoading = isLogoutLoading
-                )
-            }
-
-            item {
-                AccountUsagePurposeDarkCard(
-                    onClick = onUsagePurposeClick
                 )
             }
         }
@@ -358,11 +342,13 @@ private fun AccountProfileHero(
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1),
+        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = BBSpacing.Space2),
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -388,7 +374,7 @@ private fun AccountProfileHero(
                     onProfileClick()
                 },
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             AccountAvatar(
                 useProfilePhoto = useProfilePhoto,
@@ -399,7 +385,7 @@ private fun AccountProfileHero(
 
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
             ) {
                 Text(
                     text = data.userName,
@@ -431,20 +417,6 @@ private fun AccountProfileHero(
                     )
                 }
 
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    AccountProfileChip(
-                        icon = Icons.Outlined.Badge,
-                        text = data.profileId
-                    )
-
-                    AccountProfileChip(
-                        icon = Icons.Outlined.LocationOn,
-                        text = data.city
-                    )
-                }
             }
         }
     }
@@ -496,44 +468,6 @@ private fun AccountAvatar(
                     fontWeight = FontWeight.Bold
                 )
             }
-        }
-    }
-}
-
-@Composable
-private fun AccountProfileChip(
-    icon: ImageVector,
-    text: String
-) {
-    Surface(
-        shape = BBRadius.PillShape,
-        color = MaterialTheme.colorScheme.surface,
-        border = BorderStroke(
-            width = BBSpacing.BorderThin,
-            color = MaterialTheme.colorScheme.outlineVariant
-        )
-    ) {
-        Row(
-            modifier = Modifier.padding(
-                horizontal = BBSpacing.Space2,
-                vertical = BBSpacing.Space1
-            ),
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space1),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(BBIcon.SizeSm)
-            )
-
-            Text(
-                text = text,
-                style = BbTypography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                fontWeight = FontWeight.SemiBold
-            )
         }
     }
 }
@@ -716,7 +650,7 @@ private fun DashboardAccountCard(
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    imageVector = Icons.Outlined.Badge,
+                    imageVector = Icons.Outlined.Person,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onPrimaryContainer,
                     modifier = Modifier.size(BBIcon.Section)
@@ -754,83 +688,6 @@ private fun DashboardAccountCard(
                     imageVector = Icons.Outlined.ChevronRight,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.size(BBIcon.SizeSm)
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun AccountUsagePurposeDarkCard(
-    onClick: () -> Unit
-) {
-    Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-                onClick()
-            },
-        shape = BBRadius.XlShape,
-        color = MaterialTheme.colorScheme.inverseSurface
-    ) {
-        Row(
-            modifier = Modifier.padding(BBSpacing.CardPadding),
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space4),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(BBIcon.BoxLg)
-                    .background(
-                        color = MaterialTheme.colorScheme.inversePrimary,
-                        shape = BBRadius.LgShape
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Tune,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.inverseSurface,
-                    modifier = Modifier.size(BBIcon.Section)
-                )
-            }
-
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
-            ) {
-                Text(
-                    text = BBLocalization.Current.Get(key = "81ebee8c-44e5-40c8-b5e3-b88450002783", fallback = "Bulbulustur'u Hangi Amaçla Kullanıyorsun?"),
-                    style = BbTypography.titleMedium,
-                    color = MaterialTheme.colorScheme.inverseOnSurface,
-                    fontWeight = FontWeight.Bold
-                )
-
-                Text(
-                    text = BBLocalization.Current.Get(key = "e2a4ff9c-4e86-4bfb-adbe-ebd470f78ea0", fallback = "Toptan, perakende veya her ikisi için deneyimini kişiselleştirelim."),
-                    style = BbTypography.bodySmall,
-                    color = MaterialTheme.colorScheme.inverseOnSurface.copy(
-                        alpha = BBAlpha.Muted
-                    )
-                )
-            }
-
-            Box(
-                modifier = Modifier
-                    .size(BBIcon.BoxSm)
-                    .background(
-                        color = MaterialTheme.colorScheme.inverseOnSurface.copy(
-                            alpha = BBAlpha.Overlay
-                        ),
-                        shape = BBRadius.LgShape
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.ChevronRight,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.inverseOnSurface,
                     modifier = Modifier.size(BBIcon.SizeSm)
                 )
             }
@@ -959,7 +816,8 @@ private fun AccountMenuRow(
 @Composable
 private fun AccountSupportAndSettingsGroup(
     onSupportClick: () -> Unit,
-    onSettingsClick: () -> Unit
+    onSettingsClick: () -> Unit,
+    onUsagePurposeClick: () -> Unit
 ) {
     AccountMenuSection(
         title = BBLocalization.Current.Get(key = "8f2c8ee8-2a9e-4546-862c-1c2abc43b78b", fallback = "Destek ve Ayarlar")
@@ -978,6 +836,15 @@ private fun AccountSupportAndSettingsGroup(
             description = BBLocalization.Current.Get(key = "afef7635-1a94-4481-99a5-bde9954a09c6", fallback = "Dil, görünüm, bildirim ve uygulama tercihleri."),
             icon = Icons.Outlined.Settings,
             onClick = onSettingsClick
+        )
+
+        AccountDashedDivider()
+
+        AccountMenuRow(
+            title = BBLocalization.Current.Get(key = "81ebee8c-44e5-40c8-b5e3-b88450002783", fallback = "Bulbulustur'u Hangi Amaçla Kullanıyorsun?"),
+            description = BBLocalization.Current.Get(key = "e2a4ff9c-4e86-4bfb-adbe-ebd470f78ea0", fallback = "Toptan, perakende veya her ikisi için deneyimini kişiselleştirelim."),
+            icon = Icons.Outlined.Tune,
+            onClick = onUsagePurposeClick
         )
     }
 }
@@ -1061,9 +928,7 @@ private fun AccountDashedDivider() {
 private data class DashboardHomeData(
     val userName: String,
     val profileSubtitle: String,
-    val initials: String,
-    val profileId: String,
-    val city: String
+    val initials: String
 )
 
 private enum class DashboardActionAccent {

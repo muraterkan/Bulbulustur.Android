@@ -42,6 +42,7 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
 import com.bulbulustur.android.R
+import com.bulbulustur.android.businesslayer.Core.DTO.SystemDescLanguageDTO
 
 @Composable
 fun LoginScreen(
@@ -56,7 +57,11 @@ fun LoginScreen(
     onRegisterClick: () -> Unit = {},
     onGoogleClick: () -> Unit = {},
     onFacebookClick: () -> Unit = {},
-    onLanguageClick: () -> Unit = {}
+    languages: List<SystemDescLanguageDTO> = emptyList(),
+    selectedLanguageId: Int = 1,
+    isLanguageLoading: Boolean = false,
+    languageErrorMessage: String? = null,
+    onLanguageSelected: (Int) -> Unit = {}
 ) {
     val focusManager =
         LocalFocusManager.current
@@ -87,9 +92,13 @@ fun LoginScreen(
     }
 
     LogonPublicScaffold(
-        onLanguageSelected = {
+        languages = languages,
+        selectedLanguageId = selectedLanguageId,
+        isLanguageLoading = isLanguageLoading,
+        languageErrorMessage = languageErrorMessage,
+        onLanguageIdSelected = { languageId ->
             if (!isLoading) {
-                onLanguageClick()
+                onLanguageSelected(languageId)
             }
         }
     ) {

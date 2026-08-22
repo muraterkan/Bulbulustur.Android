@@ -174,7 +174,7 @@ fun NavGraphBuilder.profileGraph(
             ),
             ProfileCompletionItem(
                 Title = BBLocalization.Current.Get(key = "5b1fbdba-1161-4716-966e-e40a815df70f", fallback = "Meslek"),
-                IsCompleted = !member?.Profession.isNullOrBlank()
+                IsCompleted = !memberProfile?.Profession.isNullOrBlank()
             ),
             ProfileCompletionItem(
                 Title = BBLocalization.Current.Get(key = "ab9646c9-03e3-48a1-8414-c724db187884", fallback = "Hakkımda"),
@@ -187,7 +187,7 @@ fun NavGraphBuilder.profileGraph(
         )
 
         ProfileCompletionScreen(
-            score = memberProfile?.Score ?: 0,
+            score = memberProfile?.ProfileScore ?: 0,
             items = completionItems,
             isLoading = profileState.IsLoading &&
                     (
@@ -229,8 +229,8 @@ fun NavGraphBuilder.profileGraph(
             onAddClick = {
                 navigator.navController.navigate(ProfileRoutes.ProfileLanguagesCreate)
             },
-            
-    onLanguageClick = {},
+
+            onLanguageClick = {},
             onDeleteClick = { language ->
                 profileController.DeleteMemberLanguage(
                     memberId = sessionState.MemberId,
@@ -629,18 +629,13 @@ fun NavGraphBuilder.profileGraph(
         val languageId = ResolveLanguageId(sessionState)
         var profession by rememberSaveable { mutableStateOf("") }
 
-        LaunchedEffect(languageId, sessionState.MemberId) {
-            if (profileState.Member == null) {
-                profileController.GetProfile(
-                    languageId = languageId,
-                    memberId = sessionState.MemberId
-                )
-            }
+        LaunchedEffect(sessionState.MemberId) {
+            profileController.GetMemberProfile(sessionState.MemberId)
         }
 
-        LaunchedEffect(profileState.MemberResult) {
-            if (profileState.MemberResult?.Success == true) {
-                profession = profileState.Member?.Profession.orEmpty()
+        LaunchedEffect(profileState.MemberProfileResult) {
+            if (profileState.MemberProfileResult?.Success == true) {
+                profession = profileState.MemberProfile?.Profession.orEmpty()
             }
         }
 
@@ -648,7 +643,7 @@ fun NavGraphBuilder.profileGraph(
             value = profession,
             isLoading = profileState.IsLoading &&
                     (
-                            profileState.CurrentAction == "GetProfile" ||
+                            profileState.CurrentAction == "GetMemberProfile" ||
                                     profileState.CurrentAction == "UpdateProfession"
                             ),
             errorMessage = profileState.ErrorMessage,

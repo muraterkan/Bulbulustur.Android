@@ -810,7 +810,7 @@ private fun BulbulusturApplicationContent(
 
     NavHost(
         navController = navController,
-        startDestination = if (sessionState.IsAuthenticated) SplashRoutes.ModeSelection else LogonRoutes.Logon
+        startDestination = SplashRoutes.ModeSelection
     ) {
         splashGraph(
             navigator = appNavigator,
@@ -823,7 +823,9 @@ private fun BulbulusturApplicationContent(
             navController = navController,
             sessionState = sessionState,
             logonController = logonController,
-            addressCascadeController = addressCascadeController
+            addressCascadeController = addressCascadeController,
+            settingsController = settingsController,
+            userSessionManager = userSessionManager
         )
 
         messageGraph(

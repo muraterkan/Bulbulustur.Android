@@ -311,14 +311,12 @@ private fun ModeSelectionCommerceCard(
     onClick: () -> Unit
 ) {
     Surface(
+        onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
             .defaultMinSize(
                 minHeight = BBSpacing.Space20
-            )
-            .clickable {
-                onClick()
-            },
+            ),
         shape = BBRadius.XxlShape,
         color = containerColor,
         border = BorderStroke(

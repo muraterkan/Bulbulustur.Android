@@ -491,28 +491,41 @@ private fun CouponFeedbackCard(
 
 @Composable
 private fun CouponEmptyState(modifier: Modifier) {
-    Column(
-        modifier = modifier.padding(BBSpacing.PageHorizontal),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+    Box(
+        modifier = modifier.padding(
+            start = BBSpacing.PageHorizontal,
+            top = BBSpacing.PageTopCompact,
+            end = BBSpacing.PageHorizontal
+        ),
+        contentAlignment = Alignment.TopCenter
     ) {
-        CouponIconBox(
-            icon = Icons.Outlined.LocalOffer
-        )
+        BbCard(
+            modifier = Modifier.fillMaxWidth(),
+            variant = BbCardVariant.Outlined,
+            padding = BbCardPadding.Large
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+            ) {
+                CouponIconBox(
+                    icon = Icons.Outlined.LocalOffer
+                )
 
-        Text(
-            text = BBLocalization.Current.Get(key = "bf218695-6f5d-43ec-a4aa-107007d470d8", fallback = "Kupon bulunamadı"),
-            modifier = Modifier.padding(top = BBSpacing.Space3),
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurface
-        )
+                Text(
+                    text = BBLocalization.Current.Get(key = "bf218695-6f5d-43ec-a4aa-107007d470d8", fallback = "Kupon bulunamadı"),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
 
-        Text(
-            text = BBLocalization.Current.Get(key = "db744e20-5ab1-4a6d-bb75-67e220903579", fallback = "Hesabınıza tanımlı kupon oluştuğunda burada listelenecek."),
-            modifier = Modifier.padding(top = BBSpacing.Space2),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
+                Text(
+                    text = BBLocalization.Current.Get(key = "db744e20-5ab1-4a6d-bb75-67e220903579", fallback = "Hesabınıza tanımlı kupon oluştuğunda burada listelenecek."),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
     }
 }
 

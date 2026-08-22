@@ -21,6 +21,7 @@ import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.MemberLangu
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberProfileBioUpdateModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberProfileEducationUpdateModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberProfileJobTitleUpdateModel
+import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberProfileProfessionUpdateModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdateAddressModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdateBirthDateModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdateGenderModel
@@ -388,10 +389,13 @@ class ProfileController(
         viewModelScope.launch { SetLoading("UpdateProfession")
 
             val response = executeService.PostAsync(
-                operationType = "Profile.Member.Profession.Update"
+                operationType = "Profile.MemberProfile.Profession.Upsert"
             ) {
-                memberRepository.MemberUpdateProfessionAsync(
-                    model.copy(Profession = model.Profession.trim())
+                memberProfileRepository.UpsertProfessionAsync(
+                    MemberProfileProfessionUpdateModel(
+                        MemberId = model.MemberId,
+                        Profession = model.Profession.trim()
+                    )
                 )
             }
 
@@ -402,10 +406,7 @@ class ProfileController(
             }
 
             if (response.Success) {
-                GetProfile(
-                    languageId = languageId,
-                    memberId = model.MemberId
-                )
+                GetMemberProfile(model.MemberId)
                 onSuccess?.invoke()
             }
         }

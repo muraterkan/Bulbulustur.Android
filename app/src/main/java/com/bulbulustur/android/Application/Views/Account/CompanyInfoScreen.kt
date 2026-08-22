@@ -68,10 +68,10 @@ fun CompanyInfoScreen(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = BBLocalization.Current.Get(key = "23e2ad69-3c04-4e82-834b-ed4779f0130f", fallback = "Firma Bilgilerim"),
+                title = BBLocalization.Current.Get(key = "23e2ad69-3c04-4e82-834b-ed4779f0130f", fallback = "Şirket Bilgilerim"),
                 onBackClick = onBackClick,
                 actionIcon = if (company != null) Icons.Outlined.Edit else null,
-                actionContentDescription = BBLocalization.Current.Get(key = "761ceb0a-2578-4b71-8c50-5b0d0998aefe", fallback = "Firma Bilgilerini Düzenle"),
+                actionContentDescription = BBLocalization.Current.Get(key = "761ceb0a-2578-4b71-8c50-5b0d0998aefe", fallback = "Şirket Bilgilerini Düzenle"),
                 onActionClick = onEditClick
             )
         }
@@ -89,10 +89,10 @@ fun CompanyInfoScreen(
                     item { CompanyHeroCard(company = company) }
                     item { CompanyStatsGrid(company = company, subscription = subscription) }
                     item {
-                        CompanyInfoSection(title = BBLocalization.Current.Get(key = "b05816cf-38fa-4a75-8d66-bf800fb4a8d7", fallback = "Şirket Kimliği"), description = BBLocalization.Current.Get(key = "9f84fd03-250c-48de-b322-b89b5602922c", fallback = "Ünvan, şirket tipi ve kurumsal profil bilgileri."), icon = Icons.Outlined.Badge) {
+                        CompanyInfoSection(title = BBLocalization.Current.Get(key = "b05816cf-38fa-4a75-8d66-bf800fb4a8d7", fallback = "Şirket  Kimliği"), description = BBLocalization.Current.Get(key = "9f84fd03-250c-48de-b322-b89b5602922c", fallback = "Ünvan, Şirket  tipi ve kurumsal profil bilgileri."), icon = Icons.Outlined.Badge) {
                             CompanyInfoRow(BBLocalization.Current.Get(key = "295bef89-1d52-45bf-8076-0cb215d76c41", fallback = ""), company.CompanyName.OrDash())
                             CompanyDivider()
-                            CompanyInfoRow(BBLocalization.Current.Get(key = "ce4087e5-47b4-4b6a-a853-d02fc65dfe4f", fallback = "Şirket Tipi"), company.CompanyType.OrDash())
+                            CompanyInfoRow(BBLocalization.Current.Get(key = "ce4087e5-47b4-4b6a-a853-d02fc65dfe4f", fallback = "Şirket  Tipi"), company.CompanyType.OrDash())
                             CompanyDivider()
                             CompanyInfoRow(BBLocalization.Current.Get(key = "bf84d3d3-4da3-41f0-bb97-5f7952d7d373", fallback = "Abonelik Planı"), subscription.GetSubscriptionTitle())
                             CompanyDivider()
@@ -100,7 +100,7 @@ fun CompanyInfoScreen(
                         }
                     }
                     item {
-                        CompanyInfoSection(title = BBLocalization.Current.Get(key = "80196c43-5833-4c0a-8c7b-d2906837956e", fallback = "Adres Bilgileri"), description = BBLocalization.Current.Get(key = "1e9670ca-c13f-4f26-969d-b981946c44dd", fallback = "Şirketin kayıtlı lokasyon bilgileri."), icon = Icons.Outlined.LocationOn) {
+                        CompanyInfoSection(title = BBLocalization.Current.Get(key = "80196c43-5833-4c0a-8c7b-d2906837956e", fallback = "Adres Bilgileri"), description = BBLocalization.Current.Get(key = "1e9670ca-c13f-4f26-969d-b981946c44dd", fallback = "Şirket in kayıtlı lokasyon bilgileri."), icon = Icons.Outlined.LocationOn) {
                             CompanyInfoRow(BBLocalization.Current.Get(key = "af1da4df-7298-4cd9-b256-371d098b59f7", fallback = "Adres"), company.Address.OrDash())
                             CompanyDivider()
                             CompanyInfoRow(BBLocalization.Current.Get(key = "8b04cc2a-5e86-4d4e-bf8c-7dc7bf1be325", fallback = "Ülke"), company.CountryName.OrDash())
@@ -244,9 +244,9 @@ private fun CompanyActionSection(
     onB2BIndexClick: () -> Unit,
     onB2CStoreClick: () -> Unit
 ) {
-    CompanyInfoSection(title = BBLocalization.Current.Get(key = "0390d4dd-b129-4a48-859c-cf70e4a976c8", fallback = "Kurumsal İşlemler"), description = BBLocalization.Current.Get(key = "31ff8031-2352-4b43-9301-e110b1b964e1", fallback = "Şirket profilini ticaret akışlarına bağla."), icon = Icons.Outlined.Business) {
+    CompanyInfoSection(title = BBLocalization.Current.Get(key = "0390d4dd-b129-4a48-859c-cf70e4a976c8", fallback = "Kurumsal İşlemler"), description = BBLocalization.Current.Get(key = "31ff8031-2352-4b43-9301-e110b1b964e1", fallback = "Şirket  profilini ticaret akışlarına bağla."), icon = Icons.Outlined.Business) {
         CompanyActionRow(
-            title = if (b2bActive) BBLocalization.Current.Get(key = "098a51d6-d8a7-4261-aa23-711a10f8e897", fallback = "B2B Index Durumunu Gör") else "Şirketimi B2B Index'e Dahil Et",
+            title = if (b2bActive) BBLocalization.Current.Get(key = "098a51d6-d8a7-4261-aa23-711a10f8e897", fallback = "B2B Index Durumunu Gör") else "Şirket imi B2B Index'e Dahil Et",
             description = if (b2bActive) BBLocalization.Current.Get(key = "3089962b-3e14-4f43-b560-b708dd3cd2bd", fallback = "B2B görünürlüğünüzü ve abonelik durumunuzu görüntüleyin.") else BBLocalization.Current.Get(key = "66874157-a31d-471c-a014-a9476f2afec2", fallback = "Tedarikçiler ve toptan alıcılar tarafından keşfedilin."),
             icon = Icons.Outlined.Storefront,
             onClick = onB2BIndexClick
@@ -300,8 +300,8 @@ private fun CompanyNotFoundState(onRetryClick: () -> Unit) {
     BbCard(modifier = Modifier.fillMaxWidth(), variant = BbCardVariant.Outlined, padding = BbCardPadding.Large) {
         Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)) {
             Icon(imageVector = Icons.Outlined.Business, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(BBIcon.Section))
-            Text(text = BBLocalization.Current.Get(key = "4f467a63-d0ab-423f-ae06-65c598e5a641", fallback = "Firma bilgisi bulunamadı"), style = BbTypography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
-            Text(text = BBLocalization.Current.Get(key = "9ed3edcb-bacb-47f7-8582-e196be438014", fallback = "Hesabınıza bağlı şirket kaydı bulunamadı veya görüntülenemiyor."), style = BbTypography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(text = BBLocalization.Current.Get(key = "4f467a63-d0ab-423f-ae06-65c598e5a641", fallback = "Şirket bilgisi bulunamadı"), style = BbTypography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
+            Text(text = BBLocalization.Current.Get(key = "9ed3edcb-bacb-47f7-8582-e196be438014", fallback = "Hesabınıza bağlı Şirket  kaydı bulunamadı veya görüntülenemiyor."), style = BbTypography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             BbButton(text = BBLocalization.Current.Get(key = "9d1ce783-da20-464b-9203-cd1ce09918c6", fallback = "Tekrar Dene"), onClick = onRetryClick, variant = BbButtonVariant.Primary, size = BbButtonSize.Small)
         }
     }

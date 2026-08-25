@@ -255,7 +255,9 @@ fun NavGraphBuilder.wholesaleGraph(
             categoryId = categoryId,
             isLoading = categoryState.IsLoading,
             errorMessage = categoryState.ErrorMessage,
+
             categoryInfo = categoryState.Category,
+            childCategories = categoryState.ChildCategories,
             onBackClick = {
                 navigator.back()
             },

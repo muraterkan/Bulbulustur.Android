@@ -227,24 +227,29 @@ private fun CompanyListCard(
     onProductListClick: () -> Unit,
     onMessageClick: () -> Unit
 ) {
-    val description = company.Slogan
-        .trim()
-        .ifBlank {
-            company.SeoDescription.trim()
-        }
+    val companyName = safeTrim(company.CompanyName)
+    val slogan = safeTrim(company.Slogan)
+    val seoDescription = safeTrim(company.SeoDescription)
+    val countryName = safeTrim(company.CountryName)
+    val cityName = safeTrim(company.CityName)
+    val rating = safeTrim(company.Rating)
+    val logo = safeTrim(company.Logo)
+
+    val description = slogan.ifBlank {
+        seoDescription
+    }
 
     val location = listOf(
-        company.CountryName.trim(),
-        company.CityName.trim()
+        countryName,
+        cityName
     )
         .filter { it.isNotBlank() }
         .distinct()
         .joinToString(" • ")
 
-    val businessType = company.BusinessTypes
-        .trim()
+    val businessType = safeTrim(company.BusinessTypes)
         .ifBlank {
-            company.CompanyType.trim()
+            safeTrim(company.CompanyType)
         }
 
     BbCard(
@@ -263,9 +268,9 @@ private fun CompanyListCard(
                 horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
             ) {
                 CompanyLogoBox(
-                    logoText = getCompanyInitials(company.CompanyName),
+                    logoText = getCompanyInitials(companyName),
                     icon = Icons.Outlined.Business,
-                    logoUrl = ImageUrlResolver.Resolve(company.Logo)
+                    logoUrl = ImageUrlResolver.Resolve(logo)
                 )
 
                 Column(
@@ -278,9 +283,9 @@ private fun CompanyListCard(
                             BBSpacing.IconTextGapSmall
                         )
                     ) {
-                        if (company.CompanyName.isNotBlank()) {
+                        if (companyName.isNotBlank()) {
                             Text(
-                                text = company.CompanyName,
+                                text = companyName,
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.onSurface
@@ -328,7 +333,7 @@ private fun CompanyListCard(
 
             val hasChips =
                 businessType.isNotBlank() ||
-                        company.Rating.isNotBlank()
+                        rating.isNotBlank()
 
             if (hasChips) {
                 FlowRow(
@@ -344,9 +349,9 @@ private fun CompanyListCard(
                         )
                     }
 
-                    if (company.Rating.isNotBlank()) {
+                    if (rating.isNotBlank()) {
                         BbChip(
-                            text = "Puan ${company.Rating}",
+                            text = "Puan $rating",
                             selected = false,
                             onClick = onCompanyClick
                         )
@@ -441,15 +446,17 @@ private fun CompanyLogoBox(
 private fun CompanyInfoGrid(
     company: CompanyDTO
 ) {
-    val businessType = company.BusinessTypes
-        .trim()
+    val businessType = safeTrim(company.BusinessTypes)
         .ifBlank {
-            company.CompanyType.trim()
+            safeTrim(company.CompanyType)
         }
 
+    val rating = safeTrim(company.Rating)
+    val tradeRegisterNumber = safeTrim(company.TradeRegisterNumber)
+    val companyCapabilities = safeTrim(company.CompanyCapabilities)
+
     val items = buildList {
-        company.Rating
-            .trim()
+        rating
             .takeIf { it.isNotBlank() }
             ?.let { value ->
                 add(
@@ -463,8 +470,7 @@ private fun CompanyInfoGrid(
                 )
             }
 
-        company.TradeRegisterNumber
-            .trim()
+        tradeRegisterNumber
             .takeIf { it.isNotBlank() }
             ?.let { value ->
                 add(
@@ -478,8 +484,7 @@ private fun CompanyInfoGrid(
                 )
             }
 
-        company.CompanyCapabilities
-            .trim()
+        companyCapabilities
             .takeIf { it.isNotBlank() }
             ?.let { value ->
                 add(
@@ -704,11 +709,16 @@ private data class CompanyListInfoItem(
     val value: String
 )
 
-private fun getCompanyInitials(
-    companyName: String
+private fun safeTrim(
+    value: String?
 ): String {
-    return companyName
-        .trim()
+    return value?.trim().orEmpty()
+}
+
+private fun getCompanyInitials(
+    companyName: String?
+): String {
+    return safeTrim(companyName)
         .split(Regex("\\s+"))
         .filter { it.isNotBlank() }
         .take(2)
@@ -717,6 +727,9 @@ private fun getCompanyInitials(
                 ?.uppercase()
         }
         .joinToString("")
+        .ifBlank {
+            "C"
+        }
 }
 
 @Preview(showBackground = true)

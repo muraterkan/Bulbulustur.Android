@@ -44,6 +44,7 @@ import androidx.compose.material.icons.outlined.Straighten
 import androidx.compose.material.icons.outlined.Verified
 import androidx.compose.material.icons.outlined.VerifiedUser
 import androidx.compose.material.icons.outlined.WarningAmber
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -103,6 +104,7 @@ import com.bulbulustur.android.businesslayer.Core.DTO.AdvertSponsoredDTO
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components._FromBrands
 import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductBrandSectionPageDTO
+import com.bulbulustur.android.businesslayer.Core.Network.ImageUrlResolver
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -189,16 +191,25 @@ fun ProductDetailScreen(
                 )
 
         }
-    if (product == null) {
-        RetailProductDetailEmptyState(
-            onBackClick =
-                onBackClick
-        )
+
+    if (State.ProductDetailResult == null) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
+        }
 
         return
     }
 
+    if (product == null) {
+        RetailProductDetailEmptyState(
+            onBackClick = onBackClick
+        )
 
+        return
+    }
 
     var searchText by remember {
         mutableStateOf("")
@@ -310,8 +321,51 @@ fun ProductDetailScreen(
                     }
             )
 
+    val directVariantImages =
+        variantPictures
+            .sortedWith(
+                compareByDescending<ProductVariantPictureDTO> {
+                    it.IsDefault
+                }.thenBy {
+                    it.Sorting
+                }
+            )
+            .mapNotNull { picture ->
+                val rawPicturePath =
+                    if (picture.Picture.isNotBlank()) {
+                        picture.Picture
+                    } else {
+                        picture.DirectoryName + picture.PictureName
+                    }
+
+                val imageUrl =
+                    ImageUrlResolver.Resolve(
+                        imagePath = rawPicturePath
+                    )
+
+                if (imageUrl.isBlank()) {
+                    null
+                } else {
+                    RetailProductImage(
+                        label =
+                            picture.PictureName.ifBlank {
+                                product.name
+                            },
+                        backgroundColor =
+                            BBColors.White,
+                        foregroundColor =
+                            BBColors.Gray.Gray500,
+                        imageUrl =
+                            imageUrl
+                    )
+                }
+            }
+
     val visibleImages =
-        selectedColorVariant.images
+        directVariantImages
+            .ifEmpty {
+                selectedColorVariant.images
+            }
             .ifEmpty {
                 listOf(
                     RetailProductImage(
@@ -3502,12 +3556,6 @@ data class RetailRelatedCategoryChip(
     val name: String
 )
 
-private fun ResolveRetailProductImageUrl(
-    imagePath: String
-): String {
-    return imagePath.trim()
-}
-
 private fun ProductDTO.ToRetailProductDetail(
     variantPictures: List<ProductVariantPictureDTO>,
     colorVariants: List<ProductVariantDTO>,
@@ -3602,7 +3650,7 @@ private fun ProductDTO.ToRetailProductDetail(
             )
             .mapNotNull { picture ->
                 val rawPicturePath =
-                    if (picture.Picture.isNotBlank()) {
+                    if (picture.Picture.orEmpty().isNotBlank()) {
                         picture.Picture
                     } else {
                         picture.DirectoryName +
@@ -3610,7 +3658,7 @@ private fun ProductDTO.ToRetailProductDetail(
                     }
 
                 val imageUrl =
-                    ResolveRetailProductImageUrl(
+                    ImageUrlResolver.Resolve(
                         imagePath =
                             rawPicturePath
                     )
@@ -3641,13 +3689,13 @@ private fun ProductDTO.ToRetailProductDetail(
             }
             .map { colorVariant ->
                 val colorImageUrl =
-                    ResolveRetailProductImageUrl(
+                    ImageUrlResolver.Resolve(
                         imagePath =
                             colorVariant.DefaultPicture
                                 .takeIf {
                                     it.isNotBlank()
                                 }
-                                ?: colorVariant.Picture
+                                ?: colorVariant.Picture.orEmpty()
                     )
 
                 val isActiveColor =
@@ -3813,11 +3861,11 @@ private fun ProductDTO.ToRetailProductDetail(
             ?: "default"
 
     val resolvedSizeName =
-        activeVariant.Size
+        activeVariant.Size.orEmpty()
             .takeIf {
                 it.isNotBlank()
             }
-            ?: Size.takeIf {
+            ?: Size.orEmpty().takeIf {
                 it.isNotBlank()
             }
             ?: BBLocalization.Current.Get(key = "081fb0ca-4f68-4277-9ca0-028d1e9d147f", fallback = "Standart")
@@ -3844,7 +3892,7 @@ private fun ProductDTO.ToRetailProductDetail(
             ?: ""
 
     val resolvedStoreName =
-        Store.takeIf {
+        Store.orEmpty().takeIf {
             it.isNotBlank()
         } ?: BBLocalization.Current.Get(key = "2ac4c8be-0d5d-4c84-afe8-628839892727", fallback = "")
 
@@ -3889,12 +3937,12 @@ private fun ProductDTO.ToRetailProductDetail(
             ?: 0
 
     val resolvedDescription =
-        Description.takeIf {
+        Description.orEmpty().takeIf {
             it.isNotBlank()
         } ?: BBLocalization.Current.Get(key = "906bc9cf-2d29-48a9-8f76-23e1dfd441cb", fallback = "Bu ürün için açıklama bilgisi bulunmamaktadır.")
 
     val resolvedCategoryName =
-        CategoryName.takeIf {
+        CategoryName.orEmpty().takeIf {
             it.isNotBlank()
         } ?: ""
 
@@ -3907,13 +3955,13 @@ private fun ProductDTO.ToRetailProductDetail(
             ?: Picture.orEmpty()
 
     val resolvedPictureUrl =
-        ResolveRetailProductImageUrl(
+        ImageUrlResolver.Resolve(
             imagePath =
                 resolvedPicture
         )
 
     val resolvedProductName =
-        ProductName.takeIf {
+        ProductName.orEmpty().takeIf {
             it.isNotBlank()
         } ?: BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = "")
 

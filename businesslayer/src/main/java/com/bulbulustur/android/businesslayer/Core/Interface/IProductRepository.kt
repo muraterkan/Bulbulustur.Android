@@ -39,6 +39,8 @@ interface IProductRepository {
         productId: Int,
         variantId: Int
     ): Result<List<ProductVariantDTO>>
+    suspend fun GetDefaultProductVariantPicturesAsync(variantIds: List<Int>): Result<Map<String, String>>
+
 
     suspend fun GetSearchingProductsAsync(storeId: Int = 0, key: String, page: Int = 1, pageSize: Int = 20, sortOrder: String = "Default_Asc"): Result<PaginatedList<ProductDTO>>
 }

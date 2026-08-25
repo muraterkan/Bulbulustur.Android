@@ -1,5 +1,13 @@
 package com.bulbulustur.android.Application.Views.Company
 
+import androidx.compose.runtime.remember
+
+import androidx.compose.runtime.mutableStateOf
+
+import com.bulbulustur.android.businesslayer.Core.Network.ImageUrlResolver
+
+import coil3.compose.AsyncImage
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,6 +19,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -137,7 +146,8 @@ private fun CompanyHomeHero(
     BbCard(modifier = Modifier.fillMaxWidth(), variant = BbCardVariant.Outlined, padding = BbCardPadding.Large) {
         Column(verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)) {
-                CompanyLogoMark(logoText = company.logoText)
+                
+CompanyLogoMark(logoText = company.logoText, logoUrl = company.logoUrl)
 
                 Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space1)) {
@@ -167,11 +177,22 @@ private fun CompanyHomeHero(
 }
 
 @Composable
-private fun CompanyLogoMark(logoText: String) {
+private fun CompanyLogoMark(logoText: String, logoUrl: String) {
+    val logoLoadFailed = remember(logoUrl) { mutableStateOf(false) }
+
     Surface(modifier = Modifier.size(72.dp), shape = BBRadius.XlShape, color = MaterialTheme.colorScheme.surface, border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-            Icon(imageVector = Icons.Outlined.Business, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(BBIcon.SizeLg))
-            Text(text = logoText, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.Bold)
+        if (logoUrl.isNotBlank() && !logoLoadFailed.value) {
+            AsyncImage(
+                model = logoUrl,
+                contentDescription = null,
+                modifier = Modifier.size(72.dp).padding(BBSpacing.Space2),
+                onError = { logoLoadFailed.value = true }
+            )
+        } else {
+            Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+                Icon(imageVector = Icons.Outlined.Business, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(BBIcon.SizeLg))
+                Text(text = logoText, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.Bold)
+            }
         }
     }
 }
@@ -262,6 +283,7 @@ private data class CompanyHome(
     val companyId: Int,
     val name: String,
     val logoText: String,
+    val logoUrl: String,
     val description: String,
     val isVerified: Boolean,
     val chips: List<String>
@@ -271,7 +293,8 @@ private fun CompanyDTO.toCompanyHome(): CompanyHome {
     val name = CompanyName.trim().ifBlank { "Tedarikçi" }
     val description = firstNotBlank(Slogan, SeoDescription, CompanyType, "Firma güveni, tedarik yapısı ve öne çıkan ticari bilgiler.")
     val chips = listOfNotNull(blankToNull(CountryName), blankToNull(CityName), if (Verified) BBLocalization.Current.Get(key = "c6a0ff62-8828-475f-b553-37effb42efe6", fallback = "Doğrulanmış") else null, blankToNull(CompanyType))
-    return CompanyHome(companyId = CompanyId, name = name, logoText = name.toLogoText(), description = description, isVerified = Verified, chips = chips)
+    
+return CompanyHome(companyId = CompanyId, name = name, logoText = name.toLogoText(), logoUrl = ImageUrlResolver.Resolve(Logo), description = description, isVerified = Verified, chips = chips)
 }
 
 private fun blankToNull(value: String?): String? = value?.trim()?.takeIf { it.isNotEmpty() }

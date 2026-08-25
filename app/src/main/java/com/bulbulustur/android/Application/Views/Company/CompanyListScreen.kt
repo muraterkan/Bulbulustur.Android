@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -25,11 +26,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import coil3.compose.AsyncImage
 import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.Views.Shared.Components.BbSectionHeader
@@ -43,6 +47,7 @@ import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbChip
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
 import com.bulbulustur.android.businesslayer.Core.DTO.CompanyDTO
+import com.bulbulustur.android.businesslayer.Core.Network.ImageUrlResolver
 
 @Composable
 fun CompanyListScreen(
@@ -60,7 +65,10 @@ fun CompanyListScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = BBLocalization.Current.Get(key = "a4d349d0-5340-4075-b2bb-1e900584f3b7", fallback = "Firmalar"),
+                title = BBLocalization.Current.Get(
+                    key = "a4d349d0-5340-4075-b2bb-1e900584f3b7",
+                    fallback = "Firmalar"
+                ),
                 onBackClick = onBackClick
             )
         }
@@ -76,13 +84,21 @@ fun CompanyListScreen(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.SectionGapCompact)
         ) {
             item {
-                CompanyListHero(onRfqCreateClick = onRfqCreateClick)
+                CompanyListHero(
+                    onRfqCreateClick = onRfqCreateClick
+                )
             }
 
             item {
                 BbSectionHeader(
-                    title = BBLocalization.Current.Get(key = "eb3cd91b-fc17-480e-8113-4ec331f83352", fallback = "Firma Listesi"),
-                    subtitle = BBLocalization.Current.Get(key = "eea989bd-387d-4f99-9000-bd297f22ed89", fallback = "Ürünleri, firma yetkinliklerini ve güven bilgilerini karşılaştır.")
+                    title = BBLocalization.Current.Get(
+                        key = "eb3cd91b-fc17-480e-8113-4ec331f83352",
+                        fallback = "Firma Listesi"
+                    ),
+                    subtitle = BBLocalization.Current.Get(
+                        key = "eea989bd-387d-4f99-9000-bd297f22ed89",
+                        fallback = "Ürünleri, firma yetkinliklerini ve güven bilgilerini karşılaştır."
+                    )
                 )
             }
 
@@ -109,29 +125,43 @@ fun CompanyListScreen(
 
             items(
                 items = companies,
-                key = { company -> company.CompanyId }
+                key = { company ->
+                    company.CompanyId
+                }
             ) { company ->
                 CompanyListCard(
                     company = company,
-                    onCompanyClick = { onCompanyClick(company.CompanyId) },
-                    onProductListClick = { onProductListClick(company.CompanyId) },
-                    onMessageClick = { onMessageClick(company.CompanyId) }
+                    onCompanyClick = {
+                        onCompanyClick(company.CompanyId)
+                    },
+                    onProductListClick = {
+                        onProductListClick(company.CompanyId)
+                    },
+                    onMessageClick = {
+                        onMessageClick(company.CompanyId)
+                    }
                 )
             }
 
             item {
-                CompanyListBottomCallout(onRfqCreateClick = onRfqCreateClick)
+                CompanyListBottomCallout(
+                    onRfqCreateClick = onRfqCreateClick
+                )
             }
 
             item {
-                Spacer(modifier = Modifier.height(BBSpacing.Space4))
+                Spacer(
+                    modifier = Modifier.height(BBSpacing.Space4)
+                )
             }
         }
     }
 }
 
 @Composable
-private fun CompanyListHero(onRfqCreateClick: () -> Unit) {
+private fun CompanyListHero(
+    onRfqCreateClick: () -> Unit
+) {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
@@ -143,24 +173,36 @@ private fun CompanyListHero(onRfqCreateClick: () -> Unit) {
         ) {
             CompanyIconTitleRow(
                 icon = Icons.Outlined.Business,
-                title = BBLocalization.Current.Get(key = "a4d349d0-5340-4075-b2bb-1e900584f3b7", fallback = "Firmalar")
+                title = BBLocalization.Current.Get(
+                    key = "a4d349d0-5340-4075-b2bb-1e900584f3b7",
+                    fallback = "Firmalar"
+                )
             )
 
             Text(
-                text = BBLocalization.Current.Get(key = "3a94e44b-9ffc-48c3-89b9-96442c086013", fallback = "Güvenilir Firmaları Keşfedin"),
+                text = BBLocalization.Current.Get(
+                    key = "3a94e44b-9ffc-48c3-89b9-96442c086013",
+                    fallback = "Güvenilir Firmaları Keşfedin"
+                ),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
-                text = BBLocalization.Current.Get(key = "aef4747b-5201-4412-979f-feaab62c5bee", fallback = "Bulbulustur ekosistemindeki üretici, tedarikçi ve şirket profillerini tek ekranda inceleyin."),
+                text = BBLocalization.Current.Get(
+                    key = "aef4747b-5201-4412-979f-feaab62c5bee",
+                    fallback = "Bulbulustur ekosistemindeki üretici, tedarikçi ve şirket profillerini tek ekranda inceleyin."
+                ),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             BbButton(
-                text = BBLocalization.Current.Get(key = "fcb264e8-a984-415f-b971-69ea0a531bd9", fallback = "Talep oluştur"),
+                text = BBLocalization.Current.Get(
+                    key = "fcb264e8-a984-415f-b971-69ea0a531bd9",
+                    fallback = "Talep oluştur"
+                ),
                 onClick = onRfqCreateClick,
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbButtonVariant.Primary,
@@ -185,6 +227,26 @@ private fun CompanyListCard(
     onProductListClick: () -> Unit,
     onMessageClick: () -> Unit
 ) {
+    val description = company.Slogan
+        .trim()
+        .ifBlank {
+            company.SeoDescription.trim()
+        }
+
+    val location = listOf(
+        company.CountryName.trim(),
+        company.CityName.trim()
+    )
+        .filter { it.isNotBlank() }
+        .distinct()
+        .joinToString(" • ")
+
+    val businessType = company.BusinessTypes
+        .trim()
+        .ifBlank {
+            company.CompanyType.trim()
+        }
+
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
@@ -202,7 +264,8 @@ private fun CompanyListCard(
             ) {
                 CompanyLogoBox(
                     logoText = getCompanyInitials(company.CompanyName),
-                    icon = Icons.Outlined.Business
+                    icon = Icons.Outlined.Business,
+                    logoUrl = ImageUrlResolver.Resolve(company.Logo)
                 )
 
                 Column(
@@ -211,83 +274,111 @@ private fun CompanyListCard(
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(BBSpacing.IconTextGapSmall)
-                    ) {
-                        Text(
-                            text = company.CompanyName,
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onSurface
+                        horizontalArrangement = Arrangement.spacedBy(
+                            BBSpacing.IconTextGapSmall
                         )
+                    ) {
+                        if (company.CompanyName.isNotBlank()) {
+                            Text(
+                                text = company.CompanyName,
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
 
                         if (company.Verified) {
                             Icon(
                                 imageVector = Icons.Outlined.Verified,
-                                contentDescription = BBLocalization.Current.Get(key = "c00be3e3-90d4-4f66-ac51-db9a38bac686", fallback = "Doğrulanmış firma"),
+                                contentDescription = BBLocalization.Current.Get(
+                                    key = "c00be3e3-90d4-4f66-ac51-db9a38bac686",
+                                    fallback = "Doğrulanmış firma"
+                                ),
                                 tint = MaterialTheme.colorScheme.primary
                             )
                         }
                     }
 
-                    Text(
-                        text = company.Slogan.ifBlank { company.SeoDescription.ifBlank { "-" } },
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                    if (description.isNotBlank()) {
+                        Text(
+                            text = description,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
 
-                    Text(
-                        text = "${company.CountryName} • ${company.CityName}",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                    if (location.isNotBlank()) {
+                        Text(
+                            text = location,
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
                 }
 
                 Icon(
                     imageVector = Icons.Outlined.ChevronRight,
-                    contentDescription = BBLocalization.Current.Get(key = "6a210c63-bf1c-4c78-829d-176e3c6f73be", fallback = "Firma profilini aç"),
+                    contentDescription = BBLocalization.Current.Get(
+                        key = "6a210c63-bf1c-4c78-829d-176e3c6f73be",
+                        fallback = "Firma profilini aç"
+                    ),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
-            FlowRow(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.ChipGap),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.ChipGap)
-            ) {
-                BbChip(
-                    text = company.BusinessTypes.ifBlank { company.CompanyType.ifBlank { "-" } },
-                    selected = false,
-                    onClick = onCompanyClick
-                )
+            val hasChips =
+                businessType.isNotBlank() ||
+                        company.Rating.isNotBlank()
 
-                BbChip(
-                    text = "${company.CompanyProducts.size} ürün",
-                    selected = false,
-                    onClick = onProductListClick
-                )
+            if (hasChips) {
+                FlowRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(BBSpacing.ChipGap),
+                    verticalArrangement = Arrangement.spacedBy(BBSpacing.ChipGap)
+                ) {
+                    if (businessType.isNotBlank()) {
+                        BbChip(
+                            text = businessType,
+                            selected = false,
+                            onClick = onCompanyClick
+                        )
+                    }
 
-                BbChip(
-                    text = "Puan ${company.Rating.ifBlank { "0.0" }}",
-                    selected = false,
-                    onClick = onCompanyClick
-                )
+                    if (company.Rating.isNotBlank()) {
+                        BbChip(
+                            text = "Puan ${company.Rating}",
+                            selected = false,
+                            onClick = onCompanyClick
+                        )
+                    }
+                }
             }
 
-            CompanyInfoGrid(company = company)
+            CompanyInfoGrid(
+                company = company
+            )
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.CardGapCompact)
+                horizontalArrangement = Arrangement.spacedBy(
+                    BBSpacing.CardGapCompact
+                )
             ) {
                 CompanySmallActionCard(
-                    title = BBLocalization.Current.Get(key = "6cf7b92f-05e7-4ac7-be8c-ce98d8bf20c5", fallback = "Ürünler"),
+                    title = BBLocalization.Current.Get(
+                        key = "6cf7b92f-05e7-4ac7-be8c-ce98d8bf20c5",
+                        fallback = "Ürünler"
+                    ),
                     icon = Icons.Outlined.Inventory2,
                     modifier = Modifier.weight(1f),
                     onClick = onProductListClick
                 )
 
                 CompanySmallActionCard(
-                    title = BBLocalization.Current.Get(key = "a439130c-b2cf-496f-9868-93ef084d9aec", fallback = "İletişime geç"),
+                    title = BBLocalization.Current.Get(
+                        key = "a439130c-b2cf-496f-9868-93ef084d9aec",
+                        fallback = "İletişime geç"
+                    ),
                     icon = Icons.Outlined.Mail,
                     modifier = Modifier.weight(1f),
                     onClick = onMessageClick
@@ -298,69 +389,156 @@ private fun CompanyListCard(
 }
 
 @Composable
-private fun CompanyLogoBox(logoText: String, icon: ImageVector) {
+private fun CompanyLogoBox(
+    logoText: String,
+    icon: ImageVector,
+    logoUrl: String
+) {
+    val logoLoadFailed = remember(logoUrl) {
+        mutableStateOf(false)
+    }
+
     BbCard(
         variant = BbCardVariant.Outlined,
         padding = BbCardPadding.Medium
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
-        ) {
-            Icon(
-                imageVector = icon,
+        if (logoUrl.isNotBlank() && !logoLoadFailed.value) {
+            AsyncImage(
+                model = logoUrl,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary
+                modifier = Modifier.size(BBSpacing.Space12),
+                onError = {
+                    logoLoadFailed.value = true
+                }
             )
+        } else {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space1
+                )
+            ) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary
+                )
 
-            Text(
-                text = logoText,
-                style = MaterialTheme.typography.labelLarge,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+                if (logoText.isNotBlank()) {
+                    Text(
+                        text = logoText,
+                        style = MaterialTheme.typography.labelLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+            }
         }
     }
 }
 
 @Composable
-private fun CompanyInfoGrid(company: CompanyDTO) {
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGapCompact)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.CardGapCompact)
-        ) {
-            CompanyInfoBox(
-                title = BBLocalization.Current.Get(key = "e7adcad3-f164-48d5-bc4d-7d4bc7cb6956", fallback = "Sıralama"),
-                value = company.Rating.ifBlank { "0.0" },
-                modifier = Modifier.weight(1f)
-            )
-
-            CompanyInfoBox(
-                title = BBLocalization.Current.Get(key = "6c84ad65-9bba-4795-a376-efebd24c842f", fallback = "Ticaret sicil"),
-                value = company.TradeRegisterNumber.ifBlank { "-" },
-                modifier = Modifier.weight(1f)
-            )
+private fun CompanyInfoGrid(
+    company: CompanyDTO
+) {
+    val businessType = company.BusinessTypes
+        .trim()
+        .ifBlank {
+            company.CompanyType.trim()
         }
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.CardGapCompact)
-        ) {
-            CompanyInfoBox(
-                title = BBLocalization.Current.Get(key = "4f1ad3c8-8df8-48f2-b2c2-7b128d0f0e28", fallback = "Yetenekler"),
-                value = company.CompanyCapabilities.ifBlank { "-" },
-                modifier = Modifier.weight(1f)
-            )
+    val items = buildList {
+        company.Rating
+            .trim()
+            .takeIf { it.isNotBlank() }
+            ?.let { value ->
+                add(
+                    CompanyListInfoItem(
+                        title = BBLocalization.Current.Get(
+                            key = "e7adcad3-f164-48d5-bc4d-7d4bc7cb6956",
+                            fallback = "Sıralama"
+                        ),
+                        value = value
+                    )
+                )
+            }
 
-            CompanyInfoBox(
-                title = BBLocalization.Current.Get(key = "557dd35f-dc39-4228-a30f-72adb3b29d32", fallback = "İş modeli"),
-                value = company.BusinessTypes.ifBlank { company.CompanyType.ifBlank { "-" } },
-                modifier = Modifier.weight(1f)
-            )
+        company.TradeRegisterNumber
+            .trim()
+            .takeIf { it.isNotBlank() }
+            ?.let { value ->
+                add(
+                    CompanyListInfoItem(
+                        title = BBLocalization.Current.Get(
+                            key = "6c84ad65-9bba-4795-a376-efebd24c842f",
+                            fallback = "Ticaret sicil"
+                        ),
+                        value = value
+                    )
+                )
+            }
+
+        company.CompanyCapabilities
+            .trim()
+            .takeIf { it.isNotBlank() }
+            ?.let { value ->
+                add(
+                    CompanyListInfoItem(
+                        title = BBLocalization.Current.Get(
+                            key = "4f1ad3c8-8df8-48f2-b2c2-7b128d0f0e28",
+                            fallback = "Yetenekler"
+                        ),
+                        value = value
+                    )
+                )
+            }
+
+        businessType
+            .takeIf { it.isNotBlank() }
+            ?.let { value ->
+                add(
+                    CompanyListInfoItem(
+                        title = BBLocalization.Current.Get(
+                            key = "557dd35f-dc39-4228-a30f-72adb3b29d32",
+                            fallback = "İş modeli"
+                        ),
+                        value = value
+                    )
+                )
+            }
+    }
+
+    if (items.isEmpty()) {
+        return
+    }
+
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(
+            BBSpacing.CardGapCompact
+        )
+    ) {
+        items.chunked(2).forEach { rowItems ->
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(
+                    BBSpacing.CardGapCompact
+                )
+            ) {
+                rowItems.forEach { item ->
+                    CompanyInfoBox(
+                        title = item.title,
+                        value = item.value,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+
+                if (rowItems.size == 1) {
+                    Spacer(
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+            }
         }
     }
 }
@@ -378,7 +556,9 @@ private fun CompanyInfoBox(
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+            verticalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space1
+            )
         ) {
             Text(
                 text = title,
@@ -412,7 +592,9 @@ private fun CompanySmallActionCard(
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.IconTextGap)
+            horizontalArrangement = Arrangement.spacedBy(
+                BBSpacing.IconTextGap
+            )
         ) {
             Icon(
                 imageVector = icon,
@@ -431,7 +613,9 @@ private fun CompanySmallActionCard(
 }
 
 @Composable
-private fun CompanyListBottomCallout(onRfqCreateClick: () -> Unit) {
+private fun CompanyListBottomCallout(
+    onRfqCreateClick: () -> Unit
+) {
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
@@ -441,7 +625,9 @@ private fun CompanyListBottomCallout(onRfqCreateClick: () -> Unit) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+            horizontalArrangement = Arrangement.spacedBy(
+                BBSpacing.Space3
+            )
         ) {
             Icon(
                 imageVector = Icons.Outlined.RequestQuote,
@@ -451,17 +637,25 @@ private fun CompanyListBottomCallout(onRfqCreateClick: () -> Unit) {
 
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+                verticalArrangement = Arrangement.spacedBy(
+                    BBSpacing.Space1
+                )
             ) {
                 Text(
-                    text = BBLocalization.Current.Get(key = "360424c5-f619-4309-a1db-0660afc515ef", fallback = "Aradığınız firmayı bulamadınız mı?"),
+                    text = BBLocalization.Current.Get(
+                        key = "360424c5-f619-4309-a1db-0660afc515ef",
+                        fallback = "Aradığınız firmayı bulamadınız mı?"
+                    ),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = BBLocalization.Current.Get(key = "33ab398d-8105-4689-b221-8e9ae1b7d800", fallback = "Talep oluşturun, uygun firmalar size ulaşsın."),
+                    text = BBLocalization.Current.Get(
+                        key = "33ab398d-8105-4689-b221-8e9ae1b7d800",
+                        fallback = "Talep oluşturun, uygun firmalar size ulaşsın."
+                    ),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -469,7 +663,10 @@ private fun CompanyListBottomCallout(onRfqCreateClick: () -> Unit) {
 
             Icon(
                 imageVector = Icons.Outlined.ChevronRight,
-                contentDescription = BBLocalization.Current.Get(key = "fcb264e8-a984-415f-b971-69ea0a531bd9", fallback = "Talep oluştur"),
+                contentDescription = BBLocalization.Current.Get(
+                    key = "fcb264e8-a984-415f-b971-69ea0a531bd9",
+                    fallback = "Talep oluştur"
+                ),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
@@ -477,10 +674,15 @@ private fun CompanyListBottomCallout(onRfqCreateClick: () -> Unit) {
 }
 
 @Composable
-private fun CompanyIconTitleRow(icon: ImageVector, title: String) {
+private fun CompanyIconTitleRow(
+    icon: ImageVector,
+    title: String
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(BBSpacing.IconTextGap)
+        horizontalArrangement = Arrangement.spacedBy(
+            BBSpacing.IconTextGap
+        )
     ) {
         Icon(
             imageVector = icon,
@@ -497,15 +699,24 @@ private fun CompanyIconTitleRow(icon: ImageVector, title: String) {
     }
 }
 
-private fun getCompanyInitials(companyName: String): String {
+private data class CompanyListInfoItem(
+    val title: String,
+    val value: String
+)
+
+private fun getCompanyInitials(
+    companyName: String
+): String {
     return companyName
         .trim()
         .split(Regex("\\s+"))
         .filter { it.isNotBlank() }
         .take(2)
-        .mapNotNull { it.firstOrNull()?.uppercase() }
+        .mapNotNull {
+            it.firstOrNull()
+                ?.uppercase()
+        }
         .joinToString("")
-        .ifBlank { "C" }
 }
 
 @Preview(showBackground = true)

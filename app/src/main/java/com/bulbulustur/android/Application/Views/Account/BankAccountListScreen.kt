@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.businesslayer.Core.Network.ImageUrlResolver
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -502,7 +504,7 @@ private fun BankAccountIconBox(
         mutableStateOf(false)
     }
 
-    val pictureUrl = GetBankPictureUrl(picture)
+    val pictureUrl = ImageUrlResolver.Resolve(picture)
 
     Box(
         modifier = Modifier
@@ -599,19 +601,6 @@ private fun BankAccountDeleteSheet(
             }
         }
     }
-}
-
-private fun GetBankPictureUrl(picture: String): String {
-    if (picture.isBlank()) return ""
-
-    if (
-        picture.startsWith("http://", ignoreCase = true) ||
-        picture.startsWith("https://", ignoreCase = true)
-    ) {
-        return picture
-    }
-
-    return "https://www.bulbulustur.com/${picture.trimStart('/')}"
 }
 
 private fun FormatIban(iban: String): String {

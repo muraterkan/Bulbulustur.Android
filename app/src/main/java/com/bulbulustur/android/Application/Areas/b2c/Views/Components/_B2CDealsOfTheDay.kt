@@ -29,7 +29,7 @@ import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.businesslayer.Core.DTO.DealsOfTheDayDTO
-import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
+import com.bulbulustur.android.businesslayer.Core.Network.ImageUrlResolver
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -127,11 +127,7 @@ private fun B2CDealOfTheDayCard(
                 contentAlignment = Alignment.Center
             ) {
                 AsyncImage(
-                    model = ResolveB2CDealImageUrl(
-                        deal.DefaultPicture.orEmpty().ifBlank {
-                            deal.Picture
-                        }
-                    ),
+                    model = ImageUrlResolver.Resolve(deal.DefaultPicture.orEmpty().ifBlank { deal.Picture }),
                     contentDescription = deal.ProductName.orEmpty().ifBlank { BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = "") },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -210,10 +206,4 @@ private fun FormatDealPrice(
     formatter.maximumFractionDigits = 2
 
     return "${currencySymbol.orEmpty().ifBlank { "₺" }}${formatter.format(price)}"
-}
-
-private fun ResolveB2CDealImageUrl(
-    picture: String
-): String {
-    return ApiRoutes.B2C_TEST_PRODUCT_IMAGE_URL
 }

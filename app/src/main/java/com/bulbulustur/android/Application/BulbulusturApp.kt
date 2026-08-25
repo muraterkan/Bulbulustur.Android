@@ -416,19 +416,27 @@ private fun BulbulusturApplicationContent(
         DealsOfTheDayRepository()
     }
 
-    val dealsOfTheDayController = remember(dealsOfTheDayRepository) {
-        DealsOfTheDayController(dealsOfTheDayRepository = dealsOfTheDayRepository)
+    val dealsOfTheDayController = remember(
+        dealsOfTheDayRepository,
+        productRepository
+    ) {
+        DealsOfTheDayController(
+            dealsOfTheDayRepository = dealsOfTheDayRepository,
+            productRepository = productRepository
+        )
     }
 
     val retailHomeController = remember(
         campaignRepository,
         dealsOfTheDayRepository,
-        productHomepageSpecialContentRepository
+        productHomepageSpecialContentRepository,
+        productRepository
     ) {
         RetailHomeController(
             campaignRepository = campaignRepository,
             dealsOfTheDayRepository = dealsOfTheDayRepository,
-            productHomepageSpecialContentRepository = productHomepageSpecialContentRepository
+            productHomepageSpecialContentRepository = productHomepageSpecialContentRepository,
+            productRepository = productRepository
         )
     }
 
@@ -836,10 +844,14 @@ private fun BulbulusturApplicationContent(
 
         retailGraph(
             navigator = appNavigator,
-            categoryController = com.bulbulustur.android.Application.Areas.b2c.Controllers.CategoryController(
+            
+                categoryController = com.bulbulustur.android.Application.Areas.b2c.Controllers.CategoryController(
                 executeService = executeService,
-                productCategoryRepository = productCategoryRepository
-            ),
+                productCategoryRepository = productCategoryRepository,
+                productHomepageSpecialContentRepository = productHomepageSpecialContentRepository
+
+            )
+,
             homeController = retailHomeController,
             campaignController = campaignController,
             dealsOfTheDayController = dealsOfTheDayController,

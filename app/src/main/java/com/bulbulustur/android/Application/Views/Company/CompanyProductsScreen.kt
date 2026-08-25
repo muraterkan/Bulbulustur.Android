@@ -1,17 +1,19 @@
 package com.bulbulustur.android.Application.Views.Company
 
-import com.bulbulustur.android.Application.Localization.BBLocalization
-
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -19,26 +21,26 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Business
+import androidx.compose.material.icons.outlined.Inventory2
+import androidx.compose.material.icons.outlined.RequestQuote
 import androidx.compose.material.icons.outlined.Verified
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import com.bulbulustur.android.R
-import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleProductCard
-import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleProductCardModel
+import coil3.compose.AsyncImage
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
@@ -52,10 +54,17 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
+import com.bulbulustur.android.businesslayer.Core.DTO.CompanyDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleProductDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.B2BProductData
+import com.bulbulustur.android.businesslayer.Core.Network.ImageUrlResolver
 
 @Composable
 fun CompanyProductsScreen(
-    companyId: Int = 1,
+    company: CompanyDTO? = null,
+    products: List<B2BProductData> = emptyList(),
+    isLoading: Boolean = false,
+    errorMessage: String? = null,
     onBackClick: () -> Unit = {},
     onCompanyProfileClick: () -> Unit = {},
     onCompanyContactClick: () -> Unit = {},
@@ -63,164 +72,64 @@ fun CompanyProductsScreen(
     onProductFavoriteClick: (Int) -> Unit = {},
     onRfqCreateClick: (Int) -> Unit = {}
 ) {
-    val company = remember(companyId) {
-        getCompanyProducts(companyId)
-    }
-
-    var selectedFilter by remember {
-        mutableStateOf(BBLocalization.Current.Get(key = "40b32a95-e0ec-4b16-b54d-12b6fe90cced", fallback = "Tümü"))
-    }
-
-    var favoriteProductIds by remember {
-        mutableStateOf<Set<Int>>(emptySet())
-    }
-
-    val filteredProducts = remember(
-        company.Products,
-        selectedFilter
-    ) {
-        when (selectedFilter) {
-            BBLocalization.Current.Get(key = "557ea0c9-948d-4e62-8ddc-948294a55b11", fallback = "Yeni") -> {
-                company.Products.filter { product ->
-                    product.BadgeText == BBLocalization.Current.Get(key = "557ea0c9-948d-4e62-8ddc-948294a55b11", fallback = "Yeni")
-                }
-            }
-
-            BBLocalization.Current.Get(key = "c45d05c5-c097-40c4-9379-a7ec77726c36", fallback = "Popüler") -> {
-                company.Products.filter { product ->
-                    product.BadgeText == BBLocalization.Current.Get(key = "c45d05c5-c097-40c4-9379-a7ec77726c36", fallback = "Popüler")
-                }
-            }
-
-            BBLocalization.Current.Get(key = "3c83d1c5-3b8b-4664-8ab3-985b45790a4f", fallback = "Düşük MOQ") -> {
-                company.Products.filter { product ->
-                    product.IsLowMoq
-                }
-            }
-
-            BBLocalization.Current.Get(key = "0f7c5558-348e-471a-8424-d096c7de94cc", fallback = "Hızlı teklif") -> {
-                company.Products.filter { product ->
-                    product.HasFastQuote
-                }
-            }
-
-            else -> {
-                company.Products
-            }
-        }
-    }
-
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             BbInnerPageHeader(
-                title = BBLocalization.Current.Get(key = "5441c892-ca73-4202-8a98-e5dcb7893bee", fallback = "Firma ürünleri"),
+                title = BBLocalization.Current.Get(
+                    key = "5441c892-ca73-4202-8a98-e5dcb7893bee",
+                    fallback = "Firma ürünleri"
+                ),
                 onBackClick = onBackClick
             )
         }
     ) { innerPadding ->
-        LazyVerticalGrid(
-            modifier = Modifier.fillMaxSize(),
-            columns = GridCells.Fixed(2),
-            contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
-                top = innerPadding.calculateTopPadding() +
-                        BBSpacing.PageTopCompact,
-                end = BBSpacing.PageHorizontal,
-                bottom = innerPadding.calculateBottomPadding() +
-                        BBSpacing.PageBottom
-            ),
-            horizontalArrangement = Arrangement.spacedBy(
-                BBSpacing.Space3
-            ),
-            verticalArrangement = Arrangement.spacedBy(
-                BBSpacing.Space4
-            )
-        ) {
-            item(
-                span = {
-                    GridItemSpan(maxLineSpan)
+        when {
+            isLoading && company == null && products.isEmpty() -> {
+                Box(
+                    modifier = Modifier.fillMaxSize().padding(innerPadding),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
                 }
-            ) {
-                CompanyProductsHero(
-                    company = company,
-                    onCompanyProfileClick = onCompanyProfileClick,
-                    onCompanyContactClick = onCompanyContactClick
-                )
             }
 
-            item(
-                span = {
-                    GridItemSpan(maxLineSpan)
-                }
-            ) {
-                CompanyProductsFilterHeader(
-                    productCount = filteredProducts.size,
-                    filters = company.Filters,
-                    selectedFilter = selectedFilter,
-                    onFilterClick = { filter ->
-                        selectedFilter = filter
-                    }
-                )
-            }
-
-            items(
-                items = filteredProducts,
-                key = { product ->
-                    product.Id
-                }
-            ) { product ->
-                val isFavorite = favoriteProductIds.contains(
-                    product.Id
-                )
-
-                WholesaleProductCard(
-                    product = WholesaleProductCardModel(
-                        Id = product.Id,
-                        Title = product.Title,
-                        Category = product.Category,
-                        PriceText = product.PriceText,
-                        MoqText = product.MoqText,
-                        SupplierText = product.SupplierText,
-                        BadgeText = product.BadgeText,
-                        ImageResId = product.ImageResId,
-                        IsFavorite = isFavorite
-                    ),
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = {
-                        onProductClick(
-                            product.Id
-                        )
-                    },
-                    onFavoriteClick = {
-                        favoriteProductIds = if (isFavorite) {
-                            favoriteProductIds - product.Id
+            company == null -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                        .padding(BBSpacing.PageHorizontal),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = errorMessage?.takeIf { it.isNotBlank() }
+                            ?: BBLocalization.Current.Get(
+                                key = "8d62c316-0982-473f-b9ce-01b1aebccdf9",
+                                fallback = "Şirket bilgisi bulunamadı."
+                            ),
+                        color = if (!errorMessage.isNullOrBlank()) {
+                            MaterialTheme.colorScheme.error
                         } else {
-                            favoriteProductIds + product.Id
+                            MaterialTheme.colorScheme.onSurfaceVariant
                         }
-
-                        onProductFavoriteClick(
-                            product.Id
-                        )
-                    },
-                    onRfqClick = {
-                        onRfqCreateClick(
-                            product.Id
-                        )
-                    }
-                )
+                    )
+                }
             }
 
-            item(
-                span = {
-                    GridItemSpan(maxLineSpan)
-                }
-            ) {
-                Spacer(
-                    modifier = Modifier.height(
-                        BBSpacing.Space4
-                    )
+            else -> {
+                CompanyProductsContent(
+                    company = company,
+                    products = products.filter { it.CompanyId == company.CompanyId },
+                    isLoading = isLoading,
+                    errorMessage = errorMessage,
+                    innerPadding = innerPadding,
+                    onCompanyProfileClick = onCompanyProfileClick,
+                    onCompanyContactClick = onCompanyContactClick,
+                    onProductClick = onProductClick,
+                    onProductFavoriteClick = onProductFavoriteClick,
+                    onRfqCreateClick = onRfqCreateClick
                 )
             }
         }
@@ -228,11 +137,187 @@ fun CompanyProductsScreen(
 }
 
 @Composable
+private fun CompanyProductsContent(
+    company: CompanyDTO,
+    products: List<B2BProductData>,
+    isLoading: Boolean,
+    errorMessage: String?,
+    innerPadding: PaddingValues,
+    onCompanyProfileClick: () -> Unit,
+    onCompanyContactClick: () -> Unit,
+    onProductClick: (Int) -> Unit,
+    onProductFavoriteClick: (Int) -> Unit,
+    onRfqCreateClick: (Int) -> Unit
+) {
+    val favoriteProductIds = remember {
+        mutableStateOf<Set<Int>>(emptySet())
+    }
+
+    LazyVerticalGrid(
+        modifier = Modifier.fillMaxSize(),
+        columns = GridCells.Fixed(2),
+        contentPadding = PaddingValues(
+            start = BBSpacing.PageHorizontal,
+            top = innerPadding.calculateTopPadding() + BBSpacing.PageTopCompact,
+            end = BBSpacing.PageHorizontal,
+            bottom = innerPadding.calculateBottomPadding() + BBSpacing.PageBottom
+        ),
+        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
+    ) {
+        item(span = { GridItemSpan(maxLineSpan) }) {
+            CompanyProductsHero(
+                company = company,
+                productCount = products.size,
+                onCompanyProfileClick = onCompanyProfileClick,
+                onCompanyContactClick = onCompanyContactClick
+            )
+        }
+
+        if (!errorMessage.isNullOrBlank()) {
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                Text(
+                    text = errorMessage,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
+        }
+
+        item(span = { GridItemSpan(maxLineSpan) }) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+            ) {
+                Text(
+                    text = BBLocalization.Current.Get(
+                        key = "79b4a21a-b9a4-47e9-8931-f5d66750cea0",
+                        fallback = "Ürün Listesi"
+                    ),
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Text(
+                    text = "${products.size} ürün listeleniyor",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+
+        if (isLoading && products.isEmpty()) {
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(BBSpacing.Space5),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+        }
+
+        if (!isLoading && products.isEmpty()) {
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                BbCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    variant = BbCardVariant.Outlined,
+                    padding = BbCardPadding.Large
+                ) {
+                    Text(
+                        text = BBLocalization.Current.Get(
+                            key = "bc1bc62a-7609-4fde-8790-d2a4fd6d9229",
+                            fallback = "Bu firmaya ait ürün bulunamadı."
+                        ),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+        }
+
+        items(
+            items = products,
+            key = { it.WholesaleProductId }
+        ) { product ->
+            val isFavorite = favoriteProductIds.value.contains(
+                product.WholesaleProductId
+            )
+
+            CompanyWholesaleProductCard(
+                product = product,
+                isFavorite = isFavorite,
+                onClick = {
+                    if (product.WholesaleProductId > 0) {
+                        onProductClick(product.WholesaleProductId)
+                    }
+                },
+                onFavoriteClick = {
+                    favoriteProductIds.value = if (isFavorite) {
+                        favoriteProductIds.value - product.WholesaleProductId
+                    } else {
+                        favoriteProductIds.value + product.WholesaleProductId
+                    }
+
+                    if (product.WholesaleProductId > 0) {
+                        onProductFavoriteClick(product.WholesaleProductId)
+                    }
+                },
+                onRfqClick = {
+                    if (product.WholesaleProductId > 0) {
+                        onRfqCreateClick(product.WholesaleProductId)
+                    }
+                }
+            )
+        }
+
+        item(span = { GridItemSpan(maxLineSpan) }) {
+            Spacer(modifier = Modifier.height(BBSpacing.Space4))
+        }
+    }
+}
+
+@Composable
 private fun CompanyProductsHero(
-    company: CompanyProducts,
+    company: CompanyDTO,
+    productCount: Int,
     onCompanyProfileClick: () -> Unit,
     onCompanyContactClick: () -> Unit
 ) {
+    val chips = buildList {
+        company.CountryName.orEmpty().trim()
+            .takeIf { it.isNotBlank() }
+            ?.let(::add)
+
+        company.CityName.orEmpty().trim()
+            .takeIf { it.isNotBlank() }
+            ?.let(::add)
+
+        company.CompanyType.orEmpty().trim()
+            .takeIf { it.isNotBlank() }
+            ?.let(::add)
+
+        if (company.Verified) {
+            add(
+                BBLocalization.Current.Get(
+                    key = "c6a0ff62-8828-475f-b553-37effb42efe6",
+                    fallback = "Doğrulanmış"
+                )
+            )
+        }
+
+        if (productCount > 0) {
+            add("$productCount ürün")
+        }
+    }
+
+    val description = company.Slogan.orEmpty().trim().ifBlank {
+        company.SeoDescription.orEmpty().trim()
+    }
+
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
@@ -240,94 +325,92 @@ private fun CompanyProductsHero(
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(
-                BBSpacing.Space4
-            )
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(
-                    BBSpacing.Space3
-                )
+                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
             ) {
                 CompanyProductsLogo(
-                    logoText = company.LogoText
+                    companyName = company.CompanyName,
+                    logoPath = company.Logo
                 )
 
                 Column(
                     modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(
-                        BBSpacing.Space1
-                    )
+                    verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(
-                            BBSpacing.Space1
-                        )
+                        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                     ) {
                         BbChip(
-                            text = BBLocalization.Current.Get(key = "98067ca3-741f-4b7a-ba55-e22bbc1478b7", fallback = "Tedarikçi Ürünleri"),
+                            text = BBLocalization.Current.Get(
+                                key = "98067ca3-741f-4b7a-ba55-e22bbc1478b7",
+                                fallback = "Tedarikçi Ürünleri"
+                            ),
                             selected = false,
                             onClick = onCompanyProfileClick
                         )
 
-                        if (company.IsVerified) {
+                        if (company.Verified) {
                             Icon(
                                 imageVector = Icons.Outlined.Verified,
-                                contentDescription = BBLocalization.Current.Get(key = "c00be3e3-90d4-4f66-ac51-db9a38bac686", fallback = "Doğrulanmış firma"),
+                                contentDescription = BBLocalization.Current.Get(
+                                    key = "c00be3e3-90d4-4f66-ac51-db9a38bac686",
+                                    fallback = "Doğrulanmış firma"
+                                ),
                                 tint = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.size(
-                                    BBIcon.SizeSm
-                                )
+                                modifier = Modifier.size(BBIcon.SizeSm)
                             )
                         }
                     }
 
                     Text(
-                        text = "${company.Name} ürünleri",
+                        text = company.CompanyName,
                         style = MaterialTheme.typography.headlineSmall,
                         color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold
                     )
 
-                    Text(
-                        text = company.Description,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 3,
-                        overflow = TextOverflow.Ellipsis
-                    )
+                    if (description.isNotBlank()) {
+                        Text(
+                            text = description,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            maxLines = 3,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
                 }
             }
 
-            FlowRow(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(
-                    BBSpacing.Space2
-                ),
-                verticalArrangement = Arrangement.spacedBy(
-                    BBSpacing.Space2
-                )
-            ) {
-                company.Chips.forEach { chip ->
-                    BbChip(
-                        text = chip,
-                        selected = false,
-                        onClick = {}
-                    )
+            if (chips.isNotEmpty()) {
+                FlowRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2),
+                    verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+                ) {
+                    chips.distinct().forEach { chip ->
+                        BbChip(
+                            text = chip,
+                            selected = false,
+                            onClick = {}
+                        )
+                    }
                 }
             }
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(
-                    BBSpacing.Space2
-                )
+                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
             ) {
                 BbButton(
-                    text = BBLocalization.Current.Get(key = "ab200e4f-1f9e-45f4-90a6-7d5d21d33953", fallback = "Profil"),
+                    text = BBLocalization.Current.Get(
+                        key = "ab200e4f-1f9e-45f4-90a6-7d5d21d33953",
+                        fallback = "Profil"
+                    ),
                     onClick = onCompanyProfileClick,
                     modifier = Modifier.weight(1f),
                     variant = BbButtonVariant.Outline,
@@ -335,7 +418,10 @@ private fun CompanyProductsHero(
                 )
 
                 BbButton(
-                    text = BBLocalization.Current.Get(key = "0cf2cda1-7cf6-4d8b-ab56-8918e3a260fd", fallback = "İletişim"),
+                    text = BBLocalization.Current.Get(
+                        key = "0cf2cda1-7cf6-4d8b-ab56-8918e3a260fd",
+                        fallback = "İletişim"
+                    ),
                     onClick = onCompanyContactClick,
                     modifier = Modifier.weight(1f),
                     variant = BbButtonVariant.Secondary,
@@ -348,12 +434,16 @@ private fun CompanyProductsHero(
 
 @Composable
 private fun CompanyProductsLogo(
-    logoText: String
+    companyName: String,
+    logoPath: String
 ) {
+    val logoUrl = ImageUrlResolver.Resolve(logoPath)
+    val logoLoadFailed = remember(logoUrl) {
+        mutableStateOf(false)
+    }
+
     Surface(
-        modifier = Modifier.size(
-            BBIcon.BoxXl
-        ),
+        modifier = Modifier.size(BBIcon.BoxXl),
         shape = BBRadius.XlShape,
         color = MaterialTheme.colorScheme.surface,
         border = BorderStroke(
@@ -361,90 +451,183 @@ private fun CompanyProductsLogo(
             color = MaterialTheme.colorScheme.outlineVariant
         )
     ) {
-        Column(
+        Box(
             modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            contentAlignment = Alignment.Center
         ) {
-            Icon(
-                imageVector = Icons.Outlined.Business,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(
-                    BBIcon.SizeLg
+            if (logoUrl.isNotBlank() && !logoLoadFailed.value) {
+                AsyncImage(
+                    model = logoUrl,
+                    contentDescription = companyName,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(BBSpacing.Space2),
+                    contentScale = ContentScale.Fit,
+                    onError = {
+                        logoLoadFailed.value = true
+                    }
                 )
-            )
+            } else {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Business,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(BBIcon.SizeLg)
+                    )
 
-            Text(
-                text = logoText,
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.Bold
-            )
+                    val initials = companyName.toInitials()
+
+                    if (initials.isNotBlank()) {
+                        Text(
+                            text = initials,
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+            }
         }
     }
 }
 
 @Composable
-private fun CompanyProductsFilterHeader(
-    productCount: Int,
-    filters: List<String>,
-    selectedFilter: String,
-    onFilterClick: (String) -> Unit
+private fun CompanyWholesaleProductCard(
+    product: B2BProductData,
+    isFavorite: Boolean,
+    onClick: () -> Unit,
+    onFavoriteClick: () -> Unit,
+    onRfqClick: () -> Unit
 ) {
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(
-            BBSpacing.Space3
-        )
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.Bottom
-        ) {
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(
-                    BBSpacing.Space1
-                )
-            ) {
-                Text(
-                    text = BBLocalization.Current.Get(key = "79b4a21a-b9a4-47e9-8931-f5d66750cea0", fallback = "Ürün Listesi"),
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    fontWeight = FontWeight.Bold
-                )
+    val imagePath = product.DefaultPicture.orEmpty()
+        .trim()
+        .ifBlank {
+            product.Picture.orEmpty().trim()
+        }
 
+    val imageUrl = ImageUrlResolver.Resolve(imagePath)
+
+    BbCard(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Small
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+        ) {
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(1f),
+                shape = BBRadius.LgShape,
+                color = MaterialTheme.colorScheme.surfaceVariant
+            ) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (imageUrl.isNotBlank()) {
+                        AsyncImage(
+                            model = imageUrl,
+                            contentDescription = product.ProductName,
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Fit
+                        )
+                    } else {
+                        Icon(
+                            imageVector = Icons.Outlined.Inventory2,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.size(BBIcon.SizeLg)
+                        )
+                    }
+                }
+            }
+
+            Text(
+                text = product.ProductName,
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurface,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
+
+            if (product.CategoryName.isNotBlank()) {
                 Text(
-                    text = "$productCount ürün listeleniyor",
+                    text = product.CategoryName,
                     style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+
+            if (product.MinimumOrderQuantity > 0) {
+                Text(
+                    text = buildString {
+                        append("MOQ ")
+                        append(product.MinimumOrderQuantity)
+
+                        if (product.MinimumOrderUnit.isNotBlank()) {
+                            append(" ")
+                            append(product.MinimumOrderUnit)
+                        }
+                    },
+                    style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
-            Text(
-                text = BBLocalization.Current.Get(key = "bb4d65cd-d8cf-485d-9689-4f44c7353dfa", fallback = "Filtrele"),
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.Bold
-            )
-        }
+            if (product.Price > 0.0) {
+                Text(
+                    text = product.Price.toString(),
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
 
-        FlowRow(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(
-                BBSpacing.Space2
-            ),
-            verticalArrangement = Arrangement.spacedBy(
-                BBSpacing.Space2
-            )
-        ) {
-            filters.forEach { filter ->
-                BbChip(
-                    text = filter,
-                    selected = selectedFilter == filter,
-                    onClick = {
-                        onFilterClick(filter)
+            if (product.CompanyName.isNotBlank()) {
+                Text(
+                    text = product.CompanyName,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+            ) {
+                BbButton(
+                    text = if (isFavorite) "★" else "☆",
+                    onClick = onFavoriteClick,
+                    modifier = Modifier.weight(1f),
+                    variant = BbButtonVariant.Outline,
+                    size = BbButtonSize.Small
+                )
+
+                BbButton(
+                    text = "RFQ",
+                    onClick = onRfqClick,
+                    modifier = Modifier.weight(1f),
+                    variant = BbButtonVariant.Secondary,
+                    size = BbButtonSize.Small,
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Outlined.RequestQuote,
+                            contentDescription = null
+                        )
                     }
                 )
             }
@@ -452,123 +635,15 @@ private fun CompanyProductsFilterHeader(
     }
 }
 
-@Immutable
-private data class CompanyProducts(
-    val CompanyId: Int,
-    val Name: String,
-    val LogoText: String,
-    val Description: String,
-    val IsVerified: Boolean,
-    val Chips: List<String>,
-    val Filters: List<String>,
-    val Products: List<CompanyWholesaleProduct>
-)
-
-@Immutable
-private data class CompanyWholesaleProduct(
-    val Id: Int,
-    val Title: String,
-    val Category: String,
-    val PriceText: String,
-    val MoqText: String,
-    val SupplierText: String,
-    val BadgeText: String,
-    val ImageResId: Int,
-    val IsLowMoq: Boolean,
-    val HasFastQuote: Boolean
-)
-
-private fun getCompanyProducts(
-    companyId: Int
-): CompanyProducts {
-    return CompanyProducts(
-        CompanyId = companyId,
-        Name = "Ortobella Comfort",
-        LogoText = "OC",
-        Description = BBLocalization.Current.Get(key = "8d5857cf-765d-47cc-bb23-dc16e7dfafc8", fallback = "Firmanın toptan satışa sunduğu ürünleri kategori bazında inceleyin, fiyat aralıklarını karşılaştırın ve ürün detaylarından tedarik sürecine geçin."),
-        IsVerified = true,
-        Chips = listOf(
-            BBLocalization.Current.Get(key = "5365b492-6a1c-4b46-b5c0-b50cbfdd17a8", fallback = "Türkiye"),
-            "Samsun",
-            BBLocalization.Current.Get(key = "c6a0ff62-8828-475f-b553-37effb42efe6", fallback = "Doğrulanmış"),
-            "120+ ürün",
-            BBLocalization.Current.Get(key = "0f7c5558-348e-471a-8424-d096c7de94cc", fallback = "Hızlı teklif")
-        ),
-        Filters = listOf(
-            BBLocalization.Current.Get(key = "40b32a95-e0ec-4b16-b54d-12b6fe90cced", fallback = "Tümü"),
-            BBLocalization.Current.Get(key = "557ea0c9-948d-4e62-8ddc-948294a55b11", fallback = "Yeni"),
-            BBLocalization.Current.Get(key = "c45d05c5-c097-40c4-9379-a7ec77726c36", fallback = "Popüler"),
-            BBLocalization.Current.Get(key = "3c83d1c5-3b8b-4664-8ab3-985b45790a4f", fallback = "Düşük MOQ"),
-            BBLocalization.Current.Get(key = "0f7c5558-348e-471a-8424-d096c7de94cc", fallback = "Hızlı teklif")
-        ),
-        Products = listOf(
-            CompanyWholesaleProduct(
-                Id = 1,
-                Title = BBLocalization.Current.Get(key = "3274fed0-f5d8-4bb5-8b49-31432b972e4c", fallback = "Endüstriyel karton koli seti"),
-                Category = "Ambalaj ve paketleme",
-                PriceText = "₺12,40 / adet",
-                MoqText = "MOQ 1.000",
-                SupplierText = "Ortobella",
-                BadgeText = BBLocalization.Current.Get(key = "cd90e72e-8745-4543-836b-ca914c3640f8", fallback = "Toptan"),
-                ImageResId =
-                    R.drawable.h3ff3b33d6a1447c898cee6e336867bach,
-                IsLowMoq = false,
-                HasFastQuote = true
-            ),
-            CompanyWholesaleProduct(
-                Id = 2,
-                Title = BBLocalization.Current.Get(key = "a18770e5-d086-4fca-bff8-164613a66a26", fallback = "Paslanmaz makine yedek parçası"),
-                Category = BBLocalization.Current.Get(key = "4f14fddb-41e6-48fd-bb94-473cdee47746", fallback = "Makine ve sanayi"),
-                PriceText = BBLocalization.Current.Get(key = "dbb6b4e4-1a23-423d-9b87-5b0c8cbeb64d", fallback = "Teklif iste"),
-                MoqText = "MOQ 50",
-                SupplierText = "Ortobella",
-                BadgeText = "RFQ",
-                ImageResId =
-                    R.drawable.h3ff3b33d6a1447c898cee6e336867bachvar1,
-                IsLowMoq = true,
-                HasFastQuote = true
-            ),
-            CompanyWholesaleProduct(
-                Id = 3,
-                Title = BBLocalization.Current.Get(key = "6949dd49-227e-483b-8700-0022a03a24f1", fallback = "Elektronik güç modülü"),
-                Category = BBLocalization.Current.Get(key = "74d119ba-c33b-4865-83a2-a575f717c2b2", fallback = "Elektronik bileşen"),
-                PriceText = "₺420,00 / adet",
-                MoqText = "MOQ 200",
-                SupplierText = "Ortobella",
-                BadgeText = BBLocalization.Current.Get(key = "557ea0c9-948d-4e62-8ddc-948294a55b11", fallback = "Yeni"),
-                ImageResId =
-                    R.drawable.h3ff3b33d6a1447c898cee6e336867bachvar2,
-                IsLowMoq = false,
-                HasFastQuote = false
-            ),
-            CompanyWholesaleProduct(
-                Id = 4,
-                Title = BBLocalization.Current.Get(key = "7f6dd955-1fcb-43fa-9b36-c31abcc653ab", fallback = "Toptan pamuklu kumaş rulosu"),
-                Category = BBLocalization.Current.Get(key = "5ab810a5-0d93-4129-8b8f-6efba4d8407b", fallback = "Tekstil ve giyim"),
-                PriceText = "₺78,50 / metre",
-                MoqText = "MOQ 500",
-                SupplierText = "Ortobella",
-                BadgeText = BBLocalization.Current.Get(key = "c45d05c5-c097-40c4-9379-a7ec77726c36", fallback = "Popüler"),
-                ImageResId =
-                    R.drawable.h3ff3b33d6a1447c898cee6e336867bachvar3,
-                IsLowMoq = false,
-                HasFastQuote = true
-            ),
-            CompanyWholesaleProduct(
-                Id = 5,
-                Title = "Özel baskılı promosyon çanta",
-                Category = BBLocalization.Current.Get(key = "33041afc-d5e4-4372-9cf0-0be5cb94519d", fallback = "Promosyon ürünleri"),
-                PriceText = BBLocalization.Current.Get(key = "dbb6b4e4-1a23-423d-9b87-5b0c8cbeb64d", fallback = "Teklif iste"),
-                MoqText = "MOQ 300",
-                SupplierText = "Ortobella",
-                BadgeText = "OEM",
-                ImageResId =
-                    R.drawable.h3ff3b33d6a1447c898cee6e336867bach,
-                IsLowMoq = false,
-                HasFastQuote = true
-            )
-        )
-    )
+private fun String.toInitials(): String {
+    return trim()
+        .split(" ")
+        .filter { it.isNotBlank() }
+        .take(2)
+        .mapNotNull {
+            it.firstOrNull()?.uppercaseChar()?.toString()
+        }
+        .joinToString("")
 }
 
 @Preview(showBackground = true)

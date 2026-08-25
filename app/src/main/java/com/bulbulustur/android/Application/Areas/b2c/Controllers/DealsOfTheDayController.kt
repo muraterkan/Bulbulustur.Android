@@ -3,6 +3,7 @@ package com.bulbulustur.android.Application.Areas.b2c.Controllers
 import androidx.lifecycle.viewModelScope
 import com.bulbulustur.android.businesslayer.Core.DTO.DealsOfTheDayDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.IDealsOfTheDayRepository
+import com.bulbulustur.android.businesslayer.Core.Interface.IProductRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,7 +17,8 @@ data class DealsOfTheDayControllerState(
 )
 
 class DealsOfTheDayController(
-    private val dealsOfTheDayRepository: IDealsOfTheDayRepository
+    private val dealsOfTheDayRepository: IDealsOfTheDayRepository,
+    private val productRepository: IProductRepository
 ) : BaseController() {
 
     private val _state = MutableStateFlow(DealsOfTheDayControllerState())
@@ -31,12 +33,37 @@ class DealsOfTheDayController(
                 )
             }
 
-            val result = dealsOfTheDayRepository.GetDealsOfTheDaysAsync(languageId, count)
+            val result =
+                dealsOfTheDayRepository.GetDealsOfTheDaysAsync(
+                    languageId,
+                    count
+                )
+
+            val deals = result.Data ?: emptyList()
+            val variantIds = deals.map { it.VariantId }.filter { it > 0 }.distinct()
+
+            val picturesResult = if (variantIds.isNotEmpty()) {
+                productRepository.GetDefaultProductVariantPicturesAsync(variantIds)
+            } else {
+                null
+            }
+
+            val pictures = picturesResult?.Data ?: emptyMap()
+
+            val dealsWithPictures = deals.map { deal ->
+                val picture = pictures[deal.VariantId.toString()].orEmpty()
+
+                if (picture.isNotBlank()) {
+                    deal.copy(DefaultPicture = picture)
+                } else {
+                    deal
+                }
+            }
 
             _state.update {
                 it.copy(
                     IsLoading = false,
-                    DealsOfTheDays = result.Data ?: emptyList(),
+                    DealsOfTheDays = dealsWithPictures,
                     ErrorMessage = result.Message
                 )
             }

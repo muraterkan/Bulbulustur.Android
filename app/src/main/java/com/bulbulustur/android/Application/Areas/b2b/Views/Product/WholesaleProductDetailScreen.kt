@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2b.Views.Product
 
+import com.bulbulustur.android.businesslayer.Core.Network.ImageUrlResolver
+
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -82,7 +84,6 @@ import com.bulbulustur.android.Application.Areas.b2b.Controllers.ProductControll
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleProductDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleProductRelatedDTO
-import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleProductCard
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleProductCardModel
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleSearchHeader
@@ -1894,6 +1895,10 @@ private fun WholesaleTrustMetric(
 private fun WholesaleCompanyLogoBox(
     company: WholesaleProductDetailCompany
 ) {
+    var logoLoadFailed by remember(company.logoUrl) {
+        mutableStateOf(false)
+    }
+
     Surface(
         modifier = Modifier.size(56.dp),
         shape = BBRadius.LgShape,
@@ -1907,12 +1912,26 @@ private fun WholesaleCompanyLogoBox(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = company.logoText,
-                style = MaterialTheme.typography.labelLarge,
-                color = BBColors.TextStrong,
-                fontWeight = FontWeight.ExtraBold
-            )
+            if (company.logoUrl.isNotBlank() && !logoLoadFailed) {
+                AsyncImage(
+                    model = company.logoUrl,
+                    contentDescription = company.name,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(BBSpacing.Space1),
+                    contentScale = ContentScale.Fit,
+                    onError = {
+                        logoLoadFailed = true
+                    }
+                )
+            } else {
+                Text(
+                    text = company.logoText,
+                    style = MaterialTheme.typography.labelLarge,
+                    color = BBColors.TextStrong,
+                    fontWeight = FontWeight.ExtraBold
+                )
+            }
         }
     }
 }
@@ -2342,6 +2361,7 @@ data class WholesaleProductDetailCompany(
     val id: Int,
     val name: String,
     val logoText: String,
+    val logoUrl: String,
     val description: String,
     val ratingText: String,
     val productCountText: String,
@@ -2350,9 +2370,6 @@ data class WholesaleProductDetailCompany(
     val metrics: List<WholesaleCompanyMetricItem>
 )
 
-private fun ResolveWholesaleProductImageUrl(imagePath: String): String {
-    return ApiRoutes.B2C_TEST_PRODUCT_IMAGE_URL
-}
 
 private fun WholesaleProductDTO.ToWholesaleProductDetail(relatedProducts: List<WholesaleProductRelatedDTO> = emptyList(), relatedCategories: List<ProductCategoryDTO> = emptyList()): WholesaleProductDetail {
     val mainPrice = MainPrice
@@ -2400,7 +2417,7 @@ private fun WholesaleProductDTO.ToWholesaleProductDetail(relatedProducts: List<W
                 label = if (index == 0) ProductName.orEmpty().ifBlank { BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = "") } else "${ProductName.orEmpty().ifBlank { BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = "") }} ${index + 1}",
                 backgroundColor = BBColors.Surface,
                 foregroundColor = BBColors.TextMuted,
-                imageUrl = ResolveWholesaleProductImageUrl(imagePath)
+                imageUrl = ImageUrlResolver.Resolve(imagePath)
             )
         }
         .filter { it.imageUrl.isNotBlank() }
@@ -2427,7 +2444,7 @@ private fun WholesaleProductDTO.ToWholesaleProductDetail(relatedProducts: List<W
                 badgeLabel = relatedProduct.CategoryName.orEmpty(),
                 backgroundColor = BBColors.Surface,
                 foregroundColor = BBColors.TextMuted,
-                imageUrl = ""
+                imageUrl = ImageUrlResolver.Resolve(relatedProduct.DefaultPicture)
             )
         }
 
@@ -2709,6 +2726,7 @@ private fun WholesaleProductDTO.ToWholesaleProductDetail(relatedProducts: List<W
             id = CompanyId,
             name = CompanyName,
             logoText = CompanyName.ToWholesaleCompanyLogoText(),
+            logoUrl = ImageUrlResolver.Resolve(Logo),
             description = CompanyBusinessTypes,
             ratingText = if (Rating > 0) Rating.toString() else "",
             productCountText = "",

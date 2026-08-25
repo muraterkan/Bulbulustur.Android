@@ -4,6 +4,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import androidx.navigation.compose.composable
 import com.bulbulustur.android.Application.Controllers.CompanyController
 import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
@@ -20,9 +22,12 @@ fun NavGraphBuilder.companyGraph(
     languageId: Int,
     companyController: CompanyController
 ) {
-    composable(CompanyRoutes.CompanyHome) {
+    composable(
+        route = CompanyRoutes.CompanyHome,
+        arguments = listOf(navArgument(CompanyRoutes.ArgCompanyId) { type = NavType.IntType })
+    ) { backStackEntry ->
         val companyState by companyController.State.collectAsState()
-        val companyId = 1
+        val companyId = backStackEntry.arguments?.getInt(CompanyRoutes.ArgCompanyId) ?: 0
 
         LaunchedEffect(languageId, companyId) {
             companyController.GetCompany(languageId = languageId, companyId = companyId)
@@ -33,26 +38,51 @@ fun NavGraphBuilder.companyGraph(
             isLoading = companyState.IsLoading,
             errorMessage = companyState.ErrorMessage,
             onBackClick = { navigator.back() },
-            onProfileClick = { navigator.navController.navigate(CompanyRoutes.CompanyDetail) },
-            onProductsClick = { navigator.navController.navigate(CompanyRoutes.CompanyProducts) },
-            onContactClick = { navigator.navController.navigate(CompanyRoutes.CompanyContact) }
+            onProfileClick = { navigator.navController.navigate(CompanyRoutes.companyDetail(companyId)) },
+            onProductsClick = { navigator.navController.navigate(CompanyRoutes.companyProducts(companyId)) },
+            onContactClick = { navigator.navController.navigate(CompanyRoutes.companyContact(companyId)) }
         )
     }
 
-    composable(CompanyRoutes.CompanyProducts) {
+    composable(
+        route = CompanyRoutes.CompanyProducts,
+        arguments = listOf(navArgument(CompanyRoutes.ArgCompanyId) { type = NavType.IntType })
+    ) { backStackEntry ->
+        val companyId = backStackEntry.arguments?.getInt(CompanyRoutes.ArgCompanyId) ?: 0
+        val companyState by companyController.State.collectAsState()
+
+        LaunchedEffect(languageId, companyId) {
+            if (companyId > 0) {
+                companyController.GetCompany(languageId = languageId, companyId = companyId)
+                companyController.GetCompanyProducts(languageId = languageId)
+            }
+        }
+
         CompanyProductsScreen(
+            company = companyState.CompanyResult?.Data,
+            products = companyState.CompanyProductsResult?.Data?.let { data ->
+                if (data.Products2.Items.isNotEmpty()) data.Products2.Items else data.Products
+            }.orEmpty(),
+            isLoading = companyState.IsLoading,
+            errorMessage = companyState.ErrorMessage,
             onBackClick = { navigator.back() },
-            onCompanyProfileClick = { navigator.navController.navigate(CompanyRoutes.CompanyDetail) },
-            onCompanyContactClick = { navigator.navController.navigate(CompanyRoutes.CompanyContact) },
+            onCompanyProfileClick = { navigator.navController.navigate(CompanyRoutes.companyDetail(companyId)) },
+            onCompanyContactClick = { navigator.navController.navigate(CompanyRoutes.companyContact(companyId)) },
             onProductClick = { navigator.navController.navigate(WholesaleRoutes.ProductDetail) }
         )
     }
 
-    composable(CompanyRoutes.CompanyContact) {
+    composable(
+        route = CompanyRoutes.CompanyContact,
+        arguments = listOf(navArgument(CompanyRoutes.ArgCompanyId) { type = NavType.IntType })
+    ) { backStackEntry ->
+        val companyId = backStackEntry.arguments?.getInt(CompanyRoutes.ArgCompanyId) ?: 0
+
         CompanyContactScreen(
+            companyId = companyId,
             onBackClick = { navigator.back() },
-            onCompanyProfileClick = { navigator.navController.navigate(CompanyRoutes.CompanyDetail) },
-            onCompanyProductsClick = { navigator.navController.navigate(CompanyRoutes.CompanyProducts) }
+            onCompanyProfileClick = { navigator.navController.navigate(CompanyRoutes.companyDetail(companyId)) },
+            onCompanyProductsClick = { navigator.navController.navigate(CompanyRoutes.companyProducts(companyId)) }
         )
     }
 
@@ -68,19 +98,34 @@ fun NavGraphBuilder.companyGraph(
             isLoading = companyState.IsLoading,
             errorMessage = companyState.ErrorMessage,
             onBackClick = { navigator.back() },
-            onCompanyClick = { navigator.navController.navigate(CompanyRoutes.CompanyDetail) },
-            onProductListClick = { navigator.navController.navigate(CompanyRoutes.CompanyProducts) },
-            onMessageClick = { navigator.navController.navigate(CompanyRoutes.CompanyContact) }
+            onCompanyClick = { companyId -> navigator.navController.navigate(CompanyRoutes.companyDetail(companyId)) },
+            onProductListClick = { companyId -> navigator.navController.navigate(CompanyRoutes.companyProducts(companyId)) },
+            onMessageClick = { companyId -> navigator.navController.navigate(CompanyRoutes.companyContact(companyId)) }
         )
     }
 
-    composable(CompanyRoutes.CompanyDetail) {
+    composable(
+        route = CompanyRoutes.CompanyDetail,
+        arguments = listOf(navArgument(CompanyRoutes.ArgCompanyId) { type = NavType.IntType })
+    ) { backStackEntry ->
+        val companyId = backStackEntry.arguments?.getInt(CompanyRoutes.ArgCompanyId) ?: 0
+        val companyState by companyController.State.collectAsState()
+
+        LaunchedEffect(languageId, companyId) {
+            if (companyId > 0) {
+                companyController.GetCompany(languageId = languageId, companyId = companyId)
+            }
+        }
+
         CompanyDetailScreen(
+            companyDto = companyState.CompanyResult?.Data,
+            isLoading = companyState.IsLoading,
+            errorMessage = companyState.ErrorMessage,
             onBackClick = { navigator.back() },
-            onHomeClick = { navigator.navController.navigate(CompanyRoutes.CompanyHome) },
-            onProductListClick = { navigator.navController.navigate(CompanyRoutes.CompanyProducts) },
-            onMessageClick = { navigator.navController.navigate(CompanyRoutes.CompanyContact) },
-            onContactClick = { navigator.navController.navigate(CompanyRoutes.CompanyContact) }
+            onHomeClick = { id -> navigator.navController.navigate(CompanyRoutes.companyHome(id)) },
+            onProductListClick = { id -> navigator.navController.navigate(CompanyRoutes.companyProducts(id)) },
+            onMessageClick = { id -> navigator.navController.navigate(CompanyRoutes.companyContact(id)) },
+            onContactClick = { id -> navigator.navController.navigate(CompanyRoutes.companyContact(id)) }
         )
     }
 }

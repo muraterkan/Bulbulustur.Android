@@ -891,9 +891,9 @@ fun NavGraphBuilder.accountGraph(
             onB2CStoreClick = {
                 when (accountState.StoreRequest?.StoreConfirmation) {
                     3 -> {
-                        navigator.navController.navigate(
-                            CompanyRoutes.CompanyHome
-                        )
+                        accountState.Company?.CompanyId?.takeIf { it > 0 }?.let { companyId ->
+                            navigator.navController.navigate(CompanyRoutes.companyHome(companyId))
+                        }
                     }
 
                     else -> {

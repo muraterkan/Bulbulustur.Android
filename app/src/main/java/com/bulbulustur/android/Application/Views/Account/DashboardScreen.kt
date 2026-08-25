@@ -74,7 +74,7 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BbTypography
 import com.bulbulustur.android.R
-import com.bulbulustur.android.businesslayer.Core.Network.MemberPictureUrlResolver
+import com.bulbulustur.android.businesslayer.Core.Network.ImageUrlResolver
 
 @Composable
 fun DashboardScreen(
@@ -109,7 +109,7 @@ fun DashboardScreen(
     onBasketClick: () -> Unit = {}
 ) {
     val profilePictureUrl =
-        MemberPictureUrlResolver.Resolve(
+        ImageUrlResolver.Resolve(
             memberPicture
         )
 

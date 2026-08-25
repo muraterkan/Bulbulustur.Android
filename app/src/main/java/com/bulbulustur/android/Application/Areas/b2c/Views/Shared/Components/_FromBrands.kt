@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components
 
+import com.bulbulustur.android.businesslayer.Core.Network.ImageUrlResolver
+
 import com.bulbulustur.android.Application.Localization.BBLocalization
 
 import androidx.compose.foundation.BorderStroke
@@ -198,7 +200,7 @@ private fun FromBrandsPageCard(
     onClick: () -> Unit
 ) {
     val imageUrl =
-        ResolveFromBrandsImageUrl(
+        ImageUrlResolver.Resolve(
             imagePath =
                 Page.MobilePicture
                     .takeIf {
@@ -331,41 +333,3 @@ private fun FromBrandsPageCard(
     }
 }
 
-private fun ResolveFromBrandsImageUrl(
-    imagePath: String
-): String {
-    val normalizedPath =
-        imagePath.trim()
-
-    if (
-        normalizedPath.isBlank()
-    ) {
-        return ""
-    }
-
-    if (
-        normalizedPath.startsWith(
-            "http://",
-            ignoreCase =
-                true
-        ) ||
-        normalizedPath.startsWith(
-            "https://",
-            ignoreCase =
-                true
-        )
-    ) {
-        return normalizedPath
-    }
-
-    val baseUrl =
-        ApiRoutes.BRAND_BASE_URL
-            .substringBefore(
-                "/api/"
-            )
-            .trimEnd(
-                '/'
-            )
-
-    return "$baseUrl/${normalizedPath.trimStart('/')}"
-}

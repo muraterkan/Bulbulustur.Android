@@ -7,6 +7,7 @@ import com.bulbulustur.android.businesslayer.Core.DTO.ProductHomepageSpecialCont
 import com.bulbulustur.android.businesslayer.Core.Interface.ICampaignRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IDealsOfTheDayRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IProductHomepageSpecialContentRepository
+import com.bulbulustur.android.businesslayer.Core.Interface.IProductRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,7 +25,8 @@ data class HomeControllerState(
 class HomeController(
     private val campaignRepository: ICampaignRepository,
     private val dealsOfTheDayRepository: IDealsOfTheDayRepository,
-    private val productHomepageSpecialContentRepository: IProductHomepageSpecialContentRepository
+    private val productHomepageSpecialContentRepository: IProductHomepageSpecialContentRepository,
+    private val productRepository: IProductRepository
 ) : BaseController() {
 
     private val _state = MutableStateFlow(HomeControllerState())
@@ -41,13 +43,39 @@ class HomeController(
 
             val campaignsResult = campaignRepository.GetCampaignsAsync(languageId, campaignCount)
             val dealsOfTheDaysResult = dealsOfTheDayRepository.GetDealsOfTheDaysAsync(languageId, dealsOfTheDayCount)
-            val specialContentsResult = productHomepageSpecialContentRepository.GetHomepageSpecialContentsAsync(languageId, specialContentCount)
+
+            val deals = dealsOfTheDaysResult.Data ?: emptyList()
+            val variantIds = deals.map { it.VariantId }.filter { it > 0 }.distinct()
+
+            val picturesResult = if (variantIds.isNotEmpty()) {
+                productRepository.GetDefaultProductVariantPicturesAsync(variantIds)
+            } else {
+                null
+            }
+
+            val pictures = picturesResult?.Data ?: emptyMap()
+
+            val dealsWithPictures = deals.map { deal ->
+                val picture = pictures[deal.VariantId.toString()].orEmpty()
+
+                if (picture.isNotBlank()) {
+                    deal.copy(DefaultPicture = picture)
+                } else {
+                    deal
+                }
+            }
+
+            val specialContentsResult =
+                productHomepageSpecialContentRepository.GetHomepageSpecialContentsAsync(
+                    languageId,
+                    specialContentCount
+                )
 
             _state.update {
                 it.copy(
                     IsLoading = false,
                     Campaigns = campaignsResult.Data ?: emptyList(),
-                    DealsOfTheDays = dealsOfTheDaysResult.Data ?: emptyList(),
+                    DealsOfTheDays = dealsWithPictures,
                     SpecialContents = specialContentsResult.Data ?: emptyList()
                 )
             }

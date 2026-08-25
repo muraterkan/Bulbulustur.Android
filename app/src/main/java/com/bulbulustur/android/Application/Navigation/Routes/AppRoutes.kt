@@ -19,6 +19,9 @@ object RetailRoutes {
     const val ArgCategoryId =
         "categoryId"
 
+    const val ArgSpecialGroupId =
+        "specialGroupId"
+
     const val Home =
         "retail/home"
 
@@ -37,6 +40,15 @@ object RetailRoutes {
 
     fun productList(categoryId: Int = 0): String {
         return "retail/product-list?$ArgCategoryId=$categoryId"
+    }
+
+    const val ProductHomepageSpecialList =
+        "retail/product-homepage-special-list/{$ArgSpecialGroupId}"
+
+    fun productHomepageSpecialList(
+        specialGroupId: Int
+    ): String {
+        return "retail/product-homepage-special-list/$specialGroupId"
     }
 
     const val ProductDetail =
@@ -135,6 +147,8 @@ object WholesaleRoutes {
 
     const val CategoryDetail =
         "wholesale/category-detail/{$ArgCategoryId}"
+
+    const val FeaturedProducts = "wholesale/featured-products"
 
     const val ProductList = "wholesale/product-list?$ArgCategoryId={$ArgCategoryId}"
 
@@ -371,11 +385,19 @@ object SettingsRoutes {
 }
 
 object CompanyRoutes {
-    const val CompanyHome = "company/home"
+    const val ArgCompanyId = "companyId"
+
+    const val CompanyHome = "company/home/{$ArgCompanyId}"
     const val CompanyList = "company/list"
-    const val CompanyDetail = "company/detail"
-    const val CompanyProducts = "company/products"
-    const val CompanyContact = "company/contact"
+    const val CompanyDetail = "company/detail/{$ArgCompanyId}"
+
+    fun companyHome(companyId: Int): String = "company/home/$companyId"
+    fun companyDetail(companyId: Int): String = "company/detail/$companyId"
+    const val CompanyProducts = "company/products/{$ArgCompanyId}"
+    const val CompanyContact = "company/contact/{$ArgCompanyId}"
+
+    fun companyProducts(companyId: Int): String = "company/products/$companyId"
+    fun companyContact(companyId: Int): String = "company/contact/$companyId"
 
     const val CompanyEdit = "company/edit"
     const val CompanyActivate = "company/activate"

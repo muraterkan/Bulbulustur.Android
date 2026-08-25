@@ -34,7 +34,7 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBLayout
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductBrowsingHistoryDTO
-import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
+import com.bulbulustur.android.businesslayer.Core.Network.ImageUrlResolver
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -175,14 +175,11 @@ private fun ProductBrowsingHistoryCard(
     onClick: () -> Unit
 ) {
     val imageUrl =
-        ResolveBrowsingHistoryImageUrl(
-            imagePath =
-                History.DefaultPicture
+        ImageUrlResolver.Resolve(History.DefaultPicture
                     .takeIf {
                         it.isNotBlank()
                     }
-                    ?: History.Picture
-        )
+                    ?: History.Picture)
 
     Surface(
         modifier =
@@ -198,14 +195,10 @@ private fun ProductBrowsingHistoryCard(
                 },
         shape =
             BBRadius.XlShape,
-        color =
-            MaterialTheme.colorScheme.surface,
-        border =
-            BorderStroke(
-                width =
-                    BBSpacing.BorderThin,
-                color =
-                    MaterialTheme.colorScheme.outlineVariant
+        color = MaterialTheme.colorScheme.surface,
+        border = BorderStroke(
+                width = BBSpacing.BorderThin,
+                color = MaterialTheme.colorScheme.outlineVariant
             )
     ) {
         Column {
@@ -357,45 +350,6 @@ private fun ProductBrowsingHistoryCard(
             }
         }
     }
-}
-
-private fun ResolveBrowsingHistoryImageUrl(
-    imagePath: String
-): String {
-    val normalizedPath =
-        imagePath.trim()
-
-    if (
-        normalizedPath.isBlank()
-    ) {
-        return ""
-    }
-
-    if (
-        normalizedPath.startsWith(
-            "http://",
-            ignoreCase =
-                true
-        ) ||
-        normalizedPath.startsWith(
-            "https://",
-            ignoreCase =
-                true
-        )
-    ) {
-        return normalizedPath
-    }
-
-    val baseUrl =
-        ApiRoutes.B2C_BASE_URL
-            .substringBefore(
-                "/api/"
-            )
-            .trimEnd(
-                '/'
-            )
-
-    return "$baseUrl/${normalizedPath.trimStart('/')}"
 }
 
 private fun FormatBrowsingHistoryPrice(

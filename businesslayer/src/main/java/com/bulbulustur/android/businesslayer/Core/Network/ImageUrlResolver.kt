@@ -1,35 +1,35 @@
 package com.bulbulustur.android.businesslayer.Core.Network
 
-object MemberPictureUrlResolver {
+object ImageUrlResolver {
 
     private const val WebApplicationOrigin =
-        "https://www.bulbulustur.com"
+        "https://dww.bulbulustur.com"
 
     fun Resolve(
-        picture: String?
+        imagePath: String?
     ): String {
-        val normalizedPicture =
-            picture
+        val normalizedPath =
+            imagePath
                 ?.trim()
                 .orEmpty()
 
-        if (normalizedPicture.isBlank()) {
+        if (normalizedPath.isBlank()) {
             return ""
         }
 
         if (
-            normalizedPicture.startsWith(
+            normalizedPath.startsWith(
                 "http://",
                 ignoreCase = true
             ) ||
-            normalizedPicture.startsWith(
+            normalizedPath.startsWith(
                 "https://",
                 ignoreCase = true
             )
         ) {
-            return normalizedPicture
+            return normalizedPath
         }
 
-        return "$WebApplicationOrigin/${normalizedPicture.trimStart('/')}"
+        return "$WebApplicationOrigin/${normalizedPath.trimStart('/')}"
     }
 }

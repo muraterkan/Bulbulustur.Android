@@ -55,7 +55,7 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BbTypography
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberDTO
-import com.bulbulustur.android.businesslayer.Core.Network.MemberPictureUrlResolver
+import com.bulbulustur.android.businesslayer.Core.Network.ImageUrlResolver
 
 @Composable
 fun AccountScreen(
@@ -126,7 +126,7 @@ fun AccountScreen(
     }
 
     val memberPictureUrl =
-        MemberPictureUrlResolver.Resolve(
+        ImageUrlResolver.Resolve(
             member?.Picture
         )
 

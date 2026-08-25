@@ -23,7 +23,10 @@ class CampaignController(
     private val _state = MutableStateFlow(CampaignControllerState())
     val State: StateFlow<CampaignControllerState> = _state.asStateFlow()
 
-    fun LoadCampaigns(languageId: Int, count: Int = 20) {
+    fun LoadCampaigns(
+        languageId: Int,
+        count: Int = 20
+    ) {
         viewModelScope.launch {
             _state.update {
                 it.copy(
@@ -32,7 +35,10 @@ class CampaignController(
                 )
             }
 
-            val result = campaignRepository.GetCampaignsAsync(languageId, count)
+            val result = campaignRepository.GetCampaignsAsync(
+                languageId = languageId,
+                count = count
+            )
 
             _state.update {
                 it.copy(
@@ -44,7 +50,54 @@ class CampaignController(
         }
     }
 
-    fun LoadCampaignDetail(languageId: Int, campaignId: Int) {
+    fun LoadCampaignsByCategory(
+        languageId: Int,
+        categoryId: Int,
+        count: Int = 8
+    ) {
+        if (
+            languageId <= 0 ||
+            categoryId <= 0 ||
+            count <= 0
+        ) {
+            _state.update {
+                it.copy(
+                    Campaigns = emptyList()
+                )
+            }
+
+            return
+        }
+
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    IsLoading = true,
+                    Campaigns = emptyList(),
+                    ErrorMessage = null
+                )
+            }
+
+            val result = campaignRepository.GetCampaignsByCategoryAsync(
+                languageId = languageId,
+                categoryId = categoryId,
+                count = count
+            )
+
+            _state.update {
+                it.copy(
+                    IsLoading = false,
+                    Campaigns = result.Data ?: emptyList(),
+                    ErrorMessage = result.Message
+                )
+            }
+        }
+    }
+
+    fun LoadCampaignDetail(
+        languageId: Int,
+        campaignId: Int
+    ) {
         viewModelScope.launch {
             _state.update {
                 it.copy(
@@ -54,7 +107,10 @@ class CampaignController(
                 )
             }
 
-            val result = campaignRepository.GetCampaignByIdExtendedAsync(languageId, campaignId)
+            val result = campaignRepository.GetCampaignByIdExtendedAsync(
+                languageId = languageId,
+                campaignId = campaignId
+            )
 
             _state.update {
                 it.copy(

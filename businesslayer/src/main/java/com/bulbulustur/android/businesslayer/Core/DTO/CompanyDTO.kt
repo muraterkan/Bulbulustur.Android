@@ -44,6 +44,12 @@ data class CompanyDTO(
     val SeoDescription: String = "",
     val Rating: String = "",
     val BusinessTypes: String = "",
+    val About: String? = null,
+    val WhyUs: String? = null,
+    val SystemDescNumberOfEmployee: String? = null,
+    val ExportMarketsList: String? = null,
     val CompanyCapabilities: String = "",
-    val CompanyProducts: List<WholesaleProductDTO> = emptyList()
+    val CompanyProducts: List<WholesaleProductDTO> = emptyList(),
+    val CompanyPictures: List<CompanyPictureDTO> = emptyList(),
+    val CompanyCertificates: List<CompanyCertificateDTO> = emptyList()
 )

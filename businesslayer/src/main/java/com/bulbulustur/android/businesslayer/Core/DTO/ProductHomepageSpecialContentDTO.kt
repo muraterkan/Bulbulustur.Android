@@ -6,7 +6,8 @@ data class ProductHomepageSpecialContentDTO(
     val InsertedDate: String = "",
     val StatusId: Int = 0,
     val SpecialContentGroupId: Int = 0,
-    val ProductSpecialGroupId: Int = 0,
+    val ProductSpecialGroupId: Int = 0,    val ContentName: String = "",
+
     val GroupName: String = "",
     val Products: List<ProductHomepageSpecialDTO> = emptyList()
 )

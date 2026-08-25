@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2b.Views.Home.Components
 
+import com.bulbulustur.android.businesslayer.Core.Network.ImageUrlResolver
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -30,7 +32,6 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleHomepageFeaturedProductDTO
-import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
 
 @Composable
 fun HomepageFeaturedProducts(
@@ -148,12 +149,8 @@ private fun WholesaleHomepageFeaturedProductDTO.ToWholesaleProductCardModel(
             ""
         },
         BadgeText = BBLocalization.Current.Get(key = "d02a9b8b-001b-4e99-9073-9150016441f3", fallback = "Öne Çıkan"),
-        ImageUrl = ResolveWholesaleHomepageFeaturedProductImageUrl(DefaultPicture),
+        ImageUrl = ImageUrlResolver.Resolve(DefaultPicture),
         IsFavorite = isFavorite
     )
 }
 
-private fun ResolveWholesaleHomepageFeaturedProductImageUrl(imagePath: String):
-String {
-    return ApiRoutes.B2C_TEST_PRODUCT_IMAGE_URL
-}

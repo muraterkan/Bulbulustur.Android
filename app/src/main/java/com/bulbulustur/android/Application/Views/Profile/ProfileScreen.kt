@@ -55,7 +55,7 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BbTypography
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberProfileDTO
-import com.bulbulustur.android.businesslayer.Core.Network.MemberPictureUrlResolver
+import com.bulbulustur.android.businesslayer.Core.Network.ImageUrlResolver
 
 @Suppress("UNUSED_PARAMETER")
 @Composable
@@ -105,7 +105,7 @@ fun ProfileScreen(
         ?: unspecified
 
     val memberPictureUrl =
-        MemberPictureUrlResolver.Resolve(
+        ImageUrlResolver.Resolve(
             member?.Picture
                 ?.takeIf { it.isNotBlank() }
                 ?: memberPicture

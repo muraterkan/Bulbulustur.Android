@@ -21,6 +21,7 @@ import com.bulbulustur.android.Application.Areas.b2b.Views.Category.WholesaleCat
 import com.bulbulustur.android.Application.Areas.b2b.Views.Home.WholesaleHomeScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Search.SearchScreen as WholesaleSearchScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Product.WholesaleProductListScreen
+import com.bulbulustur.android.Application.Areas.b2b.Views.Product.WholesaleFeaturedProductsScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Product.WholesaleProductDetailScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Product.LastPriceRequestScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Product.SampleRequestScreen
@@ -81,6 +82,9 @@ fun NavGraphBuilder.wholesaleGraph(
             onProductListClick = {
                 navigator.navigateToWholesaleCategories()
             },
+            onFeaturedProductsClick = {
+                navigator.navController.navigate(WholesaleRoutes.FeaturedProducts)
+            },
             onProductDetailClick = { productId ->
                 navigator.navController.navigate(
                     WholesaleRoutes.productDetail(productId)
@@ -112,6 +116,14 @@ fun NavGraphBuilder.wholesaleGraph(
             },
             onAccountClick = {
                 navigator.navigateToAccount()
+            }
+        )
+    }
+
+    composable(route = WholesaleRoutes.FeaturedProducts) {
+        WholesaleFeaturedProductsScreen(
+            onBackClick = {
+                navigator.back()
             }
         )
     }
@@ -421,10 +433,16 @@ fun NavGraphBuilder.wholesaleGraph(
             },
 
             onCompanyClick = {
-                navigator.navController.navigate(CompanyRoutes.CompanyDetail)
+                val companyId = productState.ProductDetailResult?.Data?.CompanyId ?: 0
+                if (companyId > 0) {
+                    navigator.navController.navigate(CompanyRoutes.companyDetail(companyId))
+                }
             },
             onCompanyProductsClick = {
-                navigator.navController.navigate(CompanyRoutes.CompanyProducts)
+                val companyId = productState.ProductDetailResult?.Data?.CompanyId ?: 0
+                if (companyId > 0) {
+                    navigator.navController.navigate(CompanyRoutes.companyProducts(companyId))
+                }
             },
             onRelatedProductClick = { product ->
                 if (product.id > 0) {
@@ -442,7 +460,10 @@ fun NavGraphBuilder.wholesaleGraph(
             },
             onRelatedProductsClick = {},
             onCompanyBestSellerProductsClick = {
-                navigator.navController.navigate(CompanyRoutes.CompanyProducts)
+                val companyId = productState.ProductDetailResult?.Data?.CompanyId ?: 0
+                if (companyId > 0) {
+                    navigator.navController.navigate(CompanyRoutes.companyProducts(companyId))
+                }
             },
             onRelatedCategoryClick = { category ->
                 if (category.id > 0) {

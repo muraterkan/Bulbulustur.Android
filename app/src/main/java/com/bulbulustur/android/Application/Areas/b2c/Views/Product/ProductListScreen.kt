@@ -41,7 +41,7 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
 import com.bulbulustur.android.businesslayer.Core.DTO.B2CProductData
 import com.bulbulustur.android.businesslayer.Core.DTO.B2CProductFilterDTO
-import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
+import com.bulbulustur.android.businesslayer.Core.Network.ImageUrlResolver
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -640,9 +640,7 @@ private fun B2CProductData.ToProductCardModel(
         StoreName =
             "",
         ImageUrl =
-            ResolveProductImageUrl(
-                DefaultPicture
-            ),
+            ImageUrlResolver.Resolve(DefaultPicture),
         PriceText =
             FormatProductPrice(
                 price =
@@ -661,12 +659,6 @@ private fun B2CProductData.ToProductCardModel(
         IsFavorite =
             isFavorite
     )
-}
-
-private fun ResolveProductImageUrl(
-    picture: String
-): String {
-    return ApiRoutes.B2C_TEST_PRODUCT_IMAGE_URL
 }
 
 private fun FormatProductPrice(

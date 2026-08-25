@@ -7,6 +7,7 @@ data class CompanyCertificateDTO(
     val CompanyId: Int = 0,
     val StatusId: Int = 0,
     val QualityCertificateTypeId: Int? = null,
+    val Certificate: String = "",
     val Description: String = "",
     val Picture: String = "",
     val Sorting: Int = 0,

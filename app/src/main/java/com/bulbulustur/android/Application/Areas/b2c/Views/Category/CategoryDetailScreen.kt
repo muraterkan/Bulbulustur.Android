@@ -1,17 +1,14 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Category
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -20,13 +17,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.LocalOffer
-import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.outlined.Storefront
-import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -37,28 +33,46 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.bulbulustur.android.Application.Areas.b2c.Views.Category.Components.CategoryProductShowcaseContent
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailBottomNavigation
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailBottomNavigationItem
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeader
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeaderLeadingAction
 import com.bulbulustur.android.Application.Localization.BBLocalization
+import com.bulbulustur.android.Application.Views.Shared.Components.BbProductCard
+import com.bulbulustur.android.Application.Views.Shared.Components.BbProductCardModel
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbIconBox
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbIconBoxSize
-import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
+import com.bulbulustur.android.businesslayer.Core.DTO.AdvertSponsoredDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.B2CProductData
+import com.bulbulustur.android.businesslayer.Core.DTO.CampaignDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.ProductHomepageSpecialContentDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.ProductHomepageSpecialDTO
+import com.bulbulustur.android.businesslayer.Core.Network.ImageUrlResolver
+import java.text.NumberFormat
+import java.util.Locale
 
 @Composable
 fun CategoryDetailScreen(
-    categoryId: Int = 1,
+    categoryId: Int = 0,
     categoryInfo: ProductCategoryDTO? = null,
     childCategories: List<ProductCategoryDTO> = emptyList(),
+    specialContents: List<ProductHomepageSpecialContentDTO> = emptyList(),
+    products: List<B2CProductData> = emptyList(),
+    campaigns: List<CampaignDTO> = emptyList(),
+    sponsoredAdverts: List<AdvertSponsoredDTO> = emptyList(),
+    isProductLoading: Boolean = false,
+    isSpecialContentsLoading: Boolean = false,
+
     onBackClick: () -> Unit = {},
     onMenuClick: () -> Unit = {},
     onFavoriteClick: () -> Unit = {},
@@ -67,20 +81,28 @@ fun CategoryDetailScreen(
     onModeSwitchClick: () -> Unit = {},
     onBasketClick: () -> Unit = {},
     onAccountClick: () -> Unit = {},
-    onSubCategoryClick: (RetailSubCategoryItem) -> Unit = {},
-    onProductClick: (RetailCategoryProductItem) -> Unit = {},
-    onCampaignClick: (RetailCategoryCampaignItem) -> Unit = {},
-    onQuickFilterClick: (String) -> Unit = {},
+    onSubCategoryClick: (Int) -> Unit = {},
+
+    onSpecialProductClick: (ProductHomepageSpecialDTO) -> Unit = {},
+    onSpecialProductFavoriteClick: (ProductHomepageSpecialDTO) -> Unit = {},
+    onSpecialAddToBasketClick: (Int) -> Unit = {},
+    onSpecialViewAllClick: (ProductHomepageSpecialContentDTO) -> Unit = {},
+    onProductClick: (B2CProductData) -> Unit = {},
+    onProductFavoriteClick: (B2CProductData) -> Unit = {},
+    onAddToBasketClick: (Int) -> Unit = {},
+    onSponsoredProductClick: (AdvertSponsoredDTO) -> Unit = {},
+    onSponsoredFavoriteClick: (AdvertSponsoredDTO) -> Unit = {},
+    onSponsoredAddToBasketClick: (Int) -> Unit = {},
+    onCampaignClick: (CampaignDTO) -> Unit = {},
     onSearchClick: (String) -> Unit = {}
 ) {
-    val category = getRetailCategoryDetail(
-        categoryId = categoryId,
-        categoryInfo = categoryInfo,
-        childCategories = childCategories
-    )
+    var searchText by remember { mutableStateOf("") }
+    var favoriteSponsoredIds by remember { mutableStateOf<Set<Int>>(emptySet()) }
 
-    var searchText by remember {
-        mutableStateOf("")
+    val validChildCategories = remember(childCategories) {
+        childCategories
+            .filter { it.ProductCategoryId > 0 && it.CategoryName.isNotBlank() }
+            .distinctBy { it.ProductCategoryId }
     }
 
     Scaffold(
@@ -89,21 +111,18 @@ fun CategoryDetailScreen(
         topBar = {
             RetailSearchHeader(
                 searchText = searchText,
-                onSearchTextChange = {
-                    searchText = it
-                },
-                placeholder = BBLocalization.Current.Get(key = "e4f653c3-8828-4934-aa3b-959cede38feb", fallback = "Ürün, kategori veya marka ara"),
+                onSearchTextChange = { searchText = it },
+                placeholder = BBLocalization.Current.Get(
+                    key = "e4f653c3-8828-4934-aa3b-959cede38feb",
+                    fallback = "Ürün, kategori veya marka ara"
+                ),
                 leadingAction = RetailSearchHeaderLeadingAction.Back,
                 onBackClick = onBackClick,
                 onMenuClick = onMenuClick,
                 onFavoriteClick = onFavoriteClick,
                 onMessageClick = onMessageClick,
-                onSearchClick = {
-                    onSearchClick(searchText)
-                },
-                onClearClick = {
-                    searchText = ""
-                }
+                onSearchClick = { onSearchClick(searchText) },
+                onClearClick = { searchText = "" }
             )
         },
         bottomBar = {
@@ -136,40 +155,62 @@ fun CategoryDetailScreen(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.SectionGapCompact)
         ) {
             item {
-                CategoryDetailHero(category = category)
-            }
-
-            item {
-                CategorySubCategorySection(
-                    subCategories = category.subCategories,
-                    onSubCategoryClick = onSubCategoryClick
+                CategoryDetailHero(
+                    categoryId = categoryId,
+                    categoryInfo = categoryInfo,
+                    childCategoryCount = validChildCategories.size,
+                    hasShowcase = specialContents.isNotEmpty() ||
+                            isSpecialContentsLoading ||
+                            campaigns.isNotEmpty() ||
+                            sponsoredAdverts.isNotEmpty()
                 )
             }
 
+            if (validChildCategories.isNotEmpty()) {
+                item {
+                    CategorySubCategorySectionHeader()
+                }
+
+                items(
+                    items = validChildCategories,
+                    key = { it.ProductCategoryId }
+                ) { category ->
+                    CategorySubCategoryRow(
+                        category = category,
+                        onClick = { onSubCategoryClick(category.ProductCategoryId) }
+                    )
+                }
+            }
+
             item {
-                CategoryCampaignSection(
-                    campaigns = category.campaigns,
+                CategoryShowcaseSection(
+                    specialContents = specialContents,
+                    isSpecialContentsLoading = isSpecialContentsLoading,
+                    campaigns = campaigns,
+                    onSpecialProductClick = onSpecialProductClick,
+                    onSpecialProductFavoriteClick = onSpecialProductFavoriteClick,
+                    onSpecialAddToBasketClick = onSpecialAddToBasketClick,
+                    onSpecialViewAllClick = onSpecialViewAllClick,
                     onCampaignClick = onCampaignClick
                 )
             }
 
             item {
-                CategoryQuickFilterSection(
-                    filters = category.quickFilters,
-                    onQuickFilterClick = onQuickFilterClick
-                )
-            }
+                CategorySponsoredFeaturedSection(
+                    sponsoredAdverts = sponsoredAdverts,
+                    favoriteSponsoredIds = favoriteSponsoredIds,
+                    onSponsoredProductClick = onSponsoredProductClick,
+                    onSponsoredFavoriteClick = { advert ->
+                        favoriteSponsoredIds =
+                            if (favoriteSponsoredIds.contains(advert.ProductId)) {
+                                favoriteSponsoredIds - advert.ProductId
+                            } else {
+                                favoriteSponsoredIds + advert.ProductId
+                            }
 
-            item {
-                CategoryProductSectionHeader()
-            }
-
-            items(category.products) { product ->
-                CategoryProductRow(
-                    product = product,
-                    onClick = {
-                        onProductClick(product)
-                    }
+                        onSponsoredFavoriteClick(advert)
+                    },
+                    onSponsoredAddToBasketClick = onSponsoredAddToBasketClick
                 )
             }
         }
@@ -178,18 +219,53 @@ fun CategoryDetailScreen(
 
 @Composable
 private fun CategoryDetailHero(
-    category: RetailCategoryDetail
+    categoryId: Int,
+    categoryInfo: ProductCategoryDTO?,
+    childCategoryCount: Int,
+    hasShowcase: Boolean
 ) {
-    BbCard(
+    val categoryName = categoryInfo
+        ?.CategoryName
+        ?.takeIf { it.isNotBlank() }
+        ?: BBLocalization.Current.Get(
+            key = "1a132fdc-096f-42d7-835d-96b0a17b3675",
+            fallback = ""
+        )
+
+    val description = categoryInfo
+        ?.Breadcrumb
+        .orEmpty()
+        .takeIf {
+            it.isNotBlank() &&
+                    it != categoryId.toString() &&
+                    it.any { character -> !character.isDigit() }
+        }
+        .orEmpty()
+
+    val childLabel = BBLocalization.Current.Get(
+        key = "19e928cc-d4e4-426f-a1e8-fb8d9adf872f",
+        fallback = ""
+    )
+
+    Surface(
         modifier = Modifier.fillMaxWidth(),
-        variant = BbCardVariant.Default,
-        padding = BbCardPadding.Large
+        shape = BBRadius.XxlShape,
+        color = MaterialTheme.colorScheme.primaryContainer,
+        border = BorderStroke(
+            width = 1.dp,
+            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.35f)
+        )
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(BBSpacing.Space5),
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
             ) {
                 BbIconBox(
                     size = BbIconBoxSize.Xl,
@@ -197,292 +273,105 @@ private fun CategoryDetailHero(
                     contentColor = MaterialTheme.colorScheme.onPrimary,
                     radius = BBRadius.xl
                 ) {
-                    Text(
-                        text = category.iconText,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onPrimary
+                    Icon(
+                        imageVector = ResolveRetailCategoryIcon(categoryInfo?.IconClass.orEmpty()),
+                        contentDescription = null,
+                        modifier = Modifier.size(BBIcon.Ui),
+                        tint = MaterialTheme.colorScheme.onPrimary
                     )
                 }
 
-                Spacer(modifier = Modifier.width(BBSpacing.Space4))
-
                 Column(
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                 ) {
                     Text(
-                        text = category.name,
+                        text = categoryName,
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface
                     )
 
-                    Spacer(modifier = Modifier.height(BBSpacing.Space1))
-
-                    Text(
-                        text = category.description,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                    if (description.isNotBlank()) {
+                        Text(
+                            text = description,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
                 }
             }
 
-            Spacer(modifier = Modifier.height(BBSpacing.Space4))
+            if (childCategoryCount > 0 || hasShowcase) {
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+                ) {
+                    if (childCategoryCount > 0) {
+                        item {
+                            CategoryInfoChip(
+                                text = if (childLabel.isNotBlank()) {
+                                    "$childCategoryCount $childLabel"
+                                } else {
+                                    childCategoryCount.toString()
+                                }
+                            )
+                        }
+                    }
 
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
-            ) {
-                CategoryStatPill("${category.productCount}", BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = ""))
-                CategoryStatPill("${category.storeCount}", BBLocalization.Current.Get(key = "a4bd79dd-e7ee-4407-9e7d-00582840c43a", fallback = "mağaza"))
-                CategoryStatPill("${category.campaignCount}", "kampanya")
+                    if (hasShowcase) {
+                        item {
+                            CategoryInfoChip(
+                                text = BBLocalization.Current.Get(
+                                    key = "21f6b0ee-67eb-40fb-899d-640fb99a7397",
+                                    fallback = "Kategori Vitrinleri"
+                                )
+                            )
+                        }
+                    }
+                }
             }
         }
     }
 }
 
 @Composable
-private fun CategoryStatPill(
-    title: String,
-    subtitle: String
+private fun CategoryInfoChip(
+    text: String
 ) {
-    Column(
-        modifier = Modifier
-            .background(
-                color = MaterialTheme.colorScheme.surfaceVariant,
-                shape = BBRadius.PillShape
-            )
-            .padding(
+    Surface(
+        shape = BBRadius.PillShape,
+        color = MaterialTheme.colorScheme.surfaceVariant
+    ) {
+        Text(
+            text = text,
+            modifier = Modifier.padding(
                 horizontal = BBSpacing.Space3,
                 vertical = BBSpacing.Space2
-            )
-    ) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleSmall,
-            fontWeight = FontWeight.Bold,
+            ),
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = FontWeight.SemiBold,
             color = MaterialTheme.colorScheme.onSurface
         )
+    }
+}
 
-        Text(
-            text = subtitle,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+@Composable
+private fun CategorySubCategorySectionHeader() {
+    RetailCategorySectionTitle(
+        title = BBLocalization.Current.Get(
+            key = "19e928cc-d4e4-426f-a1e8-fb8d9adf872f",
+            fallback = ""
+        ),
+        description = BBLocalization.Current.Get(
+            key = "74a46e5a-2695-4867-8660-b0fe2b4f8528",
+            fallback = "Doğrudan ürün akışına inmek için hızlı seçim."
         )
-    }
-}
-
-@Composable
-private fun CategorySubCategorySection(
-    subCategories: List<RetailSubCategoryItem>,
-    onSubCategoryClick: (RetailSubCategoryItem) -> Unit
-) {
-    Column(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        RetailSectionTitle(
-            title = BBLocalization.Current.Get(key = "19e928cc-d4e4-426f-a1e8-fb8d9adf872f", fallback = ""),
-            description = BBLocalization.Current.Get(key = "74a46e5a-2695-4867-8660-b0fe2b4f8528", fallback = "Doğrudan ürün akışına inmek için hızlı seçim.")
-        )
-
-        Spacer(modifier = Modifier.height(BBSpacing.Space3))
-
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
-        ) {
-            items(subCategories) { subCategory ->
-                SubCategoryCard(
-                    subCategory = subCategory,
-                    onClick = {
-                        onSubCategoryClick(subCategory)
-                    }
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun SubCategoryCard(
-    subCategory: RetailSubCategoryItem,
-    onClick: () -> Unit
-) {
-    BbCard(
-        modifier = Modifier.width(BBSpacing.Space24 + BBSpacing.Space12),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium,
-        onClick = onClick
-    ) {
-        Column {
-            BbIconBox(
-                size = BbIconBoxSize.Medium,
-                backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
-                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                radius = BBRadius.lg
-            ) {
-                Text(
-                    text = subCategory.iconText,
-                    style = MaterialTheme.typography.labelLarge,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSecondaryContainer
-                )
-            }
-
-            Spacer(modifier = Modifier.height(BBSpacing.Space3))
-
-            Text(
-                text = subCategory.name,
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-
-            Spacer(modifier = Modifier.height(BBSpacing.Space1))
-
-            Text(
-                text = "${subCategory.productCount} ürün",
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-    }
-}
-
-@Composable
-private fun CategoryCampaignSection(
-    campaigns: List<RetailCategoryCampaignItem>,
-    onCampaignClick: (RetailCategoryCampaignItem) -> Unit
-) {
-    Column(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        RetailSectionTitle(
-            title = BBLocalization.Current.Get(key = "21f6b0ee-67eb-40fb-899d-640fb99a7397", fallback = "Kategori Vitrinleri"),
-            description = BBLocalization.Current.Get(key = "9beff001-6dd9-4017-9f1f-72ef6606495a", fallback = "Ürün, mağaza ve kampanya akışlarına hızlı geç.")
-        )
-
-        Spacer(modifier = Modifier.height(BBSpacing.Space3))
-
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
-        ) {
-            items(campaigns) { campaign ->
-                CategoryCampaignCard(
-                    campaign = campaign,
-                    onClick = {
-                        onCampaignClick(campaign)
-                    }
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun CategoryCampaignCard(
-    campaign: RetailCategoryCampaignItem,
-    onClick: () -> Unit
-) {
-    BbCard(
-        modifier = Modifier.width(BBSpacing.Space24 + BBSpacing.Space16),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Large,
-        onClick = onClick
-    ) {
-        Column(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(BBIcon.BoxMd)
-                    .background(
-                        color = campaign.backgroundColor,
-                        shape = BBRadius.LgShape
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = campaign.icon,
-                    contentDescription = null,
-                    tint = campaign.iconColor,
-                    modifier = Modifier.size(BBIcon.Ui)
-                )
-            }
-
-            Spacer(modifier = Modifier.height(BBSpacing.Space4))
-
-            Text(
-                text = campaign.badge,
-                style = MaterialTheme.typography.labelSmall,
-                fontWeight = FontWeight.Bold,
-                color = campaign.iconColor
-            )
-
-            Spacer(modifier = Modifier.height(BBSpacing.Space2))
-
-            Text(
-                text = campaign.title,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-
-            Spacer(modifier = Modifier.height(BBSpacing.Space2))
-
-            Text(
-                text = campaign.description,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-private fun CategoryQuickFilterSection(
-    filters: List<String>,
-    onQuickFilterClick: (String) -> Unit
-) {
-    Column(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        RetailSectionTitle(
-            title = BBLocalization.Current.Get(key = "06861c0e-a393-4c0d-8851-978793cae548", fallback = ""),
-            description = BBLocalization.Current.Get(key = "095ec6b8-65fd-4f79-9512-e675636a5455", fallback = "Listeye geçmeden önce akışı daralt.")
-        )
-
-        Spacer(modifier = Modifier.height(BBSpacing.Space2))
-
-        FlowRow(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
-        ) {
-            filters.forEach { filter ->
-                AssistChip(
-                    onClick = {
-                        onQuickFilterClick(filter)
-                    },
-                    label = {
-                        Text(text = filter)
-                    }
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun CategoryProductSectionHeader() {
-    RetailSectionTitle(
-        title = BBLocalization.Current.Get(key = "1c7c6ac9-2b6d-46ec-90f0-3f88b65beb11", fallback = ""),
-        description = BBLocalization.Current.Get(key = "4340b4b1-5348-4601-ad94-18ea0ca8f5cc", fallback = "Bu kategoride dikkat çeken ürünlerden kısa bir seçki.")
     )
 }
 
 @Composable
-private fun CategoryProductRow(
-    product: RetailCategoryProductItem,
+private fun CategorySubCategoryRow(
+    category: ProductCategoryDTO,
     onClick: () -> Unit
 ) {
     BbCard(
@@ -493,58 +382,244 @@ private fun CategoryProductRow(
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
-            Box(
-                modifier = Modifier
-                    .size(BBSpacing.Space16 + BBSpacing.Space1)
-                    .background(
-                        color = MaterialTheme.colorScheme.surfaceVariant,
-                        shape = BBRadius.XlShape
-                    ),
-                contentAlignment = Alignment.Center
+            BbIconBox(
+                size = BbIconBoxSize.Medium,
+                backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+                contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                radius = BBRadius.lg
             ) {
-                Text(
-                    text = product.imageText,
-                    style = MaterialTheme.typography.labelLarge,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-
-            Spacer(modifier = Modifier.width(BBSpacing.Space4))
-
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
-                Text(
-                    text = product.name,
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-
-                Spacer(modifier = Modifier.height(BBSpacing.Space1))
-
-                Text(
-                    text = product.storeName,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-
-                Spacer(modifier = Modifier.height(BBSpacing.Space2))
-
-                Text(
-                    text = product.priceText,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary
+                Icon(
+                    imageVector = ResolveRetailCategoryIcon(category.IconClass.orEmpty()),
+                    contentDescription = null,
+                    modifier = Modifier.size(BBIcon.Ui),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
             Text(
-                text = "›",
-                style = MaterialTheme.typography.headlineSmall,
+                text = category.CategoryName,
+                modifier = Modifier.weight(1f),
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
+            Icon(
+                imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+@Composable
+private fun CategoryShowcaseSection(
+    specialContents: List<ProductHomepageSpecialContentDTO>,
+    isSpecialContentsLoading: Boolean,
+    campaigns: List<CampaignDTO>,
+    onSpecialProductClick: (ProductHomepageSpecialDTO) -> Unit,
+    onSpecialProductFavoriteClick: (ProductHomepageSpecialDTO) -> Unit,
+    onSpecialAddToBasketClick: (Int) -> Unit,
+    onSpecialViewAllClick: (ProductHomepageSpecialContentDTO) -> Unit,
+    onCampaignClick: (CampaignDTO) -> Unit
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+    ) {
+        RetailCategorySectionTitle(
+            title = BBLocalization.Current.Get(
+                key = "21f6b0ee-67eb-40fb-899d-640fb99a7397",
+                fallback = "Kategori Vitrinleri"
+            ),
+            description = BBLocalization.Current.Get(
+                key = "9beff001-6dd9-4017-9f1f-72ef6606495a",
+                fallback = "Ürün, mağaza ve kampanya akışlarına hızlı geç."
+            )
+        )
+
+        CategoryProductShowcaseContent(
+            specialContents = specialContents,
+            isLoading = isSpecialContentsLoading,
+            onProductClick = onSpecialProductClick,
+            onFavoriteClick = onSpecialProductFavoriteClick,
+            onAddToBasketClick = onSpecialAddToBasketClick,
+            onViewAllClick = onSpecialViewAllClick
+        )
+
+        if (campaigns.isNotEmpty()) {
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+                contentPadding = PaddingValues(end = BBSpacing.Space3)
+            ) {
+                items(
+                    items = campaigns.filter { it.CampaignId > 0 },
+                    key = { it.CampaignId }
+                ) { campaign ->
+                    CategoryCampaignCard(
+                        campaign = campaign,
+                        onClick = { onCampaignClick(campaign) }
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun CategorySponsoredFeaturedSection(
+    sponsoredAdverts: List<AdvertSponsoredDTO>,
+    favoriteSponsoredIds: Set<Int>,
+    onSponsoredProductClick: (AdvertSponsoredDTO) -> Unit,
+    onSponsoredFavoriteClick: (AdvertSponsoredDTO) -> Unit,
+    onSponsoredAddToBasketClick: (Int) -> Unit
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+    ) {
+        RetailCategorySectionTitle(
+            title = BBLocalization.Current.Get(
+                key = "1c7c6ac9-2b6d-46ec-90f0-3f88b65beb11",
+                fallback = "Öne Çıkan Ürünler"
+            ),
+            description = BBLocalization.Current.Get(
+                key = "4340b4b1-5348-4601-ad94-18ea0ca8f5cc",
+                fallback = "Bu kategoride dikkat çeken seçili ürünlerden kısa bir seçki."
+            )
+        )
+
+        if (sponsoredAdverts.isEmpty()) {
+            CategoryProductEmpty()
+        } else {
+            sponsoredAdverts
+                .filter { it.ProductId > 0 }
+                .take(6)
+                .chunked(2)
+                .forEach { rowProducts ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+                        verticalAlignment = Alignment.Top
+                    ) {
+                        rowProducts.forEach { advert ->
+                            val isFavorite = favoriteSponsoredIds.contains(advert.ProductId)
+
+                            BbProductCard(
+                                modifier = Modifier.weight(1f),
+                                product = advert.ToSponsoredProductCardModel(
+                                    isFavorite = isFavorite
+                                ),
+                                onClick = {
+                                    onSponsoredProductClick(advert)
+                                },
+                                onFavoriteClick = {
+                                    onSponsoredFavoriteClick(advert)
+                                },
+                                onAddToBasketClick = {
+                                    if (advert.ProductVariantPriceId > 0) {
+                                        onSponsoredAddToBasketClick(
+                                            advert.ProductVariantPriceId
+                                        )
+                                    }
+                                }
+                            )
+                        }
+
+                        if (rowProducts.size == 1) {
+                            Spacer(
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
+                    }
+                }
+        }
+    }
+}
+
+@Composable
+private fun CategoryCampaignCard(
+    campaign: CampaignDTO,
+    onClick: () -> Unit
+) {
+    BbCard(
+        modifier = Modifier.width(BBSpacing.Space24 + BBSpacing.Space16),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Large,
+        onClick = onClick
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+        ) {
+            BbIconBox(
+                size = BbIconBoxSize.Medium,
+                backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+                contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                radius = BBRadius.lg
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.LocalOffer,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+            ) {
+                Text(
+                    text = campaign.CampaignName,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+
+                if (campaign.Description.isNotBlank()) {
+                    Text(
+                        text = campaign.Description,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun CategoryProductEmpty() {
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        shape = BBRadius.XlShape,
+        color = MaterialTheme.colorScheme.surfaceVariant
+    ) {
+        Column(
+            modifier = Modifier.padding(BBSpacing.Space5),
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+        ) {
+            Text(
+                text = BBLocalization.Current.Get(
+                    key = "9afc052e-e2bf-413d-81c6-461bfc3c9174",
+                    fallback = "Ürün bulunamadı"
+                ),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
+            Text(
+                text = BBLocalization.Current.Get(
+                    key = "59f50847-365f-4959-b050-641d7c1e18cc",
+                    fallback = "Arama veya filtre seçimini değiştirerek tekrar deneyebilirsin."
+                ),
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
@@ -552,162 +627,71 @@ private fun CategoryProductRow(
 }
 
 @Composable
-private fun RetailSectionTitle(
+private fun RetailCategorySectionTitle(
     title: String,
     description: String
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
     ) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onBackground
-        )
+        if (title.isNotBlank()) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+        }
 
-        Spacer(modifier = Modifier.height(BBSpacing.Space1))
-
-        Text(
-            text = description,
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
+        if (description.isNotBlank()) {
+            Text(
+                text = description,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
     }
 }
 
-data class RetailCategoryDetail(
-    val id: Int,
-    val name: String,
-    val description: String,
-    val iconText: String,
-    val productCount: Int,
-    val storeCount: Int,
-    val campaignCount: Int,
-    val subCategories: List<RetailSubCategoryItem>,
-    val campaigns: List<RetailCategoryCampaignItem>,
-    val quickFilters: List<String>,
-    val products: List<RetailCategoryProductItem>
-)
-
-data class RetailSubCategoryItem(
-    val id: Int,
-    val name: String,
-    val iconText: String,
-    val productCount: Int
-)
-
-data class RetailCategoryCampaignItem(
-    val id: Int,
-    val title: String,
-    val description: String,
-    val badge: String,
-    val icon: androidx.compose.ui.graphics.vector.ImageVector,
-    val backgroundColor: androidx.compose.ui.graphics.Color,
-    val iconColor: androidx.compose.ui.graphics.Color
-)
-
-data class RetailCategoryProductItem(
-    val id: Int,
-    val name: String,
-    val storeName: String,
-    val priceText: String,
-    val imageText: String
-)
-
-@Composable
-private fun getRetailCategoryDetail(
-    categoryId: Int,
-    categoryInfo: ProductCategoryDTO?,
-    childCategories: List<ProductCategoryDTO>
-): RetailCategoryDetail {
-    return RetailCategoryDetail(
-        id = categoryInfo?.ProductCategoryId ?: categoryId,
-        name = categoryInfo?.CategoryName?.ifBlank { BBLocalization.Current.Get(key = "1a132fdc-096f-42d7-835d-96b0a17b3675", fallback = "") } ?: BBLocalization.Current.Get(key = "1a132fdc-096f-42d7-835d-96b0a17b3675", fallback = ""),
-        description = categoryInfo?.Breadcrumb?.ifBlank { BBLocalization.Current.Get(key = "eaccf589-4817-4e98-a847-53257da7e56c", fallback = "Kategori ürünlerini keşfedin.") } ?: BBLocalization.Current.Get(key = "eaccf589-4817-4e98-a847-53257da7e56c", fallback = "Kategori ürünlerini keşfedin."),
-        iconText = (categoryInfo?.CategoryName?.ifBlank { "KA" } ?: "KA").take(2).uppercase(),
-        productCount = 18420,
-        storeCount = 624,
-        campaignCount = 12,
-        subCategories =
-            if (childCategories.isNotEmpty()) {
-                childCategories.map { child ->
-                    RetailSubCategoryItem(
-                        id = child.ProductCategoryId,
-                        name = child.CategoryName.ifBlank { BBLocalization.Current.Get(key = "1a132fdc-096f-42d7-835d-96b0a17b3675", fallback = "") },
-                        iconText = child.CategoryName.ifBlank { "KA" }.take(2).uppercase(),
-                        productCount = 0
-                    )
-                }
-            } else {
-                listOf(
-                    RetailSubCategoryItem(1, BBLocalization.Current.Get(key = "f481d8fc-9de9-4a6b-870d-1918537ae795", fallback = "Kadın Giyim"), "KG", 5320),
-                    RetailSubCategoryItem(2, BBLocalization.Current.Get(key = "a32e412f-224f-494e-995e-04e6fd8550aa", fallback = "Erkek Giyim"), "EG", 4210),
-                    RetailSubCategoryItem(3, "Ayakkabı", "AY", 3170),
-                    RetailSubCategoryItem(4, "Çanta", "ÇA", 1460)
-                )
-            },
-        campaigns = listOf(
-            RetailCategoryCampaignItem(
-                id = 1,
-                title = BBLocalization.Current.Get(key = "1ed21217-a8d6-4f77-92fa-74f896f7095e", fallback = "Sezonun öne çıkanları"),
-                description = BBLocalization.Current.Get(key = "978c0658-d963-40e6-ab55-197f5a2987b9", fallback = "Yeni gelen ürünlerde seçili fırsatlar."),
-                badge = BBLocalization.Current.Get(key = "d0d0d256-d10b-4d42-9264-995b9315c54d", fallback = "Yeni sezon"),
-                icon = Icons.Outlined.LocalOffer,
-                backgroundColor = MaterialTheme.colorScheme.primaryContainer,
-                iconColor = MaterialTheme.colorScheme.onPrimaryContainer
-            ),
-            RetailCategoryCampaignItem(
-                id = 2,
-                title = BBLocalization.Current.Get(key = "02d45695-958e-4458-9deb-d27d85a58d73", fallback = "Haftanın Vitrinleri"),
-                description = BBLocalization.Current.Get(key = "cb15dd3d-ec2b-4ed9-ad0a-30c02fbff24c", fallback = "Popüler mağazalardan hızlı keşif."),
-                badge = "Vitrin",
-                icon = Icons.Outlined.Storefront,
-                backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
-                iconColor = MaterialTheme.colorScheme.onSecondaryContainer
-            ),
-            RetailCategoryCampaignItem(
-                id = 3,
-                title = BBLocalization.Current.Get(key = "ac891c5a-522e-48a8-b750-744f9d6b364e", fallback = "Avantajlı ürünler"),
-                description = BBLocalization.Current.Get(key = "46803f6f-2986-4bd3-8315-67d453e2bd72", fallback = "Fiyat/performans ürünleri bir arada."),
-                badge = BBLocalization.Current.Get(key = "2499e0cc-b6ba-4d7d-92e7-d93d72414d14", fallback = "Fırsat"),
-                icon = Icons.Outlined.Search,
-                backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
-                iconColor = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+private fun AdvertSponsoredDTO.ToSponsoredProductCardModel(
+    isFavorite: Boolean
+): BbProductCardModel {
+    return BbProductCardModel(
+        Id = ProductId,
+        Name = ProductName,
+        StoreName = "",
+        ImageUrl = ImageUrlResolver.Resolve(DefaultPicture),
+        PriceText = FormatCategoryProductPrice(
+            price = Price,
+            currencySymbol = CurrencySymbol
         ),
-        quickFilters = listOf(
-            BBLocalization.Current.Get(key = "c45d05c5-c097-40c4-9379-a7ec77726c36", fallback = "Popüler"),
-            BBLocalization.Current.Get(key = "6788b820-f4b2-470b-92f8-7a8470387d4e", fallback = "Yeni Gelenler"),
-            BBLocalization.Current.Get(key = "ba358f76-477e-4da3-b3e2-bc88c7ddc6df", fallback = "Çok satanlar"),
-            BBLocalization.Current.Get(key = "5d1d3591-7f28-4ff3-95a2-e196e8faf1cb", fallback = "İndirimli"),
-            BBLocalization.Current.Get(key = "fc8b89db-1fef-443a-9740-e1c37f44ca2f", fallback = "Ücretsiz kargo"),
-            BBLocalization.Current.Get(key = "d1f63ea5-7c48-4767-a74f-2e7b6efdf474", fallback = "Yüksek puanlı")
-        ),
-        products = listOf(
-            RetailCategoryProductItem(
-                id = 1,
-                name = BBLocalization.Current.Get(key = "cf2f4de0-711c-4308-a055-3ef7eb00d9c7", fallback = "Kadın klasik sneaker ayakkabı"),
-                storeName = "Ortobella",
-                priceText = "₺899,90",
-                imageText = "P1"
-            ),
-            RetailCategoryProductItem(
-                id = 2,
-                name = "Oversize pamuklu basic tişört",
-                storeName = "Moda Nova",
-                priceText = "₺349,90",
-                imageText = "P2"
-            ),
-            RetailCategoryProductItem(
-                id = 3,
-                name = BBLocalization.Current.Get(key = "71e49e6e-e73e-4edd-88c3-3f835352d635", fallback = "Günlük kullanım omuz çantası"),
-                storeName = "Urban Touch",
-                priceText = "₺649,90",
-                imageText = "P3"
-            )
-        )
+        OldPriceText = "",
+        BadgeText = "",
+        RatingText = "",
+        CargoText = "",
+        IsFavorite = isFavorite
     )
+}
+
+private fun FormatCategoryProductPrice(
+    price: Double,
+    currencySymbol: String
+): String {
+    val formatter = NumberFormat
+        .getNumberInstance(Locale.forLanguageTag("tr-TR"))
+        .apply {
+            minimumFractionDigits = 2
+            maximumFractionDigits = 2
+        }
+
+    return buildString {
+        append(currencySymbol)
+        if (currencySymbol.isNotBlank()) {
+            append(" ")
+        }
+        append(formatter.format(price))
+    }
 }
 
 @Preview(showBackground = true)

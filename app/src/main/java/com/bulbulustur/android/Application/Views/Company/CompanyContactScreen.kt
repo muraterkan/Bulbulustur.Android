@@ -63,7 +63,7 @@ import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
 
 @Composable
 fun CompanyContactScreen(
-    companyId: Int = 1,
+    companyId: Int = 0,
     onBackClick: () -> Unit = {},
     onCompanyProfileClick: () -> Unit = {},
     onCompanyProductsClick: () -> Unit = {},

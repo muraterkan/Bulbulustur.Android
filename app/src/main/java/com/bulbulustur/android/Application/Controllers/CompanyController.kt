@@ -2,9 +2,13 @@ package com.bulbulustur.android.Application.Controllers
 
 import androidx.lifecycle.viewModelScope
 import com.bulbulustur.android.businesslayer.Core.DTO.CompanyDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleProductDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.B2BProductDataDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.ICompanyRepository
+import com.bulbulustur.android.businesslayer.Core.Interface.IWholesaleProductRepository
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.CompanyUpdateModel
 import com.bulbulustur.android.businesslayer.Core.Repository.CompanyRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.WholesaleProductRepository
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 import com.bulbulustur.android.businesslayer.Core.Util.PaginatedList
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,12 +22,14 @@ data class CompanyControllerState(
     val CurrentAction: String? = null,
         val CompanyListResult: Result<PaginatedList<CompanyDTO>>? = null,
     val CompanyResult: Result<CompanyDTO?>? = null,
+    val CompanyProductsResult: Result<B2BProductDataDTO>? = null,
     val CompanyUpdateResult: Result<Any?>? = null,
     val ErrorMessage: String? = null
 )
 
 class CompanyController(
-    private val companyRepository: ICompanyRepository = CompanyRepository()
+    private val companyRepository: ICompanyRepository = CompanyRepository(),
+    private val wholesaleProductRepository: IWholesaleProductRepository = WholesaleProductRepository()
 ) : BaseController() {
     private val _state = MutableStateFlow(CompanyControllerState())
     val State: StateFlow<CompanyControllerState> = _state.asStateFlow()
@@ -39,8 +45,31 @@ class CompanyController(
     fun GetCompany(languageId: Int, companyId: Int) {
         viewModelScope.launch {
             _state.update { it.copy(IsLoading = true, ErrorMessage = null, CurrentAction = "GetCompany") }
-            val response = companyRepository.GetCompanyAsync(languageId = languageId, companyId = companyId)
+            val response = companyRepository.GetCompanyByIdExtendedAsync(languageId = languageId, companyId = companyId)
             _state.update { it.copy(IsLoading = false, CompanyResult = response, ErrorMessage = if (response.Success) null else response.Message) }
+        }
+    }
+
+    fun GetCompanyProducts(languageId: Int, page: Int = 1, pageSize: Int = 100) {
+        viewModelScope.launch {
+            _state.update { it.copy(IsLoading = true, ErrorMessage = null, CurrentAction = "GetCompanyProducts") }
+
+            val response = wholesaleProductRepository.GetProductDataAsync(
+                languageId = languageId,
+                productCategoryId = 0,
+                page = page,
+                pageSize = pageSize,
+                sortOrder = "Name_Desc",
+                brandIds = ""
+            )
+
+            _state.update {
+                it.copy(
+                    IsLoading = false,
+                    CompanyProductsResult = response,
+                    ErrorMessage = if (response.Success) null else response.Message
+                )
+            }
         }
     }
 

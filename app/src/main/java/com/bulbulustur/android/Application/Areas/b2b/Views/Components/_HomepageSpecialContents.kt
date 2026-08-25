@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2b.Views.Home.Components
 
+import com.bulbulustur.android.businesslayer.Core.Network.ImageUrlResolver
+
 import com.bulbulustur.android.Application.Localization.BBLocalization
 
 import androidx.compose.foundation.layout.Arrangement
@@ -25,7 +27,6 @@ import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbChip
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleHomepageSpecialContentDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleHomepageSpecialDTO
-import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
 
 @Composable
 fun HomepageSpecialContents(
@@ -128,11 +129,8 @@ private fun WholesaleHomepageSpecialDTO.ToWholesaleProductCardModel(isFavorite: 
         PriceText = "Teklif ile",
         MoqText = if (MinimumOrderQuantity > 0) "MOQ $MinimumOrderQuantity" else "",
         BadgeText = BBLocalization.Current.Get(key = "03fd0ba4-09a9-4909-bdb0-e0951aab5800", fallback = "Özel Vitrin"),
-        ImageUrl = ResolveWholesaleHomepageSpecialImageUrl(DefaultPicture),
+        ImageUrl = ImageUrlResolver.Resolve(DefaultPicture),
         IsFavorite = isFavorite
     )
 }
 
-private fun ResolveWholesaleHomepageSpecialImageUrl(imagePath: String): String {
-    return ApiRoutes.B2C_TEST_PRODUCT_IMAGE_URL
-}

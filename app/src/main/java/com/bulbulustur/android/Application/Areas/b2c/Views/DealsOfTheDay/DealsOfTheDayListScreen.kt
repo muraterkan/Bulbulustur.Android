@@ -20,7 +20,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.LocalOffer
 import androidx.compose.material.icons.outlined.Storefront
 import androidx.compose.material3.Card
@@ -38,7 +37,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -54,7 +52,7 @@ import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.businesslayer.Core.DTO.DealsOfTheDayDTO
-import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
+import com.bulbulustur.android.businesslayer.Core.Network.ImageUrlResolver
 import java.util.Locale
 
 @Composable
@@ -106,7 +104,10 @@ fun DealsOfTheDayListScreen(
                 onSearchTextChange = {
                     searchText = it
                 },
-                placeholder = BBLocalization.Current.Get(key = "2c5e3e73-42da-414b-bd7e-16f91bd736e2", fallback = "Fırsat ürünü ara"),
+                placeholder = BBLocalization.Current.Get(
+                    key = "2c5e3e73-42da-414b-bd7e-16f91bd736e2",
+                    fallback = "Fırsat ürünü ara"
+                ),
                 onSearchClick = {
                     Unit
                 },
@@ -115,8 +116,7 @@ fun DealsOfTheDayListScreen(
                 },
                 onMenuClick = {},
                 onFavoriteClick = {},
-                leadingAction =
-                    RetailSearchHeaderLeadingAction.Back,
+                leadingAction = RetailSearchHeaderLeadingAction.Back,
                 onBackClick = onBackClick
             )
         }
@@ -165,8 +165,14 @@ fun DealsOfTheDayListScreen(
                         }
                     ) {
                         DealsInfoCard(
-                            title = BBLocalization.Current.Get(key = "4a0fbe2f-6640-48d6-acad-51d26948d497", fallback = "Fırsatlar yükleniyor"),
-                            description = BBLocalization.Current.Get(key = "ac1b0db3-5f98-4231-9747-03fc76a75c13", fallback = "Bugünün fırsatları getiriliyor."),
+                            title = BBLocalization.Current.Get(
+                                key = "4a0fbe2f-6640-48d6-acad-51d26948d497",
+                                fallback = "Fırsatlar yükleniyor"
+                            ),
+                            description = BBLocalization.Current.Get(
+                                key = "ac1b0db3-5f98-4231-9747-03fc76a75c13",
+                                fallback = "Bugünün fırsatları getiriliyor."
+                            ),
                             showProgress = true
                         )
                     }
@@ -180,7 +186,10 @@ fun DealsOfTheDayListScreen(
                         }
                     ) {
                         DealsInfoCard(
-                            title = BBLocalization.Current.Get(key = "27302aa9-04d6-42ca-8a49-a2bc5216ca03", fallback = "Fırsatlar alınamadı"),
+                            title = BBLocalization.Current.Get(
+                                key = "27302aa9-04d6-42ca-8a49-a2bc5216ca03",
+                                fallback = "Fırsatlar alınamadı"
+                            ),
                             description = errorMessage
                         )
                     }
@@ -193,11 +202,20 @@ fun DealsOfTheDayListScreen(
                         }
                     ) {
                         DealsInfoCard(
-                            title = BBLocalization.Current.Get(key = "fa7f36dd-b420-431a-9cc1-132b39b3836c", fallback = "Fırsat bulunamadı"),
+                            title = BBLocalization.Current.Get(
+                                key = "fa7f36dd-b420-431a-9cc1-132b39b3836c",
+                                fallback = "Fırsat bulunamadı"
+                            ),
                             description = if (searchText.isBlank()) {
-                                BBLocalization.Current.Get(key = "7abf08a7-0d8a-4d0d-a613-05db00e97e9a", fallback = "Şu anda listelenecek fırsat bulunmuyor.")
+                                BBLocalization.Current.Get(
+                                    key = "7abf08a7-0d8a-4d0d-a613-05db00e97e9a",
+                                    fallback = "Şu anda listelenecek fırsat bulunmuyor."
+                                )
                             } else {
-                                BBLocalization.Current.Get(key = "9a91b3f0-6b86-4861-be4a-3538662a22b3", fallback = "Arama kriterine uygun fırsat bulunamadı.")
+                                BBLocalization.Current.Get(
+                                    key = "9a91b3f0-6b86-4861-be4a-3538662a22b3",
+                                    fallback = "Arama kriterine uygun fırsat bulunamadı."
+                                )
                             }
                         )
                     }
@@ -255,7 +273,10 @@ private fun DealsHero(
             DealHeroLabel()
 
             Text(
-                text = BBLocalization.Current.Get(key = "66913b06-a571-41d5-8a2d-dae82701da35", fallback = "Günün Öne Çıkan Fırsatları"),
+                text = BBLocalization.Current.Get(
+                    key = "66913b06-a571-41d5-8a2d-dae82701da35",
+                    fallback = "Günün Öne Çıkan Fırsatları"
+                ),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color =
@@ -263,7 +284,10 @@ private fun DealsHero(
             )
 
             Text(
-                text = BBLocalization.Current.Get(key = "a5ee4c60-0154-4a79-a4fd-508a542d5164", fallback = "Kampanyalı ürünleri, avantajlı fiyatları ve alışveriş fırsatlarını tek sayfada keşfet."),
+                text = BBLocalization.Current.Get(
+                    key = "a5ee4c60-0154-4a79-a4fd-508a542d5164",
+                    fallback = "Kampanyalı ürünleri, avantajlı fiyatları ve alışveriş fırsatlarını tek sayfada keşfet."
+                ),
                 style = MaterialTheme.typography.bodyMedium,
                 color =
                     MaterialTheme.colorScheme.onPrimaryContainer
@@ -306,7 +330,10 @@ private fun DealHeroLabel() {
             )
 
             Text(
-                text = BBLocalization.Current.Get(key = "66913b06-a571-41d5-8a2d-dae82701da35", fallback = "Günün Fırsatları"),
+                text = BBLocalization.Current.Get(
+                    key = "66913b06-a571-41d5-8a2d-dae82701da35",
+                    fallback = "Günün Fırsatları"
+                ),
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -324,21 +351,30 @@ private fun DealsSectionHeader() {
         )
     ) {
         Text(
-            text = BBLocalization.Current.Get(key = "54d3baf6-4b2d-4685-93cd-9241476fc72c", fallback = "LİSTE İÇERİĞİ"),
+            text = BBLocalization.Current.Get(
+                key = "54d3baf6-4b2d-4685-93cd-9241476fc72c",
+                fallback = "LİSTE İÇERİĞİ"
+            ),
             style = MaterialTheme.typography.labelSmall,
             fontWeight = FontWeight.SemiBold,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         Text(
-            text = BBLocalization.Current.Get(key = "d778653c-63d8-4680-9240-dd275184250c", fallback = "Kampanyalı Ürünler"),
+            text = BBLocalization.Current.Get(
+                key = "d778653c-63d8-4680-9240-dd275184250c",
+                fallback = "Kampanyalı Ürünler"
+            ),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onBackground
         )
 
         Text(
-            text = BBLocalization.Current.Get(key = "9d09125c-882e-40d2-9143-35d8d784227e", fallback = "Bugün öne çıkan indirimli ürünleri incele ve alışverişe devam et."),
+            text = BBLocalization.Current.Get(
+                key = "9d09125c-882e-40d2-9143-35d8d784227e",
+                fallback = "Bugün öne çıkan indirimli ürünleri incele ve alışverişe devam et."
+            ),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -352,20 +388,23 @@ private fun DealProductCard(
 ) {
     val productName =
         deal.ProductName
+            ?.trim()
             ?.takeIf { it.isNotBlank() }
-            ?: BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = "")
+            .orEmpty()
 
     val categoryName =
         deal.CategoryName
+            ?.trim()
             ?.takeIf { it.isNotBlank() }
-            ?: BBLocalization.Current.Get(key = "66913b06-a571-41d5-8a2d-dae82701da35", fallback = "Günün Fırsatı")
 
     val brandName =
         deal.Brand
+            ?.trim()
             ?.takeIf { it.isNotBlank() }
 
     val storeName =
         deal.Store
+            ?.trim()
             ?.takeIf { it.isNotBlank() }
 
     val campaignPrice =
@@ -376,13 +415,16 @@ private fun DealProductCard(
 
     val currencySymbol =
         deal.CurrencySymbol
-            ?.takeIf { it.isNotBlank() }
-            ?: "₺"
+            ?.trim()
+            .orEmpty()
 
     val productImageUrl =
-        resolveDealImageUrl(
-            defaultPicture = deal.DefaultPicture.orEmpty(),
-            picture = deal.Picture.orEmpty()
+        ImageUrlResolver.Resolve(
+            deal.DefaultPicture
+                .orEmpty()
+                .ifBlank {
+                    deal.Picture.orEmpty()
+                }
         )
 
     val isProductAvailable =
@@ -422,49 +464,22 @@ private fun DealProductCard(
                         onClick()
                     }
             ) {
-                AsyncImage(
-                    model = productImageUrl,
-                    contentDescription = productName,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(BBSpacing.Space2),
-                    contentScale = ContentScale.Fit
-                )
+                if (productImageUrl.isNotBlank()) {
+                    AsyncImage(
+                        model = productImageUrl,
+                        contentDescription = productName,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(BBSpacing.Space2),
+                        contentScale = ContentScale.Fit
+                    )
+                }
 
                 DealBadge(
                     modifier = Modifier
                         .align(Alignment.TopStart)
                         .padding(BBSpacing.Space2)
                 )
-
-                Surface(
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(BBSpacing.Space2),
-                    shape = BBRadius.LgShape,
-                    color = MaterialTheme.colorScheme.surface.copy(
-                        alpha = 0.92f
-                    ),
-                    border = BorderStroke(
-                        width = 1.dp,
-                        color =
-                            MaterialTheme.colorScheme.outlineVariant
-                    )
-                ) {
-                    Box(
-                        modifier = Modifier.size(34.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(19.dp),
-                            imageVector =
-                                Icons.Outlined.FavoriteBorder,
-                            contentDescription = null,
-                            tint =
-                                MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                }
             }
 
             Column(
@@ -475,24 +490,28 @@ private fun DealProductCard(
                     BBSpacing.Space2
                 )
             ) {
-                Text(
-                    text = categoryName,
-                    style = MaterialTheme.typography.labelSmall,
-                    color =
-                        MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
+                if (categoryName != null) {
+                    Text(
+                        text = categoryName,
+                        style = MaterialTheme.typography.labelSmall,
+                        color =
+                            MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
 
-                Text(
-                    text = productName,
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    minLines = 3,
-                    maxLines = 3,
-                    overflow = TextOverflow.Ellipsis
-                )
+                if (productName.isNotBlank()) {
+                    Text(
+                        text = productName,
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        minLines = 3,
+                        maxLines = 3,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
 
                 if (brandName != null) {
                     Text(
@@ -532,63 +551,49 @@ private fun DealProductCard(
                     }
                 }
 
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(
-                        BBSpacing.Space1
-                    )
-                ) {
-                    Text(
-                        text = formatDealPrice(
-                            price = campaignPrice,
-                            currencySymbol = currencySymbol
-                        ),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.error,
-                        maxLines = 1
-                    )
-
-                    if (
-                        normalPrice > 0.0 &&
-                        normalPrice > campaignPrice
+                if (campaignPrice > 0.0) {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(
+                            BBSpacing.Space1
+                        )
                     ) {
                         Text(
                             text = formatDealPrice(
-                                price = normalPrice,
+                                price = campaignPrice,
                                 currencySymbol = currencySymbol
                             ),
-                            style =
-                                MaterialTheme.typography.labelSmall,
-                            color =
-                                MaterialTheme.colorScheme.onSurfaceVariant,
-                            textDecoration =
-                                TextDecoration.LineThrough
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.error,
+                            maxLines = 1
                         )
+
+                        if (
+                            normalPrice > 0.0 &&
+                            normalPrice > campaignPrice
+                        ) {
+                            Text(
+                                text = formatDealPrice(
+                                    price = normalPrice,
+                                    currencySymbol = currencySymbol
+                                ),
+                                style =
+                                    MaterialTheme.typography.labelSmall,
+                                color =
+                                    MaterialTheme.colorScheme.onSurfaceVariant,
+                                textDecoration =
+                                    TextDecoration.LineThrough
+                            )
+                        }
                     }
-
-                    Text(
-                        text = BBLocalization.Current.Get(key = "e207b851-03c3-4075-b303-3750e1961a94", fallback = "KDV dahil fiyat"),
-                        style = MaterialTheme.typography.labelSmall,
-                        color =
-                            MaterialTheme.colorScheme.onSurfaceVariant
-                    )
                 }
 
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(
-                        BBSpacing.Space1
+                DealTag(
+                    text = BBLocalization.Current.Get(
+                        key = "66913b06-a571-41d5-8a2d-dae82701da35",
+                        fallback = "Günün Fırsatı"
                     )
-                ) {
-                    DealTag(
-                        text = BBLocalization.Current.Get(key = "9a123e2d-a73b-4d68-a090-0272bdec76d5", fallback = "Yoğun İlgi"),
-                        highlighted = true
-                    )
-
-                    DealTag(
-                        text = BBLocalization.Current.Get(key = "66913b06-a571-41d5-8a2d-dae82701da35", fallback = "Günün Fırsatı"),
-                        highlighted = false
-                    )
-                }
+                )
 
                 Surface(
                     modifier = Modifier
@@ -598,7 +603,10 @@ private fun DealProductCard(
                 ) {}
 
                 BbButton(
-                    text = BBLocalization.Current.Get(key = "0aa8fda4-a781-4746-8082-f0be1c5d8e50", fallback = ""),
+                    text = BBLocalization.Current.Get(
+                        key = "0aa8fda4-a781-4746-8082-f0be1c5d8e50",
+                        fallback = ""
+                    ),
                     modifier = Modifier.fillMaxWidth(),
                     variant = BbButtonVariant.Primary,
                     size = BbButtonSize.Small,
@@ -637,7 +645,10 @@ private fun DealBadge(
             )
 
             Text(
-                text = BBLocalization.Current.Get(key = "66913b06-a571-41d5-8a2d-dae82701da35", fallback = "Günün Fırsatı"),
+                text = BBLocalization.Current.Get(
+                    key = "66913b06-a571-41d5-8a2d-dae82701da35",
+                    fallback = "Günün Fırsatı"
+                ),
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onError,
@@ -649,25 +660,14 @@ private fun DealBadge(
 
 @Composable
 private fun DealTag(
-    text: String,
-    highlighted: Boolean
+    text: String
 ) {
     Surface(
         shape = RoundedCornerShape(999.dp),
-        color = if (highlighted) {
-            MaterialTheme.colorScheme.primaryContainer
-        } else {
-            MaterialTheme.colorScheme.surfaceVariant
-        },
+        color = MaterialTheme.colorScheme.surfaceVariant,
         border = BorderStroke(
             width = 1.dp,
-            color = if (highlighted) {
-                MaterialTheme.colorScheme.primary.copy(
-                    alpha = 0.28f
-                )
-            } else {
-                MaterialTheme.colorScheme.outlineVariant
-            }
+            color = MaterialTheme.colorScheme.outlineVariant
         )
     ) {
         Text(
@@ -678,11 +678,7 @@ private fun DealTag(
             text = text,
             style = MaterialTheme.typography.labelSmall,
             fontWeight = FontWeight.Medium,
-            color = if (highlighted) {
-                MaterialTheme.colorScheme.onPrimaryContainer
-            } else {
-                MaterialTheme.colorScheme.onSurfaceVariant
-            },
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             maxLines = 1
         )
     }
@@ -757,38 +753,15 @@ private fun formatDealPrice(
     price: Double,
     currencySymbol: String
 ): String {
-    return currencySymbol + String.format(
+    val formattedPrice = String.format(
         Locale.getDefault(),
         "%.2f",
         price
     )
-}
 
-private fun resolveDealImageUrl(
-    defaultPicture: String,
-    picture: String
-): String {
-    val normalizedPicture =
-        defaultPicture
-            .trim()
-            .ifBlank {
-                picture.trim()
-            }
-
-    if (normalizedPicture.isBlank()) {
-        return ApiRoutes.B2C_TEST_PRODUCT_IMAGE_URL
+    return if (currencySymbol.isBlank()) {
+        formattedPrice
+    } else {
+        "$currencySymbol$formattedPrice"
     }
-
-    if (
-        normalizedPicture.startsWith("http://") ||
-        normalizedPicture.startsWith("https://")
-    ) {
-        return normalizedPicture
-    }
-
-    val applicationOrigin =
-        ApiRoutes.B2C_TEST_PRODUCT_IMAGE_URL
-            .substringBefore("/UploadedFiles/")
-
-    return "$applicationOrigin/${normalizedPicture.trimStart('/')}"
 }

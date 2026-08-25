@@ -65,7 +65,7 @@ class LocalizationRepository : ILocalizationRepository {
     private companion object {
 
         const val ResourceApiBaseUrl =
-            "http://77.92.144.197:30215/api/Resource"
+            "http://37.60.239.76:30215/api/Resource"
 
         const val GetResourcesMethod =
             "GetResourcesAsync"

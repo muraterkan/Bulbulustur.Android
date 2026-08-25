@@ -13,8 +13,8 @@ class CompanyRepository(private val apiClient: ApiClient = ApiClient) : ICompany
         return apiClient.GetAsync(baseUrl = ApiRoutes.COMMERCE_SUPPORT_BASE_URL, method = "Company/GetCompaniesAsync", query = "languageId=$languageId&page=$page&pageSize=$pageSize")
     }
 
-    override suspend fun GetCompanyAsync(languageId: Int, companyId: Int): Result<CompanyDTO?> {
-        return apiClient.GetAsync(baseUrl = ApiRoutes.COMMERCE_SUPPORT_BASE_URL, method = "Company/GetCompanyAsync", query = "languageId=$languageId&companyId=$companyId")
+    override suspend fun GetCompanyByIdExtendedAsync(languageId: Int, companyId: Int): Result<CompanyDTO?> {
+        return apiClient.GetAsync(baseUrl = ApiRoutes.COMMERCE_SUPPORT_BASE_URL, method = "Company/GetCompanyByIdExtendedAsync", query = "languageId=$languageId&companyId=$companyId")
     }
 
     override suspend fun GetCompanyByMemberAsync(languageId: Int, memberId: Int): Result<CompanyDTO?> {

@@ -35,7 +35,7 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductHomepageSpecialContentDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductHomepageSpecialDTO
-import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
+import com.bulbulustur.android.businesslayer.Core.Network.ImageUrlResolver
 
 @Composable
 fun B2CHomepageSpecialContents(
@@ -133,7 +133,7 @@ private fun B2CHomepageSpecialProductCard(
     product: ProductHomepageSpecialDTO,
     onClick: () -> Unit
 ) {
-    val imageUrl = ApiRoutes.B2C_TEST_PRODUCT_IMAGE_URL
+    val imageUrl = ImageUrlResolver.Resolve(product.DefaultPicture)
 
     BbCard(
         modifier = Modifier
@@ -197,70 +197,3 @@ private fun B2CHomepageSpecialProductCard(
     }
 }
 
-private fun ResolveB2CHomepageSpecialImageUrl(
-    imagePath: String
-): String {
-    val normalizedPath =
-        imagePath
-            .trim()
-            .replace("\\", "/")
-            .replace("{", "")
-            .replace("}", "")
-
-    if (normalizedPath.isBlank()) {
-        return ""
-    }
-
-    if (
-        normalizedPath.startsWith(
-            "http://",
-            ignoreCase = true
-        ) ||
-        normalizedPath.startsWith(
-            "https://",
-            ignoreCase = true
-        )
-    ) {
-        return normalizedPath
-    }
-
-    val publicBaseUrl =
-        "https://www.bulbulustur.com"
-
-    val productImageBaseUrl =
-        "$publicBaseUrl/UploadedFiles/B2C/Products"
-
-    return when {
-        normalizedPath.startsWith(
-            "/UploadedFiles/",
-            ignoreCase = true
-        ) -> {
-            "$publicBaseUrl$normalizedPath"
-        }
-
-        normalizedPath.startsWith(
-            "UploadedFiles/",
-            ignoreCase = true
-        ) -> {
-            "$publicBaseUrl/$normalizedPath"
-        }
-
-        normalizedPath.startsWith(
-            "/B2C/Products/",
-            ignoreCase = true
-        ) -> {
-            "$publicBaseUrl/UploadedFiles$normalizedPath"
-        }
-
-        normalizedPath.startsWith(
-            "B2C/Products/",
-            ignoreCase = true
-        ) -> {
-            "$publicBaseUrl/UploadedFiles/$normalizedPath"
-        }
-
-        else -> {
-            "$productImageBaseUrl/${normalizedPath.trimStart('/')}"
-        }
-    }
-}

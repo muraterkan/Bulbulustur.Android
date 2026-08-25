@@ -565,9 +565,14 @@ class ProductController(
         variantId: Int = 0
     ) {
         viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    ProductDetailResult = null
+                )
+            }
+
             StartLoading(
-                actionName =
-                    "Detail"
+                actionName = "Detail"
             )
 
             val response =
@@ -580,25 +585,18 @@ class ProductController(
                                 "variantId=$variantId"
                 ) {
                     productRepository.GetProductByIdExtendedAsync(
-                        languageId =
-                            languageId,
-                        storeId =
-                            storeId,
-                        productId =
-                            productId,
-                        variantId =
-                            variantId
+                        languageId = languageId,
+                        storeId = storeId,
+                        productId = productId,
+                        variantId = variantId
                     )
                 }
 
             _state.update {
                 it.copy(
-                    IsLoading =
-                        false,
-                    CurrentAction =
-                        "Detail",
-                    ProductDetailResult =
-                        response,
+                    IsLoading = false,
+                    CurrentAction = "Detail",
+                    ProductDetailResult = response,
                     ErrorMessage =
                         response.Message.takeIf {
                             !response.Success

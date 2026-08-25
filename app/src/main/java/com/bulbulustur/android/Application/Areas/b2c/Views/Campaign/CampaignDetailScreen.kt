@@ -61,10 +61,8 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.businesslayer.Core.DTO.CampaignDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.CampaignProductDTO
 import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
+import com.bulbulustur.android.businesslayer.Core.Network.ImageUrlResolver
 import java.util.Locale
-
-private const val DEFAULT_CAMPAIGN_PICTURE_PATH =
-    "/UploadedFiles/B2C/Campaigns/campaign-banner.jpg"
 
 @Composable
 fun CampaignDetailScreen(
@@ -295,7 +293,7 @@ private fun CampaignDetailHero(
             ?.takeIf { it.isNotBlank() }
             ?: campaign.DefaultPicture
                 ?.takeIf { it.isNotBlank() }
-            ?: DEFAULT_CAMPAIGN_PICTURE_PATH
+            ?: ""
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -320,9 +318,7 @@ private fun CampaignDetailHero(
                     )
             ) {
                 AsyncImage(
-                    model = resolveCampaignImageUrl(
-                        campaignPicture
-                    ),
+                    model = ImageUrlResolver.Resolve(campaignPicture),
                     contentDescription = campaignName,
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop
@@ -657,9 +653,7 @@ private fun CampaignProductCard(
         product.Price
 
     val productImageUrl =
-        resolveProductImageUrl(
-            product.DefaultPicture.orEmpty()
-        )
+        ImageUrlResolver.Resolve(product.DefaultPicture.orEmpty())
 
     val isProductAvailable =
         product.ProductId > 0 &&
@@ -1039,56 +1033,6 @@ private fun CampaignDetailInfoCard(
             }
         }
     }
-}
-
-private fun resolveCampaignImageUrl(
-    picture: String
-): String {
-    val normalizedPicture =
-        picture.trim()
-
-    if (
-        normalizedPicture.startsWith("http://") ||
-        normalizedPicture.startsWith("https://")
-    ) {
-        return normalizedPicture
-    }
-
-    val applicationOrigin =
-        ApiRoutes.B2C_TEST_PRODUCT_IMAGE_URL
-            .substringBefore("/UploadedFiles/")
-
-    val relativePath =
-        normalizedPicture
-            .ifBlank {
-                DEFAULT_CAMPAIGN_PICTURE_PATH
-            }
-            .trimStart('/')
-
-    return "$applicationOrigin/$relativePath"
-}
-
-private fun resolveProductImageUrl(
-    picture: String
-): String {
-    val normalizedPicture = picture.trim()
-
-    if (normalizedPicture.isBlank()) {
-        return ApiRoutes.B2C_TEST_PRODUCT_IMAGE_URL
-    }
-
-    if (
-        normalizedPicture.startsWith("http://") ||
-        normalizedPicture.startsWith("https://")
-    ) {
-        return normalizedPicture
-    }
-
-    val applicationOrigin =
-        ApiRoutes.B2C_TEST_PRODUCT_IMAGE_URL
-            .substringBefore("/UploadedFiles/")
-
-    return "$applicationOrigin/${normalizedPicture.trimStart('/')}"
 }
 
 private fun formatPrice(

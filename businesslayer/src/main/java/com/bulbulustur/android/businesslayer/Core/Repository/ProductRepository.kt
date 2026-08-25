@@ -90,6 +90,14 @@ class ProductRepository(
                         "&variantId=$variantId"
         )
     }
+    override suspend fun GetDefaultProductVariantPicturesAsync(variantIds: List<Int>): Result<Map<String, String>> {
+        return apiClient.PostAsync(
+            baseUrl = ApiRoutes.B2C_PRODUCT_BASE_URL,
+            method = "GetDefaultProductVariantPicturesAsync",
+            data = variantIds
+        )
+    }
+
 
     override suspend fun GetSearchingProductsAsync(storeId: Int, key: String, page: Int, pageSize: Int, sortOrder: String): Result<PaginatedList<ProductDTO>> {
         val encodedKey = URLEncoder.encode(key.trim(), "UTF-8")

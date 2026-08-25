@@ -1,7 +1,5 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Store
 
-import com.bulbulustur.android.Application.Localization.BBLocalization
-
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,7 +23,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Storefront
-import androidx.compose.material.icons.outlined.Verified
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -43,9 +40,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
@@ -55,7 +55,7 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
 import com.bulbulustur.android.businesslayer.Core.DTO.StoreDTO
-import java.util.Locale
+import com.bulbulustur.android.businesslayer.Core.Network.ImageUrlResolver
 
 @Composable
 fun StoreListScreen(
@@ -67,15 +67,20 @@ fun StoreListScreen(
     onSellerInfoClick: () -> Unit = {},
     onHowItWorksClick: () -> Unit = onSellerInfoClick
 ) {
-    val items = remember(stores) {
+    val storeItems = remember(stores) {
         stores.map { store ->
             store.ToStoreListItem()
         }
     }
 
-    val alphabetFilters = remember {
+    val allFilter = BBLocalization.Current.Get(
+        key = "40b32a95-e0ec-4b16-b54d-12b6fe90cced",
+        fallback = "Tümü"
+    )
+
+    val alphabetFilters = remember(allFilter) {
         listOf(
-            BBLocalization.Current.Get(key = "40b32a95-e0ec-4b16-b54d-12b6fe90cced", fallback = "Tümü"),
+            allFilter,
             "0-9",
             "A",
             "B",
@@ -103,28 +108,48 @@ fun StoreListScreen(
         mutableStateOf("")
     }
 
-    var selectedAlphabetFilter by remember {
-        mutableStateOf(BBLocalization.Current.Get(key = "40b32a95-e0ec-4b16-b54d-12b6fe90cced", fallback = "Tümü"))
+    var selectedAlphabetFilter by remember(allFilter) {
+        mutableStateOf(allFilter)
     }
 
-    val filteredStores = remember(searchText, selectedAlphabetFilter, items) {
-        val searchFilteredStores = if (searchText.isBlank()) {
-            items
-        } else {
-            items.filter { store ->
-                store.name.contains(searchText, ignoreCase = true) ||
-                        store.description.contains(searchText, ignoreCase = true) ||
-                        store.categoryName.contains(searchText, ignoreCase = true)
+    val filteredStores = remember(
+        searchText,
+        selectedAlphabetFilter,
+        storeItems,
+        allFilter
+    ) {
+        val searchFilteredStores =
+            if (searchText.isBlank()) {
+                storeItems
+            } else {
+                storeItems.filter { store ->
+                    store.name.contains(
+                        searchText,
+                        ignoreCase = true
+                    ) ||
+                        store.description.contains(
+                            searchText,
+                            ignoreCase = true
+                        )
+                }
             }
-        }
 
         when (selectedAlphabetFilter) {
-            BBLocalization.Current.Get(key = "40b32a95-e0ec-4b16-b54d-12b6fe90cced", fallback = "Tümü") -> searchFilteredStores
-            "0-9" -> searchFilteredStores.filter { store ->
-                store.name.firstOrNull()?.isDigit() == true
+            allFilter -> searchFilteredStores
+
+            "0-9" -> {
+                searchFilteredStores.filter { store ->
+                    store.name.firstOrNull()?.isDigit() == true
+                }
             }
-            else -> searchFilteredStores.filter { store ->
-                store.name.startsWith(selectedAlphabetFilter, ignoreCase = true)
+
+            else -> {
+                searchFilteredStores.filter { store ->
+                    store.name.startsWith(
+                        selectedAlphabetFilter,
+                        ignoreCase = true
+                    )
+                }
             }
         }
     }
@@ -133,11 +158,17 @@ fun StoreListScreen(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = BBLocalization.Current.Get(key = "91be3e9a-09f2-496b-806f-952a02209bb2", fallback = "Mağazalar"),
+                title = BBLocalization.Current.Get(
+                    key = "91be3e9a-09f2-496b-806f-952a02209bb2",
+                    fallback = "Mağazalar"
+                ),
                 onBackClick = onBackClick,
                 actionContent = {
                     StoreListHeaderActionButton(
-                        text = BBLocalization.Current.Get(key = "b666c949-1b61-46d3-aa54-9ff65c1ac820", fallback = "Satıcı Ol"),
+                        text = BBLocalization.Current.Get(
+                            key = "b666c949-1b61-46d3-aa54-9ff65c1ac820",
+                            fallback = "Satıcı Ol"
+                        ),
                         icon = Icons.Outlined.Storefront,
                         onClick = onSellerInfoClick
                     )
@@ -187,18 +218,19 @@ fun StoreListScreen(
             item {
                 StoreListResultHeader(
                     storeCount = filteredStores.size,
-                    selectedFilter = selectedAlphabetFilter
+                    selectedFilter = selectedAlphabetFilter,
+                    allFilter = allFilter
                 )
             }
 
             when {
-                isLoading && items.isEmpty() -> {
+                isLoading && storeItems.isEmpty() -> {
                     item {
                         StoreListLoadingState()
                     }
                 }
 
-                !errorMessage.isNullOrBlank() && items.isEmpty() -> {
+                !errorMessage.isNullOrBlank() && storeItems.isEmpty() -> {
                     item {
                         StoreListErrorState(
                             message = errorMessage
@@ -292,24 +324,36 @@ private fun StoreListHeroCard(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             StoreListStatusPill(
-                text = BBLocalization.Current.Get(key = "156549eb-65bd-43c7-9fc5-d9bfaac351fd", fallback = "Bulbulustur Mağazaları")
+                text = BBLocalization.Current.Get(
+                    key = "156549eb-65bd-43c7-9fc5-d9bfaac351fd",
+                    fallback = "Bulbulustur Mağazaları"
+                )
             )
 
             Text(
-                text = BBLocalization.Current.Get(key = "b11bf88a-7271-427f-a24a-7122c52401bf", fallback = "Güvenilir Mağazaları Keşfedin"),
+                text = BBLocalization.Current.Get(
+                    key = "b11bf88a-7271-427f-a24a-7122c52401bf",
+                    fallback = "Güvenilir Mağazaları Keşfedin"
+                ),
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
-                text = BBLocalization.Current.Get(key = "3378b17b-1bff-49ee-9d3a-fefa00af20c8", fallback = "Perakende alışveriş için ürün, mağaza puanı ve mağaza detaylarını tek akışta inceleyin."),
+                text = BBLocalization.Current.Get(
+                    key = "3378b17b-1bff-49ee-9d3a-fefa00af20c8",
+                    fallback = "Perakende alışveriş için ürün, mağaza puanı ve mağaza detaylarını tek akışta inceleyin."
+                ),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             StoreListPrimaryButton(
-                text = BBLocalization.Current.Get(key = "6c99e78c-75c0-4f16-8834-4ea835c484f8", fallback = "Nasıl Çalışır?"),
+                text = BBLocalization.Current.Get(
+                    key = "6c99e78c-75c0-4f16-8834-4ea835c484f8",
+                    fallback = "Nasıl Çalışır?"
+                ),
                 icon = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
                 modifier = Modifier.fillMaxWidth(),
                 onClick = onHowItWorksClick
@@ -335,7 +379,10 @@ private fun StoreListSearchCard(
             singleLine = true,
             placeholder = {
                 Text(
-                    text = BBLocalization.Current.Get(key = "ed96c697-b2d3-43ed-bf60-30aec5de4541", fallback = "Mağaza Adı Ara...")
+                    text = BBLocalization.Current.Get(
+                        key = "ed96c697-b2d3-43ed-bf60-30aec5de4541",
+                        fallback = "Mağaza Adı Ara..."
+                    )
                 )
             },
             leadingIcon = {
@@ -373,18 +420,20 @@ private fun StoreAlphabetFilterRow(
                     onFilterClick(filter)
                 },
                 shape = BBRadius.PillShape,
-                color = if (selectedFilter == filter) {
-                    MaterialTheme.colorScheme.primary
-                } else {
-                    MaterialTheme.colorScheme.surface
-                },
-                border = BorderStroke(
-                    width = 1.dp,
-                    color = if (selectedFilter == filter) {
+                color =
+                    if (selectedFilter == filter) {
                         MaterialTheme.colorScheme.primary
                     } else {
-                        MaterialTheme.colorScheme.outlineVariant
-                    }
+                        MaterialTheme.colorScheme.surface
+                    },
+                border = BorderStroke(
+                    width = 1.dp,
+                    color =
+                        if (selectedFilter == filter) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            MaterialTheme.colorScheme.outlineVariant
+                        }
                 )
             ) {
                 Text(
@@ -394,11 +443,12 @@ private fun StoreAlphabetFilterRow(
                     ),
                     text = filter,
                     style = MaterialTheme.typography.labelMedium,
-                    color = if (selectedFilter == filter) {
-                        MaterialTheme.colorScheme.onPrimary
-                    } else {
-                        MaterialTheme.colorScheme.onSurface
-                    },
+                    color =
+                        if (selectedFilter == filter) {
+                            MaterialTheme.colorScheme.onPrimary
+                        } else {
+                            MaterialTheme.colorScheme.onSurface
+                        },
                     fontWeight = FontWeight.SemiBold
                 )
             }
@@ -409,7 +459,8 @@ private fun StoreAlphabetFilterRow(
 @Composable
 private fun StoreListResultHeader(
     storeCount: Int,
-    selectedFilter: String
+    selectedFilter: String,
+    allFilter: String
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
@@ -422,11 +473,15 @@ private fun StoreListResultHeader(
         )
 
         Text(
-            text = if (selectedFilter == BBLocalization.Current.Get(key = "40b32a95-e0ec-4b16-b54d-12b6fe90cced", fallback = "Tümü")) {
-                BBLocalization.Current.Get(key = "c910c4fc-3c8d-434c-ac68-734f6bb109ba", fallback = "Tüm mağazalar gösteriliyor.")
-            } else {
-                "$selectedFilter filtresi uygulanıyor."
-            },
+            text =
+                if (selectedFilter == allFilter) {
+                    BBLocalization.Current.Get(
+                        key = "c910c4fc-3c8d-434c-ac68-734f6bb109ba",
+                        fallback = "Tüm mağazalar gösteriliyor."
+                    )
+                } else {
+                    "$selectedFilter filtresi uygulanıyor."
+                },
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -438,6 +493,14 @@ private fun StoreListCard(
     store: StoreListItem,
     onClick: () -> Unit
 ) {
+    var logoLoadFailed by remember(store.logoUrl) {
+        mutableStateOf(false)
+    }
+
+    val showLogo =
+        store.logoUrl.isNotBlank() &&
+            !logoLoadFailed
+
     BbCard(
         modifier = Modifier.fillMaxWidth(),
         variant = BbCardVariant.Outlined,
@@ -456,18 +519,46 @@ private fun StoreListCard(
                 Surface(
                     modifier = Modifier.size(BBIcon.BoxLg),
                     shape = BBRadius.XlShape,
-                    color = MaterialTheme.colorScheme.primaryContainer
+                    color =
+                        if (showLogo) {
+                            MaterialTheme.colorScheme.surface
+                        } else {
+                            MaterialTheme.colorScheme.primaryContainer
+                        },
+                    border =
+                        if (showLogo) {
+                            BorderStroke(
+                                width = 1.dp,
+                                color = MaterialTheme.colorScheme.outlineVariant
+                            )
+                        } else {
+                            null
+                        }
                 ) {
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(
-                            text = store.logoText,
-                            style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            fontWeight = FontWeight.Bold
-                        )
+                        if (showLogo) {
+                            AsyncImage(
+                                model = store.logoUrl,
+                                contentDescription = store.name,
+                                contentScale = ContentScale.Fit,
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(BBSpacing.Space2),
+                                onError = {
+                                    logoLoadFailed = true
+                                }
+                            )
+                        } else {
+                            Text(
+                                text = store.logoText,
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
                     }
                 }
 
@@ -475,27 +566,13 @@ private fun StoreListCard(
                     modifier = Modifier.weight(1f),
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                 ) {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = store.name,
-                            style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            fontWeight = FontWeight.Bold,
-                            maxLines = 1
-                        )
-
-                        if (store.isVerified) {
-                            Icon(
-                                imageVector = Icons.Outlined.Verified,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.size(BBIcon.SizeSm)
-                            )
-                        }
-                    }
+                    Text(
+                        text = store.name,
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 1
+                    )
 
                     Text(
                         text = store.description,
@@ -513,21 +590,27 @@ private fun StoreListCard(
                 )
             }
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+            if (
+                store.ratingText != null ||
+                store.shippingText != null
             ) {
-                StoreListMetaPill(text = store.ratingText)
-                StoreListMetaPill(text = store.categoryName)
-                StoreListMetaPill(text = store.cargoText)
-            }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+                ) {
+                    store.ratingText?.let { ratingText ->
+                        StoreListMetaPill(
+                            text = ratingText
+                        )
+                    }
 
-            StoreListPrimaryButton(
-                text = BBLocalization.Current.Get(key = "946b1d23-5c82-4e52-a366-d8492368eac6", fallback = "Mağazayı İncele"),
-                icon = Icons.Outlined.Storefront,
-                modifier = Modifier.fillMaxWidth(),
-                onClick = onClick
-            )
+                    store.shippingText?.let { shippingText ->
+                        StoreListMetaPill(
+                            text = shippingText
+                        )
+                    }
+                }
+            }
         }
     }
 }
@@ -547,7 +630,10 @@ private fun StoreListLoadingState() {
             CircularProgressIndicator()
 
             Text(
-                text = BBLocalization.Current.Get(key = "c65fbcde-0a45-4556-9c11-1e4331da0b25", fallback = "Mağazalar yükleniyor..."),
+                text = BBLocalization.Current.Get(
+                    key = "c65fbcde-0a45-4556-9c11-1e4331da0b25",
+                    fallback = "Mağazalar yükleniyor..."
+                ),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -569,7 +655,12 @@ private fun StoreListErrorState(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
-            StoreListStatusPill(text = BBLocalization.Current.Get(key = "30aee7b0-b131-4f63-8659-f78378ac20f3", fallback = "Hata"))
+            StoreListStatusPill(
+                text = BBLocalization.Current.Get(
+                    key = "30aee7b0-b131-4f63-8659-f78378ac20f3",
+                    fallback = "Hata"
+                )
+            )
 
             Text(
                 text = "Mağazalar alınamadı",
@@ -601,23 +692,37 @@ private fun StoreListEmptyState(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
-            StoreListStatusPill(text = BBLocalization.Current.Get(key = "9141e794-372f-4548-81a2-ef81b797a60c", fallback = "Mağaza Bulunamadı"))
+            StoreListStatusPill(
+                text = BBLocalization.Current.Get(
+                    key = "9141e794-372f-4548-81a2-ef81b797a60c",
+                    fallback = "Mağaza Bulunamadı"
+                )
+            )
 
             Text(
-                text = BBLocalization.Current.Get(key = "16f66cd8-6413-4f4e-b981-0bf04a4a9b69", fallback = "Listelenecek Mağaza Bulunmuyor"),
+                text = BBLocalization.Current.Get(
+                    key = "16f66cd8-6413-4f4e-b981-0bf04a4a9b69",
+                    fallback = "Listelenecek Mağaza Bulunmuyor"
+                ),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
-                text = BBLocalization.Current.Get(key = "9664d489-4342-45bc-a0c1-8cfec8f3f2d5", fallback = "Bu filtrede mağaza bulunamadı. Satıcı olmak istiyorsanız başvuru süreci web panelinde tamamlanır."),
+                text = BBLocalization.Current.Get(
+                    key = "9664d489-4342-45bc-a0c1-8cfec8f3f2d5",
+                    fallback = "Bu filtrede mağaza bulunamadı. Satıcı olmak istiyorsanız başvuru süreci web panelinde tamamlanır."
+                ),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             StoreListPrimaryButton(
-                text = BBLocalization.Current.Get(key = "b90712c7-5604-4947-a417-5f1e625d461c", fallback = "Satıcı Başvurusu Hakkında"),
+                text = BBLocalization.Current.Get(
+                    key = "b90712c7-5604-4947-a417-5f1e625d461c",
+                    fallback = "Satıcı Başvurusu Hakkında"
+                ),
                 icon = Icons.Outlined.Storefront,
                 modifier = Modifier.fillMaxWidth(),
                 onClick = onSellerInfoClick
@@ -664,14 +769,20 @@ private fun StoreListSellerInfoBanner(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = BBLocalization.Current.Get(key = "92798553-780f-49a0-9ca3-0ba54f681150", fallback = "Satıcı olmak ister misiniz?"),
+                    text = BBLocalization.Current.Get(
+                        key = "92798553-780f-49a0-9ca3-0ba54f681150",
+                        fallback = "Satıcı olmak ister misiniz?"
+                    ),
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = BBLocalization.Current.Get(key = "62dfc179-6a41-4ac2-8a78-467164a448a3", fallback = "Başvuru ve mağaza yönetimi web paneli üzerinden tamamlanır."),
+                    text = BBLocalization.Current.Get(
+                        key = "62dfc179-6a41-4ac2-8a78-467164a448a3",
+                        fallback = "Başvuru ve mağaza yönetimi web paneli üzerinden tamamlanır."
+                    ),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -783,41 +894,50 @@ private data class StoreListItem(
     val id: Int,
     val name: String,
     val logoText: String,
+    val logoUrl: String,
     val description: String,
-    val categoryName: String,
-    val ratingText: String,
-    val cargoText: String,
-    val isVerified: Boolean
+    val ratingText: String?,
+    val shippingText: String?
 )
 
 private fun StoreDTO.ToStoreListItem(): StoreListItem {
-    val resolvedName = StoreName.ifBlank {
-        BBLocalization.Current.Get(key = "a4bd79dd-e7ee-4407-9e7d-00582840c43a", fallback = "Mağaza")
-    }
+    val resolvedName =
+        StoreName.ifBlank {
+            BBLocalization.Current.Get(
+                key = "a4bd79dd-e7ee-4407-9e7d-00582840c43a",
+                fallback = "Mağaza"
+            )
+        }
 
     return StoreListItem(
         id = StoreId,
         name = resolvedName,
-        logoText = resolvedName.take(2).uppercase(),
-        description = StoreDescription.ifBlank {
-            BBLocalization.Current.Get(key = "7ef0bc22-35db-4470-a426-670c1408e856", fallback = "Mağaza vitrini")
-        },
-        categoryName = if (CompanyId > 0) {
-            BBLocalization.Current.Get(key = "bd064b33-af61-455b-a442-b39b85fa710c", fallback = "Kurumsal Mağaza")
-        } else {
-            BBLocalization.Current.Get(key = "966a452c-8fbd-4f8e-a848-2a9a01e7b7c4", fallback = "Perakende Mağaza")
-        },
-        ratingText = if (Rating > 0.0) {
-            String.format(Locale.US, "%.1f", Rating)
-        } else {
-            "-"
-        },
-        cargoText = if (DefaultEstimatedShippingTime > 0) {
-            "${DefaultEstimatedShippingTime} gün"
-        } else {
-            BBLocalization.Current.Get(key = "081fb0ca-4f68-4277-9ca0-028d1e9d147f", fallback = "Standart")
-        },
-        isVerified = !StoreKey.isNullOrBlank() || CompanyId > 0
+        logoText = resolvedName
+            .trim()
+            .take(2)
+            .uppercase(),
+        logoUrl = ImageUrlResolver.Resolve(Picture),
+        description =
+            StoreDescription.ifBlank {
+                BBLocalization.Current.Get(
+                    key = "7ef0bc22-35db-4470-a426-670c1408e856",
+                    fallback = "Mağaza vitrini"
+                )
+            },
+        ratingText =
+            Rating
+                .takeIf { rating ->
+                    rating > 0.0
+                }
+                ?.toString(),
+        shippingText =
+            DefaultEstimatedShippingTime
+                .takeIf { estimatedShippingTime ->
+                    estimatedShippingTime > 0
+                }
+                ?.let { estimatedShippingTime ->
+                    "$estimatedShippingTime gün"
+                }
     )
 }
 

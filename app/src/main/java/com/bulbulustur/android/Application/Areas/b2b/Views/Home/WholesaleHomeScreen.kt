@@ -71,6 +71,7 @@ fun WholesaleHomeScreen(
     onMenuClick: () -> Unit = {},
     onCategoryClick: () -> Unit = {},
     onProductListClick: () -> Unit = {},
+    onFeaturedProductsClick: () -> Unit = {},
     onProductDetailClick: (Int) -> Unit = {},
     onRfqListClick: () -> Unit = {},
     onRfqCreateClick: () -> Unit = {},
@@ -160,7 +161,7 @@ fun WholesaleHomeScreen(
                     onRfqClick = {
                         onRfqCreateClick()
                     },
-                    onViewAllClick = onProductListClick
+                    onViewAllClick = onFeaturedProductsClick
                 )
             }
 

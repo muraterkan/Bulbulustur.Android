@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Home.Components
 
+import com.bulbulustur.android.businesslayer.Core.Network.ImageUrlResolver
+
 import com.bulbulustur.android.Application.Localization.BBLocalization
 
 import androidx.compose.foundation.BorderStroke
@@ -198,7 +200,7 @@ private fun CampaignBannerCard(
             }
 
             AsyncImage(
-                model = ResolveCampaignImageUrl(
+                model = ImageUrlResolver.Resolve(
                     campaign.Picture.ifBlank {
                         campaign.DefaultPicture
                     }
@@ -213,23 +215,3 @@ private fun CampaignBannerCard(
     }
 }
 
-private fun ResolveCampaignImageUrl(imagePath: String): String {
-    val normalizedPath = imagePath.trim()
-
-    if (normalizedPath.isBlank()) {
-        return ""
-    }
-
-    if (
-        normalizedPath.startsWith("http://", ignoreCase = true) ||
-        normalizedPath.startsWith("https://", ignoreCase = true)
-    ) {
-        return normalizedPath
-    }
-
-    val baseUrl = ApiRoutes.CAMPAIGN_BASE_URL
-        .substringBefore("/api/")
-        .trimEnd('/')
-
-    return "$baseUrl/${normalizedPath.trimStart('/')}"
-}

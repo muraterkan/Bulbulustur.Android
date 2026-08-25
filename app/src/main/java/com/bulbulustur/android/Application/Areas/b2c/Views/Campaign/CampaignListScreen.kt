@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Campaign
 
+import com.bulbulustur.android.businesslayer.Core.Network.ImageUrlResolver
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -52,9 +54,6 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.businesslayer.Core.DTO.CampaignDTO
 import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
-
-private const val DEFAULT_CAMPAIGN_PICTURE_PATH =
-    "/UploadedFiles/B2C/Campaigns/campaign-banner.jpg"
 
 @Composable
 fun CampaignListScreen(
@@ -350,7 +349,7 @@ private fun CampaignListCard(
             ?.takeIf { it.isNotBlank() }
             ?: campaign.DefaultPicture
                 ?.takeIf { it.isNotBlank() }
-            ?: DEFAULT_CAMPAIGN_PICTURE_PATH
+            ?: ""
 
     Card(
         modifier = modifier
@@ -384,9 +383,7 @@ private fun CampaignListCard(
                     )
             ) {
                 AsyncImage(
-                    model = resolveCampaignImageUrl(
-                        campaignPicture
-                    ),
+                    model = ImageUrlResolver.Resolve(campaignPicture),
                     contentDescription = campaignName,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -628,29 +625,3 @@ private fun CampaignListInfoCard(
     }
 }
 
-private fun resolveCampaignImageUrl(
-    picture: String
-): String {
-    val normalizedPicture =
-        picture.trim()
-
-    if (
-        normalizedPicture.startsWith("http://") ||
-        normalizedPicture.startsWith("https://")
-    ) {
-        return normalizedPicture
-    }
-
-    val applicationOrigin =
-        ApiRoutes.B2C_TEST_PRODUCT_IMAGE_URL
-            .substringBefore("/UploadedFiles/")
-
-    val relativePath =
-        normalizedPicture
-            .ifBlank {
-                DEFAULT_CAMPAIGN_PICTURE_PATH
-            }
-            .trimStart('/')
-
-    return "$applicationOrigin/$relativePath"
-}

@@ -22,12 +22,19 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleBottomNavigation
+import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleBottomNavigationItem
+import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleSearchHeader
+import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleSearchHeaderLeadingAction
 import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbSectionHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
@@ -47,7 +54,16 @@ fun WholesaleCategoryDetailScreen(
     errorMessage: String? = null,
     categoryInfo: ProductCategoryDTO? = null,
     childCategories: List<ProductCategoryDTO> = emptyList(),
+
     onBackClick: () -> Unit = {},
+    onMenuClick: () -> Unit = {},
+    onFavoriteClick: () -> Unit = {},
+    onMessageClick: () -> Unit = {},
+    onHomeClick: () -> Unit = {},
+    onModeSwitchClick: () -> Unit = {},
+    onBasketClick: () -> Unit = {},
+    onAccountClick: () -> Unit = {},
+
     onSubCategoryClick: (Int) -> Unit = {},
     onProductListClick: (Int) -> Unit = {},
     onCompanyListClick: (Int) -> Unit = {},
@@ -55,6 +71,10 @@ fun WholesaleCategoryDetailScreen(
     onPopularProductGroupClick: (Int, String) -> Unit = { _, _ -> },
     onSearchClick: (String) -> Unit = {}
 ) {
+    var searchText by remember {
+        mutableStateOf("")
+    }
+
     val category = remember(
         categoryId,
         categoryInfo,
@@ -68,18 +88,53 @@ fun WholesaleCategoryDetailScreen(
     }
 
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.background
+        modifier = Modifier.fillMaxSize(),
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            WholesaleSearchHeader(
+                searchText = searchText,
+                onSearchTextChange = {
+                    searchText = it
+                },
+                placeholder = BBLocalization.Current.Get(
+                    key = "8d009caa-1db4-42e9-b394-dc818277d259",
+                    fallback = "Toptan Ürün, Kategori Veya Firma Ara"
+                ),
+                onSearchClick = {
+                    onSearchClick(searchText)
+                },
+                onClearClick = {
+                    searchText = ""
+                },
+                leadingAction = WholesaleSearchHeaderLeadingAction.Back,
+                onBackClick = onBackClick,
+                onMenuClick = onMenuClick,
+                onFavoriteClick = onFavoriteClick,
+                onMessageClick = onMessageClick
+            )
+        },
+        bottomBar = {
+            WholesaleBottomNavigation(
+                selectedItem = WholesaleBottomNavigationItem.Menu,
+                onItemClick = { item ->
+                    when (item) {
+                        WholesaleBottomNavigationItem.Home -> onHomeClick()
+                        WholesaleBottomNavigationItem.Menu -> onMenuClick()
+                        WholesaleBottomNavigationItem.ModeSwitch -> onModeSwitchClick()
+                        WholesaleBottomNavigationItem.Basket -> onBasketClick()
+                        WholesaleBottomNavigationItem.Account -> onAccountClick()
+                    }
+                }
+            )
+        }
     ) { innerPadding ->
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(
                 start = BBSpacing.PageHorizontal,
-                top = innerPadding.calculateTopPadding() +
-                        BBSpacing.PageTopCompact,
+                top = innerPadding.calculateTopPadding() + BBSpacing.PageTopCompact,
                 end = BBSpacing.PageHorizontal,
-                bottom = innerPadding.calculateBottomPadding() +
-                        BBSpacing.PageBottom
+                bottom = innerPadding.calculateBottomPadding() + BBSpacing.PageBottom
             ),
             verticalArrangement = Arrangement.spacedBy(
                 BBSpacing.SectionGapCompact
@@ -124,8 +179,14 @@ fun WholesaleCategoryDetailScreen(
 
                     item {
                         BbSectionHeader(
-                            title = BBLocalization.Current.Get(key = "19e928cc-d4e4-426f-a1e8-fb8d9adf872f", fallback = ""),
-                            subtitle = BBLocalization.Current.Get(key = "8f3a995c-a9b5-4018-98d1-b99eaf8dcdbb", fallback = "Bu kategoriye bağlı ürün gruplarını incele.")
+                            title = BBLocalization.Current.Get(
+                                key = "19e928cc-d4e4-426f-a1e8-fb8d9adf872f",
+                                fallback = ""
+                            ),
+                            subtitle = BBLocalization.Current.Get(
+                                key = "8f3a995c-a9b5-4018-98d1-b99eaf8dcdbb",
+                                fallback = "Bu kategoriye bağlı ürün gruplarını incele."
+                            )
                         )
                     }
 
@@ -197,7 +258,10 @@ private fun WholesaleCategoryDetailErrorState(
             )
         ) {
             Text(
-                text = BBLocalization.Current.Get(key = "59050de1-3d23-41f3-8099-5c8b508e43b4", fallback = "Kategori bilgisi yüklenemedi"),
+                text = BBLocalization.Current.Get(
+                    key = "59050de1-3d23-41f3-8099-5c8b508e43b4",
+                    fallback = "Kategori bilgisi yüklenemedi"
+                ),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.error,
                 fontWeight = FontWeight.SemiBold
@@ -233,7 +297,10 @@ private fun WholesaleCategoryDetailEmptyState() {
             )
 
             Text(
-                text = BBLocalization.Current.Get(key = "507c8e7a-40f0-424e-b7dc-e8f5d0a3df07", fallback = "Kategori bilgisi bulunamadı."),
+                text = BBLocalization.Current.Get(
+                    key = "507c8e7a-40f0-424e-b7dc-e8f5d0a3df07",
+                    fallback = "Kategori bilgisi bulunamadı."
+                ),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -262,7 +329,10 @@ private fun WholesaleChildCategoryEmptyState() {
             )
 
             Text(
-                text = BBLocalization.Current.Get(key = "768246a2-980d-4c21-add0-efadd2a4f584", fallback = "Bu kategoriye bağlı alt kategori bulunamadı."),
+                text = BBLocalization.Current.Get(
+                    key = "768246a2-980d-4c21-add0-efadd2a4f584",
+                    fallback = "Bu kategoriye bağlı alt kategori bulunamadı."
+                ),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -287,7 +357,10 @@ private fun WholesaleCategoryDetailHeader(
         ) {
             WholesaleCategoryIconTitleRow(
                 icon = category.icon,
-                title = BBLocalization.Current.Get(key = "f8b3417d-7a08-4b79-b94b-c048415a71b4", fallback = "Toptan Kategori")
+                title = BBLocalization.Current.Get(
+                    key = "f8b3417d-7a08-4b79-b94b-c048415a71b4",
+                    fallback = "Toptan Kategori"
+                )
             )
 
             Text(
@@ -328,8 +401,14 @@ private fun WholesaleCategoryDetailActions(
             )
         ) {
             WholesaleCategoryActionCard(
-                title = BBLocalization.Current.Get(key = "5e09b1c8-93e6-4e9a-a055-2f556f57d6dc", fallback = "Ürünleri Gör"),
-                description = BBLocalization.Current.Get(key = "a4a0f1e9-0aff-4073-bf49-f0c661e20e66", fallback = "Kategori ürünleri"),
+                title = BBLocalization.Current.Get(
+                    key = "5e09b1c8-93e6-4e9a-a055-2f556f57d6dc",
+                    fallback = "Ürünleri Gör"
+                ),
+                description = BBLocalization.Current.Get(
+                    key = "a4a0f1e9-0aff-4073-bf49-f0c661e20e66",
+                    fallback = "Kategori ürünleri"
+                ),
                 icon = Icons.Outlined.Inventory2,
                 modifier = Modifier.weight(1f),
                 onClick = {
@@ -338,8 +417,14 @@ private fun WholesaleCategoryDetailActions(
             )
 
             WholesaleCategoryActionCard(
-                title = BBLocalization.Current.Get(key = "a4d349d0-5340-4075-b2bb-1e900584f3b7", fallback = "Firmalar"),
-                description = BBLocalization.Current.Get(key = "5df4c5b2-4f87-488b-acd1-50e38a211cb5", fallback = "Tedarikçi firmalar"),
+                title = BBLocalization.Current.Get(
+                    key = "a4d349d0-5340-4075-b2bb-1e900584f3b7",
+                    fallback = "Firmalar"
+                ),
+                description = BBLocalization.Current.Get(
+                    key = "5df4c5b2-4f87-488b-acd1-50e38a211cb5",
+                    fallback = "Tedarikçi firmalar"
+                ),
                 icon = Icons.Outlined.Business,
                 modifier = Modifier.weight(1f),
                 onClick = {
@@ -349,7 +434,10 @@ private fun WholesaleCategoryDetailActions(
         }
 
         BbButton(
-            text = BBLocalization.Current.Get(key = "203882aa-6872-41de-a0db-26b13a6389e3", fallback = ""),
+            text = BBLocalization.Current.Get(
+                key = "203882aa-6872-41de-a0db-26b13a6389e3",
+                fallback = ""
+            ),
             onClick = {
                 onRfqCreateClick(categoryId)
             },
@@ -521,7 +609,10 @@ private fun createWholesaleCategoryDetail(
             ?.CategoryName
             .orEmpty()
             .ifBlank {
-                BBLocalization.Current.Get(key = "1a132fdc-096f-42d7-835d-96b0a17b3675", fallback = "")
+                BBLocalization.Current.Get(
+                    key = "1a132fdc-096f-42d7-835d-96b0a17b3675",
+                    fallback = ""
+                )
             },
         description = categoryInfo
             ?.Breadcrumb
@@ -540,7 +631,10 @@ private fun createWholesaleCategoryDetail(
                 WholesaleSubCategoryItem(
                     categoryId = child.ProductCategoryId,
                     name = child.CategoryName.ifBlank {
-                        BBLocalization.Current.Get(key = "1a132fdc-096f-42d7-835d-96b0a17b3675", fallback = "")
+                        BBLocalization.Current.Get(
+                            key = "1a132fdc-096f-42d7-835d-96b0a17b3675",
+                            fallback = ""
+                        )
                     },
                     description = child.Breadcrumb.ifBlank {
                         child.CategoryName
@@ -559,14 +653,26 @@ private fun WholesaleCategoryDetailScreenPreview() {
             categoryId = 1,
             categoryInfo = ProductCategoryDTO(
                 ProductCategoryId = 1,
-                CategoryName = BBLocalization.Current.Get(key = "18101507-39f0-482d-80e7-491992e2915b", fallback = "Elektronik"),
-                Breadcrumb = BBLocalization.Current.Get(key = "24c60230-72a0-45c3-aaf1-ced7ede1957d", fallback = "Elektronik ürünleri")
+                CategoryName = BBLocalization.Current.Get(
+                    key = "18101507-39f0-482d-80e7-491992e2915b",
+                    fallback = "Elektronik"
+                ),
+                Breadcrumb = BBLocalization.Current.Get(
+                    key = "24c60230-72a0-45c3-aaf1-ced7ede1957d",
+                    fallback = "Elektronik ürünleri"
+                )
             ),
             childCategories = listOf(
                 ProductCategoryDTO(
                     ProductCategoryId = 2,
-                    CategoryName = BBLocalization.Current.Get(key = "4cd27909-9fb8-4840-b99a-8ad26dbf61fc", fallback = "Elektronik Bileşenler"),
-                    Breadcrumb = BBLocalization.Current.Get(key = "4a5ea768-dc60-4e68-97d5-0c51c5635d12", fallback = "Elektronik > Elektronik Bileşenler")
+                    CategoryName = BBLocalization.Current.Get(
+                        key = "4cd27909-9fb8-4840-b99a-8ad26dbf61fc",
+                        fallback = "Elektronik Bileşenler"
+                    ),
+                    Breadcrumb = BBLocalization.Current.Get(
+                        key = "4a5ea768-dc60-4e68-97d5-0c51c5635d12",
+                        fallback = "Elektronik > Elektronik Bileşenler"
+                    )
                 )
             )
         )

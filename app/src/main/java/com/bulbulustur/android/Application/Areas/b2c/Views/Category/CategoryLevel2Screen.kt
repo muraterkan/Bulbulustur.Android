@@ -62,7 +62,7 @@ import java.text.NumberFormat
 import java.util.Locale
 
 @Composable
-fun CategoryDetailScreen(
+fun CategoryLevel2Screen(
     categoryId: Int = 0,
     categoryInfo: ProductCategoryDTO? = null,
     childCategories: List<ProductCategoryDTO> = emptyList(),
@@ -696,8 +696,8 @@ private fun FormatCategoryProductPrice(
 
 @Preview(showBackground = true)
 @Composable
-private fun CategoryDetailScreenPreview() {
+private fun CategoryLevel2ScreenPreview() {
     BbTheme {
-        CategoryDetailScreen()
+        CategoryLevel2Screen()
     }
 }

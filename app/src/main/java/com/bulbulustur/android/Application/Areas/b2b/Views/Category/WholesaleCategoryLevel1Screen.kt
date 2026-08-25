@@ -55,7 +55,7 @@ import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleHomepageSpecialContentDTO
 
 @Composable
-fun WholesaleCategoryDetailScreen(
+fun WholesaleCategoryLevel1Screen(
     categoryId: Int = 0,
     isLoading: Boolean = false,
     errorMessage: String? = null,
@@ -674,9 +674,9 @@ private fun safeCategoryText(
 
 @Preview(showBackground = true)
 @Composable
-private fun WholesaleCategoryDetailScreenPreview() {
+private fun WholesaleCategoryLevel1ScreenPreview() {
     BbTheme {
-        WholesaleCategoryDetailScreen(
+        WholesaleCategoryLevel1Screen(
             categoryId = 1624,
             categoryInfo = ProductCategoryDTO(
                 ProductCategoryId = 1624,

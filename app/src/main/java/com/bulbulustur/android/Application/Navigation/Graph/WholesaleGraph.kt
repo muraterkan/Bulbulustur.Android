@@ -16,7 +16,8 @@ import androidx.navigation.navArgument
 import com.bulbulustur.android.Application.Areas.b2b.Controllers.RfqController
 import com.bulbulustur.android.Application.Controllers.MessageController
 import com.bulbulustur.android.Application.Areas.b2b.Controllers.WholesaleBuyerRequestController
-import com.bulbulustur.android.Application.Areas.b2b.Views.Category.WholesaleCategoryDetailScreen
+import com.bulbulustur.android.Application.Areas.b2b.Views.Category.WholesaleCategoryLevel1Screen
+import com.bulbulustur.android.Application.Areas.b2b.Views.Category.WholesaleCategoryLevel2Screen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Category.WholesaleCategoryHomeScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Home.WholesaleHomeScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Search.SearchScreen as WholesaleSearchScreen
@@ -208,9 +209,11 @@ fun NavGraphBuilder.wholesaleGraph(
                 navigator.navController.navigate(WholesaleRoutes.productList())
             },
             onSubCategoryClick = { subCategoryId ->
-                navigator.navController.navigate(
-                    WholesaleRoutes.categoryDetail(categoryId = subCategoryId)
-                )
+                if (subCategoryId > 0) {
+                    navigator.navController.navigate(
+                        WholesaleRoutes.categoryLevel1(subCategoryId)
+                    )
+                }
             },
             onCompanyListClick = {
                 navigator.navController.navigate(CompanyRoutes.CompanyList)
@@ -231,7 +234,7 @@ fun NavGraphBuilder.wholesaleGraph(
     }
 
     composable(
-        route = WholesaleRoutes.CategoryDetail,
+        route = WholesaleRoutes.CategoryLevel1,
         arguments = listOf(
             navArgument(WholesaleRoutes.ArgCategoryId) {
                 type = NavType.IntType
@@ -256,7 +259,7 @@ fun NavGraphBuilder.wholesaleGraph(
             )
         }
 
-        WholesaleCategoryDetailScreen(
+        WholesaleCategoryLevel1Screen(
             categoryId = categoryId,
             isLoading = categoryState.IsLoading,
             errorMessage = categoryState.ErrorMessage,
@@ -270,7 +273,64 @@ fun NavGraphBuilder.wholesaleGraph(
             },
             onSubCategoryClick = { subCategoryId ->
                 navigator.navController.navigate(
-                    WholesaleRoutes.categoryDetail(categoryId = subCategoryId)
+                    WholesaleRoutes.productList(subCategoryId)
+                )
+            },
+            onProductListClick = {
+                navigator.navController.navigate(WholesaleRoutes.productList(categoryId))
+            },
+            onCompanyListClick = {
+                navigator.navController.navigate(CompanyRoutes.CompanyList)
+            },
+            onRfqCreateClick = {
+                navigator.navController.navigate(RfqRoutes.Create)
+            },
+            onPopularProductGroupClick = { _, _ ->
+                navigator.navController.navigate(WholesaleRoutes.productList(categoryId))
+            }
+        )
+    }
+
+    composable(
+        route = WholesaleRoutes.CategoryLevel2,
+        arguments = listOf(
+            navArgument(WholesaleRoutes.ArgCategoryId) {
+                type = NavType.IntType
+            }
+        )
+    ) { backStackEntry ->
+        val categoryState by categoryController.State.collectAsState()
+
+        val categoryId = backStackEntry.arguments
+            ?.getInt(WholesaleRoutes.ArgCategoryId)
+            ?: return@composable
+
+        LaunchedEffect(sessionState.Language.Id, categoryId) {
+            categoryController.LoadDetail(
+                languageId = sessionState.Language.Id,
+                productCategoryId = categoryId
+            )
+
+            categoryController.LoadSpecialContents(
+                languageId = sessionState.Language.Id,
+                count = 6
+            )
+        }
+
+        WholesaleCategoryLevel2Screen(
+            categoryId = categoryId,
+            isLoading = categoryState.IsLoading,
+            errorMessage = categoryState.ErrorMessage,
+            categoryInfo = categoryState.Category,
+            childCategories = categoryState.ChildCategories,
+            specialContents = categoryState.SpecialContents,
+            isSpecialContentsLoading = categoryState.IsSpecialContentsLoading,
+            onBackClick = {
+                navigator.back()
+            },
+            onSubCategoryClick = { subCategoryId ->
+                navigator.navController.navigate(
+                    WholesaleRoutes.productList(subCategoryId)
                 )
             },
             onProductListClick = {
@@ -402,7 +462,7 @@ fun NavGraphBuilder.wholesaleGraph(
         }
 
 
-        
+
 
         WholesaleProductDetailScreen(
             State = productState,
@@ -477,7 +537,7 @@ fun NavGraphBuilder.wholesaleGraph(
             onRelatedCategoryClick = { category ->
                 if (category.id > 0) {
                     navigator.navController.navigate(
-                        WholesaleRoutes.categoryDetail(category.id)
+                        WholesaleRoutes.categoryLevel1(category.id)
                     )
                 }
             }

@@ -28,11 +28,18 @@ object RetailRoutes {
     const val CategoryHome =
         "retail/category-home"
 
-    const val CategoryDetail =
-        "retail/category-detail/{$ArgCategoryId}"
+    const val CategoryLevel1 =
+        "retail/category-level1/{$ArgCategoryId}"
 
-    fun categoryDetail(categoryId: Int): String {
-        return "retail/category-detail/$categoryId"
+    fun categoryLevel1(categoryId: Int): String {
+        return "retail/category-level1/$categoryId"
+    }
+
+    const val CategoryLevel2 =
+        "retail/category-level2/{$ArgCategoryId}"
+
+    fun categoryLevel2(categoryId: Int): String {
+        return "retail/category-level2/$categoryId"
     }
 
     const val ProductList =
@@ -145,9 +152,6 @@ object WholesaleRoutes {
     const val Home = "wholesale/home"
     const val CategoryHome = "wholesale/category-home"
 
-    const val CategoryDetail =
-        "wholesale/category-detail/{$ArgCategoryId}"
-
     const val FeaturedProducts = "wholesale/featured-products"
 
     const val ProductList = "wholesale/product-list?$ArgCategoryId={$ArgCategoryId}"
@@ -176,8 +180,18 @@ object WholesaleRoutes {
     const val CustomizationRequest =
         "wholesale/customization-request/{productId}"
 
-    fun categoryDetail(categoryId: Int): String {
-        return "wholesale/category-detail/$categoryId"
+    const val CategoryLevel1 =
+        "wholesale/category-level1/{$ArgCategoryId}"
+
+    const val CategoryLevel2 =
+        "wholesale/category-level2/{$ArgCategoryId}"
+
+    fun categoryLevel1(categoryId: Int): String {
+        return "wholesale/category-level1/$categoryId"
+    }
+
+    fun categoryLevel2(categoryId: Int): String {
+        return "wholesale/category-level2/$categoryId"
     }
 
     fun productDetail(productId: Int): String {

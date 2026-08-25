@@ -249,6 +249,11 @@ fun NavGraphBuilder.wholesaleGraph(
                 languageId = sessionState.Language.Id,
                 productCategoryId = categoryId
             )
+
+            categoryController.LoadSpecialContents(
+                languageId = sessionState.Language.Id,
+                count = 6
+            )
         }
 
         WholesaleCategoryDetailScreen(
@@ -258,6 +263,8 @@ fun NavGraphBuilder.wholesaleGraph(
 
             categoryInfo = categoryState.Category,
             childCategories = categoryState.ChildCategories,
+            specialContents = categoryState.SpecialContents,
+            isSpecialContentsLoading = categoryState.IsSpecialContentsLoading,
             onBackClick = {
                 navigator.back()
             },

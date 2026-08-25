@@ -870,7 +870,8 @@ private fun BulbulusturApplicationContent(
             sessionState = sessionState,
             categoryController = com.bulbulustur.android.Application.Areas.b2b.Controllers.CategoryController(
                 executeService = executeService,
-                productCategoryRepository = productCategoryRepository
+                productCategoryRepository = productCategoryRepository,
+                wholesaleHomepageSpecialContentRepository = wholesaleHomepageSpecialContentRepository
             ),
             homeController = wholesaleHomeController,
             productController = wholesaleProductController,

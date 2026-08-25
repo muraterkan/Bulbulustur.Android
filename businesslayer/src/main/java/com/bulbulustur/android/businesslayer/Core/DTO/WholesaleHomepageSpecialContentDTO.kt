@@ -7,6 +7,6 @@ data class WholesaleHomepageSpecialContentDTO(
     val StatusId: Int = 0,
     val ProductSpecialGroupId: Int = 0,
     val GroupName: String = "",
-    val ContentName: String?,
+    val ContentName: String = "",
     val Products: List<WholesaleHomepageSpecialDTO> = emptyList()
 )

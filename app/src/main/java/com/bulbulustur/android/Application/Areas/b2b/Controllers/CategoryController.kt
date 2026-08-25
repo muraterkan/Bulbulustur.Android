@@ -1,10 +1,11 @@
 package com.bulbulustur.android.Application.Areas.b2b.Controllers
 
-import com.bulbulustur.android.Application.Localization.BBLocalization
-
 import androidx.lifecycle.viewModelScope
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleHomepageSpecialContentDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.IProductCategoryRepository
+import com.bulbulustur.android.businesslayer.Core.Interface.IWholesaleHomepageSpecialContentRepository
 import com.bulbulustur.android.businesslayer.Core.Util.Execute.IExecuteService
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,11 +16,14 @@ import kotlinx.coroutines.launch
 
 data class CategoryControllerState(
     val IsLoading: Boolean = false,
+    val IsSpecialContentsLoading: Boolean = false,
     val CurrentAction: String? = null,
     val ErrorMessage: String? = null,
+    val SpecialContentsErrorMessage: String? = null,
     val CategoryResult: Result<ProductCategoryDTO?>? = null,
     val CategoryListResult: Result<List<ProductCategoryDTO>>? = null,
-    val ChildCategoryListResult: Result<List<ProductCategoryDTO>>? = null
+    val ChildCategoryListResult: Result<List<ProductCategoryDTO>>? = null,
+    val SpecialContentsResult: Result<List<WholesaleHomepageSpecialContentDTO>>? = null
 ) {
     val Category: ProductCategoryDTO?
         get() = CategoryResult?.Data
@@ -29,11 +33,15 @@ data class CategoryControllerState(
 
     val ChildCategories: List<ProductCategoryDTO>
         get() = ChildCategoryListResult?.Data.orEmpty()
+
+    val SpecialContents: List<WholesaleHomepageSpecialContentDTO>
+        get() = SpecialContentsResult?.Data.orEmpty()
 }
 
 class CategoryController(
     private val executeService: IExecuteService,
-    private val productCategoryRepository: IProductCategoryRepository
+    private val productCategoryRepository: IProductCategoryRepository,
+    private val wholesaleHomepageSpecialContentRepository: IWholesaleHomepageSpecialContentRepository
 ) : BaseController() {
 
     private val _state = MutableStateFlow(CategoryControllerState())
@@ -110,6 +118,36 @@ class CategoryController(
                         category.takeIf { result -> !result.Success }?.Message,
                         childCategories.takeIf { result -> !result.Success }?.Message
                     ).firstOrNull()
+                )
+            }
+        }
+    }
+
+    fun LoadSpecialContents(languageId: Int, count: Int = 6) {
+        if (languageId <= 0 || count <= 0) return
+
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    IsSpecialContentsLoading = true,
+                    SpecialContentsErrorMessage = null
+                )
+            }
+
+            val response = executeService.GetAsync(
+                cacheKey = "b2b.Category.SpecialContents.languageId=$languageId.count=$count"
+            ) {
+                wholesaleHomepageSpecialContentRepository.GetHomepageSpecialContents(
+                    languageId = languageId,
+                    count = count
+                )
+            }
+
+            _state.update {
+                it.copy(
+                    IsSpecialContentsLoading = false,
+                    SpecialContentsResult = response,
+                    SpecialContentsErrorMessage = response.Message.takeIf { !response.Success }
                 )
             }
         }

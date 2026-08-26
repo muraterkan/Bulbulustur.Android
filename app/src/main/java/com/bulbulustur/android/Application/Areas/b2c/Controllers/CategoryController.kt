@@ -159,6 +159,39 @@ class CategoryController(
         }
     }
 
+    fun GetCategoryScopeIds(productCategoryId: Int): List<Int> {
+        if (productCategoryId <= 0) return emptyList()
+
+        val categories = State.value.Categories
+        if (categories.isEmpty()) return listOf(productCategoryId)
+
+        val childrenByParent = categories.groupBy { it.ParentId }
+        val result = linkedSetOf<Int>()
+        val stack = ArrayDeque<Int>()
+
+        result.add(productCategoryId)
+        stack.add(productCategoryId)
+
+        while (stack.isNotEmpty()) {
+            val currentId = stack.removeLast()
+
+            childrenByParent[currentId]
+                .orEmpty()
+                .forEach { child ->
+                    if (child.ProductCategoryId > 0 && result.add(child.ProductCategoryId)) {
+                        stack.add(child.ProductCategoryId)
+                    }
+                }
+        }
+
+        android.util.Log.d(
+            "B2C_PRODUCT_CATEGORY_SCOPE",
+            "root=$productCategoryId ids=${result.joinToString(",")}"
+        )
+
+        return result.toList()
+    }
+
     fun Clear() {
         _state.update { CategoryControllerState() }
     }

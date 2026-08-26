@@ -36,15 +36,3 @@ data class B2BProductData(
     val StoreId: Int = 0,
     val Rating: Double = 0.0
 )
-
-data class B2BProductFilterDTO(
-    val ProductCategoryId: Int = 0,
-    val ChildIds: String = "",
-    val Categories: List<Int> = emptyList(),
-    val BrandIds: List<String> = emptyList(),
-    val Colors: List<String> = emptyList(),
-    val MinPrice: Int? = null,
-    val MaxPrice: Int? = null,
-    val SortOrder: String = "Name_Desc",
-    val LanguageId: Int = 1
-)

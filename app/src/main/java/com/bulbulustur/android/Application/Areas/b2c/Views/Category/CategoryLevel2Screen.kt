@@ -659,9 +659,9 @@ private fun AdvertSponsoredDTO.ToSponsoredProductCardModel(
 ): BbProductCardModel {
     return BbProductCardModel(
         Id = ProductId,
-        Name = ProductName,
+        Name = ProductName.orEmpty(),
         StoreName = "",
-        ImageUrl = ImageUrlResolver.Resolve(DefaultPicture),
+        ImageUrl = ImageUrlResolver.Resolve(DefaultPicture.orEmpty()),
         PriceText = FormatCategoryProductPrice(
             price = Price,
             currencySymbol = CurrencySymbol
@@ -676,7 +676,7 @@ private fun AdvertSponsoredDTO.ToSponsoredProductCardModel(
 
 private fun FormatCategoryProductPrice(
     price: Double,
-    currencySymbol: String
+    currencySymbol: String?
 ): String {
     val formatter = NumberFormat
         .getNumberInstance(Locale.forLanguageTag("tr-TR"))
@@ -686,8 +686,8 @@ private fun FormatCategoryProductPrice(
         }
 
     return buildString {
-        append(currencySymbol)
-        if (currencySymbol.isNotBlank()) {
+        append(currencySymbol.orEmpty())
+        if (!currencySymbol.isNullOrBlank()) {
             append(" ")
         }
         append(formatter.format(price))

@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowForward
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.ImageNotSupported
@@ -151,7 +150,10 @@ fun WholesaleProductCard(
                 }
 
                 BbButton(
-                    text = BBLocalization.Current.Get(key = "9aa9e9a4-18b3-427b-943f-36170e46cb37", fallback = "Teklif Al"),
+                    text = BBLocalization.Current.Get(
+                        key = "9aa9e9a4-18b3-427b-943f-36170e46cb37",
+                        fallback = "Teklif Al"
+                    ),
                     onClick = onRfqClick,
                     modifier = Modifier.fillMaxWidth(),
                     variant = BbButtonVariant.Primary,
@@ -159,21 +161,6 @@ fun WholesaleProductCard(
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Outlined.RequestQuote,
-                            contentDescription = null,
-                            modifier = Modifier.size(BBIcon.ButtonIcon)
-                        )
-                    }
-                )
-
-                BbButton(
-                    text = BBLocalization.Current.Get(key = "0aa8fda4-a781-4746-8082-f0be1c5d8e50", fallback = ""),
-                    onClick = onClick,
-                    modifier = Modifier.fillMaxWidth(),
-                    variant = BbButtonVariant.Outline,
-                    size = BbButtonSize.Small,
-                    trailingIcon = {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Outlined.ArrowForward,
                             contentDescription = null,
                             modifier = Modifier.size(BBIcon.ButtonIcon)
                         )
@@ -306,9 +293,23 @@ private fun WholesaleProductCardMedia(
             ) {
                 Icon(
                     imageVector = if (isFavorite) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder,
-                    contentDescription = if (isFavorite) BBLocalization.Current.Get(key = "5b2cc9ba-c14b-4c3d-8b1b-31159085896f", fallback = "Favorilerden kaldır") else BBLocalization.Current.Get(key = "78ef79d0-8390-42b9-a896-d370aa0d3928", fallback = "Favorilere ekle"),
+                    contentDescription = if (isFavorite) {
+                        BBLocalization.Current.Get(
+                            key = "5b2cc9ba-c14b-4c3d-8b1b-31159085896f",
+                            fallback = "Favorilerden kaldır"
+                        )
+                    } else {
+                        BBLocalization.Current.Get(
+                            key = "78ef79d0-8390-42b9-a896-d370aa0d3928",
+                            fallback = "Favorilere ekle"
+                        )
+                    },
                     modifier = Modifier.size(BBIcon.Action),
-                    tint = if (isFavorite) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface
+                    tint = if (isFavorite) {
+                        MaterialTheme.colorScheme.error
+                    } else {
+                        MaterialTheme.colorScheme.onSurface
+                    }
                 )
             }
         }

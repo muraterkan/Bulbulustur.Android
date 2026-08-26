@@ -274,7 +274,7 @@ fun NavGraphBuilder.wholesaleGraph(
             },
             onSubCategoryClick = { subCategoryId ->
                 navigator.navController.navigate(
-                    WholesaleRoutes.productList(8591)
+                    WholesaleRoutes.productList(subCategoryId)
                 )
             },
             onProductListClick = {

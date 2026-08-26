@@ -3,7 +3,6 @@ package com.bulbulustur.android.businesslayer.Core.Repository
 import java.net.URLEncoder
 
 import com.bulbulustur.android.businesslayer.Core.DTO.B2BProductDataDTO
-import com.bulbulustur.android.businesslayer.Core.DTO.B2BProductFilterDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleProductDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleProductRelatedDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.IWholesaleProductRepository
@@ -16,11 +15,11 @@ class WholesaleProductRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IWholesaleProductRepository {
 
-    override suspend fun GetProductDataAsync(filters: B2BProductFilterDTO, page: Int, pageSize: Int): Result<B2BProductDataDTO> {
-        return apiClient.PostAsync(
+    override suspend fun GetProductDataAsync(languageId: Int, productCategoryId: Int, page: Int, pageSize: Int, sortOrder: String, brandIds: String): Result<B2BProductDataDTO> {
+        return apiClient.GetAsync(
             baseUrl = ApiRoutes.B2B_PRODUCT_BASE_URL,
-            method = "GetProductDataAsync?page=$page&pageSize=$pageSize",
-            data = filters
+            method = "GetProductDataAsync",
+            query = "languageId=$languageId&productCategoryId=$productCategoryId&page=$page&pageSize=$pageSize&sortOrder=$sortOrder&brandIds=$brandIds"
         )
     }
 

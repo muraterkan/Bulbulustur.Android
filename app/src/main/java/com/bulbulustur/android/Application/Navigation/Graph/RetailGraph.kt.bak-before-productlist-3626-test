@@ -398,7 +398,7 @@ fun NavGraphBuilder.retailGraph(
             onSubCategoryClick = { subCategoryId ->
                 if (subCategoryId > 0) {
                     navigator.navController.navigate(
-                        RetailRoutes.productList(3626)
+                        RetailRoutes.productList(subCategoryId)
                     )
                 }
             },
@@ -608,14 +608,25 @@ fun NavGraphBuilder.retailGraph(
                     pageSize ->
 
                 productController.List(
-                    filters = filters,
-                    page = page,
-                    pageSize = pageSize
+                    filters =
+                        filters,
+                    page =
+                        page,
+                    pageSize =
+                        pageSize
                 )
             },
-            onBackClick = { navigator.back()},
-            onSearchClick = { navigator.navController.navigate(RetailRoutes.ProductList )},
-            onMenuClick = { navigator.navigateToRetailCategories()},
+            onBackClick = {
+                navigator.back()
+            },
+            onSearchClick = {
+                navigator.navController.navigate(
+                    RetailRoutes.ProductList
+                )
+            },
+            onMenuClick = {
+                navigator.navigateToRetailCategories()
+            },
             onFavoriteClick = {
                 navigator.navController.navigate(
                     AccountRoutes.Favorites

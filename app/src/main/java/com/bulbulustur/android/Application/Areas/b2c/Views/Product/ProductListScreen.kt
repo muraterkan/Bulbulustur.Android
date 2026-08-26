@@ -50,6 +50,7 @@ fun ProductListScreen(
     State: ProductControllerState = ProductControllerState(),
     languageId: Int = 1,
     productCategoryId: Int = 0,
+    categoryIds: List<Int> = emptyList(),
     OnLoadProducts: (
         filters: B2CProductFilterDTO,
         page: Int,
@@ -87,9 +88,10 @@ fun ProductListScreen(
     }
 
     val initialFilters =
-        remember(languageId, productCategoryId) {
+        remember(languageId, productCategoryId, categoryIds) {
             B2CProductFilterDTO(
                 ProductCategoryId = productCategoryId,
+                Categories = categoryIds.ifEmpty { listOf(productCategoryId) },
                 LanguageId = languageId,
                 SortOrder = "Name_Desc"
             )
@@ -97,7 +99,8 @@ fun ProductListScreen(
 
     LaunchedEffect(
         languageId,
-        productCategoryId
+        productCategoryId,
+        categoryIds
     ) {
         OnLoadProducts(
             initialFilters,

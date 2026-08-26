@@ -3,6 +3,7 @@ package com.bulbulustur.android.Application.Areas.b2c.Controllers
 import androidx.lifecycle.viewModelScope
 import com.bulbulustur.android.businesslayer.Core.DTO.CampaignDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.ICampaignRepository
+import com.bulbulustur.android.businesslayer.Core.Interface.IProductRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,7 +18,8 @@ data class CampaignControllerState(
 )
 
 class CampaignController(
-    private val campaignRepository: ICampaignRepository
+    private val campaignRepository: ICampaignRepository,
+    private val productRepository: IProductRepository
 ) : BaseController() {
 
     private val _state = MutableStateFlow(CampaignControllerState())
@@ -112,10 +114,47 @@ class CampaignController(
                 campaignId = campaignId
             )
 
+            val campaign = result.Data
+            val products = campaign?.CampaignProducts.orEmpty()
+
+            val variantIds = products
+                .map { it.VariantId }
+                .filter { it > 0 }
+                .distinct()
+
+            val picturesResult = if (variantIds.isNotEmpty()) {
+                productRepository.GetDefaultProductVariantPicturesAsync(
+                    variantIds
+                )
+            } else {
+                null
+            }
+
+            val pictures = picturesResult?.Data ?: emptyMap()
+
+            val productsWithPictures = products.map { product ->
+                val picture =
+                    pictures[product.VariantId.toString()]
+                        .orEmpty()
+
+                if (picture.isNotBlank()) {
+                    product.copy(
+                        DefaultPicture = picture
+                    )
+                } else {
+                    product
+                }
+            }
+
+            val campaignWithPictures =
+                campaign?.copy(
+                    CampaignProducts = productsWithPictures
+                )
+
             _state.update {
                 it.copy(
                     IsLoading = false,
-                    Campaign = result.Data,
+                    Campaign = campaignWithPictures,
                     ErrorMessage = result.Message
                 )
             }

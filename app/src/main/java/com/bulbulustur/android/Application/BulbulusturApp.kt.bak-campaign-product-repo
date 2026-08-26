@@ -404,14 +404,8 @@ private fun BulbulusturApplicationContent(
         CampaignRepository()
     }
 
-    val campaignController = remember(
-        campaignRepository,
-        productRepository
-    ) {
-        CampaignController(
-            campaignRepository = campaignRepository,
-            productRepository = productRepository
-        )
+    val campaignController = remember(campaignRepository) {
+        CampaignController(campaignRepository = campaignRepository)
     }
 
     val productHomepageSpecialContentRepository = remember {

@@ -260,7 +260,8 @@ private fun SponsoredAdvertCard(
                 } else {
                     Text(
                         text =
-                            Advert.ProductName.orEmpty().takeIf {
+                            Advert.ProductName
+                                .takeIf {
                                     it.isNotBlank()
                                 }
                                 ?.take(
@@ -294,7 +295,8 @@ private fun SponsoredAdvertCard(
             ) {
                 Text(
                     text =
-                        Advert.ProductName.orEmpty().takeIf {
+                        Advert.ProductName
+                            .takeIf {
                                 it.isNotBlank()
                             }
                             ?: BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = ""),
@@ -309,10 +311,11 @@ private fun SponsoredAdvertCard(
                 )
 
                 if (
-                    !Advert.Unit.isNullOrBlank()
+                    Advert.Unit.isNotBlank()
                 ) {
                     Text(
-                        text = Advert.Unit.orEmpty(),
+                        text =
+                            Advert.Unit,
                         style =
                             MaterialTheme.typography.labelSmall,
                         color =
@@ -327,7 +330,8 @@ private fun SponsoredAdvertCard(
                         FormatSponsoredAdvertPrice(
                             price =
                                 Advert.Price,
-                            currencySymbol = Advert.CurrencySymbol.orEmpty()
+                            currencySymbol =
+                                Advert.CurrencySymbol
                         ),
                     style =
                         MaterialTheme.typography.titleSmall,

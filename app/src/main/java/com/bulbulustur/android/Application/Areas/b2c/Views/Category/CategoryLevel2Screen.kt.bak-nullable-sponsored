@@ -62,7 +62,7 @@ import java.text.NumberFormat
 import java.util.Locale
 
 @Composable
-fun CategoryLevel1Screen(
+fun CategoryLevel2Screen(
     categoryId: Int = 0,
     categoryInfo: ProductCategoryDTO? = null,
     childCategories: List<ProductCategoryDTO> = emptyList(),
@@ -659,9 +659,9 @@ private fun AdvertSponsoredDTO.ToSponsoredProductCardModel(
 ): BbProductCardModel {
     return BbProductCardModel(
         Id = ProductId,
-        Name = ProductName.orEmpty(),
+        Name = ProductName,
         StoreName = "",
-        ImageUrl = ImageUrlResolver.Resolve(DefaultPicture.orEmpty()),
+        ImageUrl = ImageUrlResolver.Resolve(DefaultPicture),
         PriceText = FormatCategoryProductPrice(
             price = Price,
             currencySymbol = CurrencySymbol
@@ -676,7 +676,7 @@ private fun AdvertSponsoredDTO.ToSponsoredProductCardModel(
 
 private fun FormatCategoryProductPrice(
     price: Double,
-    currencySymbol: String?
+    currencySymbol: String
 ): String {
     val formatter = NumberFormat
         .getNumberInstance(Locale.forLanguageTag("tr-TR"))
@@ -686,8 +686,8 @@ private fun FormatCategoryProductPrice(
         }
 
     return buildString {
-        append(currencySymbol.orEmpty())
-        if (!currencySymbol.isNullOrBlank()) {
+        append(currencySymbol)
+        if (currencySymbol.isNotBlank()) {
             append(" ")
         }
         append(formatter.format(price))
@@ -696,8 +696,8 @@ private fun FormatCategoryProductPrice(
 
 @Preview(showBackground = true)
 @Composable
-private fun CategoryLevel1ScreenPreview() {
+private fun CategoryLevel2ScreenPreview() {
     BbTheme {
-        CategoryLevel1Screen()
+        CategoryLevel2Screen()
     }
 }

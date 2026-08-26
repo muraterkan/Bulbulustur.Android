@@ -46,7 +46,6 @@ import coil3.compose.AsyncImage
 import com.bulbulustur.android.Application.Areas.b2b.Controllers.ProductControllerState
 import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleProductDTO
-import com.bulbulustur.android.businesslayer.Core.DTO.B2BProductFilterDTO
 import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
 
 fun NavGraphBuilder.wholesaleGraph(
@@ -274,7 +273,7 @@ fun NavGraphBuilder.wholesaleGraph(
             },
             onSubCategoryClick = { subCategoryId ->
                 navigator.navController.navigate(
-                    WholesaleRoutes.productList(8591)
+                    WholesaleRoutes.productList(subCategoryId)
                 )
             },
             onProductListClick = {
@@ -360,27 +359,9 @@ fun NavGraphBuilder.wholesaleGraph(
     ) { backStackEntry ->
         val productCategoryId = backStackEntry.arguments?.getInt(WholesaleRoutes.ArgCategoryId) ?: 0
         val productState by productController.State.collectAsState()
-        val categoryState by categoryController.State.collectAsState()
 
-        val categoryIds = androidx.compose.runtime.remember(productCategoryId, categoryState.Categories) {
-            categoryController.GetCategoryScopeIds(productCategoryId)
-        }
-
-        LaunchedEffect(sessionState.Language.Id, productCategoryId, categoryIds) {
-            productController.List(
-                filters = B2BProductFilterDTO(
-                    ProductCategoryId = productCategoryId,
-                    Categories = categoryIds.ifEmpty { listOf(productCategoryId) },
-                    BrandIds = emptyList(),
-                    Colors = emptyList(),
-                    MinPrice = 0,
-                    MaxPrice = 99999999,
-                    SortOrder = "Name_Desc",
-                    LanguageId = sessionState.Language.Id
-                ),
-                page = 1,
-                pageSize = 50
-            )
+        LaunchedEffect(sessionState.Language.Id, productCategoryId) {
+            productController.List(languageId = sessionState.Language.Id, productCategoryId = productCategoryId, page = 1, pageSize = 50)
         }
 
         WholesaleProductListScreen(

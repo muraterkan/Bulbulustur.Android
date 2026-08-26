@@ -153,31 +153,6 @@ class CategoryController(
         }
     }
 
-    fun GetCategoryScopeIds(productCategoryId: Int): List<Int> {
-        if (productCategoryId <= 0) return emptyList()
-
-        val categories = State.value.Categories
-        if (categories.isEmpty()) return listOf(productCategoryId)
-
-        val childrenByParent = categories.groupBy { it.ParentId }
-        val result = LinkedHashSet<Int>()
-        val queue = ArrayDeque<Int>()
-
-        result.add(productCategoryId)
-        queue.add(productCategoryId)
-
-        while (queue.isNotEmpty()) {
-            val parentId = queue.removeFirst()
-            childrenByParent[parentId].orEmpty().forEach { child ->
-                if (child.ProductCategoryId > 0 && result.add(child.ProductCategoryId)) {
-                    queue.add(child.ProductCategoryId)
-                }
-            }
-        }
-
-        return result.toList()
-    }
-
     fun Clear() {
         _state.update {
             CategoryControllerState()

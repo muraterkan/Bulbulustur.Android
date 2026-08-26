@@ -2,7 +2,6 @@ package com.bulbulustur.android.Application.Areas.b2b.Controllers
 
 import androidx.lifecycle.viewModelScope
 import com.bulbulustur.android.businesslayer.Core.DTO.B2BProductDataDTO
-import com.bulbulustur.android.businesslayer.Core.DTO.B2BProductFilterDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleProductDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleProductRelatedDTO
@@ -43,8 +42,8 @@ class ProductController(
     private val _state = MutableStateFlow(ProductControllerState())
     val State: StateFlow<ProductControllerState> = _state.asStateFlow()
 
-    fun List(filters: B2BProductFilterDTO, page: Int = 1, pageSize: Int = 50) {
-        if (filters.LanguageId <= 0) {
+    fun List(languageId: Int, productCategoryId: Int = 0, page: Int = 1, pageSize: Int = 50, sortOrder: String = "Name_Desc", brandIds: String = "") {
+        if (languageId <= 0) {
             _state.update {
                 it.copy(
                     IsLoading = false,
@@ -61,12 +60,15 @@ class ProductController(
             StartLoading("List")
 
             val response = executeService.GetAsync(
-                cacheKey = "b2b.Product.GetProductDataAsync.page=$page.pageSize=$pageSize.$filters"
+                cacheKey = "b2b.Product.GetProductDataAsync.languageId=$languageId.productCategoryId=$productCategoryId.page=$page.pageSize=$pageSize.sortOrder=$sortOrder.brandIds=$brandIds"
             ) {
                 wholesaleProductRepository.GetProductDataAsync(
-                    filters = filters,
+                    languageId = languageId,
+                    productCategoryId = productCategoryId,
                     page = page,
-                    pageSize = pageSize
+                    pageSize = pageSize,
+                    sortOrder = sortOrder,
+                    brandIds = brandIds
                 )
             }
 

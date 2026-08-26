@@ -43,7 +43,6 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
 import com.bulbulustur.android.R
 import com.bulbulustur.android.businesslayer.Core.DTO.B2BProductData
-import com.bulbulustur.android.businesslayer.Core.Network.ImageUrlResolver
 
 @Composable
 fun WholesaleProductListScreen(
@@ -385,9 +384,7 @@ private fun B2BProductData.ToWholesaleProductListEntry(): WholesaleProductListEn
             MoqText = moqText,
             SupplierText = CompanyName,
             BadgeText = BBLocalization.Current.Get(key = "cd90e72e-8745-4543-836b-ca914c3640f8", fallback = "Toptan"),
-            ImageUrl = ImageUrlResolver.Resolve(
-                DefaultPicture.trim().ifBlank { Picture.trim() }
-            ),
+            ImageResId = R.drawable.h3ff3b33d6a1447c898cee6e336867bach,
             IsFavorite = false
         ),
         MinimumOrderValue = MinimumOrderQuantity,

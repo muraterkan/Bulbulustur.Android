@@ -347,19 +347,23 @@ private fun WholesaleSearchInfoCard(
 }
 
 private fun WholesaleProductDTO.toWholesaleProductCardModel(): WholesaleProductCardModel {
-    val title = ProductName
+    val productName = ProductName.orEmpty().trim()
+    val seoTitle = SeoTitle.orEmpty().trim()
+    val minimumOrderUnit = MinimumOrderUnit.orEmpty().trim()
+    val defaultPicture = DefaultPicture.orEmpty().trim()
+    val picture = Picture.orEmpty().trim()
+
+    val title = productName
         .takeIf { it.isNotBlank() }
-        ?: SeoTitle.takeIf { it.isNotBlank() }
+        ?: seoTitle.takeIf { it.isNotBlank() }
         ?: BBLocalization.Current.Get(
             key = "45ac0832-bf5d-4c76-a747-f544863260cb",
             fallback = "Toptan ürün"
         )
 
     val moqText = if (MinimumOrderQuantity > 0) {
-        val unit = MinimumOrderUnit.trim()
-
-        if (unit.isNotBlank()) {
-            "Min. $MinimumOrderQuantity $unit"
+        if (minimumOrderUnit.isNotBlank()) {
+            "Min. $MinimumOrderQuantity $minimumOrderUnit"
         } else {
             "Min. $MinimumOrderQuantity"
         }
@@ -379,7 +383,7 @@ private fun WholesaleProductDTO.toWholesaleProductCardModel(): WholesaleProductC
             fallback = "Toptan"
         ),
         ImageUrl = ImageUrlResolver.Resolve(
-            DefaultPicture.trim().ifBlank { Picture.trim() }
+            defaultPicture.ifBlank { picture }
         ),
         IsFavorite = false
     )

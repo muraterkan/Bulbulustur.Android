@@ -1,7 +1,6 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Search
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,10 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ChevronRight
 import androidx.compose.material.icons.outlined.Inventory2
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -40,11 +36,12 @@ import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.Ret
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeader
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeaderLeadingAction
 import com.bulbulustur.android.Application.Localization.BBLocalization
+import com.bulbulustur.android.Application.Views.Shared.Components.BbProductCard
+import com.bulbulustur.android.Application.Views.Shared.Components.BbProductCardModel
 import com.bulbulustur.android.Application.Views.Shared.Components.BbSectionHeader
-import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbIconBox
-import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbIconBoxSize
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductDTO
+import com.bulbulustur.android.businesslayer.Core.Network.ImageUrlResolver
 import kotlinx.coroutines.delay
 
 @Composable
@@ -95,16 +92,11 @@ fun SearchScreen(
         ) {
             lastSubmittedSearchText = latestSearchText
             android.util.Log.d("BB_SEARCH", "Retail auto search submit key=$latestSearchText")
+
             onSearchSubmit(
                 latestSearchText,
                 RetailSearchType.Product
             )
-        }
-    }
-
-    val displayedProducts = remember(productResults) {
-        productResults.map { product ->
-            product.toRetailSearchProductItem()
         }
     }
 
@@ -124,7 +116,6 @@ fun SearchScreen(
                 ),
                 onSearchClick = {
                     val currentSearchText = searchText.trim()
-
                     android.util.Log.d("BB_SEARCH", "Retail header search click key=$currentSearchText")
 
                     if (currentSearchText.length >= 3) {
@@ -210,7 +201,7 @@ fun SearchScreen(
                     }
                 }
 
-                displayedProducts.isEmpty() -> {
+                productResults.isEmpty() -> {
                     item {
                         SearchInfoCard(
                             title = BBLocalization.Current.Get(
@@ -227,15 +218,15 @@ fun SearchScreen(
 
                 else -> {
                     itemsIndexed(
-                        items = displayedProducts,
+                        items = productResults,
                         key = { index, product ->
-                            "retail-search-product-${product.id}-$index"
+                            "retail-search-product-${product.ProductId}-${product.VariantId}-${product.StoreId}-$index"
                         }
                     ) { _, product ->
-                        SearchProductCard(
-                            product = product,
+                        BbProductCard(
+                            product = product.toSearchProductCardModel(),
                             onClick = {
-                                onProductClick(product)
+                                onProductClick(product.toRetailSearchProductItem())
                             }
                         )
                     }
@@ -246,90 +237,6 @@ fun SearchScreen(
                 Spacer(modifier = Modifier.height(BBSpacing.Space4))
             }
         }
-    }
-}
-
-@Composable
-private fun SearchProductCard(
-    product: RetailSearchProductItem,
-    onClick: () -> Unit
-) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-                onClick()
-            },
-        shape = RoundedCornerShape(22.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 1.dp
-        )
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(14.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
-        ) {
-            SearchImagePlaceholder(
-                text = product.imageText
-            )
-
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
-            ) {
-                Text(
-                    text = product.name,
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-
-                Text(
-                    text = product.storeName,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-
-                if (product.priceText.isNotBlank()) {
-                    Text(
-                        text = product.priceText,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
-            }
-
-            Icon(
-                imageVector = Icons.Outlined.ChevronRight,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-    }
-}
-
-@Composable
-private fun SearchImagePlaceholder(
-    text: String
-) {
-    BbIconBox(
-        size = BbIconBoxSize.Large,
-        backgroundColor = MaterialTheme.colorScheme.primaryContainer,
-        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-    ) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.labelLarge,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onPrimaryContainer
-        )
     }
 }
 
@@ -445,9 +352,7 @@ private fun ProductDTO.toRetailSearchProductItem(): RetailSearchProductItem {
         .trim()
         .take(2)
         .uppercase()
-        .ifBlank {
-            "P"
-        }
+        .ifBlank { "P" }
 
     return RetailSearchProductItem(
         id = ProductId,
@@ -455,6 +360,37 @@ private fun ProductDTO.toRetailSearchProductItem(): RetailSearchProductItem {
         storeName = storeName,
         priceText = priceText,
         imageText = imageText
+    )
+}
+
+private fun ProductDTO.toSearchProductCardModel(): BbProductCardModel {
+    val name = ProductName.orEmpty().trim()
+        .ifBlank { SeoTitle.orEmpty().trim() }
+        .ifBlank {
+            BBLocalization.Current.Get(
+                key = "c1b573ef-6e74-4646-8512-37ab80572c47",
+                fallback = "Ürün"
+            )
+        }
+
+    val storeName = Store.orEmpty().trim()
+        .ifBlank { CategoryName.orEmpty().trim() }
+        .ifBlank {
+            BBLocalization.Current.Get(
+                key = "d7ef8746-7182-43ef-8c73-64a50ae37c1b",
+                fallback = "Mağaza bilgisi yok"
+            )
+        }
+
+    val currencySymbol = CurrencySymbol.orEmpty().trim().ifBlank { "₺" }
+
+    return BbProductCardModel(
+        Id = ProductId,
+        Name = name,
+        StoreName = storeName,
+        PriceText = if (Price > 0.0) "$currencySymbol$Price" else "",
+        ImageUrl = ImageUrlResolver.Resolve(DefaultPicture.orEmpty().trim()),
+        IsFavorite = false
     )
 }
 

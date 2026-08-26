@@ -32,7 +32,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleSearchHeader
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleSearchHeaderLeadingAction
+import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleProductCard
+import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleProductCardModel
 import com.bulbulustur.android.Application.Localization.BBLocalization
+import com.bulbulustur.android.businesslayer.Core.Network.ImageUrlResolver
 import com.bulbulustur.android.Application.Views.Shared.Components.BbSectionHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
@@ -59,12 +62,6 @@ fun SearchScreen(
 ) {
     var searchText by remember {
         mutableStateOf("")
-    }
-
-    val displayedProducts = remember(productResults) {
-        productResults.map { product ->
-            product.toWholesaleSearchProductResult()
-        }
     }
 
     Scaffold(
@@ -153,7 +150,7 @@ fun SearchScreen(
                     }
                 }
 
-                displayedProducts.isEmpty() -> {
+                productResults.isEmpty() -> {
                     item {
                         WholesaleSearchInfoCard(
                             title = BBLocalization.Current.Get(
@@ -171,18 +168,18 @@ fun SearchScreen(
 
                 else -> {
                     itemsIndexed(
-                        items = displayedProducts,
+                        items = productResults,
                         key = { index, product ->
-                            "wholesale-search-product-${product.productId}-$index"
+                            "wholesale-search-product-${product.WholesaleProductId}-$index"
                         }
                     ) { _, product ->
-                        WholesaleSearchResultCard(
-                            title = product.name,
-                            description = product.description,
-                            meta = product.meta,
-                            icon = product.icon,
+                        WholesaleProductCard(
+                            product = product.toWholesaleProductCardModel(),
                             onClick = {
-                                onProductClick(product.productId)
+                                onProductClick(product.WholesaleProductId)
+                            },
+                            onRfqClick = {
+                                onRfqCreateClick(product.ProductName)
                             }
                         )
                     }
@@ -307,64 +304,6 @@ private fun WholesaleSearchModeCard(
 }
 
 @Composable
-private fun WholesaleSearchResultCard(
-    title: String,
-    description: String,
-    meta: String,
-    icon: ImageVector,
-    onClick: () -> Unit
-) {
-    BbCard(
-        modifier = Modifier.fillMaxWidth(),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium,
-        onClick = onClick
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary
-            )
-
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
-            ) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-
-                Text(
-                    text = description,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-
-                Text(
-                    text = meta,
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-
-            Icon(
-                imageVector = Icons.Outlined.ChevronRight,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-    }
-}
-
-@Composable
 private fun WholesaleSearchInfoCard(
     title: String,
     description: String,
@@ -407,16 +346,8 @@ private fun WholesaleSearchInfoCard(
     }
 }
 
-data class WholesaleSearchProductResult(
-    val productId: Int,
-    val name: String,
-    val description: String,
-    val meta: String,
-    val icon: ImageVector
-)
-
-private fun WholesaleProductDTO.toWholesaleSearchProductResult(): WholesaleSearchProductResult {
-    val name = ProductName
+private fun WholesaleProductDTO.toWholesaleProductCardModel(): WholesaleProductCardModel {
+    val title = ProductName
         .takeIf { it.isNotBlank() }
         ?: SeoTitle.takeIf { it.isNotBlank() }
         ?: BBLocalization.Current.Get(
@@ -424,23 +355,14 @@ private fun WholesaleProductDTO.toWholesaleSearchProductResult(): WholesaleSearc
             fallback = "Toptan ürün"
         )
 
-    val description = Description
-        .takeIf { it.isNotBlank() }
-        ?: Category.takeIf { it.isNotBlank() }
-        ?: BBLocalization.Current.Get(
-            key = "4b06bbbe-2824-4b75-81e9-a3796bc59339",
-            fallback = "Ürün açıklaması bulunmuyor."
-        )
+    val moqText = if (MinimumOrderQuantity > 0) {
+        val unit = MinimumOrderUnit.trim()
 
-    val companyName = CompanyName
-        .takeIf { it.isNotBlank() }
-        ?: BBLocalization.Current.Get(
-            key = "e3af0e39-0a77-4184-b981-905315dbd1c",
-            fallback = "Firma bilgisi yok"
-        )
-
-    val quantityText = if (MinimumOrderQuantity > 0) {
-        "Min. $MinimumOrderQuantity adet"
+        if (unit.isNotBlank()) {
+            "Min. $MinimumOrderQuantity $unit"
+        } else {
+            "Min. $MinimumOrderQuantity"
+        }
     } else {
         BBLocalization.Current.Get(
             key = "e2256c25-f471-4083-8f20-57650248c7a7",
@@ -448,12 +370,18 @@ private fun WholesaleProductDTO.toWholesaleSearchProductResult(): WholesaleSearc
         )
     }
 
-    return WholesaleSearchProductResult(
-        productId = WholesaleProductId,
-        name = name,
-        description = description,
-        meta = "$quantityText • $companyName",
-        icon = Icons.Outlined.Inventory2
+    return WholesaleProductCardModel(
+        Id = WholesaleProductId,
+        Title = title,
+        MoqText = moqText,
+        BadgeText = BBLocalization.Current.Get(
+            key = "cd90e72e-8745-4543-836b-ca914c3640f8",
+            fallback = "Toptan"
+        ),
+        ImageUrl = ImageUrlResolver.Resolve(
+            DefaultPicture.trim().ifBlank { Picture.trim() }
+        ),
+        IsFavorite = false
     )
 }
 

@@ -11,5 +11,7 @@ data class WholesaleProductCategoryContentGroupDTO(
     val Picture: String = "",
     val BackgroundColor: String = "",
     val BackgroundPicture: String = "",
-    val TextColor: String = ""
+    val TextColor: String = "",
+    val ProductName: String = "",
+    val Products: List<WholesaleProductCategoryContentDTO> = emptyList()
 )

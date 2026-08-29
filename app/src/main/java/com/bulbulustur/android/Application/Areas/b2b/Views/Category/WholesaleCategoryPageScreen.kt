@@ -59,6 +59,7 @@ import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.Who
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleSearchHeader
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleSearchHeaderLeadingAction
 import com.bulbulustur.android.Application.Localization.BBLocalization
+import com.bulbulustur.android.Application.Views.Shared.Components.BbMaterialSymbol
 import com.bulbulustur.android.Application.Views.Shared.Components.BbSectionHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
@@ -457,9 +458,8 @@ private fun WholesaleCategoryHomeCategoryCard(
                     ),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    imageVector = ResolveWholesaleCategoryIcon(item.iconClass),
-                    contentDescription = null,
+                BbMaterialSymbol(
+                    iconClass = item.iconClass,
                     tint = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             }
@@ -544,28 +544,6 @@ private fun WholesaleCategoryQuickCard(
                 )
             }
         }
-    }
-}
-
-private fun ResolveWholesaleCategoryIcon(iconClass: String): ImageVector {
-    return when (iconClass.trim().lowercase()) {
-        "build" -> Icons.Outlined.Build
-        "security" -> Icons.Outlined.Security
-        "minor_crash" -> Icons.Outlined.MinorCrash
-        "settings_suggest" -> Icons.Outlined.SettingsSuggest
-        "directions_car" -> Icons.Outlined.DirectionsCar
-        "checkroom" -> Icons.Outlined.Checkroom
-        "weekend" -> Icons.Outlined.Weekend
-        "sports_esports" -> Icons.Outlined.SportsEsports
-        "computer" -> Icons.Outlined.Computer
-        "local_florist" -> Icons.Outlined.LocalFlorist
-        "pets" -> Icons.Outlined.Pets
-        "restaurant" -> Icons.Outlined.Restaurant
-        "kitchen" -> Icons.Outlined.Kitchen
-        "child_care" -> Icons.Outlined.ChildCare
-        "home" -> Icons.Outlined.Home
-        "face" -> Icons.Outlined.Face
-        else -> Icons.Outlined.Category
     }
 }
 

@@ -34,12 +34,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.bulbulustur.android.Application.Areas.b2c.Views.Category.Components.CategoryProductShowcaseContent
+import com.bulbulustur.android.Application.Areas.b2c.Views.Category.Components.CategoryProductContentShowcaseContent
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailBottomNavigation
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailBottomNavigationItem
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeader
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeaderLeadingAction
 import com.bulbulustur.android.Application.Localization.BBLocalization
+import com.bulbulustur.android.Application.Views.Shared.Components.BbMaterialSymbol
 import com.bulbulustur.android.Application.Views.Shared.Components.BbProductCard
 import com.bulbulustur.android.Application.Views.Shared.Components.BbProductCardModel
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
@@ -55,8 +56,8 @@ import com.bulbulustur.android.businesslayer.Core.DTO.AdvertSponsoredDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.B2CProductData
 import com.bulbulustur.android.businesslayer.Core.DTO.CampaignDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryDTO
-import com.bulbulustur.android.businesslayer.Core.DTO.ProductHomepageSpecialContentDTO
-import com.bulbulustur.android.businesslayer.Core.DTO.ProductHomepageSpecialDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryContentDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryContentGroupDTO
 import com.bulbulustur.android.businesslayer.Core.Network.ImageUrlResolver
 import java.text.NumberFormat
 import java.util.Locale
@@ -66,12 +67,12 @@ fun CategoryLevel1Screen(
     categoryId: Int = 0,
     categoryInfo: ProductCategoryDTO? = null,
     childCategories: List<ProductCategoryDTO> = emptyList(),
-    specialContents: List<ProductHomepageSpecialContentDTO> = emptyList(),
+    categoryContents: List<ProductCategoryContentGroupDTO> = emptyList(),
     products: List<B2CProductData> = emptyList(),
     campaigns: List<CampaignDTO> = emptyList(),
     sponsoredAdverts: List<AdvertSponsoredDTO> = emptyList(),
     isProductLoading: Boolean = false,
-    isSpecialContentsLoading: Boolean = false,
+    isCategoryContentsLoading: Boolean = false,
 
     onBackClick: () -> Unit = {},
     onMenuClick: () -> Unit = {},
@@ -83,10 +84,10 @@ fun CategoryLevel1Screen(
     onAccountClick: () -> Unit = {},
     onSubCategoryClick: (Int) -> Unit = {},
 
-    onSpecialProductClick: (ProductHomepageSpecialDTO) -> Unit = {},
-    onSpecialProductFavoriteClick: (ProductHomepageSpecialDTO) -> Unit = {},
-    onSpecialAddToBasketClick: (Int) -> Unit = {},
-    onSpecialViewAllClick: (ProductHomepageSpecialContentDTO) -> Unit = {},
+    onCategoryProductClick: (ProductCategoryContentDTO) -> Unit = {},
+    onCategoryProductFavoriteClick: (ProductCategoryContentDTO) -> Unit = {},
+    onCategoryAddToBasketClick: (Int) -> Unit = {},
+    onCategoryViewAllClick: (ProductCategoryContentGroupDTO) -> Unit = {},
     onProductClick: (B2CProductData) -> Unit = {},
     onProductFavoriteClick: (B2CProductData) -> Unit = {},
     onAddToBasketClick: (Int) -> Unit = {},
@@ -159,8 +160,8 @@ fun CategoryLevel1Screen(
                     categoryId = categoryId,
                     categoryInfo = categoryInfo,
                     childCategoryCount = validChildCategories.size,
-                    hasShowcase = specialContents.isNotEmpty() ||
-                            isSpecialContentsLoading ||
+                    hasShowcase = categoryContents.isNotEmpty() ||
+                            isCategoryContentsLoading ||
                             campaigns.isNotEmpty() ||
                             sponsoredAdverts.isNotEmpty()
                 )
@@ -184,13 +185,13 @@ fun CategoryLevel1Screen(
 
             item {
                 CategoryShowcaseSection(
-                    specialContents = specialContents,
-                    isSpecialContentsLoading = isSpecialContentsLoading,
+                    categoryContents = categoryContents,
+                    isCategoryContentsLoading = isCategoryContentsLoading,
                     campaigns = campaigns,
-                    onSpecialProductClick = onSpecialProductClick,
-                    onSpecialProductFavoriteClick = onSpecialProductFavoriteClick,
-                    onSpecialAddToBasketClick = onSpecialAddToBasketClick,
-                    onSpecialViewAllClick = onSpecialViewAllClick,
+                    onCategoryProductClick = onCategoryProductClick,
+                    onCategoryProductFavoriteClick = onCategoryProductFavoriteClick,
+                    onCategoryAddToBasketClick = onCategoryAddToBasketClick,
+                    onCategoryViewAllClick = onCategoryViewAllClick,
                     onCampaignClick = onCampaignClick
                 )
             }
@@ -273,10 +274,8 @@ private fun CategoryDetailHero(
                     contentColor = MaterialTheme.colorScheme.onPrimary,
                     radius = BBRadius.xl
                 ) {
-                    Icon(
-                        imageVector = ResolveRetailCategoryIcon(categoryInfo?.IconClass.orEmpty()),
-                        contentDescription = null,
-                        modifier = Modifier.size(BBIcon.Ui),
+                    BbMaterialSymbol(
+                        iconClass = categoryInfo?.IconClass,
                         tint = MaterialTheme.colorScheme.onPrimary
                     )
                 }
@@ -391,11 +390,9 @@ private fun CategorySubCategoryRow(
                 contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 radius = BBRadius.lg
             ) {
-                Icon(
-                    imageVector = ResolveRetailCategoryIcon(category.IconClass.orEmpty()),
-                    contentDescription = null,
-                    modifier = Modifier.size(BBIcon.Ui),
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                BbMaterialSymbol(
+                    iconClass = category.IconClass,
+                    tint = MaterialTheme.colorScheme.primary
                 )
             }
 
@@ -418,13 +415,13 @@ private fun CategorySubCategoryRow(
 
 @Composable
 private fun CategoryShowcaseSection(
-    specialContents: List<ProductHomepageSpecialContentDTO>,
-    isSpecialContentsLoading: Boolean,
+    categoryContents: List<ProductCategoryContentGroupDTO>,
+    isCategoryContentsLoading: Boolean,
     campaigns: List<CampaignDTO>,
-    onSpecialProductClick: (ProductHomepageSpecialDTO) -> Unit,
-    onSpecialProductFavoriteClick: (ProductHomepageSpecialDTO) -> Unit,
-    onSpecialAddToBasketClick: (Int) -> Unit,
-    onSpecialViewAllClick: (ProductHomepageSpecialContentDTO) -> Unit,
+    onCategoryProductClick: (ProductCategoryContentDTO) -> Unit,
+    onCategoryProductFavoriteClick: (ProductCategoryContentDTO) -> Unit,
+    onCategoryAddToBasketClick: (Int) -> Unit,
+    onCategoryViewAllClick: (ProductCategoryContentGroupDTO) -> Unit,
     onCampaignClick: (CampaignDTO) -> Unit
 ) {
     Column(
@@ -442,13 +439,13 @@ private fun CategoryShowcaseSection(
             )
         )
 
-        CategoryProductShowcaseContent(
-            specialContents = specialContents,
-            isLoading = isSpecialContentsLoading,
-            onProductClick = onSpecialProductClick,
-            onFavoriteClick = onSpecialProductFavoriteClick,
-            onAddToBasketClick = onSpecialAddToBasketClick,
-            onViewAllClick = onSpecialViewAllClick
+        CategoryProductContentShowcaseContent(
+            categoryContents = categoryContents,
+            isLoading = isCategoryContentsLoading,
+            onProductClick = onCategoryProductClick,
+            onFavoriteClick = onCategoryProductFavoriteClick,
+            onAddToBasketClick = onCategoryAddToBasketClick,
+            onViewAllClick = onCategoryViewAllClick
         )
 
         if (campaigns.isNotEmpty()) {

@@ -22,6 +22,9 @@ object RetailRoutes {
     const val ArgSpecialGroupId =
         "specialGroupId"
 
+    const val ArgCategoryContentGroupId = "categoryContentGroupId"
+    const val ArgCategoryContentGroupName = "categoryContentGroupName"
+
     const val Home =
         "retail/home"
 
@@ -51,6 +54,13 @@ object RetailRoutes {
 
     const val ProductHomepageSpecialList =
         "retail/product-homepage-special-list/{$ArgSpecialGroupId}"
+
+    const val ProductCategoryContentList =
+        "retail/product-category-content-list/{$ArgCategoryContentGroupId}/{$ArgCategoryContentGroupName}"
+
+    fun productCategoryContentList(categoryContentGroupId: Int, groupName: String): String {
+        return "retail/product-category-content-list/$categoryContentGroupId/${android.net.Uri.encode(groupName)}"
+    }
 
     fun productHomepageSpecialList(
         specialGroupId: Int
@@ -148,11 +158,20 @@ object WholesaleRoutes {
 
     const val ArgCategoryId = "categoryId"
     const val ArgProductId = "productId"
+    const val ArgCategoryContentGroupId = "categoryContentGroupId"
+    const val ArgCategoryContentGroupName = "categoryContentGroupName"
 
     const val Home = "wholesale/home"
     const val CategoryHome = "wholesale/category-home"
 
     const val FeaturedProducts = "wholesale/featured-products"
+
+    const val ProductCategoryContentList =
+        "wholesale/product-category-content-list/{$ArgCategoryContentGroupId}/{$ArgCategoryContentGroupName}"
+
+    fun productCategoryContentList(categoryContentGroupId: Int, groupName: String): String {
+        return "wholesale/product-category-content-list/$categoryContentGroupId/${android.net.Uri.encode(groupName)}"
+    }
 
     const val ProductList = "wholesale/product-list?$ArgCategoryId={$ArgCategoryId}"
 

@@ -1144,8 +1144,24 @@ fun NavGraphBuilder.accountGraph(
     composable(route = AccountRoutes.Favorites) {
         val accountState by accountController.State.collectAsState()
 
+        if (!sessionState.IsAuthenticated || sessionState.MemberId <= 0) {
+            LaunchedEffect(Unit) {
+                navigator.navController.navigate(LogonRoutes.Logon) {
+                    popUpTo(AccountRoutes.Favorites) {
+                        inclusive = true
+                    }
+
+                    launchSingleTop = true
+                }
+            }
+
+            return@composable
+        }
+
         LaunchedEffect(sessionState.MemberId) {
-            accountController.GetFavorites(memberId = sessionState.MemberId)
+            accountController.GetFavorites(
+                memberId = sessionState.MemberId
+            )
         }
 
         FavoriteListScreen(

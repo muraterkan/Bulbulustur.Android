@@ -2,11 +2,14 @@ package com.bulbulustur.android.Application.Areas.b2c.Controllers
 
 import androidx.lifecycle.viewModelScope
 import com.bulbulustur.android.Application.Localization.BBLocalization
+import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryContentDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductHomepageSpecialContentDTO
+import com.bulbulustur.android.businesslayer.Core.Interface.IProductCategoryContentRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IProductCategoryRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IProductHomepageSpecialContentRepository
 import com.bulbulustur.android.businesslayer.Core.Util.Execute.IExecuteService
+import com.bulbulustur.android.businesslayer.Core.Util.PaginatedList
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,24 +19,32 @@ import kotlinx.coroutines.launch
 
 data class CategoryControllerState(
     val IsLoading: Boolean = false,
+    val IsCategoryContentsLoading: Boolean = false,
     val IsSpecialContentsLoading: Boolean = false,
     val CurrentAction: String? = null,
     val ErrorMessage: String? = null,
+    val CategoryContentsErrorMessage: String? = null,
     val SpecialContentsErrorMessage: String? = null,
     val CategoryResult: Result<ProductCategoryDTO?>? = null,
     val CategoryListResult: Result<List<ProductCategoryDTO>>? = null,
     val ChildCategoryListResult: Result<List<ProductCategoryDTO>>? = null,
+    val ProductCategoryContentsResult: Result<ProductCategoryContentDTO>? = null,
+    val ProductCategoryContentListResult: Result<PaginatedList<ProductCategoryContentDTO>>? = null,
+    val IsCategoryContentListLoading: Boolean = false,
+    val CategoryContentListErrorMessage: String? = null,
     val SpecialContentsResult: Result<List<ProductHomepageSpecialContentDTO>>? = null
 ) {
     val Category: ProductCategoryDTO? get() = CategoryResult?.Data
     val Categories: List<ProductCategoryDTO> get() = CategoryListResult?.Data.orEmpty()
     val ChildCategories: List<ProductCategoryDTO> get() = ChildCategoryListResult?.Data.orEmpty()
+    val CategoryContents get() = ProductCategoryContentsResult?.Data?.Groups.orEmpty()
     val SpecialContents: List<ProductHomepageSpecialContentDTO> get() = SpecialContentsResult?.Data.orEmpty()
 }
 
 class CategoryController(
     private val executeService: IExecuteService,
     private val productCategoryRepository: IProductCategoryRepository,
+    private val productCategoryContentRepository: IProductCategoryContentRepository,
     private val productHomepageSpecialContentRepository: IProductHomepageSpecialContentRepository
 ) : BaseController() {
 
@@ -120,6 +131,73 @@ class CategoryController(
         }
     }
 
+    fun LoadProductCategoryContents(languageId: Int, productCategoryId: Int, groupCount: Int = 3, productCount: Int = 4) {
+        if (languageId <= 0 || productCategoryId <= 0) {
+            _state.update {
+                it.copy(
+                    IsCategoryContentsLoading = false,
+                    ProductCategoryContentsResult = null,
+                    CategoryContentsErrorMessage = null
+                )
+            }
+            return
+        }
+
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    IsCategoryContentsLoading = true,
+                    CategoryContentsErrorMessage = null
+                )
+            }
+
+            val response = executeService.GetAsync(
+                cacheKey = "b2c.Category.ProductCategoryContents.languageId=$languageId.productCategoryId=$productCategoryId.groupCount=$groupCount.productCount=$productCount"
+            ) {
+                productCategoryContentRepository.GetProductCategoryContentsAsync(
+                    languageId = languageId,
+                    productCategoryId = productCategoryId,
+                    groupCount = groupCount,
+                    productCount = productCount
+                )
+            }
+
+            _state.update {
+                it.copy(
+                    IsCategoryContentsLoading = false,
+                    ProductCategoryContentsResult = response,
+                    CategoryContentsErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+        }
+    }
+
+    fun LoadProductCategoryContentPage(productCategoryContentGroupId: Int, page: Int = 1, pageSize: Int = 20) {
+        if (productCategoryContentGroupId <= 0) return
+
+        viewModelScope.launch {
+            _state.update { it.copy(IsCategoryContentListLoading = true, CategoryContentListErrorMessage = null) }
+
+            val response = executeService.GetAsync(
+                cacheKey = "b2c.Category.ProductCategoryContentPage.groupId=$productCategoryContentGroupId.page=$page.pageSize=$pageSize"
+            ) {
+                productCategoryContentRepository.GetProductCategoryContentsPagedAsync(
+                    productCategoryContentGroupId = productCategoryContentGroupId,
+                    page = page,
+                    pageSize = pageSize
+                )
+            }
+
+            _state.update {
+                it.copy(
+                    IsCategoryContentListLoading = false,
+                    ProductCategoryContentListResult = response,
+                    CategoryContentListErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+        }
+    }
+
     fun LoadSpecialContents(languageId: Int, count: Int = 5) {
         if (languageId <= 0 || count <= 0) {
             _state.update {
@@ -175,13 +253,11 @@ class CategoryController(
         while (stack.isNotEmpty()) {
             val currentId = stack.removeLast()
 
-            childrenByParent[currentId]
-                .orEmpty()
-                .forEach { child ->
-                    if (child.ProductCategoryId > 0 && result.add(child.ProductCategoryId)) {
-                        stack.add(child.ProductCategoryId)
-                    }
+            childrenByParent[currentId].orEmpty().forEach { child ->
+                if (child.ProductCategoryId > 0 && result.add(child.ProductCategoryId)) {
+                    stack.add(child.ProductCategoryId)
                 }
+            }
         }
 
         android.util.Log.d(

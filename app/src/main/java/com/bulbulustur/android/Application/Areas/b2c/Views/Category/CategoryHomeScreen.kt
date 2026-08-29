@@ -55,6 +55,7 @@ import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.Ret
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeader
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeaderLeadingAction
 import com.bulbulustur.android.Application.Localization.BBLocalization
+import com.bulbulustur.android.Application.Views.Shared.Components.BbMaterialSymbol
 import com.bulbulustur.android.Application.Views.Shared.Components.BbSectionHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
@@ -309,10 +310,9 @@ private fun RetailCategoryHomeCategoryCard(
                     ),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    imageVector = ResolveRetailCategoryIcon(item.iconClass),
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer
+                BbMaterialSymbol(
+                    iconClass = item.iconClass,
+                    tint = MaterialTheme.colorScheme.primary
                 )
             }
 

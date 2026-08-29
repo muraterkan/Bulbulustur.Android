@@ -850,12 +850,12 @@ private fun BulbulusturApplicationContent(
 
         retailGraph(
             navigator = appNavigator,
-            
-                categoryController = com.bulbulustur.android.Application.Areas.b2c.Controllers.CategoryController(
+
+            categoryController = com.bulbulustur.android.Application.Areas.b2c.Controllers.CategoryController(
                 executeService = executeService,
                 productCategoryRepository = productCategoryRepository,
+                productCategoryContentRepository = com.bulbulustur.android.businesslayer.Core.Repository.ProductCategoryContentRepository(),
                 productHomepageSpecialContentRepository = productHomepageSpecialContentRepository
-
             )
 ,
             homeController = retailHomeController,
@@ -877,6 +877,7 @@ private fun BulbulusturApplicationContent(
             categoryController = com.bulbulustur.android.Application.Areas.b2b.Controllers.CategoryController(
                 executeService = executeService,
                 productCategoryRepository = productCategoryRepository,
+                wholesaleProductCategoryContentRepository = com.bulbulustur.android.businesslayer.Core.Repository.WholesaleProductCategoryContentRepository(),
                 wholesaleHomepageSpecialContentRepository = wholesaleHomepageSpecialContentRepository
             ),
             homeController = wholesaleHomeController,

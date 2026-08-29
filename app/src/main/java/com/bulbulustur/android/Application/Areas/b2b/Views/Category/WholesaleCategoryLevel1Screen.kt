@@ -36,7 +36,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.bulbulustur.android.Application.Areas.b2b.Views.Components.WholesaleCategoryProductShowcaseContent
+import com.bulbulustur.android.Application.Areas.b2b.Views.Components.WholesaleCategoryProductContentShowcaseContent
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleBottomNavigation
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleBottomNavigationItem
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleSearchHeader
@@ -52,7 +52,7 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryDTO
-import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleHomepageSpecialContentDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleProductCategoryContentGroupDTO
 
 @Composable
 fun WholesaleCategoryLevel1Screen(
@@ -61,8 +61,8 @@ fun WholesaleCategoryLevel1Screen(
     errorMessage: String? = null,
     categoryInfo: ProductCategoryDTO? = null,
     childCategories: List<ProductCategoryDTO> = emptyList(),
-    specialContents: List<WholesaleHomepageSpecialContentDTO> = emptyList(),
-    isSpecialContentsLoading: Boolean = false,
+    categoryContents: List<WholesaleProductCategoryContentGroupDTO> = emptyList(),
+    isCategoryContentsLoading: Boolean = false,
     onBackClick: () -> Unit = {},
     onMenuClick: () -> Unit = {},
     onFavoriteClick: () -> Unit = {},
@@ -76,9 +76,9 @@ fun WholesaleCategoryLevel1Screen(
     onCompanyListClick: (Int) -> Unit = {},
     onRfqCreateClick: (Int) -> Unit = {},
     onPopularProductGroupClick: (Int, String) -> Unit = { _, _ -> },
-    onSpecialProductClick: (Int) -> Unit = {},
-    onSpecialFavoriteClick: (Int) -> Unit = {},
-    onSpecialViewAllClick: (WholesaleHomepageSpecialContentDTO) -> Unit = {},
+    onCategoryProductClick: (Int) -> Unit = {},
+    onCategoryFavoriteClick: (Int) -> Unit = {},
+    onCategoryViewAllClick: (WholesaleProductCategoryContentGroupDTO) -> Unit = {},
     onSearchClick: (String) -> Unit = {}
 ) {
     var searchText by remember { mutableStateOf("") }
@@ -189,7 +189,7 @@ fun WholesaleCategoryLevel1Screen(
                             categoryName = categoryName,
                             description = categoryDescription,
                             childCategoryCount = validChildCategories.size,
-                            hasShowcases = specialContents.isNotEmpty()
+                            hasShowcases = categoryContents.isNotEmpty()
                         )
                     }
 
@@ -250,13 +250,13 @@ fun WholesaleCategoryLevel1Screen(
                     }
 
                     item {
-                        WholesaleCategoryProductShowcaseContent(
-                            specialContents = specialContents,
-                            isLoading = isSpecialContentsLoading,
-                            onProductClick = onSpecialProductClick,
-                            onFavoriteClick = onSpecialFavoriteClick,
+                        WholesaleCategoryProductContentShowcaseContent(
+                            categoryContents = categoryContents,
+                            isLoading = isCategoryContentsLoading,
+                            onProductClick = onCategoryProductClick,
+                            onFavoriteClick = onCategoryFavoriteClick,
                             onRfqClick = onRfqCreateClick,
-                            onViewAllClick = onSpecialViewAllClick
+                            onViewAllClick = onCategoryViewAllClick
                         )
                     }
                 }

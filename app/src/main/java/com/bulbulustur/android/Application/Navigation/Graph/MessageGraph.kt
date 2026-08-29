@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.bulbulustur.android.Application.Controllers.MessageController
 import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
+import com.bulbulustur.android.Application.Navigation.Routes.LogonRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.MessageRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.WholesaleRoutes
 import com.bulbulustur.android.Application.Session.UserSessionState
@@ -21,13 +22,33 @@ fun NavGraphBuilder.messageGraph(
     sessionState: UserSessionState
 ) {
     composable(MessageRoutes.Inbox) {
+        if (!sessionState.IsAuthenticated || sessionState.MemberId <= 0) {
+            LaunchedEffect(Unit) {
+                navigator.navController.navigate(LogonRoutes.Logon) {
+                    popUpTo(MessageRoutes.Inbox) {
+                        inclusive = true
+                    }
+
+                    launchSingleTop = true
+                }
+            }
+
+            return@composable
+        }
+
         val state by messageController.State.collectAsState()
         val memberId = sessionState.MemberId
         val languageId = sessionState.Language.Id
 
         LaunchedEffect(languageId, memberId) {
-            messageController.Inbox(languageId = languageId, memberId = memberId)
-            messageController.UnreadCount(memberId = memberId)
+            messageController.Inbox(
+                languageId = languageId,
+                memberId = memberId
+            )
+
+            messageController.UnreadCount(
+                memberId = memberId
+            )
         }
 
         MessageInboxScreen(

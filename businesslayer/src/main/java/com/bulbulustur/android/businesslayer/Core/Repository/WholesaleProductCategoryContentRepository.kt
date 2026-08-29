@@ -6,6 +6,7 @@ import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.WholesalePr
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.WholesaleProductCategoryContentUpdateModel
 import com.bulbulustur.android.businesslayer.Core.Network.ApiClient
 import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
+import com.bulbulustur.android.businesslayer.Core.Util.PaginatedList
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
 class WholesaleProductCategoryContentRepository(
@@ -66,6 +67,21 @@ class WholesaleProductCategoryContentRepository(
             baseUrl = ApiRoutes.RESOURCE_BASE_URL,
             method = "DeleteAsync",
             query = "wholesaleProductCategoryContentId=$wholesaleProductCategoryContentId"
+        )
+    }
+    override suspend fun GetWholesaleProductCategoryContentsAsync(languageId: Int, productCategoryId: Int, groupCount: Int, productCount: Int): Result<WholesaleProductCategoryContentDTO> {
+        return apiClient.GetAsync(
+            baseUrl = ApiRoutes.B2B_PRODUCT_CATEGORY_CONTENT_BASE_URL,
+            method = "GetWholesaleProductCategoryContentsAsync",
+            query = "languageId=$languageId&productCategoryId=$productCategoryId&groupCount=$groupCount&productCount=$productCount"
+        )
+    }
+
+    override suspend fun GetWholesaleProductCategoryContentsPagedAsync(productCategoryContentGroupId: Int, page: Int, pageSize: Int): Result<PaginatedList<WholesaleProductCategoryContentDTO>> {
+        return apiClient.GetAsync(
+            baseUrl = ApiRoutes.B2B_PRODUCT_CATEGORY_CONTENT_BASE_URL,
+            method = "GetWholesaleProductCategoryContentsPagedAsync",
+            query = "productCategoryContentGroupId=$productCategoryContentGroupId&page=$page&pageSize=$pageSize"
         )
     }
 }

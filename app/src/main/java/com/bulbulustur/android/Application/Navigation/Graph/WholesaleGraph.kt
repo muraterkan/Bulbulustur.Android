@@ -22,6 +22,7 @@ import com.bulbulustur.android.Application.Areas.b2b.Views.Category.WholesaleCat
 import com.bulbulustur.android.Application.Areas.b2b.Views.Home.WholesaleHomeScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Search.SearchScreen as WholesaleSearchScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Product.WholesaleProductListScreen
+import com.bulbulustur.android.Application.Areas.b2b.Views.Product.WholesaleProductCategoryContentListScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Product.WholesaleFeaturedProductsScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Product.WholesaleProductDetailScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Product.LastPriceRequestScreen
@@ -254,9 +255,11 @@ fun NavGraphBuilder.wholesaleGraph(
                 productCategoryId = categoryId
             )
 
-            categoryController.LoadSpecialContents(
+            categoryController.LoadWholesaleProductCategoryContents(
                 languageId = sessionState.Language.Id,
-                count = 6
+                productCategoryId = categoryId,
+                groupCount = 3,
+                productCount = 4
             )
         }
 
@@ -264,30 +267,102 @@ fun NavGraphBuilder.wholesaleGraph(
             categoryId = categoryId,
             isLoading = categoryState.IsLoading,
             errorMessage = categoryState.ErrorMessage,
-
             categoryInfo = categoryState.Category,
             childCategories = categoryState.ChildCategories,
-            specialContents = categoryState.SpecialContents,
-            isSpecialContentsLoading = categoryState.IsSpecialContentsLoading,
+            categoryContents = categoryState.CategoryContents,
+            isCategoryContentsLoading = categoryState.IsCategoryContentsLoading,
+
             onBackClick = {
                 navigator.back()
             },
+
+            onMenuClick = {
+                navigator.navigateToWholesaleCategories()
+            },
+
+            onFavoriteClick = {
+                navigator.navController.navigate(AccountRoutes.Favorites)
+            },
+
+            onMessageClick = {
+                navigator.navigateToInbox()
+            },
+
+            onHomeClick = {
+                navigator.navController.navigate(WholesaleRoutes.Home)
+            },
+
+            onModeSwitchClick = {
+                navigator.openModeSheet()
+            },
+
+            onBasketClick = {
+                navigator.navController.navigate(RfqRoutes.List)
+            },
+
+            onAccountClick = {
+                navigator.navigateToAccount()
+            },
+
+            onSearchClick = { _ ->
+                navigator.navController.navigate(WholesaleRoutes.Search)
+            },
+
             onSubCategoryClick = { subCategoryId ->
+                if (subCategoryId > 0) {
+                    navigator.navController.navigate(
+                        WholesaleRoutes.categoryLevel2(subCategoryId)
+                    )
+                }
+            },
+
+            onProductListClick = {
                 navigator.navController.navigate(
-                    WholesaleRoutes.productList(8591)
+                    WholesaleRoutes.productList(categoryId)
                 )
             },
-            onProductListClick = {
-                navigator.navController.navigate(WholesaleRoutes.productList(categoryId))
-            },
+
             onCompanyListClick = {
-                navigator.navController.navigate(CompanyRoutes.CompanyList)
+                navigator.navController.navigate(
+                    CompanyRoutes.CompanyList
+                )
             },
+
             onRfqCreateClick = {
-                navigator.navController.navigate(RfqRoutes.Create)
+                navigator.navController.navigate(
+                    RfqRoutes.Create
+                )
             },
+
             onPopularProductGroupClick = { _, _ ->
-                navigator.navController.navigate(WholesaleRoutes.productList(categoryId))
+                navigator.navController.navigate(
+                    WholesaleRoutes.productList(categoryId)
+                )
+            },
+
+            onCategoryProductClick = { productId ->
+                if (productId > 0) {
+                    navigator.navController.navigate(
+                        WholesaleRoutes.productDetail(productId)
+                    )
+                }
+            },
+
+            onCategoryFavoriteClick = {
+                navigator.navController.navigate(
+                    AccountRoutes.Favorites
+                )
+            },
+
+            onCategoryViewAllClick = { content ->
+                if (content.WholesaleProductCategoryContentGroupId > 0) {
+                    navigator.navController.navigate(
+                        WholesaleRoutes.productCategoryContentList(
+                            categoryContentGroupId = content.WholesaleProductCategoryContentGroupId,
+                            groupName = content.GroupName
+                        )
+                    )
+                }
             }
         )
     }
@@ -345,6 +420,71 @@ fun NavGraphBuilder.wholesaleGraph(
             },
             onPopularProductGroupClick = { _, _ ->
                 navigator.navController.navigate(WholesaleRoutes.productList(categoryId))
+            }
+        )
+    }
+
+    composable(
+        route = WholesaleRoutes.ProductCategoryContentList,
+        arguments = listOf(
+            navArgument(WholesaleRoutes.ArgCategoryContentGroupId) {
+                type = NavType.IntType
+            },
+            navArgument(WholesaleRoutes.ArgCategoryContentGroupName) {
+                type = NavType.StringType
+            }
+        )
+    ) { backStackEntry ->
+        val categoryState by categoryController.State.collectAsState()
+
+        val groupId = backStackEntry.arguments
+            ?.getInt(WholesaleRoutes.ArgCategoryContentGroupId)
+            ?: 0
+
+        val groupName = backStackEntry.arguments
+            ?.getString(WholesaleRoutes.ArgCategoryContentGroupName)
+            .orEmpty()
+
+        val pagedResult = categoryState.WholesaleProductCategoryContentListResult?.Data
+        val currentPage = pagedResult?.PageNumber ?: 1
+
+        LaunchedEffect(groupId) {
+            categoryController.LoadWholesaleProductCategoryContentPage(
+                productCategoryContentGroupId = groupId,
+                page = 1,
+                pageSize = 20
+            )
+        }
+
+        WholesaleProductCategoryContentListScreen(
+            groupName = groupName,
+            products = pagedResult?.Items.orEmpty(),
+            currentPage = currentPage,
+            totalPages = pagedResult?.TotalPageCount ?: 1,
+            totalItemCount = pagedResult?.TotalItemCount ?: 0,
+            isLoading = categoryState.IsCategoryContentListLoading,
+            errorMessage = categoryState.CategoryContentListErrorMessage,
+            onBackClick = {
+                navigator.back()
+            },
+            onPageChange = { page ->
+                categoryController.LoadWholesaleProductCategoryContentPage(
+                    productCategoryContentGroupId = groupId,
+                    page = page,
+                    pageSize = 20
+                )
+            },
+            onProductClick = { productId ->
+                if (productId > 0) {
+                    navigator.navController.navigate(
+                        WholesaleRoutes.productDetail(productId)
+                    )
+                }
+            },
+            onRfqClick = { productId ->
+                if (productId > 0) {
+                    navigator.navController.navigate(RfqRoutes.Create)
+                }
             }
         )
     }

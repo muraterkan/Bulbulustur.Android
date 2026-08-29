@@ -4,9 +4,12 @@ import androidx.lifecycle.viewModelScope
 import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleHomepageSpecialContentDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleProductCategoryContentDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.IProductCategoryRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IWholesaleHomepageSpecialContentRepository
+import com.bulbulustur.android.businesslayer.Core.Interface.IWholesaleProductCategoryContentRepository
 import com.bulbulustur.android.businesslayer.Core.Util.Execute.IExecuteService
+import com.bulbulustur.android.businesslayer.Core.Util.PaginatedList
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,31 +19,32 @@ import kotlinx.coroutines.launch
 
 data class CategoryControllerState(
     val IsLoading: Boolean = false,
+    val IsCategoryContentsLoading: Boolean = false,
     val IsSpecialContentsLoading: Boolean = false,
     val CurrentAction: String? = null,
     val ErrorMessage: String? = null,
+    val CategoryContentsErrorMessage: String? = null,
     val SpecialContentsErrorMessage: String? = null,
     val CategoryResult: Result<ProductCategoryDTO?>? = null,
     val CategoryListResult: Result<List<ProductCategoryDTO>>? = null,
     val ChildCategoryListResult: Result<List<ProductCategoryDTO>>? = null,
+    val WholesaleProductCategoryContentsResult: Result<WholesaleProductCategoryContentDTO>? = null,
+    val WholesaleProductCategoryContentListResult: Result<PaginatedList<WholesaleProductCategoryContentDTO>>? = null,
+    val IsCategoryContentListLoading: Boolean = false,
+    val CategoryContentListErrorMessage: String? = null,
     val SpecialContentsResult: Result<List<WholesaleHomepageSpecialContentDTO>>? = null
 ) {
-    val Category: ProductCategoryDTO?
-        get() = CategoryResult?.Data
-
-    val Categories: List<ProductCategoryDTO>
-        get() = CategoryListResult?.Data.orEmpty()
-
-    val ChildCategories: List<ProductCategoryDTO>
-        get() = ChildCategoryListResult?.Data.orEmpty()
-
-    val SpecialContents: List<WholesaleHomepageSpecialContentDTO>
-        get() = SpecialContentsResult?.Data.orEmpty()
+    val Category: ProductCategoryDTO? get() = CategoryResult?.Data
+    val Categories: List<ProductCategoryDTO> get() = CategoryListResult?.Data.orEmpty()
+    val ChildCategories: List<ProductCategoryDTO> get() = ChildCategoryListResult?.Data.orEmpty()
+    val CategoryContents get() = WholesaleProductCategoryContentsResult?.Data?.Groups.orEmpty()
+    val SpecialContents: List<WholesaleHomepageSpecialContentDTO> get() = SpecialContentsResult?.Data.orEmpty()
 }
 
 class CategoryController(
     private val executeService: IExecuteService,
     private val productCategoryRepository: IProductCategoryRepository,
+    private val wholesaleProductCategoryContentRepository: IWholesaleProductCategoryContentRepository,
     private val wholesaleHomepageSpecialContentRepository: IWholesaleHomepageSpecialContentRepository
 ) : BaseController() {
 
@@ -123,6 +127,73 @@ class CategoryController(
         }
     }
 
+    fun LoadWholesaleProductCategoryContents(languageId: Int, productCategoryId: Int, groupCount: Int = 3, productCount: Int = 4) {
+        if (languageId <= 0 || productCategoryId <= 0) {
+            _state.update {
+                it.copy(
+                    IsCategoryContentsLoading = false,
+                    WholesaleProductCategoryContentsResult = null,
+                    CategoryContentsErrorMessage = null
+                )
+            }
+            return
+        }
+
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    IsCategoryContentsLoading = true,
+                    CategoryContentsErrorMessage = null
+                )
+            }
+
+            val response = executeService.GetAsync(
+                cacheKey = "b2b.Category.WholesaleProductCategoryContents.languageId=$languageId.productCategoryId=$productCategoryId.groupCount=$groupCount.productCount=$productCount"
+            ) {
+                wholesaleProductCategoryContentRepository.GetWholesaleProductCategoryContentsAsync(
+                    languageId = languageId,
+                    productCategoryId = productCategoryId,
+                    groupCount = groupCount,
+                    productCount = productCount
+                )
+            }
+
+            _state.update {
+                it.copy(
+                    IsCategoryContentsLoading = false,
+                    WholesaleProductCategoryContentsResult = response,
+                    CategoryContentsErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+        }
+    }
+
+    fun LoadWholesaleProductCategoryContentPage(productCategoryContentGroupId: Int, page: Int = 1, pageSize: Int = 20) {
+        if (productCategoryContentGroupId <= 0) return
+
+        viewModelScope.launch {
+            _state.update { it.copy(IsCategoryContentListLoading = true, CategoryContentListErrorMessage = null) }
+
+            val response = executeService.GetAsync(
+                cacheKey = "b2b.Category.WholesaleProductCategoryContentPage.groupId=$productCategoryContentGroupId.page=$page.pageSize=$pageSize"
+            ) {
+                wholesaleProductCategoryContentRepository.GetWholesaleProductCategoryContentsPagedAsync(
+                    productCategoryContentGroupId = productCategoryContentGroupId,
+                    page = page,
+                    pageSize = pageSize
+                )
+            }
+
+            _state.update {
+                it.copy(
+                    IsCategoryContentListLoading = false,
+                    WholesaleProductCategoryContentListResult = response,
+                    CategoryContentListErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+        }
+    }
+
     fun LoadSpecialContents(languageId: Int, count: Int = 6) {
         if (languageId <= 0 || count <= 0) return
 
@@ -168,6 +239,7 @@ class CategoryController(
 
         while (queue.isNotEmpty()) {
             val parentId = queue.removeFirst()
+
             childrenByParent[parentId].orEmpty().forEach { child ->
                 if (child.ProductCategoryId > 0 && result.add(child.ProductCategoryId)) {
                     queue.add(child.ProductCategoryId)
@@ -179,9 +251,7 @@ class CategoryController(
     }
 
     fun Clear() {
-        _state.update {
-            CategoryControllerState()
-        }
+        _state.update { CategoryControllerState() }
     }
 
     private fun Start(action: String) {

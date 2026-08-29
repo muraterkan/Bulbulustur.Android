@@ -1,5 +1,6 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Category
 
+import android.R.attr.category
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -40,6 +41,7 @@ import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.Ret
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeader
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeaderLeadingAction
 import com.bulbulustur.android.Application.Localization.BBLocalization
+import com.bulbulustur.android.Application.Views.Shared.Components.BbMaterialSymbol
 import com.bulbulustur.android.Application.Views.Shared.Components.BbProductCard
 import com.bulbulustur.android.Application.Views.Shared.Components.BbProductCardModel
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
@@ -273,10 +275,8 @@ private fun CategoryDetailHero(
                     contentColor = MaterialTheme.colorScheme.onPrimary,
                     radius = BBRadius.xl
                 ) {
-                    Icon(
-                        imageVector = ResolveRetailCategoryIcon(categoryInfo?.IconClass.orEmpty()),
-                        contentDescription = null,
-                        modifier = Modifier.size(BBIcon.Ui),
+                    BbMaterialSymbol(
+                        iconClass = categoryInfo?.IconClass,
                         tint = MaterialTheme.colorScheme.onPrimary
                     )
                 }
@@ -391,11 +391,9 @@ private fun CategorySubCategoryRow(
                 contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 radius = BBRadius.lg
             ) {
-                Icon(
-                    imageVector = ResolveRetailCategoryIcon(category.IconClass.orEmpty()),
-                    contentDescription = null,
-                    modifier = Modifier.size(BBIcon.Ui),
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                BbMaterialSymbol(
+                    iconClass = category.IconClass,
+                    tint = MaterialTheme.colorScheme.primary
                 )
             }
 

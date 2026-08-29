@@ -76,7 +76,7 @@ fun B2CDealsOfTheDay(
                     .clickable {
                         onViewAllClick()
                     },
-                text = "Tümünü Gör",
+                text = BBLocalization.Current.Get(key = "7fa2dfd8-809f-4a8d-8fde-f33e7f652b45", fallback = "Tümünü Gör"),
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.SemiBold

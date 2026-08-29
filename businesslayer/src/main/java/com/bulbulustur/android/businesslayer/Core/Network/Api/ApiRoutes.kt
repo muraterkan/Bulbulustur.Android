@@ -98,8 +98,14 @@ object ApiRoutes {
     const val B2B_BASE_URL =
         "http://$APPLICATION_SERVER_HOST:30235/api/"
 
+    const val B2B_PRODUCT_CATEGORY_CONTENT_BASE_URL =
+        "http://$APPLICATION_SERVER_HOST:30235/api/WholesaleProductCategoryContent/"
+
     const val B2C_BASE_URL =
         "http://$APPLICATION_SERVER_HOST:30240/api/"
+
+    const val B2C_PRODUCT_CATEGORY_CONTENT_BASE_URL =
+        "http://$APPLICATION_SERVER_HOST:30240/api/ProductCategoryContent/"
 
     // -------------------------------------------------------------------------
     // Authentication API
@@ -277,7 +283,7 @@ object ApiRoutes {
         "https://www.bulbulustur.com/UploadedFiles/B2B/Products/2024_1/e444e272-842e-4c0a-b3fe-f68d4c569ff2.jpg"
 
     const val B2B_PRODUCT_BASE_URL =
-        "http://$APPLICATION_SERVER_HOST:30235/api/Product/"
+        "http://$APPLICATION_SERVER_HOST:30235/api/WholesaleProduct/"
 
     const val B2B_WHOLESALE_FAVORITE_BASE_URL =
         "http://$APPLICATION_SERVER_HOST:30235/api/WholesaleFavorite/"

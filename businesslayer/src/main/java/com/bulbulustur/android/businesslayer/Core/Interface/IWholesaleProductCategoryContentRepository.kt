@@ -3,6 +3,7 @@ package com.bulbulustur.android.businesslayer.Core.Interface
 import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleProductCategoryContentDTO
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.WholesaleProductCategoryContentInsertModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.WholesaleProductCategoryContentUpdateModel
+import com.bulbulustur.android.businesslayer.Core.Util.PaginatedList
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -44,4 +45,6 @@ interface IWholesaleProductCategoryContentRepository {
         @Query("wholesaleProductCategoryContentId")
         wholesaleProductCategoryContentId: Int
     ): Result<Unit>
+    suspend fun GetWholesaleProductCategoryContentsAsync(languageId: Int, productCategoryId: Int, groupCount: Int = 3, productCount: Int = 4): Result<WholesaleProductCategoryContentDTO>
+    suspend fun GetWholesaleProductCategoryContentsPagedAsync(productCategoryContentGroupId: Int, page: Int = 1, pageSize: Int = 20): Result<PaginatedList<WholesaleProductCategoryContentDTO>>
 }

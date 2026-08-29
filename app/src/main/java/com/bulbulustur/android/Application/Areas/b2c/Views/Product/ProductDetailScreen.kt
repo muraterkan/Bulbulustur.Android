@@ -24,13 +24,11 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import coil3.compose.AsyncImage
-import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.CircleNotifications
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Inventory2
 import androidx.compose.material.icons.outlined.LocalShipping
@@ -215,34 +213,12 @@ fun ProductDetailScreen(
         mutableStateOf("")
     }
 
-    var selectedColorId by remember(
-        product.id,
-        product.colorVariants
-    ) {
-        mutableStateOf(
-            product.colorVariants
-                .firstOrNull()
-                ?.id
-                ?: ""
-        )
+    var selectedColorId by remember(product.id) {
+        mutableStateOf("")
     }
 
-    var selectedSizeId by remember(
-        product.id,
-        product.sizeOptions
-    ) {
-        mutableStateOf(
-            product.sizeOptions
-                .firstOrNull { sizeOption ->
-                    sizeOption.state ==
-                            RetailProductSizeState.Selected
-                }
-                ?.id
-                ?: product.sizeOptions
-                    .firstOrNull()
-                    ?.id
-                ?: ""
-        )
+    var selectedSizeId by remember(product.id) {
+        mutableStateOf("")
     }
 
     var quantity by remember(
@@ -266,22 +242,37 @@ fun ProductDetailScreen(
         product.colorVariants,
         product.sizeOptions
     ) {
-        selectedColorId =
-            product.colorVariants
-                .firstOrNull()
-                ?.id
-                ?: ""
+        if (
+            selectedColorId.isBlank() ||
+            product.colorVariants.none { colorVariant ->
+                colorVariant.id == selectedColorId
+            }
+        ) {
+            selectedColorId =
+                product.colorVariants
+                    .firstOrNull()
+                    ?.id
+                    ?: ""
+        }
 
-        selectedSizeId =
-            product.sizeOptions
-                .firstOrNull { sizeOption ->
-                    sizeOption.state ==
-                            RetailProductSizeState.Selected
-                }
-                ?.id
-                ?: product.sizeOptions.firstOrNull()?.id ?: ""
-
-        quantity = 1
+        if (
+            selectedSizeId.isBlank() ||
+            product.sizeOptions.none { sizeOption ->
+                sizeOption.id == selectedSizeId
+            }
+        ) {
+            selectedSizeId =
+                product.sizeOptions
+                    .firstOrNull { sizeOption ->
+                        sizeOption.state ==
+                                RetailProductSizeState.Selected
+                    }
+                    ?.id
+                    ?: product.sizeOptions
+                        .firstOrNull()
+                        ?.id
+                            ?: ""
+        }
     }
 
     val selectedColorVariant =
@@ -680,18 +671,6 @@ fun ProductDetailScreen(
                 product =
                     product
             )
-
-            if (
-                !product.isInStock
-            ) {
-                RetailProductStockAlertCard(
-                    onStockAlarmClick = {
-                        onStockAlarmClick(
-                            selection
-                        )
-                    }
-                )
-            }
 
             RetailProductTrustLinksCard(
                 onLowerPriceClick = {
@@ -1708,112 +1687,6 @@ private fun RetailProductBenefitPill(
                 color = BBColors.Success,
                 fontWeight = FontWeight.Bold
             )
-        }
-    }
-}
-
-@Composable
-private fun RetailProductStockAlertCard(
-    onStockAlarmClick: () -> Unit
-) {
-    BbCard(
-        modifier = Modifier.padding(
-            start = BBSpacing.PageHorizontal,
-            top = BBSpacing.Space3,
-            end = BBSpacing.PageHorizontal
-        ),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium
-    ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
-        ) {
-            Surface(
-                modifier = Modifier.fillMaxWidth(),
-                shape = BBRadius.XlShape,
-                color = MaterialTheme.colorScheme.primaryContainer,
-                border = BorderStroke(
-                    width = 1.dp,
-                    color = MaterialTheme.colorScheme.primary
-                )
-            ) {
-                Row(
-                    modifier = Modifier.padding(
-                        horizontal = BBSpacing.Space3,
-                        vertical = BBSpacing.Space3
-                    ),
-                    verticalAlignment = Alignment.Top,
-                    horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.CircleNotifications,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.size(BBIcon.SizeMd)
-                    )
-
-                    Column(
-                        modifier = Modifier.weight(1f),
-                        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
-                    ) {
-                        Text(
-                            text = BBLocalization.Current.Get(key = "bf96435f-90fa-498f-a617-9f213f4f1f8c", fallback = "Stokta Yok"),
-                            style = MaterialTheme.typography.titleSmall,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            fontWeight = FontWeight.Bold
-                        )
-
-                        Text(
-                            text = BBLocalization.Current.Get(key = "e587dd2b-dcb8-43f5-a93a-6fe16d435316", fallback = "Bu ürün tekrar stoğa girdiğinde haberdar olabilirsin."),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-
-                    Text(
-                        text = BBLocalization.Current.Get(key = "67669893-776b-4074-8667-8691f771b7db", fallback = "Stok Alarmı"),
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-            }
-
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(BBSpacing.Space12)
-                    .clip(BBRadius.XxlShape)
-                    .clickable {
-                        onStockAlarmClick()
-                    },
-                shape = BBRadius.XxlShape,
-                color = BBColors.Success
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.NotificationsActive,
-                        contentDescription = null,
-                        tint = BBColors.White,
-                        modifier = Modifier.size(BBIcon.SizeMd)
-                    )
-
-                    Spacer(
-                        modifier = Modifier.width(BBSpacing.Space2)
-                    )
-
-                    Text(
-                        text = BBLocalization.Current.Get(key = "cd154da7-10a9-491c-bead-5b46f55ef32e", fallback = "Stoğa Gelince Haber Ver"),
-                        style = MaterialTheme.typography.labelLarge,
-                        color = BBColors.White,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-            }
         }
     }
 }
@@ -4162,4 +4035,3 @@ private fun ProductDetailScreenPreview() {
         ProductDetailScreen()
     }
 }
-

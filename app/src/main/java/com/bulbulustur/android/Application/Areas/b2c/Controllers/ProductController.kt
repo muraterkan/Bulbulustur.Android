@@ -49,6 +49,7 @@ data class ProductControllerState(
     val OtherStorePricesResult: Result<List<ProductVariantDTO>>? = null,
 
     val SponsoredAdvertsResult: Result<List<AdvertSponsoredDTO>>? = null,
+    val CategorySponsoredAdvertsResult: Result<List<AdvertSponsoredDTO>>? = null,
     val ProductBrandSectionsResult: Result<List<ProductBrandSectionDTO>>? = null,
     val ProductBrowsingHistoryResult:
     Result<PaginatedList<ProductBrowsingHistoryDTO>>? = null,
@@ -105,6 +106,9 @@ data class ProductControllerState(
             SponsoredAdvertsResult
                 ?.Data
                 .orEmpty()
+
+    val CategorySponsoredAdverts: List<AdvertSponsoredDTO>
+        get() = CategorySponsoredAdvertsResult?.Data.orEmpty()
 
     val ProductBrandSections: List<ProductBrandSectionDTO>
         get() =
@@ -1131,6 +1135,55 @@ class ProductController(
                         response.Message.takeIf {
                             !response.Success
                         }
+                )
+            }
+        }
+    }
+
+    fun SponsoredAdvertsByProductCategoryList(
+        languageId: Int,
+        productCategoryIds: List<Int>,
+        count: Int = 8
+    ) {
+        val categoryIds = productCategoryIds.filter { it > 0 }.distinct()
+
+        if (languageId <= 0 || categoryIds.isEmpty()) {
+            _state.update {
+                it.copy(
+                    CategorySponsoredAdvertsResult = null
+                )
+            }
+            return
+        }
+
+        viewModelScope.launch {
+            StartLoading(
+                actionName = "CategorySponsoredAdverts"
+            )
+
+            val response =
+                executeService.GetAsync(
+                    cacheKey =
+                        "b2c.Product.GetSponsoredAdvertsByProductCategoryListAsync." +
+                                "languageId=$languageId." +
+                                "categoryIds=${categoryIds.joinToString(",")}." +
+                                "count=$count"
+                ) {
+                    advertSponsoredRepository.GetSponsoredAdvertsByProductCategoryListAsync(
+                        languageId = languageId,
+                        productCategoryIds = categoryIds,
+                        count = count
+                    )
+                }
+
+            _state.update {
+                it.copy(
+                    IsLoading = false,
+                    CurrentAction = "CategorySponsoredAdverts",
+                    CategorySponsoredAdvertsResult = response,
+                    ErrorMessage = response.Message.takeIf {
+                        !response.Success
+                    }
                 )
             }
         }

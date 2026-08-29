@@ -55,6 +55,7 @@ import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
 import com.bulbulustur.android.businesslayer.Core.DTO.AdvertSponsoredDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.B2CProductData
 import com.bulbulustur.android.businesslayer.Core.DTO.CampaignDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.DealsOfTheDayDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryContentDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryContentGroupDTO
@@ -70,6 +71,7 @@ fun CategoryLevel1Screen(
     categoryContents: List<ProductCategoryContentGroupDTO> = emptyList(),
     products: List<B2CProductData> = emptyList(),
     campaigns: List<CampaignDTO> = emptyList(),
+    dealsOfTheDays: List<DealsOfTheDayDTO> = emptyList(),
     sponsoredAdverts: List<AdvertSponsoredDTO> = emptyList(),
     isProductLoading: Boolean = false,
     isCategoryContentsLoading: Boolean = false,
@@ -163,6 +165,7 @@ fun CategoryLevel1Screen(
                     hasShowcase = categoryContents.isNotEmpty() ||
                             isCategoryContentsLoading ||
                             campaigns.isNotEmpty() ||
+                            dealsOfTheDays.isNotEmpty() ||
                             sponsoredAdverts.isNotEmpty()
                 )
             }
@@ -193,6 +196,21 @@ fun CategoryLevel1Screen(
                     onCategoryAddToBasketClick = onCategoryAddToBasketClick,
                     onCategoryViewAllClick = onCategoryViewAllClick,
                     onCampaignClick = onCampaignClick
+                )
+            }
+
+            item {
+                CategoryDealsOfTheDaySection(
+                    dealsOfTheDays = dealsOfTheDays,
+                    onProductClick = { deal ->
+                        onProductClick(
+                            B2CProductData(
+                                ProductId = deal.ProductId,
+                                StoreId = deal.StoreId,
+                                VariantId = deal.VariantId
+                            )
+                        )
+                    }
                 )
             }
 
@@ -465,6 +483,88 @@ private fun CategoryShowcaseSection(
             }
         }
     }
+}
+
+@Composable
+private fun CategoryDealsOfTheDaySection(
+    dealsOfTheDays: List<DealsOfTheDayDTO>,
+    onProductClick: (DealsOfTheDayDTO) -> Unit
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+    ) {
+        RetailCategorySectionTitle(
+            title = BBLocalization.Current.Get(
+                key = "category_deals_of_day_title",
+                fallback = "Bu Kategoride Günün Fırsatları"
+            ),
+            description = BBLocalization.Current.Get(
+                key = "category_deals_of_day_description",
+                fallback = "Bu kategorideki kampanyalı ve avantajlı ürünleri keşfedin."
+            )
+        )
+
+        if (dealsOfTheDays.isEmpty()) {
+            CategoryProductEmpty()
+        } else {
+            dealsOfTheDays
+                .filter { it.ProductId > 0 && it.StoreId > 0 && it.VariantId > 0 }
+                .take(6)
+                .chunked(2)
+                .forEach { rowProducts ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+                        verticalAlignment = Alignment.Top
+                    ) {
+                        rowProducts.forEach { deal ->
+                            BbProductCard(
+                                modifier = Modifier.weight(1f),
+                                product = deal.ToDealsOfTheDayProductCardModel(),
+                                onClick = {
+                                    onProductClick(deal)
+                                },
+                                onFavoriteClick = {},
+                                onAddToBasketClick = {}
+                            )
+                        }
+
+                        if (rowProducts.size == 1) {
+                            Spacer(
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
+                    }
+                }
+        }
+    }
+}
+
+private fun DealsOfTheDayDTO.ToDealsOfTheDayProductCardModel(): BbProductCardModel {
+    return BbProductCardModel(
+        Id = ProductId,
+        Name = ProductName,
+        StoreName = Store.orEmpty(),
+        ImageUrl = ImageUrlResolver.Resolve(DefaultPicture.orEmpty()),
+        PriceText = FormatCategoryProductPrice(
+            price = if (CampaignPrice > 0.0) CampaignPrice else Price,
+            currencySymbol = CurrencySymbol
+        ),
+        OldPriceText =
+            if (CampaignPrice > 0.0 && Price > CampaignPrice) {
+                FormatCategoryProductPrice(
+                    price = Price,
+                    currencySymbol = CurrencySymbol
+                )
+            } else {
+                ""
+            },
+        BadgeText = "",
+        RatingText = "",
+        CargoText = "",
+        IsFavorite = false
+    )
 }
 
 @Composable

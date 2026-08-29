@@ -427,8 +427,7 @@ private fun BulbulusturApplicationContent(
         productRepository
     ) {
         DealsOfTheDayController(
-            dealsOfTheDayRepository = dealsOfTheDayRepository,
-            productRepository = productRepository
+            dealsOfTheDayRepository = dealsOfTheDayRepository
         )
     }
 

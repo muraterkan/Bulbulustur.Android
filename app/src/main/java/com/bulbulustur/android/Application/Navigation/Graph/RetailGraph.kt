@@ -306,6 +306,7 @@ fun NavGraphBuilder.retailGraph(
         val categoryState by categoryController.State.collectAsState()
         val productState by productController.State.collectAsState()
         val campaignState by campaignController.State.collectAsState()
+        val dealsOfTheDayState by dealsOfTheDayController.State.collectAsState()
 
         val categoryId =
             backStackEntry.arguments
@@ -346,9 +347,17 @@ fun NavGraphBuilder.retailGraph(
                 count = 8
             )
 
-            productController.SponsoredAdverts(
+            val categoryScopeIds = categoryController.GetCategoryScopeIds(categoryId)
+
+            dealsOfTheDayController.LoadByProductCategoryList(
                 languageId = sessionState.Language.Id,
-                productCategoryId = categoryId,
+                productCategoryIds = categoryScopeIds,
+                count = 6
+            )
+
+            productController.SponsoredAdvertsByProductCategoryList(
+                languageId = sessionState.Language.Id,
+                productCategoryIds = categoryScopeIds,
                 count = 6
             )
         }
@@ -366,7 +375,8 @@ fun NavGraphBuilder.retailGraph(
                 ?.Items
                 .orEmpty(),
             campaigns = campaignState.Campaigns,
-            sponsoredAdverts = productState.SponsoredAdverts,
+            dealsOfTheDays = dealsOfTheDayState.CategoryDealsOfTheDays,
+            sponsoredAdverts = productState.CategorySponsoredAdverts,
             isProductLoading =
                 productState.IsLoading &&
                         productState.ProductListData == null,

@@ -1,6 +1,5 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Category
 
-import android.R.attr.category
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -35,7 +34,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.bulbulustur.android.Application.Areas.b2c.Views.Category.Components.CategoryProductShowcaseContent
+import com.bulbulustur.android.Application.Areas.b2c.Views.Category.Components.CategoryProductContentShowcaseContent
+import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.CategoryBrands
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailBottomNavigation
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailBottomNavigationItem
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeader
@@ -56,9 +56,11 @@ import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
 import com.bulbulustur.android.businesslayer.Core.DTO.AdvertSponsoredDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.B2CProductData
 import com.bulbulustur.android.businesslayer.Core.DTO.CampaignDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.DealsOfTheDayDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.ProductBrandCategoryMapDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryDTO
-import com.bulbulustur.android.businesslayer.Core.DTO.ProductHomepageSpecialContentDTO
-import com.bulbulustur.android.businesslayer.Core.DTO.ProductHomepageSpecialDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryContentDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryContentGroupDTO
 import com.bulbulustur.android.businesslayer.Core.Network.ImageUrlResolver
 import java.text.NumberFormat
 import java.util.Locale
@@ -68,12 +70,17 @@ fun CategoryLevel2Screen(
     categoryId: Int = 0,
     categoryInfo: ProductCategoryDTO? = null,
     childCategories: List<ProductCategoryDTO> = emptyList(),
-    specialContents: List<ProductHomepageSpecialContentDTO> = emptyList(),
+    categoryContents: List<ProductCategoryContentGroupDTO> = emptyList(),
     products: List<B2CProductData> = emptyList(),
     campaigns: List<CampaignDTO> = emptyList(),
+    dealsOfTheDays: List<DealsOfTheDayDTO> = emptyList(),
     sponsoredAdverts: List<AdvertSponsoredDTO> = emptyList(),
+    categoryBrands: List<ProductBrandCategoryMapDTO> = emptyList(),
     isProductLoading: Boolean = false,
-    isSpecialContentsLoading: Boolean = false,
+    isCategoryContentsLoading: Boolean = false,
+    isCategoryBrandsLoading: Boolean = false,
+
+
 
     onBackClick: () -> Unit = {},
     onMenuClick: () -> Unit = {},
@@ -85,10 +92,10 @@ fun CategoryLevel2Screen(
     onAccountClick: () -> Unit = {},
     onSubCategoryClick: (Int) -> Unit = {},
 
-    onSpecialProductClick: (ProductHomepageSpecialDTO) -> Unit = {},
-    onSpecialProductFavoriteClick: (ProductHomepageSpecialDTO) -> Unit = {},
-    onSpecialAddToBasketClick: (Int) -> Unit = {},
-    onSpecialViewAllClick: (ProductHomepageSpecialContentDTO) -> Unit = {},
+    onCategoryProductClick: (ProductCategoryContentDTO) -> Unit = {},
+    onCategoryProductFavoriteClick: (ProductCategoryContentDTO) -> Unit = {},
+    onCategoryAddToBasketClick: (Int) -> Unit = {},
+    onCategoryViewAllClick: (ProductCategoryContentGroupDTO) -> Unit = {},
     onProductClick: (B2CProductData) -> Unit = {},
     onProductFavoriteClick: (B2CProductData) -> Unit = {},
     onAddToBasketClick: (Int) -> Unit = {},
@@ -161,9 +168,10 @@ fun CategoryLevel2Screen(
                     categoryId = categoryId,
                     categoryInfo = categoryInfo,
                     childCategoryCount = validChildCategories.size,
-                    hasShowcase = specialContents.isNotEmpty() ||
-                            isSpecialContentsLoading ||
+                    hasShowcase = categoryContents.isNotEmpty() ||
+                            isCategoryContentsLoading ||
                             campaigns.isNotEmpty() ||
+                            dealsOfTheDays.isNotEmpty() ||
                             sponsoredAdverts.isNotEmpty()
                 )
             }
@@ -186,14 +194,29 @@ fun CategoryLevel2Screen(
 
             item {
                 CategoryShowcaseSection(
-                    specialContents = specialContents,
-                    isSpecialContentsLoading = isSpecialContentsLoading,
+                    categoryContents = categoryContents,
+                    isCategoryContentsLoading = isCategoryContentsLoading,
                     campaigns = campaigns,
-                    onSpecialProductClick = onSpecialProductClick,
-                    onSpecialProductFavoriteClick = onSpecialProductFavoriteClick,
-                    onSpecialAddToBasketClick = onSpecialAddToBasketClick,
-                    onSpecialViewAllClick = onSpecialViewAllClick,
+                    onCategoryProductClick = onCategoryProductClick,
+                    onCategoryProductFavoriteClick = onCategoryProductFavoriteClick,
+                    onCategoryAddToBasketClick = onCategoryAddToBasketClick,
+                    onCategoryViewAllClick = onCategoryViewAllClick,
                     onCampaignClick = onCampaignClick
+                )
+            }
+
+            item {
+                CategoryDealsOfTheDaySection(
+                    dealsOfTheDays = dealsOfTheDays,
+                    onProductClick = { deal ->
+                        onProductClick(
+                            B2CProductData(
+                                ProductId = deal.ProductId,
+                                StoreId = deal.StoreId,
+                                VariantId = deal.VariantId
+                            )
+                        )
+                    }
                 )
             }
 
@@ -215,6 +238,19 @@ fun CategoryLevel2Screen(
                     onSponsoredAddToBasketClick = onSponsoredAddToBasketClick
                 )
             }
+
+            if (
+                isCategoryBrandsLoading ||
+                categoryBrands.isNotEmpty()
+            ) {
+                item {
+                    CategoryBrands(
+                        brands = categoryBrands,
+                        isLoading = isCategoryBrandsLoading
+                    )
+                }
+            }
+
         }
     }
 }
@@ -393,7 +429,8 @@ private fun CategorySubCategoryRow(
             ) {
                 BbMaterialSymbol(
                     iconClass = category.IconClass,
-                    tint = MaterialTheme.colorScheme.primary
+                    tint = MaterialTheme.colorScheme.primary,
+                    size = BBIcon.Section
                 )
             }
 
@@ -416,13 +453,13 @@ private fun CategorySubCategoryRow(
 
 @Composable
 private fun CategoryShowcaseSection(
-    specialContents: List<ProductHomepageSpecialContentDTO>,
-    isSpecialContentsLoading: Boolean,
+    categoryContents: List<ProductCategoryContentGroupDTO>,
+    isCategoryContentsLoading: Boolean,
     campaigns: List<CampaignDTO>,
-    onSpecialProductClick: (ProductHomepageSpecialDTO) -> Unit,
-    onSpecialProductFavoriteClick: (ProductHomepageSpecialDTO) -> Unit,
-    onSpecialAddToBasketClick: (Int) -> Unit,
-    onSpecialViewAllClick: (ProductHomepageSpecialContentDTO) -> Unit,
+    onCategoryProductClick: (ProductCategoryContentDTO) -> Unit,
+    onCategoryProductFavoriteClick: (ProductCategoryContentDTO) -> Unit,
+    onCategoryAddToBasketClick: (Int) -> Unit,
+    onCategoryViewAllClick: (ProductCategoryContentGroupDTO) -> Unit,
     onCampaignClick: (CampaignDTO) -> Unit
 ) {
     Column(
@@ -440,13 +477,13 @@ private fun CategoryShowcaseSection(
             )
         )
 
-        CategoryProductShowcaseContent(
-            specialContents = specialContents,
-            isLoading = isSpecialContentsLoading,
-            onProductClick = onSpecialProductClick,
-            onFavoriteClick = onSpecialProductFavoriteClick,
-            onAddToBasketClick = onSpecialAddToBasketClick,
-            onViewAllClick = onSpecialViewAllClick
+        CategoryProductContentShowcaseContent(
+            categoryContents = categoryContents,
+            isLoading = isCategoryContentsLoading,
+            onProductClick = onCategoryProductClick,
+            onFavoriteClick = onCategoryProductFavoriteClick,
+            onAddToBasketClick = onCategoryAddToBasketClick,
+            onViewAllClick = onCategoryViewAllClick
         )
 
         if (campaigns.isNotEmpty()) {
@@ -466,6 +503,88 @@ private fun CategoryShowcaseSection(
             }
         }
     }
+}
+
+@Composable
+private fun CategoryDealsOfTheDaySection(
+    dealsOfTheDays: List<DealsOfTheDayDTO>,
+    onProductClick: (DealsOfTheDayDTO) -> Unit
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+    ) {
+        RetailCategorySectionTitle(
+            title = BBLocalization.Current.Get(
+                key = "category_deals_of_day_title",
+                fallback = "Bu Kategoride Günün Fırsatları"
+            ),
+            description = BBLocalization.Current.Get(
+                key = "category_deals_of_day_description",
+                fallback = "Bu kategorideki kampanyalı ve avantajlı ürünleri keşfedin."
+            )
+        )
+
+        if (dealsOfTheDays.isEmpty()) {
+            CategoryProductEmpty()
+        } else {
+            dealsOfTheDays
+                .filter { it.ProductId > 0 && it.StoreId > 0 && it.VariantId > 0 }
+                .take(6)
+                .chunked(2)
+                .forEach { rowProducts ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+                        verticalAlignment = Alignment.Top
+                    ) {
+                        rowProducts.forEach { deal ->
+                            BbProductCard(
+                                modifier = Modifier.weight(1f),
+                                product = deal.ToDealsOfTheDayProductCardModel(),
+                                onClick = {
+                                    onProductClick(deal)
+                                },
+                                onFavoriteClick = {},
+                                onAddToBasketClick = {}
+                            )
+                        }
+
+                        if (rowProducts.size == 1) {
+                            Spacer(
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
+                    }
+                }
+        }
+    }
+}
+
+private fun DealsOfTheDayDTO.ToDealsOfTheDayProductCardModel(): BbProductCardModel {
+    return BbProductCardModel(
+        Id = ProductId,
+        Name = ProductName,
+        StoreName = Store.orEmpty(),
+        ImageUrl = ImageUrlResolver.Resolve(DefaultPicture.orEmpty()),
+        PriceText = FormatCategoryProductPrice(
+            price = if (CampaignPrice > 0.0) CampaignPrice else Price,
+            currencySymbol = CurrencySymbol
+        ),
+        OldPriceText =
+            if (CampaignPrice > 0.0 && Price > CampaignPrice) {
+                FormatCategoryProductPrice(
+                    price = Price,
+                    currencySymbol = CurrencySymbol
+                )
+            } else {
+                ""
+            },
+        BadgeText = "",
+        RatingText = "",
+        CargoText = "",
+        IsFavorite = false
+    )
 }
 
 @Composable

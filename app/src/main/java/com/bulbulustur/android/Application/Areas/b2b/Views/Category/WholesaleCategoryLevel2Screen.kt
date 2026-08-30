@@ -32,16 +32,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import com.bulbulustur.android.Application.Areas.b2b.Views.Components.WholesaleCategoryProductShowcaseContent
+import com.bulbulustur.android.Application.Areas.b2b.Views.Components.WholesaleCategoryProductContentShowcaseContent
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleBottomNavigation
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleBottomNavigationItem
+import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleProductCategorySlider
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleSearchHeader
 import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleSearchHeaderLeadingAction
+import com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components.WholesaleSupplierSection
 import com.bulbulustur.android.Application.Localization.BBLocalization
+import com.bulbulustur.android.Application.Views.Shared.Components.BbMaterialSymbol
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
@@ -52,7 +55,11 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryDTO
-import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleHomepageSpecialContentDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleProductCategoryContentGroupDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleProductCategorySliderDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleProductCategorySliderPageDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleProductCategorySupplierDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleProductCategorySupplierSomeProductDTO
 
 @Composable
 fun WholesaleCategoryLevel2Screen(
@@ -61,8 +68,16 @@ fun WholesaleCategoryLevel2Screen(
     errorMessage: String? = null,
     categoryInfo: ProductCategoryDTO? = null,
     childCategories: List<ProductCategoryDTO> = emptyList(),
-    specialContents: List<WholesaleHomepageSpecialContentDTO> = emptyList(),
-    isSpecialContentsLoading: Boolean = false,
+
+    categoryContents: List<WholesaleProductCategoryContentGroupDTO> = emptyList(),
+    isCategoryContentsLoading: Boolean = false,
+
+    categorySlider: WholesaleProductCategorySliderDTO? = null,
+    isCategorySliderLoading: Boolean = false,
+
+    categorySuppliers: List<WholesaleProductCategorySupplierDTO> = emptyList(),
+    isCategorySuppliersLoading: Boolean = false,
+
     onBackClick: () -> Unit = {},
     onMenuClick: () -> Unit = {},
     onFavoriteClick: () -> Unit = {},
@@ -71,40 +86,62 @@ fun WholesaleCategoryLevel2Screen(
     onModeSwitchClick: () -> Unit = {},
     onBasketClick: () -> Unit = {},
     onAccountClick: () -> Unit = {},
+
     onSubCategoryClick: (Int) -> Unit = {},
     onProductListClick: (Int) -> Unit = {},
     onCompanyListClick: (Int) -> Unit = {},
     onRfqCreateClick: (Int) -> Unit = {},
     onPopularProductGroupClick: (Int, String) -> Unit = { _, _ -> },
-    onSpecialProductClick: (Int) -> Unit = {},
-    onSpecialFavoriteClick: (Int) -> Unit = {},
-    onSpecialViewAllClick: (WholesaleHomepageSpecialContentDTO) -> Unit = {},
+
+    onCategoryProductClick: (Int) -> Unit = {},
+    onCategoryFavoriteClick: (Int) -> Unit = {},
+    onCategoryViewAllClick: (WholesaleProductCategoryContentGroupDTO) -> Unit = {},
+
+    onCategorySliderPageClick: (WholesaleProductCategorySliderPageDTO) -> Unit = {},
+
+    onCategorySupplierClick: (WholesaleProductCategorySupplierDTO) -> Unit = {},
+    onCategorySupplierProductClick: (WholesaleProductCategorySupplierSomeProductDTO) -> Unit = {},
+
     onSearchClick: (String) -> Unit = {}
 ) {
-    var searchText by remember { mutableStateOf("") }
+    var searchText by remember {
+        mutableStateOf("")
+    }
 
-    val categoryName = safeCategoryText(categoryInfo?.CategoryName).ifBlank {
+    val categoryName = safeCategoryText(
+        categoryInfo?.CategoryName
+    ).ifBlank {
         BBLocalization.Current.Get(
             key = "1a132fdc-096f-42d7-835d-96b0a17b3675",
             fallback = ""
         )
     }
 
-    val categoryDescription = safeCategoryText(categoryInfo?.Breadcrumb)
+    val categoryDescription = safeCategoryText(
+        categoryInfo?.Breadcrumb
+    )
         .takeIf {
             it.isNotBlank() &&
                     it != categoryId.toString() &&
-                    it.any { character -> !character.isDigit() }
+                    it.any { character ->
+                        !character.isDigit()
+                    }
         }
         .orEmpty()
 
-    val validChildCategories = remember(childCategories) {
+    val validChildCategories = remember(
+        childCategories
+    ) {
         childCategories
             .filter {
                 it.ProductCategoryId > 0 &&
-                        safeCategoryText(it.CategoryName).isNotBlank()
+                        safeCategoryText(
+                            it.CategoryName
+                        ).isNotBlank()
             }
-            .distinctBy { it.ProductCategoryId }
+            .distinctBy {
+                it.ProductCategoryId
+            }
     }
 
     Scaffold(
@@ -113,7 +150,9 @@ fun WholesaleCategoryLevel2Screen(
         topBar = {
             WholesaleSearchHeader(
                 searchText = searchText,
-                onSearchTextChange = { searchText = it },
+                onSearchTextChange = {
+                    searchText = it
+                },
                 placeholder = BBLocalization.Current.Get(
                     key = "8d009caa-1db4-42e9-b394-dc818277d259",
                     fallback = "Toptan Ürün, Kategori Veya Firma Ara"
@@ -124,7 +163,9 @@ fun WholesaleCategoryLevel2Screen(
                 onFavoriteClick = onFavoriteClick,
                 onMessageClick = onMessageClick,
                 onSearchClick = {
-                    onSearchClick(searchText)
+                    onSearchClick(
+                        searchText
+                    )
                 },
                 onClearClick = {
                     searchText = ""
@@ -136,11 +177,25 @@ fun WholesaleCategoryLevel2Screen(
                 selectedItem = WholesaleBottomNavigationItem.Menu,
                 onItemClick = { item ->
                     when (item) {
-                        WholesaleBottomNavigationItem.Home -> onHomeClick()
-                        WholesaleBottomNavigationItem.Menu -> onMenuClick()
-                        WholesaleBottomNavigationItem.ModeSwitch -> onModeSwitchClick()
-                        WholesaleBottomNavigationItem.Basket -> onBasketClick()
-                        WholesaleBottomNavigationItem.Account -> onAccountClick()
+                        WholesaleBottomNavigationItem.Home -> {
+                            onHomeClick()
+                        }
+
+                        WholesaleBottomNavigationItem.Menu -> {
+                            onMenuClick()
+                        }
+
+                        WholesaleBottomNavigationItem.ModeSwitch -> {
+                            onModeSwitchClick()
+                        }
+
+                        WholesaleBottomNavigationItem.Basket -> {
+                            onBasketClick()
+                        }
+
+                        WholesaleBottomNavigationItem.Account -> {
+                            onAccountClick()
+                        }
                     }
                 }
             )
@@ -149,8 +204,12 @@ fun WholesaleCategoryLevel2Screen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
-                .padding(innerPadding)
+                .background(
+                    MaterialTheme.colorScheme.background
+                )
+                .padding(
+                    innerPadding
+                )
                 .navigationBarsPadding(),
             contentPadding = PaddingValues(
                 start = BBSpacing.PageHorizontal,
@@ -189,7 +248,7 @@ fun WholesaleCategoryLevel2Screen(
                             categoryName = categoryName,
                             description = categoryDescription,
                             childCategoryCount = validChildCategories.size,
-                            hasShowcases = specialContents.isNotEmpty()
+                            hasShowcases = categoryContents.isNotEmpty()
                         )
                     }
 
@@ -214,7 +273,9 @@ fun WholesaleCategoryLevel2Screen(
                         )
                     }
 
-                    if (validChildCategories.isEmpty()) {
+                    if (
+                        validChildCategories.isEmpty()
+                    ) {
                         item {
                             WholesaleChildCategoryEmpty()
                         }
@@ -250,14 +311,44 @@ fun WholesaleCategoryLevel2Screen(
                     }
 
                     item {
-                        WholesaleCategoryProductShowcaseContent(
-                            specialContents = specialContents,
-                            isLoading = isSpecialContentsLoading,
-                            onProductClick = onSpecialProductClick,
-                            onFavoriteClick = onSpecialFavoriteClick,
+                        WholesaleCategoryProductContentShowcaseContent(
+                            categoryContents = categoryContents,
+                            isLoading = isCategoryContentsLoading,
+                            onProductClick = onCategoryProductClick,
+                            onFavoriteClick = onCategoryFavoriteClick,
                             onRfqClick = onRfqCreateClick,
-                            onViewAllClick = onSpecialViewAllClick
+                            onViewAllClick = onCategoryViewAllClick
                         )
+                    }
+
+                    if (
+                        isCategorySliderLoading ||
+                        categorySlider
+                            ?.Pages
+                            .orEmpty()
+                            .isNotEmpty()
+                    ) {
+                        item {
+                            WholesaleProductCategorySlider(
+                                slider = categorySlider,
+                                isLoading = isCategorySliderLoading,
+                                onPageClick = onCategorySliderPageClick
+                            )
+                        }
+                    }
+
+                    if (
+                        isCategorySuppliersLoading ||
+                        categorySuppliers.isNotEmpty()
+                    ) {
+                        item {
+                            WholesaleSupplierSection(
+                                suppliers = categorySuppliers,
+                                isLoading = isCategorySuppliersLoading,
+                                onSupplierClick = onCategorySupplierClick,
+                                onProductClick = onCategorySupplierProductClick
+                            )
+                        }
                     }
                 }
             }
@@ -277,7 +368,7 @@ private fun WholesaleCategoryHero(
         shape = BBRadius.XxlShape,
         color = MaterialTheme.colorScheme.primaryContainer,
         border = BorderStroke(
-            width = 1.dp,
+            width = BBSpacing.Hairline,
             color = MaterialTheme.colorScheme.primary.copy(
                 alpha = 0.35f
             )
@@ -286,7 +377,9 @@ private fun WholesaleCategoryHero(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(BBSpacing.Space5),
+                .padding(
+                    BBSpacing.Space5
+                ),
             verticalArrangement = Arrangement.spacedBy(
                 BBSpacing.Space4
             )
@@ -300,15 +393,17 @@ private fun WholesaleCategoryHero(
             ) {
                 BbIconBox(
                     size = BbIconBoxSize.Xl,
-                    backgroundColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                    backgroundColor = MaterialTheme.colorScheme.surface,
+                    contentColor = Color.Black,
                     radius = BBRadius.xl
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Category,
                         contentDescription = null,
-                        modifier = Modifier.size(BBIcon.Ui),
-                        tint = MaterialTheme.colorScheme.onPrimary
+                        modifier = Modifier.size(
+                            BBIcon.Section
+                        ),
+                        tint = Color.Black
                     )
                 }
 
@@ -335,7 +430,9 @@ private fun WholesaleCategoryHero(
                         fontWeight = FontWeight.Bold
                     )
 
-                    if (description.isNotBlank()) {
+                    if (
+                        description.isNotBlank()
+                    ) {
                         Text(
                             text = description,
                             style = MaterialTheme.typography.bodyMedium,
@@ -345,13 +442,18 @@ private fun WholesaleCategoryHero(
                 }
             }
 
-            if (childCategoryCount > 0 || hasShowcases) {
+            if (
+                childCategoryCount > 0 ||
+                hasShowcases
+            ) {
                 LazyRow(
                     horizontalArrangement = Arrangement.spacedBy(
                         BBSpacing.Space2
                     )
                 ) {
-                    if (childCategoryCount > 0) {
+                    if (
+                        childCategoryCount > 0
+                    ) {
                         item {
                             WholesaleCategoryInfoChip(
                                 text = "$childCategoryCount ${
@@ -364,7 +466,9 @@ private fun WholesaleCategoryHero(
                         }
                     }
 
-                    if (hasShowcases) {
+                    if (
+                        hasShowcases
+                    ) {
                         item {
                             WholesaleCategoryInfoChip(
                                 text = BBLocalization.Current.Get(
@@ -388,7 +492,7 @@ private fun WholesaleCategoryInfoChip(
         shape = BBRadius.PillShape,
         color = MaterialTheme.colorScheme.surface,
         border = BorderStroke(
-            width = 1.dp,
+            width = BBSpacing.Hairline,
             color = MaterialTheme.colorScheme.primary.copy(
                 alpha = 0.20f
             )
@@ -431,7 +535,9 @@ private fun WholesaleCategoryActions(
             ),
             icon = Icons.Outlined.Inventory2,
             onClick = {
-                onProductListClick(categoryId)
+                onProductListClick(
+                    categoryId
+                )
             }
         )
 
@@ -447,7 +553,9 @@ private fun WholesaleCategoryActions(
             ),
             icon = Icons.Outlined.Business,
             onClick = {
-                onCompanyListClick(categoryId)
+                onCompanyListClick(
+                    categoryId
+                )
             }
         )
     }
@@ -476,7 +584,9 @@ private fun WholesaleCategoryActionCard(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                modifier = Modifier.size(BBIcon.Ui),
+                modifier = Modifier.size(
+                    BBIcon.Ui
+                ),
                 tint = MaterialTheme.colorScheme.primary
             )
 
@@ -516,15 +626,14 @@ private fun WholesaleSubCategoryRow(
         ) {
             BbIconBox(
                 size = BbIconBoxSize.Medium,
-                backgroundColor = MaterialTheme.colorScheme.primaryContainer,
-                contentColor = MaterialTheme.colorScheme.primary,
+                backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+                contentColor = Color.Black,
                 radius = BBRadius.lg
             ) {
-                Icon(
-                    imageVector = Icons.Outlined.Category,
-                    contentDescription = null,
-                    modifier = Modifier.size(BBIcon.Ui),
-                    tint = MaterialTheme.colorScheme.primary
+                BbMaterialSymbol(
+                    iconClass = category.IconClass,
+                    tint = Color.Black,
+                    size = BBIcon.Section
                 )
             }
 
@@ -558,7 +667,9 @@ private fun WholesaleCategorySectionTitle(
             BBSpacing.Space1
         )
     ) {
-        if (title.isNotBlank()) {
+        if (
+            title.isNotBlank()
+        ) {
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleMedium,
@@ -567,7 +678,9 @@ private fun WholesaleCategorySectionTitle(
             )
         }
 
-        if (description.isNotBlank()) {
+        if (
+            description.isNotBlank()
+        ) {
             Text(
                 text = description,
                 style = MaterialTheme.typography.bodySmall,

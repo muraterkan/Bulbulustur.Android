@@ -211,9 +211,13 @@ fun NavGraphBuilder.wholesaleGraph(
                 navigator.navController.navigate(WholesaleRoutes.productList())
             },
             onSubCategoryClick = { subCategoryId ->
-                if (subCategoryId > 0) {
+                if (
+                    subCategoryId > 0
+                ) {
                     navigator.navController.navigate(
-                        WholesaleRoutes.categoryLevel1(subCategoryId)
+                        WholesaleRoutes.productList(
+                            subCategoryId
+                        )
                     )
                 }
             },
@@ -249,7 +253,10 @@ fun NavGraphBuilder.wholesaleGraph(
             ?.getInt(WholesaleRoutes.ArgCategoryId)
             ?: return@composable
 
-        LaunchedEffect(sessionState.Language.Id, categoryId) {
+        LaunchedEffect(
+            sessionState.Language.Id,
+            categoryId
+        ) {
             categoryController.LoadDetail(
                 languageId = sessionState.Language.Id,
                 productCategoryId = categoryId
@@ -261,6 +268,17 @@ fun NavGraphBuilder.wholesaleGraph(
                 groupCount = 3,
                 productCount = 4
             )
+
+            categoryController.LoadCategorySlider(
+                languageId = sessionState.Language.Id,
+                productCategoryId = categoryId
+            )
+
+            categoryController.LoadCategorySuppliers(
+                languageId = sessionState.Language.Id,
+                productCategoryId = categoryId,
+                count = 2
+            )
         }
 
         WholesaleCategoryLevel1Screen(
@@ -269,8 +287,15 @@ fun NavGraphBuilder.wholesaleGraph(
             errorMessage = categoryState.ErrorMessage,
             categoryInfo = categoryState.Category,
             childCategories = categoryState.ChildCategories,
+
             categoryContents = categoryState.CategoryContents,
             isCategoryContentsLoading = categoryState.IsCategoryContentsLoading,
+
+            categorySlider = categoryState.CategorySlider,
+            isCategorySliderLoading = categoryState.IsCategorySliderLoading,
+
+            categorySuppliers = categoryState.CategorySuppliers,
+            isCategorySuppliersLoading = categoryState.IsCategorySuppliersLoading,
 
             onBackClick = {
                 navigator.back()
@@ -281,7 +306,9 @@ fun NavGraphBuilder.wholesaleGraph(
             },
 
             onFavoriteClick = {
-                navigator.navController.navigate(AccountRoutes.Favorites)
+                navigator.navController.navigate(
+                    AccountRoutes.Favorites
+                )
             },
 
             onMessageClick = {
@@ -289,7 +316,9 @@ fun NavGraphBuilder.wholesaleGraph(
             },
 
             onHomeClick = {
-                navigator.navController.navigate(WholesaleRoutes.Home)
+                navigator.navController.navigate(
+                    WholesaleRoutes.Home
+                )
             },
 
             onModeSwitchClick = {
@@ -297,7 +326,9 @@ fun NavGraphBuilder.wholesaleGraph(
             },
 
             onBasketClick = {
-                navigator.navController.navigate(RfqRoutes.List)
+                navigator.navController.navigate(
+                    RfqRoutes.List
+                )
             },
 
             onAccountClick = {
@@ -305,20 +336,28 @@ fun NavGraphBuilder.wholesaleGraph(
             },
 
             onSearchClick = { _ ->
-                navigator.navController.navigate(WholesaleRoutes.Search)
+                navigator.navController.navigate(
+                    WholesaleRoutes.Search
+                )
             },
 
             onSubCategoryClick = { subCategoryId ->
-                if (subCategoryId > 0) {
+                if (
+                    subCategoryId > 0
+                ) {
                     navigator.navController.navigate(
-                        WholesaleRoutes.categoryLevel2(subCategoryId)
+                        WholesaleRoutes.categoryLevel2(
+                            subCategoryId
+                        )
                     )
                 }
             },
 
             onProductListClick = {
                 navigator.navController.navigate(
-                    WholesaleRoutes.productList(categoryId)
+                    WholesaleRoutes.productList(
+                        categoryId
+                    )
                 )
             },
 
@@ -336,14 +375,20 @@ fun NavGraphBuilder.wholesaleGraph(
 
             onPopularProductGroupClick = { _, _ ->
                 navigator.navController.navigate(
-                    WholesaleRoutes.productList(categoryId)
+                    WholesaleRoutes.productList(
+                        categoryId
+                    )
                 )
             },
 
             onCategoryProductClick = { productId ->
-                if (productId > 0) {
+                if (
+                    productId > 0
+                ) {
                     navigator.navController.navigate(
-                        WholesaleRoutes.productDetail(productId)
+                        WholesaleRoutes.productDetail(
+                            productId
+                        )
                     )
                 }
             },
@@ -355,11 +400,47 @@ fun NavGraphBuilder.wholesaleGraph(
             },
 
             onCategoryViewAllClick = { content ->
-                if (content.WholesaleProductCategoryContentGroupId > 0) {
+                if (
+                    content.WholesaleProductCategoryContentGroupId > 0
+                ) {
                     navigator.navController.navigate(
                         WholesaleRoutes.productCategoryContentList(
-                            categoryContentGroupId = content.WholesaleProductCategoryContentGroupId,
-                            groupName = content.GroupName
+                            categoryContentGroupId =
+                                content.WholesaleProductCategoryContentGroupId,
+                            groupName =
+                                content.GroupName
+                        )
+                    )
+                }
+            },
+
+            onCategorySliderPageClick = {
+                if (categoryId > 0) {
+                    navigator.navController.navigate(
+                        WholesaleRoutes.productList(
+                            categoryId
+                        )
+                    )
+                }
+            },
+
+            onCategorySupplierClick = { supplier ->
+                if (supplier.CompanyId > 0) {
+                    navigator.navController.navigate(
+                        CompanyRoutes.companyDetail(
+                            supplier.CompanyId
+                        )
+                    )
+                }
+            },
+
+            onCategorySupplierProductClick = { product ->
+                if (
+                    product.WholesaleProductId > 0
+                ) {
+                    navigator.navController.navigate(
+                        WholesaleRoutes.productDetail(
+                            product.WholesaleProductId
                         )
                     )
                 }
@@ -399,27 +480,163 @@ fun NavGraphBuilder.wholesaleGraph(
             errorMessage = categoryState.ErrorMessage,
             categoryInfo = categoryState.Category,
             childCategories = categoryState.ChildCategories,
-            specialContents = categoryState.SpecialContents,
-            isSpecialContentsLoading = categoryState.IsSpecialContentsLoading,
+
+            categoryContents = categoryState.CategoryContents,
+            isCategoryContentsLoading = categoryState.IsCategoryContentsLoading,
+
+            categorySlider = categoryState.CategorySlider,
+            isCategorySliderLoading = categoryState.IsCategorySliderLoading,
+
+            categorySuppliers = categoryState.CategorySuppliers,
+            isCategorySuppliersLoading = categoryState.IsCategorySuppliersLoading,
+
             onBackClick = {
                 navigator.back()
             },
-            onSubCategoryClick = { subCategoryId ->
+
+            onMenuClick = {
+                navigator.navigateToWholesaleCategories()
+            },
+
+            onFavoriteClick = {
                 navigator.navController.navigate(
-                    WholesaleRoutes.productList(subCategoryId)
+                    AccountRoutes.Favorites
                 )
             },
+
+            onMessageClick = {
+                navigator.navigateToInbox()
+            },
+
+            onHomeClick = {
+                navigator.navController.navigate(
+                    WholesaleRoutes.Home
+                )
+            },
+
+            onModeSwitchClick = {
+                navigator.openModeSheet()
+            },
+
+            onBasketClick = {
+                navigator.navController.navigate(
+                    RfqRoutes.List
+                )
+            },
+
+            onAccountClick = {
+                navigator.navigateToAccount()
+            },
+
+            onSearchClick = { _ ->
+                navigator.navController.navigate(
+                    WholesaleRoutes.Search
+                )
+            },
+
+            onSubCategoryClick = { subCategoryId ->
+                if (
+                    subCategoryId > 0
+                ) {
+                    navigator.navController.navigate(
+                        WholesaleRoutes.categoryLevel2(
+                            subCategoryId
+                        )
+                    )
+                }
+            },
+
             onProductListClick = {
-                navigator.navController.navigate(WholesaleRoutes.productList(categoryId))
+                navigator.navController.navigate(
+                    WholesaleRoutes.productList(
+                        categoryId
+                    )
+                )
             },
+
             onCompanyListClick = {
-                navigator.navController.navigate(CompanyRoutes.CompanyList)
+                navigator.navController.navigate(
+                    CompanyRoutes.CompanyList
+                )
             },
+
             onRfqCreateClick = {
-                navigator.navController.navigate(RfqRoutes.Create)
+                navigator.navController.navigate(
+                    RfqRoutes.Create
+                )
             },
+
             onPopularProductGroupClick = { _, _ ->
-                navigator.navController.navigate(WholesaleRoutes.productList(categoryId))
+                navigator.navController.navigate(
+                    WholesaleRoutes.productList(
+                        categoryId
+                    )
+                )
+            },
+
+            onCategoryProductClick = { productId ->
+                if (
+                    productId > 0
+                ) {
+                    navigator.navController.navigate(
+                        WholesaleRoutes.productDetail(
+                            productId
+                        )
+                    )
+                }
+            },
+
+            onCategoryFavoriteClick = {
+                navigator.navController.navigate(
+                    AccountRoutes.Favorites
+                )
+            },
+
+            onCategoryViewAllClick = { content ->
+                if (
+                    content.WholesaleProductCategoryContentGroupId > 0
+                ) {
+                    navigator.navController.navigate(
+                        WholesaleRoutes.productCategoryContentList(
+                            categoryContentGroupId =
+                                content.WholesaleProductCategoryContentGroupId,
+                            groupName =
+                                content.GroupName
+                        )
+                    )
+                }
+            },
+
+            onCategorySliderPageClick = {
+                if (categoryId > 0) {
+                    navigator.navController.navigate(
+                        WholesaleRoutes.productList(
+                            categoryId
+                        )
+                    )
+                }
+            },
+
+            onCategorySupplierClick = { supplier ->
+                if (supplier.CompanyId > 0) {
+                    navigator.navController.navigate(
+                        CompanyRoutes.companyDetail(
+                            supplier.CompanyId
+                        )
+                    )
+                }
+            },
+
+            onCategorySupplierProductClick = { product ->
+                if (
+                    product.WholesaleProductId > 0
+                ) {
+                    navigator.navController.navigate(
+                        WholesaleRoutes.productDetail(
+                            product.WholesaleProductId
+                        )
+                    )
+                }
             }
         )
     }

@@ -37,6 +37,7 @@ import com.bulbulustur.android.Application.Controllers.LogonController
 import com.bulbulustur.android.Application.Controllers.MessageController
 import com.bulbulustur.android.Application.Controllers.ProfileController
 import com.bulbulustur.android.Application.Controllers.SettingsController
+import com.bulbulustur.android.Application.Datastore.ProductCategoryDataStore
 import com.bulbulustur.android.Application.Datastore.UserPreferenceDataStore
 import com.bulbulustur.android.Application.Localization.BBLocalizationProvider
 import com.bulbulustur.android.Application.Localization.LocalizationManager
@@ -206,6 +207,12 @@ private fun BulbulusturApplicationContent(
     appLinkUrl: String?,
     onAppLinkConsumed: () -> Unit
 ) {
+    val context = LocalContext.current
+
+    val productCategoryDataStore = remember(context) {
+        ProductCategoryDataStore(context.applicationContext)
+    }
+
     val navController = rememberNavController()
 
     var showBuyerModeSheet by remember {
@@ -427,7 +434,8 @@ private fun BulbulusturApplicationContent(
         productRepository
     ) {
         DealsOfTheDayController(
-            dealsOfTheDayRepository = dealsOfTheDayRepository
+            dealsOfTheDayRepository = dealsOfTheDayRepository,
+            productRepository = productRepository
         )
     }
 
@@ -853,8 +861,10 @@ private fun BulbulusturApplicationContent(
             categoryController = com.bulbulustur.android.Application.Areas.b2c.Controllers.CategoryController(
                 executeService = executeService,
                 productCategoryRepository = productCategoryRepository,
+                productCategoryDataStore = productCategoryDataStore,
                 productCategoryContentRepository = com.bulbulustur.android.businesslayer.Core.Repository.ProductCategoryContentRepository(),
-                productHomepageSpecialContentRepository = productHomepageSpecialContentRepository
+                productHomepageSpecialContentRepository = productHomepageSpecialContentRepository,
+                productBrandCategoryMapRepository = com.bulbulustur.android.businesslayer.Core.Repository.ProductBrandCategoryMapRepository()
             )
 ,
             homeController = retailHomeController,
@@ -876,8 +886,11 @@ private fun BulbulusturApplicationContent(
             categoryController = com.bulbulustur.android.Application.Areas.b2b.Controllers.CategoryController(
                 executeService = executeService,
                 productCategoryRepository = productCategoryRepository,
+                productCategoryDataStore = productCategoryDataStore,
                 wholesaleProductCategoryContentRepository = com.bulbulustur.android.businesslayer.Core.Repository.WholesaleProductCategoryContentRepository(),
-                wholesaleHomepageSpecialContentRepository = wholesaleHomepageSpecialContentRepository
+                wholesaleHomepageSpecialContentRepository = wholesaleHomepageSpecialContentRepository,
+                wholesaleProductCategorySliderRepository = com.bulbulustur.android.businesslayer.Core.Repository.WholesaleProductCategorySliderRepository(),
+                wholesaleProductCategorySupplierRepository = com.bulbulustur.android.businesslayer.Core.Repository.WholesaleProductCategorySupplierRepository()
             ),
             homeController = wholesaleHomeController,
             productController = wholesaleProductController,

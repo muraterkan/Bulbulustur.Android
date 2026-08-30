@@ -101,6 +101,12 @@ object ApiRoutes {
     const val B2B_PRODUCT_CATEGORY_CONTENT_BASE_URL =
         "http://$APPLICATION_SERVER_HOST:30235/api/WholesaleProductCategoryContent/"
 
+    const val B2B_PRODUCT_CATEGORY_SUPPLIER_BASE_URL =
+        "http://$APPLICATION_SERVER_HOST:30235/api/WholesaleProductCategorySupplier/"
+
+    const val B2B_PRODUCT_CATEGORY_SLIDER_BASE_URL =
+        "http://$APPLICATION_SERVER_HOST:30235/api/WholesaleProductCategorySlider/"
+
     const val B2C_BASE_URL =
         "http://$APPLICATION_SERVER_HOST:30240/api/"
 

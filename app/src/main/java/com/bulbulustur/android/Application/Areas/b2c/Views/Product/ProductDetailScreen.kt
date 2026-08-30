@@ -2149,11 +2149,11 @@ private fun RetailProductDetailStoreCard(
             horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             Surface(
-                modifier = Modifier.size(48.dp),
+                modifier = Modifier.size(BBSpacing.Space14),
                 shape = BBRadius.LgShape,
-                color = MaterialTheme.colorScheme.surfaceVariant,
+                color = BBColors.White,
                 border = BorderStroke(
-                    width = 1.dp,
+                    width = BBSpacing.BorderThin,
                     color = MaterialTheme.colorScheme.outlineVariant
                 )
             ) {
@@ -2161,12 +2161,23 @@ private fun RetailProductDetailStoreCard(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = store.logoText,
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        fontWeight = FontWeight.Bold
-                    )
+                    if (store.logoUrl.isNotBlank()) {
+                        AsyncImage(
+                            model = store.logoUrl,
+                            contentDescription = store.name,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(BBSpacing.Space1),
+                            contentScale = ContentScale.Fit
+                        )
+                    } else {
+                        Text(
+                            text = store.logoText,
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
             }
 
@@ -3400,6 +3411,7 @@ data class RetailProductDetailStore(
     val id: Int,
     val name: String,
     val logoText: String,
+    val logoUrl: String,
     val ratingText: String,
     val productCount: Int,
     val isVerified: Boolean
@@ -3838,6 +3850,8 @@ private fun ProductDTO.ToRetailProductDetail(
             it.isNotBlank()
         } ?: BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = "")
 
+    val resolvedStoreLogoUrl = ImageUrlResolver.Resolve(imagePath = StoreLogo.orEmpty())
+
     val resolvedStoreLogoText =
         resolvedStoreName
             .split(
@@ -3979,6 +3993,8 @@ private fun ProductDTO.ToRetailProductDetail(
                     resolvedStoreName,
                 logoText =
                     resolvedStoreLogoText,
+                logoUrl =
+                    resolvedStoreLogoUrl,
                 ratingText =
                     resolvedStoreRating,
                 productCount =

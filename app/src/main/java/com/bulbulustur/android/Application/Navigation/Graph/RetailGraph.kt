@@ -331,6 +331,11 @@ fun NavGraphBuilder.retailGraph(
                 productCount = 4
             )
 
+            categoryController.LoadCategoryBrands(
+                productCategoryId = categoryId,
+                count = 30
+            )
+
             productController.List(
                 filters = B2CProductFilterDTO(
                     ProductCategoryId = categoryId,
@@ -377,6 +382,8 @@ fun NavGraphBuilder.retailGraph(
             campaigns = campaignState.Campaigns,
             dealsOfTheDays = dealsOfTheDayState.CategoryDealsOfTheDays,
             sponsoredAdverts = productState.CategorySponsoredAdverts,
+            categoryBrands = categoryState.CategoryBrands,
+            isCategoryBrandsLoading = categoryState.IsCategoryBrandsLoading,
             isProductLoading =
                 productState.IsLoading &&
                         productState.ProductListData == null,
@@ -411,7 +418,9 @@ fun NavGraphBuilder.retailGraph(
             onSubCategoryClick = { subCategoryId ->
                 if (subCategoryId > 0) {
                     navigator.navController.navigate(
-                        RetailRoutes.productList(3626)
+                        RetailRoutes.productList(
+                            subCategoryId
+                        )
                     )
                 }
             },
@@ -1161,6 +1170,7 @@ fun NavGraphBuilder.retailGraph(
         val categoryState by categoryController.State.collectAsState()
         val productState by productController.State.collectAsState()
         val campaignState by campaignController.State.collectAsState()
+        val dealsOfTheDayState by dealsOfTheDayController.State.collectAsState()
 
         val categoryId =
             backStackEntry.arguments
@@ -1212,14 +1222,17 @@ fun NavGraphBuilder.retailGraph(
             categoryInfo = categoryState.Category,
 
             childCategories = categoryState.ChildCategories,
-            specialContents = categoryState.SpecialContents,
-            isSpecialContentsLoading = categoryState.IsSpecialContentsLoading,
+            categoryContents = categoryState.CategoryContents,
+            isCategoryContentsLoading = categoryState.IsCategoryContentsLoading,
             products = productState.ProductListData
                 ?.Products2
                 ?.Items
                 .orEmpty(),
             campaigns = campaignState.Campaigns,
-            sponsoredAdverts = productState.SponsoredAdverts,
+            dealsOfTheDays = dealsOfTheDayState.CategoryDealsOfTheDays,
+            sponsoredAdverts = productState.CategorySponsoredAdverts,
+            categoryBrands = categoryState.CategoryBrands,
+            isCategoryBrandsLoading = categoryState.IsCategoryBrandsLoading,
             isProductLoading =
                 productState.IsLoading &&
                         productState.ProductListData == null,
@@ -1254,20 +1267,23 @@ fun NavGraphBuilder.retailGraph(
             onSubCategoryClick = { subCategoryId ->
                 if (subCategoryId > 0) {
                     navigator.navController.navigate(
-                        RetailRoutes.productList(subCategoryId)
-                    )
-                }
-            },
-            onSpecialViewAllClick = { content ->
-                if (content.ProductSpecialGroupId > 0) {
-                    navigator.navController.navigate(
-                        RetailRoutes.productHomepageSpecialList(
-                            specialGroupId = content.ProductSpecialGroupId
+                        RetailRoutes.categoryLevel2(
+                            subCategoryId
                         )
                     )
                 }
             },
-            onSpecialProductClick = { special ->
+            onCategoryViewAllClick = { content ->
+                if (content.ProductCategoryContentGroupId > 0) {
+                    navigator.navController.navigate(
+                        RetailRoutes.productCategoryContentList(
+                            categoryContentGroupId = content.ProductCategoryContentGroupId,
+                            groupName = content.GroupName
+                        )
+                    )
+                }
+            },
+            onCategoryProductClick = { special ->
                 if (special.ProductId > 0 && special.StoreId > 0 && special.VariantId > 0) {
                     navigator.navController.navigate(
                         RetailRoutes.productDetail(
@@ -1278,7 +1294,7 @@ fun NavGraphBuilder.retailGraph(
                     )
                 }
             },
-            onSpecialProductFavoriteClick = { special ->
+            onCategoryProductFavoriteClick = { special ->
                 if (!sessionState.IsAuthenticated || sessionState.MemberId <= 0) {
                     navigator.navController.navigate(LogonRoutes.Logon)
                 } else {
@@ -1298,7 +1314,7 @@ fun NavGraphBuilder.retailGraph(
                     )
                 }
             },
-            onSpecialAddToBasketClick = { priceId ->
+            onCategoryAddToBasketClick = { priceId ->
                 if (!sessionState.IsAuthenticated || sessionState.MemberId <= 0) {
                     navigator.navController.navigate(LogonRoutes.Logon)
                 } else if (priceId > 0) {
@@ -2692,8 +2708,17 @@ fun NavGraphBuilder.retailGraph(
                 navigator.navigateToAccount()
             },
             onProductClick = { product ->
+                android.util.Log.d(
+                    "CAMPAIGN_PRODUCT_CLICK",
+                    "campaignProductId=${product.CampaignProductId} productId=${product.ProductId} storeId=${product.StoreId} variantId=${product.VariantId} priceId=${product.ProductVariantPriceId}"
+                )
+
                 navigator.navController.navigate(
-                    RetailRoutes.productDetail(product.ProductId, product.StoreId, product.VariantId)
+                    RetailRoutes.productDetail(
+                        product.ProductId,
+                        product.StoreId,
+                        product.VariantId
+                    )
                 )
             },
             onCategoryClick = { categoryId ->

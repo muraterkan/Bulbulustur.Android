@@ -60,6 +60,7 @@ import com.bulbulustur.android.Application.Views.Shared.Components.BbSectionHead
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
+import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryDTO
@@ -312,7 +313,8 @@ private fun RetailCategoryHomeCategoryCard(
             ) {
                 BbMaterialSymbol(
                     iconClass = item.iconClass,
-                    tint = MaterialTheme.colorScheme.primary
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                    size = BBIcon.Section
                 )
             }
 

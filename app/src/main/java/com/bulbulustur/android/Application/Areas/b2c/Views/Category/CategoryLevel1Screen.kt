@@ -35,6 +35,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bulbulustur.android.Application.Areas.b2c.Views.Category.Components.CategoryProductContentShowcaseContent
+import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.CategoryBrands
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailBottomNavigation
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailBottomNavigationItem
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeader
@@ -56,6 +57,7 @@ import com.bulbulustur.android.businesslayer.Core.DTO.AdvertSponsoredDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.B2CProductData
 import com.bulbulustur.android.businesslayer.Core.DTO.CampaignDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.DealsOfTheDayDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.ProductBrandCategoryMapDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryContentDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryContentGroupDTO
@@ -73,8 +75,12 @@ fun CategoryLevel1Screen(
     campaigns: List<CampaignDTO> = emptyList(),
     dealsOfTheDays: List<DealsOfTheDayDTO> = emptyList(),
     sponsoredAdverts: List<AdvertSponsoredDTO> = emptyList(),
+    categoryBrands: List<ProductBrandCategoryMapDTO> = emptyList(),
     isProductLoading: Boolean = false,
     isCategoryContentsLoading: Boolean = false,
+    isCategoryBrandsLoading: Boolean = false,
+
+
 
     onBackClick: () -> Unit = {},
     onMenuClick: () -> Unit = {},
@@ -232,6 +238,19 @@ fun CategoryLevel1Screen(
                     onSponsoredAddToBasketClick = onSponsoredAddToBasketClick
                 )
             }
+
+            if (
+                isCategoryBrandsLoading ||
+                categoryBrands.isNotEmpty()
+            ) {
+                item {
+                    CategoryBrands(
+                        brands = categoryBrands,
+                        isLoading = isCategoryBrandsLoading
+                    )
+                }
+            }
+
         }
     }
 }
@@ -410,7 +429,8 @@ private fun CategorySubCategoryRow(
             ) {
                 BbMaterialSymbol(
                     iconClass = category.IconClass,
-                    tint = MaterialTheme.colorScheme.primary
+                    tint = MaterialTheme.colorScheme.primary,
+                    size = BBIcon.Section
                 )
             }
 

@@ -10,10 +10,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
@@ -35,17 +37,8 @@ fun BbMaterialSymbol(
     tint: Color = LocalContentColor.current,
     size: Dp = BBIcon.Ui
 ) {
-    val symbolName = remember(iconClass) {
-        iconClass
-            ?.trim()
-            ?.lowercase()
-            ?.takeIf { it.isNotBlank() && BbMaterialSymbolNameRegex.matches(it) }
-            ?: "category"
-    }
-
-    val fontSize = with(LocalDensity.current) {
-        size.toSp()
-    }
+    val symbolName = remember(iconClass) { iconClass?.trim()?.lowercase()?.takeIf { it.isNotBlank() && BbMaterialSymbolNameRegex.matches(it) } ?: "category" }
+    val fontSize = with(LocalDensity.current) { size.toSp() }
 
     Box(
         modifier = modifier.size(size),
@@ -53,7 +46,6 @@ fun BbMaterialSymbol(
     ) {
         Text(
             text = symbolName,
-            modifier = Modifier,
             maxLines = 1,
             softWrap = false,
             overflow = TextOverflow.Clip,
@@ -63,7 +55,12 @@ fun BbMaterialSymbol(
                 fontSize = fontSize,
                 lineHeight = fontSize,
                 color = tint,
-                fontFeatureSettings = "liga"
+                fontFeatureSettings = "liga",
+                platformStyle = PlatformTextStyle(includeFontPadding = false),
+                lineHeightStyle = LineHeightStyle(
+                    alignment = LineHeightStyle.Alignment.Center,
+                    trim = LineHeightStyle.Trim.Both
+                )
             )
         )
     }

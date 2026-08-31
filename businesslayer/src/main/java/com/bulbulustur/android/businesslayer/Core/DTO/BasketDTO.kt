@@ -32,6 +32,7 @@ data class BasketDTO(
     val StoreBoxRuleId: Int = 0,
 
     val Store: String = "",
+    val StoreLogo: String = "",
     val ProductName: String = "",
     val Unit: String = "",
     val CurrencySymbol: String = "",

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -203,28 +204,14 @@ fun WholesaleProductListScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            WholesaleProductListIntroCard()
-
             WholesaleProductFilterRow(
-                items = categoryFilters,
-                selectedItem = selectedCategory,
-                modifier = Modifier.padding(
-                    top = BBSpacing.SectionGapCompact
-                ),
-                onItemClick = { category ->
-                    selectedCategory = category
-                }
-            )
-
-            WholesaleProductFilterRow(
-                items = sortFilters,
-                selectedItem = selectedSort,
-                modifier = Modifier.padding(
-                    top = BBSpacing.Space3
-                ),
-                onItemClick = { sort ->
-                    selectedSort = sort
-                }
+                categoryItems = categoryFilters,
+                sortItems = sortFilters,
+                selectedCategory = selectedCategory,
+                selectedSort = selectedSort,
+                modifier = Modifier.padding(top = BBSpacing.PageTopCompact),
+                onCategoryClick = { category -> selectedCategory = category },
+                onSortClick = { sort -> selectedSort = sort }
             )
 
             BbSectionHeader(
@@ -285,72 +272,25 @@ fun WholesaleProductListScreen(
 }
 
 @Composable
-private fun WholesaleProductListIntroCard() {
-    BbCard(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(
-                start = BBSpacing.PageHorizontal,
-                top = BBSpacing.PageTopCompact,
-                end = BBSpacing.PageHorizontal
-            ),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Large
-    ) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(
-                BBSpacing.Space2
-            )
-        ) {
-            Text(
-                text = "Toptan Ürünler",
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-
-            Text(
-                text = BBLocalization.Current.Get(key = "3ea03f74-61c0-4d3e-aeec-3562785d14c0", fallback = "Sektörlerden, tedarikçilerden ve teklif akışlarından ürün keşfet."),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
 private fun WholesaleProductFilterRow(
-    items: List<String>,
-    selectedItem: String,
+    categoryItems: List<String>,
+    sortItems: List<String>,
+    selectedCategory: String,
+    selectedSort: String,
     modifier: Modifier = Modifier,
-    onItemClick: (String) -> Unit
+    onCategoryClick: (String) -> Unit,
+    onSortClick: (String) -> Unit
 ) {
-    FlowRow(
-        modifier = modifier
-            .fillMaxWidth()
-            .horizontalScroll(
-                rememberScrollState()
-            )
-            .padding(
-                horizontal = BBSpacing.PageHorizontal
-            ),
-        horizontalArrangement = Arrangement.spacedBy(
-            BBSpacing.ChipGap
-        ),
-        verticalArrangement = Arrangement.spacedBy(
-            BBSpacing.ChipGap
-        )
+    Row(
+        modifier = modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(horizontal = BBSpacing.PageHorizontal),
+        horizontalArrangement = Arrangement.spacedBy(BBSpacing.ChipGap)
     ) {
-        items.forEach { item ->
-            BbChip(
-                text = item,
-                selected = selectedItem == item,
-                onClick = {
-                    onItemClick(item)
-                }
-            )
+        categoryItems.forEach { item ->
+            BbChip(text = item, selected = selectedCategory == item, onClick = { onCategoryClick(item) })
+        }
+
+        sortItems.forEach { item ->
+            BbChip(text = item, selected = selectedSort == item, onClick = { onSortClick(item) })
         }
     }
 }

@@ -640,7 +640,7 @@ private fun WholesaleProductTitleCard(
 
             Text(
                 text = product.name,
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.titleMedium,
                 color = BBColors.TextStrong,
                 fontWeight = FontWeight.Bold
             )

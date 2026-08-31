@@ -14,6 +14,8 @@ import kotlinx.coroutines.launch
 data class HomeControllerState(
     val IsLoading: Boolean = false,
     val FeaturedProducts: List<WholesaleHomepageFeaturedProductDTO> = emptyList(),
+    val FeaturedProductsAll: List<WholesaleHomepageFeaturedProductDTO> = emptyList(),
+    val IsFeaturedProductsLoading: Boolean = false,
     val SpecialContents: List<WholesaleHomepageSpecialContentDTO> = emptyList(),
     val ErrorMessage: String? = null
 )
@@ -26,7 +28,11 @@ class HomeController(
     private val _state = MutableStateFlow(HomeControllerState())
     val State: StateFlow<HomeControllerState> = _state.asStateFlow()
 
-    fun Load(languageId: Int, featuredProductCount: Int = 12, specialContentCount: Int = 6) {
+    fun Load(
+        languageId: Int,
+        featuredProductCount: Int = 12,
+        specialContentCount: Int = 6
+    ) {
         viewModelScope.launch {
             _state.update {
                 it.copy(
@@ -35,14 +41,48 @@ class HomeController(
                 )
             }
 
-            val featuredProductsResult = wholesaleHomepageFeaturedProductRepository.GetHomepageFeaturedProductsAsync(featuredProductCount)
-            val specialContentsResult = wholesaleHomepageSpecialContentRepository.GetHomepageSpecialContents(languageId, specialContentCount)
+            val featuredProductsResult =
+                wholesaleHomepageFeaturedProductRepository
+                    .GetHomepageFeaturedProductsAsync(featuredProductCount)
+
+            val specialContentsResult =
+                wholesaleHomepageSpecialContentRepository
+                    .GetHomepageSpecialContents(
+                        languageId,
+                        specialContentCount
+                    )
 
             _state.update {
                 it.copy(
                     IsLoading = false,
-                    FeaturedProducts = featuredProductsResult.Data ?: emptyList(),
-                    SpecialContents = specialContentsResult.Data ?: emptyList()
+                    FeaturedProducts =
+                        featuredProductsResult.Data ?: emptyList(),
+                    SpecialContents =
+                        specialContentsResult.Data ?: emptyList()
+                )
+            }
+        }
+    }
+
+    fun LoadFeaturedProducts(
+        count: Int = 100
+    ) {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    IsFeaturedProductsLoading = true,
+                    ErrorMessage = null
+                )
+            }
+
+            val result =
+                wholesaleHomepageFeaturedProductRepository
+                    .GetHomepageFeaturedProductsAsync(count)
+
+            _state.update {
+                it.copy(
+                    IsFeaturedProductsLoading = false,
+                    FeaturedProductsAll = result.Data ?: emptyList()
                 )
             }
         }

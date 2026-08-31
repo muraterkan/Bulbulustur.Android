@@ -124,9 +124,29 @@ fun NavGraphBuilder.wholesaleGraph(
     }
 
     composable(route = WholesaleRoutes.FeaturedProducts) {
+        val homeState by homeController.State.collectAsState()
+
+        LaunchedEffect(Unit) {
+            homeController.LoadFeaturedProducts(
+                count = 100
+            )
+        }
+
         WholesaleFeaturedProductsScreen(
+            products = homeState.FeaturedProductsAll,
+            isLoading = homeState.IsFeaturedProductsLoading,
             onBackClick = {
                 navigator.back()
+            },
+            onProductClick = { productId ->
+                navigator.navController.navigate(
+                    WholesaleRoutes.productDetail(productId)
+                )
+            },
+            onRfqClick = {
+                navigator.navController.navigate(
+                    RfqRoutes.Create
+                )
             }
         )
     }
@@ -215,9 +235,7 @@ fun NavGraphBuilder.wholesaleGraph(
                     subCategoryId > 0
                 ) {
                     navigator.navController.navigate(
-                        WholesaleRoutes.productList(
-                            subCategoryId
-                        )
+                        WholesaleRoutes.categoryLevel1(subCategoryId)
                     )
                 }
             },
@@ -539,9 +557,7 @@ fun NavGraphBuilder.wholesaleGraph(
                     subCategoryId > 0
                 ) {
                     navigator.navController.navigate(
-                        WholesaleRoutes.categoryLevel2(
-                            subCategoryId
-                        )
+                        WholesaleRoutes.productList(subCategoryId)
                     )
                 }
             },

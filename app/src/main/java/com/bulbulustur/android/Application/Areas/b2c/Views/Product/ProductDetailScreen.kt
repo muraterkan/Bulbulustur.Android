@@ -585,18 +585,12 @@ fun ProductDetailScreen(
                 }
             )
 
-            RetailProductTitleCard(
-                product =
-                    product
-            )
+            RetailProductTitleCard(product = product)
 
             RetailProductRatingSummaryCard(
-                ratingText =
-                    product.ratingText,
-                reviewCount =
-                    product.reviewCount,
-                onReviewClick =
-                    onReviewClick
+                ratingText = product.ratingText,
+                reviewCount = product.reviewCount,
+                onReviewClick = onReviewClick
             )
 
             RetailProductDetailVariantCard(
@@ -1090,22 +1084,12 @@ private fun RetailProductTitleCard(
         variant = BbCardVariant.Outlined,
         padding = BbCardPadding.Medium
     ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
-        ) {
-            Text(
-                text = product.name,
-                style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.Bold
-            )
-
-            Text(
-                text = product.shortDescription,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
+        Text(
+            text = product.name,
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurface,
+            fontWeight = FontWeight.Bold
+        )
     }
 }
 

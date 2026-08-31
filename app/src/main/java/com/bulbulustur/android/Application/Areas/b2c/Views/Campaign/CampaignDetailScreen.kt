@@ -52,7 +52,6 @@ import coil3.compose.AsyncImage
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeader
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailSearchHeaderLeadingAction
 import com.bulbulustur.android.Application.Localization.BBLocalization
-import com.bulbulustur.android.Application.Views.Shared.Components.BbSectionHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
@@ -197,17 +196,6 @@ fun CampaignDetailScreen(
                                     campaign.CampaignCondition.orEmpty()
                             )
                         }
-                    }
-
-                    item(
-                        span = {
-                            GridItemSpan(maxLineSpan)
-                        }
-                    ) {
-                        BbSectionHeader(
-                            title = BBLocalization.Current.Get(key = "63e5e486-0f3c-4a5c-856d-7a22f46c8be9", fallback = "Bu Kampanyadaki Ürünler"),
-                            subtitle = BBLocalization.Current.Get(key = "d406e4a7-172e-49c6-87bd-776ff5ef7e78", fallback = "Kampanya kapsamındaki seçili ürünleri, kampanyalı fiyatları ve alışveriş seçeneklerini incele.")
-                        )
                     }
 
                     if (campaign.CampaignProducts.isNullOrEmpty()) {
@@ -614,15 +602,8 @@ private fun CampaignProductCard(
     onProductClick: () -> Unit,
     onStoreClick: () -> Unit
 ) {
-    val productName =
-        product.ProductName
-            ?.takeIf { it.isNotBlank() }
-            ?: BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = "")
-
-    val categoryName =
-        product.CategoryName
-            ?.takeIf { it.isNotBlank() }
-            ?: "Kampanya Ürünü"
+    val productName = product.ProductName?.takeIf { it.isNotBlank() }
+    val categoryName = product.CategoryName?.takeIf { it.isNotBlank() }
 
     val storeName =
         product.StoreName
@@ -718,24 +699,26 @@ private fun CampaignProductCard(
                     BBSpacing.Space2
                 )
             ) {
-                Text(
-                    text = categoryName,
-                    style = MaterialTheme.typography.labelSmall,
-                    color =
-                        MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
+                if (categoryName != null) {
+                    Text(
+                        text = categoryName,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
 
-                Text(
-                    text = productName,
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    minLines = 3,
-                    maxLines = 3,
-                    overflow = TextOverflow.Ellipsis
-                )
+                if (productName != null) {
+                    Text(
+                        text = productName,
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
 
                 if (storeName != null) {
                     Row(

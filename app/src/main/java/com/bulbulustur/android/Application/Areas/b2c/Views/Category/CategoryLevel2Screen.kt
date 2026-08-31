@@ -424,7 +424,7 @@ private fun CategorySubCategoryRow(
             BbIconBox(
                 size = BbIconBoxSize.Medium,
                 backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
-                contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                contentColor = MaterialTheme.colorScheme.primary,
                 radius = BBRadius.lg
             ) {
                 BbMaterialSymbol(

@@ -32,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.ProductReviewControllerState
@@ -50,13 +51,16 @@ import com.bulbulustur.android.businesslayer.Core.DTO.ReviewDTO
 import java.util.Locale
 import kotlin.math.roundToInt
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
+import com.bulbulustur.android.businesslayer.Core.Network.ImageUrlResolver
+
 
 
 @Composable
 fun ProductReviewScreen(
-    State: ProductReviewControllerState =
-        ProductReviewControllerState(),
+    State: ProductReviewControllerState = ProductReviewControllerState(),
     product: ProductDTO? = null,
+    productPicture: String = "",
     onBackClick: () -> Unit = {},
     onLoadMoreClick: () -> Unit = {},
     onReviewClick: (ReviewDTO) -> Unit = {}
@@ -151,8 +155,8 @@ fun ProductReviewScreen(
         ) {
             item {
                 ProductReviewProductSummary(
-                    product =
-                        product
+                    product = product,
+                    productPicture = productPicture
                 )
             }
 
@@ -278,150 +282,82 @@ fun ProductReviewScreen(
 
 @Composable
 private fun ProductReviewProductSummary(
-    product: ProductDTO?
+    product: ProductDTO?,
+    productPicture: String
 ) {
-    val productName =
-        product
-            ?.ProductName
-            ?.takeIf {
-                it.isNotBlank()
-            }
-            ?: BBLocalization.Current.Get(key = "47459db5-2c10-463e-9c78-aba51e39f219", fallback = "Ürün Değerlendirmeleri")
+    val productName = product?.ProductName?.takeIf { it.isNotBlank() } ?: BBLocalization.Current.Get(key = "47459db5-2c10-463e-9c78-aba51e39f219", fallback = "Ürün Değerlendirmeleri")
+    val storeName = product?.Store?.takeIf { it.isNotBlank() } ?: BBLocalization.Current.Get(key = "2132e096-e397-4fc1-bb82-793c20e3fee2", fallback = "Satıcı bilgisi")
+    val variantText = listOfNotNull(product?.Color?.takeIf { it.isNotBlank() }, product?.Size?.takeIf { it.isNotBlank() }).joinToString(separator = " · ")
+    val imageText = productName.ToInitials(fallback = "Ü")
 
-    val storeName =
-        product
-            ?.Store
-            ?.takeIf {
-                it.isNotBlank()
-            }
-            ?: BBLocalization.Current.Get(key = "2132e096-e397-4fc1-bb82-793c20e3fee2", fallback = "Satıcı bilgisi")
+    val productImageUrl = ImageUrlResolver.Resolve(
+        imagePath = productPicture
+            .ifBlank { product?.DefaultPicture.orEmpty() }
+            .ifBlank { product?.Picture.orEmpty() }
+    )
 
-    val variantText =
-        listOfNotNull(
-            product
-                ?.Color
-                ?.takeIf {
-                    it.isNotBlank()
-                },
-            product
-                ?.Size
-                ?.takeIf {
-                    it.isNotBlank()
-                }
-        ).joinToString(
-            separator =
-                " · "
-        )
-
-    val imageText =
-        productName
-            .ToInitials(
-                fallback =
-                    "Ü"
-            )
+    var imageLoadFailed by remember(productImageUrl) { mutableStateOf(false) }
 
     Surface(
-        modifier =
-            Modifier.fillMaxWidth(),
-        shape =
-            BBRadius.XxlShape,
-        color =
-            MaterialTheme.colorScheme.primaryContainer,
-        border =
-            BorderStroke(
-                width =
-                    1.dp,
-                color =
-                    MaterialTheme.colorScheme.primary
-                        .copy(
-                            alpha =
-                                0.35f
-                        )
-            )
+        modifier = Modifier.fillMaxWidth(),
+        shape = BBRadius.XxlShape,
+        color = MaterialTheme.colorScheme.primaryContainer,
+        border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary.copy(alpha = 0.35f))
     ) {
         Row(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        BBSpacing.CardPadding
-                    ),
-            verticalAlignment =
-                Alignment.CenterVertically,
-            horizontalArrangement =
-                Arrangement.spacedBy(
-                    BBSpacing.Space3
-                )
+            modifier = Modifier.fillMaxWidth().padding(BBSpacing.CardPadding),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
-            Box(
-                modifier =
-                    Modifier
-                        .size(
-                            BBSpacing.Space18
-                        )
-                        .clip(
-                            BBRadius.XlShape
-                        )
-                        .background(
-                            MaterialTheme.colorScheme.primary
-                        ),
-                contentAlignment =
-                    Alignment.Center
+            Surface(
+                modifier = Modifier.size(BBSpacing.Space18),
+                shape = BBRadius.XlShape,
+                color = MaterialTheme.colorScheme.surface,
+                border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
             ) {
-                Text(
-                    text =
-                        imageText,
-                    style =
-                        MaterialTheme.typography.titleMedium,
-                    fontWeight =
-                        FontWeight.Bold,
-                    color =
-                        MaterialTheme.colorScheme.onSurface
-                )
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    if (productImageUrl.isNotBlank() && !imageLoadFailed) {
+                        AsyncImage(
+                            model = productImageUrl,
+                            contentDescription = productName,
+                            modifier = Modifier.fillMaxSize().padding(BBSpacing.Space1),
+                            contentScale = ContentScale.Fit,
+                            onError = { imageLoadFailed = true }
+                        )
+                    } else {
+                        Text(
+                            text = imageText,
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                }
             }
 
             Column(
-                modifier =
-                    Modifier.weight(
-                        1f
-                    ),
-                verticalArrangement =
-                    Arrangement.spacedBy(
-                        BBSpacing.Space1
-                    )
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text =
-                        productName,
-                    style =
-                        MaterialTheme.typography.titleMedium,
-                    fontWeight =
-                        FontWeight.Bold,
-                    color =
-                        MaterialTheme.colorScheme.onSurface
+                    text = productName,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text =
-                        storeName,
-                    style =
-                        MaterialTheme.typography.bodySmall,
-                    color =
-                        MaterialTheme.colorScheme.onSurfaceVariant
+                    text = storeName,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
-                if (
-                    variantText.isNotBlank()
-                ) {
+                if (variantText.isNotBlank()) {
                     Text(
-                        text =
-                            variantText,
-                        style =
-                            MaterialTheme.typography.labelMedium,
-                        fontWeight =
-                            FontWeight.SemiBold,
-                        color =
-                            MaterialTheme.colorScheme.onSurface
+                        text = variantText,
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 }
             }

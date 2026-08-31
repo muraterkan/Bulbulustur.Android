@@ -48,9 +48,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import coil3.compose.AsyncImage
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailBottomNavigation
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailBottomNavigationItem
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
@@ -69,6 +71,7 @@ import com.bulbulustur.android.Application.Areas.b2c.Controllers.BasketControlle
 import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.businesslayer.Core.DTO.BasketDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductFavoriteDTO
+import com.bulbulustur.android.businesslayer.Core.Network.ImageUrlResolver
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -92,47 +95,25 @@ fun BasketScreen(
     onModeSwitchClick: () -> Unit = {},
     onAccountClick: () -> Unit = {}
 ) {
-    val basketItems =
-        State.BasketItems
-
-    val basketLines =
-        remember(
-            basketItems
-        ) {
-            basketItems.map { basket ->
-                basket.ToBasketLineItem()
-            }
-        }
+    val basketItems = State.BasketItems
+    val basketLines = remember(basketItems) { basketItems.map { basket -> basket.ToBasketLineItem() } }
 
     var showCouponSheet by remember { mutableStateOf(false) }
     var showFavoriteSheet by remember { mutableStateOf(false) }
     var couponApplied by remember { mutableStateOf(false) }
 
-    val storeGroups =
-        basketLines
-            .groupBy {
-                it.storeId
-            }
-            .map { basketGroup ->
-                BasketStoreGroup(
-                    storeId =
-                        basketGroup.key,
-                    storeName =
-                        basketGroup.value
-                            .first()
-                            .storeName,
-                    storeLogoText =
-                        basketGroup.value
-                            .first()
-                            .storeLogoText,
-                    cargoText =
-                        basketGroup.value
-                            .first()
-                            .cargoText,
-                    lines =
-                        basketGroup.value
-                )
-            }
+    val storeGroups = basketLines
+        .groupBy { it.storeId }
+        .map { basketGroup ->
+            BasketStoreGroup(
+                storeId = basketGroup.key,
+                storeName = basketGroup.value.first().storeName,
+                storeLogoText = basketGroup.value.first().storeLogoText,
+                storeLogoUrl = basketGroup.value.first().storeLogoUrl,
+                cargoText = basketGroup.value.first().cargoText,
+                lines = basketGroup.value
+            )
+        }
 
     val productTotal = basketLines.sumOf { it.priceValue * it.quantity }
     val cargoTotal = storeGroups.sumOf { it.lines.first().cargoPriceValue }
@@ -438,7 +419,7 @@ private fun BasketFavoriteShortcutCard(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
-                    text = BBLocalization.Current.Get(key = "55923458-0616-4032-931c-1b5b1bcce9eb", fallback = "Favorilerinden Sepete Ekle"),
+                    text = BBLocalization.Current.Get(key = "55923458-0616-4032-931c-1b5b1bcce9eb", fallback = "Favorilerimden Sepete Ekle"),
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
@@ -528,20 +509,19 @@ private fun BasketStoreHeader(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
-            modifier = Modifier
-                .size(BBIcon.BoxMd)
-                .background(
-                    color = MaterialTheme.colorScheme.surfaceVariant,
-                    shape = BBRadius.LgShape
-                ),
+            modifier = Modifier.size(BBIcon.BoxMd).background(color = MaterialTheme.colorScheme.surfaceVariant, shape = BBRadius.LgShape),
             contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = storeGroup.storeLogoText,
-                style = MaterialTheme.typography.labelSmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+            if (storeGroup.storeLogoUrl.isNotBlank()) {
+                AsyncImage(
+                    model = storeGroup.storeLogoUrl,
+                    contentDescription = storeGroup.storeName,
+                    modifier = Modifier.fillMaxSize().padding(BBSpacing.Space1),
+                    contentScale = ContentScale.Fit
+                )
+            } else {
+                Text(text = storeGroup.storeLogoText, style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+            }
         }
 
         Column(
@@ -617,20 +597,19 @@ private fun BasketLineCard(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
-            modifier = Modifier
-                .size(BBSpacing.Space16)
-                .background(
-                    color = MaterialTheme.colorScheme.surface,
-                    shape = BBRadius.LgShape
-                ),
+            modifier = Modifier.size(BBSpacing.Space16).background(color = MaterialTheme.colorScheme.surface, shape = BBRadius.LgShape),
             contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = line.imageText,
-                style = MaterialTheme.typography.labelLarge,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+            if (line.imageUrl.isNotBlank()) {
+                AsyncImage(
+                    model = line.imageUrl,
+                    contentDescription = line.productName,
+                    modifier = Modifier.fillMaxSize().padding(BBSpacing.Space1),
+                    contentScale = ContentScale.Fit
+                )
+            } else {
+                Text(text = line.imageText, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
         }
 
         Column(
@@ -1151,7 +1130,7 @@ private fun BasketFavoriteSheet(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
             Text(
-                text = BBLocalization.Current.Get(key = "55923458-0616-4032-931c-1b5b1bcce9eb", fallback = "Favorilerinden Sepete Ekle"),
+                text = BBLocalization.Current.Get(key = "55923458-0616-4032-931c-1b5b1bcce9eb", fallback = "Favorilerimden Sepete Ekle"),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -1231,6 +1210,7 @@ private fun BasketFavoriteSuggestionCard(
     onAddFavoriteClick: () -> Unit
 ) {
     val currencySymbol = favorite.CurrencySymbol.ifBlank { "₺" }
+    val imageUrl = ImageUrlResolver.Resolve(imagePath = favorite.DefaultPicture.ifBlank { favorite.Picture })
     val imageText = favorite.ProductName
         .trim()
         .split(" ")
@@ -1251,21 +1231,19 @@ private fun BasketFavoriteSuggestionCard(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(BBSpacing.Space20)
-                .background(
-                    color = MaterialTheme.colorScheme.surface,
-                    shape = BBRadius.LgShape
-                ),
+            modifier = Modifier.fillMaxWidth().height(BBSpacing.Space20).background(color = MaterialTheme.colorScheme.surface, shape = BBRadius.LgShape),
             contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = imageText,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+            if (imageUrl.isNotBlank()) {
+                AsyncImage(
+                    model = imageUrl,
+                    contentDescription = favorite.ProductName,
+                    modifier = Modifier.fillMaxSize().padding(BBSpacing.Space1),
+                    contentScale = ContentScale.Fit
+                )
+            } else {
+                Text(text = imageText, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
         }
 
         Text(
@@ -1300,6 +1278,7 @@ data class BasketStoreGroup(
     val storeId: Int,
     val storeName: String,
     val storeLogoText: String,
+    val storeLogoUrl: String,
     val cargoText: String,
     val lines: List<BasketLineItem>
 )
@@ -1312,6 +1291,7 @@ data class BasketLineItem(
     val storeId: Int,
     val storeName: String,
     val storeLogoText: String,
+    val storeLogoUrl: String,
     val productName: String,
     val variantText: String,
     val priceText: String,
@@ -1321,133 +1301,39 @@ data class BasketLineItem(
     val cargoText: String,
     val cargoPriceValue: Double,
     val imageText: String,
+    val imageUrl: String,
     val source: BasketDTO
 )
 
 private fun BasketDTO.ToBasketLineItem(): BasketLineItem {
-    val resolvedUnitPrice =
-        UnitPrice.takeIf {
-            it > 0.0
-        }
-            ?: if (Quantity > 0) {
-                TotalPrice / Quantity
-            } else {
-                TotalPrice
-            }
-
-    val resolvedCurrencySymbol =
-        CurrencySymbol.takeIf {
-            it.isNotBlank()
-        }
-            ?: "₺"
-
-    val resolvedVariantText =
-        listOfNotNull(
-            Color.takeIf {
-                it.isNotBlank()
-            },
-            Size.takeIf {
-                it.isNotBlank()
-            }
-        ).joinToString(
-            separator =
-                " · "
-        )
-
-    val resolvedImageText =
-        ProductName
-            .trim()
-            .split(
-                " "
-            )
-            .filter {
-                it.isNotBlank()
-            }
-            .take(
-                2
-            )
-            .mapNotNull { word ->
-                word.firstOrNull()
-            }
-            .joinToString(
-                separator =
-                    ""
-            )
-            .uppercase()
-            .ifBlank {
-                "Ü"
-            }
-
-    val resolvedStoreLogoText =
-        Store
-            .trim()
-            .split(
-                " "
-            )
-            .filter {
-                it.isNotBlank()
-            }
-            .take(
-                2
-            )
-            .mapNotNull { word ->
-                word.firstOrNull()
-            }
-            .joinToString(
-                separator =
-                    ""
-            )
-            .uppercase()
-            .ifBlank {
-                "M"
-            }
+    val resolvedUnitPrice = UnitPrice.takeIf { it > 0.0 } ?: if (Quantity > 0) TotalPrice / Quantity else TotalPrice
+    val resolvedCurrencySymbol = CurrencySymbol.takeIf { it.isNotBlank() } ?: "₺"
+    val resolvedVariantText = listOfNotNull(Color.takeIf { it.isNotBlank() }, Size.takeIf { it.isNotBlank() }).joinToString(separator = " · ")
+    val resolvedImageText = ProductName.trim().split(" ").filter { it.isNotBlank() }.take(2).mapNotNull { word -> word.firstOrNull() }.joinToString("").uppercase().ifBlank { "Ü" }
+    val resolvedStoreLogoText = Store.trim().split(" ").filter { it.isNotBlank() }.take(2).mapNotNull { word -> word.firstOrNull() }.joinToString("").uppercase().ifBlank { "M" }
+    val resolvedImageUrl = ImageUrlResolver.Resolve(imagePath = DefaultPicture.ifBlank { Picture })
+    val resolvedStoreLogoUrl = ImageUrlResolver.Resolve(imagePath = StoreLogo)
 
     return BasketLineItem(
-        id =
-            BasketId,
-        productId =
-            ProductId,
-        variantId =
-            VariantId,
-        priceId =
-            PriceId,
-        storeId =
-            StoreId,
-        storeName =
-            Store.ifBlank {
-                BBLocalization.Current.Get(key = "a4bd79dd-e7ee-4407-9e7d-00582840c43a", fallback = "Mağaza")
-            },
-        storeLogoText =
-            resolvedStoreLogoText,
-        productName =
-            ProductName.ifBlank {
-                BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = "")
-            },
-        variantText =
-            resolvedVariantText.ifBlank {
-                BBLocalization.Current.Get(key = "081fb0ca-4f68-4277-9ca0-028d1e9d147f", fallback = "Standart")
-            },
-        priceText =
-            FormatBasketPrice(
-                value =
-                    resolvedUnitPrice,
-                currencySymbol =
-                    resolvedCurrencySymbol
-            ),
-        priceValue =
-            resolvedUnitPrice,
-        discountValue =
-            DiscountAmount,
-        quantity =
-            Quantity,
-        cargoText =
-            BBLocalization.Current.Get(key = "0c7b108c-136d-4c5a-add7-bfbbba981634", fallback = "Kargo bilgisi ödeme adımında netleşir."),
-        cargoPriceValue =
-            SummaryShippingCost,
-        imageText =
-            resolvedImageText,
-        source =
-            this
+        id = BasketId,
+        productId = ProductId,
+        variantId = VariantId,
+        priceId = PriceId,
+        storeId = StoreId,
+        storeName = Store.ifBlank { BBLocalization.Current.Get(key = "a4bd79dd-e7ee-4407-9e7d-00582840c43a", fallback = "Mağaza") },
+        storeLogoText = resolvedStoreLogoText,
+        storeLogoUrl = resolvedStoreLogoUrl,
+        productName = ProductName.ifBlank { BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = "") },
+        variantText = resolvedVariantText.ifBlank { BBLocalization.Current.Get(key = "081fb0ca-4f68-4277-9ca0-028d1e9d147f", fallback = "Standart") },
+        priceText = FormatBasketPrice(value = resolvedUnitPrice, currencySymbol = resolvedCurrencySymbol),
+        priceValue = resolvedUnitPrice,
+        discountValue = DiscountAmount,
+        quantity = Quantity,
+        cargoText = BBLocalization.Current.Get(key = "0c7b108c-136d-4c5a-add7-bfbbba981634", fallback = "Kargo bilgisi ödeme adımında netleşir."),
+        cargoPriceValue = SummaryShippingCost,
+        imageText = resolvedImageText,
+        imageUrl = resolvedImageUrl,
+        source = this
     )
 }
 
@@ -1455,18 +1341,9 @@ private fun FormatBasketPrice(
     value: Double,
     currencySymbol: String
 ): String {
-    return "$currencySymbol${
-        String
-            .format(
-                "%.2f",
-                value
-            )
-            .replace(
-                ".",
-                ","
-            )
-    }"
+    return "$currencySymbol${String.format("%.2f", value).replace(".", ",")}"
 }
+
 private fun formatPrice(value: Double): String {
     return "₺${String.format("%.2f", value).replace(".", ",")}"
 }
@@ -1476,4 +1353,3 @@ private fun formatPrice(value: Double): String {
 private fun BasketScreenPreview() {
     BasketScreen()
 }
-

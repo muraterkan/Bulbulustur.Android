@@ -54,6 +54,9 @@ import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.MemberAlarm
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.ProductComplaintInsertModel
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.ProductFavoriteInsertModel
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.ProductLowPriceReportInsertModel
+import coil3.compose.AsyncImage
+import androidx.compose.ui.layout.ContentScale
+import com.bulbulustur.android.businesslayer.Core.Network.ImageUrlResolver
 
 fun NavGraphBuilder.retailGraph(
     navigator: BulbulusturNavigator,
@@ -985,12 +988,9 @@ fun NavGraphBuilder.retailGraph(
             onReviewClick = {
                 navigator.navController.navigate(
                     RetailRoutes.productReview(
-                        productId =
-                            productId,
-                        storeId =
-                            storeId,
-                        variantId =
-                            variantId
+                        productId = productId,
+                        storeId = storeId,
+                        variantId = variantId
                     )
                 )
             },
@@ -2030,128 +2030,93 @@ fun NavGraphBuilder.retailGraph(
             )
         }
 
+        val productState by productController.State.collectAsState()
+
         OtherSellerListScreen(
             productId =
                 productId,
+            sellers =
+                productState.OtherStorePrices,
+            isLoading =
+                productState.IsLoading &&
+                        productState.CurrentAction == "OtherSellerList",
             onBackClick = {
                 navigator.back()
             }
         )
     }
 
-
     composable(
-        route =
-            RetailRoutes.ProductReview,
-        arguments =
-            listOf(
-                navArgument(
-                    RetailRoutes.ArgProductId
-                ) {
-                    type =
-                        NavType.IntType
-                },
-                navArgument(
-                    RetailRoutes.ArgStoreId
-                ) {
-                    type =
-                        NavType.IntType
-                },
-                navArgument(
-                    RetailRoutes.ArgVariantId
-                ) {
-                    type =
-                        NavType.IntType
-                }
-            )
+        route = RetailRoutes.ProductReview,
+        arguments = listOf(
+            navArgument(RetailRoutes.ArgProductId) { type = NavType.IntType },
+            navArgument(RetailRoutes.ArgStoreId) { type = NavType.IntType },
+            navArgument(RetailRoutes.ArgVariantId) { type = NavType.IntType }
+        )
     ) { backStackEntry ->
-        val productId =
-            backStackEntry.arguments
-                ?.getInt(
-                    RetailRoutes.ArgProductId
-                )
-                ?: 0
+        val productId = backStackEntry.arguments?.getInt(RetailRoutes.ArgProductId) ?: 0
+        val storeId = backStackEntry.arguments?.getInt(RetailRoutes.ArgStoreId) ?: 0
+        val variantId = backStackEntry.arguments?.getInt(RetailRoutes.ArgVariantId) ?: 0
 
-        val storeId =
-            backStackEntry.arguments
-                ?.getInt(
-                    RetailRoutes.ArgStoreId
-                )
-                ?: 0
+        val productState by productController.State.collectAsState()
+        val reviewState by productReviewController.State.collectAsState()
 
-        val variantId =
-            backStackEntry.arguments
-                ?.getInt(
-                    RetailRoutes.ArgVariantId
-                )
-                ?: 0
-
-        val productState by
-        productController.State.collectAsState()
-
-        val reviewState by
-        productReviewController.State.collectAsState()
-
-        LaunchedEffect(
-            productId,
-            storeId,
-            variantId
-        ) {
-            if (
-                productId <= 0 ||
-                storeId <= 0
-            ) {
-                return@LaunchedEffect
-            }
+        LaunchedEffect(productId, storeId, variantId) {
+            if (productId <= 0 || storeId <= 0) return@LaunchedEffect
 
             productReviewController.Clear()
 
             productReviewController.List(
-                sourceType =
-                    "PRODUCT",
-                sourceId =
-                    productId,
-                variantId =
-                    variantId,
-                page =
-                    1,
-                pageSize =
-                    10
+                sourceType = "PRODUCT",
+                sourceId = productId,
+                variantId = variantId,
+                page = 1,
+                pageSize = 10
             )
 
-            val currentProduct =
-                productState.ProductDetailResult
-                    ?.Data
+            val currentProduct = productState.ProductDetailResult?.Data
 
-            if (
-                currentProduct == null ||
-                currentProduct.ProductId != productId
-            ) {
+            if (currentProduct == null || currentProduct.ProductId != productId) {
                 productController.Detail(
-                    languageId =
-                        1,
-                    storeId =
-                        storeId,
-                    productId =
-                        productId,
-                    variantId =
-                        variantId
+                    languageId = 1,
+                    storeId = storeId,
+                    productId = productId,
+                    variantId = variantId
+                )
+            }
+
+            if (variantId > 0) {
+                productController.VariantPictures(
+                    variantId = variantId,
+                    count = 10
                 )
             }
         }
 
+        val productPicture =
+            productState.ProductVariantPicturesResult
+                ?.Data
+                .orEmpty()
+                .sortedWith(
+                    compareByDescending<com.bulbulustur.android.businesslayer.Core.DTO.ProductVariantPictureDTO> { it.IsDefault }
+                        .thenBy { it.Sorting }
+                )
+                .firstOrNull()
+                ?.let { picture ->
+                    if (picture.Picture.isNotBlank()) picture.Picture else picture.DirectoryName + picture.PictureName
+                }
+                .orEmpty()
+                .ifBlank {
+                    productState.ProductDetailResult?.Data?.DefaultPicture.orEmpty()
+                        .ifBlank { productState.ProductDetailResult?.Data?.Picture.orEmpty() }
+                }
+
         ProductReviewScreen(
-            State =
-                reviewState,
-            product =
-                productState.ProductDetailResult
-                    ?.Data,
-            onBackClick = {
-                navigator.back()
-            },
-            onLoadMoreClick = {
-                productReviewController.LoadMore()
-            }
+            State = reviewState,
+            product = productState.ProductDetailResult?.Data,
+            productPicture = productPicture,
+            onBackClick = { navigator.back() },
+            onLoadMoreClick = { productReviewController.LoadMore() }
         )
     }
 
@@ -2225,12 +2190,12 @@ fun NavGraphBuilder.retailGraph(
 
             productQuestionController.Clear()
 
-            productQuestionController.List(
-                productId =
-                    productId,
-                count =
-                    100
-            )
+            if (variantId > 0) {
+                productController.VariantPictures(
+                    variantId = variantId,
+                    count = 10
+                )
+            }
 
             if (
                 product == null ||
@@ -2249,6 +2214,36 @@ fun NavGraphBuilder.retailGraph(
             }
         }
 
+        val productPicture =
+            productState.ProductVariantPicturesResult
+                ?.Data
+                .orEmpty()
+                .sortedWith(
+                    compareByDescending<com.bulbulustur.android.businesslayer.Core.DTO.ProductVariantPictureDTO> {
+                        it.IsDefault
+                    }.thenBy {
+                        it.Sorting
+                    }
+                )
+                .firstOrNull()
+                ?.let { picture ->
+                    if (picture.Picture.isNotBlank()) {
+                        picture.Picture
+                    } else {
+                        picture.DirectoryName + picture.PictureName
+                    }
+                }
+                .orEmpty().ifBlank {
+                    product
+                        ?.DefaultPicture
+                        .orEmpty()
+                        .ifBlank {
+                            product
+                                ?.Picture
+                                .orEmpty()
+                        }
+                }
+
         ProductQuestionScreen(
             State =
                 questionState,
@@ -2258,6 +2253,8 @@ fun NavGraphBuilder.retailGraph(
                 product
                     ?.ProductName
                     .orEmpty(),
+            productPicture =
+                productPicture,
             storeName =
                 product
                     ?.Store
@@ -2269,6 +2266,7 @@ fun NavGraphBuilder.retailGraph(
             onBackClick = {
                 navigator.back()
             },
+
             onLoginRequired = {
                 navigator.navController.navigate(
                     LogonRoutes.Logon

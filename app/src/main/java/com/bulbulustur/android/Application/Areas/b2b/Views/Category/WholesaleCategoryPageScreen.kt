@@ -64,6 +64,8 @@ import com.bulbulustur.android.Application.Views.Shared.Components.BbSectionHead
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
+import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbIconBox
+import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbIconBoxSize
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
@@ -449,19 +451,15 @@ private fun WholesaleCategoryHomeCategoryCard(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
-            Box(
-                modifier = Modifier
-                    .width(BBSpacing.Space11)
-                    .height(BBSpacing.Space11)
-                    .background(
-                        MaterialTheme.colorScheme.primaryContainer,
-                        BBRadius.LgShape
-                    ),
-                contentAlignment = Alignment.Center
+            BbIconBox(
+                size = BbIconBoxSize.Medium,
+                backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+                contentColor = MaterialTheme.colorScheme.primary,
+                radius = BBRadius.lg
             ) {
                 BbMaterialSymbol(
                     iconClass = item.iconClass,
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                    tint = MaterialTheme.colorScheme.primary,
                     size = BBIcon.Section
                 )
             }
@@ -475,15 +473,7 @@ private fun WholesaleCategoryHomeCategoryCard(
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.SemiBold
-                )
-
-                if (item.description.isNotBlank()) {
-                    Text(
-                        text = item.description,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
+                )
             }
 
             Icon(

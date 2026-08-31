@@ -394,7 +394,7 @@ private fun WholesaleCategoryHero(
                 BbIconBox(
                     size = BbIconBoxSize.Xl,
                     backgroundColor = MaterialTheme.colorScheme.surface,
-                    contentColor = Color.Black,
+                    contentColor = MaterialTheme.colorScheme.primary,
                     radius = BBRadius.xl
                 ) {
                     Icon(
@@ -627,12 +627,12 @@ private fun WholesaleSubCategoryRow(
             BbIconBox(
                 size = BbIconBoxSize.Medium,
                 backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
-                contentColor = Color.Black,
+                contentColor = MaterialTheme.colorScheme.primary,
                 radius = BBRadius.lg
             ) {
                 BbMaterialSymbol(
                     iconClass = category.IconClass,
-                    tint = Color.Black,
+                    tint = MaterialTheme.colorScheme.primary,
                     size = BBIcon.Section
                 )
             }

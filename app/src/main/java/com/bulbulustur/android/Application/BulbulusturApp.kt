@@ -53,11 +53,15 @@ import com.bulbulustur.android.Application.Navigation.Graph.settingsGraph
 import com.bulbulustur.android.Application.Navigation.Graph.splashGraph
 import com.bulbulustur.android.Application.Navigation.Graph.wholesaleGraph
 import com.bulbulustur.android.Application.Navigation.Routes.LogonRoutes
+import com.bulbulustur.android.Application.Navigation.Routes.RetailRoutes
+import com.bulbulustur.android.Application.Navigation.Routes.WholesaleRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.SplashRoutes
 import com.bulbulustur.android.Application.Session.UserSessionManager
 import com.bulbulustur.android.Application.Session.UserSessionState
 import com.bulbulustur.android.Application.Shared.Address.AddressCascadeController
 import com.bulbulustur.android.Application.Views.Shared.Components.BuyerModeSheet
+import com.bulbulustur.android.Application.Views.Shared.Components.RetailCategorySheet
+import com.bulbulustur.android.Application.Views.Shared.Components.WholesaleCategorySheet
 import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
 import com.bulbulustur.android.businesslayer.Core.Enums.EBuyerMode
 import com.bulbulustur.android.businesslayer.Core.Repository.AddressCityRepository
@@ -218,6 +222,9 @@ private fun BulbulusturApplicationContent(
     var showBuyerModeSheet by remember {
         mutableStateOf(false)
     }
+
+    var showRetailCategorySheet by remember { mutableStateOf(false) }
+    var showWholesaleCategorySheet by remember { mutableStateOf(false) }
 
     val executeService = remember {
         ExecuteService()
@@ -748,6 +755,42 @@ private fun BulbulusturApplicationContent(
         )
     }
 
+    val retailCategoryController = remember(
+        executeService,
+        productCategoryRepository,
+        productCategoryDataStore,
+        productHomepageSpecialContentRepository
+    ) {
+        com.bulbulustur.android.Application.Areas.b2c.Controllers.CategoryController(
+            executeService = executeService,
+            productCategoryRepository = productCategoryRepository,
+            productCategoryDataStore = productCategoryDataStore,
+            productCategoryContentRepository = com.bulbulustur.android.businesslayer.Core.Repository.ProductCategoryContentRepository(),
+            productHomepageSpecialContentRepository = productHomepageSpecialContentRepository,
+            productBrandCategoryMapRepository = com.bulbulustur.android.businesslayer.Core.Repository.ProductBrandCategoryMapRepository()
+        )
+    }
+
+    val wholesaleCategoryController = remember(
+        executeService,
+        productCategoryRepository,
+        productCategoryDataStore,
+        wholesaleHomepageSpecialContentRepository
+    ) {
+        com.bulbulustur.android.Application.Areas.b2b.Controllers.CategoryController(
+            executeService = executeService,
+            productCategoryRepository = productCategoryRepository,
+            productCategoryDataStore = productCategoryDataStore,
+            wholesaleProductCategoryContentRepository = com.bulbulustur.android.businesslayer.Core.Repository.WholesaleProductCategoryContentRepository(),
+            wholesaleHomepageSpecialContentRepository = wholesaleHomepageSpecialContentRepository,
+            wholesaleProductCategorySliderRepository = com.bulbulustur.android.businesslayer.Core.Repository.WholesaleProductCategorySliderRepository(),
+            wholesaleProductCategorySupplierRepository = com.bulbulustur.android.businesslayer.Core.Repository.WholesaleProductCategorySupplierRepository()
+        )
+    }
+
+    val retailCategoryState by retailCategoryController.State.collectAsState()
+    val wholesaleCategoryState by wholesaleCategoryController.State.collectAsState()
+
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry?.destination?.route
 
@@ -764,6 +807,18 @@ private fun BulbulusturApplicationContent(
             },
             closeBuyerModeSheet = {
                 showBuyerModeSheet = false
+            },
+            openRetailCategorySheet = {
+                showRetailCategorySheet = true
+            },
+            closeRetailCategorySheet = {
+                showRetailCategorySheet = false
+            },
+            openWholesaleCategorySheet = {
+                showWholesaleCategorySheet = true
+            },
+            closeWholesaleCategorySheet = {
+                showWholesaleCategorySheet = false
             }
         )
     }
@@ -858,15 +913,7 @@ private fun BulbulusturApplicationContent(
         retailGraph(
             navigator = appNavigator,
 
-            categoryController = com.bulbulustur.android.Application.Areas.b2c.Controllers.CategoryController(
-                executeService = executeService,
-                productCategoryRepository = productCategoryRepository,
-                productCategoryDataStore = productCategoryDataStore,
-                productCategoryContentRepository = com.bulbulustur.android.businesslayer.Core.Repository.ProductCategoryContentRepository(),
-                productHomepageSpecialContentRepository = productHomepageSpecialContentRepository,
-                productBrandCategoryMapRepository = com.bulbulustur.android.businesslayer.Core.Repository.ProductBrandCategoryMapRepository()
-            )
-,
+            categoryController = retailCategoryController,
             homeController = retailHomeController,
             campaignController = campaignController,
             dealsOfTheDayController = dealsOfTheDayController,
@@ -883,15 +930,7 @@ private fun BulbulusturApplicationContent(
         wholesaleGraph(
             navigator = appNavigator,
             sessionState = sessionState,
-            categoryController = com.bulbulustur.android.Application.Areas.b2b.Controllers.CategoryController(
-                executeService = executeService,
-                productCategoryRepository = productCategoryRepository,
-                productCategoryDataStore = productCategoryDataStore,
-                wholesaleProductCategoryContentRepository = com.bulbulustur.android.businesslayer.Core.Repository.WholesaleProductCategoryContentRepository(),
-                wholesaleHomepageSpecialContentRepository = wholesaleHomepageSpecialContentRepository,
-                wholesaleProductCategorySliderRepository = com.bulbulustur.android.businesslayer.Core.Repository.WholesaleProductCategorySliderRepository(),
-                wholesaleProductCategorySupplierRepository = com.bulbulustur.android.businesslayer.Core.Repository.WholesaleProductCategorySupplierRepository()
-            ),
+            categoryController = wholesaleCategoryController,
             homeController = wholesaleHomeController,
             productController = wholesaleProductController,
             searchController = wholesaleSearchController,
@@ -934,6 +973,48 @@ private fun BulbulusturApplicationContent(
             userSessionManager = userSessionManager,
             accountController = accountController,
             settingsController = settingsController
+        )
+    }
+
+    LaunchedEffect(showRetailCategorySheet, sessionState.Language.Id) {
+        if (showRetailCategorySheet) {
+            retailCategoryController.LoadHome(languageId = sessionState.Language.Id)
+        }
+    }
+
+    LaunchedEffect(showWholesaleCategorySheet, sessionState.Language.Id) {
+        if (showWholesaleCategorySheet) {
+            wholesaleCategoryController.LoadHome(languageId = sessionState.Language.Id)
+        }
+    }
+
+    if (showRetailCategorySheet) {
+        RetailCategorySheet(
+            categories = retailCategoryState.Categories,
+            isLoading = retailCategoryState.IsLoading,
+            errorMessage = retailCategoryState.ErrorMessage,
+            onDismissRequest = {
+                showRetailCategorySheet = false
+            },
+            onCategoryClick = { categoryId ->
+                showRetailCategorySheet = false
+                navController.navigate(RetailRoutes.categoryLevel1(categoryId))
+            }
+        )
+    }
+
+    if (showWholesaleCategorySheet) {
+        WholesaleCategorySheet(
+            categories = wholesaleCategoryState.Categories,
+            isLoading = wholesaleCategoryState.IsLoading,
+            errorMessage = wholesaleCategoryState.ErrorMessage,
+            onDismissRequest = {
+                showWholesaleCategorySheet = false
+            },
+            onCategoryClick = { categoryId ->
+                showWholesaleCategorySheet = false
+                navController.navigate(WholesaleRoutes.categoryLevel1(categoryId))
+            }
         )
     }
 

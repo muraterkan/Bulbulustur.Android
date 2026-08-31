@@ -1,7 +1,6 @@
 package com.bulbulustur.android.Application.Areas.b2b.Views.Product
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -73,27 +72,30 @@ fun WholesaleProductCategoryContentListScreen(
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
-            item {
-                Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)) {
-                    Text(text = groupName, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
-                    if (totalItemCount > 0) Text(text = "$totalItemCount ürün", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                }
-            }
-
             when {
                 isLoading && products.isEmpty() -> item {
-                    Row(modifier = Modifier.fillMaxWidth().padding(BBSpacing.Space6), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(BBSpacing.Space6),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
                         CircularProgressIndicator()
                     }
                 }
 
                 !errorMessage.isNullOrBlank() && products.isEmpty() -> item {
-                    Text(text = errorMessage, color = MaterialTheme.colorScheme.error)
+                    Text(
+                        text = errorMessage,
+                        color = MaterialTheme.colorScheme.error
+                    )
                 }
 
                 products.isEmpty() -> item {
                     Text(
-                        text = BBLocalization.Current.Get(key = "9afc052e-e2bf-413d-81c6-461bfc3c9174", fallback = "Ürün bulunamadı"),
+                        text = BBLocalization.Current.Get(
+                            key = "9afc052e-e2bf-413d-81c6-461bfc3c9174",
+                            fallback = "Ürün bulunamadı"
+                        ),
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -108,44 +110,93 @@ fun WholesaleProductCategoryContentListScreen(
                     WholesaleProductCard(
                         modifier = Modifier.fillMaxWidth(),
                         product = product.ToCardModel(isFavorite),
-                        onClick = { if (productId > 0) onProductClick(productId) },
+                        onClick = {
+                            if (productId > 0) {
+                                onProductClick(productId)
+                            }
+                        },
                         onFavoriteClick = {
                             favoriteIds = if (isFavorite) favoriteIds - productId else favoriteIds + productId
-                            if (productId > 0) onFavoriteClick(productId)
+
+                            if (productId > 0) {
+                                onFavoriteClick(productId)
+                            }
                         },
                         onRfqClick = {
-                            if (productId > 0) onRfqClick(productId)
+                            if (productId > 0) {
+                                onRfqClick(productId)
+                            }
                         }
                     )
                 }
             }
 
-            if (totalPages > 1) item {
-                WholesaleCategoryContentPagination(
-                    currentPage = currentPage,
-                    totalPages = totalPages,
-                    isLoading = isLoading,
-                    onPageChange = onPageChange
-                )
+            if (totalPages > 1) {
+                item {
+                    WholesaleCategoryContentPagination(
+                        currentPage = currentPage,
+                        totalPages = totalPages,
+                        isLoading = isLoading,
+                        onPageChange = onPageChange
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-private fun WholesaleCategoryContentPagination(currentPage: Int, totalPages: Int, isLoading: Boolean, onPageChange: (Int) -> Unit) {
-    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-        Button(enabled = currentPage > 1 && !isLoading, onClick = { if (currentPage > 1) onPageChange(currentPage - 1) }) { Text("Önceki") }
-        Text(text = "$currentPage / $totalPages", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
-        Button(enabled = currentPage < totalPages && !isLoading, onClick = { if (currentPage < totalPages) onPageChange(currentPage + 1) }) { Text("Sonraki") }
+private fun WholesaleCategoryContentPagination(
+    currentPage: Int,
+    totalPages: Int,
+    isLoading: Boolean,
+    onPageChange: (Int) -> Unit
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Button(
+            enabled = currentPage > 1 && !isLoading,
+            onClick = {
+                if (currentPage > 1) {
+                    onPageChange(currentPage - 1)
+                }
+            }
+        ) {
+            Text("Önceki")
+        }
+
+        Text(
+            text = "$currentPage / $totalPages",
+            style = MaterialTheme.typography.titleSmall,
+            fontWeight = FontWeight.SemiBold
+        )
+
+        Button(
+            enabled = currentPage < totalPages && !isLoading,
+            onClick = {
+                if (currentPage < totalPages) {
+                    onPageChange(currentPage + 1)
+                }
+            }
+        ) {
+            Text("Sonraki")
+        }
     }
 }
 
-private fun WholesaleProductCategoryContentDTO.ToCardModel(isFavorite: Boolean): WholesaleProductCardModel {
+private fun WholesaleProductCategoryContentDTO.ToCardModel(
+    isFavorite: Boolean
+): WholesaleProductCardModel {
     return WholesaleProductCardModel(
         Id = WholesaleProductId,
         Title = ProductName.trim(),
-        PriceText = BBLocalization.Current.Get(key = "ba6fe1b6-4d68-487c-b98a-eed9fe59bb2c", fallback = "Teklif İle"),
+        PriceText = BBLocalization.Current.Get(
+            key = "ba6fe1b6-4d68-487c-b98a-eed9fe59bb2c",
+            fallback = "Teklif İle"
+        ),
         MoqText = if (MinimumOrderQuantity > 0) "MOQ $MinimumOrderQuantity" else "",
         BadgeText = "",
         ImageUrl = ImageUrlResolver.Resolve(DefaultPicture.trim()),

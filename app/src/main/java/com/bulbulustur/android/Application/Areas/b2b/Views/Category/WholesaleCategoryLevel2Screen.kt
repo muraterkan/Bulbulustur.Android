@@ -250,15 +250,7 @@ fun WholesaleCategoryLevel2Screen(
                             childCategoryCount = validChildCategories.size,
                             hasShowcases = categoryContents.isNotEmpty()
                         )
-                    }
-
-                    item {
-                        WholesaleCategoryActions(
-                            categoryId = categoryId,
-                            onProductListClick = onProductListClick,
-                            onCompanyListClick = onCompanyListClick
-                        )
-                    }
+                    }
 
                     item {
                         WholesaleCategorySectionTitle(

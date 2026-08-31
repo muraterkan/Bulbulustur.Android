@@ -12,7 +12,11 @@ import com.bulbulustur.android.Application.Navigation.Routes.RfqRoutes
 class BulbulusturNavigator(
     val navController: NavHostController,
     private val openBuyerModeSheet: () -> Unit,
-    private val closeBuyerModeSheet: () -> Unit
+    private val closeBuyerModeSheet: () -> Unit,
+    private val openRetailCategorySheet: () -> Unit,
+    private val closeRetailCategorySheet: () -> Unit,
+    private val openWholesaleCategorySheet: () -> Unit,
+    private val closeWholesaleCategorySheet: () -> Unit
 ) {
     fun openModeSheet() {
         openBuyerModeSheet()
@@ -45,15 +49,11 @@ class BulbulusturNavigator(
     }
 
     fun navigateToRetailCategories() {
-        navController.navigate(RetailRoutes.CategoryHome) {
-            launchSingleTop = true
-        }
+        openRetailCategorySheet()
     }
 
     fun navigateToWholesaleCategories() {
-        navController.navigate(WholesaleRoutes.CategoryHome) {
-            launchSingleTop = true
-        }
+        openWholesaleCategorySheet()
     }
 
     fun navigateToWholesaleOffers() {

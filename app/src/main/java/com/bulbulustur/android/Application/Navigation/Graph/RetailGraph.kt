@@ -19,7 +19,6 @@ import com.bulbulustur.android.Application.Areas.b2c.Views.Campaign.CampaignDeta
 import com.bulbulustur.android.Application.Areas.b2c.Views.Campaign.CampaignListScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.Category.CategoryLevel1Screen
 import com.bulbulustur.android.Application.Areas.b2c.Views.Category.CategoryLevel2Screen
-import com.bulbulustur.android.Application.Areas.b2c.Views.Category.RetailCategoryHomeScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.Home.RetailHomeScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.DealsOfTheDay.DealsOfTheDayListScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.Product.ProductDetailScreen
@@ -94,9 +93,7 @@ fun NavGraphBuilder.retailGraph(
                 )
             },
             onCategoryClick = {
-                navigator.navController.navigate(
-                    RetailRoutes.CategoryHome
-                )
+                navigator.navigateToRetailCategories()
             },
             onProductDetailClick = { productId, storeId, variantId ->
                 if (productId > 0 && storeId > 0 && variantId > 0) {
@@ -189,7 +186,7 @@ fun NavGraphBuilder.retailGraph(
                 }
             },
             onMenuClick = {
-                navigator.navController.navigate(RetailRoutes.CategoryHome)
+                navigator.navigateToRetailCategories()
             },
             onModeSwitchClick = {
                 navigator.openModeSheet()
@@ -219,7 +216,7 @@ fun NavGraphBuilder.retailGraph(
                 navigator.navController.navigate(RetailRoutes.ProductList)
             },
             onCategoryClick = {
-                navigator.navController.navigate(RetailRoutes.CategoryHome)
+                navigator.navigateToRetailCategories()
             },
             onBrandClick = {
                 navigator.navController.navigate(RetailRoutes.ProductList)
@@ -229,71 +226,6 @@ fun NavGraphBuilder.retailGraph(
             },
             productResults = searchState.ProductSearchResult?.Data?.Items.orEmpty(),
             hasProductSearch = searchState.ProductSearchResult != null
-        )
-    }
-
-    composable(
-        route = RetailRoutes.CategoryHome
-    ) {
-        val categoryState by categoryController.State.collectAsState()
-
-        LaunchedEffect(sessionState.Language.Id) {
-            categoryController.LoadHome(
-                languageId = sessionState.Language.Id
-            )
-        }
-        RetailCategoryHomeScreen(
-            onBackClick = {
-                navigator.back()
-            },
-            onSearchClick = {
-                navigator.navController.navigate(
-                    RetailRoutes.ProductList
-                )
-            },
-            onMenuClick = {
-                navigator.navigateToRetailCategories()
-            },
-            onFavoriteClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.Favorites
-                )
-            },
-            onMessageClick = {
-                Unit
-            },
-            onHomeClick = {
-                navigator.navController.navigate(
-                    RetailRoutes.Home
-                )
-            },
-            onModeSwitchClick = {
-                navigator.openModeSheet()
-            },
-            onBasketClick = {
-                navigator.navigateToRetailBasket()
-            },
-            onAccountClick = {
-                navigator.navigateToAccount()
-            },
-            categories = categoryState.Categories,
-            isLoading = categoryState.IsLoading,
-            errorMessage = categoryState.ErrorMessage,
-            onSubCategoryClick = { categoryId ->
-                navigator.navController.navigate(
-                    RetailRoutes.categoryLevel1(categoryId)
-                )
-            },
-            onCampaignClick = {
-                navigator.navController.navigate(
-                    RetailRoutes.CampaignList
-                )
-            },
-            onStoreClick = {
-                navigator.navController.navigate(
-                    StoreRoutes.StoreList
-                )
-            }
         )
     }
 

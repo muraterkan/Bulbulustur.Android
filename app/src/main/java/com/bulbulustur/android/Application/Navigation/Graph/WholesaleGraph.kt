@@ -18,7 +18,6 @@ import com.bulbulustur.android.Application.Controllers.MessageController
 import com.bulbulustur.android.Application.Areas.b2b.Controllers.WholesaleBuyerRequestController
 import com.bulbulustur.android.Application.Areas.b2b.Views.Category.WholesaleCategoryLevel1Screen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Category.WholesaleCategoryLevel2Screen
-import com.bulbulustur.android.Application.Areas.b2b.Views.Category.WholesaleCategoryHomeScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Home.WholesaleHomeScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Search.SearchScreen as WholesaleSearchScreen
 import com.bulbulustur.android.Application.Areas.b2b.Views.Product.WholesaleProductListScreen
@@ -183,77 +182,6 @@ fun NavGraphBuilder.wholesaleGraph(
             },
             productResults = searchState.ProductSearchResult?.Data?.Items.orEmpty(),
             hasProductSearch = searchState.ProductSearchResult != null
-        )
-    }
-
-    composable(route = WholesaleRoutes.CategoryHome) {
-        val categoryState by categoryController.State.collectAsState()
-
-        LaunchedEffect(sessionState.Language.Id) {
-            categoryController.LoadHome(
-                languageId = sessionState.Language.Id
-            )
-        }
-        WholesaleCategoryHomeScreen(
-            isLoading = categoryState.IsLoading,
-            errorMessage = categoryState.ErrorMessage,
-            categories = categoryState.Categories,
-            onBackClick = {
-                navigator.back()
-            },
-            onSearchClick = {
-                navigator.navController.navigate(WholesaleRoutes.Search)
-            },
-            onMenuClick = {
-                navigator.navigateToWholesaleCategories()
-            },
-            onFavoriteClick = {
-                navigator.navController.navigate(AccountRoutes.Favorites)
-            },
-            onMessageClick = {
-                navigator.navigateToInbox()
-            },
-            onHomeClick = {
-                navigator.navController.navigate(WholesaleRoutes.Home) {
-                    launchSingleTop = true
-                }
-            },
-            onModeSwitchClick = {
-                navigator.openModeSheet()
-            },
-            onBasketClick = {
-                navigator.navController.navigate(RfqRoutes.List)
-            },
-            onAccountClick = {
-                navigator.navigateToAccount()
-            },
-            onProductListClick = {
-                navigator.navController.navigate(WholesaleRoutes.productList())
-            },
-            onSubCategoryClick = { subCategoryId ->
-                if (
-                    subCategoryId > 0
-                ) {
-                    navigator.navController.navigate(
-                        WholesaleRoutes.categoryLevel1(subCategoryId)
-                    )
-                }
-            },
-            onCompanyListClick = {
-                navigator.navController.navigate(CompanyRoutes.CompanyList)
-            },
-            onRfqClick = {
-                navigator.navController.navigate(RfqRoutes.Create)
-            },
-            onLastPriceRequestClick = {
-                navigator.navController.navigate(RfqRoutes.Create)
-            },
-            onSampleRequestClick = {
-                navigator.navController.navigate(RfqRoutes.Create)
-            },
-            onCustomizationRequestClick = {
-                navigator.navController.navigate(RfqRoutes.Create)
-            }
         )
     }
 

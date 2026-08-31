@@ -3,6 +3,7 @@ package com.bulbulustur.android.Application.Areas.b2c.Views.Category
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -421,15 +422,18 @@ private fun CategorySubCategoryRow(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
-            BbIconBox(
-                size = BbIconBoxSize.Medium,
-                backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
-                contentColor = MaterialTheme.colorScheme.primary,
-                radius = BBRadius.lg
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .background(
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        shape = BBRadius.LgShape
+                    ),
+                contentAlignment = Alignment.Center
             ) {
                 BbMaterialSymbol(
                     iconClass = category.IconClass,
-                    tint = MaterialTheme.colorScheme.primary,
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
                     size = BBIcon.Section
                 )
             }

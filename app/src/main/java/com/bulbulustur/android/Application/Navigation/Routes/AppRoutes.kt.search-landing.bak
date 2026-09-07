@@ -71,9 +71,6 @@ object RetailRoutes {
     const val ProductDetail =
         "retail/product-detail/{$ArgProductId}/{$ArgStoreId}/{$ArgVariantId}"
 
-    const val SearchLanding =
-        "retail/search-landing"
-
     const val Search =
         "retail/search"
 
@@ -258,7 +255,6 @@ object RfqRoutes {
 object OrderRoutes {
     const val List = "order/list"
     const val Detail = "order/detail/{orderId}/{orderKey}"
-    const val Success = "order/success/{orderId}/{orderKey}"
     const val Contract = "order/contract/{orderKey}/{storeKey}"
     const val CancelRequest = "order/cancel-request/{orderStoreLineId}/{orderKey}"
     const val ReturnRequest = "order/return-request/{orderStoreLineId}/{orderKey}"
@@ -275,10 +271,6 @@ object OrderRoutes {
 
     fun detail(orderId: Int, orderKey: String): String {
         return "order/detail/$orderId/$orderKey"
-    }
-
-    fun success(orderId: Int, orderKey: String): String {
-        return "order/success/$orderId/$orderKey"
     }
 
     fun contract(orderKey: String, storeKey: String): String {

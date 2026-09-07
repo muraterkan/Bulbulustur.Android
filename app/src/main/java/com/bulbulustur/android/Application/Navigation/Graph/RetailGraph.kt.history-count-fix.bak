@@ -1686,12 +1686,14 @@ fun NavGraphBuilder.retailGraph(
                 sessionState.IsAuthenticated &&
                 sessionState.MemberId > 0
             ) {
-                
-    productController.ProductBrowsingHistories(
-        memberId = sessionState.MemberId,
-        count = 20
-    )
-
+                productController.ProductBrowsingHistories(
+                    memberId =
+                        sessionState.MemberId,
+                    page =
+                        1,
+                    pageSize =
+                        20
+                )
 
                 if (
                     variantId > 0

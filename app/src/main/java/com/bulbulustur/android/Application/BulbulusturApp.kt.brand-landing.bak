@@ -90,7 +90,6 @@ import com.bulbulustur.android.businesslayer.Core.Repository.MemberRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.MemberPreferenceRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.MemberSubscriptionRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.MemberTempRepository
-import com.bulbulustur.android.businesslayer.Core.Repository.ProductBrandRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.ProductBrandSectionRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.ProductBrowsingHistoryRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.ProductCategoryRepository
@@ -399,10 +398,6 @@ private fun BulbulusturApplicationContent(
         StatusRepository()
     }
 
-    val productBrandRepository = remember {
-        ProductBrandRepository()
-    }
-
     val productBrandSectionRepository = remember {
         ProductBrandSectionRepository()
     }
@@ -486,7 +481,6 @@ private fun BulbulusturApplicationContent(
         productVariantRepository,
         productVariantPictureRepository,
         advertSponsoredRepository,
-        productBrandRepository,
         productBrandSectionRepository,
         productBrowsingHistoryRepository,
         productCategoryRepository,
@@ -499,7 +493,6 @@ private fun BulbulusturApplicationContent(
             productVariantRepository = productVariantRepository,
             productVariantPictureRepository = productVariantPictureRepository,
             advertSponsoredRepository = advertSponsoredRepository,
-            productBrandRepository = productBrandRepository,
             productBrandSectionRepository = productBrandSectionRepository,
             productBrowsingHistoryRepository = productBrowsingHistoryRepository,
             productCategoryRepository = productCategoryRepository,

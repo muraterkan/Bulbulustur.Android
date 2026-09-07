@@ -6,27 +6,28 @@ import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.ProductBrow
 import com.bulbulustur.android.businesslayer.Core.Network.ApiClient
 import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
 import com.bulbulustur.android.businesslayer.Core.Util.Result
+import com.bulbulustur.android.businesslayer.Core.Util.PaginatedList
 
 class ProductBrowsingHistoryRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IProductBrowsingHistoryRepository {
 
-    
-    override suspend fun GetProductBrowsingHistoriesByCountAsync(
+    override suspend fun GetProductBrowsingHistoriesAsync(
         memberId: Int,
-        count: Int
-    ): Result<List<ProductBrowsingHistoryDTO>> {
+        page: Int,
+        pageSize: Int
+    ):  Result<PaginatedList<ProductBrowsingHistoryDTO>> {
         return apiClient.GetAsync(
             baseUrl =
                 ApiRoutes.B2C_PRODUCT_BROWSING_HISTORY_BASE_URL,
             method =
-                "GetProductBrowsingHistoriesByCountAsync",
+                "GetProductBrowsingHistoriesAsync",
             query =
-                "memberId=" +
-                        "&count="
+                "memberId=$memberId" +
+                        "&page=$page" +
+                        "&pageSize=$pageSize"
         )
     }
-
 
     override suspend fun InsertProductBrowsingHistoryAsync(
         memberId: Int,

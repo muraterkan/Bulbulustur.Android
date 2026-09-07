@@ -67,6 +67,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -584,37 +585,28 @@ fun ProductDetailScreen(
                     }
                 }
             )
+            RetailProductCampaignStrip()
 
             RetailProductTitleCard(product = product)
 
-            RetailProductRatingSummaryCard(
+            RetailProductDetailVariantCard(
+                product = product,
                 ratingText = product.ratingText,
                 reviewCount = product.reviewCount,
-                onReviewClick = onReviewClick
-            )
-
-            RetailProductDetailVariantCard(
-                product =
-                    product,
-                selectedColorVariant =
-                    selectedColorVariant,
-                selectedSizeOption =
-                    selectedSizeOption,
-                quantity =
-                    quantity,
+                onReviewClick = onReviewClick,
+                selectedColorVariant = selectedColorVariant,
+                selectedSizeOption = selectedSizeOption,
+                quantity = quantity,
                 onColorClick = { colorVariant ->
                     if (
                         colorVariant.variantId > 0 &&
                         selectedColorId != colorVariant.id
                     ) {
-                        selectedColorId =
-                            colorVariant.id
+                        selectedColorId = colorVariant.id
 
-                        selectedSizeId =
-                            ""
+                        selectedSizeId = ""
 
-                        quantity =
-                            1
+                        quantity = 1
 
                         onColorVariantChange(
                             colorVariant.variantId
@@ -651,13 +643,11 @@ fun ProductDetailScreen(
                     if (
                         quantity > 1
                     ) {
-                        quantity -=
-                            1
+                        quantity -= 1
                     }
                 },
                 onIncreaseQuantityClick = {
-                    quantity +=
-                        1
+                    quantity += 1
                 }
             )
 
@@ -1072,63 +1062,31 @@ private fun RetailProductDetailImageCounter(
 }
 
 @Composable
-private fun RetailProductTitleCard(
-    product: RetailProductDetail
-) {
-    BbCard(
-        modifier = Modifier.padding(
-            start = BBSpacing.PageHorizontal,
-            top = BBSpacing.Space3,
-            end = BBSpacing.PageHorizontal
-        ),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium
-    ) {
-        Text(
-            text = product.name,
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurface,
-            fontWeight = FontWeight.Bold
-        )
-    }
-}
-
-@Composable
-private fun RetailProductRatingSummaryCard(
-    ratingText: String,
-    reviewCount: Int,
-    onReviewClick: () -> Unit
-) {
-    BbCard(
-        modifier = Modifier.padding(
-            start = BBSpacing.PageHorizontal,
-            top = BBSpacing.Space3,
-            end = BBSpacing.PageHorizontal
-        ),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium,
-        onClick = onReviewClick
+private fun RetailProductCampaignStrip() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                brush = Brush.horizontalGradient(
+                    colors = listOf(
+                        Color(0xFFF7D6E8),
+                        Color(0xFFFFE6D5)
+                    )
+                )
+            )
     ) {
         Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    horizontal = BBSpacing.PageHorizontal,
+                    vertical = BBSpacing.Space2
+                ),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
         ) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(1.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                repeat(5) {
-                    Icon(
-                        imageVector = Icons.Outlined.Star,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(BBIcon.SizeSm)
-                    )
-                }
-            }
-
             Text(
-                text = ratingText.replace("★ ", ""),
+                text = "Acele Et!",
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
@@ -1136,24 +1094,81 @@ private fun RetailProductRatingSummaryCard(
 
             Text(
                 modifier = Modifier.weight(1f),
-                text = "$reviewCount değerlendirme",
+                text = "Devam eden 1 Teklif var!",
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.onSurface
             )
+
+            listOf("15", "34", "20").forEachIndexed { index, value ->
+                Surface(
+                    shape = BBRadius.MdShape,
+                    color = MaterialTheme.colorScheme.primary
+                ) {
+                    Text(
+                        modifier = Modifier.padding(
+                            horizontal = BBSpacing.Space2,
+                            vertical = BBSpacing.Space1
+                        ),
+                        text = value,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+
+                if (index < 2) {
+                    Text(
+                        text = ":",
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
 
             Icon(
                 imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(BBIcon.SizeMd)
             )
         }
     }
 }
 
+
+@Composable
+private fun RetailProductTitleCard(
+    product: RetailProductDetail
+) {
+    BbCard(
+        modifier = Modifier
+            .padding(
+                start = BBSpacing.PageHorizontal,
+                top = BBSpacing.Space3,
+                end = BBSpacing.PageHorizontal
+            )
+            .fillMaxWidth()
+            .heightIn(min = 64.dp),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
+        Text(
+            text = product.name,
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.onSurface,
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
+
+
 @Composable
 private fun RetailProductDetailVariantCard(
     product: RetailProductDetail,
+    ratingText: String,
+    reviewCount: Int,
+    onReviewClick: () -> Unit,
     selectedColorVariant: RetailProductColorVariant,
     selectedSizeOption: RetailProductSizeOption,
     quantity: Int,
@@ -1175,6 +1190,49 @@ private fun RetailProductDetailVariantCard(
         Column(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space5)
         ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onReviewClick() },
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(1.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    repeat(5) {
+                        Icon(
+                            imageVector = Icons.Outlined.Star,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(BBIcon.SizeSm)
+                        )
+                    }
+                }
+
+                Text(
+                    text = ratingText.replace("★ ", ""),
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Text(
+                    modifier = Modifier.weight(1f),
+                    text = "$reviewCount değerlendirme",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+
+                Icon(
+                    imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(BBIcon.SizeMd)
+                )
+            }
+
             Column(
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
             ) {
@@ -1183,12 +1241,6 @@ private fun RetailProductDetailVariantCard(
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
-                )
-
-                Text(
-                    text = BBLocalization.Current.Get(key = "bcbd7c30-5bcc-4ca7-9a2d-84c906b03042", fallback = "Seçenekler"),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
                 Row(
@@ -1223,12 +1275,6 @@ private fun RetailProductDetailVariantCard(
                             style = MaterialTheme.typography.titleSmall,
                             color = MaterialTheme.colorScheme.onSurface,
                             fontWeight = FontWeight.Bold
-                        )
-
-                        Text(
-                            text = BBLocalization.Current.Get(key = "bcbd7c30-5bcc-4ca7-9a2d-84c906b03042", fallback = "Seçenekler"),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
 
@@ -1314,6 +1360,7 @@ private fun RetailProductDetailVariantCard(
         }
     }
 }
+
 
 @Composable
 private fun RetailProductColorChoice(
@@ -2118,24 +2165,34 @@ private fun RetailProductDetailStoreCard(
     store: RetailProductDetailStore,
     onStoreClick: () -> Unit
 ) {
-    BbCard(
-        modifier = Modifier.padding(
-            start = BBSpacing.PageHorizontal,
-            top = BBSpacing.Space3,
-            end = BBSpacing.PageHorizontal
-        ),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium,
-        onClick = onStoreClick
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                start = BBSpacing.PageHorizontal,
+                top = BBSpacing.Space3,
+                end = BBSpacing.PageHorizontal
+            )
+            .clip(BBRadius.XlShape)
+            .clickable {
+                onStoreClick()
+            },
+        shape = BBRadius.XlShape,
+        color = MaterialTheme.colorScheme.primaryContainer,
+        border = BorderStroke(
+            width = BBSpacing.BorderThin,
+            color = MaterialTheme.colorScheme.outlineVariant
+        )
     ) {
         Row(
+            modifier = Modifier.padding(BBSpacing.Space4),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             Surface(
                 modifier = Modifier.size(BBSpacing.Space14),
                 shape = BBRadius.LgShape,
-                color = BBColors.White,
+                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.55f),
                 border = BorderStroke(
                     width = BBSpacing.BorderThin,
                     color = MaterialTheme.colorScheme.outlineVariant
@@ -2182,7 +2239,10 @@ private fun RetailProductDetailStoreCard(
 
                     if (store.isVerified) {
                         RetailProductDetailPill(
-                            text = BBLocalization.Current.Get(key = "c6a0ff62-8828-475f-b553-37effb42efe6", fallback = "Doğrulanmış"),
+                            text = BBLocalization.Current.Get(
+                                key = "c6a0ff62-8828-475f-b553-37effb42efe6",
+                                fallback = "Doğrulanmış"
+                            ),
                             icon = Icons.Outlined.Verified
                         )
                     }
@@ -2302,15 +2362,18 @@ private fun RetailProductDescriptionSection(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
         ) {
             Text(
-                text = BBLocalization.Current.Get(key = "eb7e1e0a-57ec-49bf-9968-61f0e5b75e6c", fallback = "Ürün Açıklaması"),
-                style = MaterialTheme.typography.titleMedium,
+                text = BBLocalization.Current.Get(
+                    key = "eb7e1e0a-57ec-49bf-9968-61f0e5b75e6c",
+                    fallback = "Ürün Açıklaması"
+                ),
+                style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
                 text = description,
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }

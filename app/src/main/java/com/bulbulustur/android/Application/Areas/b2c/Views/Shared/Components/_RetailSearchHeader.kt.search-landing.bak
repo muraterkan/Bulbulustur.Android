@@ -26,15 +26,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.bulbulustur.android.Application.Localization.BBLocalization
-import kotlinx.coroutines.delay
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbIconBoxIcon
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbIconBoxSize
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
@@ -61,7 +56,6 @@ fun RetailSearchHeader(
     onClearClick: (() -> Unit)? = null,
     leadingAction: RetailSearchHeaderLeadingAction = RetailSearchHeaderLeadingAction.Menu,
     onBackClick: (() -> Unit)? = null,
-    requestFocusOnStart: Boolean = false,
     onMessageClick: () -> Unit = {}
 ) {
     Surface(
@@ -122,7 +116,6 @@ fun RetailSearchHeader(
                     placeholder = placeholder,
                     onSearchClick = onSearchClick,
                     onClearClick = onClearClick,
-                    requestFocusOnStart = requestFocusOnStart,
                     modifier = Modifier.weight(1f)
                 )
                 RetailHeaderActionButton(
@@ -162,20 +155,8 @@ private fun RetailSearchInput(
     placeholder: String,
     onSearchClick: (() -> Unit)?,
     onClearClick: (() -> Unit)?,
-    requestFocusOnStart: Boolean = false,
     modifier: Modifier = Modifier
 ) {
-    val focusRequester = androidx.compose.runtime.remember { FocusRequester() }
-    val keyboardController = LocalSoftwareKeyboardController.current
-
-    LaunchedEffect(requestFocusOnStart) {
-        if (requestFocusOnStart) {
-            delay(150)
-            focusRequester.requestFocus()
-            keyboardController?.show()
-        }
-    }
-
     Surface(
         modifier = modifier.height(
             BBLayout.TopBarHeight - BBSpacing.Space4
@@ -192,9 +173,7 @@ private fun RetailSearchInput(
             onValueChange = onSearchTextChange,
             singleLine = true,
             textStyle = BbTypography.bodyMedium,
-            modifier = Modifier
-                .fillMaxWidth()
-                .focusRequester(focusRequester),
+            modifier = Modifier.fillMaxWidth(),
             placeholder = {
                 Text(
                     text = placeholder,

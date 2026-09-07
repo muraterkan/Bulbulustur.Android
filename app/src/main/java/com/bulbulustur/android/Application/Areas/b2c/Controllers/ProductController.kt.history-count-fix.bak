@@ -431,14 +431,14 @@ class ProductController(
             }
 
             is ProductControllerEvent.LoadProductBrowsingHistories -> {
-                
-    ProductBrowsingHistories(
-        memberId =
-            event.MemberId,
-        count =
-            event.PageSize
-    )
-
+                ProductBrowsingHistories(
+                    memberId =
+                        event.MemberId,
+                    page =
+                        event.Page,
+                    pageSize =
+                        event.PageSize
+                )
             }
 
             is ProductControllerEvent.InsertProductBrowsingHistory -> {

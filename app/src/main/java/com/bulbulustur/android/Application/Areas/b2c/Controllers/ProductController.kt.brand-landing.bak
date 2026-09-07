@@ -4,7 +4,6 @@ import androidx.lifecycle.viewModelScope
 import com.bulbulustur.android.businesslayer.Core.DTO.AdvertSponsoredDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.B2CProductDataDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.B2CProductFilterDTO
-import com.bulbulustur.android.businesslayer.Core.DTO.ProductBrandDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductBrandSectionDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductBrowsingHistoryDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductCategoryDTO
@@ -12,7 +11,6 @@ import com.bulbulustur.android.businesslayer.Core.DTO.ProductDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductVariantDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductVariantPictureDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.IAdvertSponsoredRepository
-import com.bulbulustur.android.businesslayer.Core.Interface.IProductBrandRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IProductBrandSectionRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IProductBrowsingHistoryRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IProductCategoryRepository
@@ -26,6 +24,7 @@ import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.ProductComp
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.ProductLowPriceReportInsertModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.ProductUpdateModel
 import com.bulbulustur.android.businesslayer.Core.Util.Execute.IExecuteService
+import com.bulbulustur.android.businesslayer.Core.Util.PaginatedList
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -51,12 +50,9 @@ data class ProductControllerState(
 
     val SponsoredAdvertsResult: Result<List<AdvertSponsoredDTO>>? = null,
     val CategorySponsoredAdvertsResult: Result<List<AdvertSponsoredDTO>>? = null,
-    val ProductBrandsResult: Result<List<ProductBrandDTO>>? = null,
     val ProductBrandSectionsResult: Result<List<ProductBrandSectionDTO>>? = null,
-    
     val ProductBrowsingHistoryResult:
-    Result<List<ProductBrowsingHistoryDTO>>? = null
-,
+    Result<PaginatedList<ProductBrowsingHistoryDTO>>? = null,
     val InsertProductBrowsingHistoryResult: Result<Unit>? = null,
     val ProductComplaintInsertResult: Result<Unit>? = null,
     val ProductLowPriceReportInsertResult: Result<Unit>? = null,
@@ -114,25 +110,18 @@ data class ProductControllerState(
     val CategorySponsoredAdverts: List<AdvertSponsoredDTO>
         get() = CategorySponsoredAdvertsResult?.Data.orEmpty()
 
-    val ProductBrands: List<ProductBrandDTO>
-        get() =
-            ProductBrandsResult
-                ?.Data
-                .orEmpty()
-
     val ProductBrandSections: List<ProductBrandSectionDTO>
         get() =
             ProductBrandSectionsResult
                 ?.Data
                 .orEmpty()
 
-    
     val ProductBrowsingHistories: List<ProductBrowsingHistoryDTO>
         get() =
             ProductBrowsingHistoryResult
                 ?.Data
+                ?.Items
                 .orEmpty()
-
 
     val RelatedCategories: List<ProductCategoryDTO>
         get() =
@@ -154,10 +143,12 @@ data class ProductControllerState(
                 ?.HasNextPage
                 ?: false
 
-    
     val HasNextBrowsingHistoryPage: Boolean
-        get() = false
-
+        get() =
+            ProductBrowsingHistoryResult
+                ?.Data
+                ?.HasNextPage
+                ?: false
 }
 
 sealed interface ProductControllerEvent {
@@ -268,7 +259,6 @@ class ProductController(
     private val productVariantRepository: IProductVariantRepository,
     private val productVariantPictureRepository: IProductVariantPictureRepository,
     private val advertSponsoredRepository: IAdvertSponsoredRepository,
-    private val productBrandRepository: IProductBrandRepository,
     private val productBrandSectionRepository: IProductBrandSectionRepository,
     private val productBrowsingHistoryRepository: IProductBrowsingHistoryRepository,
     private val productCategoryRepository: IProductCategoryRepository
@@ -431,14 +421,14 @@ class ProductController(
             }
 
             is ProductControllerEvent.LoadProductBrowsingHistories -> {
-                
-    ProductBrowsingHistories(
-        memberId =
-            event.MemberId,
-        count =
-            event.PageSize
-    )
-
+                ProductBrowsingHistories(
+                    memberId =
+                        event.MemberId,
+                    page =
+                        event.Page,
+                    pageSize =
+                        event.PageSize
+                )
             }
 
             is ProductControllerEvent.InsertProductBrowsingHistory -> {
@@ -1199,39 +1189,6 @@ class ProductController(
         }
     }
 
-    fun ProductBrands() {
-        viewModelScope.launch {
-            StartLoading(
-                actionName =
-                    "ProductBrands"
-            )
-
-            val response =
-                executeService.GetAsync(
-                    cacheKey =
-                        "b2c.Product.GetProductBrandListAsync"
-                ) {
-                    productBrandRepository
-                        .GetProductBrandListAsync()
-                }
-
-            _state.update {
-                it.copy(
-                    IsLoading =
-                        false,
-                    CurrentAction =
-                        "ProductBrands",
-                    ProductBrandsResult =
-                        response,
-                    ErrorMessage =
-                        response.Message.takeIf {
-                            !response.Success
-                        }
-                )
-            }
-        }
-    }
-
     fun ProductBrandSections(
         languageId: Int,
         brandId: Int,
@@ -1293,12 +1250,11 @@ class ProductController(
         }
     }
 
-    
     fun ProductBrowsingHistories(
         memberId: Int,
-        count: Int = 20
-    )
- {
+        page: Int = 1,
+        pageSize: Int = 20
+    ) {
         if (memberId <= 0) {
             _state.update {
                 it.copy(
@@ -1321,15 +1277,15 @@ class ProductController(
                     cacheKey =
                         ""
                 ) {
-                    
-    productBrowsingHistoryRepository
-        .GetProductBrowsingHistoriesByCountAsync(
-            memberId =
-                memberId,
-            count =
-                count
-        )
-
+                    productBrowsingHistoryRepository
+                        .GetProductBrowsingHistoriesAsync(
+                            memberId =
+                                memberId,
+                            page =
+                                page,
+                            pageSize =
+                                pageSize
+                        )
                 }
 
             _state.update {

@@ -29,7 +29,6 @@ import com.bulbulustur.android.Application.Areas.b2c.Views.Store.StoreListScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.Store.StoreOnboardingInfoScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.Store.SearchScreen as RetailSearchScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.Search.SearchScreen as RetailSearchScreen
-import com.bulbulustur.android.Application.Areas.b2c.Views.Search.RetailSearchLandingScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.Search.RetailSearchType
 
 import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
@@ -90,7 +89,7 @@ fun NavGraphBuilder.retailGraph(
             specialContents = homeState.SpecialContents,
             onSearchClick = {
                 navigator.navController.navigate(
-                    RetailRoutes.SearchLanding
+                    RetailRoutes.Search
                 )
             },
             onCategoryClick = {
@@ -159,113 +158,6 @@ fun NavGraphBuilder.retailGraph(
             },
             onModeSwitchClick = {
                 navigator.openModeSheet()
-            }
-        )
-    }
-
-    composable(route = RetailRoutes.SearchLanding) {
-        val productState by productController.State.collectAsState()
-        val categoryState by categoryController.State.collectAsState()
-
-        LaunchedEffect(
-            sessionState.Language.Id,
-            sessionState.MemberId,
-            sessionState.IsAuthenticated
-        ) {
-            if (
-                categoryState.Categories.isEmpty() &&
-                sessionState.Language.Id > 0
-            ) {
-                categoryController.LoadHome(
-                    languageId = sessionState.Language.Id,
-                    count = 30000
-                )
-            }
-
-            if (productState.ProductBrands.isEmpty()) {
-                productController.ProductBrands()
-            }
-
-            if (
-                sessionState.IsAuthenticated &&
-                sessionState.MemberId > 0
-            ) {
-                
-    productController.ProductBrowsingHistories(
-        memberId = sessionState.MemberId,
-        count = 20
-    )
-
-            }
-        }
-
-        RetailSearchLandingScreen(
-            categories = categoryState.Categories,
-            histories = productState.ProductBrowsingHistories,
-            brands = productState.ProductBrands,
-            onBackClick = {
-                navigator.back()
-            },
-            onSearchSubmit = { searchKey ->
-                navigator.navController.navigate(
-                    RetailRoutes.search(searchKey)
-                )
-            },
-            onCategoryClick = { category ->
-                if (category.ProductCategoryId > 0) {
-                    navigator.navController.navigate(
-                        RetailRoutes.productList(
-                            category.ProductCategoryId
-                        )
-                    )
-                }
-            },
-            onHistoryProductClick = { history ->
-                if (
-                    history.ProductId > 0 &&
-                    history.StoreId > 0 &&
-                    history.VariantId > 0
-                ) {
-                    navigator.navController.navigate(
-                        RetailRoutes.productDetail(
-                            productId = history.ProductId,
-                            storeId = history.StoreId,
-                            variantId = history.VariantId
-                        )
-                    )
-                }
-            },
-            onBrandClick = { brand ->
-                navigator.navController.navigate(
-                    RetailRoutes.search(brand)
-                )
-            },
-            onFavoriteClick = {
-                navigator.navController.navigate(
-                    AccountRoutes.Favorites
-                )
-            },
-            onMessageClick = {
-                navigator.navigateToInbox()
-            },
-            onHomeClick = {
-                navigator.navController.navigate(
-                    RetailRoutes.Home
-                ) {
-                    launchSingleTop = true
-                }
-            },
-            onMenuClick = {
-                navigator.navigateToRetailCategories()
-            },
-            onModeSwitchClick = {
-                navigator.openModeSheet()
-            },
-            onBasketClick = {
-                navigator.navigateToRetailBasket()
-            },
-            onAccountClick = {
-                navigator.navigateToAccount()
             }
         )
     }
@@ -956,12 +848,14 @@ fun NavGraphBuilder.retailGraph(
                 sessionState.IsAuthenticated &&
                 sessionState.MemberId > 0
             ) {
-                
-    productController.ProductBrowsingHistories(
-        memberId = sessionState.MemberId,
-        count = 20
-    )
-
+                productController.ProductBrowsingHistories(
+                    memberId =
+                        sessionState.MemberId,
+                    page =
+                        1,
+                    pageSize =
+                        20
+                )
 
                 if (
                     variantId > 0
@@ -1686,12 +1580,14 @@ fun NavGraphBuilder.retailGraph(
                 sessionState.IsAuthenticated &&
                 sessionState.MemberId > 0
             ) {
-                
-    productController.ProductBrowsingHistories(
-        memberId = sessionState.MemberId,
-        count = 20
-    )
-
+                productController.ProductBrowsingHistories(
+                    memberId =
+                        sessionState.MemberId,
+                    page =
+                        1,
+                    pageSize =
+                        20
+                )
 
                 if (
                     variantId > 0

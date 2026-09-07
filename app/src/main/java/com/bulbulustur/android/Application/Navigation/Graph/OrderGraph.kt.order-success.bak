@@ -11,7 +11,6 @@ import com.bulbulustur.android.Application.Areas.b2c.Views.order.OrderListScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.order.OrderReturnRequestScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.order.OrderReviewCreateScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.order.OrderShipmentTrackingScreen
-import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.OrderSuccessScreen
 import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
 import com.bulbulustur.android.Application.Navigation.Routes.OrderRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.StoreRoutes
@@ -29,56 +28,6 @@ fun NavGraphBuilder.orderGraph(
                 navigator.navController.navigate(
                     OrderRoutes.detail(orderId, orderKey)
                 )
-            }
-        )
-    }
-
-    composable(
-        route = OrderRoutes.Success,
-        arguments = listOf(
-            navArgument(OrderRoutes.ArgOrderId) {
-                type = NavType.IntType
-            },
-            navArgument(OrderRoutes.ArgOrderKey) {
-                type = NavType.StringType
-            }
-        )
-    ) { backStackEntry ->
-        val orderId = backStackEntry.arguments
-            ?.getInt(OrderRoutes.ArgOrderId)
-            ?: 0
-
-        val orderKey = backStackEntry.arguments
-            ?.getString(OrderRoutes.ArgOrderKey)
-            .orEmpty()
-
-        OrderSuccessScreen(
-            orderId = orderId,
-            onGoHomeClick = {
-                navigator.navigateToRetailHome()
-            },
-            onOrderDetailClick = { selectedOrderId ->
-                navigator.navController.navigate(
-                    OrderRoutes.detail(
-                        orderId = selectedOrderId,
-                        orderKey = orderKey
-                    )
-                )
-            },
-            onContinueShoppingClick = {
-                navigator.navigateToRetailHome()
-            },
-            onMenuClick = {
-                navigator.navigateToRetailCategories()
-            },
-            onModeSwitchClick = {
-                navigator.openModeSheet()
-            },
-            onBasketClick = {
-                navigator.navigateToRetailBasket()
-            },
-            onAccountClick = {
-                navigator.navigateToAccount()
             }
         )
     }

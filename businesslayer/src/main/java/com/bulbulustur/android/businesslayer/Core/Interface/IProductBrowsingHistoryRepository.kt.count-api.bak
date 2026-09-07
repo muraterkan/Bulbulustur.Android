@@ -2,16 +2,16 @@ package com.bulbulustur.android.businesslayer.Core.Interface
 
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductBrowsingHistoryDTO
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.ProductBrowsingHistoryInsertModel
+import com.bulbulustur.android.businesslayer.Core.Util.PaginatedList
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
 interface IProductBrowsingHistoryRepository {
 
-    
-    suspend fun GetProductBrowsingHistoriesByCountAsync(
+    suspend fun GetProductBrowsingHistoriesAsync(
         memberId: Int,
-        count: Int = 20
-    ): Result<List<ProductBrowsingHistoryDTO>>
-
+        page: Int = 1,
+        pageSize: Int = 20
+    ): Result<PaginatedList<ProductBrowsingHistoryDTO>>
 
     suspend fun InsertProductBrowsingHistoryAsync(
         memberId: Int,

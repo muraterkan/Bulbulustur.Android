@@ -1,6 +1,8 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Basket
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,10 +16,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.ChevronRight
@@ -48,27 +50,27 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import com.bulbulustur.android.Application.Areas.b2c.Controllers.BasketControllerState
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailBottomNavigation
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.RetailBottomNavigationItem
+import com.bulbulustur.android.Application.Localization.BBLocalization
+import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardPadding
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCardVariant
-import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
-import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBAlpha
-import com.bulbulustur.android.Application.Areas.b2c.Controllers.BasketControllerState
-import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.businesslayer.Core.DTO.BasketDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductFavoriteDTO
 import com.bulbulustur.android.businesslayer.Core.Network.ImageUrlResolver
@@ -99,7 +101,7 @@ fun BasketScreen(
     val basketLines = remember(basketItems) { basketItems.map { basket -> basket.ToBasketLineItem() } }
 
     var showCouponSheet by remember { mutableStateOf(false) }
-    var showFavoriteSheet by remember { mutableStateOf(false) }
+    var showSummarySheet by remember { mutableStateOf(false) }
     var couponApplied by remember { mutableStateOf(false) }
 
     val storeGroups = basketLines
@@ -135,15 +137,14 @@ fun BasketScreen(
         )
     }
 
-    if (showFavoriteSheet) {
-        BasketFavoriteSheet(
-            favorites = favorites,
-            isLoading = isFavoriteLoading,
-            errorMessage = favoriteErrorMessage,
-            onRetryClick = onRetryFavoritesClick,
-            onAddFavoriteClick = onAddFavoriteToBasketClick,
+    if (showSummarySheet) {
+        BasketSummarySheet(
+            productTotalText = formatPrice(productTotal),
+            cargoTotalText = formatPrice(cargoTotal),
+            discountTotalText = "-${formatPrice(discountTotal)}",
+            payableTotalText = formatPrice(payableTotal),
             onDismiss = {
-                showFavoriteSheet = false
+                showSummarySheet = false
             }
         )
     }
@@ -163,10 +164,11 @@ fun BasketScreen(
                 if (basketLines.isNotEmpty()) {
                     BasketCheckoutBar(
                         payableTotalText = formatPrice(payableTotal),
+                        onSummaryClick = {
+                            showSummarySheet = true
+                        },
                         onCheckoutClick = {
-                            onCheckoutClick(
-                                basketItems
-                            )
+                            onCheckoutClick(basketItems)
                         }
                     )
                 }
@@ -199,22 +201,17 @@ fun BasketScreen(
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
-            item {
-                BasketHeaderCard(
-                    lineCount = basketLines.size,
-                    storeCount = storeGroups.size
-                )
-            }
-
             if (basketLines.isEmpty()) {
                 item { BasketEmptyCard() }
 
                 if (favorites.isNotEmpty() || isFavoriteLoading || !favoriteErrorMessage.isNullOrBlank()) {
                     item {
-                        BasketFavoriteShortcutCard(
-                            onClick = {
-                                showFavoriteSheet = true
-                            }
+                        BasketFavoritesSection(
+                            favorites = favorites,
+                            isLoading = isFavoriteLoading,
+                            errorMessage = favoriteErrorMessage,
+                            onRetryClick = onRetryFavoritesClick,
+                            onAddFavoriteClick = onAddFavoriteToBasketClick
                         )
                     }
                 }
@@ -230,61 +227,43 @@ fun BasketScreen(
                     )
                 }
 
-                item {
-                    BasketFavoriteShortcutCard(
-                        onClick = {
-                            showFavoriteSheet = true
-                        }
-                    )
-                }
-
                 items(
                     items = storeGroups,
                     key = { storeGroup -> storeGroup.storeId }
                 ) { storeGroup ->
                     BasketStoreGroupCard(
-                        storeGroup =
-                            storeGroup,
+                        storeGroup = storeGroup,
                         onStoreClick = {
-                            onStoreClick(
-                                storeGroup.storeId
-                            )
+                            onStoreClick(storeGroup.storeId)
                         },
                         onProductClick = { line ->
-                            onProductClick(
-                                line.source
-                            )
+                            onProductClick(line.source)
                         },
                         onIncreaseQuantityClick = { line ->
-                            onIncreaseQuantityClick(
-                                line.source
-                            )
+                            onIncreaseQuantityClick(line.source)
                         },
                         onDecreaseQuantityClick = { line ->
-                            onDecreaseQuantityClick(
-                                line.source
-                            )
+                            onDecreaseQuantityClick(line.source)
                         },
                         onRemoveClick = { line ->
-                            onRemoveClick(
-                                line.source
-                            )
+                            onRemoveClick(line.source)
                         },
                         onMoveToFavoriteClick = { line ->
-                            onMoveToFavoriteClick(
-                                line.source
-                            )
+                            onMoveToFavoriteClick(line.source)
                         }
                     )
                 }
 
-                item {
-                    BasketSummaryCard(
-                        productTotalText = formatPrice(productTotal),
-                        cargoTotalText = formatPrice(cargoTotal),
-                        discountTotalText = "-${formatPrice(discountTotal)}",
-                        payableTotalText = formatPrice(payableTotal)
-                    )
+                if (favorites.isNotEmpty() || isFavoriteLoading || !favoriteErrorMessage.isNullOrBlank()) {
+                    item {
+                        BasketFavoritesSection(
+                            favorites = favorites,
+                            isLoading = isFavoriteLoading,
+                            errorMessage = favoriteErrorMessage,
+                            onRetryClick = onRetryFavoritesClick,
+                            onAddFavoriteClick = onAddFavoriteToBasketClick
+                        )
+                    }
                 }
 
                 item { BasketBuyerProtectionCard() }
@@ -293,51 +272,6 @@ fun BasketScreen(
     }
 }
 
-@Composable
-private fun BasketHeaderCard(
-    lineCount: Int,
-    storeCount: Int
-) {
-    BbCard(
-        modifier = Modifier.fillMaxWidth(),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            BasketIconBox(
-                icon = Icons.Outlined.ShoppingBasket,
-                backgroundColor = MaterialTheme.colorScheme.primaryContainer,
-                iconColor = BBColors.Yellow.Yellow800
-            )
-
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
-            ) {
-                Text(
-                    text = if (lineCount > 0) "$lineCount ürün sepette" else BBLocalization.Current.Get(key = "2617a5c2-1dca-464d-b4d4-f44ad5a5b7ad", fallback = ""),
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-
-                Text(
-                    text = if (lineCount > 0) {
-                        "$storeCount mağazadan gönderim yapılacak"
-                    } else {
-                        BBLocalization.Current.Get(key = "507ef499-3ec4-4197-98b3-66c6a6402a33", fallback = "Ürün Keşfine dönüp sepetini doldurabilirsin.")
-                    },
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-        }
-    }
-}
 
 @Composable
 private fun BasketCouponCard(
@@ -368,7 +302,7 @@ private fun BasketCouponCard(
                 Text(
                     text = BBLocalization.Current.Get(key = "b2007b6f-06c1-4ddf-b73e-2f6da5361af3", fallback = "Kupon ve İndirimler"),
                     style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.surface,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
                 )
 
@@ -378,55 +312,6 @@ private fun BasketCouponCard(
                     } else {
                         BBLocalization.Current.Get(key = "b9d14d51-71dc-48f4-88eb-d2a4e85f7496", fallback = "İndirim kodu ekle veya kullanılabilir kuponlarını görüntüle.")
                     },
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-
-            Icon(
-                imageVector = Icons.Outlined.ChevronRight,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(BBIcon.Action)
-            )
-        }
-    }
-}
-
-@Composable
-private fun BasketFavoriteShortcutCard(
-    onClick: () -> Unit
-) {
-    BbCard(
-        modifier = Modifier.fillMaxWidth(),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium,
-        onClick = onClick
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            BasketIconBox(
-                icon = Icons.Outlined.FavoriteBorder,
-                backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
-                iconColor = MaterialTheme.colorScheme.onSurface
-            )
-
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
-            ) {
-                Text(
-                    text = BBLocalization.Current.Get(key = "55923458-0616-4032-931c-1b5b1bcce9eb", fallback = "Favorilerimden Sepete Ekle"),
-                    style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    fontWeight = FontWeight.Bold
-                )
-
-                Text(
-                    text = BBLocalization.Current.Get(key = "7dfdda4a-d0ee-4f95-b744-ed44e127308f", fallback = "Daha önce beğendiğin ürünleri hızlıca sepete aktar."),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -466,6 +351,10 @@ private fun BasketStoreGroupCard(
                 onStoreClick = onStoreClick
             )
 
+            HorizontalDivider(
+                color = MaterialTheme.colorScheme.outlineVariant
+            )
+
             storeGroup.lines.forEachIndexed { index, line ->
                 BasketLineCard(
                     line = line,
@@ -482,14 +371,14 @@ private fun BasketStoreGroupCard(
                         onRemoveClick(line)
                     },
                     onMoveToFavoriteClick = {
-                        onMoveToFavoriteClick(
-                            line
-                        )
+                        onMoveToFavoriteClick(line)
                     }
                 )
 
                 if (index != storeGroup.lines.lastIndex) {
-                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                    HorizontalDivider(
+                        color = MaterialTheme.colorScheme.outlineVariant
+                    )
                 }
             }
         }
@@ -524,46 +413,24 @@ private fun BasketStoreHeader(
             }
         }
 
-        Column(
+        Row(
             modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space1),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space1),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Storefront,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.size(BBIcon.Inline)
-                )
+            Icon(
+                imageVector = Icons.Outlined.Storefront,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.size(BBIcon.Inline)
+            )
 
-                Text(
-                    text = storeGroup.storeName,
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-            }
-
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space1),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.LocalShipping,
-                    contentDescription = null,
-                    tint = BBColors.Yellow.Yellow800,
-                    modifier = Modifier.size(BBIcon.Inline)
-                )
-
-                Text(
-                    text = storeGroup.cargoText,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
+            Text(
+                text = storeGroup.storeName,
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
         }
 
         Icon(
@@ -588,16 +455,21 @@ private fun BasketLineCard(
         modifier = Modifier
             .fillMaxWidth()
             .background(
-                color = MaterialTheme.colorScheme.surfaceVariant,
+                color = MaterialTheme.colorScheme.surface,
                 shape = BBRadius.LgShape
             )
-            .clickable { onProductClick() }
             .padding(BBSpacing.CardPaddingCompact),
         horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
-            modifier = Modifier.size(BBSpacing.Space16).background(color = MaterialTheme.colorScheme.surface, shape = BBRadius.LgShape),
+            modifier = Modifier
+                .size(BBSpacing.Space16)
+                .background(
+                    color = MaterialTheme.colorScheme.surface,
+                    shape = BBRadius.LgShape
+                )
+                .clickable { onProductClick() },
             contentAlignment = Alignment.Center
         ) {
             if (line.imageUrl.isNotBlank()) {
@@ -618,7 +490,8 @@ private fun BasketLineCard(
         ) {
             Text(
                 text = line.productName,
-                style = MaterialTheme.typography.titleSmall,
+                modifier = Modifier.clickable { onProductClick() },
+                style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onSurface,
                 maxLines = 2
@@ -635,7 +508,7 @@ private fun BasketLineCard(
                 text = line.priceText,
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
-                color = BBColors.Yellow.Yellow800
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Row(
@@ -662,38 +535,57 @@ private fun BasketLineCard(
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                Row(
-                    modifier = Modifier.clickable { onRemoveClick() },
-                    horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space1),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.DeleteOutline,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.size(BBIcon.Inline)
-                    )
+                BasketActionChip(
+                    text = BBLocalization.Current.Get(key = "e38050df-62e1-4b83-97ee-2643ad73390c", fallback = "Sil"),
+                    icon = Icons.Outlined.DeleteOutline,
+                    onClick = onRemoveClick
+                )
 
-                    Text(
-                        text = BBLocalization.Current.Get(key = "e38050df-62e1-4b83-97ee-2643ad73390c", fallback = "Sil"),
-                        style = MaterialTheme.typography.labelSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-
-                    Text(
-                        text =
-                            BBLocalization.Current.Get(key = "da76c00e-61ee-46da-9690-5a8d15c7ce6e", fallback = "Favoriye Taşı"),
-                        style =
-                            MaterialTheme.typography.labelSmall,
-                        fontWeight =
-                            FontWeight.Bold,
-                        color =
-                            MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
+                BasketActionChip(
+                    text = BBLocalization.Current.Get(key = "da76c00e-61ee-46da-9690-5a8d15c7ce6e", fallback = "Favoriye Taşı"),
+                    icon = Icons.Outlined.FavoriteBorder,
+                    onClick = onMoveToFavoriteClick
+                )
             }
         }
+    }
+}
+
+@Composable
+private fun BasketActionChip(
+    text: String,
+    icon: ImageVector? = null,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .background(
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                shape = BBRadius.PillShape
+            )
+            .clickable { onClick() }
+            .padding(
+                horizontal = BBSpacing.Space3,
+                vertical = BBSpacing.Space2
+            ),
+        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space1),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        if (icon != null) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.size(BBIcon.Inline)
+            )
+        }
+
+        Text(
+            text = text,
+            style = MaterialTheme.typography.labelSmall,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }
 
@@ -760,6 +652,65 @@ private fun BasketSummaryCard(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun BasketSummarySheet(
+    productTotalText: String,
+    cargoTotalText: String,
+    discountTotalText: String,
+    payableTotalText: String,
+    onDismiss: () -> Unit
+) {
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        containerColor = MaterialTheme.colorScheme.surface
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .navigationBarsPadding()
+                .padding(
+                    start = BBSpacing.PageHorizontal,
+                    end = BBSpacing.PageHorizontal,
+                    bottom = BBSpacing.PageBottom
+                ),
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
+        ) {
+            Text(
+                text = BBLocalization.Current.Get(key = "c3894b16-f66b-47f2-8853-11c6d9084bdf", fallback = "Sepet Özeti"),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
+            BasketSummaryRow(
+                title = BBLocalization.Current.Get(key = "9ca1b3ac-05ef-462c-a4ef-e4bcd4b4b11b", fallback = "Ürün Toplamı"),
+                value = productTotalText
+            )
+
+            BasketSummaryRow(
+                title = BBLocalization.Current.Get(key = "8fa1207a-2a06-4bdb-936b-f7da848e0f72", fallback = "Kargo"),
+                value = cargoTotalText
+            )
+
+            BasketSummaryRow(
+                title = BBLocalization.Current.Get(key = "9dd8d854-ca26-4660-bcb3-b7ec8e3f458b", fallback = "İndirim"),
+                value = discountTotalText
+            )
+
+            HorizontalDivider(
+                color = MaterialTheme.colorScheme.outlineVariant
+            )
+
+            BasketSummaryRow(
+                title = BBLocalization.Current.Get(key = "0234baa2-519d-42ae-a2e8-760ebc0a1d06", fallback = "Ödenecek Tutar"),
+                value = payableTotalText,
+                isStrong = true
+            )
+        }
+    }
+}
+
 @Composable
 private fun BasketSummaryRow(
     title: String,
@@ -795,11 +746,7 @@ private fun BasketSummaryRow(
                 MaterialTheme.typography.bodySmall
             },
             fontWeight = FontWeight.Bold,
-            color = if (isStrong) {
-                BBColors.Yellow.Yellow800
-            } else {
-                MaterialTheme.colorScheme.onSurface
-            }
+            color = MaterialTheme.colorScheme.onSurface
         )
     }
 }
@@ -807,6 +754,7 @@ private fun BasketSummaryRow(
 @Composable
 private fun BasketCheckoutBar(
     payableTotalText: String,
+    onSummaryClick: () -> Unit,
     onCheckoutClick: () -> Unit
 ) {
     Surface(
@@ -825,7 +773,9 @@ private fun BasketCheckoutBar(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable { onSummaryClick() },
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
                 Text(
@@ -838,7 +788,7 @@ private fun BasketCheckoutBar(
                     text = payableTotalText,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
 
@@ -1104,36 +1054,32 @@ private fun BasketCouponOption(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun BasketFavoriteSheet(
+private fun BasketFavoritesSection(
     favorites: List<ProductFavoriteDTO>,
     isLoading: Boolean,
     errorMessage: String?,
     onRetryClick: () -> Unit,
-    onAddFavoriteClick: (ProductFavoriteDTO) -> Unit,
-    onDismiss: () -> Unit
+    onAddFavoriteClick: (ProductFavoriteDTO) -> Unit
 ) {
-    ModalBottomSheet(
-        onDismissRequest = onDismiss,
-        containerColor = MaterialTheme.colorScheme.surface
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .navigationBarsPadding()
-                .padding(
-                    start = BBSpacing.PageHorizontal,
-                    end = BBSpacing.PageHorizontal,
-                    bottom = BBSpacing.PageBottom
-                ),
-            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             Text(
                 text = BBLocalization.Current.Get(key = "55923458-0616-4032-931c-1b5b1bcce9eb", fallback = "Favorilerimden Sepete Ekle"),
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
+                fontWeight = FontWeight.Bold
+            )
+
+            HorizontalDivider(
+                color = MaterialTheme.colorScheme.outlineVariant
             )
 
             when {
@@ -1181,15 +1127,15 @@ private fun BasketFavoriteSheet(
 
                 else -> {
                     LazyRow(
-                        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
-                        contentPadding = PaddingValues(end = BBSpacing.PageHorizontal)
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2),
+                        contentPadding = PaddingValues(end = BBSpacing.Space1)
                     ) {
                         items(
                             items = favorites,
                             key = { favorite -> favorite.FavoriteId }
                         ) { favorite ->
                             BasketFavoriteSuggestionCard(
-                                modifier = Modifier.fillParentMaxWidth(0.42f),
                                 favorite = favorite,
                                 onAddFavoriteClick = {
                                     onAddFavoriteClick(favorite)
@@ -1205,7 +1151,6 @@ private fun BasketFavoriteSheet(
 
 @Composable
 private fun BasketFavoriteSuggestionCard(
-    modifier: Modifier = Modifier,
     favorite: ProductFavoriteDTO,
     onAddFavoriteClick: () -> Unit
 ) {
@@ -1222,27 +1167,48 @@ private fun BasketFavoriteSuggestionCard(
         .ifBlank { "Ü" }
 
     Column(
-        modifier = modifier
-            .background(
-                color = MaterialTheme.colorScheme.surfaceVariant,
+        modifier = Modifier
+            .width(138.dp)
+            .border(
+                border = BorderStroke(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.outlineVariant
+                ),
                 shape = BBRadius.LgShape
             )
-            .padding(BBSpacing.CardPaddingCompact),
+            .background(
+                color = MaterialTheme.colorScheme.surface,
+                shape = BBRadius.LgShape
+            )
+            .padding(BBSpacing.Space2),
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
     ) {
         Box(
-            modifier = Modifier.fillMaxWidth().height(BBSpacing.Space20).background(color = MaterialTheme.colorScheme.surface, shape = BBRadius.LgShape),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(BBSpacing.Space20)
+                .background(
+                    color = MaterialTheme.colorScheme.surface,
+                    shape = BBRadius.LgShape
+                ),
             contentAlignment = Alignment.Center
         ) {
             if (imageUrl.isNotBlank()) {
                 AsyncImage(
                     model = imageUrl,
                     contentDescription = favorite.ProductName,
-                    modifier = Modifier.fillMaxSize().padding(BBSpacing.Space1),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(BBSpacing.Space1),
                     contentScale = ContentScale.Fit
                 )
             } else {
-                Text(text = imageText, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(
+                    text = imageText,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
         }
 
@@ -1250,7 +1216,7 @@ private fun BasketFavoriteSuggestionCard(
             text = favorite.ProductName.ifBlank { BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = "") },
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurface,
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.Normal,
             maxLines = 2
         )
 
@@ -1260,7 +1226,7 @@ private fun BasketFavoriteSuggestionCard(
                 currencySymbol = currencySymbol
             ),
             style = MaterialTheme.typography.labelSmall,
-            color = BBColors.Yellow.Yellow800,
+            color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold
         )
 

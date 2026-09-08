@@ -84,7 +84,8 @@ fun NavGraphBuilder.retailGraph(
             )
         }
 
-        RetailHomeScreen(
+        
+RetailHomeScreen(
             campaigns = homeState.Campaigns,
             dealsOfTheDays = homeState.DealsOfTheDays,
             specialContents = homeState.SpecialContents,
@@ -151,6 +152,12 @@ fun NavGraphBuilder.retailGraph(
             onMessageClick = {
                 Unit
             },
+            onNotificationClick = {
+                navigator.navController.navigate(
+                    AccountRoutes.Notifications
+                )
+            },
+    
             onBasketClick = {
                 navigator.navigateToRetailBasket()
             },

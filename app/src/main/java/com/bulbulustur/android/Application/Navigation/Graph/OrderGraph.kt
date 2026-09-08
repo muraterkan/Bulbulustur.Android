@@ -102,9 +102,12 @@ fun NavGraphBuilder.orderGraph(
             ?.getString(OrderRoutes.ArgOrderKey)
             .orEmpty()
 
-        OrderDetailScreen(
-            orderId = orderId,
-            orderKey = orderKey,
+        
+    OrderDetailScreen(
+        orderId = orderId,
+        orderKey = orderKey,
+        memberId = memberId,
+
             onBackClick = {
                 navigator.back()
             },

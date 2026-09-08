@@ -1,8 +1,5 @@
+package com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components
 
-        package com.bulbulustur.android.Application.Areas.b2b.Views.Shared.Components
-
-import androidx.compose.material.icons.outlined.Notifications
-    
 import com.bulbulustur.android.Application.Localization.BBLocalization
 
 import androidx.compose.foundation.BorderStroke
@@ -61,10 +58,7 @@ fun WholesaleSearchHeader(
     onClearClick: (() -> Unit)? = null,
     leadingAction: WholesaleSearchHeaderLeadingAction = WholesaleSearchHeaderLeadingAction.Menu,
     onBackClick: (() -> Unit)? = null,
-    
-        onMessageClick: () -> Unit = {},
-    onNotificationClick: (() -> Unit)? = null
-    
+    onMessageClick: () -> Unit = {}
 ) {
     Surface(
         modifier = modifier.fillMaxWidth(),
@@ -127,21 +121,8 @@ fun WholesaleSearchHeader(
                     modifier = Modifier.weight(1f)
                 )
 
-                if (onNotificationClick != null) {
-                    WholesaleHeaderActionButton(
-                        icon = Icons.Outlined.Notifications,
-                        contentDescription = BBLocalization.Current.Get(
-                            key = "9bc9cd06-7971-4d1c-9082-85a6bdaf77c2",
-                            fallback = "Bildirimler"
-                        ),
-                        onClick = onNotificationClick
-                    )
-                }
-
-
                 WholesaleHeaderActionButton(
                     icon = Icons.Outlined.MailOutline,
-    
                     contentDescription = BBLocalization.Current.Get(key = "8e5477ec-e596-4a04-ac89-21ae8022b8f2", fallback = "Mesajlar"),
                     onClick = onMessageClick
                 )

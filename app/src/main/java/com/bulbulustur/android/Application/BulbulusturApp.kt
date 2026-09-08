@@ -669,7 +669,17 @@ private fun BulbulusturApplicationContent(
         )
     }
 
+    val systemDescNotificationTypeRepository = remember {
+        com.bulbulustur.android.businesslayer.Core.Repository.SystemDescNotificationTypeRepository()
+    }
+
+    val memberNotificationRepository = remember {
+        com.bulbulustur.android.businesslayer.Core.Repository.MemberNotificationRepository()
+    }
+
     val accountController = remember(
+        systemDescNotificationTypeRepository,
+        memberNotificationRepository,
         executeService,
         systemDescGenderRepository,
         memberRepository,
@@ -691,8 +701,12 @@ private fun BulbulusturApplicationContent(
         companyRepository,
         storeRequestRepository
     ) {
+        
+
         AccountController(
+            memberNotificationRepository = memberNotificationRepository,
             executeService = executeService,
+            systemDescNotificationTypeRepository = systemDescNotificationTypeRepository,
             memberRepository = memberRepository,
             memberAddressRepository = memberAddressRepository,
             memberBankAccountRepository = memberBankAccountRepository,

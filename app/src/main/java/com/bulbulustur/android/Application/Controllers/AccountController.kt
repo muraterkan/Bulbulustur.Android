@@ -8,7 +8,9 @@ import com.bulbulustur.android.businesslayer.Core.DTO.MemberAgreementDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberAlarmListDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberBankAccountDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberCouponDTO
+
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.SystemDescNotificationTypeDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberFollowedCompanyDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberFollowedStoreDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberLoginActivityDTO
@@ -24,7 +26,9 @@ import com.bulbulustur.android.businesslayer.Core.Interface.IMemberFollowedCompa
 import com.bulbulustur.android.businesslayer.Core.Interface.IMemberFollowedStoreRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IMemberLoginActivityRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IMemberPreferenceRepository
+
 import com.bulbulustur.android.businesslayer.Core.Interface.IMemberRepository
+import com.bulbulustur.android.businesslayer.Core.Interface.ISystemDescNotificationTypeRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IProductFavoriteRepository
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.ProductFavoriteInsertModel
 import com.bulbulustur.android.businesslayer.Core.Interface.IWholesaleFavoriteRepository
@@ -63,7 +67,9 @@ import com.bulbulustur.android.businesslayer.Core.Interface.IReviewRepository
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberSubscriptionDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.IMemberSubscriptionRepository
 import com.bulbulustur.android.businesslayer.Core.DTO.CompanyDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.MemberNotificationDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.ICompanyRepository
+import com.bulbulustur.android.businesslayer.Core.Interface.IMemberNotificationRepository
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.CompanyUpdateModel
 
 data class AccountControllerState(
@@ -80,6 +86,8 @@ data class AccountControllerState(
     val BankAccountInsertResult: Result<Unit>? = null,
     val BankAccountUpdateResult: Result<Unit>? = null,
     val BankAccountDeleteResult: Result<Unit>? = null,
+    val NotificationTypeListResult: Result<List<SystemDescNotificationTypeDTO>>? = null,
+    val MemberNotificationListResult: Result<List<MemberNotificationDTO>>? = null,
     val AlarmListResult: Result<List<MemberAlarmListDTO>>? = null,
     val AlarmInsertResult: Result<Unit>? = null,
     val AlarmDeleteResult: Result<Unit>? = null,
@@ -142,6 +150,12 @@ data class AccountControllerState(
     val BankAccount: MemberBankAccountUpdateModel?
         get() = BankAccountDetailResult?.Data
 
+    val NotificationTypes: List<SystemDescNotificationTypeDTO>
+        get() = NotificationTypeListResult?.Data.orEmpty()
+
+    val MemberNotifications: List<MemberNotificationDTO>
+        get() = MemberNotificationListResult?.Data.orEmpty()
+
     val Alarms: List<MemberAlarmListDTO>
         get() = AlarmListResult?.Data.orEmpty()
 
@@ -192,6 +206,8 @@ data class AccountControllerState(
 }
 
 class AccountController(
+    private val systemDescNotificationTypeRepository: ISystemDescNotificationTypeRepository,
+    private val memberNotificationRepository: IMemberNotificationRepository,
     private val executeService: IExecuteService,
     private val memberRepository: IMemberRepository,
     private val memberAddressRepository: IMemberAddressRepository,
@@ -684,6 +700,87 @@ class AccountController(
             }
 
             if (response.Success) onSuccess?.invoke()
+        }
+    }
+
+    fun GetMemberNotifications(
+        memberId: Int,
+        applicationId: Int,
+        count: Int = 100
+    ) {
+        if (!ValidateMember(memberId)) return
+
+        viewModelScope.launch {
+            SetLoading("GetMemberNotifications")
+
+            val response = executeService.GetAsync(cacheKey = "") {
+                memberNotificationRepository.GetMemberNotificationsAsync(
+                    memberId = memberId,
+                    applicationId = applicationId,
+                    count = count
+                )
+            }
+
+            Complete {
+                copy(
+                    MemberNotificationListResult = response,
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+        }
+    }
+
+    fun MarkMemberNotificationAsRead(
+        memberId: Int,
+        applicationId: Int,
+        notificationId: Int
+    ) {
+        if (!ValidateMember(memberId)) return
+        if (notificationId <= 0) return
+
+        viewModelScope.launch {
+            SetLoading("MarkMemberNotificationAsRead")
+
+            val response = memberNotificationRepository.MarkMemberNotificationAsReadAsync(
+                memberId = memberId,
+                notificationId = notificationId
+            )
+
+            Complete {
+                copy(
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
+
+            if (response.Success) {
+                GetMemberNotifications(
+                    memberId = memberId,
+                    applicationId = applicationId,
+                    count = 100
+                )
+            }
+        }
+    }
+
+    fun GetNotificationTypes(languageId: Int, count: Int = 100) {
+        viewModelScope.launch {
+            SetLoading("GetNotificationTypes")
+
+            val response = executeService.GetAsync(
+                cacheKey = "system-desc-notification-types-$languageId-$count"
+            ) {
+                systemDescNotificationTypeRepository.GetNotificationTypesAsync(
+                    languageId = languageId,
+                    count = count
+                )
+            }
+
+            Complete {
+                copy(
+                    NotificationTypeListResult = response,
+                    ErrorMessage = response.Message.takeIf { !response.Success }
+                )
+            }
         }
     }
 

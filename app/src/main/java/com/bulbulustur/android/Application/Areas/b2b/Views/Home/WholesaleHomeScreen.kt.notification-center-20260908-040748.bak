@@ -80,10 +80,8 @@ fun WholesaleHomeScreen(
     onCustomizationRequestClick: () -> Unit = {},
     onModeSwitchClick: () -> Unit = {},
     onFavoriteClick: () -> Unit = {},
-        
     onMessageClick: () -> Unit = {},
-    onNotificationClick: () -> Unit = {},
-        onAccountClick: () -> Unit = {}
+    onAccountClick: () -> Unit = {}
 ) {
     var searchText by remember {
         mutableStateOf("")
@@ -101,8 +99,7 @@ fun WholesaleHomeScreen(
         modifier = Modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
-            
-        WholesaleSearchHeader(
+            WholesaleSearchHeader(
                 searchText = searchText,
                 onSearchTextChange = {
                     searchText = it
@@ -116,10 +113,7 @@ fun WholesaleHomeScreen(
                 onClearClick = {
                     searchText = ""
                 },
-                onMessageClick = onMessageClick,
-
-                onNotificationClick = onNotificationClick,
-    
+                onMessageClick = onMessageClick
             )
         },
         bottomBar = {

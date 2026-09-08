@@ -1,7 +1,5 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.order
 
-import com.bulbulustur.android.Application.Localization.BBLocalization
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.HelpOutline
+import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.LocalShipping
 import androidx.compose.material.icons.outlined.Payments
@@ -37,9 +36,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.OrderController
+import com.bulbulustur.android.Application.Areas.b2c.Controllers.OrderControllerState
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
@@ -52,6 +54,8 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
+import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
+import com.bulbulustur.android.businesslayer.Core.DTO.OrderDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.OrderStoreDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.OrderStoreLineDTO
 import java.text.NumberFormat
@@ -61,6 +65,7 @@ import java.util.Locale
 fun OrderDetailScreen(
     orderId: Int,
     orderKey: String,
+    memberId: Int = 0,
     onBackClick: () -> Unit = {},
     onContractClick: (String) -> Unit = {},
     onSupportClick: () -> Unit = {},
@@ -73,29 +78,79 @@ fun OrderDetailScreen(
 ) {
     val state by controller.State.collectAsStateWithLifecycle()
 
-    LaunchedEffect(orderKey) {
+    LaunchedEffect(orderKey, memberId) {
         if (orderKey.isNotBlank()) {
             controller.GetOrderStoresAsync(orderKey)
         }
+
+        if (memberId > 0) {
+            controller.GetOrdersByMemberIdAsync(
+                memberId = memberId,
+                count = 100
+            )
+        }
     }
 
+    OrderDetailScreenContent(
+        orderId = orderId,
+        orderKey = orderKey,
+        order = state.Orders.firstOrNull {
+            it.OrderKey == orderKey || it.OrderId == orderId
+        },
+        state = state,
+        onBackClick = onBackClick,
+        onContractClick = onContractClick,
+        onSupportClick = onSupportClick,
+        onStoreClick = onStoreClick,
+        onCancelRequestClick = onCancelRequestClick,
+        onReturnRequestClick = onReturnRequestClick,
+        onReviewCreateClick = onReviewCreateClick,
+        onShipmentTrackingClick = onShipmentTrackingClick
+    )
+}
+
+@Composable
+fun OrderDetailScreenContent(
+    orderId: Int,
+    orderKey: String,
+    order: OrderDTO? = null,
+    state: OrderControllerState,
+    onBackClick: () -> Unit = {},
+    onContractClick: (String) -> Unit = {},
+    onSupportClick: () -> Unit = {},
+    onStoreClick: (Int) -> Unit = {},
+    onCancelRequestClick: (Long, String) -> Unit = { _, _ -> },
+    onReturnRequestClick: (Long, String) -> Unit = { _, _ -> },
+    onReviewCreateClick: (Long, Long, String) -> Unit = { _, _, _ -> },
+    onShipmentTrackingClick: (Int) -> Unit = {}
+) {
     val orderStores = state.OrderStores
     val orderLines = orderStores.flatMap { it.OrderStoreLines }
-    val total = orderStores.sumOf { it.StoreGrandTotal }
-    val netTotal = orderStores.sumOf { it.StoreTotalNetPrice }
-    val shippingTotal = orderStores.sumOf { it.StoreTotalShipping }
+
+    val total = order?.GrandTotal
+        ?: orderStores.sumOf { it.StoreGrandTotal }
+
+    val netTotal = order?.TotalNetPrice
+        ?: orderStores.sumOf { it.StoreTotalNetPrice }
+
+    val shippingTotal = order?.TotalShipping
+        ?: orderStores.sumOf { it.StoreTotalShipping }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         topBar = {
             BbInnerPageHeader(
-                title = BBLocalization.Current.Get(key = "b820bc4a-7523-4901-a326-a07c9ec43637", fallback = "Sipariş Detayları"),
+                title = BBLocalization.Current.Get(
+                    key = "b820bc4a-7523-4901-a326-a07c9ec43637",
+                    fallback = "Sipariş Detayları"
+                ),
                 subtitle = orderKey.ifBlank { "Sipariş #$orderId" },
                 onBackClick = onBackClick
             )
         }
     ) { innerPadding ->
+
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -110,12 +165,20 @@ fun OrderDetailScreen(
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
+
             when {
+
                 orderKey.isBlank() -> {
                     item {
                         OrderDetailMessageCard(
-                            title = BBLocalization.Current.Get(key = "b9e4b392-a83b-410e-87fe-aefdfb9ee96f", fallback = "Sipariş anahtarı bulunamadı"),
-                            description = BBLocalization.Current.Get(key = "2dc4d4ed-b521-48c8-9b4f-ee0150940d11", fallback = "Sipariş detayı açılamadı.")
+                            title = BBLocalization.Current.Get(
+                                key = "b9e4b392-a83b-410e-87fe-aefdfb9ee96f",
+                                fallback = "Sipariş anahtarı bulunamadı"
+                            ),
+                            description = BBLocalization.Current.Get(
+                                key = "2dc4d4ed-b521-48c8-9b4f-ee0150940d11",
+                                fallback = "Sipariş detayı açılamadı."
+                            )
                         )
                     }
                 }
@@ -129,7 +192,10 @@ fun OrderDetailScreen(
                 state.ErrorMessage != null && orderStores.isEmpty() -> {
                     item {
                         OrderDetailMessageCard(
-                            title = BBLocalization.Current.Get(key = "1430044f-f898-4e82-bc22-828a0fd579e3", fallback = "Sipariş detayı alınamadı"),
+                            title = BBLocalization.Current.Get(
+                                key = "1430044f-f898-4e82-bc22-828a0fd579e3",
+                                fallback = "Sipariş detayı alınamadı"
+                            ),
                             description = state.ErrorMessage.orEmpty()
                         )
                     }
@@ -138,13 +204,20 @@ fun OrderDetailScreen(
                 orderStores.isEmpty() -> {
                     item {
                         OrderDetailMessageCard(
-                            title = BBLocalization.Current.Get(key = "838ffc4f-83f8-4fc2-87dc-8b668084ba59", fallback = "Sipariş detayı bulunamadı"),
-                            description = BBLocalization.Current.Get(key = "2c6bbf2b-d0c8-4e6c-a336-ff9198c83503", fallback = "Bu siparişe ait mağaza veya ürün kaydı bulunamadı.")
+                            title = BBLocalization.Current.Get(
+                                key = "838ffc4f-83f8-4fc2-87dc-8b668084ba59",
+                                fallback = "Sipariş detayı bulunamadı"
+                            ),
+                            description = BBLocalization.Current.Get(
+                                key = "2c6bbf2b-d0c8-4e6c-a336-ff9198c83503",
+                                fallback = "Bu siparişe ait mağaza veya ürün kaydı bulunamadı."
+                            )
                         )
                     }
                 }
 
                 else -> {
+
                     item {
                         OrderDetailSummaryCard(
                             orderId = orderId,
@@ -157,8 +230,11 @@ fun OrderDetailScreen(
 
                     items(
                         items = orderStores,
-                        key = { store -> store.OrderStoreId }
+                        key = { store ->
+                            store.OrderStoreId
+                        }
                     ) { store ->
+
                         OrderDetailStoreCard(
                             store = store,
                             orderKey = orderKey,
@@ -170,6 +246,23 @@ fun OrderDetailScreen(
                             onReviewCreateClick = onReviewCreateClick,
                             onShipmentTrackingClick = onShipmentTrackingClick
                         )
+                    }
+
+                    if (
+                        order != null &&
+                        order.DeliveryAddress.isNotBlank()
+                    ) {
+                        item {
+                            OrderDetailAddressCard(
+                                title = BBLocalization.Current.Get(
+                                    key = "fa3df4de-7069-4a3d-9dac-5a4ea9b88b65",
+                                    fallback = "Teslimat adresi"
+                                ),
+                                address = order.DeliveryAddress,
+                                district = order.DeliveryDistrict,
+                                postalCode = order.DeliveryPostalCode
+                            )
+                        }
                     }
 
                     item {
@@ -202,11 +295,13 @@ private fun OrderDetailSummaryCard(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
                 verticalAlignment = Alignment.CenterVertically
             ) {
+
                 OrderDetailIconBox(
                     icon = Icons.Outlined.ReceiptLong,
                     backgroundColor = MaterialTheme.colorScheme.primaryContainer,
@@ -217,6 +312,7 @@ private fun OrderDetailSummaryCard(
                     modifier = Modifier.weight(1f),
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                 ) {
+
                     Text(
                         text = "Sipariş #$orderId",
                         style = MaterialTheme.typography.titleMedium,
@@ -235,6 +331,7 @@ private fun OrderDetailSummaryCard(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
             ) {
+
                 OrderDetailMiniBox(
                     modifier = Modifier.weight(1f),
                     title = "TOPLAM",
@@ -245,7 +342,10 @@ private fun OrderDetailSummaryCard(
 
                 OrderDetailMiniBox(
                     modifier = Modifier.weight(1f),
-                    title = BBLocalization.Current.Get(key = "37f5db70-845d-4498-96d4-fb3a2d29326c", fallback = ""),
+                    title = BBLocalization.Current.Get(
+                        key = "37f5db70-845d-4498-96d4-fb3a2d29326c",
+                        fallback = ""
+                    ),
                     value = "$productCount adet",
                     icon = Icons.Outlined.ReceiptLong,
                     iconColor = BBColors.Blue.Blue600
@@ -282,6 +382,7 @@ private fun OrderDetailStoreCard(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
+
             BbCard(
                 modifier = Modifier.fillMaxWidth(),
                 variant = BbCardVariant.Default,
@@ -290,6 +391,7 @@ private fun OrderDetailStoreCard(
                     onStoreClick(store.StoreId)
                 }
             ) {
+
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -297,6 +399,7 @@ private fun OrderDetailStoreCard(
                     horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+
                     OrderDetailIconBox(
                         icon = Icons.Outlined.Storefront,
                         backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
@@ -307,14 +410,20 @@ private fun OrderDetailStoreCard(
                         modifier = Modifier.weight(1f),
                         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                     ) {
+
                         Text(
-                            text = BBLocalization.Current.Get(key = "2ac4c8be-0d5d-4c84-afe8-628839892727", fallback = ""),
+                            text = BBLocalization.Current.Get(
+                                key = "2ac4c8be-0d5d-4c84-afe8-628839892727",
+                                fallback = ""
+                            ),
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
 
                         Text(
-                            text = store.StoreName.ifBlank { "Mağaza #${store.StoreId}" },
+                            text = store.StoreName.ifBlank {
+                                "Mağaza #${store.StoreId}"
+                            },
                             style = MaterialTheme.typography.titleSmall,
                             color = MaterialTheme.colorScheme.onSurface
                         )
@@ -330,7 +439,10 @@ private fun OrderDetailStoreCard(
             }
 
             BbButton(
-                text = BBLocalization.Current.Get(key = "8b46757f-5819-4b3d-ab88-c52ce2008e3f", fallback = "Satış Sözleşmesi"),
+                text = BBLocalization.Current.Get(
+                    key = "8b46757f-5819-4b3d-ab88-c52ce2008e3f",
+                    fallback = "Satış Sözleşmesi"
+                ),
                 onClick = {
                     onContractClick(store.StoreKey)
                 },
@@ -348,6 +460,7 @@ private fun OrderDetailStoreCard(
             )
 
             store.OrderStoreLines.forEachIndexed { index, line ->
+
                 OrderDetailProductRow(
                     line = line,
                     orderKey = orderKey,
@@ -358,7 +471,10 @@ private fun OrderDetailStoreCard(
                     onShipmentTrackingClick = onShipmentTrackingClick
                 )
 
-                if (index != store.OrderStoreLines.lastIndex) {
+                if (
+                    index !=
+                    store.OrderStoreLines.lastIndex
+                ) {
                     HorizontalDivider(
                         color = MaterialTheme.colorScheme.outlineVariant
                     )
@@ -366,7 +482,10 @@ private fun OrderDetailStoreCard(
             }
 
             OrderDetailStoreTotalRow(
-                title = BBLocalization.Current.Get(key = "905dde5f-252f-408b-9e9e-b2c423bb0c8e", fallback = "Mağaza Toplamı"),
+                title = BBLocalization.Current.Get(
+                    key = "905dde5f-252f-408b-9e9e-b2c423bb0c8e",
+                    fallback = "Mağaza Toplamı"
+                ),
                 value = store.StoreGrandTotal.toCurrencyText()
             )
         }
@@ -384,24 +503,48 @@ private fun OrderDetailProductRow(
     onShipmentTrackingClick: (Int) -> Unit
 ) {
     val statusText = line.OrderStoreLineStatus.ifBlank {
-        line.OrderStatus.ifBlank { BBLocalization.Current.Get(key = "cb303be2-afdb-4770-9baf-f58c86d5f7fe", fallback = "Sipariş Alındı") }
+        line.OrderStatus.ifBlank {
+            BBLocalization.Current.Get(
+                key = "cb303be2-afdb-4770-9baf-f58c86d5f7fe",
+                fallback = "Sipariş Alındı"
+            )
+        }
     }
 
-    val statusColor = getOrderLineStatusColor(statusText)
-    val deliveryNumber = line.DeliveryNumber.toIntOrNull()
-    val isDelivered = statusText.contains("teslim", ignoreCase = true)
-    val isShipped = statusText.contains("kargo", ignoreCase = true)
-    val isCancelable = !isDelivered && !isShipped && line.CancellationDate.isBlank()
+    val statusColor =
+        getOrderLineStatusColor(statusText)
+
+    val deliveryNumber =
+        line.DeliveryNumber.toIntOrNull()
+
+    val isDelivered =
+        statusText.contains(
+            "teslim",
+            ignoreCase = true
+        )
+
+    val isShipped =
+        statusText.contains(
+            "kargo",
+            ignoreCase = true
+        )
+
+    val isCancelable =
+        !isDelivered &&
+                !isShipped &&
+                line.CancellationDate.isBlank()
 
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
     ) {
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
             verticalAlignment = Alignment.Top
         ) {
+
             Box(
                 modifier = Modifier
                     .size(BBIcon.BoxLg)
@@ -423,22 +566,37 @@ private fun OrderDetailProductRow(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
+
                 Text(
-                    text = line.ProductName.ifBlank { "Ürün #${line.ProductId}" },
+                    text = line.ProductName.ifBlank {
+                        "Ürün #${line.ProductId}"
+                    },
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = "${line.Quantity} adet · ${line.UnitPrice.toCurrencyText(line.CurrencySymbol)}",
+                    text = "${line.Quantity} adet · ${
+                        line.UnitPrice.toCurrencyText(
+                            line.CurrencySymbol
+                        )
+                    }",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
-                if (line.Color.isNotBlank() || line.Size.isNotBlank()) {
+                if (
+                    line.Color.isNotBlank() ||
+                    line.Size.isNotBlank()
+                ) {
                     Text(
-                        text = listOf(line.Color, line.Size)
-                            .filter { it.isNotBlank() }
+                        text = listOf(
+                            line.Color,
+                            line.Size
+                        )
+                            .filter {
+                                it.isNotBlank()
+                            }
                             .joinToString(" · "),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -455,26 +613,37 @@ private fun OrderDetailProductRow(
                 horizontalAlignment = Alignment.End,
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
             ) {
+
                 Text(
-                    text = BBLocalization.Current.Get(key = "e736c25f-c944-4f52-a206-819f93d64a29", fallback = "Toplam"),
+                    text = BBLocalization.Current.Get(
+                        key = "e736c25f-c944-4f52-a206-819f93d64a29",
+                        fallback = "Toplam"
+                    ),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
                 Text(
-                    text = line.TotalPrice.toCurrencyText(line.CurrencySymbol),
+                    text = line.TotalPrice.toCurrencyText(
+                        line.CurrencySymbol
+                    ),
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )
             }
         }
 
-        if (line.CargoCompany.isNotBlank() || line.DeliveryNumber.isNotBlank()) {
+        if (
+            line.CargoCompany.isNotBlank() ||
+            line.DeliveryNumber.isNotBlank()
+        ) {
             OrderDetailCargoBox(
                 cargoCompany = line.CargoCompany,
                 deliveryNumber = line.DeliveryNumber,
                 onClick = {
-                    deliveryNumber?.let(onShipmentTrackingClick)
+                    deliveryNumber?.let(
+                        onShipmentTrackingClick
+                    )
                 },
                 enabled = deliveryNumber != null
             )
@@ -482,7 +651,10 @@ private fun OrderDetailProductRow(
 
         if (isCancelable) {
             BbButton(
-                text = BBLocalization.Current.Get(key = "92ebe8f3-c0b3-48a9-88a5-bb431ba27bf8", fallback = "İptal Et"),
+                text = BBLocalization.Current.Get(
+                    key = "92ebe8f3-c0b3-48a9-88a5-bb431ba27bf8",
+                    fallback = "İptal Et"
+                ),
                 onClick = {
                     onCancelRequestClick(
                         line.OrderStoreLineId.toLong(),
@@ -496,8 +668,12 @@ private fun OrderDetailProductRow(
         }
 
         if (isDelivered) {
+
             BbButton(
-                text = BBLocalization.Current.Get(key = "c1b6be9d-c63a-494b-aa84-efbe15520640", fallback = "İade Talebi"),
+                text = BBLocalization.Current.Get(
+                    key = "c1b6be9d-c63a-494b-aa84-efbe15520640",
+                    fallback = "İade Talebi"
+                ),
                 onClick = {
                     onReturnRequestClick(
                         line.OrderStoreLineId.toLong(),
@@ -510,7 +686,10 @@ private fun OrderDetailProductRow(
             )
 
             BbButton(
-                text = BBLocalization.Current.Get(key = "000bf440-0909-4b14-b7f1-cba8861e579f", fallback = "Değerlendir"),
+                text = BBLocalization.Current.Get(
+                    key = "000bf440-0909-4b14-b7f1-cba8861e579f",
+                    fallback = "Değerlendir"
+                ),
                 onClick = {
                     onReviewCreateClick(
                         line.OrderStoreLineId.toLong(),
@@ -533,7 +712,10 @@ private fun OrderDetailProductRow(
         }
 
         BbButton(
-            text = BBLocalization.Current.Get(key = "fcb264e8-a984-415f-b971-69ea0a531bd9", fallback = "Talep Oluştur"),
+            text = BBLocalization.Current.Get(
+                key = "fcb264e8-a984-415f-b971-69ea0a531bd9",
+                fallback = "Talep Oluştur"
+            ),
             onClick = onSupportClick,
             modifier = Modifier.fillMaxWidth(),
             variant = BbButtonVariant.Light,
@@ -566,15 +748,18 @@ private fun OrderDetailCargoBox(
             )
             .padding(BBSpacing.CardPaddingCompact)
     ) {
+
         Column(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
                 verticalAlignment = Alignment.CenterVertically
             ) {
+
                 OrderDetailIconBox(
                     icon = Icons.Outlined.LocalShipping,
                     backgroundColor = MaterialTheme.colorScheme.surface,
@@ -585,14 +770,25 @@ private fun OrderDetailCargoBox(
                     modifier = Modifier.weight(1f),
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
                 ) {
+
                     Text(
-                        text = cargoCompany.ifBlank { BBLocalization.Current.Get(key = "eea452e8-aad2-44dc-a4fd-df4bad4b3093", fallback = "Kargo Bilgisi") },
+                        text = cargoCompany.ifBlank {
+                            BBLocalization.Current.Get(
+                                key = "eea452e8-aad2-44dc-a4fd-df4bad4b3093",
+                                fallback = "Kargo Bilgisi"
+                            )
+                        },
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurface
                     )
 
                     Text(
-                        text = deliveryNumber.ifBlank { BBLocalization.Current.Get(key = "97fbe7cf-b8c5-4237-8b4b-a4a3c2768972", fallback = "Takip numarası bulunamadı") },
+                        text = deliveryNumber.ifBlank {
+                            BBLocalization.Current.Get(
+                                key = "97fbe7cf-b8c5-4237-8b4b-a4a3c2768972",
+                                fallback = "Takip numarası bulunamadı"
+                            )
+                        },
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -601,7 +797,10 @@ private fun OrderDetailCargoBox(
 
             if (enabled) {
                 BbButton(
-                    text = BBLocalization.Current.Get(key = "aae1659a-e21e-4b62-8a79-ba17a842feab", fallback = "Kargom Nerede?"),
+                    text = BBLocalization.Current.Get(
+                        key = "aae1659a-e21e-4b62-8a79-ba17a842feab",
+                        fallback = "Kargom Nerede?"
+                    ),
                     onClick = onClick,
                     modifier = Modifier.fillMaxWidth(),
                     variant = BbButtonVariant.Primary,
@@ -621,6 +820,69 @@ private fun OrderDetailCargoBox(
 }
 
 @Composable
+private fun OrderDetailAddressCard(
+    title: String,
+    address: String,
+    district: String,
+    postalCode: String
+) {
+    BbCard(
+        modifier = Modifier.fillMaxWidth(),
+        variant = BbCardVariant.Outlined,
+        padding = BbCardPadding.Medium
+    ) {
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+            verticalAlignment = Alignment.Top
+        ) {
+
+            OrderDetailIconBox(
+                icon = Icons.Outlined.Home,
+                backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+                iconColor = MaterialTheme.colorScheme.primary
+            )
+
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+            ) {
+
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+
+                Text(
+                    text = address,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+
+                val addressDetail = listOf(
+                    district,
+                    postalCode
+                )
+                    .filter {
+                        it.isNotBlank()
+                    }
+                    .joinToString(" · ")
+
+                if (addressDetail.isNotBlank()) {
+                    Text(
+                        text = addressDetail,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
 private fun OrderDetailPaymentCard(
     netTotal: Double,
     shippingTotal: Double,
@@ -631,23 +893,34 @@ private fun OrderDetailPaymentCard(
         variant = BbCardVariant.Outlined,
         padding = BbCardPadding.Medium
     ) {
+
         Column(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
+
             Text(
-                text = BBLocalization.Current.Get(key = "af87a38e-5f78-42ee-ac0f-ee365d81e179", fallback = "Ödeme Özeti"),
+                text = BBLocalization.Current.Get(
+                    key = "af87a38e-5f78-42ee-ac0f-ee365d81e179",
+                    fallback = "Ödeme Özeti"
+                ),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
             OrderDetailStoreTotalRow(
-                title = BBLocalization.Current.Get(key = "9ca1b3ac-05ef-462c-a4ef-e4bcd4b4b11b", fallback = "Ürün Toplamı"),
+                title = BBLocalization.Current.Get(
+                    key = "9ca1b3ac-05ef-462c-a4ef-e4bcd4b4b11b",
+                    fallback = "Ürün Toplamı"
+                ),
                 value = netTotal.toCurrencyText()
             )
 
             OrderDetailStoreTotalRow(
-                title = BBLocalization.Current.Get(key = "8fa1207a-2a06-4bdb-936b-f7da848e0f72", fallback = "Kargo"),
+                title = BBLocalization.Current.Get(
+                    key = "8fa1207a-2a06-4bdb-936b-f7da848e0f72",
+                    fallback = "Kargo"
+                ),
                 value = shippingTotal.toCurrencyText()
             )
 
@@ -656,7 +929,10 @@ private fun OrderDetailPaymentCard(
             )
 
             OrderDetailStoreTotalRow(
-                title = BBLocalization.Current.Get(key = "5a003c3e-9b6c-42ee-a69e-8b3b40e5176a", fallback = "Genel Toplam"),
+                title = BBLocalization.Current.Get(
+                    key = "5a003c3e-9b6c-42ee-a69e-8b3b40e5176a",
+                    fallback = "Genel Toplam"
+                ),
                 value = total.toCurrencyText(),
                 strong = true
             )
@@ -675,6 +951,7 @@ private fun OrderDetailStoreTotalRow(
         horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
         verticalAlignment = Alignment.CenterVertically
     ) {
+
         Text(
             text = title,
             modifier = Modifier.weight(1f),
@@ -718,9 +995,11 @@ private fun OrderDetailMiniBox(
             )
             .padding(BBSpacing.CardPaddingCompact)
     ) {
+
         Column(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
         ) {
+
             Icon(
                 imageVector = icon,
                 contentDescription = null,
@@ -751,7 +1030,9 @@ private fun OrderDetailStatusBadge(
     Box(
         modifier = Modifier
             .background(
-                color = color.copy(alpha = BBAlpha.Overlay),
+                color = color.copy(
+                    alpha = BBAlpha.Overlay
+                ),
                 shape = BBRadius.Badge
             )
             .padding(
@@ -759,6 +1040,7 @@ private fun OrderDetailStatusBadge(
                 vertical = BBSpacing.BadgePaddingVertical
             )
     ) {
+
         Text(
             text = text,
             style = MaterialTheme.typography.labelSmall,
@@ -782,6 +1064,7 @@ private fun OrderDetailIconBox(
             ),
         contentAlignment = Alignment.Center
     ) {
+
         Icon(
             imageVector = icon,
             contentDescription = null,
@@ -798,15 +1081,20 @@ private fun OrderDetailLoadingCard() {
         variant = BbCardVariant.Outlined,
         padding = BbCardPadding.Large
     ) {
+
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
+
             CircularProgressIndicator()
 
             Text(
-                text = BBLocalization.Current.Get(key = "eecf1130-6cd5-457f-8dbb-bcb843fe48e3", fallback = "Sipariş detayı yükleniyor"),
+                text = BBLocalization.Current.Get(
+                    key = "eecf1130-6cd5-457f-8dbb-bcb843fe48e3",
+                    fallback = "Sipariş detayı yükleniyor"
+                ),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -824,11 +1112,13 @@ private fun OrderDetailMessageCard(
         variant = BbCardVariant.Outlined,
         padding = BbCardPadding.Large
     ) {
+
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
+
             OrderDetailIconBox(
                 icon = Icons.Outlined.ReceiptLong,
                 backgroundColor = MaterialTheme.colorScheme.primaryContainer,
@@ -851,20 +1141,113 @@ private fun OrderDetailMessageCard(
 }
 
 @Composable
-private fun getOrderLineStatusColor(status: String): Color {
+private fun getOrderLineStatusColor(
+    status: String
+): Color {
     return when {
-        status.contains("teslim", ignoreCase = true) -> BBColors.Green.Green600
-        status.contains("kargo", ignoreCase = true) -> BBColors.Blue.Blue600
-        status.contains(BBLocalization.Current.Get(key = "70730163-a54a-4490-ac2c-46af941301ae", fallback = "hazır"), ignoreCase = true) -> BBColors.Orange.Orange600
-        status.contains("iptal", ignoreCase = true) -> MaterialTheme.colorScheme.error
-        else -> MaterialTheme.colorScheme.onSurfaceVariant
+
+        status.contains(
+            "teslim",
+            ignoreCase = true
+        ) -> {
+            BBColors.Green.Green600
+        }
+
+        status.contains(
+            "kargo",
+            ignoreCase = true
+        ) -> {
+            BBColors.Blue.Blue600
+        }
+
+        status.contains(
+            BBLocalization.Current.Get(
+                key = "70730163-a54a-4490-ac2c-46af941301ae",
+                fallback = "hazır"
+            ),
+            ignoreCase = true
+        ) -> {
+            BBColors.Orange.Orange600
+        }
+
+        status.contains(
+            "iptal",
+            ignoreCase = true
+        ) -> {
+            MaterialTheme.colorScheme.error
+        }
+
+        else -> {
+            MaterialTheme.colorScheme.onSurfaceVariant
+        }
     }
 }
 
-private fun Double.toCurrencyText(symbol: String = "₺"): String {
-    val formatter = NumberFormat.getNumberInstance(Locale.forLanguageTag("tr-TR"))
+private fun Double.toCurrencyText(
+    symbol: String = "₺"
+): String {
+    val formatter =
+        NumberFormat.getNumberInstance(
+            Locale.forLanguageTag("tr-TR")
+        )
+
     formatter.minimumFractionDigits = 2
     formatter.maximumFractionDigits = 2
 
-    return "${formatter.format(this)} ${symbol.ifBlank { "₺" }}"
+    return "${
+        formatter.format(this)
+    } ${
+        symbol.ifBlank {
+            "₺"
+        }
+    }"
+}
+
+@Preview(showBackground = true)
+@Composable
+fun OrderDetailScreenPreview() {
+    val sampleState = OrderControllerState(
+        OrderStores = listOf(
+            OrderStoreDTO(
+                OrderStoreId = 1,
+                StoreId = 101,
+                StoreName = "Örnek Mağaza",
+                StoreGrandTotal = 150.0,
+                StoreTotalNetPrice = 130.0,
+                StoreTotalShipping = 20.0,
+                OrderStoreLines = listOf(
+                    OrderStoreLineDTO(
+                        OrderStoreLineId = 1001,
+                        ProductId = 501,
+                        ProductName = "Örnek Ürün 1",
+                        Quantity = 2,
+                        UnitPrice = 50.0,
+                        TotalPrice = 100.0,
+                        CurrencySymbol = "₺",
+                        OrderStoreLineStatus = "Hazırlanıyor",
+                        OrderStatus = "Onaylandı"
+                    ),
+                    OrderStoreLineDTO(
+                        OrderStoreLineId = 1002,
+                        ProductId = 502,
+                        ProductName = "Örnek Ürün 2",
+                        Quantity = 1,
+                        UnitPrice = 30.0,
+                        TotalPrice = 30.0,
+                        CurrencySymbol = "₺",
+                        OrderStoreLineStatus = "Teslim Edildi",
+                        OrderStatus = "Tamamlandı"
+                    )
+                )
+            )
+        )
+    )
+
+    BbTheme {
+        OrderDetailScreenContent(
+            orderId = 12345,
+            orderKey = "ORD-123-456",
+            state = sampleState
+        )
+    }
 }

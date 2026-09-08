@@ -65,11 +65,14 @@ import com.bulbulustur.android.Application.Views.Account.SubscriptionListScreen
 import com.bulbulustur.android.Application.Views.Account.WalletBalanceScreen
 import com.bulbulustur.android.Application.Views.Preference.UsagePurposeScreen
 import com.bulbulustur.android.Application.Views.Question.QuestionAnswerScreen
+import com.bulbulustur.android.businesslayer.Core.Enums.EApplicationLanguage
 import com.bulbulustur.android.businesslayer.Core.Model.ChangeMailModel
 import com.bulbulustur.android.businesslayer.Core.Model.ChangePasswordAsyncModel
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.MemberBankAccountInsertModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberBankAccountUpdateModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberUpdateTcknModel
+
+private const val MEMBER_NOTIFICATION_APPLICATION_ID = 5
 
 fun NavGraphBuilder.accountGraph(
     navigator: BulbulusturNavigator,
@@ -844,14 +847,79 @@ fun NavGraphBuilder.accountGraph(
         )
     }
 
+
+
     composable(route = AccountRoutes.Notifications) {
+
+        if (
+            !sessionState.IsAuthenticated ||
+            sessionState.MemberId <= 0
+        ) {
+            LaunchedEffect(Unit) {
+                navigator.navController.navigate(LogonRoutes.Logon) {
+                    popUpTo(AccountRoutes.Notifications) {
+                        inclusive = true
+                    }
+
+                    launchSingleTop = true
+                }
+            }
+
+            return@composable
+        }
+
+        val accountState by accountController.State.collectAsState()
+        val languageId = sessionState.Language.Id
+
+        LaunchedEffect(
+            languageId,
+            sessionState.MemberId
+        ) {
+            accountController.GetNotificationTypes(
+                languageId = languageId,
+                count = 100
+            )
+
+            if (sessionState.MemberId > 0) {
+                accountController.GetMemberNotifications(
+                    memberId = sessionState.MemberId,
+                    applicationId = MEMBER_NOTIFICATION_APPLICATION_ID,
+                    count = 100
+                )
+            }
+        }
+
         NotificationListScreen(
+            notificationTypes = accountState.NotificationTypes,
+            notifications = accountState.MemberNotifications,
+            isLoading =
+                accountState.IsLoading &&
+                        accountState.CurrentAction == "GetMemberNotifications",
+            errorMessage =
+                accountState.MemberNotificationListResult
+                    ?.takeIf { !it.Success }
+                    ?.Message,
+            onNotificationClick = { notification ->
+                if (
+                    !notification.IsRead &&
+                    notification.MemberNotificationId > 0
+                ) {
+                    accountController.MarkMemberNotificationAsRead(
+                        memberId = sessionState.MemberId,
+                        applicationId = MEMBER_NOTIFICATION_APPLICATION_ID,
+                        notificationId = notification.MemberNotificationId
+                    )
+                }
+            },
             onBackClick = {
                 navigator.back()
             }
         )
     }
-    composable(route = AccountRoutes.CompanyInfo) {
+
+    composable(route = AccountRoutes.CompanyInfo)
+
+ {
         val accountState by accountController.State.collectAsState()
 
         val languageId = sessionState.Language.Id

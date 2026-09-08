@@ -79,10 +79,8 @@ fun RetailHomeScreen(
     onCampaignListClick: () -> Unit = {},
     onFavoriteClick: () -> Unit = {},
     onStoreClick: () -> Unit = {},
-        
     onMessageClick: () -> Unit = {},
-    onNotificationClick: () -> Unit = {},
-        onModeSwitchClick: () -> Unit = {},
+    onModeSwitchClick: () -> Unit = {},
     onBasketClick: () -> Unit = {},
     onAccountClick: () -> Unit = {},
     onMenuClick: () -> Unit = {}
@@ -94,8 +92,7 @@ fun RetailHomeScreen(
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
-            
-        RetailSearchHeader(
+            RetailSearchHeader(
                 searchText = searchText,
                 onSearchTextChange = {
                     searchText = it
@@ -103,9 +100,6 @@ fun RetailHomeScreen(
                 onMenuClick = onMenuClick,
                 onFavoriteClick = onFavoriteClick,
                 onMessageClick = onMessageClick,
-
-                onNotificationClick = onNotificationClick,
-    
                 onSearchClick = {
                     onSearchClick(searchText)
                 },

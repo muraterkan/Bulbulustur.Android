@@ -69,7 +69,8 @@ fun NavGraphBuilder.wholesaleGraph(
             )
         }
 
-        WholesaleHomeScreen(
+        
+WholesaleHomeScreen(
             featuredProducts = homeState.FeaturedProducts,
             specialContents = homeState.SpecialContents,
             onSearchClick = {
@@ -116,6 +117,12 @@ fun NavGraphBuilder.wholesaleGraph(
             onMessageClick = {
                 navigator.navigateToInbox()
             },
+            onNotificationClick = {
+                navigator.navController.navigate(
+                    AccountRoutes.Notifications
+                )
+            },
+    
             onAccountClick = {
                 navigator.navigateToAccount()
             }

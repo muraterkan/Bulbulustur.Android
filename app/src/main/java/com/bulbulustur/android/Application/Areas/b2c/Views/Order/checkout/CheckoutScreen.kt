@@ -63,6 +63,9 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.lazy.LazyRow
 import coil3.compose.AsyncImage
 import coil3.compose.AsyncImage
+import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.BbCommerceBottomBar
+import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.BbCommerceCouponSheet
+import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.BbCommerceOrderSummaryOverlay
 import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
@@ -270,9 +273,10 @@ invoiceAddress =
                              * Footer overlay olduğu için son eleman
                              * footer'ın altında kalmasın.
                              */
-                            bottom =
-                                BBSpacing.Space20 +
-                                        BBSpacing.Space4
+                            
+    bottom =
+        BBSpacing.Space20
+
                         ),
 
                     verticalArrangement =
@@ -701,38 +705,6 @@ invoiceAddress =
                         }
                     }
 
-
-                    /*
-                     * ========================================================
-                     * ORDER SUMMARY
-                     * ========================================================
-                     */
-
-                    item {
-
-                        CheckoutPageItem {
-
-                            CheckoutSectionTitle(
-                                title = "Sipariş Özeti",
-
-                                description =
-                                    "Ödeme öncesi tutarları kontrol et."
-                            )
-                        }
-                    }
-
-
-                    item {
-
-                        CheckoutPageItem {
-
-                            CheckoutOrderSummaryCard(
-                                summary = data.summary
-                            )
-                        }
-                    }
-
-
                     /*
                      * ========================================================
                      * SECURE PAYMENT
@@ -873,6 +845,16 @@ invoiceAddress =
                             )
                         }
                     }
+
+                    item {
+
+                        Spacer(
+                            modifier =
+                                Modifier.height(
+                                    BBSpacing.Space3
+                                )
+                        )
+                    }
                 }
             }
 
@@ -924,14 +906,18 @@ invoiceAddress =
 
                 if (showOrderSummary) {
 
-                    CheckoutOrderSummaryOverlay(
+                    
+BbCommerceOrderSummaryOverlay(
+
                         summary =
                             data.summary
                     )
                 }
 
 
-                CheckoutBottomBar(
+                
+BbCommerceBottomBar(
+
                     totalPriceText =
                         data.summary.payableTotalText,
 
@@ -1041,46 +1027,29 @@ selectedAddressId =
      */
 
     if (showCouponSheet) {
+        BbCommerceCouponSheet(
+            coupons = data.memberCoupons,
+            selectedCoupon = data.selectedCoupon,
+            basketTotal = data.basketItems.sumOf { item ->
+                val unitPrice =
+                    item.UnitPrice.takeIf {
+                        it > 0.0
+                    } ?: if (item.Quantity > 0) {
+                        item.TotalPrice / item.Quantity
+                    } else {
+                        item.TotalPrice
+                    }
 
-        CheckoutCouponSheet(
-            coupons =
-                data.memberCoupons,
-
-            selectedCoupon =
-                data.selectedCoupon,
-
-            isLoading =
-                data.isCouponLoading,
-
-            errorMessage =
-                data.couponErrorMessage,
-
-            onCouponSelected = {
-                    coupon ->
-
-                onCouponSelected(
-                    coupon
-                )
-
-                showCouponSheet =
-                    false
+                unitPrice * item.Quantity
             },
-
-            onCouponCodeApply = {
-                    code ->
-
-                onCouponCodeApply(
-                    code
-                )
-            },
-
+            isLoading = data.isCouponLoading,
+            errorMessage = data.couponErrorMessage,
+            onCouponCodeApply = onCouponCodeApply,
             onDismiss = {
-                showCouponSheet =
-                    false
+                showCouponSheet = false
             }
         )
     }
-
 
     /*
      * ========================================================================
@@ -1829,7 +1798,7 @@ private fun CheckoutSecureInfoCard() {
 
                 Text(
                     text =
-                        "Güvenli ödeme",
+                        "Güvenli Ödeme",
 
                     style =
                         MaterialTheme.typography.titleSmall,
@@ -1870,6 +1839,7 @@ private fun CheckoutSecureInfoCard() {
  */
 
 @Composable
+
 private fun CheckoutBottomBar(
     totalPriceText: String,
     canContinue: Boolean,
@@ -1911,7 +1881,8 @@ private fun CheckoutBottomBar(
                                 BBSpacing.PageHorizontal,
 
                             vertical =
-                                BBSpacing.Space3
+                                BBSpacing.Space2
+
                         ),
 
                 horizontalArrangement =
@@ -1951,8 +1922,11 @@ private fun CheckoutBottomBar(
                 ) {
 
                     Column(
+
                         modifier =
-                            Modifier.weight(1f)
+                            Modifier.size(
+                                BBIcon.BoxMd
+                            )
                     ) {
 
                         Text(
@@ -1962,7 +1936,7 @@ private fun CheckoutBottomBar(
                                         "e736c25f-c944-4f52-a206-819f93d64a29",
 
                                     fallback =
-                                        "Toplam"
+                                        "TOPLAM"
                                 ),
 
                             style =
@@ -2053,6 +2027,7 @@ private fun CheckoutBottomBar(
  */
 
 @Composable
+
 private fun CheckoutOrderSummaryOverlay(
     summary: CheckoutPriceSummary
 ) {
@@ -2065,7 +2040,13 @@ private fun CheckoutOrderSummaryOverlay(
             MaterialTheme.colorScheme.surface,
 
         shape =
-            MaterialTheme.shapes.extraLarge,
+            androidx.compose.foundation.shape.RoundedCornerShape(
+                topStart = 28.dp,
+                topEnd = 28.dp,
+                bottomEnd = 0.dp,
+                bottomStart = 0.dp
+            )
+,
 
         shadowElevation =
             BBSpacing.Space4
@@ -4129,7 +4110,7 @@ private fun MemberCouponDTO.IsCheckoutAvailable(): Boolean {
 
     if (
         Used == 1 ||
-        OrderId.isNotBlank()
+        OrderId.orEmpty().isNotBlank()
     ) {
         return false
     }

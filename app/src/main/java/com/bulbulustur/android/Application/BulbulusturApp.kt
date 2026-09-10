@@ -1,4 +1,5 @@
 package com.bulbulustur.android.Application
+import com.bulbulustur.android.Application.Areas.b2c.Controllers.BasketController
 
 import android.net.Uri
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,7 +23,6 @@ import com.bulbulustur.android.Application.Areas.b2b.Controllers.ProductControll
 import com.bulbulustur.android.Application.Areas.b2b.Controllers.SearchController as WholesaleSearchController
 import com.bulbulustur.android.Application.Areas.b2b.Controllers.RfqController
 import com.bulbulustur.android.Application.Areas.b2b.Controllers.WholesaleBuyerRequestController
-import com.bulbulustur.android.Application.Areas.b2c.Controllers.BasketController
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.CampaignController
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.DealsOfTheDayController
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.HomeController as RetailHomeController
@@ -585,13 +585,16 @@ private fun BulbulusturApplicationContent(
         BasketRepository()
     }
 
+
     val basketController = remember(
         executeService,
-        basketRepository
+        basketRepository,
+        memberCouponRepository
     ) {
         BasketController(
             executeService = executeService,
-            basketRepository = basketRepository
+            basketRepository = basketRepository,
+            memberCouponRepository = memberCouponRepository
         )
     }
 

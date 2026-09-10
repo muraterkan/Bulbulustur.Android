@@ -79,6 +79,48 @@ fun NavGraphBuilder.orderGraph(
         val basketSummary =
             basketState.BasketSummary
 
+        val checkoutPayableTotal =
+            basketSummary
+                ?.GrossTotal
+                ?.takeIf { it > 0.0 }
+                ?: basketState.BasketItems.let { items ->
+
+                    val productTotal =
+                        items.sumOf { item ->
+
+                            val unitPrice =
+                                item.UnitPrice.takeIf {
+                                    it > 0.0
+                                }
+                                    ?: if (item.Quantity > 0) {
+                                        item.TotalPrice / item.Quantity
+                                    } else {
+                                        item.TotalPrice
+                                    }
+
+                            unitPrice * item.Quantity
+                        }
+
+                    val cargoTotal =
+                        items
+                            .groupBy {
+                                it.StoreId
+                            }
+                            .values
+                            .sumOf { storeItems ->
+                                storeItems.first().SummaryShippingCost
+                            }
+
+                    val discountTotal =
+                        items.sumOf { item ->
+                            item.DiscountAmount * item.Quantity
+                        }
+
+                    productTotal +
+                            cargoTotal -
+                            discountTotal
+                }
+
         CheckoutScreen(
             data = CheckoutScreenData(
                 addresses = checkoutState.Addresses,
@@ -95,8 +137,22 @@ fun NavGraphBuilder.orderGraph(
     basketItemCount =
                     basketState.ItemCount,
 
-                basketItems =
+                
+basketItems =
                     basketState.BasketItems,
+
+                memberCoupons =
+                    basketState.Coupons,
+
+                selectedCoupon =
+                    basketState.SelectedCoupon,
+
+                isCouponLoading =
+                    basketState.IsCouponLoading,
+
+                couponErrorMessage =
+                    basketState.CouponErrorMessage,
+
 
                 deliveryAddress =
                     checkoutState.SelectedDeliveryAddress
@@ -117,9 +173,8 @@ fun NavGraphBuilder.orderGraph(
                         },
 
 
-
                 summary = CheckoutPriceSummary(
-    
+
                     productTotalText =
                         basketSummary
                             ?.NetTotal
@@ -166,12 +221,26 @@ fun NavGraphBuilder.orderGraph(
                 )
             },
 
-        onInvoiceAddressSelected = { address ->
+        
+onInvoiceAddressSelected = { address ->
             checkoutController.SelectInvoiceAddress(
                 memberAddressId =
                     address.MemberAddressId
             )
         },
+
+            onCouponSelected = { coupon ->
+                basketController.SelectCoupon(
+                    coupon
+                )
+            },
+
+            onCouponCodeApply = { code ->
+                basketController.SelectCouponByCode(
+                    code
+                )
+            },
+
 
 
 

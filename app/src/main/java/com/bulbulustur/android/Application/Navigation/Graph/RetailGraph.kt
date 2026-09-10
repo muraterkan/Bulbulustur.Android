@@ -2206,7 +2206,16 @@ fun NavGraphBuilder.retailGraph(
             },
             onAccountClick = {
                 navigator.navigateToAccount()
-            }
+            },
+            onCouponSelected = { coupon ->
+                basketController.SelectCoupon(coupon)
+            },
+            onCouponCodeApply = { code ->
+                basketController.SelectCouponByCode(code)
+            },
+            onCouponCleared = {
+                basketController.ClearCoupon()
+            },
         )
     }
 

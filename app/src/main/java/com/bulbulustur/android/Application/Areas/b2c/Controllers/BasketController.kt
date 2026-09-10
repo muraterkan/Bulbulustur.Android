@@ -7,7 +7,9 @@ import com.bulbulustur.android.businesslayer.Core.DTO.BasketDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.BasketInsertResponse
 import com.bulbulustur.android.businesslayer.Core.DTO.BasketQuantityUpdateResponse
 import com.bulbulustur.android.businesslayer.Core.DTO.BasketSummaryDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.MemberCouponDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.IBasketRepository
+import com.bulbulustur.android.businesslayer.Core.Interface.IMemberCouponRepository
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.BasketInsertRequest
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.BasketQuantityUpdateModel
 import com.bulbulustur.android.businesslayer.Core.Util.Execute.IExecuteService
@@ -17,6 +19,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.OffsetDateTime
 
 data class BasketControllerState(
     val IsLoading: Boolean = false,
@@ -27,6 +32,10 @@ data class BasketControllerState(
     val QuantityUpdateResult: Result<BasketQuantityUpdateResponse>? = null,
     val DeleteResult: Result<Any?>? = null,
     val MoveToFavoriteResult: Result<Any?>? = null,
+    val CouponListResult: Result<List<MemberCouponDTO>>? = null,
+    val SelectedCouponId: Int = 0,
+    val IsCouponLoading: Boolean = false,
+    val CouponErrorMessage: String? = null,
     val ErrorMessage: String? = null
 ) {
 
@@ -40,6 +49,19 @@ data class BasketControllerState(
         get() =
             BasketSummaryResult
                 ?.Data
+
+    val Coupons: List<MemberCouponDTO>
+        get() =
+            CouponListResult
+                ?.Data
+                .orEmpty()
+
+    val SelectedCoupon: MemberCouponDTO?
+        get() =
+            Coupons.firstOrNull { coupon ->
+                coupon.MemberCouponId ==
+                        SelectedCouponId
+            }
 
     val ItemCount: Int
         get() =
@@ -60,7 +82,8 @@ data class BasketControllerState(
 
 class BasketController(
     private val executeService: IExecuteService,
-    private val basketRepository: IBasketRepository
+    private val basketRepository: IBasketRepository,
+    private val memberCouponRepository: IMemberCouponRepository
 ) : BaseController() {
 
     private val _state =
@@ -79,6 +102,10 @@ class BasketController(
             SetAuthenticationError()
             return
         }
+
+        LoadCoupons(
+            memberId = memberId
+        )
 
         viewModelScope.launch {
             SetLoading(
@@ -151,6 +178,164 @@ class BasketController(
                         }
                 )
             }
+        }
+    }
+
+    fun LoadCoupons(
+        memberId: Int,
+        count: Int = 100
+    ) {
+        if (memberId <= 0) {
+            _state.update { currentState ->
+                currentState.copy(
+                    IsCouponLoading = false,
+                    CouponListResult = null,
+                    SelectedCouponId = 0,
+                    CouponErrorMessage = null
+                )
+            }
+
+            return
+        }
+
+        viewModelScope.launch {
+            _state.update { currentState ->
+                currentState.copy(
+                    IsCouponLoading = true,
+                    CouponErrorMessage = null
+                )
+            }
+
+            val response =
+                executeService.GetAsync(
+                    cacheKey = ""
+                ) {
+                    memberCouponRepository.GetMemberCouponsAsync(
+                        memberId = memberId,
+                        count = count
+                    )
+                }
+
+            _state.update { currentState ->
+                val coupons =
+                    response.Data.orEmpty()
+
+                val selectedCouponId =
+                    currentState.SelectedCouponId
+                        .takeIf { selectedId ->
+                            selectedId > 0 &&
+                                    coupons.any { coupon ->
+                                        coupon.MemberCouponId == selectedId &&
+                                                coupon.IsSelectableCoupon()
+                                    }
+                        }
+                        ?: 0
+
+                currentState.copy(
+                    CouponListResult = response,
+                    SelectedCouponId = selectedCouponId,
+                    IsCouponLoading = false,
+                    CouponErrorMessage =
+                        response.Message.takeIf {
+                            !response.Success
+                        }
+                )
+            }
+        }
+    }
+
+    fun SelectCoupon(
+        coupon: MemberCouponDTO
+    ) {
+        _state.update { currentState ->
+            val currentCoupon =
+                currentState.Coupons.firstOrNull {
+                        currentCoupon ->
+                    currentCoupon.MemberCouponId ==
+                            coupon.MemberCouponId
+                }
+
+            if (
+                currentCoupon == null ||
+                !currentCoupon.IsSelectableCoupon()
+            ) {
+                currentState.copy(
+                    CouponErrorMessage =
+                        "Bu kupon şu anda kullanılamıyor."
+                )
+            } else {
+                currentState.copy(
+                    SelectedCouponId =
+                        currentCoupon.MemberCouponId,
+                    CouponErrorMessage =
+                        null
+                )
+            }
+        }
+    }
+
+    fun SelectCouponByCode(
+        couponCode: String
+    ) {
+        val normalizedCode =
+            couponCode.trim()
+
+        if (normalizedCode.isBlank()) {
+            _state.update { currentState ->
+                currentState.copy(
+                    CouponErrorMessage =
+                        "Kupon kodunu giriniz."
+                )
+            }
+
+            return
+        }
+
+        _state.update { currentState ->
+            val coupon =
+                currentState.Coupons.firstOrNull {
+                        currentCoupon ->
+                    currentCoupon.CouponCode
+                        .orEmpty()
+                        .equals(
+                            normalizedCode,
+                            ignoreCase = true
+                        )
+                }
+
+            when {
+                coupon == null -> {
+                    currentState.copy(
+                        CouponErrorMessage =
+                            "Bu kupon kodu hesabınızda bulunamadı."
+                    )
+                }
+
+                !coupon.IsSelectableCoupon() -> {
+                    currentState.copy(
+                        CouponErrorMessage =
+                            "Bu kupon artık kullanılamıyor."
+                    )
+                }
+
+                else -> {
+                    currentState.copy(
+                        SelectedCouponId =
+                            coupon.MemberCouponId,
+                        CouponErrorMessage =
+                            null
+                    )
+                }
+            }
+        }
+    }
+
+    fun ClearCoupon() {
+        _state.update { currentState ->
+            currentState.copy(
+                SelectedCouponId = 0,
+                CouponErrorMessage = null
+            )
         }
     }
 
@@ -566,4 +751,60 @@ class BasketController(
             }
         }
     }
+    private fun MemberCouponDTO.IsSelectableCoupon(): Boolean {
+        if (
+            Used != 0 ||
+            OrderId.orEmpty().isNotBlank()
+        ) {
+            return false
+        }
+
+        val lastUsingDate =
+            LastUsingDate
+                .orEmpty()
+                .ToCouponLocalDate()
+
+        if (
+            lastUsingDate != null &&
+            lastUsingDate.isBefore(
+                LocalDate.now()
+            )
+        ) {
+            return false
+        }
+
+        return true
+    }
+
+    private fun String.ToCouponLocalDate(): LocalDate? {
+        val value =
+            trim()
+
+        if (
+            value.isBlank() ||
+            value.startsWith("0001-01-01") ||
+            value.startsWith("1.01.0001")
+        ) {
+            return null
+        }
+
+        return runCatching {
+            OffsetDateTime
+                .parse(value)
+                .toLocalDate()
+        }.getOrElse {
+            runCatching {
+                LocalDateTime
+                    .parse(value)
+                    .toLocalDate()
+            }.getOrElse {
+                runCatching {
+                    LocalDate.parse(
+                        value.substringBefore("T")
+                    )
+                }.getOrNull()
+            }
+        }
+    }
+
 }

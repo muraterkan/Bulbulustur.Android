@@ -257,6 +257,19 @@ object RfqRoutes {
 
 object OrderRoutes {
     const val List = "order/list"
+    const val Checkout = "order/checkout"
+
+    const val CheckoutSummary = "order/checkout/summary"
+    const val ArgCheckoutAddressType = "addressType"
+    const val ArgCheckoutAddressKey = "addressKey"
+
+    const val CheckoutAddressTypeDelivery = "delivery"
+    const val CheckoutAddressTypeInvoice = "invoice"
+
+    const val CheckoutAddressList = "order/checkout/address/{addressType}"
+    const val CheckoutAddressCreate = "order/checkout/address/{addressType}/create"
+    const val CheckoutAddressEdit = "order/checkout/address/{addressType}/edit/{addressKey}"
+
     const val Detail = "order/detail/{orderId}/{orderKey}"
     const val Success = "order/success/{orderId}/{orderKey}"
     const val Contract = "order/contract/{orderKey}/{storeKey}"
@@ -273,7 +286,22 @@ object OrderRoutes {
     const val ArgProductSecureKey = "productSecureKey"
     const val ArgCargoTrackingNumber = "cargoTrackingNumber"
 
+    fun checkoutAddressList(addressType: String): String {
+        return "order/checkout/address/$addressType"
+    }
+
+    fun checkoutAddressCreate(addressType: String): String {
+        return "order/checkout/address/$addressType/create"
+    }
+
+    fun checkoutAddressEdit(addressType: String, addressKey: String): String {
+        return "order/checkout/address/$addressType/edit/$addressKey"
+    }
+
+
+
     fun detail(orderId: Int, orderKey: String): String {
+    
         return "order/detail/$orderId/$orderKey"
     }
 

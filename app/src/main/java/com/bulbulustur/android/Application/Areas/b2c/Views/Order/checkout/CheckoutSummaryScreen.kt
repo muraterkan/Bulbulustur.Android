@@ -1,4 +1,9 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout
+import androidx.compose.material3.Icon
+import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
+import androidx.compose.material.icons.Icons
+import androidx.compose.foundation.layout.navigationBarsPadding
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -48,7 +53,6 @@ import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
 fun CheckoutSummaryScreen(
     onBackClick: () -> Unit = {},
     onEditAddressClick: () -> Unit = {},
-    onEditCargoClick: () -> Unit = {},
     onEditPaymentClick: () -> Unit = {},
     onCompleteOrderClick: (CheckoutSummaryApproval) -> Unit = {}
 ) {
@@ -64,7 +68,9 @@ fun CheckoutSummaryScreen(
         mutableStateOf(false)
     }
 
-    val canCompleteOrder = distanceSalesAgreementApproved && preliminaryInformationApproved
+    val canCompleteOrder =
+        distanceSalesAgreementApproved &&
+            preliminaryInformationApproved
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -73,83 +79,98 @@ fun CheckoutSummaryScreen(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
+            CheckoutSummaryTopBar(
+                onBackClick = onBackClick
+            )
+
+            HorizontalDivider(
+                color = MaterialTheme.colorScheme.outlineVariant
+            )
+
             LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                contentPadding = PaddingValues(
-                    start = BBSpacing.PageHorizontal,
-                    top = BBSpacing.PageTopCompact,
-                    end = BBSpacing.PageHorizontal,
-                    bottom = BBSpacing.PageBottomCompact
-                ),
-                verticalArrangement = Arrangement.spacedBy(BBSpacing.SectionGapCompact)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                contentPadding =
+                    PaddingValues(
+                        top = BBSpacing.PageTopCompact,
+                        bottom = BBSpacing.PageBottomCompact
+                    ),
+                verticalArrangement =
+                    Arrangement.spacedBy(
+                        BBSpacing.SectionGapCompact
+                    )
             ) {
                 item {
-                    CheckoutSummaryTopBar(
-                        onBackClick = onBackClick
-                    )
+                    CheckoutSummaryPageItem {
+                        CheckoutSummaryAddressCard(
+                            address = screenData.address,
+                            onEditAddressClick = onEditAddressClick
+                        )
+                    }
                 }
 
                 item {
-                    CheckoutProgressCard(
-                        currentStep = "4",
-                        title = "Sipariş özeti",
-                        description = BBLocalization.Current.Get(key = "99eac621-651c-4e57-899a-84387968abc5", fallback = "Ödeme öncesi bilgilerini son kez kontrol et.")
-                    )
+                    CheckoutSummaryPageItem {
+                        CheckoutSummaryCargoCard(
+                            cargo = screenData.cargo
+                        )
+                    }
                 }
 
                 item {
-                    CheckoutSummaryAddressCard(
-                        address = screenData.address,
-                        onEditAddressClick = onEditAddressClick
-                    )
+                    CheckoutSummaryPageItem {
+                        CheckoutSummaryPaymentCard(
+                            payment = screenData.payment,
+                            onEditPaymentClick = onEditPaymentClick
+                        )
+                    }
                 }
 
                 item {
-                    CheckoutSummaryCargoCard(
-                        cargo = screenData.cargo,
-                        onEditCargoClick = onEditCargoClick
-                    )
-                }
-
-                item {
-                    CheckoutSummaryPaymentCard(
-                        payment = screenData.payment,
-                        onEditPaymentClick = onEditPaymentClick
-                    )
-                }
-
-                item {
-                    CheckoutSummarySectionTitle(
-                        title = BBLocalization.Current.Get(key = "cfb10390-aea0-4edc-bbef-486b6b1bb4ad", fallback = "Sipariş ürünleri"),
-                        description = "${screenData.products.size} ürün siparişe dahil."
-                    )
+                    CheckoutSummaryPageItem {
+                        CheckoutSummarySectionTitle(
+                            title = BBLocalization.Current.Get(
+                                key = "cfb10390-aea0-4edc-bbef-486b6b1bb4ad",
+                                fallback = "Sipariş ürünleri"
+                            ),
+                            description = "${screenData.products.size} ürün siparişe dahil."
+                        )
+                    }
                 }
 
                 items(screenData.products) { product ->
-                    CheckoutSummaryProductCard(
-                        product = product
-                    )
+                    CheckoutSummaryPageItem {
+                        CheckoutSummaryProductCard(
+                            product = product
+                        )
+                    }
                 }
 
                 item {
-                    CheckoutSummaryTotalCard(
-                        total = screenData.total
-                    )
+                    CheckoutSummaryPageItem {
+                        CheckoutSummaryTotalCard(
+                            total = screenData.total
+                        )
+                    }
                 }
 
                 item {
-                    CheckoutSummaryAgreementCard(
-                        distanceSalesAgreementApproved = distanceSalesAgreementApproved,
-                        onDistanceSalesAgreementChange = {
-                            distanceSalesAgreementApproved = it
-                        },
-                        preliminaryInformationApproved = preliminaryInformationApproved,
-                        onPreliminaryInformationChange = {
-                            preliminaryInformationApproved = it
-                        }
-                    )
+                    CheckoutSummaryPageItem {
+                        CheckoutSummaryAgreementCard(
+                            distanceSalesAgreementApproved =
+                                distanceSalesAgreementApproved,
+                            onDistanceSalesAgreementChange = {
+                                distanceSalesAgreementApproved = it
+                            },
+                            preliminaryInformationApproved =
+                                preliminaryInformationApproved,
+                            onPreliminaryInformationChange = {
+                                preliminaryInformationApproved = it
+                            }
+                        )
+                    }
                 }
             }
 
@@ -159,8 +180,10 @@ fun CheckoutSummaryScreen(
                 onCompleteOrderClick = {
                     onCompleteOrderClick(
                         CheckoutSummaryApproval(
-                            distanceSalesAgreementApproved = distanceSalesAgreementApproved,
-                            preliminaryInformationApproved = preliminaryInformationApproved
+                            distanceSalesAgreementApproved =
+                                distanceSalesAgreementApproved,
+                            preliminaryInformationApproved =
+                                preliminaryInformationApproved
                         )
                     )
                 }
@@ -174,98 +197,80 @@ private fun CheckoutSummaryTopBar(
     onBackClick: () -> Unit
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(
+                    horizontal = BBSpacing.PageHorizontal,
+                    vertical = BBSpacing.Space3
+                ),
+        horizontalArrangement =
+            Arrangement.spacedBy(BBSpacing.Space3),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
-            modifier = Modifier
-                .size(BBIcon.BoxMd)
-                .clip(BBRadius.PillShape)
-                .background(MaterialTheme.colorScheme.surfaceVariant)
-                .clickable {
-                    onBackClick()
-                },
+            modifier =
+                Modifier
+                    .size(BBIcon.BoxMd)
+                    .clip(BBRadius.PillShape)
+                    .background(
+                        MaterialTheme.colorScheme.surfaceVariant
+                    )
+                    .clickable {
+                        onBackClick()
+                    },
             contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = "‹",
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+            Icon(
+                imageVector =
+                    Icons.AutoMirrored.Outlined.ArrowBack,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.size(BBIcon.Action)
             )
         }
 
-        Spacer(modifier = Modifier.width(BBSpacing.Space3))
+        Text(
+            text = "Sipariş özeti",
+            modifier = Modifier.weight(1f),
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onBackground
+        )
 
-        Column(
-            modifier = Modifier.weight(1f)
+        Box(
+            modifier =
+                Modifier
+                    .size(BBIcon.BoxMd)
+                    .clip(BBRadius.PillShape)
+                    .background(
+                        MaterialTheme.colorScheme.primaryContainer
+                    ),
+            contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = "Sipariş özeti",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-
-            Text(
-                text = BBLocalization.Current.Get(key = "e0226be6-57f6-40af-90cd-b1bc5f97dc06", fallback = "Checkout adım 4 / 4"),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+            Icon(
+                imageVector = Icons.Outlined.Lock,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(BBIcon.Action)
             )
         }
     }
 }
 
 @Composable
-private fun CheckoutProgressCard(
-    currentStep: String,
-    title: String,
-    description: String
+private fun CheckoutSummaryPageItem(
+    content: @Composable () -> Unit
 ) {
-    BbCard(
-        modifier = Modifier.fillMaxWidth(),
-        variant = BbCardVariant.Outlined,
-        padding = BbCardPadding.Medium
+    Box(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(
+                    horizontal = BBSpacing.PageHorizontal
+                )
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(BBIcon.BoxLg)
-                    .clip(BBRadius.PillShape)
-                    .background(MaterialTheme.colorScheme.primary),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = currentStep,
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
-            }
-
-            Spacer(modifier = Modifier.width(BBSpacing.Space4))
-
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-
-                Spacer(modifier = Modifier.height(BBSpacing.Space1))
-
-                Text(
-                    text = description,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-        }
+        content()
     }
 }
 
@@ -306,13 +311,15 @@ private fun CheckoutSummaryAddressCard(
 
 @Composable
 private fun CheckoutSummaryCargoCard(
-    cargo: CheckoutSummaryCargo,
-    onEditCargoClick: () -> Unit
+    cargo: CheckoutSummaryCargo
 ) {
     CheckoutSummaryInfoCard(
-        title = BBLocalization.Current.Get(key = "6c957f50-239c-4774-aa4e-318a17703e0a", fallback = "Kargo bilgisi"),
-        actionText = BBLocalization.Current.Get(key = "46abcd8f-976d-4c12-a55f-8aa3c4abb38b", fallback = ""),
-        onActionClick = onEditCargoClick
+        title = BBLocalization.Current.Get(
+            key = "6c957f50-239c-4774-aa4e-318a17703e0a",
+            fallback = "Kargo bilgisi"
+        ),
+        actionText = "",
+        onActionClick = {}
     ) {
         Text(
             text = cargo.companySummaryText,
@@ -321,7 +328,11 @@ private fun CheckoutSummaryCargoCard(
             color = MaterialTheme.colorScheme.onSurface
         )
 
-        Spacer(modifier = Modifier.height(BBSpacing.Space1))
+        Spacer(
+            modifier = Modifier.height(
+                BBSpacing.Space1
+            )
+        )
 
         Text(
             text = cargo.deliveryEstimateText,
@@ -329,13 +340,19 @@ private fun CheckoutSummaryCargoCard(
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
-        Spacer(modifier = Modifier.height(BBSpacing.Space1))
+        if (cargo.packageSummaryText.isNotBlank()) {
+            Spacer(
+                modifier = Modifier.height(
+                    BBSpacing.Space1
+                )
+            )
 
-        Text(
-            text = cargo.packageSummaryText,
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
+            Text(
+                text = cargo.packageSummaryText,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
     }
 }
 
@@ -616,6 +633,7 @@ private fun CheckoutSummaryBottomBar(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .navigationBarsPadding()
                 .padding(
                     start = BBSpacing.PageHorizontal,
                     top = BBSpacing.Space3,
@@ -736,9 +754,9 @@ private fun getCheckoutSummaryScreenData(): CheckoutSummaryScreenData {
             fullAddress = "Kızılay Mah. Atatürk Bulvarı No: 12 Daire: 8 Çankaya / Ankara"
         ),
         cargo = CheckoutSummaryCargo(
-            companySummaryText = "2 mağaza için kargo seçildi",
-            deliveryEstimateText = "Tahmini teslimat: 1-4 iş günü",
-            packageSummaryText = "2 ayrı paket gönderimi"
+            companySummaryText = "Anlaşmalı Kargo",
+            deliveryEstimateText = "Kargo firması sistem tarafından belirlenir.",
+            packageSummaryText = ""
         ),
         payment = CheckoutSummaryPayment(
             methodTitle = BBLocalization.Current.Get(key = "7f6de62f-c609-44f5-b796-8ae5b2121b10", fallback = "Yeni kart ile ödeme"),

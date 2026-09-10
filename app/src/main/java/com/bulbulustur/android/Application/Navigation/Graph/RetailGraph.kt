@@ -35,6 +35,7 @@ import com.bulbulustur.android.Application.Areas.b2c.Views.Search.RetailSearchTy
 import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
 import com.bulbulustur.android.Application.Navigation.Routes.AccountRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.BasketRoutes
+import com.bulbulustur.android.Application.Navigation.Routes.OrderRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.RetailRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.StoreRoutes
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.BasketController
@@ -84,8 +85,8 @@ fun NavGraphBuilder.retailGraph(
             )
         }
 
-        
-RetailHomeScreen(
+
+        RetailHomeScreen(
             campaigns = homeState.Campaigns,
             dealsOfTheDays = homeState.DealsOfTheDays,
             specialContents = homeState.SpecialContents,
@@ -150,14 +151,13 @@ RetailHomeScreen(
                 navigator.navigateToRetailCategories()
             },
             onMessageClick = {
-                Unit
             },
             onNotificationClick = {
                 navigator.navController.navigate(
                     AccountRoutes.Notifications
                 )
             },
-    
+
             onBasketClick = {
                 navigator.navigateToRetailBasket()
             },
@@ -197,11 +197,11 @@ RetailHomeScreen(
                 sessionState.IsAuthenticated &&
                 sessionState.MemberId > 0
             ) {
-                
-    productController.ProductBrowsingHistories(
-        memberId = sessionState.MemberId,
-        count = 20
-    )
+
+                productController.ProductBrowsingHistories(
+                    memberId = sessionState.MemberId,
+                    count = 20
+                )
 
             }
         }
@@ -449,7 +449,6 @@ RetailHomeScreen(
                 )
             },
             onMessageClick = {
-                Unit
             },
             onHomeClick = {
                 navigator.navController.navigate(
@@ -700,7 +699,6 @@ RetailHomeScreen(
                 )
             },
             onMessageClick = {
-                Unit
             },
             onModeSwitchClick = {
                 navigator.openModeSheet()
@@ -812,6 +810,9 @@ RetailHomeScreen(
         val productState by
         productController.State.collectAsState()
 
+        val reviewState by
+        productReviewController.State.collectAsState()
+
         val productDetail =
             productState.ProductDetailResult
                 ?.Data
@@ -854,17 +855,11 @@ RetailHomeScreen(
                 count = 100
             )
 
-            productReviewController.List(
-                sourceType =
-                    "PRODUCT",
-                sourceId =
-                    productId,
-                variantId =
-                    variantId,
-                page =
-                    1,
-                pageSize =
-                    10
+            productReviewController.Clear()
+
+            productReviewController.Summary(
+                sourceType = "PRODUCT",
+                sourceId = productId
             )
 
             productQuestionController.List(
@@ -963,11 +958,11 @@ RetailHomeScreen(
                 sessionState.IsAuthenticated &&
                 sessionState.MemberId > 0
             ) {
-                
-    productController.ProductBrowsingHistories(
-        memberId = sessionState.MemberId,
-        count = 20
-    )
+
+                productController.ProductBrowsingHistories(
+                    memberId = sessionState.MemberId,
+                    count = 20
+                )
 
 
                 if (
@@ -992,6 +987,17 @@ RetailHomeScreen(
                 productState,
             productId =
                 productId,
+            reviewAverageRating =
+                reviewState.ReviewSummaryResult
+                    ?.Data
+                    ?.AverageRating
+                    ?: 0.0,
+            reviewCount =
+                reviewState.ReviewSummaryResult
+                    ?.Data
+                    ?.ReviewNumber
+                    ?.toInt()
+                    ?: 0,
             onBackClick = {
                 navigator.back()
             },
@@ -1293,7 +1299,6 @@ RetailHomeScreen(
                 )
             },
             onMessageClick = {
-                Unit
             },
             onHomeClick = {
                 navigator.navController.navigate(
@@ -1493,449 +1498,6 @@ RetailHomeScreen(
 
 
     composable(
-        route =
-            RetailRoutes.ProductDetail,
-        arguments =
-            listOf(
-                navArgument(
-                    RetailRoutes.ArgProductId
-                ) {
-                    type =
-                        NavType.IntType
-                },
-                navArgument(
-                    RetailRoutes.ArgStoreId
-                ) {
-                    type =
-                        NavType.IntType
-                },
-                navArgument(
-                    RetailRoutes.ArgVariantId
-                ) {
-                    type =
-                        NavType.IntType
-                }
-            )
-    ) { backStackEntry ->
-
-        val productId =
-            backStackEntry.arguments
-                ?.getInt(
-                    RetailRoutes.ArgProductId
-                )
-                ?: 0
-
-        val storeId =
-            backStackEntry.arguments
-                ?.getInt(
-                    RetailRoutes.ArgStoreId
-                )
-                ?: 0
-
-        val variantId =
-            backStackEntry.arguments
-                ?.getInt(
-                    RetailRoutes.ArgVariantId
-                )
-                ?: 0
-
-        val productState by
-        productController.State.collectAsState()
-
-        val productDetail =
-            productState.ProductDetailResult
-                ?.Data
-
-        val productCategoryId =
-            productDetail
-                ?.ProductCategoryId
-                ?: 0
-
-        val brandId =
-            productDetail
-                ?.BrandId
-                ?: 0
-
-        LaunchedEffect(
-            productId,
-            storeId,
-            variantId
-        ) {
-            if (
-                productId <= 0 ||
-                storeId <= 0
-            ) {
-                return@LaunchedEffect
-            }
-
-            productController.ClearProductDetail()
-
-            productController.Detail(
-                languageId = 1,
-                storeId = storeId,
-                productId = productId,
-                variantId = variantId
-            )
-
-            productController.Variants(
-                languageId = 1,
-                productId = productId,
-                storeId = storeId,
-                count = 100
-            )
-
-            productReviewController.List(
-                sourceType =
-                    "PRODUCT",
-                sourceId =
-                    productId,
-                variantId =
-                    variantId,
-                page =
-                    1,
-                pageSize =
-                    10
-            )
-
-            productQuestionController.List(
-                productId =
-                    productId,
-                count =
-                    100
-            )
-
-            productController.SmallestPrice(
-                languageId = 1,
-                productId = productId
-            )
-
-            if (variantId > 0) {
-                productController.SelectedVariant(
-                    languageId = 1,
-                    variantId = variantId
-                )
-
-                productController.VariantPictures(
-                    variantId = variantId,
-                    count = 10
-                )
-
-                productController.ColorVariants(
-                    languageId = 1,
-                    productId = productId,
-                    variantId = variantId
-                )
-
-                productController.SizeVariants(
-                    languageId = 1,
-                    productId = productId,
-                    variantId = variantId
-                )
-
-                productController.OtherSellerList(
-                    languageId = 1,
-                    productId = productId,
-                    variantId = variantId,
-                    storeId = storeId
-                )
-            }
-        }
-
-        LaunchedEffect(
-            productCategoryId,
-            brandId,
-            sessionState.MemberId,
-            productId,
-            storeId,
-            variantId
-        ) {
-            if (
-                productId <= 0 ||
-                storeId <= 0
-            ) {
-                return@LaunchedEffect
-            }
-
-            if (
-                productCategoryId > 0
-            ) {
-                productController.SponsoredAdverts(
-                    languageId =
-                        1,
-                    productCategoryId =
-                        productCategoryId,
-                    count =
-                        8
-                )
-
-                productController.RelatedCategories(
-                    languageId =
-                        1,
-                    productCategoryId =
-                        productCategoryId
-                )
-            }
-
-            if (
-                brandId > 0
-            ) {
-                productController.ProductBrandSections(
-                    languageId =
-                        1,
-                    brandId =
-                        brandId,
-                    count =
-                        5
-                )
-            }
-
-            if (
-                sessionState.IsAuthenticated &&
-                sessionState.MemberId > 0
-            ) {
-                
-    productController.ProductBrowsingHistories(
-        memberId = sessionState.MemberId,
-        count = 20
-    )
-
-
-                if (
-                    variantId > 0
-                ) {
-                    productController.InsertBrowsingHistory(
-                        memberId =
-                            sessionState.MemberId,
-                        storeId =
-                            storeId,
-                        productId =
-                            productId,
-                        variantId =
-                            variantId
-                    )
-                }
-            }
-        }
-
-        ProductDetailScreen(
-            State =
-                productState,
-            productId =
-                productId,
-            onBackClick = {
-                navigator.back()
-            },
-            onColorVariantChange = { selectedVariantId ->
-                productController.SelectedVariant(
-                    languageId =
-                        1,
-                    variantId =
-                        selectedVariantId
-                )
-
-                productController.VariantPictures(
-                    variantId =
-                        selectedVariantId,
-                    count =
-                        10
-                )
-
-                productController.SizeVariants(
-                    languageId =
-                        1,
-                    productId =
-                        productId,
-                    variantId =
-                        selectedVariantId
-                )
-
-                productController.OtherSellerList(
-                    languageId =
-                        1,
-                    productId =
-                        productId,
-                    variantId =
-                        selectedVariantId,
-                    storeId =
-                        storeId
-                )
-            },
-            onReviewClick = {
-                navigator.navController.navigate(
-                    RetailRoutes.productReview(
-                        productId =
-                            productId,
-                        storeId =
-                            storeId,
-                        variantId =
-                            variantId
-                    )
-                )
-            },
-            onQuestionClick = {
-                navigator.navController.navigate(
-                    RetailRoutes.productQuestion(
-                        productId =
-                            productId,
-                        storeId =
-                            storeId,
-                        variantId =
-                            variantId
-                    )
-                )
-            },
-            onOtherSellerClick = {
-                navigator.navController.navigate(
-                    RetailRoutes.otherSellerList(
-                        productId =
-                            productId,
-                        storeId =
-                            storeId,
-                        variantId =
-                            variantId
-                    )
-                )
-            },
-            onSizeVariantChange = { selectedVariantId ->
-                productController.SelectedVariant(
-                    languageId =
-                        1,
-                    variantId =
-                        selectedVariantId
-                )
-
-                productController.VariantPictures(
-                    variantId =
-                        selectedVariantId,
-                    count =
-                        10
-                )
-
-                productController.OtherSellerList(
-                    languageId =
-                        1,
-                    productId =
-                        productId,
-                    variantId =
-                        selectedVariantId,
-                    storeId =
-                        storeId
-                )
-            },
-            onAddToBasketClick = { selection ->
-                if (
-                    !sessionState.IsAuthenticated ||
-                    sessionState.MemberId <= 0
-                ) {
-                    navigator.navigateToAccount()
-                } else {
-                    basketController.AddToBasket(
-                        memberId =
-                            sessionState.MemberId,
-                        priceId =
-                            selection.priceId,
-                        quantity =
-                            selection.quantity
-                    )
-                }
-            },
-            onBuyNowClick = { selection ->
-                if (
-                    !sessionState.IsAuthenticated ||
-                    sessionState.MemberId <= 0
-                ) {
-                    navigator.navigateToAccount()
-                } else {
-                    basketController.AddToBasket(
-                        memberId =
-                            sessionState.MemberId,
-                        priceId =
-                            selection.priceId,
-                        quantity =
-                            selection.quantity,
-                        onSuccess = {
-                            navigator.navigateToRetailBasket()
-                        }
-                    )
-                }
-            },
-            onSponsoredAdvertClick = { advert ->
-                if (
-                    advert.ProductId > 0 &&
-                    advert.StoreId > 0 &&
-                    advert.VariantId > 0
-                ) {
-                    navigator.navController.navigate(
-                        RetailRoutes.productDetail(
-                            productId =
-                                advert.ProductId,
-                            storeId =
-                                advert.StoreId,
-                            variantId =
-                                advert.VariantId
-                        )
-                    )
-                }
-            },
-            onBrandSectionPageClick = { page ->
-                if (
-                    page.ProductId > 0 &&
-                    page.StoreId > 0 &&
-                    page.VariantId > 0
-                ) {
-                    navigator.navController.navigate(
-                        RetailRoutes.productDetail(
-                            productId =
-                                page.ProductId,
-                            storeId =
-                                page.StoreId,
-                            variantId =
-                                page.VariantId
-                        )
-                    )
-                } else if (
-                    page.ProductCategoryId > 0
-                ) {
-                    navigator.navController.navigate(
-                        RetailRoutes.categoryLevel2(page.ProductCategoryId)
-                    )
-                }
-            },
-            onBrowsingHistoryProductClick = { history ->
-                if (
-                    history.ProductId > 0 &&
-                    history.StoreId > 0 &&
-                    history.VariantId > 0
-                ) {
-                    navigator.navController.navigate(
-                        RetailRoutes.productDetail(
-                            productId =
-                                history.ProductId,
-                            storeId =
-                                history.StoreId,
-                            variantId =
-                                history.VariantId
-                        )
-                    )
-                }
-            },
-            onRelatedCategoryClick = {
-                if (productCategoryId > 0) {
-                    navigator.navController.navigate(
-                        RetailRoutes.categoryLevel2(productCategoryId)
-                    )
-                }
-            },
-            onStoreClick = {
-                if (storeId > 0) {
-                    navigator.navController.navigate(
-                        StoreRoutes.storeDetail(storeId)
-                    )
-                }
-            }
-        )
-    }
-    composable(
         route = RetailRoutes.ProductCategoryContentList,
         arguments = listOf(
             navArgument(RetailRoutes.ArgCategoryContentGroupId) {
@@ -2115,6 +1677,11 @@ RetailHomeScreen(
                 variantId = variantId,
                 page = 1,
                 pageSize = 10
+            )
+
+            productReviewController.Summary(
+                sourceType = "PRODUCT",
+                sourceId = productId
             )
 
             val currentProduct = productState.ProductDetailResult?.Data
@@ -2548,12 +2115,9 @@ RetailHomeScreen(
                 )
             },
             onCheckoutClick = {
-                /*
-                 * Checkout feature açıldığında:
-                 * navigator.navController.navigate(
-                 *     BasketRoutes.Checkout
-                 * )
-                 */
+                navigator.navController.navigate(
+                    OrderRoutes.Checkout
+                )
             },
             onProductClick = { basket ->
                 if (
@@ -2732,7 +2296,6 @@ RetailHomeScreen(
                 )
             },
             onMessageClick = {
-                Unit
             },
             onHomeClick = {
                 navigator.navController.navigate(

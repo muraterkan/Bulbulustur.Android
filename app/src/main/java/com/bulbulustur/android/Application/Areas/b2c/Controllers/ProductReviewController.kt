@@ -1,9 +1,9 @@
 package com.bulbulustur.android.Application.Areas.b2c.Controllers
 
 import com.bulbulustur.android.Application.Localization.BBLocalization
-
 import androidx.lifecycle.viewModelScope
 import com.bulbulustur.android.businesslayer.Core.DTO.ReviewDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.ReviewSummaryDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.IReviewRepository
 import com.bulbulustur.android.businesslayer.Core.Util.Execute.IExecuteService
 import com.bulbulustur.android.businesslayer.Core.Util.PaginatedList
@@ -20,6 +20,7 @@ data class ProductReviewControllerState(
 
     val Reviews: List<ReviewDTO> = emptyList(),
     val ReviewsResult: Result<PaginatedList<ReviewDTO>>? = null,
+    val ReviewSummaryResult: Result<ReviewSummaryDTO>? = null,
 
     val SourceType: String = "PRODUCT",
     val SourceId: Int = 0,
@@ -41,17 +42,13 @@ sealed interface ProductReviewControllerEvent {
         val PageSize: Int = 10
     ) : ProductReviewControllerEvent
 
-    data object LoadMore :
-        ProductReviewControllerEvent
+    data object LoadMore : ProductReviewControllerEvent
 
-    data object Refresh :
-        ProductReviewControllerEvent
+    data object Refresh : ProductReviewControllerEvent
 
-    data object Clear :
-        ProductReviewControllerEvent
+    data object Clear : ProductReviewControllerEvent
 
-    data object ClearError :
-        ProductReviewControllerEvent
+    data object ClearError : ProductReviewControllerEvent
 }
 
 class ProductReviewController(
@@ -59,264 +56,133 @@ class ProductReviewController(
     private val reviewRepository: IReviewRepository
 ) : BaseController() {
 
-    private val _state =
-        MutableStateFlow(
-            ProductReviewControllerState()
-        )
+    private val _state = MutableStateFlow(ProductReviewControllerState())
 
-    val State: StateFlow<ProductReviewControllerState> =
-        _state.asStateFlow()
+    val State: StateFlow<ProductReviewControllerState> = _state.asStateFlow()
 
-    fun OnEvent(
-        event: ProductReviewControllerEvent
-    ) {
+    fun OnEvent(event: ProductReviewControllerEvent) {
         when (event) {
-            is ProductReviewControllerEvent.Load -> {
-                List(
-                    sourceType =
-                        event.SourceType,
-                    sourceId =
-                        event.SourceId,
-                    variantId =
-                        event.VariantId,
-                    page =
-                        1,
-                    pageSize =
-                        event.PageSize,
-                    append =
-                        false
-                )
-            }
-
-            ProductReviewControllerEvent.LoadMore -> {
-                LoadMore()
-            }
-
-            ProductReviewControllerEvent.Refresh -> {
-                Refresh()
-            }
-
-            ProductReviewControllerEvent.Clear -> {
-                Clear()
-            }
-
-            ProductReviewControllerEvent.ClearError -> {
-                ClearError()
-            }
+            is ProductReviewControllerEvent.Load -> List(sourceType = event.SourceType, sourceId = event.SourceId, variantId = event.VariantId, page = 1, pageSize = event.PageSize, append = false)
+            ProductReviewControllerEvent.LoadMore -> LoadMore()
+            ProductReviewControllerEvent.Refresh -> Refresh()
+            ProductReviewControllerEvent.Clear -> Clear()
+            ProductReviewControllerEvent.ClearError -> ClearError()
         }
     }
 
-    fun List(
-        sourceType: String = "PRODUCT",
-        sourceId: Int,
-        variantId: Int = 0,
-        page: Int = 1,
-        pageSize: Int = 10,
-        append: Boolean = false
-    ) {
-        if (
-            sourceType.isBlank() ||
-            sourceId <= 0 ||
-            page <= 0 ||
-            pageSize <= 0
-        ) {
+    fun List(sourceType: String = "PRODUCT", sourceId: Int, variantId: Int = 0, page: Int = 1, pageSize: Int = 10, append: Boolean = false) {
+        if (sourceType.isBlank() || sourceId <= 0 || page <= 0 || pageSize <= 0) {
             _state.update {
                 it.copy(
-                    IsLoading =
-                        false,
-                    CurrentAction =
-                        "List",
-                    Reviews =
-                        if (append) {
-                            it.Reviews
-                        } else {
-                            emptyList()
-                        },
-                    ReviewsResult =
-                        null,
-                    HasNextPage =
-                        false,
-                    ErrorMessage =
-                        BBLocalization.Current.Get(key = "a6eaf805-9df7-4fb3-a4ad-85bd6ecad250", fallback = "Geçerli değerlendirme parametreleri bulunamadı.")
+                    IsLoading = false,
+                    CurrentAction = "List",
+                    Reviews = if (append) it.Reviews else emptyList(),
+                    ReviewsResult = null,
+                    HasNextPage = false,
+                    ErrorMessage = BBLocalization.Current.Get(key = "a6eaf805-9df7-4fb3-a4ad-85bd6ecad250", fallback = "Geçerli değerlendirme parametreleri bulunamadı.")
                 )
             }
-
             return
         }
 
         viewModelScope.launch {
-            StartLoading(
-                actionName =
-                    if (append) {
-                        "LoadMore"
-                    } else {
-                        "List"
-                    }
-            )
+            StartLoading(actionName = if (append) "LoadMore" else "List")
 
-            val response =
-                executeService.GetAsync(
-                    cacheKey =
-                        "commerceSupport.Review.GetReviewsAsync." +
-                                "sourceType=$sourceType." +
-                                "sourceId=$sourceId." +
-                                "variantId=$variantId." +
-                                "page=$page." +
-                                "pageSize=$pageSize"
-                ) {
-                    reviewRepository.GetReviewsAsync(
-                        sourceType =
-                            sourceType,
-                        sourceId =
-                            sourceId,
-                        variantId =
-                            variantId,
-                        page =
-                            page,
-                        pageSize =
-                            pageSize
-                    )
-                }
+            val response = executeService.GetAsync(
+                cacheKey = "commerceSupport.Review.GetReviewsAsync.sourceType=$sourceType.sourceId=$sourceId.variantId=$variantId.page=$page.pageSize=$pageSize"
+            ) {
+                reviewRepository.GetReviewsAsync(sourceType = sourceType, sourceId = sourceId, variantId = variantId, page = page, pageSize = pageSize)
+            }
 
-            val incomingReviews =
-                response.Data
-                    ?.Items
-                    ?: emptyList()
+            val incomingReviews = response.Data?.Items ?: emptyList()
 
             _state.update { currentState ->
                 currentState.copy(
-                    IsLoading =
-                        false,
-                    CurrentAction =
-                        if (append) {
-                            "LoadMore"
-                        } else {
-                            "List"
-                        },
-                    Reviews =
-                        if (
-                            append &&
-                            response.Success
-                        ) {
-                            (
-                                    currentState.Reviews +
-                                            incomingReviews
-                                    ).distinctBy {
-                                    it.ReviewId
-                                }
-                        } else if (response.Success) {
-                            incomingReviews
-                        } else {
-                            currentState.Reviews
-                        },
-                    ReviewsResult =
-                        response,
-                    SourceType =
-                        sourceType,
-                    SourceId =
-                        sourceId,
-                    VariantId =
-                        variantId,
-                    CurrentPage =
-                        if (response.Success) {
-                            page
-                        } else {
-                            currentState.CurrentPage
-                        },
-                    PageSize =
-                        pageSize,
-                    HasNextPage =
-                        response.Success &&
-                                response.Data?.HasNextPage == true,
-                    ErrorMessage =
-                        if (response.Success) {
-                            null
-                        } else {
-                            response.Message
-                                ?: BBLocalization.Current.Get(key = "4a26c4e4-5c82-4c19-9e36-08cb0dadf54f", fallback = "Değerlendirmeler alınamadı.")
-                        }
+                    IsLoading = false,
+                    CurrentAction = if (append) "LoadMore" else "List",
+                    Reviews = if (append && response.Success) {
+                        (currentState.Reviews + incomingReviews).distinctBy { it.ReviewId }
+                    } else if (response.Success) {
+                        incomingReviews
+                    } else {
+                        currentState.Reviews
+                    },
+                    ReviewsResult = response,
+                    SourceType = sourceType,
+                    SourceId = sourceId,
+                    VariantId = variantId,
+                    CurrentPage = if (response.Success) page else currentState.CurrentPage,
+                    PageSize = pageSize,
+                    HasNextPage = response.Success && response.Data?.HasNextPage == true,
+                    ErrorMessage = if (response.Success) null else response.Message ?: BBLocalization.Current.Get(key = "4a26c4e4-5c82-4c19-9e36-08cb0dadf54f", fallback = "Değerlendirmeler alınamadı.")
                 )
+            }
+        }
+    }
+
+    fun Summary(sourceType: String = "PRODUCT", sourceId: Int) {
+        if (sourceType.isBlank() || sourceId <= 0) {
+            _state.update { it.copy(ReviewSummaryResult = null) }
+            return
+        }
+
+        viewModelScope.launch {
+            val response = executeService.GetAsync(
+                cacheKey = "commerceSupport.Review.GetReviewSummaryAsync.sourceType=$sourceType.sourceId=$sourceId"
+            ) {
+                reviewRepository.GetReviewSummaryAsync(sourceType = sourceType, sourceId = sourceId)
+            }
+
+            _state.update {
+                it.copy(ReviewSummaryResult = response)
             }
         }
     }
 
     fun LoadMore() {
-        val currentState =
-            _state.value
+        val currentState = _state.value
 
-        if (
-            currentState.IsLoading ||
-            !currentState.HasNextPage ||
-            currentState.SourceId <= 0
-        ) {
-            return
-        }
+        if (currentState.IsLoading || !currentState.HasNextPage || currentState.SourceId <= 0) return
 
         List(
-            sourceType =
-                currentState.SourceType,
-            sourceId =
-                currentState.SourceId,
-            variantId =
-                currentState.VariantId,
-            page =
-                currentState.CurrentPage + 1,
-            pageSize =
-                currentState.PageSize,
-            append =
-                true
+            sourceType = currentState.SourceType,
+            sourceId = currentState.SourceId,
+            variantId = currentState.VariantId,
+            page = currentState.CurrentPage + 1,
+            pageSize = currentState.PageSize,
+            append = true
         )
     }
 
     fun Refresh() {
-        val currentState =
-            _state.value
+        val currentState = _state.value
 
-        if (currentState.SourceId <= 0) {
-            return
-        }
+        if (currentState.SourceId <= 0) return
 
         List(
-            sourceType =
-                currentState.SourceType,
-            sourceId =
-                currentState.SourceId,
-            variantId =
-                currentState.VariantId,
-            page =
-                1,
-            pageSize =
-                currentState.PageSize,
-            append =
-                false
+            sourceType = currentState.SourceType,
+            sourceId = currentState.SourceId,
+            variantId = currentState.VariantId,
+            page = 1,
+            pageSize = currentState.PageSize,
+            append = false
         )
     }
 
     fun Clear() {
-        _state.value =
-            ProductReviewControllerState()
+        _state.value = ProductReviewControllerState()
     }
 
     fun ClearError() {
-        _state.update {
-            it.copy(
-                ErrorMessage =
-                    null
-            )
-        }
+        _state.update { it.copy(ErrorMessage = null) }
     }
 
-    private fun StartLoading(
-        actionName: String
-    ) {
+    private fun StartLoading(actionName: String) {
         _state.update {
             it.copy(
-                IsLoading =
-                    true,
-                CurrentAction =
-                    actionName,
-                ErrorMessage =
-                    null
+                IsLoading = true,
+                CurrentAction = actionName,
+                ErrorMessage = null
             )
         }
     }

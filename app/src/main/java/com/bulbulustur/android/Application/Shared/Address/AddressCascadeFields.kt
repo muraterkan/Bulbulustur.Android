@@ -19,7 +19,9 @@ fun AddressCascadeFields(
     onDistrictSelected: (Int?) -> Unit,
     modifier: Modifier = Modifier,
     countryLabel: String = BBLocalization.Current.Get(key = "8b04cc2a-5e86-4d4e-bf8c-7dc7bf1be325", fallback = "Ülke"),
-    countryPlaceholder: String = BBLocalization.Current.Get(key = "387bcc7b-e309-4099-8f1d-0ee062d4b7f4", fallback = ""),
+    
+countryPlaceholder: String = "Ülke seçiniz"
+,
     countryStateLabel: String = BBLocalization.Current.Get(key = "e59fd16b-4f44-42cb-9488-de3a719b46dd", fallback = "Eyalet / Bölge"),
     countryStatePlaceholder: String = BBLocalization.Current.Get(key = "cc71b6aa-c305-4009-96b9-a84ce4936c8d", fallback = "Eyalet veya bölge seçiniz"),
     countryDepartmentLabel: String = "Departman",

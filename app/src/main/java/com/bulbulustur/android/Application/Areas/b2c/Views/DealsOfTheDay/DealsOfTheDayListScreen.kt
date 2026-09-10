@@ -109,7 +109,6 @@ fun DealsOfTheDayListScreen(
                     fallback = "Fırsat ürünü ara"
                 ),
                 onSearchClick = {
-                    Unit
                 },
                 onClearClick = {
                     searchText = ""

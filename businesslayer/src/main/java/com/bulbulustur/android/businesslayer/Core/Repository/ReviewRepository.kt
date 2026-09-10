@@ -1,6 +1,7 @@
 package com.bulbulustur.android.businesslayer.Core.Repository
 
 import com.bulbulustur.android.businesslayer.Core.DTO.ReviewDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.ReviewSummaryDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.IReviewRepository
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.ReviewInsertModel
 import com.bulbulustur.android.businesslayer.Core.Network.ApiClient
@@ -17,6 +18,14 @@ class ReviewRepository(
             baseUrl = ApiRoutes.COMMERCE_SUPPORT_REVIEW_BASE_URL,
             method = "GetReviewsAsync",
             query = "sourceType=$sourceType&sourceId=$sourceId&variantId=$variantId&page=$page&pageSize=$pageSize"
+        )
+    }
+
+    override suspend fun GetReviewSummaryAsync(sourceType: String, sourceId: Int): Result<ReviewSummaryDTO> {
+        return apiClient.GetAsync(
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_REVIEW_BASE_URL,
+            method = "GetReviewSummaryAsync",
+            query = "sourceType=$sourceType&sourceId=$sourceId"
         )
     }
 

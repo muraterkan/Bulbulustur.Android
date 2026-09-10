@@ -1217,9 +1217,7 @@ repeat(5) { index ->
 
                 Text(
                     
-
-    text = java.lang.String.format(java.util.Locale.US, "%.1f", averageRating),
-
+    'text = java.lang.String.format(java.util.Locale.US, "%.1f", averageRating),'
 
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onSurface,
@@ -2038,9 +2036,7 @@ private fun RetailReviewCarousel(
                 ) {
                     Text(
                         
-
-    text = java.lang.String.format(java.util.Locale.US, "%.1f", averageRating),
-
+    'text = java.lang.String.format(java.util.Locale.US, "%.1f", averageRating),'
 
                         style = MaterialTheme.typography.headlineSmall,
                         color = MaterialTheme.colorScheme.onSurface,

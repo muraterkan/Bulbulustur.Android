@@ -729,6 +729,16 @@ private fun BulbulusturApplicationContent(
         )
     }
 
+    val checkoutController = remember(
+        executeService,
+        memberAddressRepository
+    ) {
+        com.bulbulustur.android.Application.Areas.b2c.Controllers.CheckoutController(
+            executeService = executeService,
+            memberAddressRepository = memberAddressRepository
+        )
+    }
+
     val assignedToSellerRepository = remember {
         com.bulbulustur.android.businesslayer.Core.Repository.AssignedToSellerRepository()
     }
@@ -903,7 +913,7 @@ private fun BulbulusturApplicationContent(
         onAppLinkConsumed()
     }
 
-    val companyController = remember { com.bulbulustur.android.Application.Controllers.CompanyController() }
+    val companyController = remember { CompanyController() }
 
     NavHost(
         navController = navController,
@@ -969,7 +979,10 @@ private fun BulbulusturApplicationContent(
         orderGraph(
             navigator = appNavigator,
             memberId = sessionState.MemberId,
-            languageId = sessionState.Language.Id
+            languageId = sessionState.Language.Id,
+            checkoutController = checkoutController,
+            basketController = basketController,
+            addressCascadeController = addressCascadeController
         )
 
         accountGraph(

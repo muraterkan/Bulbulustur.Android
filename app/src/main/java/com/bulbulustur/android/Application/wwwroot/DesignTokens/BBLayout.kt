@@ -171,7 +171,6 @@ object BBLayout {
     val CheckoutStepIconSize: Dp = 38.dp
     val CheckoutAddressIconSize: Dp = BBSpacing.Space13
     val CheckoutPaymentCardIconSize: Dp = 46.dp
-    val CheckoutCargoLogoSize: Dp = BBSpacing.Space12
 
     val OrderSuccessIconBoxSize: Dp = BBSpacing.Space18
     val OrderSuccessMiniIconSize: Dp = BBSpacing.Space11

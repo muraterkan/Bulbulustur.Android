@@ -1,6 +1,11 @@
 package com.bulbulustur.android.Application.Navigation.Graph
 
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.navigation.NavGraphBuilder
+import com.bulbulustur.android.Application.Areas.b2c.Controllers.BasketController
+import com.bulbulustur.android.Application.Areas.b2c.Controllers.CheckoutController
+import com.bulbulustur.android.Application.Shared.Address.AddressCascadeController
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
@@ -11,15 +16,28 @@ import com.bulbulustur.android.Application.Areas.b2c.Views.order.OrderListScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.order.OrderReturnRequestScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.order.OrderReviewCreateScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.order.OrderShipmentTrackingScreen
+import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.CheckoutPriceSummary
+import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.CheckoutScreen
+import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.CheckoutScreenData
+import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.CheckoutSelectionDisplay
+import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.CheckoutSummaryScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.OrderSuccessScreen
+import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.address.CheckoutAddressCreateScreen
+import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.address.CheckoutAddressEditScreen
+import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.address.CheckoutAddressListScreen
 import com.bulbulustur.android.Application.Navigation.BulbulusturNavigator
 import com.bulbulustur.android.Application.Navigation.Routes.OrderRoutes
 import com.bulbulustur.android.Application.Navigation.Routes.StoreRoutes
+import com.bulbulustur.android.Application.Shared.Address.AddressCascadeEvent
+import com.bulbulustur.android.Application.Shared.Address.AddressCascadeSelection
 
 fun NavGraphBuilder.orderGraph(
     navigator: BulbulusturNavigator,
     memberId: Int,
-    languageId: Int
+    languageId: Int,
+    checkoutController: CheckoutController,
+    basketController: BasketController,
+    addressCascadeController: AddressCascadeController
 ){
     composable(OrderRoutes.List) {
         OrderListScreen(
@@ -29,6 +47,534 @@ fun NavGraphBuilder.orderGraph(
                 navigator.navController.navigate(
                     OrderRoutes.detail(orderId, orderKey)
                 )
+            }
+        )
+    }
+
+    composable(OrderRoutes.Checkout) {
+        val checkoutState =
+            checkoutController.State
+                .collectAsState()
+                .value
+
+        val basketState =
+            basketController.State
+                .collectAsState()
+                .value
+
+        LaunchedEffect(memberId) {
+            checkoutController.LoadAddresses(
+                memberId = memberId
+            )
+
+            basketController.List(
+                memberId = memberId
+            )
+
+            basketController.Summary(
+                memberId = memberId
+            )
+        }
+
+        val basketSummary =
+            basketState.BasketSummary
+
+        CheckoutScreen(
+            data = CheckoutScreenData(
+                addresses = checkoutState.Addresses,
+
+                
+        selectedDeliveryAddressId =
+                    checkoutState.SelectedDeliveryAddressId,
+
+                
+
+                selectedInvoiceAddressId =
+                    checkoutState.SelectedInvoiceAddressId,
+
+    basketItemCount =
+                    basketState.ItemCount,
+
+                basketItems =
+                    basketState.BasketItems,
+
+                deliveryAddress =
+                    checkoutState.SelectedDeliveryAddress
+                        ?.let { address ->
+                            CheckoutSelectionDisplay(
+                                title = address.AddressTitle,
+                                description = address.Address
+                            )
+                        },
+
+                invoiceAddress =
+                    checkoutState.SelectedInvoiceAddress
+                        ?.let { address ->
+                            CheckoutSelectionDisplay(
+                                title = address.AddressTitle,
+                                description = address.Address
+                            )
+                        },
+
+
+
+                summary = CheckoutPriceSummary(
+    
+                    productTotalText =
+                        basketSummary
+                            ?.NetTotal
+                            ?.let { value ->
+                                "₺${String.format("%.2f", value).replace(".", ",")}"
+                            }
+                            .orEmpty(),
+
+                    cargoTotalText =
+                        basketSummary
+                            ?.ShippingCost
+                            ?.let { value ->
+                                "₺${String.format("%.2f", value).replace(".", ",")}"
+                            }
+                            .orEmpty(),
+
+                    payableTotalText =
+                        basketSummary
+                            ?.GrossTotal
+                            ?.let { value ->
+                                "₺${String.format("%.2f", value).replace(".", ",")}"
+
+                            } .orEmpty()
+                )
+            ),
+
+            onBackClick = {
+                navigator.back()
+            },
+
+            onAddressClick = {
+                navigator.navController.navigate(
+                    OrderRoutes.checkoutAddressList(
+                        OrderRoutes.CheckoutAddressTypeDelivery
+                    )
+                )
+            },
+
+            onAddressSelected = { address ->
+
+                checkoutController.SelectDeliveryAddress(
+                    memberAddressId =
+                        address.MemberAddressId
+                )
+            },
+
+        onInvoiceAddressSelected = { address ->
+            checkoutController.SelectInvoiceAddress(
+                memberAddressId =
+                    address.MemberAddressId
+            )
+        },
+
+
+
+            onContinueClick = {
+    
+                navigator.navController.navigate(
+                    OrderRoutes.CheckoutSummary
+                )
+            }
+
+
+        )
+    }
+
+    composable(
+        route = OrderRoutes.CheckoutAddressList,
+        arguments = listOf(
+            navArgument(OrderRoutes.ArgCheckoutAddressType) {
+                type = NavType.StringType
+            }
+        )
+    ) { backStackEntry ->
+
+        val checkoutState =
+            checkoutController.State
+                .collectAsState()
+                .value
+
+        val addressType =
+            backStackEntry.arguments
+                ?.getString(OrderRoutes.ArgCheckoutAddressType)
+                .orEmpty()
+
+        LaunchedEffect(memberId) {
+            checkoutController.LoadAddresses(
+                memberId = memberId
+            )
+        }
+
+        CheckoutAddressListScreen(
+            addresses = checkoutState.Addresses,
+
+            isLoading =
+                checkoutState.IsLoading &&
+                        checkoutState.CurrentAction == "LoadAddresses",
+
+            errorMessage =
+                checkoutState.AddressListResult
+                    ?.takeIf { !it.Success }
+                    ?.Message,
+
+            selectedAddressId =
+                if (
+                    addressType ==
+                    OrderRoutes.CheckoutAddressTypeDelivery
+                ) {
+                    checkoutState.SelectedDeliveryAddressId
+                        .takeIf { it > 0 }
+                } else {
+                    null
+                },
+
+            onBackClick = {
+                navigator.back()
+            },
+
+            onCreateAddressClick = {
+                navigator.navController.navigate(
+                    OrderRoutes.checkoutAddressCreate(
+                        addressType
+                    )
+                )
+            },
+
+            onEditAddressClick = { addressKey ->
+                if (addressKey.isNotBlank()) {
+                    navigator.navController.navigate(
+                        OrderRoutes.checkoutAddressEdit(
+                            addressType = addressType,
+                            addressKey = addressKey
+                        )
+                    )
+                }
+            },
+
+            onSelectAddressClick = { memberAddressId ->
+                if (
+                    addressType ==
+                    OrderRoutes.CheckoutAddressTypeDelivery
+                ) {
+                    checkoutController.SelectDeliveryAddress(
+                        memberAddressId = memberAddressId
+                    )
+
+                    navigator.back()
+                }
+            },
+
+            onRetryClick = {
+                checkoutController.LoadAddresses(
+                    memberId = memberId
+                )
+            }
+        )
+    }
+
+    composable(
+        route = OrderRoutes.CheckoutAddressCreate,
+        arguments = listOf(
+            navArgument(OrderRoutes.ArgCheckoutAddressType) {
+                type = NavType.StringType
+            }
+        )
+    ) {
+        val checkoutState =
+            checkoutController.State
+                .collectAsState()
+                .value
+
+        val addressCascadeState =
+            addressCascadeController.State
+                .collectAsState()
+                .value
+
+        LaunchedEffect(Unit) {
+            addressCascadeController.OnEvent(
+                AddressCascadeEvent.Clear
+            )
+
+            addressCascadeController.OnEvent(
+                AddressCascadeEvent.LoadCountries(
+                    LanguageId = languageId
+                )
+            )
+        }
+
+        CheckoutAddressCreateScreen(
+            addressCascadeState = addressCascadeState,
+
+            isLoading =
+                checkoutState.IsLoading &&
+                        checkoutState.CurrentAction == "InsertAddress",
+
+            errorMessage =
+                checkoutState.AddressInsertResult
+                    ?.takeIf { !it.Success }
+                    ?.Message,
+
+            onBackClick = {
+                addressCascadeController.OnEvent(
+                    AddressCascadeEvent.Clear
+                )
+
+                navigator.back()
+            },
+
+            onCountrySelected = { countryId ->
+                addressCascadeController.OnEvent(
+                    AddressCascadeEvent.SelectCountry(
+                        CountryId = countryId,
+                        LanguageId = languageId
+                    )
+                )
+            },
+
+            onCountryStateSelected = { countryStateId ->
+                addressCascadeController.OnEvent(
+                    AddressCascadeEvent.SelectCountryState(
+                        CountryStateId = countryStateId,
+                        LanguageId = languageId
+                    )
+                )
+            },
+
+            onCountryDepartmentSelected = { countryDepartmentId ->
+                addressCascadeController.OnEvent(
+                    AddressCascadeEvent.SelectCountryDepartment(
+                        CountryDepartmentId = countryDepartmentId,
+                        LanguageId = languageId
+                    )
+                )
+            },
+
+            onCitySelected = { cityId ->
+                addressCascadeController.OnEvent(
+                    AddressCascadeEvent.SelectCity(
+                        CityId = cityId,
+                        LanguageId = languageId
+                    )
+                )
+            },
+
+            onDistrictSelected = { districtId ->
+                addressCascadeController.OnEvent(
+                    AddressCascadeEvent.SelectDistrict(
+                        DistrictId = districtId
+                    )
+                )
+            },
+
+            onSaveClick = { model ->
+                checkoutController.InsertAddress(
+                    memberId = memberId,
+                    model = model,
+                    onSuccess = {
+                        addressCascadeController.OnEvent(
+                            AddressCascadeEvent.Clear
+                        )
+
+                        navigator.back()
+                    }
+                )
+            }
+        )
+    }
+
+    composable(
+        route = OrderRoutes.CheckoutAddressEdit,
+        arguments = listOf(
+            navArgument(OrderRoutes.ArgCheckoutAddressType) {
+                type = NavType.StringType
+            },
+            navArgument(OrderRoutes.ArgCheckoutAddressKey) {
+                type = NavType.StringType
+            }
+        )
+    ) { backStackEntry ->
+
+        val checkoutState =
+            checkoutController.State
+                .collectAsState()
+                .value
+
+        val addressCascadeState =
+            addressCascadeController.State
+                .collectAsState()
+                .value
+
+        val addressKey =
+            backStackEntry.arguments
+                ?.getString(OrderRoutes.ArgCheckoutAddressKey)
+                .orEmpty()
+
+        val address =
+            checkoutState.AddressDetail
+                ?.takeIf {
+                    it.AddressKey == addressKey
+                }
+
+        LaunchedEffect(
+            addressKey,
+            memberId
+        ) {
+            addressCascadeController.OnEvent(
+                AddressCascadeEvent.Clear
+            )
+
+            checkoutController.ClearAddressDetail()
+
+            checkoutController.LoadAddress(
+                memberId = memberId,
+                addressKey = addressKey
+            )
+        }
+
+        LaunchedEffect(
+            address?.AddressKey,
+            address?.CountryId,
+            address?.CountryStateId,
+            address?.CountryDepartmentId,
+            address?.CityId,
+            address?.DistrictId
+        ) {
+            val currentAddress =
+                address ?: return@LaunchedEffect
+
+            addressCascadeController.OnEvent(
+                AddressCascadeEvent.SetInitialSelection(
+                    Selection = AddressCascadeSelection(
+                        CountryId =
+                            currentAddress.CountryId ?: 0,
+
+                        CountryStateId =
+                            currentAddress.CountryStateId ?: 0,
+
+                        CountryDepartmentId =
+                            currentAddress.CountryDepartmentId,
+
+                        CityId =
+                            currentAddress.CityId ?: 0,
+
+                        DistrictId =
+                            currentAddress.DistrictId
+                    ),
+
+                    LanguageId = languageId
+                )
+            )
+        }
+
+        CheckoutAddressEditScreen(
+            address = address,
+            addressCascadeState = addressCascadeState,
+
+            isLoading =
+                checkoutState.IsLoading &&
+                        (
+                                checkoutState.CurrentAction == "LoadAddress" ||
+                                        checkoutState.CurrentAction == "UpdateAddress"
+                                ),
+
+            errorMessage =
+                checkoutState.AddressDetailResult
+                    ?.takeIf { !it.Success }
+                    ?.Message
+                    ?: checkoutState.AddressUpdateResult
+                        ?.takeIf { !it.Success }
+                        ?.Message,
+
+            onBackClick = {
+                checkoutController.ClearAddressDetail()
+
+                addressCascadeController.OnEvent(
+                    AddressCascadeEvent.Clear
+                )
+
+                navigator.back()
+            },
+
+            onCountrySelected = { countryId ->
+                addressCascadeController.OnEvent(
+                    AddressCascadeEvent.SelectCountry(
+                        CountryId = countryId,
+                        LanguageId = languageId
+                    )
+                )
+            },
+
+            onCountryStateSelected = { countryStateId ->
+                addressCascadeController.OnEvent(
+                    AddressCascadeEvent.SelectCountryState(
+                        CountryStateId = countryStateId,
+                        LanguageId = languageId
+                    )
+                )
+            },
+
+            onCountryDepartmentSelected = { countryDepartmentId ->
+                addressCascadeController.OnEvent(
+                    AddressCascadeEvent.SelectCountryDepartment(
+                        CountryDepartmentId = countryDepartmentId,
+                        LanguageId = languageId
+                    )
+                )
+            },
+
+            onCitySelected = { cityId ->
+                addressCascadeController.OnEvent(
+                    AddressCascadeEvent.SelectCity(
+                        CityId = cityId,
+                        LanguageId = languageId
+                    )
+                )
+            },
+
+            onDistrictSelected = { districtId ->
+                addressCascadeController.OnEvent(
+                    AddressCascadeEvent.SelectDistrict(
+                        DistrictId = districtId
+                    )
+                )
+            },
+
+            onSaveClick = { model ->
+                checkoutController.UpdateAddress(
+                    memberId = memberId,
+                    model = model,
+                    onSuccess = {
+                        checkoutController.ClearAddressDetail()
+
+                        addressCascadeController.OnEvent(
+                            AddressCascadeEvent.Clear
+                        )
+
+                        navigator.back()
+                    }
+                )
+            }
+        )
+    }
+
+    composable(OrderRoutes.CheckoutSummary) {
+        CheckoutSummaryScreen(
+            onBackClick = {
+                navigator.back()
+            },
+            onEditAddressClick = {
+                navigator.back()
+            },
+            onEditPaymentClick = {
+                navigator.back()
+            },
+            onCompleteOrderClick = {
             }
         )
     }

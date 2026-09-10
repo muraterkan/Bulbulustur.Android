@@ -847,8 +847,6 @@ fun NavGraphBuilder.accountGraph(
         )
     }
 
-
-
     composable(route = AccountRoutes.Notifications) {
 
         if (

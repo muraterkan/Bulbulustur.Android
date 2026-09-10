@@ -1,6 +1,7 @@
 package com.bulbulustur.android.businesslayer.Core.Interface
 
 import com.bulbulustur.android.businesslayer.Core.DTO.ReviewDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.ReviewSummaryDTO
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.ReviewInsertModel
 import com.bulbulustur.android.businesslayer.Core.Util.PaginatedList
 import com.bulbulustur.android.businesslayer.Core.Util.Result
@@ -8,6 +9,8 @@ import com.bulbulustur.android.businesslayer.Core.Util.Result
 interface IReviewRepository {
 
     suspend fun GetReviewsAsync(sourceType: String, sourceId: Int, variantId: Int = 0, page: Int = 1, pageSize: Int = 10): Result<PaginatedList<ReviewDTO>>
+
+    suspend fun GetReviewSummaryAsync(sourceType: String, sourceId: Int): Result<ReviewSummaryDTO>
 
     suspend fun GetMemberReviewsAsync(memberId: Int, count: Int = 100): Result<List<ReviewDTO>>
 

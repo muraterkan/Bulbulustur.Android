@@ -60,12 +60,19 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.PathEffect
 import coil3.compose.AsyncImage
 import coil3.compose.AsyncImage
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.BbCommerceBottomBar
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.BbCommerceCouponSheet
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.BbCommerceOrderSummaryOverlay
+import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.payment.CheckoutCardEntryScreen
+import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.payment.CheckoutInstallmentUiModel
+import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.payment.CheckoutPaymentCardUiModel
+import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.payment.CheckoutPaymentMockData
 import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
@@ -113,8 +120,11 @@ fun CheckoutScreen(
     onPaymentMethodClick: () -> Unit = {},
     onPaymentMethodSelected: (CheckoutSelectionDisplay) -> Unit = {},
 
+    
     onCardClick: () -> Unit = {},
     onCardSelected: (CheckoutSelectionDisplay) -> Unit = {},
+    onAddCardClick: () -> Unit = {},
+
 
     onInstallmentClick: () -> Unit = {},
     onInstallmentSelected: (CheckoutSelectionDisplay) -> Unit = {},
@@ -165,25 +175,36 @@ var termsAccepted by rememberSaveable {
         mutableStateOf<CheckoutSelectionSheetType?>(null)
     }
 
-    var corporateInvoiceCompanyName by rememberSaveable {
-        mutableStateOf("")
+    var paymentCardsUi by remember { mutableStateOf(CheckoutPaymentMockData.cards) }
+    var selectedPaymentCardUi by remember { mutableStateOf<CheckoutPaymentCardUiModel?>(CheckoutPaymentMockData.card) }
+    var showNewCardScreen by remember { mutableStateOf(false) }
+
+    var corporateInvoiceCompanyName by rememberSaveable { mutableStateOf("") }
+
+    var corporateInvoiceTaxOffice by rememberSaveable { mutableStateOf("") }
+
+    var corporateInvoiceTaxNumber by rememberSaveable { mutableStateOf("") }
+
+    val hasCorporateInvoiceInfo = corporateInvoiceCompanyName.isNotBlank() && corporateInvoiceTaxOffice.isNotBlank() && corporateInvoiceTaxNumber.isNotBlank()
+
+    if (showNewCardScreen) {
+
+        CheckoutCardEntryScreen(
+            onBackClick = {
+                showNewCardScreen = false
+            },
+
+            onContinueClick = { newCard ->
+                paymentCardsUi = paymentCardsUi + newCard
+                selectedPaymentCardUi = newCard
+                showNewCardScreen = false
+            }
+        )
+
+        return
     }
 
-    var corporateInvoiceTaxOffice by rememberSaveable {
-        mutableStateOf("")
-    }
-
-    var corporateInvoiceTaxNumber by rememberSaveable {
-        mutableStateOf("")
-    }
-
-    val hasCorporateInvoiceInfo =
-        corporateInvoiceCompanyName.isNotBlank() &&
-            corporateInvoiceTaxOffice.isNotBlank() &&
-            corporateInvoiceTaxNumber.isNotBlank()
-
-    val pageBackground =
-        MaterialTheme.colorScheme.surfaceContainerLow
+    val pageBackground = MaterialTheme.colorScheme.surfaceContainerLow
 
 
     val contractSnapshot =
@@ -194,7 +215,7 @@ var termsAccepted by rememberSaveable {
                     .orEmpty(),
 
             
-invoiceAddress =
+            invoiceAddress =
                 (
                     data.invoiceAddress
                         ?: data.deliveryAddress
@@ -247,10 +268,31 @@ invoiceAddress =
                     color = MaterialTheme.colorScheme.surface
                 ) {
 
-                    BbInnerPageHeader(
-                        title = "Güvenli Ödeme",
-                        onBackClick = onBackClick
-                    )
+                    Box(Modifier.fillMaxWidth()) {
+
+                        BbInnerPageHeader(
+                            title = "Güvenli Ödeme",
+                            onBackClick = onBackClick
+                        )
+
+                        Row(
+                            modifier = Modifier.align(Alignment.CenterEnd).padding(end = BBSpacing.PageHorizontal),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Lock,
+                                contentDescription = "SSL",
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(BBIcon.Action)
+                            )
+
+                            Text(
+                                text = "SSL",
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                    }
                 }
 
 
@@ -276,75 +318,13 @@ invoiceAddress =
                             
     bottom =
         BBSpacing.Space20
-
                         ),
 
-                    verticalArrangement =
-                        Arrangement.spacedBy(
-                            BBSpacing.SectionGapCompact
-                        )
+                    verticalArrangement = Arrangement.spacedBy(BBSpacing.SectionGapCompact)
                 ) {
 
-                    /*
-                     * ========================================================
-                     * PRODUCTS
-                     * ========================================================
-                     */
-
-                    item {
-
-                        CheckoutPageItem {
-
-                            Column(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalArrangement = Arrangement.spacedBy(
-                                    BBSpacing.Space2
-                                )
-                            ) {
-
-                                CheckoutActionCard(
-                                    title =
-                                        "Sepetteki Ürünler (${data.basketItemCount})",
-
-                                    description =
-                                        "Siparişe dahil ürünleri görüntüle.",
-
-                                    actionText =
-                                        if (showProductsInline) {
-                                            "Kapat"
-                                        } else {
-                                            "Görüntüle"
-                                        },
-
-                                    onClick = {
-
-                                        showProductsInline =
-                                            !showProductsInline
-
-                                        onProductsClick()
-                                    }
-                                )
 
 
-                                AnimatedVisibility(
-                                    visible =
-                                        showProductsInline,
-
-                                    enter =
-                                        expandVertically(),
-
-                                    exit =
-                                        shrinkVertically()
-                                ) {
-
-                                    CheckoutProductImageStrip(
-                                        basketItems =
-                                            data.basketItems
-                                    )
-                                }
-                            }
-                        }
-                    }
 
                     /*
                      * ========================================================
@@ -523,10 +503,7 @@ invoiceAddress =
                         CheckoutPageItem {
 
                             CheckoutSectionTitle(
-                                title = "Ödeme Yöntemi",
-
-                                description =
-                                    "Ödeme yöntemini ve kullanacağın kartı seç."
+                                title = "Ödeme Yöntemi"
                             )
                         }
                     }
@@ -536,124 +513,132 @@ invoiceAddress =
 
                         CheckoutPageItem {
 
-                            CheckoutActionCard(
-                                title = "Ödeme Yöntemi",
+                            Surface(
+                                modifier =
+                                    Modifier.fillMaxWidth(),
+                                shape =
+                                    MaterialTheme.shapes.large,
+                                color =
+                                    MaterialTheme.colorScheme.surface,
+                                border =
+                                    BorderStroke(
+                                        width = 1.dp,
+                                        color =
+                                            MaterialTheme.colorScheme.outlineVariant
+                                    )
+                            ) {
 
-                                value =
-                                    data.paymentMethod
-                                        ?.title
-                                        .orEmpty(),
+                                Row(
+                                    modifier =
+                                        Modifier
+                                            .fillMaxWidth()
+                                            .padding(
+                                                horizontal = BBSpacing.Space4,
+                                                vertical = BBSpacing.Space4
+                                            ),
+                                    horizontalArrangement =
+                                        Arrangement.spacedBy(
+                                            BBSpacing.Space3
+                                        ),
+                                    verticalAlignment =
+                                        Alignment.CenterVertically
+                                ) {
 
-                                description =
-                                    data.paymentMethod
-                                        ?.description
-                                        ?.takeIf {
-                                            it.isNotBlank()
-                                        }
-                                        ?: "Kullanılabilir ödeme yöntemini seç.",
+                                    RadioButton(
+                                        selected = true,
+                                        onClick = null,
+                                        colors =
+                                            RadioButtonDefaults.colors(
+                                                selectedColor =
+                                                    MaterialTheme.colorScheme.primary
+                                            )
+                                    )
 
-                                actionText =
-                                    if (
-                                        data.paymentMethod ==
-                                        null
+                                    Column(
+                                        modifier =
+                                            Modifier.weight(1f),
+                                        verticalArrangement =
+                                            Arrangement.spacedBy(
+                                                BBSpacing.Space1
+                                            )
                                     ) {
-                                        "Seç"
-                                    } else {
-                                        "Değiştir"
-                                    },
 
-                                onClick = {
-                                    onPaymentMethodClick()
+                                        Text(
+                                            text =
+                                                "Banka / Kredi Kartı",
+                                            style =
+                                                MaterialTheme.typography.titleSmall,
+                                            fontWeight =
+                                                FontWeight.Bold,
+                                            color =
+                                                MaterialTheme.colorScheme.onSurface
+                                        )
 
-                                    selectionSheetType =
-                                        CheckoutSelectionSheetType.PaymentMethod
+                                        Text(
+                                            text =
+                                                "Banka veya kredi kartınla güvenli ödeme yap.",
+                                            style =
+                                                MaterialTheme.typography.bodySmall,
+                                            color =
+                                                MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    }
                                 }
-                            )
+                            }
                         }
                     }
 
 
                     item {
-
                         CheckoutPageItem {
+                            val paymentCard = selectedPaymentCardUi
 
-                            CheckoutActionCard(
-                                title = "Kart Bilgileri",
-
-                                value =
-                                    data.card
-                                        ?.title
-                                        .orEmpty(),
-
-                                description =
-                                    data.card
-                                        ?.description
-                                        ?.takeIf {
-                                            it.isNotBlank()
-                                        }
-                                        ?: "Kayıtlı kart seç veya yeni kart kullan.",
-
-                                actionText =
-                                    if (
-                                        data.card ==
-                                        null
-                                    ) {
-                                        "Kart Seç"
-                                    } else {
-                                        "Değiştir"
-                                    },
-
-                                onClick = {
-                                    onCardClick()
-
-                                    selectionSheetType =
-                                        CheckoutSelectionSheetType.Card
-                                }
-                            )
+                            if (!paymentCard?.bankName.isNullOrBlank()) {
+                                CheckoutPaymentCard(
+                                    card = paymentCard,
+                                    onClick = {
+                                        onCardClick()
+                                        selectionSheetType = CheckoutSelectionSheetType.Card
+                                    }
+                                )
+                            } else {
+                                CheckoutActionCard(
+                                    title = "Kart Bilgileri",
+                                    value = data.card?.title.orEmpty(),
+                                    description = data.card?.description?.takeIf { it.isNotBlank() } ?: "Kayıtlı kart seç veya yeni kart kullan.",
+                                    actionText = if (data.card == null) "Kart Seç" else "Değiştir",
+                                    onClick = {
+                                        onCardClick()
+                                        selectionSheetType = CheckoutSelectionSheetType.Card
+                                    }
+                                )
+                            }
                         }
                     }
 
 
                     item {
-
                         CheckoutPageItem {
+                            val paymentCard = selectedPaymentCardUi
+                            val installments = data.paymentInstallmentsUi
 
-                            CheckoutActionCard(
-                                title =
-                                    "Taksit Seçenekleri",
-
-                                value =
-                                    data.installment
-                                        ?.title
-                                        .orEmpty(),
-
-                                description =
-                                    data.installment
-                                        ?.description
-                                        ?.takeIf {
-                                            it.isNotBlank()
-                                        }
-                                        ?: "Kart seçildikten sonra uygun taksit seçenekleri gösterilir.",
-
-                                actionText =
-                                    "Görüntüle",
-
-                                onClick = {
-                                    onInstallmentClick()
-
-                                    selectionSheetType =
-                                        CheckoutSelectionSheetType.Installment
-                                }
-                            )
+                            if (!paymentCard?.bankName.isNullOrBlank() && installments.isNotEmpty()) {
+                                CheckoutPaymentInstallmentCard(installments = installments)
+                            } else {
+                                CheckoutActionCard(
+                                    title = "Taksit Seçenekleri",
+                                    value = data.installment?.title.orEmpty(),
+                                    description = data.installment?.description?.takeIf { it.isNotBlank() } ?: "Kart seçildikten sonra uygun taksit seçenekleri gösterilir.",
+                                    actionText = "Görüntüle",
+                                    onClick = {
+                                        onInstallmentClick()
+                                        selectionSheetType = CheckoutSelectionSheetType.Installment
+                                    }
+                                )
+                            }
                         }
                     }
 
-
-                    /*
-                     * ========================================================
-                     * COUPONS
-                     * ========================================================
-                     */
 
                     item {
 
@@ -742,73 +727,18 @@ invoiceAddress =
 
 
                     item {
-
                         CheckoutPageItem {
-
-                            CheckoutActionCard(
-                                title =
-                                    "Ön Bilgilendirme Formu",
-
-                                description =
-                                    "Sipariş, teslimat ve ödeme bilgilerini içeren ön bilgilendirme formu.",
-
-                                actionText =
-                                    "Görüntüle",
-
-                                onClick = {
-                                    legalSheetType =
-                                        CheckoutLegalSheetType.PreInformation
-
+                            CheckoutLegalDocumentsCard(
+                                onPreInformationClick = {
+                                    legalSheetType = CheckoutLegalSheetType.PreInformation
                                     onPreInformationClick()
-                                }
-                            )
-                        }
-                    }
-
-
-                    item {
-
-                        CheckoutPageItem {
-
-                            CheckoutActionCard(
-                                title =
-                                    "Mesafeli Satış Sözleşmesi",
-
-                                description =
-                                    "Siparişe özel mesafeli satış sözleşmesini görüntüle.",
-
-                                actionText =
-                                    "Görüntüle",
-
-                                onClick = {
-                                    legalSheetType =
-                                        CheckoutLegalSheetType.DistanceSales
-
+                                },
+                                onDistanceSalesClick = {
+                                    legalSheetType = CheckoutLegalSheetType.DistanceSales
                                     onDistanceSalesContractClick()
-                                }
-                            )
-                        }
-                    }
-
-
-                    item {
-
-                        CheckoutPageItem {
-
-                            CheckoutActionCard(
-                                title =
-                                    "Cayma Hakkı",
-
-                                description =
-                                    "Cayma hakkı ve ilgili koşulları görüntüle.",
-
-                                actionText =
-                                    "Görüntüle",
-
-                                onClick = {
-                                    legalSheetType =
-                                        CheckoutLegalSheetType.WithdrawalRight
-
+                                },
+                                onWithdrawalRightClick = {
+                                    legalSheetType = CheckoutLegalSheetType.WithdrawalRight
                                     onWithdrawalRightClick()
                                 }
                             )
@@ -851,7 +781,7 @@ invoiceAddress =
                         Spacer(
                             modifier =
                                 Modifier.height(
-                                    BBSpacing.Space3
+                                    BBSpacing.Space2
                                 )
                         )
                     }
@@ -1065,24 +995,17 @@ selectedAddressId =
             CheckoutLegalSheetType.PreInformation -> {
 
                 CheckoutLegalSheet(
-                    title =
-                        "Ön Bilgilendirme Formu",
+                    title = "Ön Bilgilendirme Formu",
 
-                    htmlContent =
-                        data.preInformationHtml,
+                    htmlContent = data.preInformationHtml,
 
-                    loading =
-                        data.isContractLoading,
+                    loading = data.isContractLoading,
 
-                    emptyText =
-                        "Ön Bilgilendirme Formu henüz oluşturulmadı.",
+                    emptyText = "Ön Bilgilendirme Formu henüz oluşturulmadı.",
 
-                    snapshot =
-                        contractSnapshot,
+                    snapshot = contractSnapshot,
 
-                    onDismiss = {
-                        legalSheetType = null
-                    }
+                    onDismiss = { legalSheetType = null }
                 )
             }
 
@@ -1220,40 +1143,46 @@ selectedAddressId =
                 )
             }
 
-
             CheckoutSelectionSheetType.Card -> {
 
-                CheckoutPlainSelectionSheet(
-                    title =
-                        "Kart Seçimi",
-
-                    items =
-                        data.cardOptions,
-
-                    selected =
-                        data.card,
-
-                    emptyText =
-                        "Kayıtlı kart bulunamadı.",
-
-                    onSelected = {
-                            selection ->
-
-                        onCardSelected(
-                            selection
+                val selectedDisplay =
+                    selectedPaymentCardUi?.let { card ->
+                        CheckoutSelectionDisplay(
+                            title = card.cardAlias,
+                            description = "${card.maskedNumber} · ${card.bankName} · ${card.cardBrand}"
                         )
+                    }
 
-                        selectionSheetType =
-                            null
+                CheckoutCardSelectionSheet(
+                    items = paymentCardsUi.map { card ->
+                        CheckoutSelectionDisplay(
+                            title = card.cardAlias,
+                            description = "${card.maskedNumber} · ${card.bankName} · ${card.cardBrand}"
+                        )
+                    },
+
+                    selected = selectedDisplay,
+
+                    onAddCardClick = {
+                        selectionSheetType = null
+                        showNewCardScreen = true
+                    },
+
+                    onSelected = { selection ->
+
+                        selectedPaymentCardUi =
+                            paymentCardsUi.firstOrNull {
+                                it.cardAlias == selection.title
+                            }
+
+                        selectionSheetType = null
                     },
 
                     onDismiss = {
-                        selectionSheetType =
-                            null
+                        selectionSheetType = null
                     }
                 )
             }
-
 
             CheckoutSelectionSheetType.Installment -> {
 
@@ -1297,6 +1226,107 @@ selectedAddressId =
  * PAGE
  * ============================================================================
  */
+
+@Composable
+private fun CheckoutPaymentCard(card: CheckoutPaymentCardUiModel, onClick: () -> Unit) {
+    Surface(
+        modifier = Modifier.fillMaxWidth().clickable(onClick = onClick),
+        shape = MaterialTheme.shapes.large,
+        color = MaterialTheme.colorScheme.surface,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+    ) {
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = BBSpacing.Space4, vertical = BBSpacing.Space3),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text("Kart Bilgileri", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                Text("Değiştir", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+            }
+
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(BBSpacing.Space4),
+                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+            ) {
+                Text("Kayıtlı Kartım", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+
+                Surface(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = MaterialTheme.shapes.medium,
+                    color = MaterialTheme.colorScheme.surfaceContainerLow,
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(BBSpacing.Space3),
+                        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(card.cardAlias.ifBlank { card.maskedNumber }, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                            Text(card.maskedNumber, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text(card.bankName, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+
+                        Text(card.cardBrand, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun CheckoutPaymentInstallmentCard(installments: List<CheckoutInstallmentUiModel>) {
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.large,
+        color = MaterialTheme.colorScheme.surface,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+    ) {
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Text(
+                text = "Taksit Seçenekleri",
+                modifier = Modifier.padding(horizontal = BBSpacing.Space4, vertical = BBSpacing.Space4),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+
+            installments.forEachIndexed { index, installment ->
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = BBSpacing.Space3, vertical = BBSpacing.Space3),
+                    horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    RadioButton(
+                        selected = installment.isSelected,
+                        onClick = null,
+                        colors = RadioButtonDefaults.colors(selectedColor = MaterialTheme.colorScheme.primary)
+                    )
+
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(installment.title, style = MaterialTheme.typography.bodyLarge, fontWeight = if (installment.isSelected) FontWeight.Bold else FontWeight.Medium)
+
+                        if (installment.installmentCount > 1) {
+                            Text(installment.monthlyAmountText, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                    }
+
+                    Text(installment.totalAmountText, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold)
+                }
+
+                if (index != installments.lastIndex) {
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                }
+            }
+        }
+    }
+}
+
 
 @Composable
 private fun CheckoutPageItem(
@@ -1384,6 +1414,41 @@ private fun CheckoutSectionTitle(
  * STANDARD CARD
  * ============================================================================
  */
+
+@Composable
+private fun CheckoutLegalDocumentsCard(onPreInformationClick: () -> Unit, onDistanceSalesClick: () -> Unit, onWithdrawalRightClick: () -> Unit) {
+    Surface(modifier = Modifier.fillMaxWidth(), shape = MaterialTheme.shapes.large, color = MaterialTheme.colorScheme.surface, border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)) {
+        Column(modifier = Modifier.fillMaxWidth()) {
+            CheckoutLegalDocumentRow(title = "Ön Bilgilendirme Formu", description = "Sipariş, teslimat ve ödeme bilgilerini içeren ön bilgilendirme formu.", onClick = onPreInformationClick)
+            CheckoutDashedDivider()
+            CheckoutLegalDocumentRow(title = "Mesafeli Satış Sözleşmesi", description = "Siparişe özel mesafeli satış sözleşmesini görüntüle.", onClick = onDistanceSalesClick)
+            CheckoutDashedDivider()
+            CheckoutLegalDocumentRow(title = "Cayma Hakkı", description = "Cayma hakkı ve ilgili koşulları görüntüle.", onClick = onWithdrawalRightClick)
+        }
+    }
+}
+
+@Composable
+private fun CheckoutLegalDocumentRow(title: String, description: String, onClick: () -> Unit) {
+    Row(modifier = Modifier.fillMaxWidth().clickable(onClick = onClick).padding(BBSpacing.Space4), horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3), verticalAlignment = Alignment.CenterVertically) {
+        Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)) {
+            Text(text = title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+            Text(text = description, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+
+        Text(text = "Görüntüle", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+        Icon(imageVector = Icons.Outlined.ChevronRight, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(BBIcon.Action))
+    }
+}
+
+@Composable
+private fun CheckoutDashedDivider() {
+    val dividerColor = MaterialTheme.colorScheme.outlineVariant
+
+    Canvas(modifier = Modifier.fillMaxWidth().height(1.dp)) {
+        drawLine(color = dividerColor, start = Offset(0f, 0f), end = Offset(size.width, 0f), strokeWidth = 1.dp.toPx(), pathEffect = PathEffect.dashPathEffect(floatArrayOf(8f, 8f)))
+    }
+}
 
 @Composable
 private fun CheckoutActionCard(
@@ -3912,6 +3977,99 @@ private fun CheckoutInvoiceInfoSheet(
 
 /*
  * ============================================================================
+ * CARD SELECTION SHEET
+ * ============================================================================
+ */
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun CheckoutCardSelectionSheet(
+    items: List<CheckoutSelectionDisplay>,
+    selected: CheckoutSelectionDisplay?,
+    onAddCardClick: () -> Unit,
+    onSelected: (CheckoutSelectionDisplay) -> Unit,
+    onDismiss: () -> Unit
+) {
+    var pendingSelection by remember(items, selected?.title) { mutableStateOf(selected) }
+
+    ModalBottomSheet(onDismissRequest = onDismiss, containerColor = MaterialTheme.colorScheme.surface) {
+        Column(
+            modifier = Modifier.fillMaxWidth().navigationBarsPadding().padding(bottom = BBSpacing.PageBottomCompact),
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = BBSpacing.PageHorizontal, vertical = BBSpacing.Space2),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = "Kartlarım", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+
+                TextButton(onClick = onAddCardClick) {
+                    Icon(imageVector = Icons.Outlined.Add, contentDescription = null)
+                    Text(text = "Yeni Kart", fontWeight = FontWeight.Bold)
+                }
+            }
+
+            if (items.isEmpty()) {
+                Text(
+                    text = "Kayıtlı kart bulunamadı.",
+                    modifier = Modifier.padding(horizontal = BBSpacing.PageHorizontal, vertical = BBSpacing.Space4),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            } else {
+                items.forEachIndexed { index, item ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth().clickable { pendingSelection = item }
+                            .padding(horizontal = BBSpacing.PageHorizontal, vertical = BBSpacing.Space3),
+                        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(
+                            selected = pendingSelection?.title == item.title,
+                            onClick = { pendingSelection = item },
+                            colors = RadioButtonDefaults.colors(selectedColor = MaterialTheme.colorScheme.primary)
+                        )
+
+                        Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)) {
+                            Text(text = item.title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+
+                            if (item.description.isNotBlank()) {
+                                Text(
+                                    text = item.description,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+                    }
+
+                    if (index != items.lastIndex) {
+                        HorizontalDivider(
+                            modifier = Modifier.padding(horizontal = BBSpacing.PageHorizontal),
+                            color = MaterialTheme.colorScheme.outlineVariant
+                        )
+                    }
+                }
+            }
+
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+
+            BbButton(
+                text = "Onayla",
+                onClick = { pendingSelection?.let(onSelected) },
+                modifier = Modifier.fillMaxWidth().padding(horizontal = BBSpacing.PageHorizontal),
+                variant = BbButtonVariant.Primary,
+                size = BbButtonSize.Medium,
+                enabled = pendingSelection != null
+            )
+        }
+    }
+}
+
+
+/*
+ * ============================================================================
  * PLAIN GENERIC SELECTION SHEET
  *
  * Kart ordusu YOK.
@@ -4301,8 +4459,13 @@ data class CheckoutScreenData(
     val card: CheckoutSelectionDisplay? =
         null,
 
-    val cardOptions: List<CheckoutSelectionDisplay> =
+    
+val cardOptions: List<CheckoutSelectionDisplay> =
         emptyList(),
+
+    val paymentCardUi: CheckoutPaymentCardUiModel? = CheckoutPaymentMockData.card,
+    val paymentInstallmentsUi: List<CheckoutInstallmentUiModel> = CheckoutPaymentMockData.installments,
+
 
     val installment: CheckoutSelectionDisplay? =
         null,

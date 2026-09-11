@@ -128,6 +128,7 @@ fun CheckoutScreen(
 
     onInstallmentClick: () -> Unit = {},
     onInstallmentSelected: (CheckoutSelectionDisplay) -> Unit = {},
+    onPaymentInstallmentSelected: (Int) -> Unit = {},
 
     onCouponClick: () -> Unit = {},
     onCouponSelected: (MemberCouponDTO) -> Unit = {},
@@ -175,6 +176,8 @@ var termsAccepted by rememberSaveable {
         mutableStateOf<CheckoutSelectionSheetType?>(null)
     }
 
+    var selectedPaymentInstallmentUi by remember(data.paymentInstallmentsUi) { mutableStateOf<CheckoutInstallmentUiModel?>(data.paymentInstallmentsUi.firstOrNull { it.isSelected } ?: data.paymentInstallmentsUi.firstOrNull()) }
+
     var paymentCardsUi by remember { mutableStateOf(CheckoutPaymentMockData.cards) }
     var selectedPaymentCardUi by remember { mutableStateOf<CheckoutPaymentCardUiModel?>(CheckoutPaymentMockData.card) }
     var showNewCardScreen by remember { mutableStateOf(false) }
@@ -205,45 +208,6 @@ var termsAccepted by rememberSaveable {
     }
 
     val pageBackground = MaterialTheme.colorScheme.surfaceContainerLow
-
-
-    val contractSnapshot =
-        CheckoutContractSnapshot(
-            deliveryAddress =
-                data.deliveryAddress
-                    ?.description
-                    .orEmpty(),
-
-            
-            invoiceAddress =
-                (
-                    data.invoiceAddress
-                        ?: data.deliveryAddress
-                )
-                    ?.description
-                    .orEmpty(),
-
-
-            shippingCost =
-                data.summary.cargoTotalText,
-
-            grandTotal =
-                data.summary.payableTotalText,
-
-            installment =
-                data.installment
-                    ?.title
-                    .orEmpty(),
-
-            installmentDetail =
-                data.installment
-                    ?.description
-                    .orEmpty(),
-
-            providerFee =
-                data.summary.commissionTotalText
-        )
-
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -350,147 +314,18 @@ var termsAccepted by rememberSaveable {
                      * ========================================================
                      */
 
+
                     item {
-
                         CheckoutPageItem {
-
-                            CheckoutSectionTitle(
-                                title = "Teslimat ve Fatura",
-                                description = "Teslimat ve fatura bilgilerini kontrol et.",
-                                actionText = "Ekle / Düzenle",
-                                onActionClick = onAddressClick
+                            CheckoutAddressCard(
+                                deliveryAddress = data.deliveryAddress,
+                                invoiceAddress = data.invoiceAddress ?: data.deliveryAddress,
+                                onHeaderClick = onAddressClick,
+                                onDeliveryClick = { showDeliveryAddressSheet = true },
+                                onInvoiceClick = { showInvoiceAddressSheet = true }
                             )
                         }
                     }
-
-
-                    item {
-
-                        CheckoutPageItem {
-
-                            CheckoutActionCard(
-                                title =
-                                    BBLocalization.Current.Get(
-                                        key =
-                                            "fa3df4de-7069-4a3d-9dac-5a4ea9b88b65",
-
-                                        fallback =
-                                            "Teslimat Adresi"
-                                    ),
-
-                                value =
-                                    data.deliveryAddress
-                                        ?.title
-                                        .orEmpty(),
-
-                                description =
-                                    data.deliveryAddress
-                                        ?.description
-                                        ?.takeIf {
-                                            it.isNotBlank()
-                                        }
-                                        ?: "Teslimat adresini seç.",
-
-                                actionText =
-                                    if (
-                                        data.deliveryAddress ==
-                                        null
-                                    ) {
-                                        "Seç"
-                                    } else {
-                                        "Değiştir"
-                                    },
-
-                                /*
-                                 * ARTIK FULL PAGE ADDRESS LIST'E
-                                 * gitmiyoruz.
-                                 *
-                                 * Basit sheet açılıyor.
-                                 */
-                                onClick = {
-                                    showDeliveryAddressSheet = true
-                                }
-                            )
-                        }
-                    }
-
-                    item {
-
-                        CheckoutPageItem {
-
-                            CheckoutActionCard(
-                                title =
-                                    "Fatura Adresi",
-
-                                value =
-                                    (
-                                            data.invoiceAddress
-                                                ?: data.deliveryAddress
-                                            )
-                                        ?.title
-                                        .orEmpty(),
-
-                                description =
-                                    (
-                                            data.invoiceAddress
-                                                ?: data.deliveryAddress
-                                            )
-                                        ?.description
-                                        ?.takeIf {
-                                            it.isNotBlank()
-                                        }
-                                        ?: "Fatura adresini seç.",
-
-                                actionText =
-                                    if (
-                                        data.invoiceAddress == null &&
-                                        data.deliveryAddress == null
-                                    ) {
-                                        "Seç"
-                                    } else {
-                                        "Değiştir"
-                                    },
-
-                                onClick = {
-                                    showInvoiceAddressSheet = true
-                                }
-                            )
-                        }
-                    }
-
-
-                    item {
-
-                        CheckoutPageItem {
-
-                            CheckoutActionCard(
-                                title = "Fatura Bilgileri",
-
-                                value =
-                                    corporateInvoiceCompanyName,
-
-                                description =
-                                    if (hasCorporateInvoiceInfo) {
-                                        "Kurumsal fatura bilgileri eklendi."
-                                    } else {
-                                        "Kurumsal fatura bilgisi eklenmedi."
-                                    },
-
-                                actionText =
-                                    if (hasCorporateInvoiceInfo) {
-                                        "Düzenle"
-                                    } else {
-                                        "Ekle"
-                                    },
-
-                                onClick = {
-                                    selectionSheetType =
-                                        CheckoutSelectionSheetType.InvoiceInfo
-                                }
-                            )
-                        }
-                    }
-
 
                     /*
                      * ========================================================
@@ -623,7 +458,7 @@ var termsAccepted by rememberSaveable {
                             val installments = data.paymentInstallmentsUi
 
                             if (!paymentCard?.bankName.isNullOrBlank() && installments.isNotEmpty()) {
-                                CheckoutPaymentInstallmentCard(installments = installments)
+                                CheckoutPaymentInstallmentCard(installments = installments, selectedInstallment = selectedPaymentInstallmentUi, onSelected = { selectedPaymentInstallmentUi = it; onPaymentInstallmentSelected(it.installmentCount) })
                             } else {
                                 CheckoutActionCard(
                                     title = "Taksit Seçenekleri",
@@ -712,21 +547,6 @@ var termsAccepted by rememberSaveable {
                      */
 
                     item {
-
-                        CheckoutPageItem {
-
-                            CheckoutSectionTitle(
-                                title =
-                                    "Sözleşmeler ve Formlar",
-
-                                description =
-                                    "Siparişi tamamlamadan önce yasal metinleri incele."
-                            )
-                        }
-                    }
-
-
-                    item {
                         CheckoutPageItem {
                             CheckoutLegalDocumentsCard(
                                 onPreInformationClick = {
@@ -736,15 +556,10 @@ var termsAccepted by rememberSaveable {
                                 onDistanceSalesClick = {
                                     legalSheetType = CheckoutLegalSheetType.DistanceSales
                                     onDistanceSalesContractClick()
-                                },
-                                onWithdrawalRightClick = {
-                                    legalSheetType = CheckoutLegalSheetType.WithdrawalRight
-                                    onWithdrawalRightClick()
                                 }
                             )
                         }
                     }
-
 
                     /*
                      * Checkbox BAĞIMSIZ.
@@ -756,18 +571,13 @@ var termsAccepted by rememberSaveable {
                         CheckoutPageItem {
 
                             BbCheckboxRow(
-                                checked =
-                                    termsAccepted,
+                                checked = termsAccepted,
 
-                                onCheckedChange = {
-                                        checked ->
+                                onCheckedChange = { checked ->
 
-                                    termsAccepted =
-                                        checked
+                                    termsAccepted = checked
 
-                                    onTermsAcceptedChange(
-                                        checked
-                                    )
+                                    onTermsAcceptedChange(checked)
                                 },
 
                                 title =
@@ -776,15 +586,7 @@ var termsAccepted by rememberSaveable {
                         }
                     }
 
-                    item {
-
-                        Spacer(
-                            modifier =
-                                Modifier.height(
-                                    BBSpacing.Space2
-                                )
-                        )
-                    }
+                    item { Spacer(modifier = Modifier.height(BBSpacing.Space3)) }
                 }
             }
 
@@ -981,86 +783,32 @@ selectedAddressId =
         )
     }
 
-    /*
-     * ========================================================================
-     * LEGAL HTML
-     * ========================================================================
-     */
-
-    legalSheetType?.let {
-            type ->
-
-        when (type) {
-
-            CheckoutLegalSheetType.PreInformation -> {
-
+    legalSheetType?.let { type ->
+        when (type)
+        {
+            CheckoutLegalSheetType.PreInformation ->
+            {
                 CheckoutLegalSheet(
                     title = "Ön Bilgilendirme Formu",
-
                     htmlContent = data.preInformationHtml,
-
                     loading = data.isContractLoading,
-
                     emptyText = "Ön Bilgilendirme Formu henüz oluşturulmadı.",
-
-                    snapshot = contractSnapshot,
-
                     onDismiss = { legalSheetType = null }
                 )
             }
 
-
-            CheckoutLegalSheetType.DistanceSales -> {
-
+            CheckoutLegalSheetType.DistanceSales ->
+            {
                 CheckoutLegalSheet(
-                    title =
-                        "Mesafeli Satış Sözleşmesi",
-
-                    htmlContent =
-                        data.distanceSellingHtml,
-
-                    loading =
-                        data.isContractLoading,
-
-                    emptyText =
-                        "Mesafeli Satış Sözleşmesi henüz oluşturulmadı.",
-
-                    snapshot =
-                        contractSnapshot,
-
-                    onDismiss = {
-                        legalSheetType = null
-                    }
-                )
-            }
-
-
-            CheckoutLegalSheetType.WithdrawalRight -> {
-
-                CheckoutLegalSheet(
-                    title =
-                        "Cayma Hakkı",
-
-                    htmlContent =
-                        data.withdrawalRightHtml,
-
-                    loading =
-                        data.isContractLoading,
-
-                    emptyText =
-                        "Cayma hakkı bilgilendirmesi henüz oluşturulmadı.",
-
-                    snapshot =
-                        contractSnapshot,
-
-                    onDismiss = {
-                        legalSheetType = null
-                    }
+                    title = "Mesafeli Satış Sözleşmesi",
+                    htmlContent = data.distanceSellingHtml,
+                    loading = data.isContractLoading,
+                    emptyText = "Mesafeli Satış Sözleşmesi henüz oluşturulmadı.",
+                    onDismiss = { legalSheetType = null }
                 )
             }
         }
     }
-
 
     /*
      * ========================================================================
@@ -1210,10 +958,7 @@ selectedAddressId =
                             null
                     },
 
-                    onDismiss = {
-                        selectionSheetType =
-                            null
-                    }
+                    onDismiss = { selectionSheetType = null }
                 )
             }
         }
@@ -1279,54 +1024,70 @@ private fun CheckoutPaymentCard(card: CheckoutPaymentCardUiModel, onClick: () ->
 }
 
 @Composable
-private fun CheckoutPaymentInstallmentCard(installments: List<CheckoutInstallmentUiModel>) {
-    Surface(
-        modifier = Modifier.fillMaxWidth(),
-        shape = MaterialTheme.shapes.large,
-        color = MaterialTheme.colorScheme.surface,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
-    ) {
-        Column(modifier = Modifier.fillMaxWidth()) {
+private fun CheckoutPaymentInstallmentCard(installments: List<CheckoutInstallmentUiModel>, selectedInstallment: CheckoutInstallmentUiModel?, onSelected: (CheckoutInstallmentUiModel) -> Unit)
+{
+    Surface(modifier = Modifier.fillMaxWidth(), shape = MaterialTheme.shapes.large, color = MaterialTheme.colorScheme.surface, border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant))
+    {
+        Column(modifier = Modifier.fillMaxWidth())
+        {
             Text(
                 text = "Taksit Seçenekleri",
-                modifier = Modifier.padding(horizontal = BBSpacing.Space4, vertical = BBSpacing.Space4),
-                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(horizontal = BBSpacing.Space4, vertical = BBSpacing.Space3),
+                style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Bold
             )
 
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
             installments.forEachIndexed { index, installment ->
+                val selected = selectedInstallment?.installmentCount == installment.installmentCount
+
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = BBSpacing.Space3, vertical = BBSpacing.Space3),
+                    modifier = Modifier.fillMaxWidth().clickable { onSelected(installment) }.padding(horizontal = BBSpacing.Space3, vertical = BBSpacing.Space3),
                     horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
                     verticalAlignment = Alignment.CenterVertically
-                ) {
+                )
+                {
                     RadioButton(
-                        selected = installment.isSelected,
-                        onClick = null,
+                        selected = selected,
+                        onClick = { onSelected(installment) },
                         colors = RadioButtonDefaults.colors(selectedColor = MaterialTheme.colorScheme.primary)
                     )
 
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(installment.title, style = MaterialTheme.typography.bodyLarge, fontWeight = if (installment.isSelected) FontWeight.Bold else FontWeight.Medium)
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+                    )
+                    {
+                        Text(
+                            text = installment.title,
+                            style = MaterialTheme.typography.bodySmall,
+                            fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
 
-                        if (installment.installmentCount > 1) {
-                            Text(installment.monthlyAmountText, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        }
+                        Text(
+                            text = installment.monthlyAmountText,
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     }
 
-                    Text(installment.totalAmountText, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold)
+                    Text(
+                        text = installment.totalAmountText,
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
 
-                if (index != installments.lastIndex) {
+                if (index != installments.lastIndex)
+                {
                     HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                 }
             }
         }
     }
 }
-
 
 @Composable
 private fun CheckoutPageItem(
@@ -1416,14 +1177,15 @@ private fun CheckoutSectionTitle(
  */
 
 @Composable
-private fun CheckoutLegalDocumentsCard(onPreInformationClick: () -> Unit, onDistanceSalesClick: () -> Unit, onWithdrawalRightClick: () -> Unit) {
-    Surface(modifier = Modifier.fillMaxWidth(), shape = MaterialTheme.shapes.large, color = MaterialTheme.colorScheme.surface, border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)) {
-        Column(modifier = Modifier.fillMaxWidth()) {
+private fun CheckoutLegalDocumentsCard(onPreInformationClick: () -> Unit, onDistanceSalesClick: () -> Unit)
+{
+    Surface(modifier = Modifier.fillMaxWidth(), shape = MaterialTheme.shapes.large, color = MaterialTheme.colorScheme.surface, border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant))
+    {
+        Column(modifier = Modifier.fillMaxWidth())
+        {
             CheckoutLegalDocumentRow(title = "Ön Bilgilendirme Formu", description = "Sipariş, teslimat ve ödeme bilgilerini içeren ön bilgilendirme formu.", onClick = onPreInformationClick)
             CheckoutDashedDivider()
             CheckoutLegalDocumentRow(title = "Mesafeli Satış Sözleşmesi", description = "Siparişe özel mesafeli satış sözleşmesini görüntüle.", onClick = onDistanceSalesClick)
-            CheckoutDashedDivider()
-            CheckoutLegalDocumentRow(title = "Cayma Hakkı", description = "Cayma hakkı ve ilgili koşulları görüntüle.", onClick = onWithdrawalRightClick)
         }
     }
 }
@@ -1447,6 +1209,142 @@ private fun CheckoutDashedDivider() {
 
     Canvas(modifier = Modifier.fillMaxWidth().height(1.dp)) {
         drawLine(color = dividerColor, start = Offset(0f, 0f), end = Offset(size.width, 0f), strokeWidth = 1.dp.toPx(), pathEffect = PathEffect.dashPathEffect(floatArrayOf(8f, 8f)))
+    }
+}
+
+@Composable
+private fun CheckoutAddressCard(
+    deliveryAddress: CheckoutSelectionDisplay?,
+    invoiceAddress: CheckoutSelectionDisplay?,
+    onHeaderClick: () -> Unit,
+    onDeliveryClick: () -> Unit,
+    onInvoiceClick: () -> Unit
+)
+{
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.large,
+        color = MaterialTheme.colorScheme.surface,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+    )
+    {
+        Column(modifier = Modifier.fillMaxWidth())
+        {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = BBSpacing.Space3, vertical = BBSpacing.Space3),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            )
+            {
+                Text(
+                    text = "Teslimat ve Fatura",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+
+                Text(
+                    text = "Ekle / Düzenle",
+                    modifier = Modifier.clip(BBRadius.PillShape).clickable { onHeaderClick() }.padding(horizontal = BBSpacing.Space2, vertical = BBSpacing.Space1),
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(BBSpacing.Space3),
+                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+            )
+            {
+                CheckoutAddressBlock(
+                    title = "Teslimat Adresi",
+                    address = deliveryAddress,
+                    emptyText = "Teslimat adresini seç.",
+                    onClick = onDeliveryClick
+                )
+
+                CheckoutAddressBlock(
+                    title = "Fatura Adresi",
+                    address = invoiceAddress,
+                    emptyText = "Fatura adresini seç.",
+                    onClick = onInvoiceClick
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun CheckoutAddressBlock(
+    title: String,
+    address: CheckoutSelectionDisplay?,
+    emptyText: String,
+    onClick: () -> Unit
+)
+{
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+    )
+    {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.labelLarge,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+
+        Surface(
+            modifier = Modifier.fillMaxWidth().clickable { onClick() },
+            shape = MaterialTheme.shapes.medium,
+            color = MaterialTheme.colorScheme.surfaceContainerLow,
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+        )
+        {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = BBSpacing.Space3, vertical = BBSpacing.Space2),
+                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2),
+                verticalAlignment = Alignment.CenterVertically
+            )
+            {
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
+                )
+                {
+                    Text(
+                        text = address?.title?.takeIf { it.isNotBlank() } ?: "Adres",
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+
+                    Text(
+                        text = address?.description?.takeIf { it.isNotBlank() } ?: emptyText,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 2
+                    )
+                }
+
+                Text(
+                    text = if (address == null) "Ekle" else "Değiştir",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary
+                )
+
+                Icon(
+                    imageVector = Icons.Outlined.ChevronRight,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(BBIcon.Action)
+                )
+            }
+        }
     }
 }
 
@@ -3467,9 +3365,8 @@ private fun CheckoutLegalSheet(
     htmlContent: String,
     loading: Boolean,
     emptyText: String,
-    snapshot: CheckoutContractSnapshot,
     onDismiss: () -> Unit
-) {
+){
 
     val onSurfaceColor =
         MaterialTheme.colorScheme.onSurface
@@ -3521,35 +3418,6 @@ private fun CheckoutLegalSheet(
                         BBSpacing.Space3
                     )
             )
-
-
-            CheckoutContractSnapshotView(
-                snapshot =
-                    snapshot
-            )
-
-
-            Spacer(
-                modifier =
-                    Modifier.height(
-                        BBSpacing.Space3
-                    )
-            )
-
-
-            HorizontalDivider(
-                color =
-                    MaterialTheme.colorScheme.outlineVariant
-            )
-
-
-            Spacer(
-                modifier =
-                    Modifier.height(
-                        BBSpacing.Space3
-                    )
-            )
-
 
             when {
 
@@ -3679,174 +3547,6 @@ private fun CheckoutLegalSheet(
  * ============================================================================
  */
 
-@Composable
-private fun CheckoutContractSnapshotView(
-    snapshot: CheckoutContractSnapshot
-) {
-
-    Column(
-        modifier =
-            Modifier.fillMaxWidth(),
-
-        verticalArrangement =
-            Arrangement.spacedBy(
-                BBSpacing.Space2
-            )
-    ) {
-
-        if (
-            snapshot.deliveryAddress
-                .isNotBlank()
-        ) {
-
-            CheckoutContractRow(
-                title =
-                    "Teslimat Adresi",
-
-                value =
-                    snapshot.deliveryAddress
-            )
-        }
-
-
-        if (
-            snapshot.invoiceAddress
-                .isNotBlank()
-        ) {
-
-            CheckoutContractRow(
-                title =
-                    "Fatura Adresi",
-
-                value =
-                    snapshot.invoiceAddress
-            )
-        }
-
-
-        CheckoutContractRow(
-            title =
-                "Kargo",
-
-            value =
-                snapshot.shippingCost
-                    .ifBlank {
-                        "—"
-                    }
-        )
-
-
-        if (
-            snapshot.installment
-                .isNotBlank()
-        ) {
-
-            CheckoutContractRow(
-                title =
-                    "Taksit",
-
-                value =
-                    listOf(
-                        snapshot.installment,
-                        snapshot.installmentDetail
-                    )
-                        .filter {
-                            it.isNotBlank()
-                        }
-                        .joinToString(
-                            separator =
-                                " · "
-                        )
-            )
-        }
-
-
-        if (
-            snapshot.providerFee
-                .isNotBlank()
-        ) {
-
-            CheckoutContractRow(
-                title =
-                    "Provider / Taksit Farkı",
-
-                value =
-                    snapshot.providerFee
-            )
-        }
-
-
-        CheckoutContractRow(
-            title =
-                "Nihai Tutar",
-
-            value =
-                snapshot.grandTotal
-                    .ifBlank {
-                        "—"
-                    },
-
-            strong =
-                true
-        )
-    }
-}
-
-
-@Composable
-private fun CheckoutContractRow(
-    title: String,
-    value: String,
-    strong: Boolean = false
-) {
-
-    Row(
-        modifier =
-            Modifier.fillMaxWidth(),
-
-        horizontalArrangement =
-            Arrangement.spacedBy(
-                BBSpacing.Space3
-            )
-    ) {
-
-        Text(
-            text =
-                title,
-
-            modifier =
-                Modifier.weight(0.36f),
-
-            style =
-                MaterialTheme.typography.bodySmall,
-
-            color =
-                MaterialTheme.colorScheme.onSurfaceVariant
-        )
-
-
-        Text(
-            text =
-                value,
-
-            modifier =
-                Modifier.weight(0.64f),
-
-            style =
-                MaterialTheme.typography.bodySmall,
-
-            fontWeight =
-                if (strong) {
-                    FontWeight.Bold
-                } else {
-                    FontWeight.Medium
-                },
-
-            color =
-                MaterialTheme.colorScheme.onSurface
-        )
-    }
-}
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -4369,9 +4069,7 @@ private enum class CheckoutLegalSheetType {
 
     PreInformation,
 
-    DistanceSales,
-
-    WithdrawalRight
+    DistanceSales
 }
 
 
@@ -4467,8 +4165,7 @@ val cardOptions: List<CheckoutSelectionDisplay> =
     val paymentInstallmentsUi: List<CheckoutInstallmentUiModel> = CheckoutPaymentMockData.installments,
 
 
-    val installment: CheckoutSelectionDisplay? =
-        null,
+    val installment: CheckoutSelectionDisplay? = null,
 
     val installmentOptions: List<CheckoutSelectionDisplay> =
         emptyList(),
@@ -4529,11 +4226,9 @@ val cardOptions: List<CheckoutSelectionDisplay> =
 
 data class CheckoutSelectionDisplay(
 
-    val title: String =
-        "",
+    val title: String = "",
 
-    val description: String =
-        ""
+    val description: String = ""
 )
 
 
@@ -4560,32 +4255,6 @@ data class CheckoutPriceSummary(
     val payableTotalText: String =
         ""
 )
-
-
-data class CheckoutContractSnapshot(
-
-    val deliveryAddress: String =
-        "",
-
-    val invoiceAddress: String =
-        "",
-
-    val shippingCost: String =
-        "",
-
-    val grandTotal: String =
-        "",
-
-    val installment: String =
-        "",
-
-    val installmentDetail: String =
-        "",
-
-    val providerFee: String =
-        ""
-)
-
 
 /*
  * ============================================================================
@@ -4634,14 +4303,7 @@ private fun CheckoutScreenPreview() {
 
                     basketItemCount = 4,
 
-                    deliveryAddress =
-                        CheckoutSelectionDisplay(
-                            title =
-                                "Ev Adresim",
-
-                            description =
-                                "Fulya Mah. Aytekin Kotil Cad. No: 11/1"
-                        ),
+                    deliveryAddress = CheckoutSelectionDisplay(title = "Ev Adresim", description = "Fulya Mah. Aytekin Kotil Cad. No: 11/1"),
 
                     invoiceType =
                         CheckoutSelectionDisplay(
@@ -4691,14 +4353,7 @@ private fun CheckoutScreenPreview() {
                             )
                         ),
 
-                    installment =
-                        CheckoutSelectionDisplay(
-                            title =
-                                "Tek Çekim",
-
-                            description =
-                                "Tek çekim"
-                        ),
+                    installment = CheckoutSelectionDisplay(title = "Tek Çekim", description = "Tek çekim"),
 
                     installmentOptions =
                         listOf(

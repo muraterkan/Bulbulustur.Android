@@ -1,8 +1,12 @@
 package com.bulbulustur.android.Application.Areas.b2c.Controllers
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.bulbulustur.android.businesslayer.Core.DTO.CheckoutContractDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberAddressDTO
+import com.bulbulustur.android.businesslayer.Core.Interface.IContractRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IMemberAddressRepository
+import com.bulbulustur.android.businesslayer.Core.Model.CheckoutContractRequestModel
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.MemberAddressInsertModel
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.MemberAddressUpdateModel
 import com.bulbulustur.android.businesslayer.Core.Util.Execute.IExecuteService
@@ -27,6 +31,11 @@ data class CheckoutControllerState(
 
     val SelectedInvoiceAddressId: Int = 0,
 
+    val ContractResult: Result<CheckoutContractDTO>? = null,
+    val IsContractLoading: Boolean = false,
+    val ContractErrorMessage: String? = null,
+
+
     val ErrorMessage: String? = null
 ) {
     val Addresses: List<MemberAddressDTO>
@@ -48,11 +57,16 @@ data class CheckoutControllerState(
                 it.MemberAddressId == SelectedInvoiceAddressId
             }
 
+    val PreInformationHtml: String get() = ContractResult?.Data?.PreInformationHtml.orEmpty()
+
+    val DistanceSellingHtml: String get() = ContractResult?.Data?.DistanceSellingHtml.orEmpty()
+
 }
 
 class CheckoutController(
     private val executeService: IExecuteService,
-    private val memberAddressRepository: IMemberAddressRepository
+    private val memberAddressRepository: IMemberAddressRepository,
+    private val contractRepository: IContractRepository
 ) : BaseController() {
 
     private val _state =
@@ -336,6 +350,53 @@ class CheckoutController(
                     SelectedInvoiceAddressId =
                         memberAddressId
                 )
+            }
+        }
+    }
+    fun LoadContracts(memberId: Int, languageId: Int, deliveryAddressId: Int, invoiceAddressId: Int, installmentCount: Int) {
+        if (memberId <= 0 || deliveryAddressId <= 0 || invoiceAddressId <= 0) {
+            _state.update {
+                it.copy(
+                    ContractResult = null,
+                    IsContractLoading = false,
+                    ContractErrorMessage = null
+                )
+            }
+            return
+        }
+
+        val safeInstallmentCount = installmentCount.coerceAtLeast(1)
+
+        viewModelScope.launch {
+            _state.update { it.copy(IsContractLoading = true, ContractErrorMessage = null) }
+
+            val request = CheckoutContractRequestModel(
+                MemberId = 10000002,
+                LanguageId = 1,
+                DeliveryAddressId = 1,
+                InvoiceAddressId = 1,
+                InstallmentCount = 1
+            )
+
+            Log.d(
+                "ContractDebug",
+                "FORCED REQUEST MemberId=${request.MemberId} LanguageId=${request.LanguageId} DeliveryAddressId=${request.DeliveryAddressId} InvoiceAddressId=${request.InvoiceAddressId} InstallmentCount=${request.InstallmentCount}"
+            )
+
+            val response = executeService.PostAsync(operationType = "Checkout.Contract.Load") {
+                contractRepository.GetCheckoutContractsAsync(request)
+            }
+
+            Log.d(
+                "ContractDebug",
+                "RESPONSE Success=${response.Success} PreLength=${response.Data?.PreInformationHtml?.length ?: 0} DistanceLength=${response.Data?.DistanceSellingHtml?.length ?: 0} Message=${response.Message}"
+            )
+
+            _state.update {
+                it.copy(
+                    ContractResult = response,
+                    IsContractLoading = false,
+                    ContractErrorMessage = response.Message.takeIf { !response.Success })
             }
         }
     }

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.KeyboardArrowUp
@@ -21,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.CheckoutPriceSummary
 import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
@@ -29,7 +31,6 @@ import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
-
 
 /*
  * ============================================================================
@@ -48,158 +49,68 @@ fun BbCommerceBottomBar(
     actionText: String = "Devam Et",
     onSummaryClick: () -> Unit,
     onContinueClick: () -> Unit
-) {
-    val navigationModifier =
-        if (applyNavigationBarsPadding) {
-            Modifier.navigationBarsPadding()
-        } else {
-            Modifier
-        }
+)
+{
+    val navigationModifier = if (applyNavigationBarsPadding) Modifier.navigationBarsPadding() else Modifier
 
     Surface(
-        color =
-            MaterialTheme.colorScheme.surface,
-        tonalElevation =
-            BBSpacing.Space1,
-        shadowElevation =
-            BBSpacing.Space3
-    ) {
-        Column(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .then(
-                        navigationModifier
-                    )
-        ) {
-            HorizontalDivider(
-                color =
-                    MaterialTheme.colorScheme
-                        .outlineVariant
-            )
+        color = MaterialTheme.colorScheme.surface,
+        tonalElevation = BBSpacing.Space1,
+        shadowElevation = BBSpacing.Space3
+    )
+    {
+        Column(modifier = Modifier.fillMaxWidth().then(navigationModifier))
+        {
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
             Row(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            horizontal =
-                                BBSpacing.PageHorizontal,
-                            vertical =
-                                BBSpacing.Space3
-                        ),
-                horizontalArrangement =
-                    Arrangement.spacedBy(
-                        BBSpacing.Space3
-                    ),
-                verticalAlignment =
-                    Alignment.CenterVertically
-            ) {
+                modifier = Modifier.fillMaxWidth().padding(horizontal = BBSpacing.PageHorizontal, vertical = BBSpacing.Space3),
+                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+                verticalAlignment = Alignment.CenterVertically
+            )
+            {
                 Row(
-                    modifier =
-                        Modifier
-                            .weight(
-                                1f
-                            )
-                            .clip(
-                                BBRadius.Button
-                            )
-                            .clickable {
-                                onSummaryClick()
-                            }
-                            .padding(
-                                horizontal =
-                                    BBSpacing.Space2,
-                                vertical =
-                                    BBSpacing.Space2
-                            ),
-                    verticalAlignment =
-                        Alignment.CenterVertically,
-                    horizontalArrangement =
-                        Arrangement.spacedBy(
-                            BBSpacing.Space2
-                        )
-                ) {
-                    Column(
-                        modifier =
-                            Modifier.weight(
-                                1f
-                            )
-                    ) {
+                    modifier = Modifier.weight(1f).clip(BBRadius.Button).clickable { onSummaryClick() }.padding(horizontal = BBSpacing.Space2, vertical = BBSpacing.Space2),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+                )
+                {
+                    Column(modifier = Modifier.weight(1f))
+                    {
                         Text(
-                            text =
-                                BBLocalization.Current.Get(
-                                    key =
-                                        "e736c25f-c944-4f52-a206-819f93d64a29",
-                                    fallback =
-                                        "Toplam"
-                                ),
-                            style =
-                                MaterialTheme.typography
-                                    .labelSmall,
-                            color =
-                                MaterialTheme.colorScheme
-                                    .onSurfaceVariant
+                            text = BBLocalization.Current.Get(key = "e736c25f-c944-4f52-a206-819f93d64a29", fallback = "Toplam"),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
 
                         Text(
-                            text =
-                                totalPriceText.ifBlank {
-                                    "—"
-                                },
-                            style =
-                                MaterialTheme.typography
-                                    .titleMedium,
-                            fontWeight =
-                                FontWeight.Bold,
-                            color =
-                                MaterialTheme.colorScheme
-                                    .onSurface
+                            text = totalPriceText.ifBlank { "—" },
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
 
                     Icon(
-                        imageVector =
-                            if (summaryExpanded) {
-                                Icons.Outlined
-                                    .KeyboardArrowDown
-                            } else {
-                                Icons.Outlined
-                                    .KeyboardArrowUp
-                            },
-                        contentDescription =
-                            null,
-                        tint =
-                            MaterialTheme.colorScheme
-                                .primary,
-                        modifier =
-                            Modifier.size(
-                                BBIcon.Action
-                            )
+                        imageVector = if (summaryExpanded) Icons.Outlined.KeyboardArrowDown else Icons.Outlined.KeyboardArrowUp,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(BBIcon.Action)
                     )
                 }
 
                 BbButton(
-                    text =
-                        actionText,
-                    onClick =
-                        onContinueClick,
-                    modifier =
-                        Modifier.weight(
-                            1.35f
-                        ),
-                    variant =
-                        BbButtonVariant.Primary,
-                    size =
-                        BbButtonSize.Medium,
-                    enabled =
-                        canContinue
+                    text = actionText,
+                    onClick = onContinueClick,
+                    modifier = Modifier.weight(1.35f),
+                    variant = BbButtonVariant.Primary,
+                    size = BbButtonSize.Medium,
+                    enabled = canContinue
                 )
             }
         }
     }
 }
-
 
 /*
  * ============================================================================
@@ -208,207 +119,91 @@ fun BbCommerceBottomBar(
  */
 
 @Composable
-fun BbCommerceOrderSummaryOverlay(
-    summary: CheckoutPriceSummary
-) {
+fun BbCommerceOrderSummaryOverlay(summary: CheckoutPriceSummary)
+{
     Surface(
-        modifier =
-            Modifier.fillMaxWidth(),
-        color =
-            MaterialTheme.colorScheme.surface,
-        shape =
-            MaterialTheme.shapes.extraLarge,
-        shadowElevation =
-            BBSpacing.Space4
-    ) {
+        modifier = Modifier.fillMaxWidth(),
+        color = MaterialTheme.colorScheme.surface,
+        shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp, bottomStart = 0.dp, bottomEnd = 0.dp),
+        shadowElevation = BBSpacing.Space4
+    )
+    {
         Column(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        start =
-                            BBSpacing.PageHorizontal,
-                        top =
-                            BBSpacing.Space4,
-                        end =
-                            BBSpacing.PageHorizontal,
-                        bottom =
-                            BBSpacing.Space4
-                    ),
-            verticalArrangement =
-                Arrangement.spacedBy(
-                    BBSpacing.Space3
-                )
-        ) {
+            modifier = Modifier.fillMaxWidth().padding(start = BBSpacing.PageHorizontal, top = BBSpacing.Space3, end = BBSpacing.PageHorizontal, bottom = BBSpacing.Space3),
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+        )
+        {
             Text(
-                text =
-                    "Sepet Özeti",
-                style =
-                    MaterialTheme.typography
-                        .titleLarge,
-                fontWeight =
-                    FontWeight.Bold
+                text = "Sepet Özeti",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface
             )
 
-            BbCommerceSummaryContent(
-                summary =
-                    summary
-            )
+            BbCommerceSummaryContent(summary = summary)
         }
     }
 }
 
-
 @Composable
-private fun BbCommerceSummaryContent(
-    summary: CheckoutPriceSummary
-) {
+private fun BbCommerceSummaryContent(summary: CheckoutPriceSummary)
+{
     Column(
-        modifier =
-            Modifier.fillMaxWidth(),
-        verticalArrangement =
-            Arrangement.spacedBy(
-                BBSpacing.Space3
-            )
-    ) {
-        BbCommerceSummaryRow(
-            title =
-                "Ürün Toplamı",
-            value =
-                summary.productTotalText
-        )
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+    )
+    {
+        BbCommerceSummaryRow(title = "Ürün Toplamı", value = summary.productTotalText)
+        BbCommerceSummaryRow(title = "Kargo", value = summary.cargoTotalText)
 
-        BbCommerceSummaryRow(
-            title =
-                "Kargo",
-            value =
-                summary.cargoTotalText
-        )
-
-        if (
-            summary.discountTotalText
-                .isNotBlank()
-        ) {
-            BbCommerceSummaryRow(
-                title =
-                    "İndirim",
-                value =
-                    summary.discountTotalText
-            )
+        if (summary.discountTotalText.isNotBlank())
+        {
+            BbCommerceSummaryRow(title = "İndirim", value = summary.discountTotalText)
         }
 
-        if (
-            summary.couponTotalText
-                .isNotBlank()
-        ) {
-            BbCommerceSummaryRow(
-                title =
-                    "Kupon",
-                value =
-                    summary.couponTotalText
-            )
+        if (summary.couponTotalText.isNotBlank())
+        {
+            BbCommerceSummaryRow(title = "Kupon", value = summary.couponTotalText)
         }
 
-        if (
-            summary.installmentFeeText
-                .isNotBlank()
-        ) {
-            BbCommerceSummaryRow(
-                title =
-                    "Taksit Farkı",
-                value =
-                    summary.installmentFeeText
-            )
+        if (summary.installmentFeeText.isNotBlank())
+        {
+            BbCommerceSummaryRow(title = "Taksit Farkı", value = summary.installmentFeeText)
         }
 
-        if (
-            summary.commissionTotalText
-                .isNotBlank()
-        ) {
-            BbCommerceSummaryRow(
-                title =
-                    "Komisyon",
-                value =
-                    summary.commissionTotalText
-            )
+        if (summary.commissionTotalText.isNotBlank())
+        {
+            BbCommerceSummaryRow(title = "Komisyon", value = summary.commissionTotalText)
         }
 
-        HorizontalDivider(
-            color =
-                MaterialTheme.colorScheme
-                    .outlineVariant
-        )
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
-        BbCommerceSummaryRow(
-            title =
-                "Ödenecek Tutar",
-            value =
-                summary.payableTotalText,
-            strong =
-                true
-        )
+        BbCommerceSummaryRow(title = "Ödenecek Tutar", value = summary.payableTotalText, strong = true)
     }
 }
 
-
 @Composable
-private fun BbCommerceSummaryRow(
-    title: String,
-    value: String,
-    strong: Boolean = false
-) {
+private fun BbCommerceSummaryRow(title: String, value: String, strong: Boolean = false)
+{
     Row(
-        modifier =
-            Modifier.fillMaxWidth(),
-        horizontalArrangement =
-            Arrangement.spacedBy(
-                BBSpacing.Space3
-            ),
-        verticalAlignment =
-            Alignment.CenterVertically
-    ) {
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+        verticalAlignment = Alignment.CenterVertically
+    )
+    {
         Text(
-            text =
-                title,
-            modifier =
-                Modifier.weight(
-                    1f
-                ),
-            style =
-                if (strong) {
-                    MaterialTheme.typography
-                        .titleSmall
-                } else {
-                    MaterialTheme.typography
-                        .bodyMedium
-                },
-            fontWeight =
-                if (strong) {
-                    FontWeight.Bold
-                } else {
-                    FontWeight.Medium
-                },
-            color =
-                MaterialTheme.colorScheme
-                    .onSurface
+            text = title,
+            modifier = Modifier.weight(1f),
+            style = if (strong) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.bodySmall,
+            fontWeight = if (strong) FontWeight.Bold else FontWeight.Medium,
+            color = MaterialTheme.colorScheme.onSurface
         )
 
         Text(
-            text =
-                value,
-            style =
-                if (strong) {
-                    MaterialTheme.typography
-                        .titleMedium
-                } else {
-                    MaterialTheme.typography
-                        .bodyMedium
-                },
-            fontWeight =
-                FontWeight.Bold,
-            color =
-                MaterialTheme.colorScheme
-                    .onSurface
+            text = value,
+            style = if (strong) MaterialTheme.typography.titleSmall else MaterialTheme.typography.bodySmall,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onSurface
         )
     }
 }

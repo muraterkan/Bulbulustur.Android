@@ -1,5 +1,6 @@
 package com.bulbulustur.android.Application.Navigation.Graph
 
+import android.util.Log
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -2059,14 +2060,12 @@ fun NavGraphBuilder.retailGraph(
         val basketState by basketController.State.collectAsState()
         val accountState by accountController.State.collectAsState()
 
-        LaunchedEffect(sessionState.MemberId) {
-            basketController.Refresh(
-                memberId = sessionState.MemberId
-            )
+        LaunchedEffect(sessionState.MemberId)
+        {
+            Log.d("BasketDebug", "Basket route memberId=${sessionState.MemberId}")
 
-            accountController.GetProductFavorites(
-                memberId = sessionState.MemberId
-            )
+            basketController.Refresh(memberId = sessionState.MemberId)
+            accountController.GetProductFavorites(memberId = sessionState.MemberId)
         }
 
         BasketScreen(

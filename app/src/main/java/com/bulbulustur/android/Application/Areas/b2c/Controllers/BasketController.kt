@@ -1,8 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Controllers
 
-import com.bulbulustur.android.Application.Localization.BBLocalization
-
 import androidx.lifecycle.viewModelScope
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.businesslayer.Core.DTO.BasketDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.BasketInsertResponse
 import com.bulbulustur.android.businesslayer.Core.DTO.BasketQuantityUpdateResponse
@@ -23,328 +22,121 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
 
-data class BasketControllerState(
-    val IsLoading: Boolean = false,
-    val CurrentAction: String? = null,
-    val BasketListResult: Result<List<BasketDTO>>? = null,
-    val BasketSummaryResult: Result<BasketSummaryDTO>? = null,
-    val InsertResult: Result<BasketInsertResponse>? = null,
-    val QuantityUpdateResult: Result<BasketQuantityUpdateResponse>? = null,
-    val DeleteResult: Result<Any?>? = null,
-    val MoveToFavoriteResult: Result<Any?>? = null,
-    val CouponListResult: Result<List<MemberCouponDTO>>? = null,
-    val SelectedCouponId: Int = 0,
-    val IsCouponLoading: Boolean = false,
-    val CouponErrorMessage: String? = null,
-    val ErrorMessage: String? = null
-) {
-
-    val BasketItems: List<BasketDTO>
-        get() =
-            BasketListResult
-                ?.Data
-                .orEmpty()
-
-    val BasketSummary: BasketSummaryDTO?
-        get() =
-            BasketSummaryResult
-                ?.Data
-
-    val Coupons: List<MemberCouponDTO>
-        get() =
-            CouponListResult
-                ?.Data
-                .orEmpty()
-
-    val SelectedCoupon: MemberCouponDTO?
-        get() =
-            Coupons.firstOrNull { coupon ->
-                coupon.MemberCouponId ==
-                        SelectedCouponId
-            }
-
-    val ItemCount: Int
-        get() =
-            InsertResult
-                ?.Data
-                ?.ItemCount
-                ?: BasketItems.size
-
-    val TotalQuantity: Int
-        get() =
-            InsertResult
-                ?.Data
-                ?.TotalQuantity
-                ?: BasketItems.sumOf { basket ->
-                    basket.Quantity
-                }
+data class BasketControllerState(val IsLoading: Boolean = false, val CurrentAction: String? = null, val BasketListResult: Result<List<BasketDTO>>? = null, val BasketSummaryResult: Result<BasketSummaryDTO>? = null, val InsertResult: Result<BasketInsertResponse>? = null, val QuantityUpdateResult: Result<BasketQuantityUpdateResponse>? = null, val DeleteResult: Result<Any?>? = null, val MoveToFavoriteResult: Result<Any?>? = null, val CouponListResult: Result<List<MemberCouponDTO>>? = null, val SelectedCouponId: Int = 0, val IsCouponLoading: Boolean = false, val CouponErrorMessage: String? = null, val ErrorMessage: String? = null) {
+    val BasketItems: List<BasketDTO> get() = BasketListResult?.Data.orEmpty()
+    val BasketSummary: BasketSummaryDTO? get() = BasketSummaryResult?.Data
+    val Coupons: List<MemberCouponDTO> get() = CouponListResult?.Data.orEmpty()
+    val SelectedCoupon: MemberCouponDTO? get() = Coupons.firstOrNull { coupon -> coupon.MemberCouponId == SelectedCouponId }
+    val ItemCount: Int get() = InsertResult?.Data?.ItemCount ?: BasketItems.size
+    val TotalQuantity: Int get() = InsertResult?.Data?.TotalQuantity ?: BasketItems.sumOf { basket -> basket.Quantity }
 }
 
-class BasketController(
-    private val executeService: IExecuteService,
-    private val basketRepository: IBasketRepository,
-    private val memberCouponRepository: IMemberCouponRepository
-) : BaseController() {
+class BasketController(private val executeService: IExecuteService, private val basketRepository: IBasketRepository, private val memberCouponRepository: IMemberCouponRepository) : BaseController() {
+    private val _state = MutableStateFlow(BasketControllerState())
+    val State: StateFlow<BasketControllerState> = _state.asStateFlow()
 
-    private val _state =
-        MutableStateFlow(
-            BasketControllerState()
-        )
-
-    val State: StateFlow<BasketControllerState> =
-        _state.asStateFlow()
-
-    fun List(
-        memberId: Int,
-        count: Int = 150
-    ) {
+    fun List(memberId: Int, count: Int = 150) {
         if (memberId <= 0) {
             SetAuthenticationError()
             return
         }
 
-        LoadCoupons(
-            memberId = memberId
-        )
+        LoadCoupons(memberId = memberId)
 
         viewModelScope.launch {
-            SetLoading(
-                currentAction =
-                    "List"
-            )
+            SetLoading(currentAction = "List")
 
-            val response =
-                executeService.GetAsync(
-                    cacheKey =
-                        ""
-                ) {
-                    basketRepository.GetBasketsAsync(
-                        memberId =
-                            memberId,
-                        count =
-                            count
-                    )
-                }
+            val response = executeService.GetAsync(cacheKey = "") {
+                basketRepository.GetBasketsAsync(memberId = memberId, count = count)
+            }
 
             _state.update { currentState ->
-                currentState.copy(
-                    IsLoading =
-                        false,
-                    BasketListResult =
-                        response,
-                    ErrorMessage =
-                        response.Message.takeIf {
-                            !response.Success
-                        }
-                )
+                currentState.copy(IsLoading = false, BasketListResult = response, ErrorMessage = response.Message.takeIf { !response.Success })
             }
         }
     }
 
-    fun Summary(
-        memberId: Int
-    ) {
+    fun Summary(memberId: Int) {
         if (memberId <= 0) {
             SetAuthenticationError()
             return
         }
 
         viewModelScope.launch {
-            SetLoading(
-                currentAction =
-                    "Summary"
-            )
+            SetLoading(currentAction = "Summary")
 
-            val response =
-                executeService.GetAsync(
-                    cacheKey =
-                        ""
-                ) {
-                    basketRepository.GetBasketSummaryAsync(
-                        memberId =
-                            memberId
-                    )
-                }
+            val response = executeService.GetAsync(cacheKey = "") {
+                basketRepository.GetBasketSummaryAsync(memberId = memberId)
+            }
 
             _state.update { currentState ->
-                currentState.copy(
-                    IsLoading =
-                        false,
-                    BasketSummaryResult =
-                        response,
-                    ErrorMessage =
-                        response.Message.takeIf {
-                            !response.Success
-                        }
-                )
+                currentState.copy(IsLoading = false, BasketSummaryResult = response, ErrorMessage = response.Message.takeIf { !response.Success })
             }
         }
     }
 
-    fun LoadCoupons(
-        memberId: Int,
-        count: Int = 100
-    ) {
+    fun LoadCoupons(memberId: Int, count: Int = 100) {
         if (memberId <= 0) {
             _state.update { currentState ->
-                currentState.copy(
-                    IsCouponLoading = false,
-                    CouponListResult = null,
-                    SelectedCouponId = 0,
-                    CouponErrorMessage = null
-                )
+                currentState.copy(IsCouponLoading = false, CouponListResult = null, SelectedCouponId = 0, CouponErrorMessage = null)
             }
-
             return
         }
 
         viewModelScope.launch {
             _state.update { currentState ->
-                currentState.copy(
-                    IsCouponLoading = true,
-                    CouponErrorMessage = null
-                )
+                currentState.copy(IsCouponLoading = true, CouponErrorMessage = null)
             }
 
-            val response =
-                executeService.GetAsync(
-                    cacheKey = ""
-                ) {
-                    memberCouponRepository.GetMemberCouponsAsync(
-                        memberId = memberId,
-                        count = count
-                    )
-                }
+            val response = executeService.GetAsync(cacheKey = "") {
+                memberCouponRepository.GetMemberCouponsAsync(memberId = memberId, count = count)
+            }
 
             _state.update { currentState ->
-                val coupons =
-                    response.Data.orEmpty()
+                val coupons = response.Data.orEmpty()
+                val selectedCouponId = currentState.SelectedCouponId.takeIf { selectedId -> selectedId > 0 && coupons.any { coupon -> coupon.MemberCouponId == selectedId && coupon.IsSelectableCoupon() } } ?: 0
 
-                val selectedCouponId =
-                    currentState.SelectedCouponId
-                        .takeIf { selectedId ->
-                            selectedId > 0 &&
-                                    coupons.any { coupon ->
-                                        coupon.MemberCouponId == selectedId &&
-                                                coupon.IsSelectableCoupon()
-                                    }
-                        }
-                        ?: 0
-
-                currentState.copy(
-                    CouponListResult = response,
-                    SelectedCouponId = selectedCouponId,
-                    IsCouponLoading = false,
-                    CouponErrorMessage =
-                        response.Message.takeIf {
-                            !response.Success
-                        }
-                )
+                currentState.copy(CouponListResult = response, SelectedCouponId = selectedCouponId, IsCouponLoading = false, CouponErrorMessage = response.Message.takeIf { !response.Success })
             }
         }
     }
 
-    fun SelectCoupon(
-        coupon: MemberCouponDTO
-    ) {
+    fun SelectCoupon(coupon: MemberCouponDTO) {
         _state.update { currentState ->
-            val currentCoupon =
-                currentState.Coupons.firstOrNull {
-                        currentCoupon ->
-                    currentCoupon.MemberCouponId ==
-                            coupon.MemberCouponId
-                }
+            val currentCoupon = currentState.Coupons.firstOrNull { item -> item.MemberCouponId == coupon.MemberCouponId }
 
-            if (
-                currentCoupon == null ||
-                !currentCoupon.IsSelectableCoupon()
-            ) {
-                currentState.copy(
-                    CouponErrorMessage =
-                        "Bu kupon şu anda kullanılamıyor."
-                )
+            if (currentCoupon == null || !currentCoupon.IsSelectableCoupon()) {
+                currentState.copy(CouponErrorMessage = "Bu kupon şu anda kullanılamıyor.")
             } else {
-                currentState.copy(
-                    SelectedCouponId =
-                        currentCoupon.MemberCouponId,
-                    CouponErrorMessage =
-                        null
-                )
+                currentState.copy(SelectedCouponId = currentCoupon.MemberCouponId, CouponErrorMessage = null)
             }
         }
     }
 
-    fun SelectCouponByCode(
-        couponCode: String
-    ) {
-        val normalizedCode =
-            couponCode.trim()
+    fun SelectCouponByCode(couponCode: String) {
+        val normalizedCode = couponCode.trim()
 
         if (normalizedCode.isBlank()) {
-            _state.update { currentState ->
-                currentState.copy(
-                    CouponErrorMessage =
-                        "Kupon kodunu giriniz."
-                )
-            }
-
+            _state.update { currentState -> currentState.copy(CouponErrorMessage = "Kupon kodunu giriniz.") }
             return
         }
 
         _state.update { currentState ->
-            val coupon =
-                currentState.Coupons.firstOrNull {
-                        currentCoupon ->
-                    currentCoupon.CouponCode
-                        .orEmpty()
-                        .equals(
-                            normalizedCode,
-                            ignoreCase = true
-                        )
-                }
+            val coupon = currentState.Coupons.firstOrNull { currentCoupon -> currentCoupon.CouponCode.orEmpty().equals(normalizedCode, ignoreCase = true) }
 
             when {
-                coupon == null -> {
-                    currentState.copy(
-                        CouponErrorMessage =
-                            "Bu kupon kodu hesabınızda bulunamadı."
-                    )
-                }
-
-                !coupon.IsSelectableCoupon() -> {
-                    currentState.copy(
-                        CouponErrorMessage =
-                            "Bu kupon artık kullanılamıyor."
-                    )
-                }
-
-                else -> {
-                    currentState.copy(
-                        SelectedCouponId =
-                            coupon.MemberCouponId,
-                        CouponErrorMessage =
-                            null
-                    )
-                }
+                coupon == null -> currentState.copy(CouponErrorMessage = "Bu kupon kodu hesabınızda bulunamadı.")
+                !coupon.IsSelectableCoupon() -> currentState.copy(CouponErrorMessage = "Bu kupon artık kullanılamıyor.")
+                else -> currentState.copy(SelectedCouponId = coupon.MemberCouponId, CouponErrorMessage = null)
             }
         }
     }
 
     fun ClearCoupon() {
-        _state.update { currentState ->
-            currentState.copy(
-                SelectedCouponId = 0,
-                CouponErrorMessage = null
-            )
-        }
+        _state.update { currentState -> currentState.copy(SelectedCouponId = 0, CouponErrorMessage = null) }
     }
 
-    fun AddToBasket(
-        memberId: Int,
-        priceId: Int,
-        quantity: Int = 1,
-        onSuccess: (() -> Unit)? = null
-    ) {
+    fun AddToBasket(memberId: Int, priceId: Int, quantity: Int = 1, onSuccess: (() -> Unit)? = null) {
         if (memberId <= 0) {
             SetAuthenticationError()
             return
@@ -352,55 +144,22 @@ class BasketController(
 
         if (priceId <= 0) {
             _state.update { currentState ->
-                currentState.copy(
-                    ErrorMessage =
-                        BBLocalization.Current.Get(key = "7a2833af-d6f0-4cdb-afe8-9f61bb82b1a5", fallback = "Ürün fiyat bilgisi bulunamadı.")
-                )
+                currentState.copy(ErrorMessage = BBLocalization.Current.Get(key = "7a2833af-d6f0-4cdb-afe8-9f61bb82b1a5", fallback = "Ürün fiyat bilgisi bulunamadı."))
             }
-
             return
         }
 
-        val safeQuantity =
-            quantity.coerceAtLeast(
-                1
-            )
+        val safeQuantity = quantity.coerceAtLeast(1)
 
         viewModelScope.launch {
-            SetLoading(
-                currentAction =
-                    "AddToBasket"
-            )
+            SetLoading(currentAction = "AddToBasket")
 
-            val response =
-                executeService.PostAsync(
-                    operationType =
-                        "b2c.Basket.AddToBasket"
-                ) {
-                    basketRepository.InsertBasketItemAsync(
-                        memberId =
-                            memberId,
-                        request =
-                            BasketInsertRequest(
-                                PriceId =
-                                    priceId,
-                                Quantity =
-                                    safeQuantity
-                            )
-                    )
-                }
+            val response = executeService.PostAsync(operationType = "b2c.Basket.AddToBasket") {
+                basketRepository.InsertBasketItemAsync(memberId = memberId, request = BasketInsertRequest(PriceId = priceId, Quantity = safeQuantity))
+            }
 
             _state.update { currentState ->
-                currentState.copy(
-                    IsLoading =
-                        false,
-                    InsertResult =
-                        response,
-                    ErrorMessage =
-                        response.Message.takeIf {
-                            !response.Success
-                        }
-                )
+                currentState.copy(IsLoading = false, InsertResult = response, ErrorMessage = response.Message.takeIf { !response.Success })
             }
 
             if (response.Success) {
@@ -409,11 +168,7 @@ class BasketController(
         }
     }
 
-    fun UpdateQuantity(
-        memberId: Int,
-        basketId: Int,
-        quantity: Int
-    ) {
+    fun UpdateQuantity(memberId: Int, basketId: Int, quantity: Int) {
         if (memberId <= 0) {
             SetAuthenticationError()
             return
@@ -421,106 +176,42 @@ class BasketController(
 
         if (basketId <= 0) {
             _state.update { currentState ->
-                currentState.copy(
-                    ErrorMessage =
-                        BBLocalization.Current.Get(key = "f07713a9-374e-47b6-bc35-7d78212cd17b", fallback = "Geçerli bir sepet satırı bulunamadı.")
-                )
+                currentState.copy(ErrorMessage = BBLocalization.Current.Get(key = "f07713a9-374e-47b6-bc35-7d78212cd17b", fallback = "Geçerli bir sepet satırı bulunamadı."))
             }
-
             return
         }
 
-        val safeQuantity =
-            quantity.coerceAtLeast(
-                0
-            )
+        val safeQuantity = quantity.coerceAtLeast(0)
 
         viewModelScope.launch {
-            SetLoading(
-                currentAction =
-                    "UpdateQuantity"
-            )
+            android.util.Log.d("BB_BASKET_QTY", "REQUEST basketId=$basketId quantity=$safeQuantity memberId=$memberId")
+            SetLoading(currentAction = "UpdateQuantity")
 
-            val response =
-                executeService.PostAsync(
-                    operationType =
-                        "b2c.Basket.UpdateQuantity"
-                ) {
-                    basketRepository.UpdateBasketQuantityAsync(
-                        memberId =
-                            memberId,
-                        request =
-                            BasketQuantityUpdateModel(
-                                BasketId =
-                                    basketId,
-                                Quantity =
-                                    safeQuantity
-                            )
-                    )
+            val response = executeService.PostAsync(operationType = "b2c.Basket.UpdateQuantity") {
+                basketRepository.UpdateBasketQuantityAsync(memberId = memberId, request = BasketQuantityUpdateModel(BasketId = basketId, Quantity = safeQuantity))
+            }
 
-                }
+            android.util.Log.d("BB_BASKET_QTY", "RESPONSE success=${response.Success} message=${response.Message} data=${response.Data}")
 
             val responseData = response.Data
 
             _state.update { currentState ->
-                val updatedItems =
-                    if (
-                        response.Success &&
-                        responseData != null
-                    ) {
-                        ApplyQuantityUpdate(
-                            basketItems =
-                                currentState.BasketItems,
-                            response =
-                                responseData
-                        )
-                    }else {
-                        currentState.BasketItems
-                    }
+                val updatedItems = when {
+                    !response.Success -> currentState.BasketItems
+                    responseData != null -> ApplyQuantityUpdate(currentState.BasketItems, responseData)
+                    else -> ApplyRequestedQuantityUpdate(currentState.BasketItems, basketId, safeQuantity)
+                }
 
-                currentState.copy(
-                    IsLoading =
-                        false,
-                    QuantityUpdateResult =
-                        response,
-                    BasketListResult =
-                        if (response.Success) {
-                            Result(
-                                Success =
-                                    true,
-                                Data =
-                                    updatedItems
-                            )
-                        } else {
-                            currentState.BasketListResult
-                        },
-                    BasketSummaryResult =
-                        if (
-                            response.Success &&
-                            responseData != null
-                        ) {
-                            Result(
-                                Success =
-                                    true,
-                                Data =
-                                    responseData.Summary
-                            )
-                        } else {
-                            currentState.BasketSummaryResult
-                        },
-                    ErrorMessage =
-                        response.Message.takeIf {
-                            !response.Success
-                        }
-                )
+                currentState.copy(IsLoading = false, QuantityUpdateResult = response, BasketListResult = if (response.Success) Result(Success = true, Data = updatedItems) else currentState.BasketListResult, BasketSummaryResult = if (response.Success && responseData != null) Result(Success = true, Data = responseData.Summary) else currentState.BasketSummaryResult, ErrorMessage = response.Message.takeIf { !response.Success })
+            }
+
+            if (response.Success && responseData == null) {
+                Summary(memberId = memberId)
             }
         }
     }
 
-    fun Delete(
-        memberId: Int,
-        basketId: Int
-    ) {
+    fun Delete(memberId: Int, basketId: Int) {
         if (memberId <= 0) {
             SetAuthenticationError()
             return
@@ -528,59 +219,20 @@ class BasketController(
 
         if (basketId <= 0) {
             _state.update { currentState ->
-                currentState.copy(
-                    ErrorMessage =
-                        BBLocalization.Current.Get(key = "f07713a9-374e-47b6-bc35-7d78212cd17b", fallback = "Geçerli bir sepet satırı bulunamadı.")
-                )
+                currentState.copy(ErrorMessage = BBLocalization.Current.Get(key = "f07713a9-374e-47b6-bc35-7d78212cd17b", fallback = "Geçerli bir sepet satırı bulunamadı."))
             }
-
             return
         }
 
         viewModelScope.launch {
-            SetLoading(
-                currentAction =
-                    "Delete"
-            )
+            SetLoading(currentAction = "Delete")
 
-            val response =
-                executeService.PostAsync(
-                    operationType =
-                        "b2c.Basket.Delete"
-                ) {
-                    basketRepository.DeleteBasketItemAsync(
-                        memberId =
-                            memberId,
-                        basketId =
-                            basketId
-                    )
-                }
+            val response = executeService.PostAsync(operationType = "b2c.Basket.Delete") {
+                basketRepository.DeleteBasketItemAsync(memberId = memberId, basketId = basketId)
+            }
 
             _state.update { currentState ->
-                currentState.copy(
-                    IsLoading =
-                        false,
-                    DeleteResult =
-                        response,
-                    BasketListResult =
-                        if (response.Success) {
-                            Result(
-                                Success =
-                                    true,
-                                Data =
-                                    currentState.BasketItems.filterNot { basket ->
-                                        basket.BasketId ==
-                                                basketId
-                                    }
-                            )
-                        } else {
-                            currentState.BasketListResult
-                        },
-                    ErrorMessage =
-                        response.Message.takeIf {
-                            !response.Success
-                        }
-                )
+                currentState.copy(IsLoading = false, DeleteResult = response, BasketListResult = if (response.Success) Result(Success = true, Data = currentState.BasketItems.filterNot { basket -> basket.BasketId == basketId }) else currentState.BasketListResult, ErrorMessage = response.Message.takeIf { !response.Success })
             }
 
             if (response.Success) {
@@ -589,10 +241,7 @@ class BasketController(
         }
     }
 
-    fun MoveToFavorite(
-        memberId: Int,
-        basketId: Int
-    ) {
+    fun MoveToFavorite(memberId: Int, basketId: Int) {
         if (memberId <= 0) {
             SetAuthenticationError()
             return
@@ -600,57 +249,20 @@ class BasketController(
 
         if (basketId <= 0) {
             _state.update { currentState ->
-                currentState.copy(
-                    ErrorMessage =
-                        BBLocalization.Current.Get(key = "f07713a9-374e-47b6-bc35-7d78212cd17b", fallback = "Geçerli bir sepet satırı bulunamadı.")
-                )
+                currentState.copy(ErrorMessage = BBLocalization.Current.Get(key = "f07713a9-374e-47b6-bc35-7d78212cd17b", fallback = "Geçerli bir sepet satırı bulunamadı."))
             }
-
             return
         }
 
         viewModelScope.launch {
-            SetLoading(
-                currentAction =
-                    "MoveToFavorite"
-            )
+            SetLoading(currentAction = "MoveToFavorite")
 
-            val response =
-                executeService.PostAsync(
-                    operationType =
-                        "b2c.Basket.MoveToFavorite"
-                ) {
-                    basketRepository.MoveBasketToFavoriteAsync(
-                        basketId =
-                            basketId
-                    )
-                }
+            val response = executeService.PostAsync(operationType = "b2c.Basket.MoveToFavorite") {
+                basketRepository.MoveBasketToFavoriteAsync(basketId = basketId)
+            }
 
             _state.update { currentState ->
-                currentState.copy(
-                    IsLoading =
-                        false,
-                    MoveToFavoriteResult =
-                        response,
-                    BasketListResult =
-                        if (response.Success) {
-                            Result(
-                                Success =
-                                    true,
-                                Data =
-                                    currentState.BasketItems.filterNot { basket ->
-                                        basket.BasketId ==
-                                                basketId
-                                    }
-                            )
-                        } else {
-                            currentState.BasketListResult
-                        },
-                    ErrorMessage =
-                        response.Message.takeIf {
-                            !response.Success
-                        }
-                )
+                currentState.copy(IsLoading = false, MoveToFavoriteResult = response, BasketListResult = if (response.Success) Result(Success = true, Data = currentState.BasketItems.filterNot { basket -> basket.BasketId == basketId }) else currentState.BasketListResult, ErrorMessage = response.Message.takeIf { !response.Success })
             }
 
             if (response.Success) {
@@ -659,117 +271,57 @@ class BasketController(
         }
     }
 
-    fun Refresh(
-        memberId: Int,
-        count: Int = 150
-    ) {
-        List(
-            memberId =
-                memberId,
-            count =
-                count
-        )
-
-        Summary(
-            memberId =
-                memberId
-        )
+    fun Refresh(memberId: Int, count: Int = 150) {
+        List(memberId = memberId, count = count)
+        Summary(memberId = memberId)
     }
 
     fun ClearFeedback() {
-        _state.update { currentState ->
-            currentState.copy(
-                InsertResult =
-                    null,
-                QuantityUpdateResult =
-                    null,
-                DeleteResult =
-                    null,
-                MoveToFavoriteResult =
-                    null,
-                ErrorMessage =
-                    null
-            )
-        }
+        _state.update { currentState -> currentState.copy(InsertResult = null, QuantityUpdateResult = null, DeleteResult = null, MoveToFavoriteResult = null, ErrorMessage = null) }
     }
 
     fun Clear() {
-        _state.value =
-            BasketControllerState()
+        _state.value = BasketControllerState()
     }
 
-    private fun SetLoading(
-        currentAction: String
-    ) {
-        _state.update { currentState ->
-            currentState.copy(
-                IsLoading =
-                    true,
-                CurrentAction =
-                    currentAction,
-                ErrorMessage =
-                    null
-            )
-        }
+    private fun SetLoading(currentAction: String) {
+        _state.update { currentState -> currentState.copy(IsLoading = true, CurrentAction = currentAction, ErrorMessage = null) }
     }
 
     private fun SetAuthenticationError() {
         _state.update { currentState ->
-            currentState.copy(
-                IsLoading =
-                    false,
-                ErrorMessage =
-                    BBLocalization.Current.Get(key = "e1783e80-755c-42bb-b996-6af48da03db2", fallback = "Sepet işlemi için giriş yapmalısınız.")
-            )
+            currentState.copy(IsLoading = false, ErrorMessage = BBLocalization.Current.Get(key = "e1783e80-755c-42bb-b996-6af48da03db2", fallback = "Sepet işlemi için giriş yapmalısınız."))
         }
     }
 
-    private fun ApplyQuantityUpdate(
-        basketItems: List<BasketDTO>,
-        response: BasketQuantityUpdateResponse
-    ): List<BasketDTO> {
-        if (response.Removed) {
-            return basketItems.filterNot { basket ->
-                basket.BasketId ==
-                        response.BasketId
-            }
+    private fun ApplyRequestedQuantityUpdate(basketItems: List<BasketDTO>, basketId: Int, quantity: Int): List<BasketDTO> {
+        if (quantity <= 0) {
+            return basketItems.filterNot { basket -> basket.BasketId == basketId }
         }
 
         return basketItems.map { basket ->
-            if (
-                basket.BasketId ==
-                response.BasketId
-            ) {
-                basket.copy(
-                    Quantity =
-                        response.Quantity,
-                    TotalPrice =
-                        response.LineTotal
-                )
-            } else {
-                basket
-            }
+            if (basket.BasketId == basketId) basket.copy(Quantity = quantity) else basket
         }
     }
+
+    private fun ApplyQuantityUpdate(basketItems: List<BasketDTO>, response: BasketQuantityUpdateResponse): List<BasketDTO> {
+        if (response.Removed) {
+            return basketItems.filterNot { basket -> basket.BasketId == response.BasketId }
+        }
+
+        return basketItems.map { basket ->
+            if (basket.BasketId == response.BasketId) basket.copy(Quantity = response.Quantity, TotalPrice = response.LineTotal) else basket
+        }
+    }
+
     private fun MemberCouponDTO.IsSelectableCoupon(): Boolean {
-        if (
-            Used != 0 ||
-            OrderId.orEmpty().isNotBlank()
-        ) {
+        if (Used != 0 || OrderId.orEmpty().isNotBlank()) {
             return false
         }
 
-        val lastUsingDate =
-            LastUsingDate
-                .orEmpty()
-                .ToCouponLocalDate()
+        val lastUsingDate = LastUsingDate.orEmpty().ToCouponLocalDate()
 
-        if (
-            lastUsingDate != null &&
-            lastUsingDate.isBefore(
-                LocalDate.now()
-            )
-        ) {
+        if (lastUsingDate != null && lastUsingDate.isBefore(LocalDate.now())) {
             return false
         }
 
@@ -777,34 +329,16 @@ class BasketController(
     }
 
     private fun String.ToCouponLocalDate(): LocalDate? {
-        val value =
-            trim()
+        val value = trim()
 
-        if (
-            value.isBlank() ||
-            value.startsWith("0001-01-01") ||
-            value.startsWith("1.01.0001")
-        ) {
+        if (value.isBlank() || value.startsWith("0001-01-01") || value.startsWith("1.01.0001")) {
             return null
         }
 
-        return runCatching {
-            OffsetDateTime
-                .parse(value)
-                .toLocalDate()
-        }.getOrElse {
-            runCatching {
-                LocalDateTime
-                    .parse(value)
-                    .toLocalDate()
-            }.getOrElse {
-                runCatching {
-                    LocalDate.parse(
-                        value.substringBefore("T")
-                    )
-                }.getOrNull()
+        return runCatching { OffsetDateTime.parse(value).toLocalDate() }.getOrElse {
+            runCatching { LocalDateTime.parse(value).toLocalDate() }.getOrElse {
+                runCatching { LocalDate.parse(value.substringBefore("T")) }.getOrNull()
             }
         }
     }
-
 }

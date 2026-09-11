@@ -374,7 +374,7 @@ private fun BasketEmptyCard(onHomeClick: () -> Unit) {
         Column(modifier = Modifier.fillMaxWidth().padding(horizontal = BBSpacing.Space4, vertical = BBSpacing.Space6), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)) {
             BasketIconBox(icon = Icons.Outlined.ShoppingBasket, backgroundColor = MaterialTheme.colorScheme.primaryContainer, iconColor = MaterialTheme.colorScheme.primary)
 
-            Text(text = "Sepetin henüz boş", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+            Text(text = "Sepetin Henüz Boş", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
 
             Text(text = "Beğendiğin ürünleri sepete ekleyerek alışverişe başlayabilirsin.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 

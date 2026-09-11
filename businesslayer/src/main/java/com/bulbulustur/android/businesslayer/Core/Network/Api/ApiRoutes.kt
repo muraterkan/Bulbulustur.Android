@@ -331,7 +331,10 @@ object ApiRoutes {
     const val COMMERCE_SUPPORT_ORDER_BASE_URL =
         "http://$APPLICATION_SERVER_HOST:30185/api/Order/"
 
-    const val COMMERCE_SUPPORT_RETURN_BASE_URL =
+    
+    const val COMMERCE_SUPPORT_CONTRACT_BASE_URL =
+        "http://$APPLICATION_SERVER_HOST:30185/api/Contract/"
+const val COMMERCE_SUPPORT_RETURN_BASE_URL =
         "http://$APPLICATION_SERVER_HOST:30185/api/Return/"
 
     const val COMMERCE_SUPPORT_REVIEW_BASE_URL =

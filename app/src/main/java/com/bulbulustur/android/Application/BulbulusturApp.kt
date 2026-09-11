@@ -75,6 +75,7 @@ import com.bulbulustur.android.businesslayer.Core.Repository.BasketRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.BuyerRequestRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.CampaignRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.CompanyRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.ContractRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.DealsOfTheDayRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.LocalizationRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.MemberAddressRepository
@@ -732,13 +733,19 @@ private fun BulbulusturApplicationContent(
         )
     }
 
+    val contractRepository = remember {
+        ContractRepository()
+    }
+
     val checkoutController = remember(
         executeService,
-        memberAddressRepository
+        memberAddressRepository,
+        contractRepository
     ) {
         com.bulbulustur.android.Application.Areas.b2c.Controllers.CheckoutController(
             executeService = executeService,
-            memberAddressRepository = memberAddressRepository
+            memberAddressRepository = memberAddressRepository,
+            contractRepository = contractRepository
         )
     }
 

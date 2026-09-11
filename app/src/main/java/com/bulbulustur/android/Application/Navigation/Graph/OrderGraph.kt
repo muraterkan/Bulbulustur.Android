@@ -1,7 +1,12 @@
 package com.bulbulustur.android.Application.Navigation.Graph
 
+import android.util.Log
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.navigation.NavGraphBuilder
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.BasketController
 import com.bulbulustur.android.Application.Areas.b2c.Controllers.CheckoutController
@@ -62,6 +67,8 @@ fun NavGraphBuilder.orderGraph(
                 .collectAsState()
                 .value
 
+        var selectedInstallmentCount by remember { mutableIntStateOf(1) }
+
         LaunchedEffect(memberId) {
             checkoutController.LoadAddresses(
                 memberId = memberId
@@ -78,6 +85,29 @@ fun NavGraphBuilder.orderGraph(
 
         val basketSummary =
             basketState.BasketSummary
+
+        val contractDeliveryAddressId = checkoutState.SelectedDeliveryAddressId
+        val contractInvoiceAddressId = checkoutState.SelectedInvoiceAddressId.takeIf { it > 0 } ?: contractDeliveryAddressId
+
+        LaunchedEffect(
+            memberId,
+            languageId,
+            contractDeliveryAddressId,
+            contractInvoiceAddressId,
+            selectedInstallmentCount
+        )
+        {
+            if (memberId > 0 && contractDeliveryAddressId > 0 && contractInvoiceAddressId > 0)
+            {
+                checkoutController.LoadContracts(
+                    memberId = memberId,
+                    languageId = languageId,
+                    deliveryAddressId = contractDeliveryAddressId,
+                    invoiceAddressId = contractInvoiceAddressId,
+                    installmentCount = selectedInstallmentCount
+                )
+            }
+        }
 
         val checkoutPayableTotal =
             basketSummary
@@ -125,20 +155,20 @@ fun NavGraphBuilder.orderGraph(
             data = CheckoutScreenData(
                 addresses = checkoutState.Addresses,
 
-                
-        selectedDeliveryAddressId =
+
+                selectedDeliveryAddressId =
                     checkoutState.SelectedDeliveryAddressId,
 
-                
+
 
                 selectedInvoiceAddressId =
                     checkoutState.SelectedInvoiceAddressId,
 
-    basketItemCount =
+                basketItemCount =
                     basketState.ItemCount,
 
-                
-basketItems =
+
+                basketItems =
                     basketState.BasketItems,
 
                 memberCoupons =
@@ -173,31 +203,14 @@ basketItems =
                         },
 
 
+                preInformationHtml = checkoutState.PreInformationHtml,
+                distanceSellingHtml = checkoutState.DistanceSellingHtml,
+                isContractLoading = checkoutState.IsContractLoading,
+
                 summary = CheckoutPriceSummary(
-
-                    productTotalText =
-                        basketSummary
-                            ?.NetTotal
-                            ?.let { value ->
-                                "₺${String.format("%.2f", value).replace(".", ",")}"
-                            }
-                            .orEmpty(),
-
-                    cargoTotalText =
-                        basketSummary
-                            ?.ShippingCost
-                            ?.let { value ->
-                                "₺${String.format("%.2f", value).replace(".", ",")}"
-                            }
-                            .orEmpty(),
-
-                    payableTotalText =
-                        basketSummary
-                            ?.GrossTotal
-                            ?.let { value ->
-                                "₺${String.format("%.2f", value).replace(".", ",")}"
-
-                            } .orEmpty()
+                    productTotalText = basketSummary?.NetTotal?.let { value -> "₺${String.format("%.2f", value).replace(".", ",")}" }.orEmpty(),
+                    cargoTotalText = basketSummary?.ShippingCost?.let { value -> "₺${String.format("%.2f", value).replace(".", ",")}" }.orEmpty(),
+                    payableTotalText = "₺${String.format("%.2f", checkoutPayableTotal).replace(".", ",")}"
                 )
             ),
 
@@ -221,13 +234,13 @@ basketItems =
                 )
             },
 
-        
-onInvoiceAddressSelected = { address ->
-            checkoutController.SelectInvoiceAddress(
-                memberAddressId =
-                    address.MemberAddressId
-            )
-        },
+
+            onInvoiceAddressSelected = { address ->
+                checkoutController.SelectInvoiceAddress(
+                    memberAddressId =
+                        address.MemberAddressId
+                )
+            },
 
             onCouponSelected = { coupon ->
                 basketController.SelectCoupon(
@@ -241,11 +254,48 @@ onInvoiceAddressSelected = { address ->
                 )
             },
 
+            onPaymentInstallmentSelected = { installmentCount ->
+                selectedInstallmentCount = installmentCount.coerceAtLeast(1)
+            },
 
+            onPreInformationClick = {
+                if (memberId > 0 && contractDeliveryAddressId > 0 && contractInvoiceAddressId > 0)
+                {
+                    Log.d(
+                        "ContractDebug",
+                        "PRE CLICK memberId=$memberId deliveryAddressId=$contractDeliveryAddressId invoiceAddressId=$contractInvoiceAddressId installmentCount=$selectedInstallmentCount"
+                    )
 
+                    checkoutController.LoadContracts(
+                        memberId = memberId,
+                        languageId = languageId,
+                        deliveryAddressId = contractDeliveryAddressId,
+                        invoiceAddressId = contractInvoiceAddressId,
+                        installmentCount = selectedInstallmentCount
+                    )
+                }
+            },
+
+            onDistanceSalesContractClick = {
+                if (memberId > 0 && contractDeliveryAddressId > 0 && contractInvoiceAddressId > 0)
+                {
+                    Log.d(
+                        "ContractDebug",
+                        "DISTANCE CLICK memberId=$memberId deliveryAddressId=$contractDeliveryAddressId invoiceAddressId=$contractInvoiceAddressId installmentCount=$selectedInstallmentCount"
+                    )
+
+                    checkoutController.LoadContracts(
+                        memberId = memberId,
+                        languageId = languageId,
+                        deliveryAddressId = contractDeliveryAddressId,
+                        invoiceAddressId = contractInvoiceAddressId,
+                        installmentCount = selectedInstallmentCount
+                    )
+                }
+            },
 
             onContinueClick = {
-    
+
                 navigator.navController.navigate(
                     OrderRoutes.CheckoutSummary
                 )
@@ -717,11 +767,11 @@ onInvoiceAddressSelected = { address ->
             ?.getString(OrderRoutes.ArgOrderKey)
             .orEmpty()
 
-        
-    OrderDetailScreen(
-        orderId = orderId,
-        orderKey = orderKey,
-        memberId = memberId,
+
+        OrderDetailScreen(
+            orderId = orderId,
+            orderKey = orderKey,
+            memberId = memberId,
 
             onBackClick = {
                 navigator.back()

@@ -64,6 +64,9 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import coil3.compose.AsyncImage
 import coil3.compose.AsyncImage
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.BbCommerceBottomBar
@@ -79,6 +82,7 @@ import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCheckboxRow
+import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBColors
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
@@ -148,13 +152,9 @@ var termsAccepted by rememberSaveable {
         mutableStateOf(false)
     }
 
-    var showProductsInline by rememberSaveable {
-        mutableStateOf(false)
-    }
+    var showProductsInline by rememberSaveable { mutableStateOf(true) }
 
-    var showDeliveryAddressSheet by rememberSaveable {
-        mutableStateOf(false)
-    }
+    var showDeliveryAddressSheet by rememberSaveable { mutableStateOf(false) }
 
     var showInvoiceAddressSheet by rememberSaveable {
         mutableStateOf(false)
@@ -246,14 +246,14 @@ var termsAccepted by rememberSaveable {
                             Icon(
                                 imageVector = Icons.Outlined.Lock,
                                 contentDescription = "SSL",
-                                tint = MaterialTheme.colorScheme.primary,
+                                tint = BBColors.Success,
                                 modifier = Modifier.size(BBIcon.Action)
                             )
 
                             Text(
                                 text = "SSL",
                                 fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.primary
+                                color = BBColors.Success
                             )
                         }
                     }
@@ -280,15 +280,28 @@ var termsAccepted by rememberSaveable {
                              * footer'ın altında kalmasın.
                              */
                             
-    bottom =
-        BBSpacing.Space20
+                            bottom = BBSpacing.Space20
                         ),
 
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.SectionGapCompact)
                 ) {
 
+/*
+ * ========================================================
+ * PRODUCTS
+ * ========================================================
+ */
 
-
+                    item {
+                        CheckoutPageItem {
+                            CheckoutProductsCard(
+                                basketItems = data.basketItems,
+                                expanded = showProductsInline,
+                                onExpandClick = { showProductsInline = !showProductsInline },
+                                onProductsClick = onProductsClick
+                            )
+                        }
+                    }
 
                     /*
                      * ========================================================
@@ -561,27 +574,32 @@ var termsAccepted by rememberSaveable {
                         }
                     }
 
-                    /*
-                     * Checkbox BAĞIMSIZ.
-                     * İç içe Surface yok.
-                     */
+                    val legalConsentText = buildAnnotatedString {
+                        withStyle(SpanStyle(fontWeight = FontWeight.Bold))
+                        {
+                            append("Ön Bilgilendirme Formu")
+                        }
+
+                        append("'nu ve ")
+
+                        withStyle(SpanStyle(fontWeight = FontWeight.Bold))
+                        {
+                            append("Mesafeli Satış Sözleşmesi")
+                        }
+
+                        append("'ni okudum ve onaylıyorum.")
+                    }
 
                     item {
-
                         CheckoutPageItem {
-
                             BbCheckboxRow(
                                 checked = termsAccepted,
-
                                 onCheckedChange = { checked ->
-
                                     termsAccepted = checked
-
                                     onTermsAcceptedChange(checked)
                                 },
-
-                                title =
-                                    "Ön Bilgilendirme Formu'nu ve Mesafeli Satış Sözleşmesi'ni okudum ve onaylıyorum."
+                                title = "",
+                                annotatedTitle = legalConsentText
                             )
                         }
                     }
@@ -1516,120 +1534,73 @@ private fun CheckoutActionCard(
  */
 
 @Composable
-private fun CheckoutCargoCard(
-    cargoTotalText: String
-) {
-
+private fun CheckoutCargoCard(cargoTotalText: String)
+{
     Surface(
-        modifier =
-            Modifier.fillMaxWidth(),
-
-        shape =
-            MaterialTheme.shapes.large,
-
-        color =
-            MaterialTheme.colorScheme.surface,
-
-        border =
-            BorderStroke(
-                1.dp,
-                MaterialTheme.colorScheme.outlineVariant
+        modifier = Modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.large,
+        color = MaterialTheme.colorScheme.surface,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+    )
+    {
+        Column(modifier = Modifier.fillMaxWidth())
+        {
+            Text(
+                text = "Teslimat / Kargo",
+                modifier = Modifier.fillMaxWidth().padding(horizontal = BBSpacing.Space3, vertical = BBSpacing.Space3),
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface
             )
-    ) {
 
-        Column(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        BBSpacing.Space4
-                    ),
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
-            verticalArrangement =
-                Arrangement.spacedBy(
-                    BBSpacing.Space2
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(BBSpacing.Space3),
+                verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+            )
+            {
+                Text(
+                    text = "Anlaşmalı Kargo",
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
-        ) {
-
-            Text(
-                text =
-                    "Teslimat / Kargo",
-
-                style =
-                    MaterialTheme.typography.titleSmall,
-
-                fontWeight =
-                    FontWeight.Bold
-            )
-
-
-            Text(
-                text =
-                    "Anlaşmalı Kargo",
-
-                style =
-                    MaterialTheme.typography.bodyMedium,
-
-                fontWeight =
-                    FontWeight.SemiBold
-            )
-
-
-            Text(
-                text =
-                    "Kargo firması sistem tarafından belirlenir.",
-
-                style =
-                    MaterialTheme.typography.bodySmall,
-
-                color =
-                    MaterialTheme.colorScheme.onSurfaceVariant
-            )
-
-
-            HorizontalDivider(
-                color =
-                    MaterialTheme.colorScheme.outlineVariant
-            )
-
-
-            Row(
-                modifier =
-                    Modifier.fillMaxWidth(),
-
-                horizontalArrangement =
-                    Arrangement.SpaceBetween
-            ) {
 
                 Text(
-                    text =
-                        BBLocalization.Current.Get(
-                            key =
-                                "8fa1207a-2a06-4bdb-936b-f7da848e0f72",
+                    text = "Kargo firması sistem tarafından belirlenir.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
 
-                            fallback =
-                                "Kargo"
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                )
+                {
+                    Text(
+                        text = BBLocalization.Current.Get(
+                            key = "8fa1207a-2a06-4bdb-936b-f7da848e0f72",
+                            fallback = "Kargo"
                         ),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
 
-                    color =
-                        MaterialTheme.colorScheme.onSurfaceVariant
-                )
-
-
-                Text(
-                    text =
-                        cargoTotalText.ifBlank {
-                            "—"
-                        },
-
-                    fontWeight =
-                        FontWeight.Bold
-                )
+                    Text(
+                        text = cargoTotalText.ifBlank { "—" },
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
             }
         }
     }
 }
-
 
 /*
  * ============================================================================
@@ -2488,125 +2459,109 @@ private fun CheckoutAddressSelectionRow(
 }
 
 @Composable
-private fun CheckoutProductImageStrip(
-    basketItems: List<BasketDTO>
-) {
-
+private fun CheckoutProductsCard(
+    basketItems: List<BasketDTO>,
+    expanded: Boolean,
+    onExpandClick: () -> Unit,
+    onProductsClick: () -> Unit
+)
+{
     Surface(
-        modifier =
-            Modifier.fillMaxWidth(),
-
-        shape =
-            MaterialTheme.shapes.large,
-
-        color =
-            MaterialTheme.colorScheme.surface,
-
-        border =
-            BorderStroke(
-                width =
-                    1.dp,
-
-                color =
-                    MaterialTheme.colorScheme.outlineVariant
+        modifier = Modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.large,
+        color = MaterialTheme.colorScheme.surface,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+    )
+    {
+        Column(modifier = Modifier.fillMaxWidth())
+        {
+            Row(
+                modifier = Modifier.fillMaxWidth().clickable { onExpandClick() }.padding(horizontal = BBSpacing.Space3, vertical = BBSpacing.Space3),
+                horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+                verticalAlignment = Alignment.CenterVertically
             )
-    ) {
+            {
+                Text(
+                    text = "Sepetimdeki Ürünler (${basketItems.sumOf { it.Quantity }})",
+                    modifier = Modifier.weight(1f),
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
 
-        if (basketItems.isEmpty()) {
+                Icon(
+                    imageVector = if (expanded) Icons.Outlined.KeyboardArrowUp else Icons.Outlined.KeyboardArrowDown,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(BBIcon.Action)
+                )
+            }
 
-            Text(
-                text =
-                    "Sepet ürünleri yükleniyor...",
+            if (expanded)
+            {
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
-                modifier =
-                    Modifier.padding(
-                        BBSpacing.Space3
-                    ),
-
-                style =
-                    MaterialTheme.typography.bodySmall,
-
-                color =
-                    MaterialTheme.colorScheme.onSurfaceVariant
-            )
-
-        } else {
-
-            LazyRow(
-                modifier =
-                    Modifier.fillMaxWidth(),
-
-                contentPadding =
-                    PaddingValues(
-                        horizontal =
-                            BBSpacing.Space3,
-
-                        vertical =
-                            BBSpacing.Space3
-                    ),
-
-                horizontalArrangement =
-                    Arrangement.spacedBy(
-                        BBSpacing.Space2
+                if (basketItems.isEmpty())
+                {
+                    Text(
+                        text = "Sepet ürünleri yükleniyor...",
+                        modifier = Modifier.padding(BBSpacing.Space3),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-            ) {
+                }
+                else
+                {
+                    LazyRow(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentPadding = PaddingValues(horizontal = BBSpacing.Space3, vertical = BBSpacing.Space3),
+                        horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
+                    )
+                    {
+                        items(
+                            count = basketItems.size,
+                            key = { index -> basketItems[index].BasketId }
+                        )
+                        { index ->
+                            val basket = basketItems[index]
+                            val imageUrl = ImageUrlResolver.Resolve(imagePath = basket.DefaultPicture.ifBlank { basket.Picture })
 
-                items(
-                    count =
-                        basketItems.size,
+                            Surface(
+                                modifier = Modifier.size(76.dp).clickable { onProductsClick() },
+                                shape = MaterialTheme.shapes.medium,
+                                color = MaterialTheme.colorScheme.surfaceContainerLow,
+                                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                            )
+                            {
+                                Box(modifier = Modifier.fillMaxSize())
+                                {
+                                    AsyncImage(
+                                        model = imageUrl,
+                                        contentDescription = basket.ProductName,
+                                        modifier = Modifier.fillMaxSize().padding(BBSpacing.Space1),
+                                        contentScale = ContentScale.Fit
+                                    )
 
-                    key = {
-                            index ->
-
-                        basketItems[index].BasketId
-                    }
-                ) {
-                        index ->
-
-                    val basket =
-                        basketItems[index]
-
-                    val imageUrl =
-                        ImageUrlResolver.Resolve(
-                            imagePath =
-                                basket.DefaultPicture
-                                    .ifBlank {
-                                        basket.Picture
+                                    if (basket.Quantity > 1)
+                                    {
+                                        Surface(
+                                            modifier = Modifier.align(Alignment.TopStart).padding(BBSpacing.Space1),
+                                            shape = BBRadius.PillShape,
+                                            color = MaterialTheme.colorScheme.surface
+                                        )
+                                        {
+                                            Text(
+                                                text = "x${basket.Quantity}",
+                                                modifier = Modifier.padding(horizontal = BBSpacing.Space1, vertical = 1.dp),
+                                                style = MaterialTheme.typography.labelSmall,
+                                                fontWeight = FontWeight.Bold,
+                                                color = MaterialTheme.colorScheme.onSurface
+                                            )
+                                        }
                                     }
-                        )
-
-
-                    Surface(
-                        modifier =
-                            Modifier.size(
-                                72.dp
-                            ),
-
-                        shape =
-                            MaterialTheme.shapes.medium,
-
-                        color =
-                            MaterialTheme.colorScheme
-                                .surfaceContainerLow
-                    ) {
-
-                        AsyncImage(
-                            model =
-                                imageUrl,
-
-                            contentDescription =
-                                basket.ProductName,
-
-                            modifier =
-                                Modifier
-                                    .fillMaxSize()
-                                    .padding(
-                                        BBSpacing.Space1
-                                    ),
-
-                            contentScale =
-                                ContentScale.Fit
-                        )
+                                }
+                            }
+                        }
                     }
                 }
             }

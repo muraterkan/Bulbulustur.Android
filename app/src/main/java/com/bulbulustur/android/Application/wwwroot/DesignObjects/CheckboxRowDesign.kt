@@ -12,6 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 
 @Composable
@@ -21,41 +23,56 @@ fun BbCheckboxRow(
     title: String,
     modifier: Modifier = Modifier,
     description: String? = null,
-    enabled: Boolean = true
-) {
+    enabled: Boolean = true,
+    titleFontWeight: FontWeight? = null,
+    annotatedTitle: AnnotatedString? = null
+)
+{
     BbCard(
-        modifier = modifier
-            .fillMaxWidth()
-            .toggleable(
-                value = checked,
-                enabled = enabled,
-                role = Role.Checkbox,
-                onValueChange = onCheckedChange
-            ),
+        modifier = modifier.fillMaxWidth().toggleable(
+            value = checked,
+            enabled = enabled,
+            role = Role.Checkbox,
+            onValueChange = onCheckedChange
+        ),
         variant = BbCardVariant.Outlined,
         padding = BbCardPadding.Medium
-    ) {
+    )
+    {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
             verticalAlignment = Alignment.CenterVertically
-        ) {
+        )
+        {
             Checkbox(
                 checked = checked,
                 onCheckedChange = null,
                 enabled = enabled
             )
 
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
+            Column(modifier = Modifier.weight(1f))
+            {
+                if (annotatedTitle != null)
+                {
+                    Text(
+                        text = annotatedTitle,
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+                else
+                {
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = titleFontWeight,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
 
-                if (description != null) {
+                if (description != null)
+                {
                     Text(
                         text = description,
                         style = MaterialTheme.typography.bodySmall,

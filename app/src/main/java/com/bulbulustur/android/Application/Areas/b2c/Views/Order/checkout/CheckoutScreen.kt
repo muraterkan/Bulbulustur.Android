@@ -390,7 +390,8 @@ var termsAccepted by rememberSaveable {
                                         ),
                                     verticalAlignment =
                                         Alignment.CenterVertically
-                                ) {
+                                )
+                                {
 
                                     RadioButton(
                                         selected = true,
@@ -1042,9 +1043,18 @@ private fun CheckoutPaymentCard(card: CheckoutPaymentCardUiModel, onClick: () ->
 }
 
 @Composable
-private fun CheckoutPaymentInstallmentCard(installments: List<CheckoutInstallmentUiModel>, selectedInstallment: CheckoutInstallmentUiModel?, onSelected: (CheckoutInstallmentUiModel) -> Unit)
+private fun CheckoutPaymentInstallmentCard(
+    installments: List<CheckoutInstallmentUiModel>,
+    selectedInstallment: CheckoutInstallmentUiModel?,
+    onSelected: (CheckoutInstallmentUiModel) -> Unit
+)
 {
-    Surface(modifier = Modifier.fillMaxWidth(), shape = MaterialTheme.shapes.large, color = MaterialTheme.colorScheme.surface, border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant))
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.large,
+        color = MaterialTheme.colorScheme.surface,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+    )
     {
         Column(modifier = Modifier.fillMaxWidth())
         {
@@ -1061,8 +1071,8 @@ private fun CheckoutPaymentInstallmentCard(installments: List<CheckoutInstallmen
                 val selected = selectedInstallment?.installmentCount == installment.installmentCount
 
                 Row(
-                    modifier = Modifier.fillMaxWidth().clickable { onSelected(installment) }.padding(horizontal = BBSpacing.Space3, vertical = BBSpacing.Space3),
-                    horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3),
+                    modifier = Modifier.fillMaxWidth().clickable { onSelected(installment) }.padding(start = BBSpacing.Space2, top = BBSpacing.Space2, end = BBSpacing.Space4, bottom = BBSpacing.Space2),
+                    horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2),
                     verticalAlignment = Alignment.CenterVertically
                 )
                 {
@@ -1093,8 +1103,9 @@ private fun CheckoutPaymentInstallmentCard(installments: List<CheckoutInstallmen
 
                     Text(
                         text = installment.totalAmountText,
-                        style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.Bold
+                        style = MaterialTheme.typography.bodySmall,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 }
 

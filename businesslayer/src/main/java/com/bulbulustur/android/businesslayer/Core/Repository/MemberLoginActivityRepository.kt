@@ -8,10 +8,10 @@ import com.bulbulustur.android.businesslayer.Core.Util.Result
 
 class MemberLoginActivityRepository(private val apiClient: ApiClient = ApiClient) : IMemberLoginActivityRepository {
 
-    override suspend fun GetAccountLoginActivities(memberId: Int, count: Int): Result<List<MemberLoginActivityDTO>> {
+    override suspend fun GetMemberLoginActivitiesAsync(memberId: Int, count: Int): Result<List<MemberLoginActivityDTO>> {
         return apiClient.GetAsync(
-            baseUrl = ApiRoutes.COMMERCE_SUPPORT_ACCOUNT_BASE_URL,
-            method = "GetAccountLoginActivities",
+            baseUrl = ApiRoutes.MEMBER_BASE_URL,
+            method = "GetMemberLoginActivitiesAsync",
             query = "memberId=$memberId&count=$count"
         )
     }

@@ -996,7 +996,7 @@ class AccountController(
             SetLoading("GetLoginActivities")
 
             val response = executeService.GetAsync(cacheKey = "") {
-                memberLoginActivityRepository.GetAccountLoginActivities(memberId, count)
+                memberLoginActivityRepository.GetMemberLoginActivitiesAsync(memberId, count)
             }
 
             Complete {

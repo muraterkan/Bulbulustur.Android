@@ -124,7 +124,7 @@ fun OrderCancelRequestScreen(
 
             when {
                 orderStoreLineId <= 0L || orderKey.isBlank() -> {
-                    item {
+                    bbPageItem {
                         OrderCancelMessageCard(
                             title = BBLocalization.Current.Get(key = "1202f4fc-a180-41eb-a681-417274d697e1", fallback = "Sipariş bilgisi eksik"),
                             description = BBLocalization.Current.Get(key = "c823ce20-defe-4f1a-92c7-9aba9f6585f9", fallback = "İptal talebi için sipariş satırı veya sipariş anahtarı bulunamadı.")
@@ -133,7 +133,7 @@ fun OrderCancelRequestScreen(
                 }
 
                 memberId <= 0 -> {
-                    item {
+                    bbPageItem {
                         OrderCancelMessageCard(
                             title = BBLocalization.Current.Get(key = "7d3eff10-e01c-4564-a290-e3542478f979", fallback = "Oturum bilgisi bulunamadı"),
                             description = BBLocalization.Current.Get(key = "e02721f5-6867-40da-bfc3-5ccc5b2bf61d", fallback = "İptal talebi oluşturmak için hesabınıza giriş yapmanız gerekiyor.")
@@ -144,7 +144,7 @@ fun OrderCancelRequestScreen(
                 state.IsLoading &&
                         state.CurrentAction == "GetOrderCancelationTypes" &&
                         state.CancelationTypes.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         OrderCancelLoadingCard(
                             text = BBLocalization.Current.Get(key = "f17951e9-f9ab-4715-8109-a72f6c5d9646", fallback = "İptal nedenleri yükleniyor")
                         )
@@ -154,7 +154,7 @@ fun OrderCancelRequestScreen(
                 state.ErrorMessage != null &&
                         state.CancelationTypes.isEmpty() &&
                         state.CurrentAction == "GetOrderCancelationTypes" -> {
-                    item {
+                    bbPageItem {
                         OrderCancelMessageCard(
                             title = BBLocalization.Current.Get(key = "61db1d81-ad2c-471b-9ae8-59117d1eb048", fallback = "İptal nedenleri alınamadı"),
                             description = state.ErrorMessage.orEmpty()
@@ -163,7 +163,7 @@ fun OrderCancelRequestScreen(
                 }
 
                 state.CancelationTypes.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         OrderCancelMessageCard(
                             title = BBLocalization.Current.Get(key = "5cfcc94d-2ba4-4cc6-a213-1f8a608c0990", fallback = "İptal nedeni bulunamadı"),
                             description = BBLocalization.Current.Get(key = "8c522bf7-dbcf-4f31-8cc8-53f7873b5cac", fallback = "İptal talebi için kullanılabilir neden kaydı bulunamadı.")
@@ -172,7 +172,7 @@ fun OrderCancelRequestScreen(
                 }
 
                 else -> {
-                    item {
+                    bbPageItem {
                         OrderCancelReasonCard(
                             reasons = state.CancelationTypes,
                             selectedReasonId = selectedReasonId,
@@ -182,7 +182,7 @@ fun OrderCancelRequestScreen(
                         )
                     }
 
-                    item {
+                    bbPageItem {
                         OrderCancelDescriptionCard(
                             description = description,
                             onDescriptionChange = { value ->
@@ -191,7 +191,7 @@ fun OrderCancelRequestScreen(
                         )
                     }
 
-                    item {
+                    bbPageItem {
                         OrderCancelWarningCard()
                     }
 
@@ -200,7 +200,7 @@ fun OrderCancelRequestScreen(
                             state.CurrentAction == "InsertOrderCancelationAsync"
                         }
                         ?.let { errorMessage ->
-                            item {
+                            bbPageItem {
                                 OrderCancelMessageCard(
                                     title = BBLocalization.Current.Get(key = "78af2bde-b828-4709-9a26-bfb63ceeeda2", fallback = "Talep gönderilemedi"),
                                     description = errorMessage
@@ -208,7 +208,7 @@ fun OrderCancelRequestScreen(
                             }
                         }
 
-                    item {
+                    bbPageItem {
                         OrderCancelActionCard(
                             isLoading = state.IsLoading &&
                                     state.CurrentAction == "InsertOrderCancelationAsync",

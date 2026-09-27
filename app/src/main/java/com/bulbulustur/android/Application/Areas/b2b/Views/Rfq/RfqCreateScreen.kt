@@ -227,7 +227,7 @@ fun RfqCreateScreen(
             }
 
             if (isOptionsLoading) {
-                item {
+                bbPageItem {
                     BbCard(
                         modifier = Modifier.fillMaxWidth(),
                         variant = BbCardVariant.Outlined,
@@ -243,7 +243,7 @@ fun RfqCreateScreen(
             }
 
             if (!isOptionsLoading && !hasAllOptions) {
-                item {
+                bbPageItem {
                     BbCard(
                         modifier = Modifier.fillMaxWidth(),
                         variant = BbCardVariant.Outlined,
@@ -452,7 +452,7 @@ fun RfqCreateScreen(
             val visibleError = validationMessage ?: errorMessage?.takeIf { hasAllOptions }
 
             if (!visibleError.isNullOrBlank()) {
-                item {
+                bbPageItem {
                     BbCard(
                         modifier = Modifier.fillMaxWidth(),
                         variant = BbCardVariant.Outlined,

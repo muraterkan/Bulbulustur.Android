@@ -1,5 +1,9 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.order
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItems
+
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -95,7 +99,7 @@ fun OrderListScreen(
         ) {
             when {
                 memberId <= 0 -> {
-                    item {
+                    bbPageItem {
                         OrderMessageCard(
                             title = BBLocalization.Current.Get(key = "7d3eff10-e01c-4564-a290-e3542478f979", fallback = "Oturum bilgisi bulunamadı"),
                             description = BBLocalization.Current.Get(key = "23036200-215d-4425-b832-1d99ea7aa703", fallback = "Siparişlerinizi görüntülemek için hesabınıza giriş yapmanız gerekiyor.")
@@ -104,13 +108,13 @@ fun OrderListScreen(
                 }
 
                 state.IsLoading && state.Orders.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         OrderLoadingCard()
                     }
                 }
 
                 state.ErrorMessage != null && state.Orders.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         OrderMessageCard(
                             title = BBLocalization.Current.Get(key = "9f159f2d-5f29-4ead-87cb-85e6c6c7e2cb", fallback = "Siparişler alınamadı"),
                             description = state.ErrorMessage.orEmpty()
@@ -119,17 +123,17 @@ fun OrderListScreen(
                 }
 
                 state.Orders.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         OrderEmptyState()
                     }
                 }
 
                 else -> {
-                    item {
+                    bbPageItem {
                         OrderListOverviewCard(totalOrderCount = state.Orders.size)
                     }
 
-                    items(
+                    bbPageItems(
                         items = state.Orders,
                         key = { order -> order.OrderId }
                     ) { order ->

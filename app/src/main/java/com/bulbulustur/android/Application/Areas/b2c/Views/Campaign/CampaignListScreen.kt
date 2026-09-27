@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Campaign
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItemsIndexed
+
 import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
 
 import com.bulbulustur.android.businesslayer.Core.Network.ImageUrlResolver
@@ -151,7 +153,7 @@ fun CampaignListScreen(
 
             when {
                 isLoading -> {
-                    item {
+                    bbPageItem {
                         CampaignListInfoCard(
                             title = BBLocalization.Current.Get(key = "b0232075-fe70-45c8-aabf-7f0e54f81ce5", fallback = "Kampanyalar yükleniyor"),
                             description = BBLocalization.Current.Get(key = "20b5f12d-1dbf-467c-af8e-3138533bedcc", fallback = ""),
@@ -162,7 +164,7 @@ fun CampaignListScreen(
 
                 !errorMessage.isNullOrBlank() &&
                         campaigns.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         CampaignListInfoCard(
                             title = BBLocalization.Current.Get(key = "bdf61c70-ebbc-45bc-bb86-a8c7e4d90fe0", fallback = "Kampanyalar alınamadı"),
                             description = errorMessage
@@ -171,7 +173,7 @@ fun CampaignListScreen(
                 }
 
                 filteredCampaigns.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         CampaignListInfoCard(
                             title = BBLocalization.Current.Get(key = "e59db449-f1ba-4c09-b6ea-0c60689bfd19", fallback = "Kampanya bulunamadı"),
                             description = if (searchText.isBlank()) {
@@ -184,7 +186,7 @@ fun CampaignListScreen(
                 }
 
                 else -> {
-                    itemsIndexed(
+                    bbPageItemsIndexed(
                         items = campaignRows,
                         key = { rowIndex, row ->
                             val rowKey = row.joinToString("-") {

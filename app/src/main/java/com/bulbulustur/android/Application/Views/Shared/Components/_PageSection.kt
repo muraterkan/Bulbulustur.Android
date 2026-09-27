@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
@@ -59,3 +60,27 @@ inline fun <T> LazyListScope.bbPageItems(
         }
     }
 }
+
+inline fun <T> LazyListScope.bbPageItemsIndexed(
+    items: List<T>,
+    noinline key: ((index: Int, item: T) -> Any)? = null,
+    noinline contentType: (index: Int, item: T) -> Any? = { _, _ -> null },
+    crossinline itemContent: @Composable LazyItemScope.(index: Int, item: T) -> Unit
+) {
+    itemsIndexed(
+        items = items,
+        key = key,
+        contentType = contentType
+    ) { index, item ->
+        val lazyItemScope = this
+
+        BbPageSection {
+            itemContent(
+                lazyItemScope,
+                index,
+                item
+            )
+        }
+    }
+}
+

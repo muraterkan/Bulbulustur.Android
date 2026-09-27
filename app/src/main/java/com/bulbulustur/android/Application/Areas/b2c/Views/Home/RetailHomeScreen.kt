@@ -149,7 +149,7 @@ fun RetailHomeScreen(
                 RetailHomeHeroCard()
             }
 
-            item {
+            bbPageItem {
                 RetailHomeQuickGatewayRow(
                     onCampaignListClick = onCampaignListClick,
                     onDealsOfTheDayListClick =
@@ -193,7 +193,7 @@ fun RetailHomeScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 RetailHomeStoreRow(
                     onStoreClick = onStoreClick
                 )

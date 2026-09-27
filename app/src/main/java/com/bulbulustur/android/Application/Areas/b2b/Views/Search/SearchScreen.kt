@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2b.Views.Search
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItemsIndexed
+
 import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
 
 import androidx.compose.foundation.background
@@ -137,7 +139,7 @@ fun SearchScreen(
 
             when {
                 !hasProductSearch -> {
-                    item {
+                    bbPageItem {
                         WholesaleSearchInfoCard(
                             title = BBLocalization.Current.Get(
                                 key = "0e2dc829-9eb6-4c30-a0d8-321e3a6d4b89",
@@ -153,7 +155,7 @@ fun SearchScreen(
                 }
 
                 productResults.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         WholesaleSearchInfoCard(
                             title = BBLocalization.Current.Get(
                                 key = "827ac3ff-d105-4f4c-9fa3-cf6b891a7f4e",
@@ -169,7 +171,7 @@ fun SearchScreen(
                 }
 
                 else -> {
-                    itemsIndexed(
+                    bbPageItemsIndexed(
                         items = productResults,
                         key = { index, product ->
                             "wholesale-search-product-${product.WholesaleProductId}-$index"

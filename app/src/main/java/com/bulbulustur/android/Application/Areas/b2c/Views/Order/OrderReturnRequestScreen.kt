@@ -127,7 +127,7 @@ fun OrderReturnRequestScreen(
 
             when {
                 orderStoreLineId <= 0L || orderKey.isBlank() -> {
-                    item {
+                    bbPageItem {
                         OrderReturnMessageCard(
                             title = BBLocalization.Current.Get(key = "1202f4fc-a180-41eb-a681-417274d697e1", fallback = "Sipariş bilgisi eksik"),
                             description = BBLocalization.Current.Get(key = "e74448c2-f7cb-4e27-853a-3e6681a7f32c", fallback = "İade talebi için sipariş satırı veya sipariş anahtarı bulunamadı.")
@@ -136,7 +136,7 @@ fun OrderReturnRequestScreen(
                 }
 
                 memberId <= 0 -> {
-                    item {
+                    bbPageItem {
                         OrderReturnMessageCard(
                             title = BBLocalization.Current.Get(key = "7d3eff10-e01c-4564-a290-e3542478f979", fallback = "Oturum bilgisi bulunamadı"),
                             description = BBLocalization.Current.Get(key = "12c4b267-51c0-4fb1-8a04-d2d18a39f8a1", fallback = "İade talebi oluşturmak için hesabınıza giriş yapmanız gerekiyor.")
@@ -147,7 +147,7 @@ fun OrderReturnRequestScreen(
                 state.IsLoading &&
                         state.CurrentAction == "GetReturnRequestReasonsAsync" &&
                         state.ReturnRequestReasons.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         OrderReturnLoadingCard(
                             text = BBLocalization.Current.Get(key = "48fca598-6c28-470d-b44b-25f4e58c1c3f", fallback = "İade nedenleri yükleniyor")
                         )
@@ -157,7 +157,7 @@ fun OrderReturnRequestScreen(
                 state.ErrorMessage != null &&
                         state.ReturnRequestReasons.isEmpty() &&
                         state.CurrentAction == "GetReturnRequestReasonsAsync" -> {
-                    item {
+                    bbPageItem {
                         OrderReturnMessageCard(
                             title = BBLocalization.Current.Get(key = "51369ff0-7241-4cf7-ac4a-46f4c10d122a", fallback = "İade nedenleri alınamadı"),
                             description = state.ErrorMessage.orEmpty()
@@ -166,7 +166,7 @@ fun OrderReturnRequestScreen(
                 }
 
                 state.ReturnRequestReasons.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         OrderReturnMessageCard(
                             title = BBLocalization.Current.Get(key = "0e20d531-6952-4188-ad2f-3dc230fc4ea3", fallback = "İade nedeni bulunamadı"),
                             description = BBLocalization.Current.Get(key = "b0e7a4de-368c-4cff-9652-f7f0e5677495", fallback = "İade talebi için kullanılabilir neden kaydı bulunamadı.")
@@ -175,7 +175,7 @@ fun OrderReturnRequestScreen(
                 }
 
                 else -> {
-                    item {
+                    bbPageItem {
                         OrderReturnReasonCard(
                             reasons = state.ReturnRequestReasons,
                             selectedReasonId = selectedReasonId,
@@ -185,7 +185,7 @@ fun OrderReturnRequestScreen(
                         )
                     }
 
-                    item {
+                    bbPageItem {
                         OrderReturnDescriptionCard(
                             description = description,
                             onDescriptionChange = { value ->
@@ -194,7 +194,7 @@ fun OrderReturnRequestScreen(
                         )
                     }
 
-                    item {
+                    bbPageItem {
                         OrderReturnProcessCard()
                     }
 
@@ -203,7 +203,7 @@ fun OrderReturnRequestScreen(
                             state.CurrentAction == "InsertReturnRequestAsync"
                         }
                         ?.let { errorMessage ->
-                            item {
+                            bbPageItem {
                                 OrderReturnMessageCard(
                                     title = BBLocalization.Current.Get(key = "78af2bde-b828-4709-9a26-bfb63ceeeda2", fallback = "Talep gönderilemedi"),
                                     description = errorMessage
@@ -211,7 +211,7 @@ fun OrderReturnRequestScreen(
                             }
                         }
 
-                    item {
+                    bbPageItem {
                         OrderReturnActionCard(
                             isLoading = state.IsLoading &&
                                     state.CurrentAction == "InsertReturnRequestAsync",

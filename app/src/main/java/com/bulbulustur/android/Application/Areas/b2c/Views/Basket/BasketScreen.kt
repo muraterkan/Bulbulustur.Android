@@ -1,5 +1,9 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Basket
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItems
+
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -129,31 +133,31 @@ fun BasketScreen(State: BasketControllerState = BasketControllerState(), favorit
             ) {
                 when {
                     !basketLoaded -> {
-                        item {
+                        bbPageItem {
                             BasketLoadingCard()
                         }
                     }
 
                     basketLines.isEmpty() -> {
-                        item {
+                        bbPageItem {
                             BasketEmptyCard(onHomeClick = onHomeClick)
                         }
 
-                        item {
+                        bbPageItem {
                             BasketFavoritesSection(favorites = favorites, isLoading = isFavoriteLoading, errorMessage = favoriteErrorMessage, onRetryClick = onRetryFavoritesClick, onAddFavoriteClick = onAddFavoriteToBasketClick)
                         }
 
-                        item {
+                        bbPageItem {
                             BasketBuyerProtectionCard()
                         }
                     }
 
                     else -> {
-                        item {
+                        bbPageItem {
                             BasketCouponCard(coupons = State.Coupons, selectedCoupon = appliedCoupon, usableCouponCount = usableCouponCount, isLoading = State.IsCouponLoading, errorMessage = State.CouponErrorMessage, onClick = { showCouponSheet = true })
                         }
 
-                        items(items = storeGroups, key = { storeGroup -> storeGroup.storeId }) { storeGroup ->
+                        bbPageItems(items = storeGroups, key = { storeGroup -> storeGroup.storeId }) { storeGroup ->
                             BasketStoreGroupCard(
                                 storeGroup = storeGroup,
                                 onStoreClick = { onStoreClick(storeGroup.storeId) },
@@ -166,12 +170,12 @@ fun BasketScreen(State: BasketControllerState = BasketControllerState(), favorit
                         }
 
                         if (favorites.isNotEmpty() || isFavoriteLoading || !favoriteErrorMessage.isNullOrBlank()) {
-                            item {
+                            bbPageItem {
                                 BasketFavoritesSection(favorites = favorites, isLoading = isFavoriteLoading, errorMessage = favoriteErrorMessage, onRetryClick = onRetryFavoritesClick, onAddFavoriteClick = onAddFavoriteToBasketClick)
                             }
                         }
 
-                        item {
+                        bbPageItem {
                             BasketBuyerProtectionCard()
                         }
                     }

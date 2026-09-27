@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Store
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItems
+
 import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
 
 import androidx.compose.foundation.BorderStroke
@@ -227,13 +229,13 @@ fun StoreListScreen(
 
             when {
                 isLoading && storeItems.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         StoreListLoadingState()
                     }
                 }
 
                 !errorMessage.isNullOrBlank() && storeItems.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         StoreListErrorState(
                             message = errorMessage
                         )
@@ -241,7 +243,7 @@ fun StoreListScreen(
                 }
 
                 filteredStores.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         StoreListEmptyState(
                             onSellerInfoClick = onSellerInfoClick
                         )
@@ -249,7 +251,7 @@ fun StoreListScreen(
                 }
 
                 else -> {
-                    items(
+                    bbPageItems(
                         items = filteredStores,
                         key = { store ->
                             store.id
@@ -263,7 +265,7 @@ fun StoreListScreen(
                         )
                     }
 
-                    item {
+                    bbPageItem {
                         StoreListSellerInfoBanner(
                             onSellerInfoClick = onSellerInfoClick
                         )

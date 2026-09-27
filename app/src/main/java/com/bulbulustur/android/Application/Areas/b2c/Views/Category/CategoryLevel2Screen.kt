@@ -196,7 +196,7 @@ fun CategoryLevel2Screen(
                 }
             }
 
-            item {
+            bbPageItem {
                 CategoryShowcaseSection(
                     categoryContents = categoryContents,
                     isCategoryContentsLoading = isCategoryContentsLoading,
@@ -209,7 +209,7 @@ fun CategoryLevel2Screen(
                 )
             }
 
-            item {
+            bbPageItem {
                 CategoryDealsOfTheDaySection(
                     dealsOfTheDays = dealsOfTheDays,
                     onProductClick = { deal ->
@@ -224,7 +224,7 @@ fun CategoryLevel2Screen(
                 )
             }
 
-            item {
+            bbPageItem {
                 CategorySponsoredFeaturedSection(
                     sponsoredAdverts = sponsoredAdverts,
                     favoriteSponsoredIds = favoriteSponsoredIds,
@@ -247,7 +247,7 @@ fun CategoryLevel2Screen(
                 isCategoryBrandsLoading ||
                 categoryBrands.isNotEmpty()
             ) {
-                item {
+                bbPageItem {
                     CategoryBrands(
                         brands = categoryBrands,
                         isLoading = isCategoryBrandsLoading

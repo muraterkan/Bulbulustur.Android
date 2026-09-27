@@ -265,7 +265,7 @@ fun RetailSearchLandingScreen(
             }
 
             if (histories.isNotEmpty()) {
-                item {
+                bbPageItem {
                     LazyRow(
                         modifier =
                             Modifier.fillMaxWidth(),

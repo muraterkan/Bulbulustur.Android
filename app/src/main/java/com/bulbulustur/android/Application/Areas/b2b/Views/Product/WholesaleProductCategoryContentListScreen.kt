@@ -1,5 +1,9 @@
 package com.bulbulustur.android.Application.Areas.b2b.Views.Product
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItems
+
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -73,7 +77,7 @@ fun WholesaleProductCategoryContentListScreen(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
             when {
-                isLoading && products.isEmpty() -> item {
+                isLoading && products.isEmpty() -> bbPageItem {
                     Row(
                         modifier = Modifier.fillMaxWidth().padding(BBSpacing.Space6),
                         horizontalArrangement = Arrangement.Center,
@@ -83,14 +87,14 @@ fun WholesaleProductCategoryContentListScreen(
                     }
                 }
 
-                !errorMessage.isNullOrBlank() && products.isEmpty() -> item {
+                !errorMessage.isNullOrBlank() && products.isEmpty() -> bbPageItem {
                     Text(
                         text = errorMessage,
                         color = MaterialTheme.colorScheme.error
                     )
                 }
 
-                products.isEmpty() -> item {
+                products.isEmpty() -> bbPageItem {
                     Text(
                         text = BBLocalization.Current.Get(
                             key = "9afc052e-e2bf-413d-81c6-461bfc3c9174",
@@ -100,7 +104,7 @@ fun WholesaleProductCategoryContentListScreen(
                     )
                 }
 
-                else -> items(
+                else -> bbPageItems(
                     items = products,
                     key = { "${it.WholesaleProductCategoryContentId}-${it.WholesaleProductId}" }
                 ) { product ->
@@ -132,7 +136,7 @@ fun WholesaleProductCategoryContentListScreen(
             }
 
             if (totalPages > 1) {
-                item {
+                bbPageItem {
                     WholesaleCategoryContentPagination(
                         currentPage = currentPage,
                         totalPages = totalPages,

@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.order
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -91,7 +93,7 @@ fun OrderShipmentTrackingScreen(
         ) {
             when {
                 cargoTrackingNumber <= 0 -> {
-                    item {
+                    bbPageItem {
                         OrderShipmentMessageCard(
                             title = BBLocalization.Current.Get(key = "419451ce-69ba-45e6-80b9-5f05ca872706", fallback = "Kargo takip numarası bulunamadı"),
                             description = BBLocalization.Current.Get(key = "f35e0f0d-556e-4289-8706-568376bfd74f", fallback = "Gönderi bilgisi görüntülenemedi.")
@@ -100,7 +102,7 @@ fun OrderShipmentTrackingScreen(
                 }
 
                 memberId <= 0 -> {
-                    item {
+                    bbPageItem {
                         OrderShipmentMessageCard(
                             title = BBLocalization.Current.Get(key = "7d3eff10-e01c-4564-a290-e3542478f979", fallback = "Oturum bilgisi bulunamadı"),
                             description = BBLocalization.Current.Get(key = "ef411e74-cfd6-497c-9add-f55462225a84", fallback = "Kargo bilgisini görüntülemek için hesabınıza giriş yapmanız gerekiyor.")
@@ -109,13 +111,13 @@ fun OrderShipmentTrackingScreen(
                 }
 
                 state.IsLoading && state.OrderTracking == null -> {
-                    item {
+                    bbPageItem {
                         OrderShipmentLoadingCard()
                     }
                 }
 
                 state.ErrorMessage != null && state.OrderTracking == null -> {
-                    item {
+                    bbPageItem {
                         OrderShipmentMessageCard(
                             title = BBLocalization.Current.Get(key = "e3327e09-5c59-4b0e-b895-d544194aa9b5", fallback = "Kargo bilgisi alınamadı"),
                             description = state.ErrorMessage.orEmpty()
@@ -124,7 +126,7 @@ fun OrderShipmentTrackingScreen(
                 }
 
                 state.OrderTracking == null -> {
-                    item {
+                    bbPageItem {
                         OrderShipmentMessageCard(
                             title = "Kargo kaydı bulunamadı",
                             description = BBLocalization.Current.Get(key = "82ff65b9-a7b7-47a0-a133-77dd2780093e", fallback = "Bu takip numarasına ait gönderi bilgisi bulunamadı.")
@@ -135,31 +137,31 @@ fun OrderShipmentTrackingScreen(
                 else -> {
                     val tracking = state.OrderTracking!!
 
-                    item {
+                    bbPageItem {
                         OrderShipmentSummaryCard(
                             tracking = tracking,
                             cargoTrackingNumber = cargoTrackingNumber
                         )
                     }
 
-                    item {
+                    bbPageItem {
                         OrderShipmentInfoGrid(
                             tracking = tracking,
                             cargoTrackingNumber = cargoTrackingNumber
                         )
                     }
 
-                    item {
+                    bbPageItem {
                         OrderShipmentDetailCard(
                             tracking = tracking
                         )
                     }
 
-                    item {
+                    bbPageItem {
                         OrderShipmentHelpCard()
                     }
 
-                    item {
+                    bbPageItem {
                         BbButton(
                             text = "Sipariş Detaylarına Dön",
                             onClick = onBackClick,

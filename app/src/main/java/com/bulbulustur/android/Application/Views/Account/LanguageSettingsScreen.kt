@@ -80,39 +80,27 @@ fun LanguageSettingsScreen(
 
             if (isLoading && languages.isEmpty()) {
                 bbPageItem {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = BBSpacing.PageHorizontal)
-                    ) {
-                        SettingsLoadingCard(
-                            BBLocalization.Current.Get(
-                                key = "4cb87a4e-27ee-4945-95dc-31c9c14b8986",
-                                fallback = "Diller yükleniyor..."
-                            )
+                    SettingsLoadingCard(
+                        BBLocalization.Current.Get(
+                            key = "4cb87a4e-27ee-4945-95dc-31c9c14b8986",
+                            fallback = "Diller yükleniyor..."
                         )
-                    }
+                    )
                 }
             } else {
                 bbPageItems(
                     items = visibleLanguages,
                     key = { it.id }
                 ) { language ->
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = BBSpacing.PageHorizontal)
-                    ) {
-                        LanguageRow(
-                            item = language,
-                            isSelected = language.id == selectedLanguageId,
-                            onClick = {
-                                if (language.id != selectedLanguageId) {
-                                    onLanguageSelected(language.id, language.code)
-                                }
+                    LanguageRow(
+                        item = language,
+                        isSelected = language.id == selectedLanguageId,
+                        onClick = {
+                            if (language.id != selectedLanguageId) {
+                                onLanguageSelected(language.id, language.code)
                             }
-                        )
-                    }
+                        }
+                    )
                 }
             }
         }

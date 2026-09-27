@@ -1,5 +1,9 @@
 package com.bulbulustur.android.Application.Areas.b2b.Views.Category
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItems
+
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -223,13 +227,13 @@ fun WholesaleCategoryLevel1Screen(
         ) {
             when {
                 isLoading -> {
-                    item {
+                    bbPageItem {
                         WholesaleCategoryLoading()
                     }
                 }
 
                 !errorMessage.isNullOrBlank() -> {
-                    item {
+                    bbPageItem {
                         WholesaleCategoryError(
                             message = errorMessage
                         )
@@ -237,13 +241,13 @@ fun WholesaleCategoryLevel1Screen(
                 }
 
                 categoryInfo == null -> {
-                    item {
+                    bbPageItem {
                         WholesaleCategoryEmpty()
                     }
                 }
 
                 else -> {
-                    item {
+                    bbPageItem {
                         WholesaleCategoryHero(
                             categoryName = categoryName,
                             description = categoryDescription,
@@ -252,7 +256,7 @@ fun WholesaleCategoryLevel1Screen(
                         )
                     }
 
-                    item {
+                    bbPageItem {
                         WholesaleCategoryActions(
                             categoryId = categoryId,
                             onProductListClick = onProductListClick,
@@ -260,7 +264,7 @@ fun WholesaleCategoryLevel1Screen(
                         )
                     }
 
-                    item {
+                    bbPageItem {
                         WholesaleCategorySectionTitle(
                             title = BBLocalization.Current.Get(
                                 key = "19e928cc-d4e4-426f-a1e8-fb8d9adf872f",
@@ -276,11 +280,11 @@ fun WholesaleCategoryLevel1Screen(
                     if (
                         validChildCategories.isEmpty()
                     ) {
-                        item {
+                        bbPageItem {
                             WholesaleChildCategoryEmpty()
                         }
                     } else {
-                        items(
+                        bbPageItems(
                             items = validChildCategories,
                             key = { category ->
                                 category.ProductCategoryId
@@ -297,7 +301,7 @@ fun WholesaleCategoryLevel1Screen(
                         }
                     }
 
-                    item {
+                    bbPageItem {
                         WholesaleCategorySectionTitle(
                             title = BBLocalization.Current.Get(
                                 key = "b18fcc04-78f7-4914-afb6-8f283fd08a61",
@@ -310,7 +314,7 @@ fun WholesaleCategoryLevel1Screen(
                         )
                     }
 
-                    item {
+                    bbPageItem {
                         WholesaleCategoryProductContentShowcaseContent(
                             categoryContents = categoryContents,
                             isLoading = isCategoryContentsLoading,
@@ -328,7 +332,7 @@ fun WholesaleCategoryLevel1Screen(
                             .orEmpty()
                             .isNotEmpty()
                     ) {
-                        item {
+                        bbPageItem {
                             WholesaleProductCategorySlider(
                                 slider = categorySlider,
                                 isLoading = isCategorySliderLoading,
@@ -341,7 +345,7 @@ fun WholesaleCategoryLevel1Screen(
                         isCategorySuppliersLoading ||
                         categorySuppliers.isNotEmpty()
                     ) {
-                        item {
+                        bbPageItem {
                             WholesaleSupplierSection(
                                 suppliers = categorySuppliers,
                                 isLoading = isCategorySuppliersLoading,

@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Product
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItems
+
 import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
 
 import androidx.compose.foundation.BorderStroke
@@ -131,7 +133,7 @@ fun ProductQuestionScreen(
             State.SuccessMessage
                 ?.takeIf { it.isNotBlank() }
                 ?.let { message ->
-                    item {
+                    bbPageItem {
                         ProductQuestionFeedbackCard(
                             message = message,
                             isError = false
@@ -142,7 +144,7 @@ fun ProductQuestionScreen(
             State.ErrorMessage
                 ?.takeIf { it.isNotBlank() }
                 ?.let { message ->
-                    item {
+                    bbPageItem {
                         ProductQuestionFeedbackCard(
                             message = message,
                             isError = true
@@ -152,26 +154,26 @@ fun ProductQuestionScreen(
 
             when {
                 State.IsLoading && State.Questions.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         ProductQuestionLoadingCard()
                     }
                 }
 
                 State.Questions.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         ProductQuestionEmptyCard()
                     }
                 }
 
                 else -> {
-                    item {
+                    bbPageItem {
                         ProductQuestionSummaryCard(
                             totalQuestionCount =
                                 State.Questions.size
                         )
                     }
 
-                    item {
+                    bbPageItem {
                         ProductQuestionSectionTitle(
                             title =
                                 "Ürün soruları",
@@ -183,7 +185,7 @@ fun ProductQuestionScreen(
                         )
                     }
 
-                    items(
+                    bbPageItems(
                         items =
                             State.Questions,
                         key = {

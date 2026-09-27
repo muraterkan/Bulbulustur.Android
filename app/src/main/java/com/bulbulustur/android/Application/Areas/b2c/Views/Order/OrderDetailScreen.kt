@@ -1,5 +1,9 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.order
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItems
+
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -169,7 +173,7 @@ fun OrderDetailScreenContent(
             when {
 
                 orderKey.isBlank() -> {
-                    item {
+                    bbPageItem {
                         OrderDetailMessageCard(
                             title = BBLocalization.Current.Get(
                                 key = "b9e4b392-a83b-410e-87fe-aefdfb9ee96f",
@@ -184,13 +188,13 @@ fun OrderDetailScreenContent(
                 }
 
                 state.IsLoading && orderStores.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         OrderDetailLoadingCard()
                     }
                 }
 
                 state.ErrorMessage != null && orderStores.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         OrderDetailMessageCard(
                             title = BBLocalization.Current.Get(
                                 key = "1430044f-f898-4e82-bc22-828a0fd579e3",
@@ -202,7 +206,7 @@ fun OrderDetailScreenContent(
                 }
 
                 orderStores.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         OrderDetailMessageCard(
                             title = BBLocalization.Current.Get(
                                 key = "838ffc4f-83f8-4fc2-87dc-8b668084ba59",
@@ -218,7 +222,7 @@ fun OrderDetailScreenContent(
 
                 else -> {
 
-                    item {
+                    bbPageItem {
                         OrderDetailSummaryCard(
                             orderId = orderId,
                             orderKey = orderKey,
@@ -228,7 +232,7 @@ fun OrderDetailScreenContent(
                         )
                     }
 
-                    items(
+                    bbPageItems(
                         items = orderStores,
                         key = { store ->
                             store.OrderStoreId
@@ -252,7 +256,7 @@ fun OrderDetailScreenContent(
                         order != null &&
                         order.DeliveryAddress.isNotBlank()
                     ) {
-                        item {
+                        bbPageItem {
                             OrderDetailAddressCard(
                                 title = BBLocalization.Current.Get(
                                     key = "fa3df4de-7069-4a3d-9dac-5a4ea9b88b65",
@@ -265,7 +269,7 @@ fun OrderDetailScreenContent(
                         }
                     }
 
-                    item {
+                    bbPageItem {
                         OrderDetailPaymentCard(
                             netTotal = netTotal,
                             shippingTotal = shippingTotal,

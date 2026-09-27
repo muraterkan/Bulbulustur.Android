@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2b.Views.Rfq
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -80,13 +82,13 @@ fun RfqDetailScreen(
         ) {
             when {
                 isLoading && buyerRequest == null -> {
-                    item {
+                    bbPageItem {
                         RfqDetailLoadingCard()
                     }
                 }
 
                 !errorMessage.isNullOrBlank() && buyerRequest == null -> {
-                    item {
+                    bbPageItem {
                         RfqDetailErrorCard(
                             message = errorMessage,
                             onRetryClick = onRetryClick
@@ -95,44 +97,44 @@ fun RfqDetailScreen(
                 }
 
                 buyerRequest == null -> {
-                    item {
+                    bbPageItem {
                         RfqDetailEmptyCard()
                     }
                 }
 
                 else -> {
-                    item {
+                    bbPageItem {
                         RfqDetailSummaryCard(
                             buyerRequest = buyerRequest,
                             onCreateRfqClick = onCreateRfqClick
                         )
                     }
 
-                    item {
+                    bbPageItem {
                         RfqDetailQuantityCard(
                             buyerRequest = buyerRequest
                         )
                     }
 
-                    item {
+                    bbPageItem {
                         RfqDetailProductCard(
                             buyerRequest = buyerRequest
                         )
                     }
 
-                    item {
+                    bbPageItem {
                         RfqDetailTradeCard(
                             buyerRequest = buyerRequest
                         )
                     }
 
-                    item {
+                    bbPageItem {
                         RfqDetailDeliveryCard(
                             buyerRequest = buyerRequest
                         )
                     }
 
-                    item {
+                    bbPageItem {
                         RfqDetailOffersCard(
                             onOffersClick = onOffersClick
                         )

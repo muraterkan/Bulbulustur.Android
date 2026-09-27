@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2b.Views.Rfq
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItems
+
 import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
 
 import androidx.compose.foundation.background
@@ -118,13 +120,13 @@ fun RfqListScreen(
 
             when {
                 isLoading && requests.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         RfqListLoadingCard()
                     }
                 }
 
                 !errorMessage.isNullOrBlank() && requests.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         RfqListErrorCard(
                             message = errorMessage,
                             onRetryClick = onRetryClick
@@ -133,7 +135,7 @@ fun RfqListScreen(
                 }
 
                 requests.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         RfqEmptyState(
                             onDiscoverWholesaleClick = onDiscoverWholesaleClick
                         )
@@ -141,7 +143,7 @@ fun RfqListScreen(
                 }
 
                 else -> {
-                    items(
+                    bbPageItems(
                         items = requests,
                         key = { item -> item.BuyerRequestKey }
                     ) { item ->

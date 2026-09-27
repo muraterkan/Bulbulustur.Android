@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Store
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -94,7 +96,7 @@ fun StoreDetailScreen(
         ) {
             when {
                 isLoading && store == null -> {
-                    item {
+                    bbPageItem {
                         StoreDetailStatusCard(
                             title = BBLocalization.Current.Get(
                                 key = "f58ed75d-1b29-43cc-8eec-5ca92118d7dd",
@@ -109,7 +111,7 @@ fun StoreDetailScreen(
                 }
 
                 !errorMessage.isNullOrBlank() && store == null -> {
-                    item {
+                    bbPageItem {
                         StoreDetailStatusCard(
                             title = BBLocalization.Current.Get(
                                 key = "c466e1d0-f104-4b5b-b0e3-b0d51ca833fe",
@@ -121,7 +123,7 @@ fun StoreDetailScreen(
                 }
 
                 store == null -> {
-                    item {
+                    bbPageItem {
                         StoreDetailStatusCard(
                             title = BBLocalization.Current.Get(
                                 key = "9141e794-372f-4548-81a2-ef81b797a60c",
@@ -136,26 +138,26 @@ fun StoreDetailScreen(
                 }
 
                 else -> {
-                    item {
+                    bbPageItem {
                         StoreDetailHero(
                             store = store
                         )
                     }
 
-                    item {
+                    bbPageItem {
                         StoreInfoStatSection(
                             store = store
                         )
                     }
 
-                    item {
+                    bbPageItem {
                         StoreProductsCallout(
                             storeName = store.name,
                             onClick = onStoreProductListClick
                         )
                     }
 
-                    item {
+                    bbPageItem {
                         StoreOtherStoresCard(
                             onStoreListClick = onStoreListClick
                         )

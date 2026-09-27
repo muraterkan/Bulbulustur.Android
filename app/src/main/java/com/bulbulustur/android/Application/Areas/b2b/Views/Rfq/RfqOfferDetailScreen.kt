@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2b.Views.Rfq
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -84,13 +86,13 @@ fun RfqOfferDetailScreen(
         ) {
             when {
                 isLoading && offer == null -> {
-                    item {
+                    bbPageItem {
                         RfqOfferDetailLoadingCard()
                     }
                 }
 
                 !errorMessage.isNullOrBlank() && offer == null -> {
-                    item {
+                    bbPageItem {
                         RfqOfferDetailErrorCard(
                             message = errorMessage,
                             onRetryClick = onRetryClick
@@ -99,25 +101,25 @@ fun RfqOfferDetailScreen(
                 }
 
                 offer == null -> {
-                    item {
+                    bbPageItem {
                         RfqOfferDetailEmptyCard()
                     }
                 }
 
                 else -> {
-                    item {
+                    bbPageItem {
                         RfqOfferSummaryCard(offer = offer)
                     }
 
-                    item {
+                    bbPageItem {
                         RfqOfferInfoCard(offer = offer)
                     }
 
-                    item {
+                    bbPageItem {
                         RfqOfferMessageCard(offer = offer)
                     }
 
-                    item {
+                    bbPageItem {
                         RfqOfferActionCard(
                             onSellerClick = onSellerClick,
                             onMessageClick = {

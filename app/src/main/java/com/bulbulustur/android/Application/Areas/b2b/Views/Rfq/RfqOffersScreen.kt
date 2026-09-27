@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2b.Views.Rfq
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItems
+
 import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
 
 import androidx.compose.foundation.background
@@ -83,13 +85,13 @@ fun RfqOffersScreen(
 
             when {
                 isLoading && offers.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         RfqOffersLoadingCard()
                     }
                 }
 
                 !errorMessage.isNullOrBlank() && offers.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         RfqOffersErrorCard(
                             message = errorMessage,
                             onRetryClick = onRetryClick
@@ -98,13 +100,13 @@ fun RfqOffersScreen(
                 }
 
                 offers.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         RfqOffersEmptyCard()
                     }
                 }
 
                 else -> {
-                    items(
+                    bbPageItems(
                         items = offers,
                         key = { offer -> offer.SendedOfferId }
                     ) { offer ->

@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Product
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItems
+
 import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
 
 import androidx.compose.foundation.layout.Arrangement
@@ -107,7 +109,7 @@ fun ProductHomepageSpecialListScreen(
 
             when {
                 isLoading && products.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -121,7 +123,7 @@ fun ProductHomepageSpecialListScreen(
                 }
 
                 !errorMessage.isNullOrBlank() && products.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         Text(
                             text = errorMessage,
                             style = MaterialTheme.typography.bodyMedium,
@@ -131,7 +133,7 @@ fun ProductHomepageSpecialListScreen(
                 }
 
                 products.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         Text(
                             text = BBLocalization.Current.Get(
                                 key = "9afc052e-e2bf-413d-81c6-461bfc3c9174",
@@ -146,7 +148,7 @@ fun ProductHomepageSpecialListScreen(
                 else -> {
                     val rows = products.chunked(2)
 
-                    items(
+                    bbPageItems(
                         items = rows,
                         key = { row ->
                             row.joinToString("-") {
@@ -202,7 +204,7 @@ fun ProductHomepageSpecialListScreen(
             }
 
             if (totalPages > 1) {
-                item {
+                bbPageItem {
                     ProductHomepageSpecialPagination(
                         currentPage = currentPage,
                         totalPages = totalPages,

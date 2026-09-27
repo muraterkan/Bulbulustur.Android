@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.order
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import com.bulbulustur.android.Application.Localization.BBLocalization
 
 import androidx.compose.foundation.background
@@ -94,7 +96,7 @@ fun OrderContractScreen(
         ) {
             when {
                 orderKey.isBlank() || storeKey.isBlank() -> {
-                    item {
+                    bbPageItem {
                         OrderContractMessageCard(
                             title = BBLocalization.Current.Get(key = "bf9ae67b-414c-4dbb-8c78-afef77dffa5a", fallback = "Sözleşme bilgisi eksik"),
                             description = BBLocalization.Current.Get(key = "425b726a-13a6-4865-b3e8-2c468de48d02", fallback = "Sipariş veya mağaza anahtarı bulunamadı.")
@@ -103,13 +105,13 @@ fun OrderContractScreen(
                 }
 
                 state.IsLoading && state.Contract == null -> {
-                    item {
+                    bbPageItem {
                         OrderContractLoadingCard()
                     }
                 }
 
                 state.ErrorMessage != null && state.Contract == null -> {
-                    item {
+                    bbPageItem {
                         OrderContractMessageCard(
                             title = BBLocalization.Current.Get(key = "9891ee14-8be2-40e6-98fb-39a517213676", fallback = "Sözleşme alınamadı"),
                             description = state.ErrorMessage.orEmpty()
@@ -118,7 +120,7 @@ fun OrderContractScreen(
                 }
 
                 state.Contract == null -> {
-                    item {
+                    bbPageItem {
                         OrderContractMessageCard(
                             title = BBLocalization.Current.Get(key = "7f372c3b-70c4-4f07-a241-1519ddac1165", fallback = "Sözleşme bulunamadı"),
                             description = BBLocalization.Current.Get(key = "9a012116-37ca-46b2-a459-04ab2d36261c", fallback = "Bu sipariş ve mağaza için kayıtlı sözleşme bulunamadı.")
@@ -129,7 +131,7 @@ fun OrderContractScreen(
                 else -> {
                     val contract = state.Contract!!
 
-                    item {
+                    bbPageItem {
                         OrderContractSummaryCard(
                             contract = contract,
                             onPrintClick = {
@@ -138,19 +140,19 @@ fun OrderContractScreen(
                         )
                     }
 
-                    item {
+                    bbPageItem {
                         OrderContractInfoGrid(
                             contract = contract
                         )
                     }
 
-                    item {
+                    bbPageItem {
                         OrderContractLegalTextCard(
                             contractText = contract.ContractText
                         )
                     }
 
-                    item {
+                    bbPageItem {
                         OrderContractBottomActionCard(
                             onPrintClick = {
                                 onPrintClick(contract.ContractText)

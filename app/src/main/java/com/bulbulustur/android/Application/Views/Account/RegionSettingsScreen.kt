@@ -81,32 +81,20 @@ fun RegionSettingsScreen(
             when {
                 isLoading && countries.isEmpty() -> {
                     bbPageItem {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = BBSpacing.PageHorizontal)
-                        ) {
-                            RegionLoadingCard()
-                        }
+                        RegionLoadingCard()
                     }
                 }
 
                 countries.isEmpty() -> {
                     bbPageItem {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = BBSpacing.PageHorizontal)
-                        ) {
-                            RegionMessageCard(
-                                message = errorMessage
-                                    ?.takeIf { it.isNotBlank() }
-                                    ?: BBLocalization.Current.Get(
-                                        key = "f5b18e46-1512-45b8-93da-c4a6aa611db2",
-                                        fallback = "Kullanılabilir ülke bulunamadı."
-                                    )
-                            )
-                        }
+                        RegionMessageCard(
+                            message = errorMessage
+                                ?.takeIf { it.isNotBlank() }
+                                ?: BBLocalization.Current.Get(
+                                    key = "f5b18e46-1512-45b8-93da-c4a6aa611db2",
+                                    fallback = "Kullanılabilir ülke bulunamadı."
+                                )
+                        )
                     }
                 }
 
@@ -115,19 +103,13 @@ fun RegionSettingsScreen(
                         items = countries,
                         key = { it.AddressCountryId }
                     ) { country ->
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = BBSpacing.PageHorizontal)
-                        ) {
-                            RegionRow(
-                                item = country,
-                                isSelected = country.AddressCountryId == selectedCountryId,
-                                onClick = {
-                                    onCountrySelected(country)
-                                }
-                            )
-                        }
+                        RegionRow(
+                            item = country,
+                            isSelected = country.AddressCountryId == selectedCountryId,
+                            onClick = {
+                                onCountrySelected(country)
+                            }
+                        )
                     }
                 }
             }

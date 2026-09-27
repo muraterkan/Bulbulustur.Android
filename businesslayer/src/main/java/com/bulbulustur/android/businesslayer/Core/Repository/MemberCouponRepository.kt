@@ -12,7 +12,10 @@ class MemberCouponRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IMemberCouponRepository {
 
-    override suspend fun GetMemberCouponsAsync(memberId: Int, count: Int): Result<List<MemberCouponDTO>> {
+    override suspend fun GetMemberCouponsAsync(
+        memberId: Int,
+        count: Int
+    ): Result<List<MemberCouponDTO>> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.COMMERCE_SUPPORT_BASE_URL,
             method = "Account/GetAccountCouponsAsync",
@@ -20,7 +23,10 @@ class MemberCouponRepository(
         )
     }
 
-    override suspend fun GetMemberCouponByIdAsync(memberId: Int, couponId: Int): Result<MemberCouponUpdateModel?> {
+    override suspend fun GetMemberCouponByIdAsync(
+        memberId: Int,
+        couponId: Int
+    ): Result<MemberCouponUpdateModel?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.COMMERCE_SUPPORT_BASE_URL,
             method = "Account/GetAccountCouponsByIdAsync",
@@ -28,7 +34,10 @@ class MemberCouponRepository(
         )
     }
 
-    override suspend fun InsertAsync(memberId: Int, model: MemberCouponInsertModel): Result<Unit> {
+    override suspend fun InsertAsync(
+        memberId: Int,
+        model: MemberCouponInsertModel
+    ): Result<Unit> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.COMMERCE_SUPPORT_BASE_URL,
             method = "Account/InsertAccountCouponsAsync?memberId=$memberId",
@@ -36,7 +45,10 @@ class MemberCouponRepository(
         )
     }
 
-    override suspend fun UpdateAsync(memberId: Int, model: MemberCouponUpdateModel): Result<Unit> {
+    override suspend fun UpdateAsync(
+        memberId: Int,
+        model: MemberCouponUpdateModel
+    ): Result<Unit> {
         return apiClient.PutAsync(
             baseUrl = ApiRoutes.COMMERCE_SUPPORT_BASE_URL,
             method = "Account/UpdateAccountCouponsAsync?memberId=$memberId",
@@ -44,7 +56,9 @@ class MemberCouponRepository(
         )
     }
 
-    override suspend fun DeleteAsync(couponId: Int): Result<Unit> {
+    override suspend fun DeleteAsync(
+        couponId: Int
+    ): Result<Unit> {
         return apiClient.DeleteAsync(
             baseUrl = ApiRoutes.COMMERCE_SUPPORT_BASE_URL,
             method = "Account/DeleteAccountCouponsAsync",

@@ -14,7 +14,10 @@ class OrderRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IOrderRepository {
 
-    override suspend fun GetOrdersByMemberIdAsync(memberId: Int, count: Int): Result<List<OrderDTO>> {
+    override suspend fun GetOrdersByMemberIdAsync(
+        memberId: Int,
+        count: Int
+    ): Result<List<OrderDTO>> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.COMMERCE_SUPPORT_ORDER_BASE_URL,
             method = "GetOrdersByMemberIdAsync",
@@ -22,7 +25,9 @@ class OrderRepository(
         )
     }
 
-    override suspend fun GetOrderStoresAsync(orderKey: String): Result<List<OrderStoreDTO>> {
+    override suspend fun GetOrderStoresAsync(
+        orderKey: String
+    ): Result<List<OrderStoreDTO>> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.COMMERCE_SUPPORT_ORDER_BASE_URL,
             method = "GetOrderStoresAsync",
@@ -30,7 +35,10 @@ class OrderRepository(
         )
     }
 
-    override suspend fun GetOrderTrackingAsync(cargoTrackingNumber: Int, memberId: Int): Result<OrderStoreLineDTO?> {
+    override suspend fun GetOrderTrackingAsync(
+        cargoTrackingNumber: Int,
+        memberId: Int
+    ): Result<OrderStoreLineDTO?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.COMMERCE_SUPPORT_ORDER_BASE_URL,
             method = "GetOrderTrackingAsync",
@@ -38,7 +46,9 @@ class OrderRepository(
         )
     }
 
-    override suspend fun GetOrderCancelationTypes(count: Int): Result<List<SystemDescOrderCancelationTypeDTO>> {
+    override suspend fun GetOrderCancelationTypes(
+        count: Int
+    ): Result<List<SystemDescOrderCancelationTypeDTO>> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.COMMERCE_SUPPORT_ORDER_BASE_URL,
             method = "GetOrderCancelationTypes",
@@ -46,7 +56,11 @@ class OrderRepository(
         )
     }
 
-    override suspend fun InsertOrderCancelationAsync(languageId: Int, memberId: Int, insertModel: OrderCancelationInsertModel): Result<Unit> {
+    override suspend fun InsertOrderCancelationAsync(
+        languageId: Int,
+        memberId: Int,
+        insertModel: OrderCancelationInsertModel
+    ): Result<Unit> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.COMMERCE_SUPPORT_ORDER_BASE_URL,
             method = "InsertOrderCancelationAsync",

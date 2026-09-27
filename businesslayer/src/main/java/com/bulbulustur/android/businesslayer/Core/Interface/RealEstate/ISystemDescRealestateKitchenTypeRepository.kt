@@ -6,9 +6,22 @@ import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.RealEstate.
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
 interface ISystemDescRealestateKitchenTypeRepository {
+
     suspend fun GetSystemDescRealestateKitchenTypesAsync(): Result<List<SystemDescRealestateKitchenTypeDTO>>
-    suspend fun GetSystemDescRealestateKitchenTypeByIdAsync(systemDescRealestateKitchenTypeId: Int): Result<SystemDescRealestateKitchenTypeUpdateModel>
-    suspend fun InsertAsync(model: SystemDescRealestateKitchenTypeInsertModel): Result<SystemDescRealestateKitchenTypeInsertModel>
-    suspend fun UpdateAsync(model: SystemDescRealestateKitchenTypeUpdateModel): Result<SystemDescRealestateKitchenTypeUpdateModel>
-    suspend fun DeleteAsync(systemDescRealestateKitchenTypeId: Int): Result<Unit>
+
+    suspend fun GetSystemDescRealestateKitchenTypeByIdAsync(
+        systemDescRealestateKitchenTypeId: Int
+    ): Result<SystemDescRealestateKitchenTypeUpdateModel>
+
+    suspend fun InsertAsync(
+        model: SystemDescRealestateKitchenTypeInsertModel
+    ): Result<SystemDescRealestateKitchenTypeInsertModel>
+
+    suspend fun UpdateAsync(
+        model: SystemDescRealestateKitchenTypeUpdateModel
+    ): Result<SystemDescRealestateKitchenTypeUpdateModel>
+
+    suspend fun DeleteAsync(
+        systemDescRealestateKitchenTypeId: Int
+    ): Result<Unit>
 }

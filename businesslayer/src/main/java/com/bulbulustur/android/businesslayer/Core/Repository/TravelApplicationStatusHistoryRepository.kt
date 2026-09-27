@@ -8,9 +8,13 @@ import com.bulbulustur.android.businesslayer.Core.Network.ApiClient
 import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
-class TravelApplicationStatusHistoryRepository(private val apiClient: ApiClient = ApiClient) : ITravelApplicationStatusHistoryRepository {
+class TravelApplicationStatusHistoryRepository(
+    private val apiClient: ApiClient = ApiClient
+) : ITravelApplicationStatusHistoryRepository {
 
-    override suspend fun GetTravelApplicationStatusHistoriesAsync(count: Int): Result<List<TravelApplicationStatusHistoryDTO>> {
+    override suspend fun GetTravelApplicationStatusHistoriesAsync(
+        count: Int
+    ): Result<List<TravelApplicationStatusHistoryDTO>> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.TRAVEL_GIRLS_BASE_URL,
             method = "GetTravelApplicationStatusHistoriesAsync",
@@ -18,7 +22,9 @@ class TravelApplicationStatusHistoryRepository(private val apiClient: ApiClient 
         )
     }
 
-    override suspend fun GetTravelApplicationStatusHistoryByIdAsync(travelApplicationStatusHistoryId: Int): Result<TravelApplicationStatusHistoryUpdateModel?> {
+    override suspend fun GetTravelApplicationStatusHistoryByIdAsync(
+        travelApplicationStatusHistoryId: Int
+    ): Result<TravelApplicationStatusHistoryUpdateModel?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.TRAVEL_GIRLS_BASE_URL,
             method = "GetTravelApplicationStatusHistoryByIdAsync",
@@ -26,7 +32,9 @@ class TravelApplicationStatusHistoryRepository(private val apiClient: ApiClient 
         )
     }
 
-    override suspend fun GetTravelApplicationStatusHistoryByIdExtendedAsync(travelApplicationStatusHistoryId: Int): Result<TravelApplicationStatusHistoryDTO?> {
+    override suspend fun GetTravelApplicationStatusHistoryByIdExtendedAsync(
+        travelApplicationStatusHistoryId: Int
+    ): Result<TravelApplicationStatusHistoryDTO?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.TRAVEL_GIRLS_BASE_URL,
             method = "GetTravelApplicationStatusHistoryByIdExtendedAsync",
@@ -34,7 +42,9 @@ class TravelApplicationStatusHistoryRepository(private val apiClient: ApiClient 
         )
     }
 
-    override suspend fun InsertAsync(model: TravelApplicationStatusHistoryInsertModel): Result<Unit> {
+    override suspend fun InsertAsync(
+        model: TravelApplicationStatusHistoryInsertModel
+    ): Result<Unit> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.TRAVEL_GIRLS_BASE_URL,
             method = "InsertTravelApplicationStatusHistoryAsync",
@@ -42,7 +52,9 @@ class TravelApplicationStatusHistoryRepository(private val apiClient: ApiClient 
         )
     }
 
-    override suspend fun UpdateAsync(model: TravelApplicationStatusHistoryUpdateModel): Result<Unit> {
+    override suspend fun UpdateAsync(
+        model: TravelApplicationStatusHistoryUpdateModel
+    ): Result<Unit> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.TRAVEL_GIRLS_BASE_URL,
             method = "UpdateTravelApplicationStatusHistoryAsync",
@@ -50,7 +62,9 @@ class TravelApplicationStatusHistoryRepository(private val apiClient: ApiClient 
         )
     }
 
-    override suspend fun DeleteAsync(travelApplicationStatusHistoryId: Int): Result<Unit> {
+    override suspend fun DeleteAsync(
+        travelApplicationStatusHistoryId: Int
+    ): Result<Unit> {
         return apiClient.DeleteAsync(
             baseUrl = ApiRoutes.TRAVEL_GIRLS_BASE_URL,
             method = "DeleteTravelApplicationStatusHistoryAsync",

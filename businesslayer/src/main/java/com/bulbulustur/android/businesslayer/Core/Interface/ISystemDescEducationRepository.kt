@@ -5,5 +5,8 @@ import com.bulbulustur.android.businesslayer.Core.Util.Result
 
 interface ISystemDescEducationRepository {
 
-    suspend fun GetEducationsAsync(languageId: Int, count: Int): Result<List<SystemDescEducationDTO>>
+    suspend fun GetEducationsAsync(
+        languageId: Int,
+        count: Int
+    ): Result<List<SystemDescEducationDTO>>
 }

@@ -12,7 +12,10 @@ class WholesaleBuyerSampleRequestRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IWholesaleBuyerSampleRequestRepository {
 
-    override suspend fun GetWholesaleBuyerSampleRequestListAsync(wholesaleProductId: Int, count: Int): Result<List<WholesaleBuyerSampleRequestDTO>> {
+    override suspend fun GetWholesaleBuyerSampleRequestListAsync(
+        wholesaleProductId: Int,
+        count: Int
+    ): Result<List<WholesaleBuyerSampleRequestDTO>> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.BUYER_REQUEST_BASE_URL,
             method = "GetBuyerSampleRequestsAsync",
@@ -20,7 +23,9 @@ class WholesaleBuyerSampleRequestRepository(
         )
     }
 
-    override suspend fun GetWholesaleBuyerSampleRequestByIdExtendedAsync(wholesaleBuyerSampleRequestId: Int): Result<WholesaleBuyerSampleRequestDTO?> {
+    override suspend fun GetWholesaleBuyerSampleRequestByIdExtendedAsync(
+        wholesaleBuyerSampleRequestId: Int
+    ): Result<WholesaleBuyerSampleRequestDTO?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.BUYER_REQUEST_BASE_URL,
             method = "GetBuyerSampleRequestByIdExtendedAsync",
@@ -28,7 +33,10 @@ class WholesaleBuyerSampleRequestRepository(
         )
     }
 
-    override suspend fun InsertAsync(languageId: Int, model: WholesaleBuyerSampleRequestInsertModel): Result<Unit> {
+    override suspend fun InsertAsync(
+        languageId: Int,
+        model: WholesaleBuyerSampleRequestInsertModel
+    ): Result<Unit> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.BUYER_REQUEST_BASE_URL,
             method = "BuyerSampleRequestInsertAsync?languageId=$languageId",
@@ -36,7 +44,9 @@ class WholesaleBuyerSampleRequestRepository(
         )
     }
 
-    override suspend fun UpdateAsync(model: WholesaleBuyerSampleRequestUpdateModel): Result<Unit> {
+    override suspend fun UpdateAsync(
+        model: WholesaleBuyerSampleRequestUpdateModel
+    ): Result<Unit> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.BUYER_REQUEST_BASE_URL,
             method = "BuyerSampleRequestUpdateAsync",
@@ -44,7 +54,9 @@ class WholesaleBuyerSampleRequestRepository(
         )
     }
 
-    override suspend fun DeleteAsync(wholesaleBuyerSampleRequestId: Int): Result<Unit> {
+    override suspend fun DeleteAsync(
+        wholesaleBuyerSampleRequestId: Int
+    ): Result<Unit> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.BUYER_REQUEST_BASE_URL,
             method = "BuyerSampleRequestDeleteAsync",

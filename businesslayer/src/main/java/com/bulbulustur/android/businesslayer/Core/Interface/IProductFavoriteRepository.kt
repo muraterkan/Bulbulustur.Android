@@ -12,14 +12,26 @@ import retrofit2.http.Query
 interface IProductFavoriteRepository {
 
     @GET("GetProductFavoritesAsync")
-    suspend fun GetProductFavoritesAsync(@Query("memberId") memberId: Int, @Query("count") count: Int = 100): Result<List<ProductFavoriteDTO>>
+    suspend fun GetProductFavoritesAsync(
+        @Query("memberId") memberId: Int,
+        @Query("count") count: Int = 100
+    ): Result<List<ProductFavoriteDTO>>
 
     @POST("InsertProductFavoriteAsync")
-    suspend fun InsertProductFavoriteAsync(@Query("memberId") memberId: Int, @Body model: ProductFavoriteInsertModel): Result<Unit>
+    suspend fun InsertProductFavoriteAsync(
+        @Query("memberId") memberId: Int,
+        @Body model: ProductFavoriteInsertModel
+    ): Result<Unit>
 
     @DELETE("DeleteProductFavoriteAsync")
-    suspend fun DeleteProductFavoriteAsync(@Query("memberId") memberId: Int, @Query("favoriteId") favoriteId: Int): Result<Unit>
+    suspend fun DeleteProductFavoriteAsync(
+        @Query("memberId") memberId: Int,
+        @Query("favoriteId") favoriteId: Int
+    ): Result<Unit>
 
     @POST("MoveProductFavoriteToBasketAsync")
-    suspend fun MoveProductFavoriteToBasketAsync(@Query("memberId") memberId: Int, @Query("favoriteId") favoriteId: Int): Result<Unit>
+    suspend fun MoveProductFavoriteToBasketAsync(
+        @Query("memberId") memberId: Int,
+        @Query("favoriteId") favoriteId: Int
+    ): Result<Unit>
 }

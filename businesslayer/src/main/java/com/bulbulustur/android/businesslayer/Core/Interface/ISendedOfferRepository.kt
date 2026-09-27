@@ -7,15 +7,28 @@ import com.bulbulustur.android.businesslayer.Core.Util.Result
 
 interface ISendedOfferRepository {
 
-    suspend fun GetSendedOffersAsync(buyerRequestKey: String, count: Int = 100): Result<List<SendedOfferDTO>>
+    suspend fun GetSendedOffersAsync(
+        buyerRequestKey: String,
+        count: Int = 100
+    ): Result<List<SendedOfferDTO>>
 
-    suspend fun GetSendedOfferByIdAsync(sendedOfferId: Int): Result<SendedOfferUpdateModel?>
+    suspend fun GetSendedOfferByIdAsync(
+        sendedOfferId: Int
+    ): Result<SendedOfferUpdateModel?>
 
-    suspend fun GetSendedOfferByIdExtendedAsync(sendedOfferId: Int): Result<SendedOfferDTO?>
+    suspend fun GetSendedOfferByIdExtendedAsync(
+        sendedOfferId: Int
+    ): Result<SendedOfferDTO?>
 
-    suspend fun InsertAsync(model: SendedOfferInsertModel): Result<Unit>
+    suspend fun InsertAsync(
+        model: SendedOfferInsertModel
+    ): Result<Unit>
 
-    suspend fun UpdateAsync(model: SendedOfferUpdateModel): Result<Unit>
+    suspend fun UpdateAsync(
+        model: SendedOfferUpdateModel
+    ): Result<Unit>
 
-    suspend fun DeleteAsync(model: SendedOfferUpdateModel): Result<Unit>
+    suspend fun DeleteAsync(
+        model: SendedOfferUpdateModel
+    ): Result<Unit>
 }

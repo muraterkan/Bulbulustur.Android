@@ -4,5 +4,9 @@ import com.bulbulustur.android.businesslayer.Core.DTO.MemberLoginActivityDTO
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
 interface IMemberLoginActivityRepository {
-    suspend fun GetMemberLoginActivitiesAsync(memberId: Int, count: Int = 100): Result<List<MemberLoginActivityDTO>>
+
+    suspend fun GetMemberLoginActivitiesAsync(
+        memberId: Int,
+        count: Int = 100
+    ): Result<List<MemberLoginActivityDTO>>
 }

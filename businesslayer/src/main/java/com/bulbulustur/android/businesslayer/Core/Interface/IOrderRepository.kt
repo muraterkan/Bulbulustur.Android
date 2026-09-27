@@ -9,13 +9,27 @@ import com.bulbulustur.android.businesslayer.Core.Util.Result
 
 interface IOrderRepository {
 
-    suspend fun GetOrdersByMemberIdAsync(memberId: Int, count: Int = 100): Result<List<OrderDTO>>
+    suspend fun GetOrdersByMemberIdAsync(
+        memberId: Int,
+        count: Int = 100
+    ): Result<List<OrderDTO>>
 
-    suspend fun GetOrderStoresAsync(orderKey: String): Result<List<OrderStoreDTO>>
+    suspend fun GetOrderStoresAsync(
+        orderKey: String
+    ): Result<List<OrderStoreDTO>>
 
-    suspend fun GetOrderTrackingAsync(cargoTrackingNumber: Int, memberId: Int): Result<OrderStoreLineDTO?>
+    suspend fun GetOrderTrackingAsync(
+        cargoTrackingNumber: Int,
+        memberId: Int
+    ): Result<OrderStoreLineDTO?>
 
-    suspend fun GetOrderCancelationTypes(count: Int = 15): Result<List<SystemDescOrderCancelationTypeDTO>>
+    suspend fun GetOrderCancelationTypes(
+        count: Int = 15
+    ): Result<List<SystemDescOrderCancelationTypeDTO>>
 
-    suspend fun InsertOrderCancelationAsync(languageId: Int, memberId: Int, insertModel: OrderCancelationInsertModel): Result<Unit>
+    suspend fun InsertOrderCancelationAsync(
+        languageId: Int,
+        memberId: Int,
+        insertModel: OrderCancelationInsertModel
+    ): Result<Unit>
 }

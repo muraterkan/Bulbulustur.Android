@@ -5,8 +5,8 @@ import com.bulbulustur.android.businesslayer.Core.DTO.B2CProductFilterDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductVariantDTO
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.ProductUpdateModel
-import com.bulbulustur.android.businesslayer.Core.Util.Result
 import com.bulbulustur.android.businesslayer.Core.Util.PaginatedList
+import com.bulbulustur.android.businesslayer.Core.Util.Result
 
 interface IProductRepository {
 
@@ -39,8 +39,16 @@ interface IProductRepository {
         productId: Int,
         variantId: Int
     ): Result<List<ProductVariantDTO>>
-    suspend fun GetDefaultProductVariantPicturesAsync(variantIds: List<Int>): Result<Map<String, String>>
 
+    suspend fun GetDefaultProductVariantPicturesAsync(
+        variantIds: List<Int>
+    ): Result<Map<String, String>>
 
-    suspend fun GetSearchingProductsAsync(storeId: Int = 0, key: String, page: Int = 1, pageSize: Int = 20, sortOrder: String = "Default_Asc"): Result<PaginatedList<ProductDTO>>
+    suspend fun GetSearchingProductsAsync(
+        storeId: Int = 0,
+        key: String,
+        page: Int = 1,
+        pageSize: Int = 20,
+        sortOrder: String = "Default_Asc"
+    ): Result<PaginatedList<ProductDTO>>
 }

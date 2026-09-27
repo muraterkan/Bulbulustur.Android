@@ -1,7 +1,5 @@
 package com.bulbulustur.android.Application.wwwroot.DesignObjects
 
-import com.bulbulustur.android.Application.Localization.BBLocalization
-
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
@@ -13,14 +11,15 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 
@@ -35,9 +34,7 @@ fun BbPasswordInput(
     errorText: String? = null,
     enabled: Boolean = true
 ) {
-    var isPasswordVisible by remember {
-        mutableStateOf(false)
-    }
+    var isPasswordVisible by remember { mutableStateOf(false) }
 
     Column(
         modifier = modifier.fillMaxWidth()
@@ -70,15 +67,16 @@ fun BbPasswordInput(
             },
             trailingIcon = {
                 TextButton(
-                    onClick = {
-                        isPasswordVisible = !isPasswordVisible
-                    }
+                    onClick = { isPasswordVisible = !isPasswordVisible }
                 ) {
                     Text(
                         text = if (isPasswordVisible) {
                             "Gizle"
                         } else {
-                            BBLocalization.Current.Get(key = "5a99cd16-cf8f-4a23-8f31-98feb0428fc9", fallback = "Göster")
+                            BBLocalization.Current.Get(
+                                key = "5a99cd16-cf8f-4a23-8f31-98feb0428fc9",
+                                fallback = "Göster"
+                            )
                         },
                         style = MaterialTheme.typography.labelSmall
                     )
@@ -100,19 +98,16 @@ private fun BbPasswordSupportText(
 ) {
     if (errorText != null) {
         Spacer(modifier = Modifier.height(BBSpacing.Space1))
-
         Text(
             text = errorText,
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.error
         )
-
         return
     }
 
     if (helperText != null) {
         Spacer(modifier = Modifier.height(BBSpacing.Space1))
-
         Text(
             text = helperText,
             style = MaterialTheme.typography.labelSmall,
@@ -120,4 +115,3 @@ private fun BbPasswordSupportText(
         )
     }
 }
-

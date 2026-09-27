@@ -6,10 +6,28 @@ import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.TravelParty
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
 interface ITravelPartyMemberRepository {
-    suspend fun GetTravelPartyMembersAsync(count: Int): Result<List<TravelPartyMemberDTO>>
-    suspend fun GetTravelPartyMemberByIdAsync(travelPartyMemberId: Int): Result<TravelPartyMemberUpdateModel?>
-    suspend fun GetTravelPartyMemberByIdExtendedAsync(travelPartyMemberId: Int): Result<TravelPartyMemberDTO?>
-    suspend fun InsertAsync(model: TravelPartyMemberInsertModel): Result<Unit>
-    suspend fun UpdateAsync(model: TravelPartyMemberUpdateModel): Result<Unit>
-    suspend fun DeleteAsync(travelPartyMemberId: Int): Result<Unit>
+
+    suspend fun GetTravelPartyMembersAsync(
+        count: Int
+    ): Result<List<TravelPartyMemberDTO>>
+
+    suspend fun GetTravelPartyMemberByIdAsync(
+        travelPartyMemberId: Int
+    ): Result<TravelPartyMemberUpdateModel?>
+
+    suspend fun GetTravelPartyMemberByIdExtendedAsync(
+        travelPartyMemberId: Int
+    ): Result<TravelPartyMemberDTO?>
+
+    suspend fun InsertAsync(
+        model: TravelPartyMemberInsertModel
+    ): Result<Unit>
+
+    suspend fun UpdateAsync(
+        model: TravelPartyMemberUpdateModel
+    ): Result<Unit>
+
+    suspend fun DeleteAsync(
+        travelPartyMemberId: Int
+    ): Result<Unit>
 }

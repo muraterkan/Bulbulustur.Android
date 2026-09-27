@@ -6,9 +6,22 @@ import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.RealEstate.
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
 interface ISystemDescRealestateTotalFloorsRepository {
+
     suspend fun GetSystemDescRealestateTotalFloorssAsync(): Result<List<SystemDescRealestateTotalFloorsDTO>>
-    suspend fun GetSystemDescRealestateTotalFloorsByIdAsync(systemDescRealestateTotalFloorsId: Int): Result<SystemDescRealestateTotalFloorsUpdateModel>
-    suspend fun InsertAsync(model: SystemDescRealestateTotalFloorsInsertModel): Result<SystemDescRealestateTotalFloorsInsertModel>
-    suspend fun UpdateAsync(model: SystemDescRealestateTotalFloorsUpdateModel): Result<SystemDescRealestateTotalFloorsUpdateModel>
-    suspend fun DeleteAsync(systemDescRealestateTotalFloorsId: Int): Result<Unit>
+
+    suspend fun GetSystemDescRealestateTotalFloorsByIdAsync(
+        systemDescRealestateTotalFloorsId: Int
+    ): Result<SystemDescRealestateTotalFloorsUpdateModel>
+
+    suspend fun InsertAsync(
+        model: SystemDescRealestateTotalFloorsInsertModel
+    ): Result<SystemDescRealestateTotalFloorsInsertModel>
+
+    suspend fun UpdateAsync(
+        model: SystemDescRealestateTotalFloorsUpdateModel
+    ): Result<SystemDescRealestateTotalFloorsUpdateModel>
+
+    suspend fun DeleteAsync(
+        systemDescRealestateTotalFloorsId: Int
+    ): Result<Unit>
 }

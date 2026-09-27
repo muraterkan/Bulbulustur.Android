@@ -15,13 +15,9 @@ class ProductBrandSectionRepository(
         count: Int
     ): Result<List<ProductBrandSectionDTO>> {
         return apiClient.GetAsync(
-            baseUrl =
-                ApiRoutes.BRAND_PRODUCT_SECTION_BASE_URL,
-            method =
-                "GetProductBrandSectionsAsync",
-            query =
-                "languageId=$languageId" +
-                        "&count=$count"
+            baseUrl = ApiRoutes.BRAND_PRODUCT_SECTION_BASE_URL,
+            method = "GetProductBrandSectionsAsync",
+            query = "languageId=$languageId&count=$count"
         )
     }
 
@@ -31,14 +27,9 @@ class ProductBrandSectionRepository(
         count: Int
     ): Result<List<ProductBrandSectionDTO>> {
         return apiClient.GetAsync(
-            baseUrl =
-                ApiRoutes.BRAND_PRODUCT_SECTION_BASE_URL,
-            method =
-                "GetProductBrandSectionsWithBrandIdAsync",
-            query =
-                "languageId=$languageId" +
-                        "&brandId=$brandId" +
-                        "&count=$count"
+            baseUrl = ApiRoutes.BRAND_PRODUCT_SECTION_BASE_URL,
+            method = "GetProductBrandSectionsWithBrandIdAsync",
+            query = "languageId=$languageId&brandId=$brandId&count=$count"
         )
     }
 }

@@ -20,12 +20,9 @@ class BasketRepository(
         count: Int
     ): Result<List<BasketDTO>> {
         return apiClient.GetAsync(
-            baseUrl =
-                ApiRoutes.COMMERCE_SUPPORT_BASKET_BASE_URL,
-            method =
-                "GetBasketsAsync",
-            query =
-                "memberId=$memberId&count=$count"
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_BASKET_BASE_URL,
+            method = "GetBasketsAsync",
+            query = "memberId=$memberId&count=$count"
         )
     }
 
@@ -33,12 +30,9 @@ class BasketRepository(
         memberId: Int
     ): Result<BasketSummaryDTO> {
         return apiClient.GetAsync(
-            baseUrl =
-                ApiRoutes.COMMERCE_SUPPORT_BASKET_BASE_URL,
-            method =
-                "GetBasketSummaryAsync",
-            query =
-                "memberId=$memberId"
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_BASKET_BASE_URL,
+            method = "GetBasketSummaryAsync",
+            query = "memberId=$memberId"
         )
     }
 
@@ -47,14 +41,10 @@ class BasketRepository(
         request: BasketInsertRequest
     ): Result<BasketInsertResponse> {
         return apiClient.PostRawAsync(
-            baseUrl =
-                ApiRoutes.COMMERCE_SUPPORT_BASKET_BASE_URL,
-            method =
-                "InsertBasketItemAsync",
-            data =
-                request,
-            query =
-                "memberId=$memberId"
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_BASKET_BASE_URL,
+            method = "InsertBasketItemAsync",
+            data = request,
+            query = "memberId=$memberId"
         )
     }
 
@@ -63,14 +53,10 @@ class BasketRepository(
         request: BasketQuantityUpdateModel
     ): Result<BasketQuantityUpdateResponse> {
         return apiClient.PutRawAsync(
-            baseUrl =
-                ApiRoutes.COMMERCE_SUPPORT_BASKET_BASE_URL,
-            method =
-                "UpdateBasketQuantityAsync",
-            data =
-                request,
-            query =
-                "memberId=$memberId"
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_BASKET_BASE_URL,
+            method = "UpdateBasketQuantityAsync",
+            data = request,
+            query = "memberId=$memberId"
         )
     }
 
@@ -79,12 +65,9 @@ class BasketRepository(
         basketId: Int
     ): Result<Any?> {
         return apiClient.DeleteAsync(
-            baseUrl =
-                ApiRoutes.COMMERCE_SUPPORT_BASKET_BASE_URL,
-            method =
-                "DeleteBasketItemAsync",
-            query =
-                "memberId=$memberId&basketId=$basketId"
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_BASKET_BASE_URL,
+            method = "DeleteBasketItemAsync",
+            query = "memberId=$memberId&basketId=$basketId"
         )
     }
 
@@ -92,14 +75,10 @@ class BasketRepository(
         basketId: Int
     ): Result<Any?> {
         return apiClient.PostAsync(
-            baseUrl =
-                ApiRoutes.COMMERCE_SUPPORT_BASKET_BASE_URL,
-            method =
-                "MoveBasketToFavoriteAsync",
-            data =
-                Unit,
-            query =
-                "basketId=$basketId"
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_BASKET_BASE_URL,
+            method = "MoveBasketToFavoriteAsync",
+            data = Unit,
+            query = "basketId=$basketId"
         )
     }
 }

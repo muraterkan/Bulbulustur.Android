@@ -10,7 +10,10 @@ class WholesaleProductCategorySliderRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IWholesaleProductCategorySliderRepository {
 
-    override suspend fun GetWholesaleProductCategorySlider(languageId: Int, productCategoryId: Int): Result<WholesaleProductCategorySliderDTO?> {
+    override suspend fun GetWholesaleProductCategorySlider(
+        languageId: Int,
+        productCategoryId: Int
+    ): Result<WholesaleProductCategorySliderDTO?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.B2B_PRODUCT_CATEGORY_SLIDER_BASE_URL,
             method = "GetWholesaleProductCategorySlider",

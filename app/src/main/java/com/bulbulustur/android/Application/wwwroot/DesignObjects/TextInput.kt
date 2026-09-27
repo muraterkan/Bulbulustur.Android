@@ -5,13 +5,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.foundation.text.KeyboardOptions
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBRadius
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBSpacing
 
@@ -68,19 +68,16 @@ private fun BbInputSupportText(
 ) {
     if (errorText != null) {
         Spacer(modifier = Modifier.height(BBSpacing.Space1))
-
         Text(
             text = errorText,
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.error
         )
-
         return
     }
 
     if (helperText != null) {
         Spacer(modifier = Modifier.height(BBSpacing.Space1))
-
         Text(
             text = helperText,
             style = MaterialTheme.typography.labelSmall,
@@ -88,4 +85,3 @@ private fun BbInputSupportText(
         )
     }
 }
-

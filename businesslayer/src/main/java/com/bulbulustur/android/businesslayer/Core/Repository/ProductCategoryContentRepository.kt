@@ -11,7 +11,12 @@ class ProductCategoryContentRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IProductCategoryContentRepository {
 
-    override suspend fun GetProductCategoryContentsAsync(languageId: Int, productCategoryId: Int, groupCount: Int, productCount: Int): Result<ProductCategoryContentDTO> {
+    override suspend fun GetProductCategoryContentsAsync(
+        languageId: Int,
+        productCategoryId: Int,
+        groupCount: Int,
+        productCount: Int
+    ): Result<ProductCategoryContentDTO> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.B2C_PRODUCT_CATEGORY_CONTENT_BASE_URL,
             method = "GetProductCategoryContentsAsync",
@@ -19,7 +24,11 @@ class ProductCategoryContentRepository(
         )
     }
 
-    override suspend fun GetProductCategoryContentsPagedAsync(productCategoryContentGroupId: Int, page: Int, pageSize: Int): Result<PaginatedList<ProductCategoryContentDTO>> {
+    override suspend fun GetProductCategoryContentsPagedAsync(
+        productCategoryContentGroupId: Int,
+        page: Int,
+        pageSize: Int
+    ): Result<PaginatedList<ProductCategoryContentDTO>> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.B2C_PRODUCT_CATEGORY_CONTENT_BASE_URL,
             method = "GetProductCategoryContentsPagedAsync",

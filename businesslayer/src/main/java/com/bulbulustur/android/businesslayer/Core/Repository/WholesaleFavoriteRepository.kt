@@ -12,7 +12,10 @@ class WholesaleFavoriteRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IWholesaleFavoriteRepository {
 
-    override suspend fun GetWholesaleFavoriteListAsync(memberId: Int, count: Int): Result<List<WholesaleFavoriteDTO>> {
+    override suspend fun GetWholesaleFavoriteListAsync(
+        memberId: Int,
+        count: Int
+    ): Result<List<WholesaleFavoriteDTO>> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.B2B_WHOLESALE_FAVORITE_BASE_URL,
             method = "GetWholesaleFavoriteListAsync",
@@ -20,7 +23,9 @@ class WholesaleFavoriteRepository(
         )
     }
 
-    override suspend fun GetWholesaleFavoriteByIdAsync(wholesaleFavoriteId: Int): Result<WholesaleFavoriteUpdateModel?> {
+    override suspend fun GetWholesaleFavoriteByIdAsync(
+        wholesaleFavoriteId: Int
+    ): Result<WholesaleFavoriteUpdateModel?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.B2B_WHOLESALE_FAVORITE_BASE_URL,
             method = "GetWholesaleFavoriteByIdAsync",
@@ -28,7 +33,9 @@ class WholesaleFavoriteRepository(
         )
     }
 
-    override suspend fun GetWholesaleFavoriteByIdExtendedAsync(wholesaleFavoriteId: Int): Result<WholesaleFavoriteDTO?> {
+    override suspend fun GetWholesaleFavoriteByIdExtendedAsync(
+        wholesaleFavoriteId: Int
+    ): Result<WholesaleFavoriteDTO?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.B2B_WHOLESALE_FAVORITE_BASE_URL,
             method = "GetWholesaleFavoriteByIdExtendedAsync",
@@ -36,7 +43,10 @@ class WholesaleFavoriteRepository(
         )
     }
 
-    override suspend fun InsertAsync(memberId: Int, model: WholesaleFavoriteInsertModel): Result<Unit> {
+    override suspend fun InsertAsync(
+        memberId: Int,
+        model: WholesaleFavoriteInsertModel
+    ): Result<Unit> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.B2B_WHOLESALE_FAVORITE_BASE_URL,
             method = "InsertAsync",
@@ -45,7 +55,10 @@ class WholesaleFavoriteRepository(
         )
     }
 
-    override suspend fun DeleteAsync(memberId: Int, wholesaleFavoriteId: Int): Result<Unit> {
+    override suspend fun DeleteAsync(
+        memberId: Int,
+        wholesaleFavoriteId: Int
+    ): Result<Unit> {
         return apiClient.DeleteAsync(
             baseUrl = ApiRoutes.B2B_WHOLESALE_FAVORITE_BASE_URL,
             method = "DeleteAsync",

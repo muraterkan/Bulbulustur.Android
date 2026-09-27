@@ -13,7 +13,13 @@ class ReviewRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IReviewRepository {
 
-    override suspend fun GetReviewsAsync(sourceType: String, sourceId: Int, variantId: Int, page: Int, pageSize: Int): Result<PaginatedList<ReviewDTO>> {
+    override suspend fun GetReviewsAsync(
+        sourceType: String,
+        sourceId: Int,
+        variantId: Int,
+        page: Int,
+        pageSize: Int
+    ): Result<PaginatedList<ReviewDTO>> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.COMMERCE_SUPPORT_REVIEW_BASE_URL,
             method = "GetReviewsAsync",
@@ -21,7 +27,10 @@ class ReviewRepository(
         )
     }
 
-    override suspend fun GetReviewSummaryAsync(sourceType: String, sourceId: Int): Result<ReviewSummaryDTO> {
+    override suspend fun GetReviewSummaryAsync(
+        sourceType: String,
+        sourceId: Int
+    ): Result<ReviewSummaryDTO> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.COMMERCE_SUPPORT_REVIEW_BASE_URL,
             method = "GetReviewSummaryAsync",
@@ -29,7 +38,10 @@ class ReviewRepository(
         )
     }
 
-    override suspend fun GetMemberReviewsAsync(memberId: Int, count: Int): Result<List<ReviewDTO>> {
+    override suspend fun GetMemberReviewsAsync(
+        memberId: Int,
+        count: Int
+    ): Result<List<ReviewDTO>> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.COMMERCE_SUPPORT_REVIEW_BASE_URL,
             method = "GetMemberReviewsAsync",
@@ -37,7 +49,9 @@ class ReviewRepository(
         )
     }
 
-    override suspend fun InsertAsync(insertModel: ReviewInsertModel): Result<Unit> {
+    override suspend fun InsertAsync(
+        insertModel: ReviewInsertModel
+    ): Result<Unit> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.COMMERCE_SUPPORT_REVIEW_BASE_URL,
             method = "Insert",

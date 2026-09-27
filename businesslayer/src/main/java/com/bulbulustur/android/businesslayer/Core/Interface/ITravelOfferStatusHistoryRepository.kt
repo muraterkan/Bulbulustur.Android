@@ -6,10 +6,28 @@ import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.TravelOffer
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
 interface ITravelOfferStatusHistoryRepository {
-    suspend fun GetTravelOfferStatusHistoriesAsync(count: Int): Result<List<TravelOfferStatusHistoryDTO>>
-    suspend fun GetTravelOfferStatusHistoryByIdAsync(travelOfferStatusHistoryId: Int): Result<TravelOfferStatusHistoryUpdateModel?>
-    suspend fun GetTravelOfferStatusHistoryByIdExtendedAsync(travelOfferStatusHistoryId: Int): Result<TravelOfferStatusHistoryDTO?>
-    suspend fun InsertAsync(model: TravelOfferStatusHistoryInsertModel): Result<Unit>
-    suspend fun UpdateAsync(model: TravelOfferStatusHistoryUpdateModel): Result<Unit>
-    suspend fun DeleteAsync(travelOfferStatusHistoryId: Int): Result<Unit>
+
+    suspend fun GetTravelOfferStatusHistoriesAsync(
+        count: Int
+    ): Result<List<TravelOfferStatusHistoryDTO>>
+
+    suspend fun GetTravelOfferStatusHistoryByIdAsync(
+        travelOfferStatusHistoryId: Int
+    ): Result<TravelOfferStatusHistoryUpdateModel?>
+
+    suspend fun GetTravelOfferStatusHistoryByIdExtendedAsync(
+        travelOfferStatusHistoryId: Int
+    ): Result<TravelOfferStatusHistoryDTO?>
+
+    suspend fun InsertAsync(
+        model: TravelOfferStatusHistoryInsertModel
+    ): Result<Unit>
+
+    suspend fun UpdateAsync(
+        model: TravelOfferStatusHistoryUpdateModel
+    ): Result<Unit>
+
+    suspend fun DeleteAsync(
+        travelOfferStatusHistoryId: Int
+    ): Result<Unit>
 }

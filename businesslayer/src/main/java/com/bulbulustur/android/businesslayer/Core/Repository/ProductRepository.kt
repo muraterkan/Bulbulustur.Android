@@ -1,7 +1,5 @@
 package com.bulbulustur.android.businesslayer.Core.Repository
 
-import java.net.URLEncoder
-
 import com.bulbulustur.android.businesslayer.Core.DTO.B2CProductDataDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.B2CProductFilterDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.ProductDTO
@@ -10,8 +8,10 @@ import com.bulbulustur.android.businesslayer.Core.Interface.IProductRepository
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.ProductUpdateModel
 import com.bulbulustur.android.businesslayer.Core.Network.ApiClient
 import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
-import com.bulbulustur.android.businesslayer.Core.Util.Result
 import com.bulbulustur.android.businesslayer.Core.Util.PaginatedList
+import com.bulbulustur.android.businesslayer.Core.Util.Result
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 class ProductRepository(
     private val apiClient: ApiClient = ApiClient
@@ -24,10 +24,7 @@ class ProductRepository(
     ): Result<B2CProductDataDTO> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.B2C_PRODUCT_BASE_URL,
-            method =
-                "GetProductDataAsync" +
-                        "?page=$page" +
-                        "&pageSize=$pageSize",
+            method = "GetProductDataAsync?page=$page&pageSize=$pageSize",
             data = filters
         )
     }
@@ -51,11 +48,7 @@ class ProductRepository(
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.B2C_PRODUCT_BASE_URL,
             method = "GetProductByIdExtendedAsync",
-            query =
-                "languageId=$languageId" +
-                        "&storeId=$storeId" +
-                        "&productId=$productId" +
-                        "&variantId=$variantId"
+            query = "languageId=$languageId&storeId=$storeId&productId=$productId&variantId=$variantId"
         )
     }
 
@@ -67,11 +60,7 @@ class ProductRepository(
     ): Result<B2CProductDataDTO> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.B2C_PRODUCT_BASE_URL,
-            method =
-                "GetStoreProductDataAsync" +
-                        "?storeId=$storeId" +
-                        "&page=$page" +
-                        "&pageSize=$pageSize",
+            method = "GetStoreProductDataAsync?storeId=$storeId&page=$page&pageSize=$pageSize",
             data = filters
         )
     }
@@ -84,13 +73,13 @@ class ProductRepository(
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.B2C_PRODUCT_BASE_URL,
             method = "GetOtherStorePrices",
-            query =
-                "languageId=$languageId" +
-                        "&productId=$productId" +
-                        "&variantId=$variantId"
+            query = "languageId=$languageId&productId=$productId&variantId=$variantId"
         )
     }
-    override suspend fun GetDefaultProductVariantPicturesAsync(variantIds: List<Int>): Result<Map<String, String>> {
+
+    override suspend fun GetDefaultProductVariantPicturesAsync(
+        variantIds: List<Int>
+    ): Result<Map<String, String>> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.B2C_PRODUCT_BASE_URL,
             method = "GetDefaultProductVariantPicturesAsync",
@@ -98,9 +87,14 @@ class ProductRepository(
         )
     }
 
-
-    override suspend fun GetSearchingProductsAsync(storeId: Int, key: String, page: Int, pageSize: Int, sortOrder: String): Result<PaginatedList<ProductDTO>> {
-        val encodedKey = URLEncoder.encode(key.trim(), "UTF-8")
+    override suspend fun GetSearchingProductsAsync(
+        storeId: Int,
+        key: String,
+        page: Int,
+        pageSize: Int,
+        sortOrder: String
+    ): Result<PaginatedList<ProductDTO>> {
+        val encodedKey = URLEncoder.encode(key.trim(), StandardCharsets.UTF_8.toString())
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.B2C_PRODUCT_BASE_URL,
             method = "GetSearchingProductsAsync",

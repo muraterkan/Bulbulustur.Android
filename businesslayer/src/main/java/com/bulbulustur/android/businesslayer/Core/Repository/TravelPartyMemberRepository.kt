@@ -8,9 +8,13 @@ import com.bulbulustur.android.businesslayer.Core.Network.ApiClient
 import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
-class TravelPartyMemberRepository(private val apiClient: ApiClient = ApiClient) : ITravelPartyMemberRepository {
+class TravelPartyMemberRepository(
+    private val apiClient: ApiClient = ApiClient
+) : ITravelPartyMemberRepository {
 
-    override suspend fun GetTravelPartyMembersAsync(count: Int): Result<List<TravelPartyMemberDTO>> {
+    override suspend fun GetTravelPartyMembersAsync(
+        count: Int
+    ): Result<List<TravelPartyMemberDTO>> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.TRAVEL_GIRLS_BASE_URL,
             method = "GetTravelPartyMembersAsync",
@@ -18,7 +22,9 @@ class TravelPartyMemberRepository(private val apiClient: ApiClient = ApiClient) 
         )
     }
 
-    override suspend fun GetTravelPartyMemberByIdAsync(travelPartyMemberId: Int): Result<TravelPartyMemberUpdateModel?> {
+    override suspend fun GetTravelPartyMemberByIdAsync(
+        travelPartyMemberId: Int
+    ): Result<TravelPartyMemberUpdateModel?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.TRAVEL_GIRLS_BASE_URL,
             method = "GetTravelPartyMemberByIdAsync",
@@ -26,7 +32,9 @@ class TravelPartyMemberRepository(private val apiClient: ApiClient = ApiClient) 
         )
     }
 
-    override suspend fun GetTravelPartyMemberByIdExtendedAsync(travelPartyMemberId: Int): Result<TravelPartyMemberDTO?> {
+    override suspend fun GetTravelPartyMemberByIdExtendedAsync(
+        travelPartyMemberId: Int
+    ): Result<TravelPartyMemberDTO?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.TRAVEL_GIRLS_BASE_URL,
             method = "GetTravelPartyMemberByIdExtendedAsync",
@@ -34,7 +42,9 @@ class TravelPartyMemberRepository(private val apiClient: ApiClient = ApiClient) 
         )
     }
 
-    override suspend fun InsertAsync(model: TravelPartyMemberInsertModel): Result<Unit> {
+    override suspend fun InsertAsync(
+        model: TravelPartyMemberInsertModel
+    ): Result<Unit> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.TRAVEL_GIRLS_BASE_URL,
             method = "InsertTravelPartyMemberAsync",
@@ -42,7 +52,9 @@ class TravelPartyMemberRepository(private val apiClient: ApiClient = ApiClient) 
         )
     }
 
-    override suspend fun UpdateAsync(model: TravelPartyMemberUpdateModel): Result<Unit> {
+    override suspend fun UpdateAsync(
+        model: TravelPartyMemberUpdateModel
+    ): Result<Unit> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.TRAVEL_GIRLS_BASE_URL,
             method = "UpdateTravelPartyMemberAsync",
@@ -50,7 +62,9 @@ class TravelPartyMemberRepository(private val apiClient: ApiClient = ApiClient) 
         )
     }
 
-    override suspend fun DeleteAsync(travelPartyMemberId: Int): Result<Unit> {
+    override suspend fun DeleteAsync(
+        travelPartyMemberId: Int
+    ): Result<Unit> {
         return apiClient.DeleteAsync(
             baseUrl = ApiRoutes.TRAVEL_GIRLS_BASE_URL,
             method = "DeleteTravelPartyMemberAsync",

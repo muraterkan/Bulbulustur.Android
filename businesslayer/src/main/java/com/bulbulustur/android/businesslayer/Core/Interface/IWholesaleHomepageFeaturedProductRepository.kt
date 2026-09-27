@@ -4,5 +4,8 @@ import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleHomepageFeaturedP
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
 interface IWholesaleHomepageFeaturedProductRepository {
-    suspend fun GetHomepageFeaturedProductsAsync(count: Int = 12): Result<List<WholesaleHomepageFeaturedProductDTO>>
+
+    suspend fun GetHomepageFeaturedProductsAsync(
+        count: Int = 12
+    ): Result<List<WholesaleHomepageFeaturedProductDTO>>
 }

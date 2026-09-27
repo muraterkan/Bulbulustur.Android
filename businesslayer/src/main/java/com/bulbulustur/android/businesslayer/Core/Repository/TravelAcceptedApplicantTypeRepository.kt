@@ -8,9 +8,13 @@ import com.bulbulustur.android.businesslayer.Core.Network.ApiClient
 import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
-class TravelAcceptedApplicantTypeRepository(private val apiClient: ApiClient = ApiClient) : ITravelAcceptedApplicantTypeRepository {
+class TravelAcceptedApplicantTypeRepository(
+    private val apiClient: ApiClient = ApiClient
+) : ITravelAcceptedApplicantTypeRepository {
 
-    override suspend fun GetTravelAcceptedApplicantTypesAsync(count: Int): Result<List<TravelAcceptedApplicantTypeDTO>> {
+    override suspend fun GetTravelAcceptedApplicantTypesAsync(
+        count: Int
+    ): Result<List<TravelAcceptedApplicantTypeDTO>> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.TRAVEL_GIRLS_BASE_URL,
             method = "GetTravelAcceptedApplicantTypesAsync",
@@ -18,7 +22,9 @@ class TravelAcceptedApplicantTypeRepository(private val apiClient: ApiClient = A
         )
     }
 
-    override suspend fun GetTravelAcceptedApplicantTypeByIdAsync(travelAcceptedApplicantTypeId: Int): Result<TravelAcceptedApplicantTypeUpdateModel?> {
+    override suspend fun GetTravelAcceptedApplicantTypeByIdAsync(
+        travelAcceptedApplicantTypeId: Int
+    ): Result<TravelAcceptedApplicantTypeUpdateModel?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.TRAVEL_GIRLS_BASE_URL,
             method = "GetTravelAcceptedApplicantTypeByIdAsync",
@@ -26,7 +32,9 @@ class TravelAcceptedApplicantTypeRepository(private val apiClient: ApiClient = A
         )
     }
 
-    override suspend fun GetTravelAcceptedApplicantTypeByIdExtendedAsync(travelAcceptedApplicantTypeId: Int): Result<TravelAcceptedApplicantTypeDTO?> {
+    override suspend fun GetTravelAcceptedApplicantTypeByIdExtendedAsync(
+        travelAcceptedApplicantTypeId: Int
+    ): Result<TravelAcceptedApplicantTypeDTO?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.TRAVEL_GIRLS_BASE_URL,
             method = "GetTravelAcceptedApplicantTypeByIdExtendedAsync",
@@ -34,7 +42,9 @@ class TravelAcceptedApplicantTypeRepository(private val apiClient: ApiClient = A
         )
     }
 
-    override suspend fun InsertAsync(model: TravelAcceptedApplicantTypeInsertModel): Result<Unit> {
+    override suspend fun InsertAsync(
+        model: TravelAcceptedApplicantTypeInsertModel
+    ): Result<Unit> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.TRAVEL_GIRLS_BASE_URL,
             method = "InsertTravelAcceptedApplicantTypeAsync",
@@ -42,7 +52,9 @@ class TravelAcceptedApplicantTypeRepository(private val apiClient: ApiClient = A
         )
     }
 
-    override suspend fun UpdateAsync(model: TravelAcceptedApplicantTypeUpdateModel): Result<Unit> {
+    override suspend fun UpdateAsync(
+        model: TravelAcceptedApplicantTypeUpdateModel
+    ): Result<Unit> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.TRAVEL_GIRLS_BASE_URL,
             method = "UpdateTravelAcceptedApplicantTypeAsync",
@@ -50,7 +62,9 @@ class TravelAcceptedApplicantTypeRepository(private val apiClient: ApiClient = A
         )
     }
 
-    override suspend fun DeleteAsync(travelAcceptedApplicantTypeId: Int): Result<Unit> {
+    override suspend fun DeleteAsync(
+        travelAcceptedApplicantTypeId: Int
+    ): Result<Unit> {
         return apiClient.DeleteAsync(
             baseUrl = ApiRoutes.TRAVEL_GIRLS_BASE_URL,
             method = "DeleteTravelAcceptedApplicantTypeAsync",

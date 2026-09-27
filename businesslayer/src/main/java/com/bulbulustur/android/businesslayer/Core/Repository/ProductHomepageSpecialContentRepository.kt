@@ -10,7 +10,10 @@ class ProductHomepageSpecialContentRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IProductHomepageSpecialContentRepository {
 
-    override suspend fun GetHomepageSpecialContentsAsync(languageId: Int, count: Int): Result<List<ProductHomepageSpecialContentDTO>> {
+    override suspend fun GetHomepageSpecialContentsAsync(
+        languageId: Int,
+        count: Int
+    ): Result<List<ProductHomepageSpecialContentDTO>> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.B2C_PRODUCT_BASE_URL,
             method = "GetHomepageSpecialContentsAsync",

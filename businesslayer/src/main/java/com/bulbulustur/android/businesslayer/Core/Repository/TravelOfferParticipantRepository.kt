@@ -8,9 +8,13 @@ import com.bulbulustur.android.businesslayer.Core.Network.ApiClient
 import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
-class TravelOfferParticipantRepository(private val apiClient: ApiClient = ApiClient) : ITravelOfferParticipantRepository {
+class TravelOfferParticipantRepository(
+    private val apiClient: ApiClient = ApiClient
+) : ITravelOfferParticipantRepository {
 
-    override suspend fun GetTravelOfferParticipantsAsync(count: Int): Result<List<TravelOfferParticipantDTO>> {
+    override suspend fun GetTravelOfferParticipantsAsync(
+        count: Int
+    ): Result<List<TravelOfferParticipantDTO>> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.TRAVEL_GIRLS_BASE_URL,
             method = "GetTravelOfferParticipantsAsync",
@@ -18,7 +22,9 @@ class TravelOfferParticipantRepository(private val apiClient: ApiClient = ApiCli
         )
     }
 
-    override suspend fun GetTravelOfferParticipantByIdAsync(travelOfferParticipantId: Int): Result<TravelOfferParticipantUpdateModel?> {
+    override suspend fun GetTravelOfferParticipantByIdAsync(
+        travelOfferParticipantId: Int
+    ): Result<TravelOfferParticipantUpdateModel?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.TRAVEL_GIRLS_BASE_URL,
             method = "GetTravelOfferParticipantByIdAsync",
@@ -26,7 +32,9 @@ class TravelOfferParticipantRepository(private val apiClient: ApiClient = ApiCli
         )
     }
 
-    override suspend fun GetTravelOfferParticipantByIdExtendedAsync(travelOfferParticipantId: Int): Result<TravelOfferParticipantDTO?> {
+    override suspend fun GetTravelOfferParticipantByIdExtendedAsync(
+        travelOfferParticipantId: Int
+    ): Result<TravelOfferParticipantDTO?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.TRAVEL_GIRLS_BASE_URL,
             method = "GetTravelOfferParticipantByIdExtendedAsync",
@@ -34,7 +42,9 @@ class TravelOfferParticipantRepository(private val apiClient: ApiClient = ApiCli
         )
     }
 
-    override suspend fun InsertAsync(model: TravelOfferParticipantInsertModel): Result<Unit> {
+    override suspend fun InsertAsync(
+        model: TravelOfferParticipantInsertModel
+    ): Result<Unit> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.TRAVEL_GIRLS_BASE_URL,
             method = "InsertTravelOfferParticipantAsync",
@@ -42,7 +52,9 @@ class TravelOfferParticipantRepository(private val apiClient: ApiClient = ApiCli
         )
     }
 
-    override suspend fun UpdateAsync(model: TravelOfferParticipantUpdateModel): Result<Unit> {
+    override suspend fun UpdateAsync(
+        model: TravelOfferParticipantUpdateModel
+    ): Result<Unit> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.TRAVEL_GIRLS_BASE_URL,
             method = "UpdateTravelOfferParticipantAsync",
@@ -50,7 +62,9 @@ class TravelOfferParticipantRepository(private val apiClient: ApiClient = ApiCli
         )
     }
 
-    override suspend fun DeleteAsync(travelOfferParticipantId: Int): Result<Unit> {
+    override suspend fun DeleteAsync(
+        travelOfferParticipantId: Int
+    ): Result<Unit> {
         return apiClient.DeleteAsync(
             baseUrl = ApiRoutes.TRAVEL_GIRLS_BASE_URL,
             method = "DeleteTravelOfferParticipantAsync",

@@ -10,7 +10,10 @@ class MemberSubscriptionRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IMemberSubscriptionRepository {
 
-    override suspend fun GetAccountSubscriptionsAsync(memberId: Int, count: Int): Result<List<MemberSubscriptionDTO>> {
+    override suspend fun GetAccountSubscriptionsAsync(
+        memberId: Int,
+        count: Int
+    ): Result<List<MemberSubscriptionDTO>> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.COMMERCE_SUPPORT_BASE_URL,
             method = "Account/GetAccountSubscriptionsAsync",
@@ -18,7 +21,10 @@ class MemberSubscriptionRepository(
         )
     }
 
-    override suspend fun GetAccountSubscriptionByIdExtendedAsync(memberId: Int, memberSubscriptionId: Int): Result<MemberSubscriptionDTO?> {
+    override suspend fun GetAccountSubscriptionByIdExtendedAsync(
+        memberId: Int,
+        memberSubscriptionId: Int
+    ): Result<MemberSubscriptionDTO?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.COMMERCE_SUPPORT_BASE_URL,
             method = "Account/GetAccountSubscriptionByIdExtendedAsync",

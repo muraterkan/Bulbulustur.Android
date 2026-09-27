@@ -12,7 +12,10 @@ class SendedOfferRepository(
     private val apiClient: ApiClient = ApiClient
 ) : ISendedOfferRepository {
 
-    override suspend fun GetSendedOffersAsync(buyerRequestKey: String, count: Int): Result<List<SendedOfferDTO>> {
+    override suspend fun GetSendedOffersAsync(
+        buyerRequestKey: String,
+        count: Int
+    ): Result<List<SendedOfferDTO>> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.B2B_BASE_URL,
             method = "SendedOffer/GetSendedOffersAsync",
@@ -20,7 +23,9 @@ class SendedOfferRepository(
         )
     }
 
-    override suspend fun GetSendedOfferByIdAsync(sendedOfferId: Int): Result<SendedOfferUpdateModel?> {
+    override suspend fun GetSendedOfferByIdAsync(
+        sendedOfferId: Int
+    ): Result<SendedOfferUpdateModel?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.B2B_BASE_URL,
             method = "SendedOffer/GetSendedOfferByIdAsync",
@@ -28,7 +33,9 @@ class SendedOfferRepository(
         )
     }
 
-    override suspend fun GetSendedOfferByIdExtendedAsync(sendedOfferId: Int): Result<SendedOfferDTO?> {
+    override suspend fun GetSendedOfferByIdExtendedAsync(
+        sendedOfferId: Int
+    ): Result<SendedOfferDTO?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.B2B_BASE_URL,
             method = "SendedOffer/GetSendedOfferByIdExtendedAsync",
@@ -36,7 +43,9 @@ class SendedOfferRepository(
         )
     }
 
-    override suspend fun InsertAsync(model: SendedOfferInsertModel): Result<Unit> {
+    override suspend fun InsertAsync(
+        model: SendedOfferInsertModel
+    ): Result<Unit> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.B2B_BASE_URL,
             method = "SendedOffer/SendedOfferInsert",
@@ -44,7 +53,9 @@ class SendedOfferRepository(
         )
     }
 
-    override suspend fun UpdateAsync(model: SendedOfferUpdateModel): Result<Unit> {
+    override suspend fun UpdateAsync(
+        model: SendedOfferUpdateModel
+    ): Result<Unit> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.B2B_BASE_URL,
             method = "SendedOffer/SendedOfferUpdate",
@@ -52,7 +63,9 @@ class SendedOfferRepository(
         )
     }
 
-    override suspend fun DeleteAsync(model: SendedOfferUpdateModel): Result<Unit> {
+    override suspend fun DeleteAsync(
+        model: SendedOfferUpdateModel
+    ): Result<Unit> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.B2B_BASE_URL,
             method = "SendedOffer/DeleteSendedOffer",

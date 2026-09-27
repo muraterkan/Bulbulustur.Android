@@ -4,5 +4,9 @@ import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleProductCategorySl
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
 interface IWholesaleProductCategorySliderRepository {
-    suspend fun GetWholesaleProductCategorySlider(languageId: Int, productCategoryId: Int): Result<WholesaleProductCategorySliderDTO?>
+
+    suspend fun GetWholesaleProductCategorySlider(
+        languageId: Int,
+        productCategoryId: Int
+    ): Result<WholesaleProductCategorySliderDTO?>
 }

@@ -69,19 +69,16 @@ private fun BbTextareaSupportText(
 ) {
     if (errorText != null) {
         Spacer(modifier = Modifier.height(BBSpacing.Space1))
-
         Text(
             text = errorText,
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.error
         )
-
         return
     }
 
     if (helperText != null) {
         Spacer(modifier = Modifier.height(BBSpacing.Space1))
-
         Text(
             text = helperText,
             style = MaterialTheme.typography.labelSmall,
@@ -89,4 +86,3 @@ private fun BbTextareaSupportText(
         )
     }
 }
-

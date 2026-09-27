@@ -17,17 +17,9 @@ object TokenExpirationParser {
             return null
         }
 
-        ParseInstant(value)?.let {
-            return it
-        }
-
-        ParseOffsetDateTime(value)?.let {
-            return it
-        }
-
-        ParseLocalDateTime(value)?.let {
-            return it
-        }
+        ParseInstant(value)?.let { return it }
+        ParseOffsetDateTime(value)?.let { return it }
+        ParseLocalDateTime(value)?.let { return it }
 
         return null
     }
@@ -36,9 +28,7 @@ object TokenExpirationParser {
         value: String,
         now: Instant = Instant.now()
     ): Boolean {
-        val expiration = Parse(value)
-            ?: return true
-
+        val expiration = Parse(value) ?: return true
         return !expiration.isAfter(now)
     }
 

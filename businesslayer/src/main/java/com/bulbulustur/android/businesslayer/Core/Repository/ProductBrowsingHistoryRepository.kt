@@ -11,36 +11,26 @@ class ProductBrowsingHistoryRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IProductBrowsingHistoryRepository {
 
-    
     override suspend fun GetProductBrowsingHistoriesByCountAsync(
         memberId: Int,
         count: Int
     ): Result<List<ProductBrowsingHistoryDTO>> {
         return apiClient.GetAsync(
-            baseUrl =
-                ApiRoutes.B2C_PRODUCT_BROWSING_HISTORY_BASE_URL,
-            method =
-                "GetProductBrowsingHistoriesByCountAsync",
-            query =
-                "memberId=" +
-                        "&count="
+            baseUrl = ApiRoutes.B2C_PRODUCT_BROWSING_HISTORY_BASE_URL,
+            method = "GetProductBrowsingHistoriesByCountAsync",
+            query = "memberId=$memberId&count=$count"
         )
     }
-
 
     override suspend fun InsertProductBrowsingHistoryAsync(
         memberId: Int,
         model: ProductBrowsingHistoryInsertModel
     ): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl =
-                ApiRoutes.B2C_PRODUCT_BROWSING_HISTORY_BASE_URL,
-            method =
-                "InsertProductBrowsingHistoryAsync",
-            query =
-                "memberId=$memberId",
-            data =
-                model
+            baseUrl = ApiRoutes.B2C_PRODUCT_BROWSING_HISTORY_BASE_URL,
+            method = "InsertProductBrowsingHistoryAsync",
+            query = "memberId=$memberId",
+            data = model
         )
     }
 
@@ -49,13 +39,9 @@ class ProductBrowsingHistoryRepository(
         browsingHistoryId: Int
     ): Result<Unit> {
         return apiClient.DeleteAsync(
-            baseUrl =
-                ApiRoutes.B2C_PRODUCT_BROWSING_HISTORY_BASE_URL,
-            method =
-                "DeleteProductBrowsingHistory",
-            query =
-                "memberId=$memberId" +
-                        "&browsingHistoryId=$browsingHistoryId"
+            baseUrl = ApiRoutes.B2C_PRODUCT_BROWSING_HISTORY_BASE_URL,
+            method = "DeleteProductBrowsingHistory",
+            query = "memberId=$memberId&browsingHistoryId=$browsingHistoryId"
         )
     }
 
@@ -63,12 +49,9 @@ class ProductBrowsingHistoryRepository(
         memberId: Int
     ): Result<Unit> {
         return apiClient.DeleteAsync(
-            baseUrl =
-                ApiRoutes.B2C_PRODUCT_BROWSING_HISTORY_BASE_URL,
-            method =
-                "DeleteAllProductBrowsingHistories",
-            query =
-                "memberId=$memberId"
+            baseUrl = ApiRoutes.B2C_PRODUCT_BROWSING_HISTORY_BASE_URL,
+            method = "DeleteAllProductBrowsingHistories",
+            query = "memberId=$memberId"
         )
     }
 }

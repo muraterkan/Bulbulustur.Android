@@ -6,9 +6,22 @@ import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.RealEstate.
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
 interface ISystemDescRealestateBuildingAgeRepository {
+
     suspend fun GetSystemDescRealestateBuildingAgesAsync(): Result<List<SystemDescRealestateBuildingAgeDTO>>
-    suspend fun GetSystemDescRealestateBuildingAgeByIdAsync(systemDescRealestateBuildingAgeId: Int): Result<SystemDescRealestateBuildingAgeUpdateModel>
-    suspend fun InsertAsync(model: SystemDescRealestateBuildingAgeInsertModel): Result<SystemDescRealestateBuildingAgeInsertModel>
-    suspend fun UpdateAsync(model: SystemDescRealestateBuildingAgeUpdateModel): Result<SystemDescRealestateBuildingAgeUpdateModel>
-    suspend fun DeleteAsync(systemDescRealestateBuildingAgeId: Int): Result<Unit>
+
+    suspend fun GetSystemDescRealestateBuildingAgeByIdAsync(
+        systemDescRealestateBuildingAgeId: Int
+    ): Result<SystemDescRealestateBuildingAgeUpdateModel>
+
+    suspend fun InsertAsync(
+        model: SystemDescRealestateBuildingAgeInsertModel
+    ): Result<SystemDescRealestateBuildingAgeInsertModel>
+
+    suspend fun UpdateAsync(
+        model: SystemDescRealestateBuildingAgeUpdateModel
+    ): Result<SystemDescRealestateBuildingAgeUpdateModel>
+
+    suspend fun DeleteAsync(
+        systemDescRealestateBuildingAgeId: Int
+    ): Result<Unit>
 }

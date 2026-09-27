@@ -7,15 +7,31 @@ import com.bulbulustur.android.businesslayer.Core.Util.Result
 
 interface IFaqRepository {
 
-    suspend fun GetFaqs(languageId: Int, faqSectionId: Int, count: Int = 100): Result<List<FaqDTO>>
+    suspend fun GetFaqs(
+        languageId: Int,
+        faqSectionId: Int,
+        count: Int = 100
+    ): Result<List<FaqDTO>>
 
-    suspend fun GetFaqById(languageId: Int, helpId: Int): Result<FaqUpdateModel?>
+    suspend fun GetFaqById(
+        languageId: Int,
+        helpId: Int
+    ): Result<FaqUpdateModel?>
 
-    suspend fun GetFaqByIdExtended(languageId: Int, helpId: Int): Result<FaqDTO?>
+    suspend fun GetFaqByIdExtended(
+        languageId: Int,
+        helpId: Int
+    ): Result<FaqDTO?>
 
-    suspend fun Insert(model: FaqInsertModel): Result<Unit>
+    suspend fun Insert(
+        model: FaqInsertModel
+    ): Result<Unit>
 
-    suspend fun Update(model: FaqUpdateModel): Result<Unit>
+    suspend fun Update(
+        model: FaqUpdateModel
+    ): Result<Unit>
 
-    suspend fun Delete(helpId: Int): Result<Unit>
+    suspend fun Delete(
+        helpId: Int
+    ): Result<Unit>
 }

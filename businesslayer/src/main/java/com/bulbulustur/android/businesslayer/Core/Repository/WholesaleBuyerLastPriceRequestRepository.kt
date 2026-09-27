@@ -12,7 +12,10 @@ class WholesaleBuyerLastPriceRequestRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IWholesaleBuyerLastPriceRequestRepository {
 
-    override suspend fun GetWholesaleBuyerLastPriceRequestListAsync(wholesaleProductId: Int, count: Int): Result<List<WholesaleBuyerLastPriceRequestDTO>> {
+    override suspend fun GetWholesaleBuyerLastPriceRequestListAsync(
+        wholesaleProductId: Int,
+        count: Int
+    ): Result<List<WholesaleBuyerLastPriceRequestDTO>> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.BUYER_REQUEST_BASE_URL,
             method = "GetBuyerLastPriceRequestsAsync",
@@ -20,7 +23,9 @@ class WholesaleBuyerLastPriceRequestRepository(
         )
     }
 
-    override suspend fun GetWholesaleBuyerLastPriceRequestByIdAsync(wholesaleBuyerLastPriceRequestId: Int): Result<WholesaleBuyerLastPriceRequestUpdateModel?> {
+    override suspend fun GetWholesaleBuyerLastPriceRequestByIdAsync(
+        wholesaleBuyerLastPriceRequestId: Int
+    ): Result<WholesaleBuyerLastPriceRequestUpdateModel?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.BUYER_REQUEST_BASE_URL,
             method = "GetBuyerLastPriceRequestByIdAsync",
@@ -28,7 +33,10 @@ class WholesaleBuyerLastPriceRequestRepository(
         )
     }
 
-    override suspend fun GetWholesaleBuyerLastPriceRequestByIdExtendedAsync(languageId: Int, wholesaleBuyerLastPriceRequestId: Int): Result<WholesaleBuyerLastPriceRequestDTO?> {
+    override suspend fun GetWholesaleBuyerLastPriceRequestByIdExtendedAsync(
+        languageId: Int,
+        wholesaleBuyerLastPriceRequestId: Int
+    ): Result<WholesaleBuyerLastPriceRequestDTO?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.BUYER_REQUEST_BASE_URL,
             method = "GetBuyerLastPriceRequestByIdExtendedAsync",
@@ -36,7 +44,10 @@ class WholesaleBuyerLastPriceRequestRepository(
         )
     }
 
-    override suspend fun InsertAsync(languageId: Int, model: WholesaleBuyerLastPriceRequestInsertModel): Result<Unit> {
+    override suspend fun InsertAsync(
+        languageId: Int,
+        model: WholesaleBuyerLastPriceRequestInsertModel
+    ): Result<Unit> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.BUYER_REQUEST_BASE_URL,
             method = "BuyerLastPriceRequestInsertAsync?languageId=$languageId",
@@ -44,7 +55,9 @@ class WholesaleBuyerLastPriceRequestRepository(
         )
     }
 
-    override suspend fun UpdateAsync(model: WholesaleBuyerLastPriceRequestUpdateModel): Result<Unit> {
+    override suspend fun UpdateAsync(
+        model: WholesaleBuyerLastPriceRequestUpdateModel
+    ): Result<Unit> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.BUYER_REQUEST_BASE_URL,
             method = "BuyerLastPriceRequestUpdateAsync",
@@ -52,7 +65,9 @@ class WholesaleBuyerLastPriceRequestRepository(
         )
     }
 
-    override suspend fun DeleteAsync(wholesaleBuyerLastPriceRequestId: Int): Result<Unit> {
+    override suspend fun DeleteAsync(
+        wholesaleBuyerLastPriceRequestId: Int
+    ): Result<Unit> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.BUYER_REQUEST_BASE_URL,
             method = "BuyerLastPriceRequestDeleteAsync",

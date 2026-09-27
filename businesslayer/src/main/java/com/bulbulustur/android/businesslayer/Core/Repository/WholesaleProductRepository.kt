@@ -16,7 +16,11 @@ class WholesaleProductRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IWholesaleProductRepository {
 
-    override suspend fun GetProductDataAsync(filters: B2BProductFilterDTO, page: Int, pageSize: Int): Result<B2BProductDataDTO> {
+    override suspend fun GetProductDataAsync(
+        filters: B2BProductFilterDTO,
+        page: Int,
+        pageSize: Int
+    ): Result<B2BProductDataDTO> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.B2B_PRODUCT_BASE_URL,
             method = "GetProductDataAsync?page=$page&pageSize=$pageSize",
@@ -24,7 +28,10 @@ class WholesaleProductRepository(
         )
     }
 
-    override suspend fun GetProductByIdExtendedAsync(languageId: Int, wholesaleProductId: Int): Result<WholesaleProductDTO?> {
+    override suspend fun GetProductByIdExtendedAsync(
+        languageId: Int,
+        wholesaleProductId: Int
+    ): Result<WholesaleProductDTO?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.B2B_PRODUCT_BASE_URL,
             method = "GetProductByIdExtendedAsync",
@@ -32,7 +39,11 @@ class WholesaleProductRepository(
         )
     }
 
-    override suspend fun GetProductRelatedsAsync(languageId: Int, wholesaleProductId: Int, count: Int): Result<List<WholesaleProductRelatedDTO>> {
+    override suspend fun GetProductRelatedsAsync(
+        languageId: Int,
+        wholesaleProductId: Int,
+        count: Int
+    ): Result<List<WholesaleProductRelatedDTO>> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.B2B_PRODUCT_BASE_URL,
             method = "GetProductRelatedsAsync",
@@ -40,7 +51,13 @@ class WholesaleProductRepository(
         )
     }
 
-    override suspend fun GetSearchingProductsAsync(companyId: Int, key: String, page: Int, pageSize: Int, sortOrder: String): Result<PaginatedList<WholesaleProductDTO>> {
+    override suspend fun GetSearchingProductsAsync(
+        companyId: Int,
+        key: String,
+        page: Int,
+        pageSize: Int,
+        sortOrder: String
+    ): Result<PaginatedList<WholesaleProductDTO>> {
         val encodedKey = URLEncoder.encode(key.trim(), "UTF-8")
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.B2B_PRODUCT_BASE_URL,

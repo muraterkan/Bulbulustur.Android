@@ -6,9 +6,22 @@ import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.RealEstate.
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
 interface ISystemDescRealestateFloorLocationRepository {
+
     suspend fun GetSystemDescRealestateFloorLocationsAsync(): Result<List<SystemDescRealestateFloorLocationDTO>>
-    suspend fun GetSystemDescRealestateFloorLocationByIdAsync(systemDescRealestateFloorLocationId: Int): Result<SystemDescRealestateFloorLocationUpdateModel>
-    suspend fun InsertAsync(model: SystemDescRealestateFloorLocationInsertModel): Result<SystemDescRealestateFloorLocationInsertModel>
-    suspend fun UpdateAsync(model: SystemDescRealestateFloorLocationUpdateModel): Result<SystemDescRealestateFloorLocationUpdateModel>
-    suspend fun DeleteAsync(systemDescRealestateFloorLocationId: Int): Result<Unit>
+
+    suspend fun GetSystemDescRealestateFloorLocationByIdAsync(
+        systemDescRealestateFloorLocationId: Int
+    ): Result<SystemDescRealestateFloorLocationUpdateModel>
+
+    suspend fun InsertAsync(
+        model: SystemDescRealestateFloorLocationInsertModel
+    ): Result<SystemDescRealestateFloorLocationInsertModel>
+
+    suspend fun UpdateAsync(
+        model: SystemDescRealestateFloorLocationUpdateModel
+    ): Result<SystemDescRealestateFloorLocationUpdateModel>
+
+    suspend fun DeleteAsync(
+        systemDescRealestateFloorLocationId: Int
+    ): Result<Unit>
 }

@@ -7,9 +7,14 @@ import com.bulbulustur.android.businesslayer.Core.Network.ApiClient
 import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
-class ProductCustomerQuestionRepository(private val apiClient: ApiClient = ApiClient) : IProductCustomerQuestionRepository {
+class ProductCustomerQuestionRepository(
+    private val apiClient: ApiClient = ApiClient
+) : IProductCustomerQuestionRepository {
 
-    override suspend fun GetProductCustomerQuestionsAsync(productId: Int, count: Int): Result<List<ProductCustomerQuestionDTO>> {
+    override suspend fun GetProductCustomerQuestionsAsync(
+        productId: Int,
+        count: Int
+    ): Result<List<ProductCustomerQuestionDTO>> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.B2C_PRODUCT_QUESTION_BASE_URL,
             method = "GetProductCustomerQuestionsAsync",
@@ -17,7 +22,10 @@ class ProductCustomerQuestionRepository(private val apiClient: ApiClient = ApiCl
         )
     }
 
-    override suspend fun GetMemberProductCustomerQuestionsAsync(memberId: Int, count: Int): Result<List<ProductCustomerQuestionDTO>> {
+    override suspend fun GetMemberProductCustomerQuestionsAsync(
+        memberId: Int,
+        count: Int
+    ): Result<List<ProductCustomerQuestionDTO>> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.B2C_PRODUCT_QUESTION_BASE_URL,
             method = "GetMemberProductCustomerQuestionsAsync",
@@ -25,7 +33,11 @@ class ProductCustomerQuestionRepository(private val apiClient: ApiClient = ApiCl
         )
     }
 
-    override suspend fun InsertProductCustomerQuestionAsync(languageId: Int, memberId: Int, model: ProductCustomerQuestionInsertModel): Result<Unit> {
+    override suspend fun InsertProductCustomerQuestionAsync(
+        languageId: Int,
+        memberId: Int,
+        model: ProductCustomerQuestionInsertModel
+    ): Result<Unit> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.B2C_PRODUCT_QUESTION_BASE_URL,
             method = "InsertProductCustomerQuestionAsync",

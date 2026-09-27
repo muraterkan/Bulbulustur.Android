@@ -6,9 +6,22 @@ import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.RealEstate.
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
 interface ISystemDescRealestateMortgageStatusRepository {
+
     suspend fun GetSystemDescRealestateMortgageStatussAsync(): Result<List<SystemDescRealestateMortgageStatusDTO>>
-    suspend fun GetSystemDescRealestateMortgageStatusByIdAsync(systemDescRealestateMortgageStatusId: Int): Result<SystemDescRealestateMortgageStatusUpdateModel>
-    suspend fun InsertAsync(model: SystemDescRealestateMortgageStatusInsertModel): Result<SystemDescRealestateMortgageStatusInsertModel>
-    suspend fun UpdateAsync(model: SystemDescRealestateMortgageStatusUpdateModel): Result<SystemDescRealestateMortgageStatusUpdateModel>
-    suspend fun DeleteAsync(systemDescRealestateMortgageStatusId: Int): Result<Unit>
+
+    suspend fun GetSystemDescRealestateMortgageStatusByIdAsync(
+        systemDescRealestateMortgageStatusId: Int
+    ): Result<SystemDescRealestateMortgageStatusUpdateModel>
+
+    suspend fun InsertAsync(
+        model: SystemDescRealestateMortgageStatusInsertModel
+    ): Result<SystemDescRealestateMortgageStatusInsertModel>
+
+    suspend fun UpdateAsync(
+        model: SystemDescRealestateMortgageStatusUpdateModel
+    ): Result<SystemDescRealestateMortgageStatusUpdateModel>
+
+    suspend fun DeleteAsync(
+        systemDescRealestateMortgageStatusId: Int
+    ): Result<Unit>
 }

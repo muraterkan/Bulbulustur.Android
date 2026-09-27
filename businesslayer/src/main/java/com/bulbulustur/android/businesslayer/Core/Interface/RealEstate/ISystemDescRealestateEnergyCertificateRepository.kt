@@ -6,9 +6,22 @@ import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.RealEstate.
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
 interface ISystemDescRealestateEnergyCertificateRepository {
+
     suspend fun GetSystemDescRealestateEnergyCertificatesAsync(): Result<List<SystemDescRealestateEnergyCertificateDTO>>
-    suspend fun GetSystemDescRealestateEnergyCertificateByIdAsync(systemDescRealestateEnergyCertificateId: Int): Result<SystemDescRealestateEnergyCertificateUpdateModel>
-    suspend fun InsertAsync(model: SystemDescRealestateEnergyCertificateInsertModel): Result<SystemDescRealestateEnergyCertificateInsertModel>
-    suspend fun UpdateAsync(model: SystemDescRealestateEnergyCertificateUpdateModel): Result<SystemDescRealestateEnergyCertificateUpdateModel>
-    suspend fun DeleteAsync(systemDescRealestateEnergyCertificateId: Int): Result<Unit>
+
+    suspend fun GetSystemDescRealestateEnergyCertificateByIdAsync(
+        systemDescRealestateEnergyCertificateId: Int
+    ): Result<SystemDescRealestateEnergyCertificateUpdateModel>
+
+    suspend fun InsertAsync(
+        model: SystemDescRealestateEnergyCertificateInsertModel
+    ): Result<SystemDescRealestateEnergyCertificateInsertModel>
+
+    suspend fun UpdateAsync(
+        model: SystemDescRealestateEnergyCertificateUpdateModel
+    ): Result<SystemDescRealestateEnergyCertificateUpdateModel>
+
+    suspend fun DeleteAsync(
+        systemDescRealestateEnergyCertificateId: Int
+    ): Result<Unit>
 }

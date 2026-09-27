@@ -8,9 +8,13 @@ import com.bulbulustur.android.businesslayer.Core.Network.ApiClient
 import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
-class TravelPhotoRepository(private val apiClient: ApiClient = ApiClient) : ITravelPhotoRepository {
+class TravelPhotoRepository(
+    private val apiClient: ApiClient = ApiClient
+) : ITravelPhotoRepository {
 
-    override suspend fun GetTravelPhotosAsync(count: Int): Result<List<TravelPhotoDTO>> {
+    override suspend fun GetTravelPhotosAsync(
+        count: Int
+    ): Result<List<TravelPhotoDTO>> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.TRAVEL_GIRLS_BASE_URL,
             method = "GetTravelPhotosAsync",
@@ -18,7 +22,9 @@ class TravelPhotoRepository(private val apiClient: ApiClient = ApiClient) : ITra
         )
     }
 
-    override suspend fun GetTravelPhotoByIdAsync(travelPhotoId: Int): Result<TravelPhotoUpdateModel?> {
+    override suspend fun GetTravelPhotoByIdAsync(
+        travelPhotoId: Int
+    ): Result<TravelPhotoUpdateModel?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.TRAVEL_GIRLS_BASE_URL,
             method = "GetTravelPhotoByIdAsync",
@@ -26,7 +32,9 @@ class TravelPhotoRepository(private val apiClient: ApiClient = ApiClient) : ITra
         )
     }
 
-    override suspend fun GetTravelPhotoByIdExtendedAsync(travelPhotoId: Int): Result<TravelPhotoDTO?> {
+    override suspend fun GetTravelPhotoByIdExtendedAsync(
+        travelPhotoId: Int
+    ): Result<TravelPhotoDTO?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.TRAVEL_GIRLS_BASE_URL,
             method = "GetTravelPhotoByIdExtendedAsync",
@@ -34,7 +42,9 @@ class TravelPhotoRepository(private val apiClient: ApiClient = ApiClient) : ITra
         )
     }
 
-    override suspend fun InsertAsync(model: TravelPhotoInsertModel): Result<Unit> {
+    override suspend fun InsertAsync(
+        model: TravelPhotoInsertModel
+    ): Result<Unit> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.TRAVEL_GIRLS_BASE_URL,
             method = "InsertTravelPhotoAsync",
@@ -42,7 +52,9 @@ class TravelPhotoRepository(private val apiClient: ApiClient = ApiClient) : ITra
         )
     }
 
-    override suspend fun UpdateAsync(model: TravelPhotoUpdateModel): Result<Unit> {
+    override suspend fun UpdateAsync(
+        model: TravelPhotoUpdateModel
+    ): Result<Unit> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.TRAVEL_GIRLS_BASE_URL,
             method = "UpdateTravelPhotoAsync",
@@ -50,7 +62,9 @@ class TravelPhotoRepository(private val apiClient: ApiClient = ApiClient) : ITra
         )
     }
 
-    override suspend fun DeleteAsync(travelPhotoId: Int): Result<Unit> {
+    override suspend fun DeleteAsync(
+        travelPhotoId: Int
+    ): Result<Unit> {
         return apiClient.DeleteAsync(
             baseUrl = ApiRoutes.TRAVEL_GIRLS_BASE_URL,
             method = "DeleteTravelPhotoAsync",

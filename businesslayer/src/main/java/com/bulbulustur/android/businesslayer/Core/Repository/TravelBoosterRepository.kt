@@ -8,9 +8,13 @@ import com.bulbulustur.android.businesslayer.Core.Network.ApiClient
 import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
-class TravelBoosterRepository(private val apiClient: ApiClient = ApiClient) : ITravelBoosterRepository {
+class TravelBoosterRepository(
+    private val apiClient: ApiClient = ApiClient
+) : ITravelBoosterRepository {
 
-    override suspend fun GetTravelBoostersAsync(count: Int): Result<List<TravelBoosterDTO>> {
+    override suspend fun GetTravelBoostersAsync(
+        count: Int
+    ): Result<List<TravelBoosterDTO>> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.TRAVEL_GIRLS_BASE_URL,
             method = "GetTravelBoostersAsync",
@@ -18,7 +22,9 @@ class TravelBoosterRepository(private val apiClient: ApiClient = ApiClient) : IT
         )
     }
 
-    override suspend fun GetTravelBoosterByIdAsync(travelBoosterId: Int): Result<TravelBoosterUpdateModel?> {
+    override suspend fun GetTravelBoosterByIdAsync(
+        travelBoosterId: Int
+    ): Result<TravelBoosterUpdateModel?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.TRAVEL_GIRLS_BASE_URL,
             method = "GetTravelBoosterByIdAsync",
@@ -26,7 +32,9 @@ class TravelBoosterRepository(private val apiClient: ApiClient = ApiClient) : IT
         )
     }
 
-    override suspend fun GetTravelBoosterByIdExtendedAsync(travelBoosterId: Int): Result<TravelBoosterDTO?> {
+    override suspend fun GetTravelBoosterByIdExtendedAsync(
+        travelBoosterId: Int
+    ): Result<TravelBoosterDTO?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.TRAVEL_GIRLS_BASE_URL,
             method = "GetTravelBoosterByIdExtendedAsync",
@@ -34,7 +42,9 @@ class TravelBoosterRepository(private val apiClient: ApiClient = ApiClient) : IT
         )
     }
 
-    override suspend fun InsertAsync(model: TravelBoosterInsertModel): Result<Unit> {
+    override suspend fun InsertAsync(
+        model: TravelBoosterInsertModel
+    ): Result<Unit> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.TRAVEL_GIRLS_BASE_URL,
             method = "InsertTravelBoosterAsync",
@@ -42,7 +52,9 @@ class TravelBoosterRepository(private val apiClient: ApiClient = ApiClient) : IT
         )
     }
 
-    override suspend fun UpdateAsync(model: TravelBoosterUpdateModel): Result<Unit> {
+    override suspend fun UpdateAsync(
+        model: TravelBoosterUpdateModel
+    ): Result<Unit> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.TRAVEL_GIRLS_BASE_URL,
             method = "UpdateTravelBoosterAsync",
@@ -50,7 +62,9 @@ class TravelBoosterRepository(private val apiClient: ApiClient = ApiClient) : IT
         )
     }
 
-    override suspend fun DeleteAsync(travelBoosterId: Int): Result<Unit> {
+    override suspend fun DeleteAsync(
+        travelBoosterId: Int
+    ): Result<Unit> {
         return apiClient.DeleteAsync(
             baseUrl = ApiRoutes.TRAVEL_GIRLS_BASE_URL,
             method = "DeleteTravelBoosterAsync",

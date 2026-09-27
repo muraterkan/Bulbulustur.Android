@@ -4,5 +4,8 @@ import com.bulbulustur.android.businesslayer.Core.DTO.StoreRequestDTO
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
 interface IStoreRequestRepository {
-    suspend fun GetAccountStoreRequestStatusAsync(memberId: Int): Result<StoreRequestDTO?>
+
+    suspend fun GetAccountStoreRequestStatusAsync(
+        memberId: Int
+    ): Result<StoreRequestDTO?>
 }

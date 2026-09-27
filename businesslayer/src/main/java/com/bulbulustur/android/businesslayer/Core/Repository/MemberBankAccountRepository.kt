@@ -8,9 +8,14 @@ import com.bulbulustur.android.businesslayer.Core.Network.ApiClient
 import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
-class MemberBankAccountRepository(private val apiClient: ApiClient = ApiClient) : IMemberBankAccountRepository {
+class MemberBankAccountRepository(
+    private val apiClient: ApiClient = ApiClient
+) : IMemberBankAccountRepository {
 
-    override suspend fun GetAccountBankAccountsAsync(memberId: Int, count: Int): Result<List<MemberBankAccountDTO>> {
+    override suspend fun GetAccountBankAccountsAsync(
+        memberId: Int,
+        count: Int
+    ): Result<List<MemberBankAccountDTO>> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.COMMERCE_SUPPORT_ACCOUNT_BASE_URL,
             method = "GetAccountBankAccountsAsync",
@@ -18,7 +23,10 @@ class MemberBankAccountRepository(private val apiClient: ApiClient = ApiClient) 
         )
     }
 
-    override suspend fun GetAccountBankAccountByIdAsync(memberId: Int, bankAccountId: Int): Result<MemberBankAccountUpdateModel?> {
+    override suspend fun GetAccountBankAccountByIdAsync(
+        memberId: Int,
+        bankAccountId: Int
+    ): Result<MemberBankAccountUpdateModel?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.COMMERCE_SUPPORT_ACCOUNT_BASE_URL,
             method = "GetAccountBankAccountByIdAsync",
@@ -26,7 +34,10 @@ class MemberBankAccountRepository(private val apiClient: ApiClient = ApiClient) 
         )
     }
 
-    override suspend fun InsertAccountBankAccountAsync(memberId: Int, model: MemberBankAccountInsertModel): Result<Unit> {
+    override suspend fun InsertAccountBankAccountAsync(
+        memberId: Int,
+        model: MemberBankAccountInsertModel
+    ): Result<Unit> {
         return apiClient.PostAsync<MemberBankAccountInsertModel, Unit>(
             baseUrl = ApiRoutes.COMMERCE_SUPPORT_ACCOUNT_BASE_URL,
             method = "InsertAccountBankAccount",
@@ -35,7 +46,10 @@ class MemberBankAccountRepository(private val apiClient: ApiClient = ApiClient) 
         )
     }
 
-    override suspend fun UpdateAccountBankAccountAsync(memberId: Int, model: MemberBankAccountUpdateModel): Result<Unit> {
+    override suspend fun UpdateAccountBankAccountAsync(
+        memberId: Int,
+        model: MemberBankAccountUpdateModel
+    ): Result<Unit> {
         return apiClient.PutAsync<MemberBankAccountUpdateModel, Unit>(
             baseUrl = ApiRoutes.COMMERCE_SUPPORT_ACCOUNT_BASE_URL,
             method = "UpdateAccountBankAccount",
@@ -44,7 +58,10 @@ class MemberBankAccountRepository(private val apiClient: ApiClient = ApiClient) 
         )
     }
 
-    override suspend fun DeleteAccountBankAccountAsync(memberId: Int, bankAccountId: Int): Result<Unit> {
+    override suspend fun DeleteAccountBankAccountAsync(
+        memberId: Int,
+        bankAccountId: Int
+    ): Result<Unit> {
         return apiClient.DeleteAsync(
             baseUrl = ApiRoutes.COMMERCE_SUPPORT_ACCOUNT_BASE_URL,
             method = "DeleteAccountBankAccount",

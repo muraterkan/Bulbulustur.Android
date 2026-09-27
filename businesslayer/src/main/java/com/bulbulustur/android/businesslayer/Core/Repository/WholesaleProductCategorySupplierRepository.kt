@@ -10,7 +10,11 @@ class WholesaleProductCategorySupplierRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IWholesaleProductCategorySupplierRepository {
 
-    override suspend fun GetWholesaleProductCategorySuppliers(languageId: Int, productCategoryId: Int, count: Int): Result<List<WholesaleProductCategorySupplierDTO>> {
+    override suspend fun GetWholesaleProductCategorySuppliers(
+        languageId: Int,
+        productCategoryId: Int,
+        count: Int
+    ): Result<List<WholesaleProductCategorySupplierDTO>> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.B2B_PRODUCT_CATEGORY_SUPPLIER_BASE_URL,
             method = "GetWholesaleProductCategorySuppliers",

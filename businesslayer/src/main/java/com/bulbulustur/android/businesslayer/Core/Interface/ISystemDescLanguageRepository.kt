@@ -7,15 +7,29 @@ import com.bulbulustur.android.businesslayer.Core.Util.Result
 
 interface ISystemDescLanguageRepository {
 
-    suspend fun GetSystemDescLanguagesAsync(languageId: Int, count: Int): Result<List<SystemDescLanguageDTO>>
+    suspend fun GetSystemDescLanguagesAsync(
+        languageId: Int,
+        count: Int
+    ): Result<List<SystemDescLanguageDTO>>
 
-    suspend fun GetSystemDescLanguageByIdAsync(systemDescLanguageId: Int): Result<SystemDescLanguageUpdateModel?>
+    suspend fun GetSystemDescLanguageByIdAsync(
+        systemDescLanguageId: Int
+    ): Result<SystemDescLanguageUpdateModel?>
 
-    suspend fun GetSystemDescLanguageByIdExtendedAsync(languageId: Int, systemDescLanguageId: Int): Result<SystemDescLanguageDTO?>
+    suspend fun GetSystemDescLanguageByIdExtendedAsync(
+        languageId: Int,
+        systemDescLanguageId: Int
+    ): Result<SystemDescLanguageDTO?>
 
-    suspend fun InsertAsync(model: SystemDescLanguageInsertModel): Result<Unit>
+    suspend fun InsertAsync(
+        model: SystemDescLanguageInsertModel
+    ): Result<Unit>
 
-    suspend fun UpdateAsync(model: SystemDescLanguageUpdateModel): Result<Unit>
+    suspend fun UpdateAsync(
+        model: SystemDescLanguageUpdateModel
+    ): Result<Unit>
 
-    suspend fun DeleteAsync(systemDescLanguageId: Int): Result<Unit>
+    suspend fun DeleteAsync(
+        systemDescLanguageId: Int
+    ): Result<Unit>
 }

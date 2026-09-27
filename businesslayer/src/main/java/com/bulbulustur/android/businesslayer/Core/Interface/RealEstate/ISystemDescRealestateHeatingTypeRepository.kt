@@ -6,9 +6,22 @@ import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.RealEstate.
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
 interface ISystemDescRealestateHeatingTypeRepository {
+
     suspend fun GetSystemDescRealestateHeatingTypesAsync(): Result<List<SystemDescRealestateHeatingTypeDTO>>
-    suspend fun GetSystemDescRealestateHeatingTypeByIdAsync(systemDescRealestateHeatingTypeId: Int): Result<SystemDescRealestateHeatingTypeUpdateModel>
-    suspend fun InsertAsync(model: SystemDescRealestateHeatingTypeInsertModel): Result<SystemDescRealestateHeatingTypeInsertModel>
-    suspend fun UpdateAsync(model: SystemDescRealestateHeatingTypeUpdateModel): Result<SystemDescRealestateHeatingTypeUpdateModel>
-    suspend fun DeleteAsync(systemDescRealestateHeatingTypeId: Int): Result<Unit>
+
+    suspend fun GetSystemDescRealestateHeatingTypeByIdAsync(
+        systemDescRealestateHeatingTypeId: Int
+    ): Result<SystemDescRealestateHeatingTypeUpdateModel>
+
+    suspend fun InsertAsync(
+        model: SystemDescRealestateHeatingTypeInsertModel
+    ): Result<SystemDescRealestateHeatingTypeInsertModel>
+
+    suspend fun UpdateAsync(
+        model: SystemDescRealestateHeatingTypeUpdateModel
+    ): Result<SystemDescRealestateHeatingTypeUpdateModel>
+
+    suspend fun DeleteAsync(
+        systemDescRealestateHeatingTypeId: Int
+    ): Result<Unit>
 }

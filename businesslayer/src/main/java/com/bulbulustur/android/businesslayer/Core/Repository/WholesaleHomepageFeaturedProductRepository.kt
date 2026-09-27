@@ -10,7 +10,9 @@ class WholesaleHomepageFeaturedProductRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IWholesaleHomepageFeaturedProductRepository {
 
-    override suspend fun GetHomepageFeaturedProductsAsync(count: Int): Result<List<WholesaleHomepageFeaturedProductDTO>> {
+    override suspend fun GetHomepageFeaturedProductsAsync(
+        count: Int
+    ): Result<List<WholesaleHomepageFeaturedProductDTO>> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.B2B_PRODUCT_BASE_URL,
             method = "GetHomepageFeaturedProductsAsync",

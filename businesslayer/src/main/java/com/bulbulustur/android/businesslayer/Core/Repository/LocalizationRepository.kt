@@ -15,15 +15,8 @@ class LocalizationRepository : ILocalizationRepository {
         count: Int
     ): Result<List<ResourceDTO>> {
         return try {
-            val safeCount = count.coerceIn(
-                minimumValue = 1,
-                maximumValue = 10000
-            )
-
-            val query = BuildQuery(
-                languageId = languageId,
-                count = safeCount
-            )
+            val safeCount = count.coerceIn(minimumValue = 1, maximumValue = 10000)
+            val query = BuildQuery(languageId = languageId, count = safeCount)
 
             ApiClient.GetAsync<List<ResourceDTO>>(
                 baseUrl = ResourceApiBaseUrl,
@@ -41,10 +34,7 @@ class LocalizationRepository : ILocalizationRepository {
         }
     }
 
-    private fun BuildQuery(
-        languageId: Int,
-        count: Int
-    ): String {
+    private fun BuildQuery(languageId: Int, count: Int): String {
         return listOf(
             "languageId" to languageId.toString(),
             "count" to count.toString()
@@ -53,21 +43,12 @@ class LocalizationRepository : ILocalizationRepository {
         }
     }
 
-    private fun Encode(
-        value: String
-    ): String {
-        return URLEncoder.encode(
-            value,
-            StandardCharsets.UTF_8.toString()
-        )
+    private fun Encode(value: String): String {
+        return URLEncoder.encode(value, StandardCharsets.UTF_8.toString())
     }
 
     private companion object {
-
-        const val ResourceApiBaseUrl =
-            "http://37.60.239.76:30215/api/Resource"
-
-        const val GetResourcesMethod =
-            "GetResourcesAsync"
+        const val ResourceApiBaseUrl = "http://37.60.239.76:30215/api/Resource"
+        const val GetResourcesMethod = "GetResourcesAsync"
     }
 }

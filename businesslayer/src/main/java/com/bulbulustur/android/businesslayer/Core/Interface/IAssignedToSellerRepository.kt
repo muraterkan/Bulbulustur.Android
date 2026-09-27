@@ -7,13 +7,23 @@ import com.bulbulustur.android.businesslayer.Core.Util.Result
 
 interface IAssignedToSellerRepository {
 
-    suspend fun GetAssignedToSellersAsync(assignedMemberId: Int): Result<List<AssignedToSellerDTO>>
+    suspend fun GetAssignedToSellersAsync(
+        assignedMemberId: Int
+    ): Result<List<AssignedToSellerDTO>>
 
-    suspend fun GetAssignedToSellersByIdAsync(assignedToSellerId: Int): Result<AssignedToSellerUpdateModel?>
+    suspend fun GetAssignedToSellersByIdAsync(
+        assignedToSellerId: Int
+    ): Result<AssignedToSellerUpdateModel?>
 
-    suspend fun GetAssignedToSellersByIdExtendedAsync(assignedToSellerId: Int): Result<AssignedToSellerDTO?>
+    suspend fun GetAssignedToSellersByIdExtendedAsync(
+        assignedToSellerId: Int
+    ): Result<AssignedToSellerDTO?>
 
-    suspend fun InsertAsync(model: AssignedToSellerInsertModel): Result<Unit>
+    suspend fun InsertAsync(
+        model: AssignedToSellerInsertModel
+    ): Result<Unit>
 
-    suspend fun UpdateAsync(model: AssignedToSellerUpdateModel): Result<Unit>
+    suspend fun UpdateAsync(
+        model: AssignedToSellerUpdateModel
+    ): Result<Unit>
 }

@@ -6,9 +6,18 @@ import com.bulbulustur.android.businesslayer.Core.Util.Result
 
 interface IMemberFollowedStoreRepository {
 
-    suspend fun GetAccountFollowedStores(memberId: Int, count: Int = 100): Result<List<MemberFollowedStoreDTO>>
+    suspend fun GetAccountFollowedStores(
+        memberId: Int,
+        count: Int = 100
+    ): Result<List<MemberFollowedStoreDTO>>
 
-    suspend fun InsertAccountFollowedStoreAsync(memberId: Int, model: MemberFollowedStoreInsertModel): Result<Unit>
+    suspend fun InsertAccountFollowedStoreAsync(
+        memberId: Int,
+        model: MemberFollowedStoreInsertModel
+    ): Result<Unit>
 
-    suspend fun DeleteAccountFollowedStoreAsync(memberId: Int, followedStoreId: Int): Result<Unit>
+    suspend fun DeleteAccountFollowedStoreAsync(
+        memberId: Int,
+        followedStoreId: Int
+    ): Result<Unit>
 }

@@ -6,9 +6,13 @@ import com.bulbulustur.android.businesslayer.Core.Network.ApiClient
 import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
-class MemberAgreementRepository(private val apiClient: ApiClient = ApiClient) : IMemberAgreementRepository {
+class MemberAgreementRepository(
+    private val apiClient: ApiClient = ApiClient
+) : IMemberAgreementRepository {
 
-    override suspend fun GetLatestAccountAgreementAsync(memberId: Int): Result<MemberAgreementDTO?> {
+    override suspend fun GetLatestAccountAgreementAsync(
+        memberId: Int
+    ): Result<MemberAgreementDTO?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.COMMERCE_SUPPORT_ACCOUNT_BASE_URL,
             method = "GetLatestAccountAgreementAsync",

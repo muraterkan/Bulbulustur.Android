@@ -10,7 +10,10 @@ class WholesaleHomepageSpecialContentRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IWholesaleHomepageSpecialContentRepository {
 
-    override suspend fun GetHomepageSpecialContents(languageId: Int, count: Int): Result<List<WholesaleHomepageSpecialContentDTO>> {
+    override suspend fun GetHomepageSpecialContents(
+        languageId: Int,
+        count: Int
+    ): Result<List<WholesaleHomepageSpecialContentDTO>> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.B2B_PRODUCT_BASE_URL,
             method = "GetHomepageSpecialContents",

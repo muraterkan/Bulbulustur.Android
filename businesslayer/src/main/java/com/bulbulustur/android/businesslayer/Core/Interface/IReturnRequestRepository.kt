@@ -5,11 +5,26 @@ import com.bulbulustur.android.businesslayer.Core.Util.Result
 
 interface IReturnRequestRepository {
 
-    suspend fun GetReturnRequestsAsync(languageId: Int, memberId: Int, count: Int = 100): Result<List<ReturnRequestDTO>>
+    suspend fun GetReturnRequestsAsync(
+        languageId: Int,
+        memberId: Int,
+        count: Int = 100
+    ): Result<List<ReturnRequestDTO>>
 
-    suspend fun GetReturnRequestByIdExtendedAsync(languageId: Int, memberId: Int, returnRequestId: Int): Result<ReturnRequestDTO?>
+    suspend fun GetReturnRequestByIdExtendedAsync(
+        languageId: Int,
+        memberId: Int,
+        returnRequestId: Int
+    ): Result<ReturnRequestDTO?>
 
-    suspend fun GetReturnRequestSimpleAsync(memberId: Int, returnRequestId: Int): Result<ReturnRequestDTO?>
+    suspend fun GetReturnRequestSimpleAsync(
+        memberId: Int,
+        returnRequestId: Int
+    ): Result<ReturnRequestDTO?>
 
-    suspend fun InsertReturnRequestAsync(languageId: Int, memberId: Int, returnRequest: ReturnRequestDTO): Result<Unit>
+    suspend fun InsertReturnRequestAsync(
+        languageId: Int,
+        memberId: Int,
+        returnRequest: ReturnRequestDTO
+    ): Result<Unit>
 }

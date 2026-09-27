@@ -7,13 +7,28 @@ import com.bulbulustur.android.businesslayer.Core.Util.Result
 
 interface IMemberAddressRepository {
 
-    suspend fun GetAccountAddressesAsync(memberId: Int, count: Int): Result<List<MemberAddressDTO>>
+    suspend fun GetAccountAddressesAsync(
+        memberId: Int,
+        count: Int
+    ): Result<List<MemberAddressDTO>>
 
-    suspend fun GetAccountAddressByIdAsync(memberId: Int, addressKey: String): Result<MemberAddressUpdateModel?>
+    suspend fun GetAccountAddressByIdAsync(
+        memberId: Int,
+        addressKey: String
+    ): Result<MemberAddressUpdateModel?>
 
-    suspend fun InsertAccountAddressAsync(memberId: Int, model: MemberAddressInsertModel): Result<Unit>
+    suspend fun InsertAccountAddressAsync(
+        memberId: Int,
+        model: MemberAddressInsertModel
+    ): Result<Unit>
 
-    suspend fun UpdateAccountAddressAsync(memberId: Int, model: MemberAddressUpdateModel): Result<Unit>
+    suspend fun UpdateAccountAddressAsync(
+        memberId: Int,
+        model: MemberAddressUpdateModel
+    ): Result<Unit>
 
-    suspend fun DeleteAccountAddressAsync(memberId: Int, addressId: Int): Result<Unit>
+    suspend fun DeleteAccountAddressAsync(
+        memberId: Int,
+        addressId: Int
+    ): Result<Unit>
 }

@@ -22,12 +22,9 @@ class AuthenticationRepository(
         model: MemberAuthModel
     ): Result<AuthResponse> {
         return apiClient.PostAsync(
-            baseUrl =
-                ApiRoutes.AUTHENTICATION_BASE_URL,
-            method =
-                "login?languageId=$languageId",
-            data =
-                model
+            baseUrl = ApiRoutes.AUTHENTICATION_BASE_URL,
+            method = "login?languageId=$languageId",
+            data = model
         )
     }
 
@@ -35,12 +32,9 @@ class AuthenticationRepository(
         model: GoogleLoginRequest
     ): Result<AuthResponse> {
         return apiClient.PostAsync(
-            baseUrl =
-                ApiRoutes.AUTHENTICATION_BASE_URL,
-            method =
-                "google-login",
-            data =
-                model
+            baseUrl = ApiRoutes.AUTHENTICATION_BASE_URL,
+            method = "google-login",
+            data = model
         )
     }
 
@@ -49,12 +43,9 @@ class AuthenticationRepository(
         model: RefreshTokenRequest
     ): Result<AuthResponse> {
         return apiClient.PostAsync(
-            baseUrl =
-                ApiRoutes.AUTHENTICATION_BASE_URL,
-            method =
-                "refresh-token?languageId=$languageId",
-            data =
-                model
+            baseUrl = ApiRoutes.AUTHENTICATION_BASE_URL,
+            method = "refresh-token?languageId=$languageId",
+            data = model
         )
     }
 
@@ -63,12 +54,9 @@ class AuthenticationRepository(
         model: RevokeTokenRequest
     ): Result<Boolean> {
         return apiClient.PostAsync(
-            baseUrl =
-                ApiRoutes.AUTHENTICATION_BASE_URL,
-            method =
-                "logout?languageId=$languageId",
-            data =
-                model
+            baseUrl = ApiRoutes.AUTHENTICATION_BASE_URL,
+            method = "logout?languageId=$languageId",
+            data = model
         )
     }
 
@@ -77,17 +65,16 @@ class AuthenticationRepository(
         model: MemberForgotModel
     ): Result<MemberDTO> {
         return apiClient.PostAsync(
-            baseUrl =
-                ApiRoutes.AUTHENTICATION_BASE_URL,
-            method =
-                "forgot?languageId=$languageId",
-            data =
-                model
+            baseUrl = ApiRoutes.AUTHENTICATION_BASE_URL,
+            method = "forgot?languageId=$languageId",
+            data = model
         )
     }
 
-    override suspend fun UpdatePasswordAsync(languageId: Int, model: MemberSetPasswordModel): Result<MemberDTO>
-    {
+    override suspend fun UpdatePasswordAsync(
+        languageId: Int,
+        model: MemberSetPasswordModel
+    ): Result<MemberDTO> {
         val requestModel = model.copy(LanguageId = languageId)
 
         return apiClient.PostAsync(

@@ -11,7 +11,10 @@ class DealsOfTheDayRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IDealsOfTheDayRepository {
 
-    override suspend fun GetDealsOfTheDaysAsync(languageId: Int, count: Int): Result<List<DealsOfTheDayDTO>> {
+    override suspend fun GetDealsOfTheDaysAsync(
+        languageId: Int,
+        count: Int
+    ): Result<List<DealsOfTheDayDTO>> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.DEALS_OF_DAY_BASE_URL,
             method = "GetDealsOfTheDaysAsync",
@@ -19,7 +22,11 @@ class DealsOfTheDayRepository(
         )
     }
 
-    override suspend fun GetDealsOfTheDaysByProductCategoryListAsync(languageId: Int, productCategoryIds: List<Int>, count: Int): Result<List<DealsOfTheDayDTO>> {
+    override suspend fun GetDealsOfTheDaysByProductCategoryListAsync(
+        languageId: Int,
+        productCategoryIds: List<Int>,
+        count: Int
+    ): Result<List<DealsOfTheDayDTO>> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.B2C_BASE_URL,
             method = "DealsOfTheDay/GetDealsOfTheDaysByProductCategoryListAsync?languageId=$languageId&count=$count",
@@ -27,7 +34,12 @@ class DealsOfTheDayRepository(
         )
     }
 
-    override suspend fun GetDealsOfTheDaysByProductCategoryListPagedAsync(languageId: Int, productCategoryIds: List<Int>, page: Int, pageSize: Int): Result<PaginatedList<DealsOfTheDayDTO>> {
+    override suspend fun GetDealsOfTheDaysByProductCategoryListPagedAsync(
+        languageId: Int,
+        productCategoryIds: List<Int>,
+        page: Int,
+        pageSize: Int
+    ): Result<PaginatedList<DealsOfTheDayDTO>> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.B2C_BASE_URL,
             method = "DealsOfTheDay/GetDealsOfTheDaysByProductCategoryListPagedAsync?languageId=$languageId&page=$page&pageSize=$pageSize",

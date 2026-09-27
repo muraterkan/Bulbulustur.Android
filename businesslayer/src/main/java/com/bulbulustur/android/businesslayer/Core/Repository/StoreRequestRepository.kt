@@ -6,9 +6,13 @@ import com.bulbulustur.android.businesslayer.Core.Network.ApiClient
 import com.bulbulustur.android.businesslayer.Core.Network.ApiRoutes
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
-class StoreRequestRepository(private val apiClient: ApiClient = ApiClient) : IStoreRequestRepository {
+class StoreRequestRepository(
+    private val apiClient: ApiClient = ApiClient
+) : IStoreRequestRepository {
 
-    override suspend fun GetAccountStoreRequestStatusAsync(memberId: Int): Result<StoreRequestDTO?> {
+    override suspend fun GetAccountStoreRequestStatusAsync(
+        memberId: Int
+    ): Result<StoreRequestDTO?> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.COMMERCE_SUPPORT_BASE_URL,
             method = "Company/GetAccountStoreRequestStatusAsync",

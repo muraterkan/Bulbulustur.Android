@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -46,104 +45,68 @@ fun BbCategorySearchSelectInput(
     onSearchTextChange: (String) -> Unit = {},
     label: String,
     modifier: Modifier = Modifier,
-    placeholder: String = BBLocalization.Current.Get(key = "387bcc7b-e309-4099-8f1d-0ee062d4b7f4", fallback = ""),
+    placeholder: String = BBLocalization.Current.Get(
+        key = "387bcc7b-e309-4099-8f1d-0ee062d4b7f4",
+        fallback = ""
+    ),
     searchPlaceholder: String = "Ara...",
     helperText: String? = null,
     errorText: String? = null,
     enabled: Boolean = true,
     maximumVisibleOptionCount: Int = 50
 ) {
-    var isSheetVisible by remember {
-        mutableStateOf(false)
+    var isSheetVisible by remember { mutableStateOf(false) }
+    var searchText by remember { mutableStateOf("") }
+    var visibleOptions by remember { mutableStateOf<List<BbSelectOption>>(emptyList()) }
+
+    val selectedText = remember(options, selectedValue) {
+        options.firstOrNull { it.value == selectedValue }?.text.orEmpty()
     }
 
-    var searchText by remember {
-        mutableStateOf("")
-    }
+    LaunchedEffect(options, searchText, maximumVisibleOptionCount) {
+        visibleOptions = withContext(Dispatchers.Default) {
+            val normalizedSearch = searchText.trim()
 
-    var visibleOptions by remember {
-        mutableStateOf<List<BbSelectOption>>(emptyList())
-    }
-
-    val selectedText =
-        remember(
-            options,
-            selectedValue
-        ) {
             options
-                .firstOrNull {
-                    it.value == selectedValue
+                .asSequence()
+                .filter {
+                    normalizedSearch.isBlank() ||
+                            it.text.contains(
+                                other = normalizedSearch,
+                                ignoreCase = true
+                            )
                 }
-                ?.text
-                .orEmpty()
+                .take(maximumVisibleOptionCount.coerceAtLeast(1))
+                .toList()
         }
-
-    LaunchedEffect(
-        options,
-        searchText,
-        maximumVisibleOptionCount
-    ) {
-        visibleOptions =
-            withContext(Dispatchers.Default) {
-                val normalizedSearch =
-                    searchText.trim()
-
-                options
-                    .asSequence()
-                    .filter {
-                        normalizedSearch.isBlank() ||
-                                it.text.contains(
-                                    other = normalizedSearch,
-                                    ignoreCase = true
-                                )
-                    }
-                    .take(
-                        maximumVisibleOptionCount
-                            .coerceAtLeast(1)
-                    )
-                    .toList()
-            }
     }
 
     Box(
-        modifier =
-            modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
     ) {
         OutlinedTextField(
-            value =
-                selectedText,
-            onValueChange = {
-            },
-            modifier =
-                Modifier.fillMaxWidth(),
-            enabled =
-                enabled,
-            readOnly =
-                true,
+            value = selectedText,
+            onValueChange = {},
+            modifier = Modifier.fillMaxWidth(),
+            enabled = enabled,
+            readOnly = true,
             label = {
-                Text(
-                    text =
-                        label
-                )
+                Text(text = label)
             },
             placeholder = {
-                Text(
-                    text =
-                        placeholder
-                )
+                Text(text = placeholder)
             },
             trailingIcon = {
                 Icon(
-                    imageVector =
-                        Icons.Outlined.ArrowDropDown,
-                    contentDescription =
-                        BBLocalization.Current.Get(key = "c2a66b95-8864-4d9f-9377-8629678b4f8d", fallback = "Listeyi aç")
+                    imageVector = Icons.Outlined.ArrowDropDown,
+                    contentDescription = BBLocalization.Current.Get(
+                        key = "c2a66b95-8864-4d9f-9377-8629678b4f8d",
+                        fallback = "Listeyi aç"
+                    )
                 )
             },
-            isError =
-                errorText != null,
-            shape =
-                BBRadius.Input
+            isError = errorText != null,
+            shape = BBRadius.Input
         )
 
         if (enabled) {
@@ -161,151 +124,92 @@ fun BbCategorySearchSelectInput(
     }
 
     if (isSheetVisible) {
-        val sheetState =
-            rememberModalBottomSheetState(
-                skipPartiallyExpanded =
-                    true
-            )
+        val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
         ModalBottomSheet(
             onDismissRequest = {
-                isSheetVisible =
-                    false
-
-                searchText =
-                    ""
+                isSheetVisible = false
+                searchText = ""
             },
-            sheetState =
-                sheetState
+            sheetState = sheetState
         ) {
             Column(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            horizontal =
-                                BBSpacing.PageHorizontal,
-                            vertical =
-                                BBSpacing.Space3
-                        )
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        horizontal = BBSpacing.PageHorizontal,
+                        vertical = BBSpacing.Space3
+                    )
             ) {
                 Text(
-                    text =
-                        label,
-                    style =
-                        MaterialTheme.typography.titleLarge
+                    text = label,
+                    style = MaterialTheme.typography.titleLarge
                 )
 
-                Spacer(
-                    modifier =
-                        Modifier.height(
-                            BBSpacing.Space3
-                        )
-                )
+                Spacer(modifier = Modifier.height(BBSpacing.Space3))
 
                 OutlinedTextField(
-                    value =
-                        searchText,
+                    value = searchText,
                     onValueChange = {
                         searchText = it
                         onSearchTextChange(it)
                     },
-                    modifier =
-                        Modifier.fillMaxWidth(),
-                    singleLine =
-                        true,
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true,
                     label = {
-                        Text(
-                            text =
-                                searchPlaceholder
-                        )
+                        Text(text = searchPlaceholder)
                     },
                     leadingIcon = {
                         Icon(
-                            imageVector =
-                                Icons.Outlined.Search,
-                            contentDescription =
-                                null
+                            imageVector = Icons.Outlined.Search,
+                            contentDescription = null
                         )
                     },
-                    shape =
-                        BBRadius.Input
+                    shape = BBRadius.Input
                 )
 
-                Spacer(
-                    modifier =
-                        Modifier.height(
-                            BBSpacing.Space2
-                        )
-                )
+                Spacer(modifier = Modifier.height(BBSpacing.Space2))
 
                 Text(
-                    text =
-                        if (visibleOptions.isEmpty()) {
-                            BBLocalization.Current.Get(key = "8340c3dd-741e-4cdb-8080-b2a6f342c24e", fallback = "Sonuç bulunamadı")
-                        } else {
-                            "En fazla ${maximumVisibleOptionCount.coerceAtLeast(1)} sonuç gösteriliyor"
-                        },
-                    style =
-                        MaterialTheme.typography.labelMedium,
-                    color =
-                        MaterialTheme.colorScheme.onSurfaceVariant
+                    text = if (visibleOptions.isEmpty()) {
+                        BBLocalization.Current.Get(
+                            key = "8340c3dd-741e-4cdb-8080-b2a6f342c24e",
+                            fallback = "Sonuç bulunamadı"
+                        )
+                    } else {
+                        "En fazla ${maximumVisibleOptionCount.coerceAtLeast(1)} sonuç gösteriliyor"
+                    },
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
-                Spacer(
-                    modifier =
-                        Modifier.height(
-                            BBSpacing.Space2
-                        )
-                )
+                Spacer(modifier = Modifier.height(BBSpacing.Space2))
 
                 LazyColumn(
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .heightIn(
-                                max =
-                                    460.dp
-                            )
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(max = 460.dp)
                 ) {
                     items(
-                        items =
-                            visibleOptions,
-                        key = {
-                            it.value
-                        }
+                        items = visibleOptions,
+                        key = { it.value }
                     ) { option ->
                         ListItem(
                             headlineContent = {
-                                Text(
-                                    text =
-                                        option.text
-                                )
+                                Text(text = option.text)
                             },
-                            modifier =
-                                Modifier.clickable {
-                                    onValueChange(
-                                        option.value
-                                    )
-
-                                    searchText =
-                                        ""
-
-                                    isSheetVisible =
-                                        false
-                                }
+                            modifier = Modifier.clickable {
+                                onValueChange(option.value)
+                                searchText = ""
+                                isSheetVisible = false
+                            }
                         )
 
                         HorizontalDivider()
                     }
                 }
 
-                Spacer(
-                    modifier =
-                        Modifier.height(
-                            BBSpacing.Space6
-                        )
-                )
+                Spacer(modifier = Modifier.height(BBSpacing.Space6))
             }
         }
     }

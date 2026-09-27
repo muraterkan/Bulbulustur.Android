@@ -4,5 +4,9 @@ import com.bulbulustur.android.businesslayer.Core.DTO.ProductHomepageSpecialCont
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
 interface IProductHomepageSpecialContentRepository {
-    suspend fun GetHomepageSpecialContentsAsync(languageId: Int, count: Int = 5): Result<List<ProductHomepageSpecialContentDTO>>
+
+    suspend fun GetHomepageSpecialContentsAsync(
+        languageId: Int,
+        count: Int = 5
+    ): Result<List<ProductHomepageSpecialContentDTO>>
 }

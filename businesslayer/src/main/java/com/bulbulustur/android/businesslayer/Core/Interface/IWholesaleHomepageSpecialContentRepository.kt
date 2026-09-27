@@ -4,5 +4,9 @@ import com.bulbulustur.android.businesslayer.Core.DTO.WholesaleHomepageSpecialCo
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
 interface IWholesaleHomepageSpecialContentRepository {
-    suspend fun GetHomepageSpecialContents(languageId: Int, count: Int = 6): Result<List<WholesaleHomepageSpecialContentDTO>>
+
+    suspend fun GetHomepageSpecialContents(
+        languageId: Int,
+        count: Int = 6
+    ): Result<List<WholesaleHomepageSpecialContentDTO>>
 }

@@ -12,7 +12,11 @@ class MemberPreferenceRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IMemberPreferenceRepository {
 
-    override suspend fun GetAccountPreferencesAsync(languageId: Int, memberId: Int, count: Int): Result<List<MemberPreferenceDTO>> {
+    override suspend fun GetAccountPreferencesAsync(
+        languageId: Int,
+        memberId: Int,
+        count: Int
+    ): Result<List<MemberPreferenceDTO>> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.COMMERCE_SUPPORT_MEMBER_BASE_URL,
             method = "GetAccountPreferencesAsync",
@@ -20,7 +24,10 @@ class MemberPreferenceRepository(
         )
     }
 
-    override suspend fun InsertAccountPreferenceAsync(memberId: Int, model: MemberPreferenceInsertModel): Result<Unit> {
+    override suspend fun InsertAccountPreferenceAsync(
+        memberId: Int,
+        model: MemberPreferenceInsertModel
+    ): Result<Unit> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.COMMERCE_SUPPORT_MEMBER_BASE_URL,
             method = "InsertAccountPreferenceAsync?memberId=$memberId",
@@ -28,7 +35,10 @@ class MemberPreferenceRepository(
         )
     }
 
-    override suspend fun UpdateAccountPreferenceAsync(memberId: Int, model: MemberPreferenceUpdateModel): Result<Unit> {
+    override suspend fun UpdateAccountPreferenceAsync(
+        memberId: Int,
+        model: MemberPreferenceUpdateModel
+    ): Result<Unit> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.COMMERCE_SUPPORT_MEMBER_BASE_URL,
             method = "UpdateAccountPreferenceAsync?memberId=$memberId",

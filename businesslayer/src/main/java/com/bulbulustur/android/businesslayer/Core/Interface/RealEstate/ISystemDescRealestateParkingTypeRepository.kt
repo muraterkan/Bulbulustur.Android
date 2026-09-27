@@ -6,9 +6,22 @@ import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.RealEstate.
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
 interface ISystemDescRealestateParkingTypeRepository {
+
     suspend fun GetSystemDescRealestateParkingTypesAsync(): Result<List<SystemDescRealestateParkingTypeDTO>>
-    suspend fun GetSystemDescRealestateParkingTypeByIdAsync(systemDescRealestateParkingTypeId: Int): Result<SystemDescRealestateParkingTypeUpdateModel>
-    suspend fun InsertAsync(model: SystemDescRealestateParkingTypeInsertModel): Result<SystemDescRealestateParkingTypeInsertModel>
-    suspend fun UpdateAsync(model: SystemDescRealestateParkingTypeUpdateModel): Result<SystemDescRealestateParkingTypeUpdateModel>
-    suspend fun DeleteAsync(systemDescRealestateParkingTypeId: Int): Result<Unit>
+
+    suspend fun GetSystemDescRealestateParkingTypeByIdAsync(
+        systemDescRealestateParkingTypeId: Int
+    ): Result<SystemDescRealestateParkingTypeUpdateModel>
+
+    suspend fun InsertAsync(
+        model: SystemDescRealestateParkingTypeInsertModel
+    ): Result<SystemDescRealestateParkingTypeInsertModel>
+
+    suspend fun UpdateAsync(
+        model: SystemDescRealestateParkingTypeUpdateModel
+    ): Result<SystemDescRealestateParkingTypeUpdateModel>
+
+    suspend fun DeleteAsync(
+        systemDescRealestateParkingTypeId: Int
+    ): Result<Unit>
 }

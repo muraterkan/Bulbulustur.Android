@@ -6,9 +6,22 @@ import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.RealEstate.
 import com.bulbulustur.android.businesslayer.Core.Util.Result
 
 interface ISystemDescRealestateBalconyStatusRepository {
+
     suspend fun GetSystemDescRealestateBalconyStatussAsync(): Result<List<SystemDescRealestateBalconyStatusDTO>>
-    suspend fun GetSystemDescRealestateBalconyStatusByIdAsync(systemDescRealestateBalconyStatusId: Int): Result<SystemDescRealestateBalconyStatusUpdateModel>
-    suspend fun InsertAsync(model: SystemDescRealestateBalconyStatusInsertModel): Result<SystemDescRealestateBalconyStatusInsertModel>
-    suspend fun UpdateAsync(model: SystemDescRealestateBalconyStatusUpdateModel): Result<SystemDescRealestateBalconyStatusUpdateModel>
-    suspend fun DeleteAsync(systemDescRealestateBalconyStatusId: Int): Result<Unit>
+
+    suspend fun GetSystemDescRealestateBalconyStatusByIdAsync(
+        systemDescRealestateBalconyStatusId: Int
+    ): Result<SystemDescRealestateBalconyStatusUpdateModel>
+
+    suspend fun InsertAsync(
+        model: SystemDescRealestateBalconyStatusInsertModel
+    ): Result<SystemDescRealestateBalconyStatusInsertModel>
+
+    suspend fun UpdateAsync(
+        model: SystemDescRealestateBalconyStatusUpdateModel
+    ): Result<SystemDescRealestateBalconyStatusUpdateModel>
+
+    suspend fun DeleteAsync(
+        systemDescRealestateBalconyStatusId: Int
+    ): Result<Unit>
 }

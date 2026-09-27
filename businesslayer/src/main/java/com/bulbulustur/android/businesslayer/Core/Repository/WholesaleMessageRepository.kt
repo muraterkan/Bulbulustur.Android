@@ -11,7 +11,11 @@ class WholesaleMessageRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IWholesaleMessageRepository {
 
-    override suspend fun GetWholesaleMessagesAsync(languageId: Int, memberId: Int, count: Int): Result<List<WholesaleMessageDTO>> {
+    override suspend fun GetWholesaleMessagesAsync(
+        languageId: Int,
+        memberId: Int,
+        count: Int
+    ): Result<List<WholesaleMessageDTO>> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.B2B_MESSAGE_BASE_URL,
             method = "GetWholesaleMessagesAsync",
@@ -19,7 +23,12 @@ class WholesaleMessageRepository(
         )
     }
 
-    override suspend fun GetMessagesByThreadAsync(languageId: Int, memberId: Int, messageThreadId: Int, count: Int): Result<List<WholesaleMessageDTO>> {
+    override suspend fun GetMessagesByThreadAsync(
+        languageId: Int,
+        memberId: Int,
+        messageThreadId: Int,
+        count: Int
+    ): Result<List<WholesaleMessageDTO>> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.B2B_MESSAGE_BASE_URL,
             method = "GetMessagesByThreadAsync",
@@ -27,7 +36,11 @@ class WholesaleMessageRepository(
         )
     }
 
-    override suspend fun GetOtherUserInThreadAsync(languageId: Int, memberId: Int, messageThreadId: Int): Result<MemberDTO> {
+    override suspend fun GetOtherUserInThreadAsync(
+        languageId: Int,
+        memberId: Int,
+        messageThreadId: Int
+    ): Result<MemberDTO> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.B2B_MESSAGE_BASE_URL,
             method = "GetOtherUserInThreadAsync",
@@ -35,7 +48,9 @@ class WholesaleMessageRepository(
         )
     }
 
-    override suspend fun GetUnreadMessageCountAsync(memberId: Int): Result<Int> {
+    override suspend fun GetUnreadMessageCountAsync(
+        memberId: Int
+    ): Result<Int> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.B2B_MESSAGE_BASE_URL,
             method = "GetUnreadMessageCountAsync",
@@ -43,7 +58,10 @@ class WholesaleMessageRepository(
         )
     }
 
-    override suspend fun InsertAsync(memberId: Int, model: WholesaleMessageDTO): Result<Any?> {
+    override suspend fun InsertAsync(
+        memberId: Int,
+        model: WholesaleMessageDTO
+    ): Result<Any?> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.B2B_MESSAGE_BASE_URL,
             method = "InsertAsync",
@@ -52,7 +70,10 @@ class WholesaleMessageRepository(
         )
     }
 
-    override suspend fun ReplyAsync(memberId: Int, model: WholesaleMessageDTO): Result<Any?> {
+    override suspend fun ReplyAsync(
+        memberId: Int,
+        model: WholesaleMessageDTO
+    ): Result<Any?> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.B2B_MESSAGE_BASE_URL,
             method = "ReplyAsync",
@@ -61,7 +82,10 @@ class WholesaleMessageRepository(
         )
     }
 
-    override suspend fun MarkAsRead(memberId: Int, messageId: Int): Result<Any?> {
+    override suspend fun MarkAsRead(
+        memberId: Int,
+        messageId: Int
+    ): Result<Any?> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.B2B_MESSAGE_BASE_URL,
             method = "MarkAsRead",

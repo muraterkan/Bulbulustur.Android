@@ -20,39 +20,27 @@ class AddressDistrictRepository(
         count: Int
     ): Result<List<AddressDistrictDTO>> {
         return apiClient.GetAsync(
-            baseUrl =
-                ApiRoutes.GLOBALIZATION_BASE_URL,
-            method =
-                "AddressDistrict/GetAddressDistrictsAsync",
-            query =
-                buildString {
-                    append("countryId=$countryId")
-                    append("&countryStateId=$countryStateId")
-
-                    countryDepartmentId?.let {
-                        append("&countryDepartmentId=$it")
-                    }
-
-                    append("&cityId=$cityId")
-                    append("&count=$count")
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "AddressDistrict/GetAddressDistrictsAsync",
+            query = buildString {
+                append("countryId=$countryId")
+                append("&countryStateId=$countryStateId")
+                countryDepartmentId?.let {
+                    append("&countryDepartmentId=$it")
                 }
+                append("&cityId=$cityId")
+                append("&count=$count")
+            }
         )
     }
 
-    override suspend fun GetAddressDistrictListAsync():
-            Result<List<AddressDistrictDTO>> {
-
+    override suspend fun GetAddressDistrictListAsync(): Result<List<AddressDistrictDTO>> {
         return GetAddressDistrictsAsync(
-            countryId =
-                1,
-            countryStateId =
-                0,
-            countryDepartmentId =
-                null,
-            cityId =
-                0,
-            count =
-                100
+            countryId = 1,
+            countryStateId = 0,
+            countryDepartmentId = null,
+            cityId = 0,
+            count = 100
         )
     }
 
@@ -60,12 +48,9 @@ class AddressDistrictRepository(
         addressDistrictId: Int
     ): Result<AddressDistrictUpdateModel?> {
         return apiClient.GetAsync(
-            baseUrl =
-                ApiRoutes.GLOBALIZATION_BASE_URL,
-            method =
-                "AddressDistrict/GetAddressDistrictByIdAsync",
-            query =
-                "addressDistrictId=$addressDistrictId"
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "AddressDistrict/GetAddressDistrictByIdAsync",
+            query = "addressDistrictId=$addressDistrictId"
         )
     }
 
@@ -73,12 +58,9 @@ class AddressDistrictRepository(
         addressDistrictId: Int
     ): Result<AddressDistrictDTO?> {
         return apiClient.GetAsync(
-            baseUrl =
-                ApiRoutes.GLOBALIZATION_BASE_URL,
-            method =
-                "AddressDistrict/GetAddressDistrictByIdExtendedAsync",
-            query =
-                "addressDistrictId=$addressDistrictId"
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "AddressDistrict/GetAddressDistrictByIdExtendedAsync",
+            query = "addressDistrictId=$addressDistrictId"
         )
     }
 
@@ -86,12 +68,9 @@ class AddressDistrictRepository(
         model: AddressDistrictInsertModel
     ): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl =
-                ApiRoutes.GLOBALIZATION_BASE_URL,
-            method =
-                "AddressDistrict/AddressDistrictInsertAsync",
-            data =
-                model
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "AddressDistrict/AddressDistrictInsertAsync",
+            data = model
         )
     }
 
@@ -99,12 +78,9 @@ class AddressDistrictRepository(
         model: AddressDistrictUpdateModel
     ): Result<Unit> {
         return apiClient.PostAsync(
-            baseUrl =
-                ApiRoutes.GLOBALIZATION_BASE_URL,
-            method =
-                "AddressDistrict/AddressDistrictUpdateAsync",
-            data =
-                model
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "AddressDistrict/AddressDistrictUpdateAsync",
+            data = model
         )
     }
 
@@ -112,12 +88,9 @@ class AddressDistrictRepository(
         addressDistrictId: Int
     ): Result<Unit> {
         return apiClient.DeleteAsync(
-            baseUrl =
-                ApiRoutes.GLOBALIZATION_BASE_URL,
-            method =
-                "AddressDistrict/AddressDistrictDelete",
-            query =
-                "addressDistrictId=$addressDistrictId"
+            baseUrl = ApiRoutes.GLOBALIZATION_BASE_URL,
+            method = "AddressDistrict/AddressDistrictDelete",
+            query = "addressDistrictId=$addressDistrictId"
         )
     }
 }

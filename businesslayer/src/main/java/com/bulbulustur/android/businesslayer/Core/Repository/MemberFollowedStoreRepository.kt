@@ -11,7 +11,10 @@ class MemberFollowedStoreRepository(
     private val apiClient: ApiClient = ApiClient
 ) : IMemberFollowedStoreRepository {
 
-    override suspend fun GetAccountFollowedStores(memberId: Int, count: Int): Result<List<MemberFollowedStoreDTO>> {
+    override suspend fun GetAccountFollowedStores(
+        memberId: Int,
+        count: Int
+    ): Result<List<MemberFollowedStoreDTO>> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.COMMERCE_SUPPORT_ACCOUNT_BASE_URL,
             method = "GetAccountFollowedStores",
@@ -19,7 +22,10 @@ class MemberFollowedStoreRepository(
         )
     }
 
-    override suspend fun InsertAccountFollowedStoreAsync(memberId: Int, model: MemberFollowedStoreInsertModel): Result<Unit> {
+    override suspend fun InsertAccountFollowedStoreAsync(
+        memberId: Int,
+        model: MemberFollowedStoreInsertModel
+    ): Result<Unit> {
         return apiClient.PostAsync(
             baseUrl = ApiRoutes.COMMERCE_SUPPORT_ACCOUNT_BASE_URL,
             method = "InsertAccountFollowedStoreAsync",
@@ -28,7 +34,10 @@ class MemberFollowedStoreRepository(
         )
     }
 
-    override suspend fun DeleteAccountFollowedStoreAsync(memberId: Int, followedStoreId: Int): Result<Unit> {
+    override suspend fun DeleteAccountFollowedStoreAsync(
+        memberId: Int,
+        followedStoreId: Int
+    ): Result<Unit> {
         return apiClient.DeleteAsync(
             baseUrl = ApiRoutes.COMMERCE_SUPPORT_ACCOUNT_BASE_URL,
             method = "DeleteAccountFollowedStoreAsync",

@@ -148,9 +148,9 @@ object ApiRoutes {
     const val PURE_MEMBER_BASE_URL =
         "http://$APPLICATION_SERVER_HOST:30500/api/Member/"
 
-// -------------------------------------------------------------------------
-// Support API - 30190
-// -------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
+    // Support API - 30190
+    // -------------------------------------------------------------------------
 
     const val FAQ_BASE_URL =
         "http://$APPLICATION_SERVER_HOST:30190/api/Faq/"
@@ -192,7 +192,7 @@ object ApiRoutes {
 
     /*
      * ProductBrand/GetProductBrands biçiminde action yolu gönderen mevcut
-     * repository kullanımları için service root korunmuştur.
+     * repository kullanımları için service root korunmıştır.
      */
     const val PRODUCT_BRAND_BASE_URL =
         "http://$APPLICATION_SERVER_HOST:30210/api/"
@@ -331,10 +331,10 @@ object ApiRoutes {
     const val COMMERCE_SUPPORT_ORDER_BASE_URL =
         "http://$APPLICATION_SERVER_HOST:30185/api/Order/"
 
-    
     const val COMMERCE_SUPPORT_CONTRACT_BASE_URL =
         "http://$APPLICATION_SERVER_HOST:30185/api/Contract/"
-const val COMMERCE_SUPPORT_RETURN_BASE_URL =
+
+    const val COMMERCE_SUPPORT_RETURN_BASE_URL =
         "http://$APPLICATION_SERVER_HOST:30185/api/Return/"
 
     const val COMMERCE_SUPPORT_REVIEW_BASE_URL =

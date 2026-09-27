@@ -7,9 +7,19 @@ import com.bulbulustur.android.businesslayer.Core.Util.Result
 
 interface IMemberPreferenceRepository {
 
-    suspend fun GetAccountPreferencesAsync(languageId: Int, memberId: Int, count: Int = 100): Result<List<MemberPreferenceDTO>>
+    suspend fun GetAccountPreferencesAsync(
+        languageId: Int,
+        memberId: Int,
+        count: Int = 100
+    ): Result<List<MemberPreferenceDTO>>
 
-    suspend fun InsertAccountPreferenceAsync(memberId: Int, model: MemberPreferenceInsertModel): Result<Unit>
+    suspend fun InsertAccountPreferenceAsync(
+        memberId: Int,
+        model: MemberPreferenceInsertModel
+    ): Result<Unit>
 
-    suspend fun UpdateAccountPreferenceAsync(memberId: Int, model: MemberPreferenceUpdateModel): Result<Unit>
+    suspend fun UpdateAccountPreferenceAsync(
+        memberId: Int,
+        model: MemberPreferenceUpdateModel
+    ): Result<Unit>
 }

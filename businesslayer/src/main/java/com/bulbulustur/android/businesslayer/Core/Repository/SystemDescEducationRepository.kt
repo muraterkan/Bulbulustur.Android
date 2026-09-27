@@ -10,7 +10,10 @@ class SystemDescEducationRepository(
     private val apiClient: ApiClient = ApiClient
 ) : ISystemDescEducationRepository {
 
-    override suspend fun GetEducationsAsync(languageId: Int, count: Int): Result<List<SystemDescEducationDTO>> {
+    override suspend fun GetEducationsAsync(
+        languageId: Int,
+        count: Int
+    ): Result<List<SystemDescEducationDTO>> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.GLOBALIZATION_MASTER_DATA_BASE_URL,
             method = "GetSystemDescEducationsAsync",

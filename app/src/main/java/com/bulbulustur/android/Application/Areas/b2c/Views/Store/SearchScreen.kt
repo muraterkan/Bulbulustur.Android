@@ -85,9 +85,9 @@ fun SearchScreen(
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(
-                start = 16.dp,
+                start = BBSpacing.PageHorizontal,
                 top = 14.dp,
-                end = 16.dp,
+                end = BBSpacing.PageHorizontal,
                 bottom = 28.dp
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)

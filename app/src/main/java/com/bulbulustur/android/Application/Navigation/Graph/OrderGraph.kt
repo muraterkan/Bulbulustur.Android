@@ -26,6 +26,12 @@ import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.Checko
 import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.CheckoutScreenData
 import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.CheckoutSelectionDisplay
 import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.CheckoutSummaryScreen
+import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.CheckoutSummaryScreenData
+import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.CheckoutSummaryAddress
+import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.CheckoutSummaryCargo
+import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.CheckoutSummaryPayment
+import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.CheckoutSummaryProductItem
+import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.CheckoutSummaryTotal
 import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.OrderSuccessScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.address.CheckoutAddressCreateScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.address.CheckoutAddressEditScreen
@@ -170,7 +176,12 @@ fun NavGraphBuilder.orderGraph(
                     productTotalText = basketSummary?.SubTotal?.let { value -> "₺${String.format("%.2f", value).replace(".", ",")}" }.orEmpty(),
                     cargoTotalText = basketSummary?.ShippingCost?.let { value -> "₺${String.format("%.2f", value).replace(".", ",")}" }.orEmpty(),
                     payableTotalText = "₺${String.format("%.2f", checkoutPayableTotal).replace(".", ",")}"
-                )
+                ),
+
+                canContinue =
+                    basketSummary != null &&
+                    basketState.BasketItems.isNotEmpty() &&
+                    checkoutState.SelectedDeliveryAddressId > 0
             ),
 
             onBackClick = {
@@ -642,16 +653,188 @@ fun NavGraphBuilder.orderGraph(
     }
 
     composable(OrderRoutes.CheckoutSummary) {
+        val checkoutState =
+            checkoutController.State
+                .collectAsState()
+                .value
+
+        val basketState =
+            basketController.State
+                .collectAsState()
+                .value
+
+        val basketSummary =
+            basketState.BasketSummary
+
+        val deliveryAddress =
+            checkoutState.SelectedDeliveryAddress
+
+        LaunchedEffect(memberId) {
+            checkoutController.LoadAddresses(
+                memberId = memberId
+            )
+
+            basketController.List(
+                memberId = memberId
+            )
+
+            basketController.Summary(
+                memberId = memberId
+            )
+        }
+
+        val summaryData =
+            CheckoutSummaryScreenData(
+                address =
+                    CheckoutSummaryAddress(
+                        title =
+                            deliveryAddress
+                                ?.AddressTitle
+                                .orEmpty(),
+
+                        fullName =
+                            listOf(
+                                deliveryAddress
+                                    ?.Name
+                                    .orEmpty(),
+
+                                deliveryAddress
+                                    ?.Surname
+                                    .orEmpty()
+                            )
+                                .filter {
+                                    it.isNotBlank()
+                                }
+                                .joinToString(" "),
+
+                        fullAddress =
+                            deliveryAddress
+                                ?.Address
+                                .orEmpty()
+                    ),
+
+                cargo =
+                    CheckoutSummaryCargo(
+                        companySummaryText =
+                            basketSummary
+                                ?.ShippingCost
+                                ?.let { value ->
+                                    if (value > 0.0) {
+                                        "₺${String.format("%.2f", value).replace(".", ",")} kargo"
+                                    } else {
+                                        "Ücretsiz kargo"
+                                    }
+                                }
+                                .orEmpty(),
+
+                        deliveryEstimateText =
+                            "Kargo firması sipariş akışında belirlenir.",
+
+                        packageSummaryText =
+                            basketSummary
+                                ?.StoreShippingBreakdown
+                                ?.takeIf {
+                                    it.isNotEmpty()
+                                }
+                                ?.let { breakdown ->
+                                    "${breakdown.size} mağaza için kargo hesaplandı."
+                                }
+                                .orEmpty()
+                    ),
+
+                payment =
+                    CheckoutSummaryPayment(
+                        methodTitle =
+                            "Banka / Kredi Kartı",
+
+                        description =
+                            "Kart ile güvenli ödeme"
+                    ),
+
+                products =
+                    basketState.BasketItems
+                        .map { basket ->
+                            CheckoutSummaryProductItem(
+                                id =
+                                    basket.BasketId,
+
+                                name =
+                                    basket.ProductName,
+
+                                storeName =
+                                    basket.Store,
+
+                                variantText =
+                                    listOf(
+                                        basket.Color,
+                                        basket.Size
+                                    )
+                                        .filter {
+                                            it.isNotBlank()
+                                        }
+                                        .joinToString(" · "),
+
+                                priceText =
+                                    "${basket.CurrencySymbol.ifBlank { "₺" }}${String.format("%.2f", basket.TotalPrice).replace(".", ",")}",
+
+                                quantity =
+                                    basket.Quantity,
+
+                                imageText =
+                                    basket.ProductName
+                                        .trim()
+                                        .take(2)
+                                        .uppercase()
+                            )
+                        },
+
+                total =
+                    CheckoutSummaryTotal(
+                        productTotalText =
+                            basketSummary
+                                ?.SubTotal
+                                ?.let { value ->
+                                    "₺${String.format("%.2f", value).replace(".", ",")}"
+                                }
+                                .orEmpty(),
+
+                        cargoTotalText =
+                            basketSummary
+                                ?.ShippingCost
+                                ?.let { value ->
+                                    "₺${String.format("%.2f", value).replace(".", ",")}"
+                                }
+                                .orEmpty(),
+
+                        discountText =
+                            "",
+
+                        totalPriceText =
+                            basketSummary
+                                ?.GrossTotal
+                                ?.let { value ->
+                                    "₺${String.format("%.2f", value).replace(".", ",")}"
+                                }
+                                .orEmpty()
+                    )
+            )
+
         CheckoutSummaryScreen(
+            data =
+                summaryData,
+
             onBackClick = {
                 navigator.back()
             },
+
             onEditAddressClick = {
                 navigator.back()
             },
+
             onEditPaymentClick = {
                 navigator.back()
             },
+
             onCompleteOrderClick = {
             }
         )

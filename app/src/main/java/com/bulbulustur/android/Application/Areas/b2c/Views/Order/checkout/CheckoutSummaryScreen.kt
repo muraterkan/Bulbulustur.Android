@@ -51,15 +51,12 @@ import com.bulbulustur.android.Application.wwwroot.Theme.BbTheme
 
 @Composable
 fun CheckoutSummaryScreen(
+    data: CheckoutSummaryScreenData,
     onBackClick: () -> Unit = {},
     onEditAddressClick: () -> Unit = {},
     onEditPaymentClick: () -> Unit = {},
     onCompleteOrderClick: (CheckoutSummaryApproval) -> Unit = {}
 ) {
-    val screenData = remember {
-        getCheckoutSummaryScreenData()
-    }
-
     var distanceSalesAgreementApproved by remember {
         mutableStateOf(false)
     }
@@ -105,7 +102,7 @@ fun CheckoutSummaryScreen(
                 item {
                     CheckoutSummaryPageItem {
                         CheckoutSummaryAddressCard(
-                            address = screenData.address,
+                            address = data.address,
                             onEditAddressClick = onEditAddressClick
                         )
                     }
@@ -114,7 +111,7 @@ fun CheckoutSummaryScreen(
                 item {
                     CheckoutSummaryPageItem {
                         CheckoutSummaryCargoCard(
-                            cargo = screenData.cargo
+                            cargo = data.cargo
                         )
                     }
                 }
@@ -122,7 +119,7 @@ fun CheckoutSummaryScreen(
                 item {
                     CheckoutSummaryPageItem {
                         CheckoutSummaryPaymentCard(
-                            payment = screenData.payment,
+                            payment = data.payment,
                             onEditPaymentClick = onEditPaymentClick
                         )
                     }
@@ -135,12 +132,12 @@ fun CheckoutSummaryScreen(
                                 key = "cfb10390-aea0-4edc-bbef-486b6b1bb4ad",
                                 fallback = "Sipariş ürünleri"
                             ),
-                            description = "${screenData.products.size} ürün siparişe dahil."
+                            description = "${data.products.size} ürün siparişe dahil."
                         )
                     }
                 }
 
-                items(screenData.products) { product ->
+                items(data.products) { product ->
                     CheckoutSummaryPageItem {
                         CheckoutSummaryProductCard(
                             product = product
@@ -151,7 +148,7 @@ fun CheckoutSummaryScreen(
                 item {
                     CheckoutSummaryPageItem {
                         CheckoutSummaryTotalCard(
-                            total = screenData.total
+                            total = data.total
                         )
                     }
                 }
@@ -175,7 +172,7 @@ fun CheckoutSummaryScreen(
             }
 
             CheckoutSummaryBottomBar(
-                totalPriceText = screenData.total.totalPriceText,
+                totalPriceText = data.total.totalPriceText,
                 canCompleteOrder = canCompleteOrder,
                 onCompleteOrderClick = {
                     onCompleteOrderClick(
@@ -518,10 +515,12 @@ private fun CheckoutSummaryTotalCard(
                 value = total.cargoTotalText
             )
 
-            CheckoutSummaryTotalRow(
-                title = BBLocalization.Current.Get(key = "9dd8d854-ca26-4660-bcb3-b7ec8e3f458b", fallback = "İndirim"),
-                value = total.discountText
-            )
+            if (total.discountText.isNotBlank()) {
+                CheckoutSummaryTotalRow(
+                    title = BBLocalization.Current.Get(key = "9dd8d854-ca26-4660-bcb3-b7ec8e3f458b", fallback = "İndirim"),
+                    value = total.discountText
+                )
+            }
 
             HorizontalDivider(
                 color = MaterialTheme.colorScheme.outlineVariant
@@ -746,7 +745,7 @@ data class CheckoutSummaryApproval(
     val preliminaryInformationApproved: Boolean
 )
 
-private fun getCheckoutSummaryScreenData(): CheckoutSummaryScreenData {
+private fun getCheckoutSummaryPreviewData(): CheckoutSummaryScreenData {
     return CheckoutSummaryScreenData(
         address = CheckoutSummaryAddress(
             title = BBLocalization.Current.Get(key = "8f6d0dd3-f45d-4fce-a684-47ee00038be8", fallback = "Ev adresim"),
@@ -804,7 +803,9 @@ private fun getCheckoutSummaryScreenData(): CheckoutSummaryScreenData {
 @Composable
 private fun CheckoutSummaryScreenPreview() {
     BbTheme {
-        CheckoutSummaryScreen()
+        CheckoutSummaryScreen(
+            data = getCheckoutSummaryPreviewData()
+        )
     }
 }
 

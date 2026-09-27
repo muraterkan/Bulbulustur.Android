@@ -371,16 +371,16 @@ class CheckoutController(
             _state.update { it.copy(IsContractLoading = true, ContractErrorMessage = null) }
 
             val request = CheckoutContractRequestModel(
-                MemberId = 10000002,
-                LanguageId = 1,
-                DeliveryAddressId = 1,
-                InvoiceAddressId = 1,
-                InstallmentCount = 1
+                MemberId = memberId,
+                LanguageId = languageId,
+                DeliveryAddressId = deliveryAddressId,
+                InvoiceAddressId = invoiceAddressId,
+                InstallmentCount = safeInstallmentCount
             )
 
             Log.d(
                 "ContractDebug",
-                "FORCED REQUEST MemberId=${request.MemberId} LanguageId=${request.LanguageId} DeliveryAddressId=${request.DeliveryAddressId} InvoiceAddressId=${request.InvoiceAddressId} InstallmentCount=${request.InstallmentCount}"
+                "REQUEST MemberId=${request.MemberId} LanguageId=${request.LanguageId} DeliveryAddressId=${request.DeliveryAddressId} InvoiceAddressId=${request.InvoiceAddressId} InstallmentCount=${request.InstallmentCount}"
             )
 
             val response = executeService.PostAsync(operationType = "Checkout.Contract.Load") {

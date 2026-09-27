@@ -202,10 +202,10 @@ class BasketController(private val executeService: IExecuteService, private val 
                     else -> ApplyRequestedQuantityUpdate(currentState.BasketItems, basketId, safeQuantity)
                 }
 
-                currentState.copy(IsLoading = false, QuantityUpdateResult = response, BasketListResult = if (response.Success) Result(Success = true, Data = updatedItems) else currentState.BasketListResult, BasketSummaryResult = if (response.Success && responseData != null) Result(Success = true, Data = responseData.Summary) else currentState.BasketSummaryResult, ErrorMessage = response.Message.takeIf { !response.Success })
+                currentState.copy(IsLoading = false, QuantityUpdateResult = response, BasketListResult = if (response.Success) Result(Success = true, Data = updatedItems) else currentState.BasketListResult, BasketSummaryResult = currentState.BasketSummaryResult, ErrorMessage = response.Message.takeIf { !response.Success })
             }
 
-            if (response.Success && responseData == null) {
+            if (response.Success) {
                 Summary(memberId = memberId)
             }
         }

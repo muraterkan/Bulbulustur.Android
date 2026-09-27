@@ -64,8 +64,7 @@ fun NavGraphBuilder.orderGraph(
 
         val basketState =
             basketController.State
-                .collectAsState()
-                .value
+                .collectAsState() .value
 
         var selectedInstallmentCount by remember { mutableIntStateOf(1) }
 

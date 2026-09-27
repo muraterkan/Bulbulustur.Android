@@ -1,5 +1,9 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Category
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItems
+
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -156,14 +160,14 @@ fun CategoryLevel2Screen(
                 .padding(innerPadding)
                 .navigationBarsPadding(),
             contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
+                start = BBSpacing.None,
                 top = BBSpacing.PageTopCompact,
-                end = BBSpacing.PageHorizontal,
+                end = BBSpacing.None,
                 bottom = BBSpacing.PageBottom
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.SectionGapCompact)
         ) {
-            item {
+            bbPageItem {
                 CategoryDetailHero(
                     categoryId = categoryId,
                     categoryInfo = categoryInfo,
@@ -177,11 +181,11 @@ fun CategoryLevel2Screen(
             }
 
             if (validChildCategories.isNotEmpty()) {
-                item {
+                bbPageItem {
                     CategorySubCategorySectionHeader()
                 }
 
-                items(
+                bbPageItems(
                     items = validChildCategories,
                     key = { it.ProductCategoryId }
                 ) { category ->

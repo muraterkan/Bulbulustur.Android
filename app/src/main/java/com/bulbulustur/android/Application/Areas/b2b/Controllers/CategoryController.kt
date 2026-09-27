@@ -29,7 +29,6 @@ data class CategoryControllerState(
     val IsCategoryContentListLoading: Boolean = false,
     val IsCategorySliderLoading: Boolean = false,
     val IsCategorySuppliersLoading: Boolean = false,
-
     val CurrentAction: String? = null,
     val ErrorMessage: String? = null,
     val CategoryContentsErrorMessage: String? = null,
@@ -37,12 +36,10 @@ data class CategoryControllerState(
     val CategoryContentListErrorMessage: String? = null,
     val CategorySliderErrorMessage: String? = null,
     val CategorySuppliersErrorMessage: String? = null,
-
     val CategoryResult: Result<ProductCategoryDTO?>? = null,
     val CategoryListResult: Result<List<ProductCategoryDTO>>? = null,
     val CachedCategories: List<ProductCategoryDTO> = emptyList(),
     val ChildCategoryListResult: Result<List<ProductCategoryDTO>>? = null,
-
     val WholesaleProductCategoryContentsResult: Result<WholesaleProductCategoryContentDTO>? = null,
     val WholesaleProductCategoryContentListResult: Result<PaginatedList<WholesaleProductCategoryContentDTO>>? = null,
     val SpecialContentsResult: Result<List<WholesaleHomepageSpecialContentDTO>>? = null,
@@ -63,8 +60,7 @@ data class CategoryControllerState(
     val CategoryContents
         get() = WholesaleProductCategoryContentsResult
             ?.Data
-            ?.Groups
-            .orEmpty()
+            ?.Groups .orEmpty()
 
     val SpecialContents: List<WholesaleHomepageSpecialContentDTO>
         get() = SpecialContentsResult?.Data.orEmpty()

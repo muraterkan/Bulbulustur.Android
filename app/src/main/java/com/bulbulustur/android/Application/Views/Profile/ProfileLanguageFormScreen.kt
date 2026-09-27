@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Profile
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import com.bulbulustur.android.Application.Localization.BBLocalization
 
 import com.bulbulustur.android.Application.Views.Profile.Components.BbProfileHeroCard
@@ -99,7 +101,7 @@ fun ProfileLanguageFormScreen(
                 onBackClick = onBackClick
             )
         },
-        
+
         bottomBar = {
             BbProfileStickySaveBar(
                 text = BBLocalization.Current.Get(key = "0f22cd2d-a7c6-4a2b-bf8d-657e9dc0800b", fallback = "Dili Kaydet"),
@@ -108,7 +110,7 @@ fun ProfileLanguageFormScreen(
                 onClick = onSaveClick
             )
         }
-    
+
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
@@ -116,14 +118,14 @@ fun ProfileLanguageFormScreen(
                 .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding),
             contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
+                start = BBSpacing.None,
                 top = BBSpacing.PageTopCompact,
-                end = BBSpacing.PageHorizontal,
+                end = BBSpacing.None,
                 bottom = BBSpacing.PageBottomWithCta
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
-            item {
+            bbPageItem {
                 BbCard(
                     modifier = Modifier.fillMaxWidth(),
                     variant = BbCardVariant.Outlined,
@@ -155,7 +157,7 @@ fun ProfileLanguageFormScreen(
                 }
             }
 
-            item {
+            bbPageItem {
                 BbCard(
                     modifier = Modifier.fillMaxWidth(),
                     variant = BbCardVariant.Outlined,
@@ -191,7 +193,7 @@ fun ProfileLanguageFormScreen(
             }
 
             if (!errorMessage.isNullOrBlank()) {
-                item {
+                bbPageItem {
                     BbCard(
                         modifier = Modifier.fillMaxWidth(),
                         variant = BbCardVariant.Outlined,
@@ -207,7 +209,7 @@ fun ProfileLanguageFormScreen(
             }
 
             if (!isLoading && languages.isEmpty()) {
-                item {
+                bbPageItem {
                     BbCard(
                         modifier = Modifier.fillMaxWidth(),
                         variant = BbCardVariant.Outlined,
@@ -223,7 +225,7 @@ fun ProfileLanguageFormScreen(
             }
 
             if (!isLoading && languageLevels.isEmpty()) {
-                item {
+                bbPageItem {
                     BbCard(
                         modifier = Modifier.fillMaxWidth(),
                         variant = BbCardVariant.Outlined,

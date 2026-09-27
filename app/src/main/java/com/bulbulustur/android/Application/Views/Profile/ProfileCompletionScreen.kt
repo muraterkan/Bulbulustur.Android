@@ -1,5 +1,9 @@
 package com.bulbulustur.android.Application.Views.Profile
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItems
+
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import com.bulbulustur.android.Application.Localization.BBLocalization
 
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbCard
@@ -61,12 +65,12 @@ fun ProfileCompletionScreen(
                 .fillMaxSize()
                 .padding(innerPadding),
             contentPadding = androidx.compose.foundation.layout.PaddingValues(
-                horizontal = BBSpacing.PageHorizontal,
+                horizontal = BBSpacing.None,
                 vertical = BBSpacing.PageTop
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
-            item {
+            bbPageItem {
                 BbCard(
                     modifier = Modifier.fillMaxWidth(),
                     variant = BbCardVariant.Outlined,
@@ -104,7 +108,7 @@ fun ProfileCompletionScreen(
             }
 
             if (isLoading) {
-                item {
+                bbPageItem {
                     BbCard(
                         modifier = Modifier.fillMaxWidth(),
                         variant = BbCardVariant.Outlined,
@@ -120,7 +124,7 @@ fun ProfileCompletionScreen(
             }
 
             if (!errorMessage.isNullOrBlank()) {
-                item {
+                bbPageItem {
                     BbCard(
                         modifier = Modifier.fillMaxWidth(),
                         variant = BbCardVariant.Outlined,
@@ -135,7 +139,7 @@ fun ProfileCompletionScreen(
                 }
             }
 
-            item {
+            bbPageItem {
                 Text(
                     text = BBLocalization.Current.Get(key = "589265c1-b3c1-4f48-ab37-47bce366de11", fallback = "Profil bilgileri"),
                     style = BbTypography.titleMedium,
@@ -144,7 +148,7 @@ fun ProfileCompletionScreen(
                 )
             }
 
-            items(
+            bbPageItems(
                 items = items,
                 key = { it.Title }
             ) { item ->

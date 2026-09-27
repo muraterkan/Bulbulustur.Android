@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2b.Views.Product
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
@@ -104,18 +106,18 @@ fun LastPriceRequestScreen(
                 .fillMaxSize()
                 .padding(innerPadding),
             contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
+                start = BBSpacing.None,
                 top = BBSpacing.PageTopCompact,
-                end = BBSpacing.PageHorizontal,
+                end = BBSpacing.None,
                 bottom = BBSpacing.PageBottom
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
-            item {
+            bbPageItem {
                 LastPriceRequestHeader(productName = productName)
             }
 
-            item {
+            bbPageItem {
                 LastPriceProductSummaryCard(
                     productId = productId,
                     productName = productName,
@@ -124,7 +126,7 @@ fun LastPriceRequestScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 BbSectionHeader(
                     title = BBLocalization.Current.Get(
                         key = "c179b226-774a-4b79-bcc5-5b4fbb580ae6",
@@ -137,7 +139,7 @@ fun LastPriceRequestScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
@@ -175,7 +177,7 @@ fun LastPriceRequestScreen(
                 }
             }
 
-            item {
+            bbPageItem {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
@@ -213,7 +215,7 @@ fun LastPriceRequestScreen(
                 }
             }
 
-            item {
+            bbPageItem {
                 LastPriceTextField(
                     value = deliveryTarget.value,
                     onValueChange = { deliveryTarget.value = it },
@@ -230,7 +232,7 @@ fun LastPriceRequestScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 LastPriceLongTextField(
                     value = detail.value,
                     onValueChange = { detail.value = it },
@@ -245,17 +247,17 @@ fun LastPriceRequestScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 LastPriceSuggestionChips(
                     onSuggestionClick = { detail.value = it }
                 )
             }
 
-            item {
+            bbPageItem {
                 LastPriceHintCard()
             }
 
-            item {
+            bbPageItem {
                 LastPriceSendCard(
                     onSendClick = {
                         onSendClick(
@@ -270,7 +272,7 @@ fun LastPriceRequestScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 Spacer(modifier = Modifier.height(BBSpacing.Space4))
             }
         }

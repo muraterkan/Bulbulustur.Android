@@ -1,5 +1,9 @@
 package com.bulbulustur.android.Application.Views.Profile
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItems
+
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import com.bulbulustur.android.Application.Localization.BBLocalization
 
 import androidx.compose.foundation.background
@@ -86,14 +90,14 @@ fun ProfileLanguageListScreen(
                 .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding),
             contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
+                start = BBSpacing.None,
                 top = BBSpacing.PageTopCompact,
-                end = BBSpacing.PageHorizontal,
+                end = BBSpacing.None,
                 bottom = BBSpacing.PageBottom
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
-            item {
+            bbPageItem {
                 BbCard(
                     modifier = Modifier.fillMaxWidth(),
                     variant = BbCardVariant.Outlined,
@@ -134,7 +138,7 @@ fun ProfileLanguageListScreen(
 
             when {
                 isLoading && languages.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -149,7 +153,7 @@ fun ProfileLanguageListScreen(
                 }
 
                 !errorMessage.isNullOrBlank() -> {
-                    item {
+                    bbPageItem {
                         BbCard(
                             modifier = Modifier.fillMaxWidth(),
                             variant = BbCardVariant.Outlined,
@@ -165,7 +169,7 @@ fun ProfileLanguageListScreen(
                 }
 
                 languages.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         BbCard(
                             modifier = Modifier.fillMaxWidth(),
                             variant = BbCardVariant.Outlined,
@@ -201,7 +205,7 @@ fun ProfileLanguageListScreen(
                 }
 
                 else -> {
-                    items(
+                    bbPageItems(
                         items = languages,
                         key = { it.MemberLanguageId }
                     ) { language ->

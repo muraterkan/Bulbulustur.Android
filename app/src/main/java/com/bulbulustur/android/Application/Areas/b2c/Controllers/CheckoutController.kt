@@ -1,6 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Controllers
 
 import android.util.Log
+import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.payment.CheckoutCardEntryModel
 import androidx.lifecycle.viewModelScope
 import com.bulbulustur.android.businesslayer.Core.DTO.CheckoutContractDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.MemberAddressDTO
@@ -35,6 +36,8 @@ data class CheckoutControllerState(
     val IsContractLoading: Boolean = false,
     val ContractErrorMessage: String? = null,
 
+    val PaymentCard: CheckoutCardEntryModel? = null,
+    val InstallmentCount: Int = 1,
 
     val ErrorMessage: String? = null
 ) {
@@ -353,6 +356,34 @@ class CheckoutController(
             }
         }
     }
+    fun SelectPaymentCard(card: CheckoutCardEntryModel) {
+        if (!card.isComplete) return
+
+        _state.update {
+            it.copy(
+                PaymentCard = card,
+                ErrorMessage = null
+            )
+        }
+    }
+
+    fun SelectInstallment(installmentCount: Int) {
+        _state.update {
+            it.copy(
+                InstallmentCount = installmentCount.coerceAtLeast(1)
+            )
+        }
+    }
+
+    fun ClearPaymentCard() {
+        _state.update {
+            it.copy(
+                PaymentCard = null,
+                InstallmentCount = 1
+            )
+        }
+    }
+
     fun LoadContracts(memberId: Int, languageId: Int, deliveryAddressId: Int, invoiceAddressId: Int, installmentCount: Int) {
         if (memberId <= 0 || deliveryAddressId <= 0 || invoiceAddressId <= 0) {
             _state.update {

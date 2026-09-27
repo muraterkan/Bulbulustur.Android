@@ -84,15 +84,22 @@ fun BasketScreen(State: BasketControllerState = BasketControllerState(), favorit
     val basketItems = State.BasketItems
     val basketLines = remember(basketItems) { basketItems.map { basket -> basket.ToBasketLineItem() } }
     val storeGroups = remember(basketLines) { basketLines.ToBasketStoreGroups() }
-    val productTotal = basketLines.sumOf { line -> line.priceValue * line.quantity }
-    val cargoTotal = storeGroups.sumOf { storeGroup -> storeGroup.lines.firstOrNull()?.cargoPriceValue ?: 0.0 }
-    val lineDiscountTotal = basketLines.sumOf { line -> line.discountValue * line.quantity }
+
+    val basketSummary = State.BasketSummary
+
+    val productTotal = basketSummary?.SubTotal ?: 0.0
+    val cargoTotal = basketSummary?.ShippingCost ?: 0.0
+    val payableTotal = basketSummary?.GrossTotal ?: 0.0
+
     val selectedCoupon = State.SelectedCoupon
     val appliedCoupon = selectedCoupon?.takeIf { coupon -> coupon.IsUsableForBasket(productTotal) }
-    val preCouponTotal = (productTotal + cargoTotal - lineDiscountTotal).coerceAtLeast(0.0)
-    val couponDiscount = appliedCoupon?.Amount?.coerceAtLeast(0.0)?.coerceAtMost(preCouponTotal) ?: 0.0
-    val payableTotal = (preCouponTotal - couponDiscount).coerceAtLeast(0.0)
-    val usableCouponCount = remember(State.Coupons, productTotal) { State.Coupons.count { coupon -> coupon.IsUsableForBasket(productTotal) } }
+
+    val usableCouponCount =
+        remember(State.Coupons, productTotal) {
+            State.Coupons.count { coupon ->
+                coupon.IsUsableForBasket(productTotal)
+            }
+        }
 
     var showCouponSheet by rememberSaveable { mutableStateOf(false) }
     var showOrderSummary by rememberSaveable { mutableStateOf(false) }
@@ -179,15 +186,53 @@ fun BasketScreen(State: BasketControllerState = BasketControllerState(), favorit
                 Column(modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth()) {
                     if (showOrderSummary) {
                         BasketOrderSummaryOverlay(
-                            productTotalText = formatPrice(productTotal),
-                            cargoTotalText = formatPrice(cargoTotal),
-                            discountTotalText = lineDiscountTotal.takeIf { it > 0.0 }?.let { "-${formatPrice(it)}" }.orEmpty(),
-                            couponTotalText = couponDiscount.takeIf { it > 0.0 }?.let { "-${formatPrice(it)}" }.orEmpty(),
-                            payableTotalText = formatPrice(payableTotal)
+                            productTotalText =
+                                basketSummary
+                                    ?.SubTotal
+                                    ?.let(::formatPrice)
+                                    .orEmpty(),
+
+                            cargoTotalText =
+                                basketSummary
+                                    ?.ShippingCost
+                                    ?.let(::formatPrice)
+                                    .orEmpty(),
+
+                            discountTotalText =
+                                "",
+
+                            couponTotalText =
+                                "",
+
+                            payableTotalText =
+                                basketSummary
+                                    ?.GrossTotal
+                                    ?.let(::formatPrice)
+                                    .orEmpty()
                         )
                     }
 
-                    BasketCheckoutBar(payableTotalText = formatPrice(payableTotal), summaryExpanded = showOrderSummary, onSummaryClick = { showOrderSummary = !showOrderSummary }, onCheckoutClick = { onCheckoutClick(basketItems) })
+                    BasketCheckoutBar(
+                        payableTotalText =
+                            basketSummary
+                                ?.GrossTotal
+                                ?.let(::formatPrice)
+                                .orEmpty(),
+
+                        summaryExpanded =
+                            showOrderSummary,
+
+                        onSummaryClick = {
+                            showOrderSummary =
+                                !showOrderSummary
+                        },
+
+                        onCheckoutClick = {
+                            onCheckoutClick(
+                                basketItems
+                            )
+                        }
+                    )
                 }
             }
         }

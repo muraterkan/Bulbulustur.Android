@@ -33,6 +33,8 @@ import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.Checko
 import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.CheckoutSummaryProductItem
 import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.CheckoutSummaryTotal
 import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.OrderSuccessScreen
+import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.payment.CheckoutPaymentCardUiModel
+import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.payment.CheckoutInstallmentUiModel
 import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.address.CheckoutAddressCreateScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.address.CheckoutAddressEditScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.address.CheckoutAddressListScreen
@@ -172,6 +174,30 @@ fun NavGraphBuilder.orderGraph(
                 distanceSellingHtml = checkoutState.DistanceSellingHtml,
                 isContractLoading = checkoutState.IsContractLoading,
 
+                paymentCardUi =
+                    checkoutState.PaymentCard
+                        ?.let { card ->
+                            CheckoutPaymentCardUiModel(
+                                bankName = "Kart",
+                                cardAlias = card.cardHolderName,
+                                maskedNumber = card.maskedNumber,
+                                cardBrand = "CARD"
+                            )
+                        },
+
+                paymentInstallmentsUi =
+                    listOf(
+                        CheckoutInstallmentUiModel(
+                            installmentCount = 1,
+                            title = "Tek Çekim",
+                            monthlyAmountText =
+                                "₺${String.format("%.2f", checkoutPayableTotal).replace(".", ",")}",
+                            totalAmountText =
+                                "₺${String.format("%.2f", checkoutPayableTotal).replace(".", ",")}",
+                            isSelected = true
+                        )
+                    ),
+
                 summary = CheckoutPriceSummary(
                     productTotalText = basketSummary?.SubTotal?.let { value -> "₺${String.format("%.2f", value).replace(".", ",")}" }.orEmpty(),
                     cargoTotalText = basketSummary?.ShippingCost?.let { value -> "₺${String.format("%.2f", value).replace(".", ",")}" }.orEmpty(),
@@ -181,7 +207,8 @@ fun NavGraphBuilder.orderGraph(
                 canContinue =
                     basketSummary != null &&
                     basketState.BasketItems.isNotEmpty() &&
-                    checkoutState.SelectedDeliveryAddressId > 0
+                    checkoutState.SelectedDeliveryAddressId > 0 &&
+                    checkoutState.PaymentCard?.isComplete == true
             ),
 
             onBackClick = {
@@ -225,7 +252,18 @@ fun NavGraphBuilder.orderGraph(
             },
 
             onPaymentInstallmentSelected = { installmentCount ->
-                selectedInstallmentCount = installmentCount.coerceAtLeast(1)
+                selectedInstallmentCount =
+                    installmentCount.coerceAtLeast(1)
+
+                checkoutController.SelectInstallment(
+                    installmentCount
+                )
+            },
+
+            onPaymentCardEntryChange = { card ->
+                checkoutController.SelectPaymentCard(
+                    card
+                )
             },
 
             onPreInformationClick = {
@@ -748,7 +786,12 @@ fun NavGraphBuilder.orderGraph(
                             "Banka / Kredi Kartı",
 
                         description =
-                            "Kart ile güvenli ödeme"
+                            checkoutState.PaymentCard
+                                ?.maskedNumber
+                                ?.takeIf {
+                                    it.isNotBlank()
+                                }
+                                ?: "Kart bilgisi girilmedi"
                     ),
 
                 products =

@@ -73,9 +73,9 @@ import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.BbC
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.BbCommerceCouponSheet
 import com.bulbulustur.android.Application.Areas.b2c.Views.Shared.Components.BbCommerceOrderSummaryOverlay
 import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.payment.CheckoutCardEntryScreen
+import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.payment.CheckoutCardEntryModel
 import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.payment.CheckoutInstallmentUiModel
 import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.payment.CheckoutPaymentCardUiModel
-import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.payment.CheckoutPaymentMockData
 import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
@@ -133,6 +133,7 @@ fun CheckoutScreen(
     onInstallmentClick: () -> Unit = {},
     onInstallmentSelected: (CheckoutSelectionDisplay) -> Unit = {},
     onPaymentInstallmentSelected: (Int) -> Unit = {},
+    onPaymentCardEntryChange: (CheckoutCardEntryModel) -> Unit = {},
 
     onCouponClick: () -> Unit = {},
     onCouponSelected: (MemberCouponDTO) -> Unit = {},
@@ -176,11 +177,23 @@ var termsAccepted by rememberSaveable {
         mutableStateOf<CheckoutSelectionSheetType?>(null)
     }
 
-    var selectedPaymentInstallmentUi by remember(data.paymentInstallmentsUi) { mutableStateOf<CheckoutInstallmentUiModel?>(data.paymentInstallmentsUi.firstOrNull { it.isSelected } ?: data.paymentInstallmentsUi.firstOrNull()) }
+    var selectedPaymentInstallmentUi by remember(data.paymentInstallmentsUi) {
+        mutableStateOf<CheckoutInstallmentUiModel?>(
+            data.paymentInstallmentsUi.firstOrNull { it.isSelected }
+                ?: data.paymentInstallmentsUi.firstOrNull()
+        )
+    }
 
-    var paymentCardsUi by remember { mutableStateOf(CheckoutPaymentMockData.cards) }
-    var selectedPaymentCardUi by remember { mutableStateOf<CheckoutPaymentCardUiModel?>(CheckoutPaymentMockData.card) }
-    var showNewCardScreen by remember { mutableStateOf(false) }
+    var selectedPaymentCardUi by remember(data.paymentCardUi) {
+        mutableStateOf(data.paymentCardUi)
+    }
+
+    val paymentCardsUi =
+        listOfNotNull(selectedPaymentCardUi)
+
+    var showNewCardScreen by remember {
+        mutableStateOf(false)
+    }
 
     var corporateInvoiceCompanyName by rememberSaveable { mutableStateOf("") }
 
@@ -197,10 +210,24 @@ var termsAccepted by rememberSaveable {
                 showNewCardScreen = false
             },
 
-            onContinueClick = { newCard ->
-                paymentCardsUi = paymentCardsUi + newCard
-                selectedPaymentCardUi = newCard
-                showNewCardScreen = false
+            onContinueClick = { cardEntry ->
+                val cardUi =
+                    CheckoutPaymentCardUiModel(
+                        bankName = "Kart",
+                        cardAlias = cardEntry.cardHolderName,
+                        maskedNumber = cardEntry.maskedNumber,
+                        cardBrand = "CARD"
+                    )
+
+                selectedPaymentCardUi =
+                    cardUi
+
+                onPaymentCardEntryChange(
+                    cardEntry
+                )
+
+                showNewCardScreen =
+                    false
             }
         )
 
@@ -4127,8 +4154,8 @@ data class CheckoutScreenData(
 val cardOptions: List<CheckoutSelectionDisplay> =
         emptyList(),
 
-    val paymentCardUi: CheckoutPaymentCardUiModel? = CheckoutPaymentMockData.card,
-    val paymentInstallmentsUi: List<CheckoutInstallmentUiModel> = CheckoutPaymentMockData.installments,
+    val paymentCardUi: CheckoutPaymentCardUiModel? = null,
+    val paymentInstallmentsUi: List<CheckoutInstallmentUiModel> = emptyList(),
 
 
     val installment: CheckoutSelectionDisplay? = null,

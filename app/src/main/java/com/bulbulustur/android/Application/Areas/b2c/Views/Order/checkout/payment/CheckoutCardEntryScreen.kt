@@ -15,7 +15,7 @@ import com.bulbulustur.android.Application.wwwroot.DesignTokens.*
 @Composable
 fun CheckoutCardEntryScreen(
     onBackClick: () -> Unit,
-    onContinueClick: (CheckoutPaymentCardUiModel) -> Unit
+    onContinueClick: (CheckoutCardEntryModel) -> Unit
 ) {
     var cardNumber by remember { mutableStateOf("") }
     var expiry by remember { mutableStateOf("") }
@@ -96,11 +96,12 @@ fun CheckoutCardEntryScreen(
             modifier = Modifier.fillMaxWidth().padding(BBSpacing.PageHorizontal),
             onClick = {
                 onContinueClick(
-                    CheckoutPaymentCardUiModel(
-                        bankName = "Yeni Kart",
-                        cardAlias = name,
-                        maskedNumber = "**** **** **** ${digits.takeLast(4)}",
-                        cardBrand = "CARD"
+                    CheckoutCardEntryModel(
+                        cardNumber = digits,
+                        expiry = expiry,
+                        cvc = cvc,
+                        cardHolderName = name,
+                        storeCard = storeCard
                     )
                 )
             }

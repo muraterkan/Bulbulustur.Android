@@ -84,13 +84,13 @@ fun ProfileNumberValueScreen(
             )
         },
         bottomBar = {
-            
+
         BbProfileStickySaveBar(
                 enabled = isValid && !isLoading,
                 isSaving = isLoading,
                 onClick = onSaveClick
             )
-    
+
         }
     ) { innerPadding ->
         Column(
@@ -99,17 +99,24 @@ fun ProfileNumberValueScreen(
                 .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding)
                 .padding(
-                    horizontal = BBSpacing.PageHorizontal,
+                    horizontal = BBSpacing.None,
                     vertical = BBSpacing.PageTopCompact
                 ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
-            
+        // BB_PAGE_HORIZONTAL_SECTION
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = BBSpacing.PageHorizontal),
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
+        ) {
+
         BbProfileHeroCard(
                 title = " Bilginizi Seçin",
                 description = description
             )
-    
+
 
             ProfileMeasurementPickerCard(
                 selectedValue = selectedValue,
@@ -138,7 +145,9 @@ fun ProfileNumberValueScreen(
             Spacer(
                 modifier = Modifier.height(BBSpacing.Space4)
             )
+
         }
+}
     }
 }
 

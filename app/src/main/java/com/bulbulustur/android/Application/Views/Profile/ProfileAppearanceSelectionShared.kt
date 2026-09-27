@@ -55,7 +55,7 @@ fun ProfileAppearanceSelectionScreen(
 ) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
-        
+
         topBar = {
             BbInnerPageHeader(
                 title = title,
@@ -76,17 +76,24 @@ fun ProfileAppearanceSelectionScreen(
                 .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding)
                 .padding(
-                    horizontal = BBSpacing.PageHorizontal,
+                    horizontal = BBSpacing.None,
                     vertical = BBSpacing.PageTopCompact
                 ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
-            
+        // BB_PAGE_HORIZONTAL_SECTION
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = BBSpacing.PageHorizontal),
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
+        ) {
+
         BbProfileHeroCard(
                 title = " Bilginizi Seçin",
                 description = description
             )
-    
+
 
             when {
                 isLoading -> {
@@ -137,7 +144,7 @@ fun ProfileAppearanceSelectionScreen(
                         ) { option ->
                             BbCard(
                                 modifier = Modifier
-                                    
+
         .fillMaxWidth()
                                     .profileClickable {
                                         onSelected(option.Id)
@@ -174,11 +181,13 @@ fun ProfileAppearanceSelectionScreen(
                         }
                     }
 
-                    
-    
+
+
                 }
             }
+
         }
+}
     }
 }
 

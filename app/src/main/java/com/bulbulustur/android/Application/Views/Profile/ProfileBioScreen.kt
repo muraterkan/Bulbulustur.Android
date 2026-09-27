@@ -70,7 +70,7 @@ fun ProfileBioScreen(
                 onBackClick = onBackClick
             )
         },
-        
+
         bottomBar = {
             BbProfileStickySaveBar(
                 enabled = canSave,
@@ -78,7 +78,7 @@ fun ProfileBioScreen(
                 onClick = onSaveClick
             )
         }
-    
+
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -87,11 +87,18 @@ fun ProfileBioScreen(
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
                 .padding(
-                    start = BBSpacing.PageHorizontal,
+                    start = BBSpacing.None,
                     top = BBSpacing.PageTopCompact,
-                    end = BBSpacing.PageHorizontal,
+                    end = BBSpacing.None,
                     bottom = BBSpacing.PageBottomWithCta
                 ),
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
+        ) {
+        // BB_PAGE_HORIZONTAL_SECTION
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = BBSpacing.PageHorizontal),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
             Text(
@@ -184,6 +191,8 @@ fun ProfileBioScreen(
                 style = BbTypography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
+
         }
+}
     }
 }

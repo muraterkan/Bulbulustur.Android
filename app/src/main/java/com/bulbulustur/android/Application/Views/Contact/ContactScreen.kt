@@ -53,7 +53,10 @@ fun ContactScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(BBSpacing.md),
+            .padding(
+                horizontal = BBSpacing.PageHorizontal,
+                vertical = BBSpacing.md
+            ),
         verticalArrangement = Arrangement.spacedBy(BBSpacing.md)
     ) {
         item {

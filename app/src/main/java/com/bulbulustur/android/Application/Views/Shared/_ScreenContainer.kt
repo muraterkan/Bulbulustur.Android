@@ -25,7 +25,7 @@ fun BbScreenContainer(
     modifier: Modifier = Modifier,
     width: BbScreenContainerWidth = BbScreenContainerWidth.Default,
     paddingValues: PaddingValues = PaddingValues(
-        horizontal = BBSpacing.PageHorizontal
+        BBSpacing.None
     ),
     contentAlignment: Alignment = Alignment.TopStart,
     content: @Composable BoxScope.() -> Unit

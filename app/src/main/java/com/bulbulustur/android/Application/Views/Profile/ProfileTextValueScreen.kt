@@ -38,7 +38,7 @@ fun ProfileTextValueScreen(
 ) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
-        
+
         topBar = {
             BbInnerPageHeader(
                 title = title,
@@ -59,17 +59,24 @@ fun ProfileTextValueScreen(
                 .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding)
                 .padding(
-                    horizontal = BBSpacing.PageHorizontal,
+                    horizontal = BBSpacing.None,
                     vertical = BBSpacing.PageTopCompact
                 ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
-            
+        // BB_PAGE_HORIZONTAL_SECTION
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = BBSpacing.PageHorizontal),
+            verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
+        ) {
+
         BbProfileHeroCard(
                 title = " Bilgisi",
                 description = description
             )
-    
+
 
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
@@ -90,6 +97,8 @@ fun ProfileTextValueScreen(
                 )
             }
 
+
         }
+}
     }
 }

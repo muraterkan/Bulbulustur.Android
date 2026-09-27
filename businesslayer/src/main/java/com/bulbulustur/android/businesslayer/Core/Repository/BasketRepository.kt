@@ -38,8 +38,8 @@ class BasketRepository(
         }
 
         val cargoQuoteResult = apiClient.GetRawAsync<GatewayCargoQuoteResponse>(
-            baseUrl = ApiRoutes.PAYMENT_BASE_URL,
-            method = "cargo/quote/$memberId"
+            baseUrl = ApiRoutes.COMMERCE_SUPPORT_BASE_URL,
+            method = "Shipment/quote/$memberId"
         )
 
         if (!cargoQuoteResult.Success || cargoQuoteResult.Data == null)

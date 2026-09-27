@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -77,22 +78,39 @@ fun LanguageSettingsScreen(
 
             if (isLoading && languages.isEmpty()) {
                 item {
-                    SettingsLoadingCard(BBLocalization.Current.Get(key = "4cb87a4e-27ee-4945-95dc-31c9c14b8986", fallback = "Diller yükleniyor..."))
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = BBSpacing.PageHorizontal)
+                    ) {
+                        SettingsLoadingCard(
+                            BBLocalization.Current.Get(
+                                key = "4cb87a4e-27ee-4945-95dc-31c9c14b8986",
+                                fallback = "Diller yükleniyor..."
+                            )
+                        )
+                    }
                 }
             } else {
                 items(
                     items = visibleLanguages,
                     key = { it.id }
                 ) { language ->
-                    LanguageRow(
-                        item = language,
-                        isSelected = language.id == selectedLanguageId,
-                        onClick = {
-                            if (language.id != selectedLanguageId) {
-                                onLanguageSelected(language.id, language.code)
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = BBSpacing.PageHorizontal)
+                    ) {
+                        LanguageRow(
+                            item = language,
+                            isSelected = language.id == selectedLanguageId,
+                            onClick = {
+                                if (language.id != selectedLanguageId) {
+                                    onLanguageSelected(language.id, language.code)
+                                }
                             }
-                        }
-                    )
+                        )
+                    }
                 }
             }
         }

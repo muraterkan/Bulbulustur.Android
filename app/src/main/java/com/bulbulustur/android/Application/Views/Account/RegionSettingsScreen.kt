@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -78,17 +79,32 @@ fun RegionSettingsScreen(
             when {
                 isLoading && countries.isEmpty() -> {
                     item {
-                        RegionLoadingCard()
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = BBSpacing.PageHorizontal)
+                        ) {
+                            RegionLoadingCard()
+                        }
                     }
                 }
 
                 countries.isEmpty() -> {
                     item {
-                        RegionMessageCard(
-                            message = errorMessage
-                                ?.takeIf { it.isNotBlank() }
-                                ?: BBLocalization.Current.Get(key = "f5b18e46-1512-45b8-93da-c4a6aa611db2", fallback = "Kullanılabilir ülke bulunamadı.")
-                        )
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = BBSpacing.PageHorizontal)
+                        ) {
+                            RegionMessageCard(
+                                message = errorMessage
+                                    ?.takeIf { it.isNotBlank() }
+                                    ?: BBLocalization.Current.Get(
+                                        key = "f5b18e46-1512-45b8-93da-c4a6aa611db2",
+                                        fallback = "Kullanılabilir ülke bulunamadı."
+                                    )
+                            )
+                        }
                     }
                 }
 
@@ -97,13 +113,19 @@ fun RegionSettingsScreen(
                         items = countries,
                         key = { it.AddressCountryId }
                     ) { country ->
-                        RegionRow(
-                            item = country,
-                            isSelected = country.AddressCountryId == selectedCountryId,
-                            onClick = {
-                                onCountrySelected(country)
-                            }
-                        )
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = BBSpacing.PageHorizontal)
+                        ) {
+                            RegionRow(
+                                item = country,
+                                isSelected = country.AddressCountryId == selectedCountryId,
+                                onClick = {
+                                    onCountrySelected(country)
+                                }
+                            )
+                        }
                     }
                 }
             }

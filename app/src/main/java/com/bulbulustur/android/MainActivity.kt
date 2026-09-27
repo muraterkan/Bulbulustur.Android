@@ -23,16 +23,13 @@ class MainActivity : ComponentActivity() {
             savedInstanceState
         )
 
-        appLinkUrl =
-            intent?.dataString
+        appLinkUrl = intent?.dataString
 
         setContent {
             BulbulusturApp(
-                appLinkUrl =
-                    appLinkUrl,
+                appLinkUrl = appLinkUrl,
                 onAppLinkConsumed = {
-                    appLinkUrl =
-                        null
+                    appLinkUrl = null
                 }
             )
         }
@@ -45,11 +42,8 @@ class MainActivity : ComponentActivity() {
             intent
         )
 
-        setIntent(
-            intent
-        )
+        setIntent(intent)
 
-        appLinkUrl =
-            intent.dataString
+        appLinkUrl = intent.dataString
     }
 }

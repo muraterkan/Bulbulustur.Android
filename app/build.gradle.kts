@@ -11,8 +11,8 @@ android {
         applicationId = "com.bulbulustur.android"
         minSdk = 34
         targetSdk = 36
-        versionCode = 10660
-        versionName = "1.6.60"
+        versionCode = 10661
+        versionName = "1.6.61"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

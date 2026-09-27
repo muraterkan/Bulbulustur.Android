@@ -48,7 +48,9 @@ fun B2CDealsOfTheDay(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = BBSpacing.PageHorizontal),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.Top
         ) {

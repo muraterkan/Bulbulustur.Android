@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
@@ -95,7 +96,9 @@ private fun HomepageFeaturedProductsHeader(
     onViewAllClick: () -> Unit
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = BBSpacing.PageHorizontal),
         verticalAlignment = Alignment.Bottom,
         horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
     ) {

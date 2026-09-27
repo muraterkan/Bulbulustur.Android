@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Home
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import com.bulbulustur.android.Application.Localization.BBLocalization
 
 import androidx.compose.foundation.background
@@ -79,7 +81,7 @@ fun RetailHomeScreen(
     onCampaignListClick: () -> Unit = {},
     onFavoriteClick: () -> Unit = {},
     onStoreClick: () -> Unit = {},
-        
+
     onMessageClick: () -> Unit = {},
     onNotificationClick: () -> Unit = {},
         onModeSwitchClick: () -> Unit = {},
@@ -94,7 +96,7 @@ fun RetailHomeScreen(
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
-            
+
         RetailSearchHeader(
                 searchText = searchText,
                 onSearchTextChange = {
@@ -105,7 +107,7 @@ fun RetailHomeScreen(
                 onMessageClick = onMessageClick,
 
                 onNotificationClick = onNotificationClick,
-    
+
                 onSearchClick = {
                     onSearchClick(searchText)
                 },
@@ -132,10 +134,10 @@ fun RetailHomeScreen(
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
             contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
+                start = BBSpacing.None,
                 top = innerPadding.calculateTopPadding() +
                         BBSpacing.PageTopCompact,
-                end = BBSpacing.PageHorizontal,
+                end = BBSpacing.None,
                 bottom = innerPadding.calculateBottomPadding() +
                         BBSpacing.PageBottomCompact
             ),
@@ -143,7 +145,7 @@ fun RetailHomeScreen(
                 BBSpacing.SectionGapCompact
             )
         ) {
-            item {
+            bbPageItem {
                 RetailHomeHeroCard()
             }
 
@@ -157,7 +159,7 @@ fun RetailHomeScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 RetailHomeTrustStrip()
             }
 
@@ -184,7 +186,7 @@ fun RetailHomeScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 BbSectionHeader(
                     title = BBLocalization.Current.Get(key = "a4ebc64d-5787-4b21-bd80-f1daeb6068a2", fallback = "Mağaza Keşfi"),
                     subtitle = BBLocalization.Current.Get(key = "95717485-49c7-4c16-b6a7-585616ecac69", fallback = "Seçilmiş mağaza ve marka alanları.")

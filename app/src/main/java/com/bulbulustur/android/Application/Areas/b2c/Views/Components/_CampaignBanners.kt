@@ -53,7 +53,9 @@ fun CampaignBanners(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = BBSpacing.PageHorizontal),
             verticalAlignment = Alignment.Bottom,
             horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {

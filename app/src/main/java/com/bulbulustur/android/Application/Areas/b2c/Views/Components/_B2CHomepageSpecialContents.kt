@@ -59,6 +59,9 @@ fun B2CHomepageSpecialContents(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
     ) {
         Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = BBSpacing.PageHorizontal),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)
         ) {
             Text(

@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2b.Views.Home
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -80,7 +82,7 @@ fun WholesaleHomeScreen(
     onCustomizationRequestClick: () -> Unit = {},
     onModeSwitchClick: () -> Unit = {},
     onFavoriteClick: () -> Unit = {},
-        
+
     onMessageClick: () -> Unit = {},
     onNotificationClick: () -> Unit = {},
         onAccountClick: () -> Unit = {}
@@ -101,7 +103,7 @@ fun WholesaleHomeScreen(
         modifier = Modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
-            
+
         WholesaleSearchHeader(
                 searchText = searchText,
                 onSearchTextChange = {
@@ -119,7 +121,7 @@ fun WholesaleHomeScreen(
                 onMessageClick = onMessageClick,
 
                 onNotificationClick = onNotificationClick,
-    
+
             )
         },
         bottomBar = {
@@ -142,21 +144,21 @@ fun WholesaleHomeScreen(
                 .fillMaxSize()
                 .padding(innerPadding),
             contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
+                start = BBSpacing.None,
                 top = BBSpacing.PageTopCompact,
-                end = BBSpacing.PageHorizontal,
+                end = BBSpacing.None,
                 bottom = BBSpacing.PageBottom
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.SectionGap)
         ) {
-            item {
+            bbPageItem {
                 WholesaleHeroCard(
                     onRfqCreateClick = onRfqCreateClick,
                     onProductListClick = onProductListClick
                 )
             }
 
-            item {
+            bbPageItem {
                 WholesaleTrustRail()
             }
 
@@ -181,14 +183,14 @@ fun WholesaleHomeScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 WholesaleSectionTitle(
                     title = BBLocalization.Current.Get(key = "58936c35-8484-4305-b5e8-ede7c8119380", fallback = "Tedarik Aksiyonları"),
                     description = BBLocalization.Current.Get(key = "c8ef2e92-25f3-4297-add2-2e60891d23df", fallback = "Teklif, son fiyat, numune ve özel üretim kanalları.")
                 )
             }
 
-            item {
+            bbPageItem {
                 WholesaleActionRow(
                     items = actionItems
                 )

@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItems
+
 import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
 
 import androidx.compose.foundation.background
@@ -72,11 +74,11 @@ fun CurrencySettingsScreen(
             }
 
             if (isLoading && currencies.isEmpty()) {
-                item {
+                bbPageItem {
                     CurrencyLoadingCard()
                 }
             } else {
-                items(
+                bbPageItems(
                     items = visibleCurrencies,
                     key = { it.SystemDescCurrencyId }
                 ) { currency ->

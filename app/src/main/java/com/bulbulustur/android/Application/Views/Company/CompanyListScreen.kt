@@ -107,7 +107,7 @@ fun CompanyListScreen(
             }
 
             if (isLoading) {
-                item {
+                bbPageItem {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Center
@@ -118,7 +118,7 @@ fun CompanyListScreen(
             }
 
             if (!errorMessage.isNullOrBlank()) {
-                item {
+                bbPageItem {
                     Text(
                         text = errorMessage,
                         style = MaterialTheme.typography.bodyMedium,

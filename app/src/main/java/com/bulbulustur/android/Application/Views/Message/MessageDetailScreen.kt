@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Message
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItems
+
 import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
 
 import androidx.compose.foundation.background
@@ -94,13 +96,13 @@ fun MessageDetailScreen(
 
             when {
                 isLoading && messages.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         MessageDetailLoadingState()
                     }
                 }
 
                 !errorMessage.isNullOrBlank() && messages.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         MessageDetailErrorState(
                             message = errorMessage,
                             onRetryClick = onRetryClick
@@ -109,13 +111,13 @@ fun MessageDetailScreen(
                 }
 
                 messages.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         MessageDetailEmptyState()
                     }
                 }
 
                 else -> {
-                    items(
+                    bbPageItems(
                         items = messages.asReversed(),
                         key = { message -> message.WholesaleMessageId }
                     ) { message ->

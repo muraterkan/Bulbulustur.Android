@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
@@ -81,7 +82,7 @@ fun AddressListScreen(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
             if (isLoading && addresses.isEmpty()) {
-                item {
+                bbPageItem {
                     AddressLoadingState()
                 }
 
@@ -89,7 +90,7 @@ fun AddressListScreen(
             }
 
             if (!errorMessage.isNullOrBlank() && addresses.isEmpty()) {
-                item {
+                bbPageItem {
                     AddressErrorState(
                         message = errorMessage,
                         onRetryClick = onRetryClick
@@ -100,7 +101,7 @@ fun AddressListScreen(
             }
 
             if (addresses.isEmpty()) {
-                item {
+                bbPageItem {
                     AddressEmptyState(
                         onCreateAddressClick = onCreateAddressClick
                     )

@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItems
+
 import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
 
 import androidx.compose.foundation.background
@@ -77,7 +79,7 @@ fun LanguageSettingsScreen(
             }
 
             if (isLoading && languages.isEmpty()) {
-                item {
+                bbPageItem {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -92,7 +94,7 @@ fun LanguageSettingsScreen(
                     }
                 }
             } else {
-                items(
+                bbPageItems(
                     items = visibleLanguages,
                     key = { it.id }
                 ) { language ->

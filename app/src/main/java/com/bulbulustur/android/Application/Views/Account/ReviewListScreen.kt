@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItems
+
 import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
 
 import androidx.compose.foundation.background
@@ -154,13 +156,13 @@ fun ReviewListScreen(
 
             when {
                 isLoading -> {
-                    item {
+                    bbPageItem {
                         ReviewLoadingState()
                     }
                 }
 
                 !errorMessage.isNullOrBlank() -> {
-                    item {
+                    bbPageItem {
                         ReviewErrorState(
                             message = errorMessage,
                             onRetryClick = onRetryClick
@@ -169,13 +171,13 @@ fun ReviewListScreen(
                 }
 
                 filteredReviews.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         ReviewEmptyState(selectedTab = selectedTab)
                     }
                 }
 
                 else -> {
-                    items(
+                    bbPageItems(
                         items = filteredReviews,
                         key = { it.ReviewId }
                     ) { review ->

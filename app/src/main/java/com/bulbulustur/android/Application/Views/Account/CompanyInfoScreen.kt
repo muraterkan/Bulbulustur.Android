@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -86,9 +88,9 @@ fun CompanyInfoScreen(
                 !errorMessage.isNullOrBlank() -> item { CompanyErrorState(message = errorMessage, onRetryClick = onRetryClick) }
                 company == null -> item { CompanyNotFoundState(onRetryClick = onRetryClick) }
                 else -> {
-                    item { CompanyHeroCard(company = company) }
-                    item { CompanyStatsGrid(company = company, subscription = subscription) }
-                    item {
+                    bbPageItem { CompanyHeroCard(company = company) }
+                    bbPageItem { CompanyStatsGrid(company = company, subscription = subscription) }
+                    bbPageItem {
                         CompanyInfoSection(title = BBLocalization.Current.Get(key = "b05816cf-38fa-4a75-8d66-bf800fb4a8d7", fallback = "Şirket  Kimliği"), description = BBLocalization.Current.Get(key = "9f84fd03-250c-48de-b322-b89b5602922c", fallback = "Ünvan, Şirket  tipi ve kurumsal profil bilgileri."), icon = Icons.Outlined.Badge) {
                             CompanyInfoRow(BBLocalization.Current.Get(key = "295bef89-1d52-45bf-8076-0cb215d76c41", fallback = ""), company.CompanyName.OrDash())
                             CompanyDivider()
@@ -99,7 +101,7 @@ fun CompanyInfoScreen(
                             CompanyInfoRow(BBLocalization.Current.Get(key = "2439777a-0431-4929-9600-07df5586ad67", fallback = ""), company.YearEstablished.OrDash())
                         }
                     }
-                    item {
+                    bbPageItem {
                         CompanyInfoSection(title = BBLocalization.Current.Get(key = "80196c43-5833-4c0a-8c7b-d2906837956e", fallback = "Adres Bilgileri"), description = BBLocalization.Current.Get(key = "1e9670ca-c13f-4f26-969d-b981946c44dd", fallback = "Şirket in kayıtlı lokasyon bilgileri."), icon = Icons.Outlined.LocationOn) {
                             CompanyInfoRow(BBLocalization.Current.Get(key = "af1da4df-7298-4cd9-b256-371d098b59f7", fallback = "Adres"), company.Address.OrDash())
                             CompanyDivider()
@@ -120,7 +122,7 @@ fun CompanyInfoScreen(
                             CompanyInfoRow(BBLocalization.Current.Get(key = "fff66b6e-cf51-4dde-a421-b8ce3df436d0", fallback = "Posta Kodu"), company.PostCode.OrDash())
                         }
                     }
-                    item {
+                    bbPageItem {
                         CompanyInfoSection(title = BBLocalization.Current.Get(key = "320c5446-e42b-4ac9-ad81-ca0d3053b6b8", fallback = "Vergi ve Resmi Bilgiler"), description = BBLocalization.Current.Get(key = "a096e615-ea46-46f5-9318-15c113cb0193", fallback = "Fatura ve resmi kayıt süreçlerinde kullanılan bilgiler."), icon = Icons.Outlined.ReceiptLong) {
                             CompanyInfoRow(BBLocalization.Current.Get(key = "8c42e65e-d7a4-4ff2-9dce-e4073d4dc335", fallback = "Vergi Dairesi"), company.TaxOffice.OrDash())
                             CompanyDivider()
@@ -135,7 +137,7 @@ fun CompanyInfoScreen(
                             CompanyInfoRow(BBLocalization.Current.Get(key = "1246f9ff-205d-4d92-84ee-7c8c7a3f2d46", fallback = "E-Posta"), company.Email.OrDash())
                         }
                     }
-                    item {
+                    bbPageItem {
                         CompanyActionSection(
                             b2bActive = company.B2bIndex,
                             storeRequest = storeRequest,

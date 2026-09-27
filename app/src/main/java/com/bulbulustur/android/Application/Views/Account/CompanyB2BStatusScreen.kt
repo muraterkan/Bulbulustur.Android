@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import com.bulbulustur.android.Application.Localization.BBLocalization
 
 import androidx.compose.foundation.background
@@ -82,11 +84,11 @@ fun CompanyB2BStatusScreen(
                 }
                 company == null -> item { CompanyB2BStatusNotFoundState(onRetryClick = onRetryClick) }
                 else -> {
-                    item { CompanyB2BStatusIntroCard(active = company.B2bIndex) }
-                    item { CompanyB2BActiveSummaryCard(company = company, subscription = subscription) }
-                    item { CompanyB2BStatusStatsGrid(company = company, subscription = subscription) }
+                    bbPageItem { CompanyB2BStatusIntroCard(active = company.B2bIndex) }
+                    bbPageItem { CompanyB2BActiveSummaryCard(company = company, subscription = subscription) }
+                    bbPageItem { CompanyB2BStatusStatsGrid(company = company, subscription = subscription) }
 
-                    item {
+                    bbPageItem {
                         CompanyB2BStatusSection(
                             title = BBLocalization.Current.Get(key = "e8f83e36-f9b7-43ac-a183-46c9f8227196", fallback = "B2B Listeleme Bilgileri"),
                             description = BBLocalization.Current.Get(key = "4e4bad3f-eb9e-4287-b924-ef00545b6ddc", fallback = "Bu bilgiler şirketinizin Bulbulustur toptan satış tarafındaki görünürlüğünü gösterir."),
@@ -125,7 +127,7 @@ fun CompanyB2BStatusScreen(
                     }
 
                     if (company.B2bIndex) {
-                        item {
+                        bbPageItem {
                             CompanyB2BManagementPanelCard(onClick = onB2BManagementPanelClick)
                         }
                     }

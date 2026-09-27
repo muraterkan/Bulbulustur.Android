@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Profile
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import com.bulbulustur.android.Application.Localization.BBLocalization
 
 import androidx.compose.ui.layout.ContentScale
@@ -151,13 +153,13 @@ fun ProfileScreen(
                         memberProfile == null &&
                         errorMessage.isNullOrBlank()
                     ) -> {
-                    item {
+                    bbPageItem {
                         ProfileLoadingState()
                     }
                 }
 
                 !errorMessage.isNullOrBlank() -> {
-                    item {
+                    bbPageItem {
                         ProfileMessageCard(
                             message = errorMessage,
                             isError = true
@@ -166,7 +168,7 @@ fun ProfileScreen(
                 }
 
                 member == null -> {
-                    item {
+                    bbPageItem {
                         ProfileMessageCard(
                             message = BBLocalization.Current.Get(key = "be5abf47-f519-4a9b-92e8-68ca7aacbc79", fallback = "Profil bilgisi bulunamadı.")
                         )
@@ -174,7 +176,7 @@ fun ProfileScreen(
                 }
 
                 else -> {
-                    item {
+                    bbPageItem {
                         ProfileHeroCard(
                             fullName = fullName,
                             profession = profession,
@@ -183,7 +185,7 @@ fun ProfileScreen(
                         )
                     }
 
-                    item {
+                    bbPageItem {
                         ProfileSectionCard(
                             title = BBLocalization.Current.Get(key = "c51bf43a-c12d-4409-bde9-6fc0cfaa92e7", fallback = "Profil Özeti"),
                             description = BBLocalization.Current.Get(key = "72132ecf-c234-4360-a3cb-6e19c6744905", fallback = "Profilinizde görünen kısa tanıtım bilginiz."),
@@ -198,7 +200,7 @@ fun ProfileScreen(
                         }
                     }
 
-                    item {
+                    bbPageItem {
                         ProfileSectionCard(
                             title = BBLocalization.Current.Get(key = "fb9900fe-d66a-4aee-a030-f41b58100722", fallback = "Diller"),
                             description = BBLocalization.Current.Get(key = "b74ee547-af93-40ff-8651-cb550b6633a1", fallback = "Konuştuğunuz dilleri ve seviyelerini yönetin."),
@@ -213,7 +215,7 @@ fun ProfileScreen(
                         }
                     }
 
-                   item {
+                   bbPageItem {
                         ProfileSectionCard(
                             title = BBLocalization.Current.Get(key = "abe57e95-3977-4455-8687-1671edc75506", fallback = "Eğitim ve İş"),
                             description = BBLocalization.Current.Get(key = "a0c55735-d953-4005-be94-cc106e5e1045", fallback = "Eğitim ve çalışma hayatınız."),

@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Message
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItems
+
 import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
 
 import com.bulbulustur.android.Application.Localization.BBLocalization
@@ -113,13 +115,13 @@ fun MessageInboxScreen(
 
             when {
                 isLoading && messages.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         MessageLoadingState()
                     }
                 }
 
                 !errorMessage.isNullOrBlank() && messages.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         MessageErrorState(
                             message = errorMessage,
                             onRetryClick = onRetryClick
@@ -128,13 +130,13 @@ fun MessageInboxScreen(
                 }
 
                 filteredMessages.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         MessageEmptyState()
                     }
                 }
 
                 else -> {
-                    items(
+                    bbPageItems(
                         items = filteredMessages,
                         key = { item -> item.MessageThreadId }
                     ) { message ->

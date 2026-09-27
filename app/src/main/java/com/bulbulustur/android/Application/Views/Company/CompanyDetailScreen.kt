@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Company
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItems
+
 import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
 
 import androidx.compose.foundation.BorderStroke
@@ -204,7 +206,7 @@ private fun CompanyDetailContent(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.SectionGapCompact)
     ) {
         if (!errorMessage.isNullOrBlank()) {
-            item {
+            bbPageItem {
                 Text(
                     text = errorMessage,
                     style = MaterialTheme.typography.bodySmall,
@@ -235,7 +237,7 @@ private fun CompanyDetailContent(
         }
 
         if (companyPictures.isNotEmpty()) {
-            item {
+            bbPageItem {
                 BbSectionHeader(
                     title = BBLocalization.Current.Get(
                         key = "e8a21e2e-de5d-4682-b64a-7cdd977fc29e",
@@ -248,7 +250,7 @@ private fun CompanyDetailContent(
                 )
             }
 
-            item {
+            bbPageItem {
                 CompanyGalleryPreview(
                     companyId = company.CompanyId,
                     pictures = companyPictures,
@@ -258,7 +260,7 @@ private fun CompanyDetailContent(
         }
 
         if (hasAbout || hasDetailedInformation) {
-            item {
+            bbPageItem {
                 BbSectionHeader(
                     title = BBLocalization.Current.Get(
                         key = "a8b9df1a-fadf-45e8-9ec8-9b369024ea5e",
@@ -273,13 +275,13 @@ private fun CompanyDetailContent(
         }
 
         if (hasAbout) {
-            item {
+            bbPageItem {
                 CompanyAboutCard(company = company)
             }
         }
 
         if (hasDetailedInformation) {
-            item {
+            bbPageItem {
                 CompanyInfoGrid(
                     company = company,
                     onWebsiteClick = onWebsiteClick
@@ -288,7 +290,7 @@ private fun CompanyDetailContent(
         }
 
         if (companyCertificates.isNotEmpty()) {
-            item {
+            bbPageItem {
                 BbSectionHeader(
                     title = BBLocalization.Current.Get(
                         key = "fa8e443e-e497-4a9d-85f7-1e1e20c69892",
@@ -301,7 +303,7 @@ private fun CompanyDetailContent(
                 )
             }
 
-            items(
+            bbPageItems(
                 items = companyCertificates,
                 key = { certificate ->
                     "certificate-${certificate.CompanyCertificateId}"

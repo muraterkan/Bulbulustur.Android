@@ -35,6 +35,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.NotificationsActive
 import androidx.compose.material3.Icon
 import com.bulbulustur.android.Application.Localization.BBLocalization
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
 import com.bulbulustur.android.Application.wwwroot.DesignTokens.BBIcon
 
 @Composable
@@ -68,7 +69,7 @@ fun AlarmListScreen(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
             if (alarms.isEmpty()) {
-                item {
+                bbPageItem {
                     AlarmEmptyState()
                 }
             }

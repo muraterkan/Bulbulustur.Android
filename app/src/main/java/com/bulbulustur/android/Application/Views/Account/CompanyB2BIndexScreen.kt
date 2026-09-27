@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import com.bulbulustur.android.Application.Localization.BBLocalization
 
 import androidx.compose.foundation.background
@@ -88,11 +90,11 @@ fun CompanyB2BIndexScreen(
                 }
                 company == null -> item { CompanyB2BNotFoundState(onRetryClick = onRetryClick) }
                 else -> {
-                    item { CompanyB2BIndexIntroCard() }
-                    item { CompanyB2BIndexSummaryCard(company = company) }
-                    item { CompanyB2BIndexStatsGrid(company = company) }
+                    bbPageItem { CompanyB2BIndexIntroCard() }
+                    bbPageItem { CompanyB2BIndexSummaryCard(company = company) }
+                    bbPageItem { CompanyB2BIndexStatsGrid(company = company) }
 
-                    item {
+                    bbPageItem {
                         CompanyB2BIndexSection(
                             title = BBLocalization.Current.Get(key = "27c038e0-8bcd-475c-ba6a-83cdb08c4053", fallback = "B2B Index Ne Sağlar?"),
                             description = BBLocalization.Current.Get(key = "6c3662ff-e317-487e-9b82-4018ce5c6993", fallback = "Firmanızın toptan ticaret akışlarında daha görünür olmasına yardımcı olur."),
@@ -122,14 +124,14 @@ fun CompanyB2BIndexScreen(
                         }
                     }
 
-                    item {
+                    bbPageItem {
                         CompanyB2BIndexAgreementCard(
                             isAccepted = agreementAccepted,
                             onAcceptedChange = { agreementAccepted = it }
                         )
                     }
 
-                    item {
+                    bbPageItem {
                         BbButton(
                             text = "Şirketimi B2B Index'e Dahil Et",
                             onClick = onActivateClick,

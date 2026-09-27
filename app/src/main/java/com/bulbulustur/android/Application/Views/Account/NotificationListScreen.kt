@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItems
+
 import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
 
 import androidx.compose.foundation.BorderStroke
@@ -155,7 +157,7 @@ fun NotificationListScreen(
 
             when {
                 isLoading && notifications.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -172,7 +174,7 @@ fun NotificationListScreen(
 
                 !errorMessage.isNullOrBlank() &&
                         notifications.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         Surface(
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(16.dp),
@@ -189,7 +191,7 @@ fun NotificationListScreen(
                 }
 
                 visibleNotifications.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -207,7 +209,7 @@ fun NotificationListScreen(
                 }
 
                 else -> {
-                    items(
+                    bbPageItems(
                         items = visibleNotifications,
                         key = {
                             it.MemberNotificationId

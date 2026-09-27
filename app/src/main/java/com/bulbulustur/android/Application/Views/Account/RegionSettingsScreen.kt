@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItems
+
 import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
 
 import com.bulbulustur.android.Application.Localization.BBLocalization
@@ -78,7 +80,7 @@ fun RegionSettingsScreen(
 
             when {
                 isLoading && countries.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -90,7 +92,7 @@ fun RegionSettingsScreen(
                 }
 
                 countries.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -109,7 +111,7 @@ fun RegionSettingsScreen(
                 }
 
                 else -> {
-                    items(
+                    bbPageItems(
                         items = countries,
                         key = { it.AddressCountryId }
                     ) { country ->

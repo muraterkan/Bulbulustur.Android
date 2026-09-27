@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -67,19 +69,19 @@ fun SubscriptionDetailScreen(
                 !errorMessage.isNullOrBlank() -> item { SubscriptionDetailErrorState(message = errorMessage, onRetryClick = onRetryClick) }
                 subscription == null -> item { SubscriptionDetailNotFoundState(onRetryClick = onRetryClick) }
                 else -> {
-                    item { SubscriptionHeroCard(subscription = subscription) }
+                    bbPageItem { SubscriptionHeroCard(subscription = subscription) }
 
-                    item {
+                    bbPageItem {
                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)) {
                             SubscriptionDetailInfoBox(modifier = Modifier.weight(1f), title = "BAŞLANGIÇ", value = subscription.StartDate.ToSubscriptionDateText(), iconColor = BBColors.Blue.Blue600)
                             SubscriptionDetailInfoBox(modifier = Modifier.weight(1f), title = BBLocalization.Current.Get(key = "ba2cca15-1d43-4b16-a4a9-e2e2bfbdcba6", fallback = "BİTİŞ"), value = subscription.EndDate.ToSubscriptionDateText(), iconColor = BBColors.Orange.Orange600)
                         }
                     }
 
-                    item { SubscriptionDetailPriceCard(subscription = subscription) }
-                    item { SubscriptionPlanInfoCard(subscription = subscription) }
+                    bbPageItem { SubscriptionDetailPriceCard(subscription = subscription) }
+                    bbPageItem { SubscriptionPlanInfoCard(subscription = subscription) }
 
-                    item {
+                    bbPageItem {
                         BbButton(
                             text = BBLocalization.Current.Get(key = "aae5c3b0-5107-423f-aa4c-9fbf4e907b56", fallback = "Aboneliklerime Dön"),
                             onClick = onBackClick,

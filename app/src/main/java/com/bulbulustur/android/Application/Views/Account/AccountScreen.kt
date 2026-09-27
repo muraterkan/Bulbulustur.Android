@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -154,7 +156,7 @@ fun AccountScreen(
         ) {
             when {
                 isLoading || (member == null && errorMessage.isNullOrBlank()) -> {
-                    item {
+                    bbPageItem {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -169,7 +171,7 @@ fun AccountScreen(
                 }
 
                 !errorMessage.isNullOrBlank() -> {
-                    item {
+                    bbPageItem {
                         ProfileErrorCard(
                             message = errorMessage
                         )
@@ -177,20 +179,20 @@ fun AccountScreen(
                 }
 
                 member == null -> {
-                    item {
+                    bbPageItem {
                         ProfileNotFoundCard()
                     }
                 }
 
                 else -> {
-                    item {
+                    bbPageItem {
                         ProfileHeroCard(
                             fullName = fullName,
                             onClick = onProfileClick
                         )
                     }
 
-                    item {
+                    bbPageItem {
                         ProfileInfoSection(
                             title = BBLocalization.Current.Get(key = "55e6f1f8-9f12-4cfe-839d-e8d8f8931d71", fallback = "Temel Bilgiler"),
                             description = BBLocalization.Current.Get(key = "a03e9ee7-9942-4915-abbd-86850716ac75", fallback = "Hesabınızın görünen temel bilgileri."),
@@ -235,7 +237,7 @@ fun AccountScreen(
                         }
                     }
 
-                    item {
+                    bbPageItem {
                         ProfileInfoSection(
                             title = BBLocalization.Current.Get(key = "1c188e84-b3f6-42b1-9634-c89f9cc9ffca", fallback = ""),
                             description = BBLocalization.Current.Get(key = "cca0cca7-ad04-4da6-9c8e-73fb19ef03b9", fallback = "Güvenlik ve hesap doğrulama bilgileri."),
@@ -268,7 +270,7 @@ fun AccountScreen(
                         }
                     }
 
-                    item {
+                    bbPageItem {
                         ProfileInfoSection(
                             title = BBLocalization.Current.Get(key = "573715c0-53d4-4c11-8636-d3834c17d768", fallback = "Kurumsal Bağlantı"),
                             description = BBLocalization.Current.Get(key = "02577eaf-6841-4e93-aa62-1b85f93c956f", fallback = "Şirket ve B2B görünürlük bağlantılarınız."),

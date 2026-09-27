@@ -1,5 +1,8 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItems
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -204,12 +207,12 @@ private fun RetailFavoriteList(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
     ) {
         if (favorites.isEmpty()) {
-            item {
+            bbPageItem {
                 FavoriteEmptyState(tab = FavoriteTab.Retail)
             }
         }
 
-        items(
+        bbPageItems(
             items = favorites,
             key = { favorite -> favorite.FavoriteId }
         ) { favorite ->
@@ -236,12 +239,12 @@ private fun WholesaleFavoriteList(
         verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
     ) {
         if (favorites.isEmpty()) {
-            item {
+            bbPageItem {
                 FavoriteEmptyState(tab = FavoriteTab.Wholesale)
             }
         }
 
-        items(
+        bbPageItems(
             items = favorites,
             key = { favorite -> favorite.WholesaleFavoriteId }
         ) { favorite ->

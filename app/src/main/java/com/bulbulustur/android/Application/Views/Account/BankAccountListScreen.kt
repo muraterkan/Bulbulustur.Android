@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItems
+
 import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
 
 import com.bulbulustur.android.businesslayer.Core.Network.ImageUrlResolver
@@ -114,24 +116,24 @@ fun BankAccountListScreen(
             }
 
             if (isLoading && currentAction == "GetBankAccounts" && bankAccounts.isEmpty()) {
-                item {
+                bbPageItem {
                     BankAccountLoadingState()
                 }
             } else if (!errorMessage.isNullOrBlank() && bankAccounts.isEmpty()) {
-                item {
+                bbPageItem {
                     BankAccountErrorState(
                         errorMessage = errorMessage,
                         onRetryClick = onRetryClick
                     )
                 }
             } else if (bankAccounts.isEmpty()) {
-                item {
+                bbPageItem {
                     BankAccountEmptyState(
                         onCreateBankAccountClick = onCreateBankAccountClick
                     )
                 }
             } else {
-                items(
+                bbPageItems(
                     items = bankAccounts,
                     key = { item -> item.MemberBankAccountId }
                 ) { item ->
@@ -148,7 +150,7 @@ fun BankAccountListScreen(
             }
 
             if (!errorMessage.isNullOrBlank() && bankAccounts.isNotEmpty()) {
-                item {
+                bbPageItem {
                     Text(
                         text = errorMessage,
                         style = MaterialTheme.typography.bodySmall,

@@ -154,7 +154,7 @@ fun ProfilePenisSizeScreen(
             }
 
             if (!errorMessage.isNullOrBlank()) {
-                item {
+                bbPageItem {
                     ProfilePrivateInformationMessageCard(
                         message = errorMessage,
                         isError = true

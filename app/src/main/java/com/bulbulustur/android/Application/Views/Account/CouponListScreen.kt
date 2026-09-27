@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
 import com.bulbulustur.android.Application.Localization.BBLocalization
 import com.bulbulustur.android.Application.Views.Shared.Components.BbInnerPageHeader
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButton
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonSize
 import com.bulbulustur.android.Application.wwwroot.DesignObjects.BbButtonVariant
@@ -114,7 +115,7 @@ fun CouponListScreen(
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
                 ) {
                     if (!errorMessage.isNullOrBlank()) {
-                        item {
+                        bbPageItem {
                             CouponFeedbackCard(
                                 message = errorMessage,
                                 onRetryClick = onRetryClick

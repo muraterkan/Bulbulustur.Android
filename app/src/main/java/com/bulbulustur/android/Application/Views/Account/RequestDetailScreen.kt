@@ -132,7 +132,7 @@ fun RequestDetailScreen(
                     }
 
                     if (!request.Description.isNullOrBlank()) {
-                        item {
+                        bbPageItem {
                             RequestDetailDescriptionCard(request = request)
                         }
                     }
@@ -146,7 +146,7 @@ fun RequestDetailScreen(
                     }
 
                     if (request.StoreId > 0) {
-                        item {
+                        bbPageItem {
                             RequestDetailActionsCard(
                                 request = request,
                                 onStoreClick = onStoreClick

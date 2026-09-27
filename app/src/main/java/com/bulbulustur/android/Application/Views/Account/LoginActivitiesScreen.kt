@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItems
+
 import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
 
 import com.bulbulustur.android.Application.Localization.BBLocalization
@@ -76,13 +78,13 @@ fun LoginActivitiesScreen(
 
             when {
                 isLoading -> {
-                    item {
+                    bbPageItem {
                         LoginActivitiesLoadingState()
                     }
                 }
 
                 !errorMessage.isNullOrBlank() -> {
-                    item {
+                    bbPageItem {
                         LoginActivitiesErrorState(
                             errorMessage = errorMessage,
                             onRetryClick = onRetryClick
@@ -91,13 +93,13 @@ fun LoginActivitiesScreen(
                 }
 
                 activities.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         LoginActivitiesEmptyState()
                     }
                 }
 
                 else -> {
-                    items(
+                    bbPageItems(
                         items = activities,
                         key = { activity -> activity.LogId }
                     ) { activity ->

@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItems
+
 import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
 
 import com.bulbulustur.android.Application.Localization.BBLocalization
@@ -77,7 +79,7 @@ fun CommunicationPreferenceScreen(
 
             when {
                 isLoading && preferences.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -90,7 +92,7 @@ fun CommunicationPreferenceScreen(
                 }
 
                 !errorMessage.isNullOrBlank() && preferences.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         BbCard(
                             modifier = Modifier.fillMaxWidth(),
                             variant = BbCardVariant.Outlined,
@@ -124,7 +126,7 @@ fun CommunicationPreferenceScreen(
                 }
 
                 preferences.isEmpty() -> {
-                    item {
+                    bbPageItem {
                         BbCard(
                             modifier = Modifier.fillMaxWidth(),
                             variant = BbCardVariant.Outlined,
@@ -140,7 +142,7 @@ fun CommunicationPreferenceScreen(
                 }
 
                 else -> {
-                    items(
+                    bbPageItems(
                         items = preferences,
                         key = { preference ->
                             preference.PreferenceTypeId
@@ -158,7 +160,7 @@ fun CommunicationPreferenceScreen(
             }
 
             if (!errorMessage.isNullOrBlank() && preferences.isNotEmpty()) {
-                item {
+                bbPageItem {
                     Text(
                         text = errorMessage,
                         style = MaterialTheme.typography.bodySmall,

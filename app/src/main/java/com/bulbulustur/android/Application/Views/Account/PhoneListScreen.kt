@@ -1,5 +1,8 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItems
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -74,24 +77,24 @@ fun PhoneListScreen(
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
             if (isLoading && currentAction == "GetPhones" && phones.isEmpty()) {
-                item {
+                bbPageItem {
                     PhoneLoadingState()
                 }
             } else if (!errorMessage.isNullOrBlank() && phones.isEmpty()) {
-                item {
+                bbPageItem {
                     PhoneErrorState(
                         message = errorMessage,
                         onRetryClick = onRetryClick
                     )
                 }
             } else if (phones.isEmpty()) {
-                item {
+                bbPageItem {
                     PhoneEmptyState(
                         onCreatePhoneClick = onCreatePhoneClick
                     )
                 }
             } else {
-                items(
+                bbPageItems(
                     items = phones,
                     key = { phone -> phone.MemberPhoneId }
                 ) { phone ->
@@ -108,7 +111,7 @@ fun PhoneListScreen(
             }
 
             if (!errorMessage.isNullOrBlank() && phones.isNotEmpty()) {
-                item {
+                bbPageItem {
                     Text(
                         text = errorMessage,
                         style = MaterialTheme.typography.bodySmall,

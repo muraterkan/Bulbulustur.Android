@@ -109,47 +109,7 @@ fun NavGraphBuilder.orderGraph(
             }
         }
 
-        val checkoutPayableTotal =
-            basketSummary
-                ?.GrossTotal
-                ?.takeIf { it > 0.0 }
-                ?: basketState.BasketItems.let { items ->
-
-                    val productTotal =
-                        items.sumOf { item ->
-
-                            val unitPrice =
-                                item.UnitPrice.takeIf {
-                                    it > 0.0
-                                }
-                                    ?: if (item.Quantity > 0) {
-                                        item.TotalPrice / item.Quantity
-                                    } else {
-                                        item.TotalPrice
-                                    }
-
-                            unitPrice * item.Quantity
-                        }
-
-                    val cargoTotal =
-                        items
-                            .groupBy {
-                                it.StoreId
-                            }
-                            .values
-                            .sumOf { storeItems ->
-                                storeItems.first().SummaryShippingCost
-                            }
-
-                    val discountTotal =
-                        items.sumOf { item ->
-                            item.DiscountAmount * item.Quantity
-                        }
-
-                    productTotal +
-                            cargoTotal -
-                            discountTotal
-                }
+        val checkoutPayableTotal = basketSummary?.GrossTotal ?: 0.0
 
         CheckoutScreen(
             data = CheckoutScreenData(
@@ -208,7 +168,7 @@ fun NavGraphBuilder.orderGraph(
                 isContractLoading = checkoutState.IsContractLoading,
 
                 summary = CheckoutPriceSummary(
-                    productTotalText = basketSummary?.NetTotal?.let { value -> "₺${String.format("%.2f", value).replace(".", ",")}" }.orEmpty(),
+                    productTotalText = basketSummary?.SubTotal?.let { value -> "₺${String.format("%.2f", value).replace(".", ",")}" }.orEmpty(),
                     cargoTotalText = basketSummary?.ShippingCost?.let { value -> "₺${String.format("%.2f", value).replace(".", ",")}" }.orEmpty(),
                     payableTotalText = "₺${String.format("%.2f", checkoutPayableTotal).replace(".", ",")}"
                 )

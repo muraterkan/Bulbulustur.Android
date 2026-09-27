@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Shared.Components
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItems
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -217,14 +219,14 @@ private fun BuyerCategorySheet(
                                 .fillMaxHeight(),
                             state = listState,
                             contentPadding = PaddingValues(
-                                start = BBSpacing.PageHorizontal,
+                                start = BBSpacing.None,
                                 top = BBSpacing.Space3,
-                                end = BBSpacing.PageHorizontal,
+                                end = BBSpacing.None,
                                 bottom = BBSpacing.PageBottom
                             ),
                             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
                         ) {
-                            items(
+                            bbPageItems(
                                 items = level1Categories,
                                 key = { it.ProductCategoryId }
                             ) { category ->

@@ -1,5 +1,9 @@
 package com.bulbulustur.android.Application.Views.Company
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItems
+
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -76,20 +80,20 @@ fun CompanyListScreen(
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
+                start = BBSpacing.None,
                 top = innerPadding.calculateTopPadding() + BBSpacing.PageTopCompact,
-                end = BBSpacing.PageHorizontal,
+                end = BBSpacing.None,
                 bottom = innerPadding.calculateBottomPadding() + BBSpacing.PageBottom
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.SectionGapCompact)
         ) {
-            item {
+            bbPageItem {
                 CompanyListHero(
                     onRfqCreateClick = onRfqCreateClick
                 )
             }
 
-            item {
+            bbPageItem {
                 BbSectionHeader(
                     title = BBLocalization.Current.Get(
                         key = "eb3cd91b-fc17-480e-8113-4ec331f83352",
@@ -123,7 +127,7 @@ fun CompanyListScreen(
                 }
             }
 
-            items(
+            bbPageItems(
                 items = companies,
                 key = { company ->
                     company.CompanyId
@@ -143,13 +147,13 @@ fun CompanyListScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 CompanyListBottomCallout(
                     onRfqCreateClick = onRfqCreateClick
                 )
             }
 
-            item {
+            bbPageItem {
                 Spacer(
                     modifier = Modifier.height(BBSpacing.Space4)
                 )

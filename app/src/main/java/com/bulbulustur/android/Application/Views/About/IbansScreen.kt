@@ -1,5 +1,9 @@
 package com.bulbulustur.android.Views.Bank
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItems
+
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -59,29 +63,29 @@ fun BankAccountListScreen(
                 .background(MaterialTheme.colorScheme.background)
                 .padding(innerPadding),
             contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
+                start = BBSpacing.None,
                 top = BBSpacing.PageTopCompact,
-                end = BBSpacing.PageHorizontal,
+                end = BBSpacing.None,
                 bottom = BBSpacing.PageBottom
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
-            item {
+            bbPageItem {
                 BankAccountIntroCard()
             }
 
-            item {
+            bbPageItem {
                 BankAccountWarningCard()
             }
 
-            item {
+            bbPageItem {
                 BbSectionHeader(
                     title = BBLocalization.Current.Get(key = "476c62ef-dec2-4c77-9d21-e453954c9407", fallback = ""),
                     subtitle = BBLocalization.Current.Get(key = "a36596dd-00ab-44b7-8117-db595f71a417", fallback = "Ödeme yapmadan önce açıklama alanına sipariş numaranızı yazmayı unutmayın.")
                 )
             }
 
-            items(
+            bbPageItems(
                 items = bankAccountItems(),
                 key = { bankAccount -> bankAccount.bankAccountId }
             ) { bankAccount ->
@@ -93,11 +97,11 @@ fun BankAccountListScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 BankAccountInfoCard()
             }
 
-            item {
+            bbPageItem {
                 Spacer(modifier = Modifier.height(BBSpacing.Space8))
             }
         }

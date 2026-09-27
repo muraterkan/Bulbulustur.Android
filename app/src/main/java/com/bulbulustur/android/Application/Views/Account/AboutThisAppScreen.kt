@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import com.bulbulustur.android.Application.Localization.BBLocalization
 
 import android.content.pm.PackageManager
@@ -119,14 +121,14 @@ fun AboutThisAppScreen(
                 .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding),
             contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
+                start = BBSpacing.None,
                 top = BBSpacing.PageTopCompact,
-                end = BBSpacing.PageHorizontal,
+                end = BBSpacing.None,
                 bottom = BBSpacing.PageBottom
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
-            item {
+            bbPageItem {
                 AboutAppHero(
                     versionLabel = appVersion.versionName,
                     onLogoClick = {
@@ -135,7 +137,7 @@ fun AboutThisAppScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 AboutMenuGroup {
                     AboutMenuRow(
                         icon = Icons.Outlined.Cached,

@@ -1,5 +1,9 @@
 package com.bulbulustur.android.Application.Views.Question
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItems
+
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -121,18 +125,18 @@ fun QuestionAnswerScreen(
                         .fillMaxSize()
                         .padding(innerPadding),
                     contentPadding = PaddingValues(
-                        start = BBSpacing.PageHorizontal,
+                        start = BBSpacing.None,
                         top = BBSpacing.PageTopCompact,
-                        end = BBSpacing.PageHorizontal,
+                        end = BBSpacing.None,
                         bottom = BBSpacing.PageBottom
                     ),
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
                 ) {
-                    item {
+                    bbPageItem {
                         QuestionAnswerIntroCard()
                     }
 
-                    items(
+                    bbPageItems(
                         items = questions,
                         key = { question -> question.ProductCustomerQuestionId }
                     ) { question ->

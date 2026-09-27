@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -59,10 +61,10 @@ fun SubscriptionListScreen(
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surfaceVariant).padding(innerPadding),
-            contentPadding = PaddingValues(start = BBSpacing.PageHorizontal, top = BBSpacing.PageTopCompact, end = BBSpacing.PageHorizontal, bottom = BBSpacing.PageBottom),
+            contentPadding = PaddingValues(start = BBSpacing.None, top = BBSpacing.PageTopCompact, end = BBSpacing.None, bottom = BBSpacing.PageBottom),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
-            item { SubscriptionIntroCard() }
+            bbPageItem { SubscriptionIntroCard() }
 
             when {
                 isLoading -> item { SubscriptionLoadingState() }

@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Company
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -93,10 +95,10 @@ fun CompanyContactScreen(
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
+                start = BBSpacing.None,
                 top = innerPadding.calculateTopPadding() +
                         BBSpacing.PageTopCompact,
-                end = BBSpacing.PageHorizontal,
+                end = BBSpacing.None,
                 bottom = innerPadding.calculateBottomPadding() +
                         BBSpacing.PageBottom
             ),
@@ -104,7 +106,7 @@ fun CompanyContactScreen(
                 BBSpacing.SectionGapCompact
             )
         ) {
-            item {
+            bbPageItem {
                 CompanyContactHero(
                     company = company,
                     onCompanyProfileClick = onCompanyProfileClick,
@@ -112,13 +114,13 @@ fun CompanyContactScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 CompanyContactPersonCard(
                     contactPerson = company.contactPerson
                 )
             }
 
-            item {
+            bbPageItem {
                 CompanyContactInfoCard(
                     company = company,
                     onWebsiteClick = {
@@ -133,7 +135,7 @@ fun CompanyContactScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 CompanyMessageCard(
                     companyName = company.name,
                     message = message,
@@ -148,7 +150,7 @@ fun CompanyContactScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 Spacer(
                     modifier = Modifier.height(
                         BBSpacing.Space4

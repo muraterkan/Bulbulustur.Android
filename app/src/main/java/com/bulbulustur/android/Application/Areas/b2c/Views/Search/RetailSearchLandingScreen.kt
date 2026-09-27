@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Search
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -199,11 +201,11 @@ fun RetailSearchLandingScreen(
                     MaterialTheme.colorScheme.background
                 ),
             contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
+                start = BBSpacing.None,
                 top =
                     innerPadding.calculateTopPadding() +
                             BBSpacing.PageTopCompact,
-                end = BBSpacing.PageHorizontal,
+                end = BBSpacing.None,
                 bottom =
                     innerPadding.calculateBottomPadding() +
                             BBSpacing.PageBottom
@@ -213,13 +215,13 @@ fun RetailSearchLandingScreen(
                     BBSpacing.SectionGapCompact
                 )
         ) {
-            item {
+            bbPageItem {
                 RetailSearchLandingSectionTitle(
                     title = "Popüler Aramalar"
                 )
             }
 
-            item {
+            bbPageItem {
                 LazyRow(
                     modifier =
                         Modifier.fillMaxWidth(),
@@ -252,11 +254,11 @@ fun RetailSearchLandingScreen(
                 }
             }
 
-            item {
+            bbPageItem {
                 RetailSearchDottedDivider()
             }
 
-            item {
+            bbPageItem {
                 RetailSearchLandingSectionTitle(
                     title = "Önceden Gezdiklerim"
                 )
@@ -296,17 +298,17 @@ fun RetailSearchLandingScreen(
                 }
             }
 
-            item {
+            bbPageItem {
                 RetailSearchDottedDivider()
             }
 
-            item {
+            bbPageItem {
                 RetailSearchLandingSectionTitle(
                     title = "Sana Özel Markalar"
                 )
             }
 
-            item {
+            bbPageItem {
                 LazyRow(
                     modifier =
                         Modifier.fillMaxWidth(),

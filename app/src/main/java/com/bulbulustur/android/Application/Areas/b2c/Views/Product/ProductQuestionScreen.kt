@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Product
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -89,14 +91,14 @@ fun ProductQuestionScreen(
                 .padding(innerPadding)
                 .navigationBarsPadding(),
             contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
+                start = BBSpacing.None,
                 top = BBSpacing.SectionGapCompact,
-                end = BBSpacing.PageHorizontal,
+                end = BBSpacing.None,
                 bottom = BBSpacing.PageBottom
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
-            item {
+            bbPageItem {
                 ProductQuestionProductSummary(
                     productId = productId,
                     productName = productName,
@@ -106,7 +108,7 @@ fun ProductQuestionScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 ProductQuestionAskCard(
                     storeName = storeName,
                     questionText = questionText,

@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -92,14 +94,14 @@ fun NotificationListScreen(
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background),
             contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
+                start = BBSpacing.None,
                 top = innerPadding.calculateTopPadding() + BBSpacing.PageTopCompact,
-                end = BBSpacing.PageHorizontal,
+                end = BBSpacing.None,
                 bottom = innerPadding.calculateBottomPadding() + BBSpacing.PageBottom
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
         ) {
-            item {
+            bbPageItem {
                 Text(
                     text = BBLocalization.Current.Get(
                         key = "50040e90-e2d9-4d76-89f1-4b9969712653",
@@ -110,7 +112,7 @@ fun NotificationListScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 LazyRow(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2),

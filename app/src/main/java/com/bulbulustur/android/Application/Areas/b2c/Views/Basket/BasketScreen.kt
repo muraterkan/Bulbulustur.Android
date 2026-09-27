@@ -117,7 +117,7 @@ fun BasketScreen(State: BasketControllerState = BasketControllerState(), favorit
         Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
             LazyColumn(
                 modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surface),
-                contentPadding = PaddingValues(start = BBSpacing.PageHorizontal, top = BBSpacing.PageTopCompact, end = BBSpacing.PageHorizontal, bottom = if (basketLines.isEmpty()) BBSpacing.PageBottom else 112.dp),
+                contentPadding = PaddingValues(start = BBSpacing.None, top = BBSpacing.PageTopCompact, end = BBSpacing.None, bottom = if (basketLines.isEmpty()) BBSpacing.PageBottom else 112.dp),
                 verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
             ) {
                 when {

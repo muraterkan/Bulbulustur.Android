@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -87,16 +89,16 @@ fun AccountSettingsScreen(
                 .padding(innerPadding)
                 .navigationBarsPadding(),
             contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
+                start = BBSpacing.None,
                 top = BBSpacing.PageTopCompact,
-                end = BBSpacing.PageHorizontal,
+                end = BBSpacing.None,
                 bottom = BBSpacing.PageBottom
             ),
             verticalArrangement = Arrangement.spacedBy(
                 BBSpacing.CardGap
             )
         ) {
-            item {
+            bbPageItem {
                 SettingsProtectionBlock(
                     onAccountSecurityClick = onAccountSecurityClick,
                     onPrivacyClick = onPrivacyClick,
@@ -105,14 +107,14 @@ fun AccountSettingsScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 SettingsSectionTitle(
                     title = BBLocalization.Current.Get(key = "f5dc72ff-667e-4b30-977a-d92df95518dd", fallback = "Tercihler"),
                     subtitle = BBLocalization.Current.Get(key = "4df352cc-9caa-450e-80d3-ef1437fd338d", fallback = "Dil, görünüm ve bölgesel tercihlerini yönet.")
                 )
             }
 
-            item {
+            bbPageItem {
                 SettingsMenuGroup {
                     SettingsMenuRow(
                         title = BBLocalization.Current.Get(key = "5259eecf-5b93-46fb-bf7c-34acd890bf9a", fallback = "Dil"),
@@ -159,14 +161,14 @@ fun AccountSettingsScreen(
                 }
             }
 
-            item {
+            bbPageItem {
                 SettingsSectionTitle(
                     title = BBLocalization.Current.Get(key = "41fe178c-0054-4c06-8afd-86c7ad29b815", fallback = "Platform"),
                     subtitle = BBLocalization.Current.Get(key = "bd9c9ebe-1cce-49c4-a53d-88701764e9f1", fallback = "Uygulama bilgileri ve yasal metinler.")
                 )
             }
 
-            item {
+            bbPageItem {
                 SettingsMenuGroup {
                     SettingsMenuRow(
                         title = BBLocalization.Current.Get(key = "fc0a3fe5-4123-4ec5-8499-fccd3efd88d3", fallback = "Uygulama Hakkında"),

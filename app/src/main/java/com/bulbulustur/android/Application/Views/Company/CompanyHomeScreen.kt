@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Company
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.runtime.remember
 
 import androidx.compose.runtime.mutableStateOf
@@ -92,22 +94,22 @@ fun CompanyHomeScreen(
 
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(start = BBSpacing.PageHorizontal, top = innerPadding.calculateTopPadding() + BBSpacing.PageTopCompact, end = BBSpacing.PageHorizontal, bottom = innerPadding.calculateBottomPadding() + BBSpacing.PageBottom),
+                    contentPadding = PaddingValues(start = BBSpacing.None, top = innerPadding.calculateTopPadding() + BBSpacing.PageTopCompact, end = BBSpacing.None, bottom = innerPadding.calculateBottomPadding() + BBSpacing.PageBottom),
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.SectionGapCompact)
                 ) {
-                    item {
+                    bbPageItem {
                         CompanyHomeHero(company = home, onProductsClick = onProductsClick, onProfileClick = onProfileClick, onContactClick = onContactClick)
                     }
 
-                    item {
+                    bbPageItem {
                         CompanyHomeShowcaseCard(company = home)
                     }
 
-                    item {
+                    bbPageItem {
                         CompanyHomeTabs(onProfileClick = onProfileClick, onProductsClick = onProductsClick, onContactClick = onContactClick)
                     }
 
-                    item {
+                    bbPageItem {
                         CompanyHomeSectionCard(
                             title = "${home.name} Ürün Vitrinleri",
                             subtitle = BBLocalization.Current.Get(key = "5360cc71-4ee0-467a-ba6b-3974b3906012", fallback = "Firmanın öne çıkardığı özel ürün gruplarını ve toptan alıma uygun koleksiyonlarını keşfedin."),
@@ -117,7 +119,7 @@ fun CompanyHomeScreen(
                         )
                     }
 
-                    item {
+                    bbPageItem {
                         CompanyHomeSectionCard(
                             title = BBLocalization.Current.Get(key = "18c05241-483b-4955-8456-000521014ae8", fallback = "Şirket Vitrini"),
                             subtitle = BBLocalization.Current.Get(key = "84f38c3a-2eea-4ca1-9e66-e2db4f857e0b", fallback = "Firmanın öne çıkardığı ürün gruplarını, özel koleksiyonlarını ve ticari vitrinlerini inceleyin."),
@@ -127,7 +129,7 @@ fun CompanyHomeScreen(
                         )
                     }
 
-                    item {
+                    bbPageItem {
                         Spacer(modifier = Modifier.height(BBSpacing.Space4))
                     }
                 }
@@ -146,7 +148,7 @@ private fun CompanyHomeHero(
     BbCard(modifier = Modifier.fillMaxWidth(), variant = BbCardVariant.Outlined, padding = BbCardPadding.Large) {
         Column(verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space3)) {
-                
+
 CompanyLogoMark(logoText = company.logoText, logoUrl = company.logoUrl)
 
                 Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(BBSpacing.Space1)) {
@@ -293,7 +295,7 @@ private fun CompanyDTO.toCompanyHome(): CompanyHome {
     val name = CompanyName.trim().ifBlank { "Tedarikçi" }
     val description = firstNotBlank(Slogan, SeoDescription, CompanyType, "Firma güveni, tedarik yapısı ve öne çıkan ticari bilgiler.")
     val chips = listOfNotNull(blankToNull(CountryName), blankToNull(CityName), if (Verified) BBLocalization.Current.Get(key = "c6a0ff62-8828-475f-b553-37effb42efe6", fallback = "Doğrulanmış") else null, blankToNull(CompanyType))
-    
+
 return CompanyHome(companyId = CompanyId, name = name, logoText = name.toLogoText(), logoUrl = ImageUrlResolver.Resolve(Logo), description = description, isVerified = Verified, chips = chips)
 }
 

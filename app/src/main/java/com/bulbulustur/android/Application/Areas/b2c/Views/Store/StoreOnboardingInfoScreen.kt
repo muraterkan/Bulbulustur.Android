@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Store
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import com.bulbulustur.android.Application.Localization.BBLocalization
 
 import androidx.compose.foundation.BorderStroke
@@ -72,14 +74,14 @@ fun StoreOnboardingInfoScreen(
                 .padding(innerPadding)
                 .navigationBarsPadding(),
             contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
+                start = BBSpacing.None,
                 top = BBSpacing.SectionGapCompact,
-                end = BBSpacing.PageHorizontal,
+                end = BBSpacing.None,
                 bottom = BBSpacing.PageBottom
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
-            item {
+            bbPageItem {
                 SellerOnboardingHeroCard(
                     onContinueWebClick = {
                         uriHandler.openUri(SellerOnboardingUrl)
@@ -87,7 +89,7 @@ fun StoreOnboardingInfoScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 SellerOnboardingStepCard(
                     icon = Icons.Outlined.Business,
                     title = "Şirket bilgileri",
@@ -95,7 +97,7 @@ fun StoreOnboardingInfoScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 SellerOnboardingStepCard(
                     icon = Icons.Outlined.RequestQuote,
                     title = BBLocalization.Current.Get(key = "2bb360bf-843a-48b1-947f-2924e98e98ab", fallback = "Belgeler ve onay"),
@@ -103,7 +105,7 @@ fun StoreOnboardingInfoScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 SellerOnboardingStepCard(
                     icon = Icons.Outlined.Inventory2,
                     title = BBLocalization.Current.Get(key = "84be47c2-4c83-4aa1-8ed6-172002c11985", fallback = "Ürün ve mağaza yönetimi"),
@@ -111,7 +113,7 @@ fun StoreOnboardingInfoScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 SellerOnboardingPrimaryButton(
                     text = BBLocalization.Current.Get(key = "80e87ccf-f5c5-4c3d-9e48-a650af3af2d2", fallback = "Web Sitemizden Devam Et"),
                     icon = Icons.AutoMirrored.Outlined.OpenInNew,

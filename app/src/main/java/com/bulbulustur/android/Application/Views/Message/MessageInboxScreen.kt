@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Message
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import com.bulbulustur.android.Application.Localization.BBLocalization
 
 import androidx.compose.foundation.background
@@ -81,14 +83,14 @@ fun MessageInboxScreen(
                 .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding),
             contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
+                start = BBSpacing.None,
                 top = BBSpacing.PageTopCompact,
-                end = BBSpacing.PageHorizontal,
+                end = BBSpacing.None,
                 bottom = BBSpacing.PageBottom
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
-            item {
+            bbPageItem {
                 MessageStatsRow(
                     totalCount = messages.size,
                     unreadCount = unreadCount.coerceAtLeast(0),
@@ -96,7 +98,7 @@ fun MessageInboxScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 MessageFilterChips(
                     selectedFilter = selectedFilter,
                     onFilterClick = { filter ->
@@ -105,7 +107,7 @@ fun MessageInboxScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 MessageSectionTitle()
             }
 

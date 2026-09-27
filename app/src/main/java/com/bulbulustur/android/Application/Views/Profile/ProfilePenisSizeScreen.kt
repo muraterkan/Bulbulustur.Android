@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Profile
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import com.bulbulustur.android.Application.Localization.BBLocalization
 
 import com.bulbulustur.android.Application.Views.Profile.Components.BbProfileStickySaveBar as CommonProfileStickySaveBar
@@ -84,10 +86,10 @@ fun ProfilePenisSizeScreen(
                 onBackClick = onBackClick
             )
         },
-        
+
         bottomBar = {
             CommonProfileStickySaveBar(
-    
+
                 enabled = canSave,
                 isSaving = isSaving,
                 onClick = {
@@ -114,18 +116,18 @@ fun ProfilePenisSizeScreen(
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.surfaceVariant),
             contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
+                start = BBSpacing.None,
                 top = innerPadding.calculateTopPadding() + BBSpacing.PageTopCompact,
-                end = BBSpacing.PageHorizontal,
+                end = BBSpacing.None,
                 bottom = innerPadding.calculateBottomPadding() + BBSpacing.Space6
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
-            item {
+            bbPageItem {
                 ProfilePenisSizeIntroductionCard()
             }
 
-            item {
+            bbPageItem {
                 BbCard(
                     modifier = Modifier.fillMaxWidth(),
                     variant = BbCardVariant.Outlined,

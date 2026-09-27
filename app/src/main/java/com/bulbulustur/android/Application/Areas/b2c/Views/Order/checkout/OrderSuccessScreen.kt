@@ -1,5 +1,9 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItems
+
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -83,14 +87,14 @@ fun OrderSuccessScreen(
                 .background(MaterialTheme.colorScheme.background)
                 .padding(innerPadding),
             contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
+                start = BBSpacing.None,
                 top = BBSpacing.PageTopCompact,
-                end = BBSpacing.PageHorizontal,
+                end = BBSpacing.None,
                 bottom = BBSpacing.PageBottom
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
-            item {
+            bbPageItem {
                 OrderSuccessHero(
                     summary = screenData.summary,
                     onOrderDetailClick = {
@@ -99,13 +103,13 @@ fun OrderSuccessScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 OrderSuccessSummaryCard(
                     summary = screenData.summary
                 )
             }
 
-            item {
+            bbPageItem {
                 OrderSuccessSectionTitle(
                     title = BBLocalization.Current.Get(
                         key = "e90ea04b-714e-4f1f-92ed-7b962c39fb13",
@@ -118,7 +122,7 @@ fun OrderSuccessScreen(
                 )
             }
 
-            items(
+            bbPageItems(
                 items = screenData.shipmentGroups,
                 key = { shipmentGroup -> shipmentGroup.storeId }
             ) { shipmentGroup ->
@@ -127,17 +131,17 @@ fun OrderSuccessScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 OrderSuccessTotalCard(
                     total = screenData.total
                 )
             }
 
-            item {
+            bbPageItem {
                 OrderSuccessInfoCard()
             }
 
-            item {
+            bbPageItem {
                 BbButton(
                     text = BBLocalization.Current.Get(
                         key = "45ff1768-f800-4829-9ccf-e59a75e76f16",
@@ -152,7 +156,7 @@ fun OrderSuccessScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 BbButton(
                     text = BBLocalization.Current.Get(
                         key = "507ef499-3ec4-4197-98b3-66c6a6402a33",

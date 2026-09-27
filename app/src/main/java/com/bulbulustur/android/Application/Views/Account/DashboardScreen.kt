@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
@@ -149,13 +151,13 @@ fun DashboardScreen(
                 .statusBarsPadding()
                 .padding(innerPadding),
             contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
-                end = BBSpacing.PageHorizontal,
+                start = BBSpacing.None,
+                end = BBSpacing.None,
                 bottom = BBSpacing.Space5
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
-            item {
+            bbPageItem {
                 AccountProfileHero(
                     data = accountData,
                     useProfilePhoto = useProfilePhoto,
@@ -166,20 +168,20 @@ fun DashboardScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 AccountPrimaryActions(
                     onQuotationRequestsClick = onQuotationRequestsClick,
                     onCompanyInfoClick = onCompanyInfoClick
                 )
             }
 
-            item {
+            bbPageItem {
                 DashboardAccountCard(
                     onClick = onAccountClick
                 )
             }
 
-            item {
+            bbPageItem {
                 AccountMenuSection(
                     title = BBLocalization.Current.Get(key = "d7296566-8cda-48a0-8a11-44e5f928c65c", fallback = "Alışveriş İşlemleri")
                 ) {
@@ -228,7 +230,7 @@ fun DashboardScreen(
                 }
             }
 
-            item {
+            bbPageItem {
                 AccountMenuSection(
                     title = BBLocalization.Current.Get(key = "b883599e-fd54-4f60-a8bf-7be6ee723dcf", fallback = "Ticari Profil")
                 ) {
@@ -251,7 +253,7 @@ fun DashboardScreen(
                 }
             }
 
-            item {
+            bbPageItem {
                 AccountMenuSection(
                     title = BBLocalization.Current.Get(key = "2d3a9e98-76d1-471c-83ef-3d08e86f5982", fallback = "Alışveriş ve Etkileşim")
                 ) {
@@ -291,7 +293,7 @@ fun DashboardScreen(
                 }
             }
 
-            item {
+            bbPageItem {
                 AccountMenuSection(
                     title = BBLocalization.Current.Get(key = "af673a72-7193-42a3-bc6f-c0d18fc17797", fallback = "Finansal")
                 ) {
@@ -313,7 +315,7 @@ fun DashboardScreen(
                 }
             }
 
-            item {
+            bbPageItem {
                 AccountSupportAndSettingsGroup(
                     onSupportClick = onSupportClick,
                     onSettingsClick = onSettingsClick,
@@ -321,7 +323,7 @@ fun DashboardScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 AccountLogoutSection(
                     onLogoutClick = onLogoutClick,
                     isLogoutLoading = isLogoutLoading

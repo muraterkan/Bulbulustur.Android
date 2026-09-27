@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Campaign
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import com.bulbulustur.android.businesslayer.Core.Network.ImageUrlResolver
 
 import androidx.compose.foundation.BorderStroke
@@ -123,10 +125,10 @@ fun CampaignListScreen(
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
+                start = BBSpacing.None,
                 top = innerPadding.calculateTopPadding() +
                         BBSpacing.PageTopCompact,
-                end = BBSpacing.PageHorizontal,
+                end = BBSpacing.None,
                 bottom = innerPadding.calculateBottomPadding() +
                         BBSpacing.PageBottom
             ),
@@ -134,13 +136,13 @@ fun CampaignListScreen(
                 BBSpacing.SectionGapCompact
             )
         ) {
-            item {
+            bbPageItem {
                 CampaignListHero(
                     campaignCount = campaigns.size
                 )
             }
 
-            item {
+            bbPageItem {
                 CampaignSectionTitle(
                     title = BBLocalization.Current.Get(key = "e2812624-6bbc-4034-9a09-6570540d0785", fallback = "Tüm Kampanyalar"),
                     description = BBLocalization.Current.Get(key = "387b8cfc-5009-4880-92f1-4ba72f11e883", fallback = "Bulbulustur içinde öne çıkan kampanya alanlarını ve avantajlı alışveriş fırsatlarını görüntüle.")

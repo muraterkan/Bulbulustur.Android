@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Message
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -75,18 +77,18 @@ fun MessageDetailScreen(
                 .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding),
             contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
+                start = BBSpacing.None,
                 top = BBSpacing.PageTopCompact,
-                end = BBSpacing.PageHorizontal,
+                end = BBSpacing.None,
                 bottom = BBSpacing.PageBottom
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
-            item {
+            bbPageItem {
                 MessageParticipantCard(otherUser = otherUser)
             }
 
-            item {
+            bbPageItem {
                 MessageConversationHeader()
             }
 
@@ -125,7 +127,7 @@ fun MessageDetailScreen(
                 }
             }
 
-            item {
+            bbPageItem {
                 MessageReplyEditor(
                     value = replyText,
                     isSending = isSending,

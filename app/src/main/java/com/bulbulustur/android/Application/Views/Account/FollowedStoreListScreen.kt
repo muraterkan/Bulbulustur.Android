@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItems
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -88,9 +90,9 @@ fun FollowedStoreListScreen(
                         .background(MaterialTheme.colorScheme.background)
                         .padding(innerPadding),
                     contentPadding = PaddingValues(
-                        start = BBSpacing.PageHorizontal,
+                        start = BBSpacing.None,
                         top = BBSpacing.PageTopCompact,
-                        end = BBSpacing.PageHorizontal,
+                        end = BBSpacing.None,
                         bottom = BBSpacing.PageBottom
                     ),
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
@@ -110,7 +112,7 @@ fun FollowedStoreListScreen(
                         }
                     }
 
-                    items(
+                    bbPageItems(
                         items = stores,
                         key = { store -> store.MemberFollowedStoreId }
                     ) { store ->

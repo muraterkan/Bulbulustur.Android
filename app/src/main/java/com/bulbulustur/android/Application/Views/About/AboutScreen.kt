@@ -1,5 +1,9 @@
 package com.bulbulustur.android.Application.Views.About
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItems
+
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -67,29 +71,29 @@ fun AboutScreen(
                 .background(MaterialTheme.colorScheme.background)
                 .padding(innerPadding),
             contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
+                start = BBSpacing.None,
                 top = BBSpacing.PageTopCompact,
-                end = BBSpacing.PageHorizontal,
+                end = BBSpacing.None,
                 bottom = BBSpacing.PageBottom
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
-            item {
+            bbPageItem {
                 AboutIntroCard()
             }
 
-            item {
+            bbPageItem {
                 AboutEcosystemCard()
             }
 
-            item {
+            bbPageItem {
                 BbSectionHeader(
                     title = BBLocalization.Current.Get(key = "c08b2887-d9b2-4671-b9ad-8e59f296b7c1", fallback = "Bulbulustur Hakkında"),
                     subtitle = BBLocalization.Current.Get(key = "be6a58d7-0e72-4152-8149-bfed9b34d70f", fallback = "Platformun hikayesi, amacı ve ticaret yaklaşımı")
                 )
             }
 
-            items(
+            bbPageItems(
                 items = aboutStoryItems(),
                 key = { item -> item.title }
             ) { item ->
@@ -98,25 +102,25 @@ fun AboutScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 BbSectionHeader(
                     title = BBLocalization.Current.Get(key = "c58e1d2d-c0e4-4ea0-a4f7-6158e988a819", fallback = "Ne Yapıyoruz?"),
                     subtitle = BBLocalization.Current.Get(key = "c844897e-56f7-47c7-889d-88477ee78133", fallback = "Toptan, perakende ve dijital ticaret altyapısını aynı omurgada topluyoruz")
                 )
             }
 
-            item {
+            bbPageItem {
                 AboutCapabilityGrid()
             }
 
-            item {
+            bbPageItem {
                 BbSectionHeader(
                     title = BBLocalization.Current.Get(key = "91e62b3b-1eab-4cee-adc5-3d2a59c507b0", fallback = "Platform Yönleri"),
                     subtitle = BBLocalization.Current.Get(key = "4dc7b679-009a-434d-b02a-85bff5423c11", fallback = "Alıcı, satıcı, tedarikçi ve geliştirici akışları")
                 )
             }
 
-            items(
+            bbPageItems(
                 items = aboutPlatformItems(),
                 key = { item -> item.title }
             ) { item ->
@@ -125,14 +129,14 @@ fun AboutScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 BbSectionHeader(
                     title = BBLocalization.Current.Get(key = "671d4eda-fc74-4a28-a7d8-e9742907ccd7", fallback = "Devam Edin"),
                     subtitle = BBLocalization.Current.Get(key = "31104221-83bd-4463-8cd6-9a2f515b042b", fallback = "Kurumsal sayfalara hızlı geçiş")
                 )
             }
 
-            item {
+            bbPageItem {
                 AboutActionArea(
                     onInvestorClick = onInvestorClick,
                     onCareerClick = onCareerClick,
@@ -141,7 +145,7 @@ fun AboutScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 Spacer(modifier = Modifier.height(BBSpacing.Space8))
             }
         }

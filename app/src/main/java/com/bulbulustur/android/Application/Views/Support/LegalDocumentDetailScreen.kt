@@ -1,5 +1,9 @@
 package com.bulbulustur.android.Application.Views.Support
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItems
+
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -58,34 +62,34 @@ fun LegalDocumentDetailScreen(
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
             contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
+                start = BBSpacing.None,
                 top = innerPadding.calculateTopPadding() + BBSpacing.PageTopCompact,
-                end = BBSpacing.PageHorizontal,
+                end = BBSpacing.None,
                 bottom = innerPadding.calculateBottomPadding() + BBSpacing.PageBottom
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.SectionGapCompact)
         ) {
-            item {
+            bbPageItem {
                 LegalDocumentDetailHeader(
                     document = document,
                     onBackClick = onBackClick
                 )
             }
 
-            item {
+            bbPageItem {
                 LegalDocumentMetaCard(
                     document = document
                 )
             }
 
-            item {
+            bbPageItem {
                 BbSectionHeader(
                     title = BBLocalization.Current.Get(key = "2b91fb3e-ca32-47dd-99ab-3f018ee89c7d", fallback = ""),
                     subtitle = BBLocalization.Current.Get(key = "57504c0e-4863-470a-9911-c1f2fce8fed0", fallback = "Bu metin API bağlantısından sonra gerçek içerikle beslenecek")
                 )
             }
 
-            items(
+            bbPageItems(
                 items = document.sections,
                 key = { section ->
                     section.title
@@ -96,11 +100,11 @@ fun LegalDocumentDetailScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 LegalDocumentInfoCard()
             }
 
-            item {
+            bbPageItem {
                 Spacer(modifier = Modifier.height(BBSpacing.Space4))
             }
         }

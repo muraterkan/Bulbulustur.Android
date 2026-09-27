@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -74,22 +76,22 @@ fun AccountSecurityScreen(
                 .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding),
             contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
+                start = BBSpacing.None,
                 top = BBSpacing.PageTopCompact,
-                end = BBSpacing.PageHorizontal,
+                end = BBSpacing.None,
                 bottom = BBSpacing.PageBottom
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
-            item {
+            bbPageItem {
                 AccountSecurityIntroCard()
             }
 
-            item {
+            bbPageItem {
                 AccountSecurityStrengthCard()
             }
 
-            item {
+            bbPageItem {
                 AccountSecuritySection(
                     title = BBLocalization.Current.Get(key = "ab200e4f-1f9e-45f4-90a6-7d5d21d33953", fallback = "Profil"),
                     description = BBLocalization.Current.Get(key = "f6141dae-a633-4fbd-a278-f853cfca9c39", fallback = "Hesabınızda görünen temel bilgileri yönetin."),
@@ -104,7 +106,7 @@ fun AccountSecurityScreen(
                 }
             }
 
-            item {
+            bbPageItem {
                 AccountSecuritySection(
                     title = BBLocalization.Current.Get(key = "72de0009-aa0a-48ed-b08e-5ce322991021", fallback = "Giriş ve Güvenlik"),
                     description = BBLocalization.Current.Get(key = "2ecf7d43-0ef8-4e69-b801-5a81939ac1b4", fallback = "E-posta, şifre ve giriş güvenliği ayarları."),
@@ -137,7 +139,7 @@ fun AccountSecurityScreen(
                 }
             }
 
-            item {
+            bbPageItem {
                 AccountSecuritySection(
                     title = BBLocalization.Current.Get(key = "b513dd09-c8de-47dd-9754-631b270b6442", fallback = "Oturum Geçmişi"),
                     description = BBLocalization.Current.Get(key = "cc2e3ef1-ee9a-4da0-bf52-f8974af7060f", fallback = "Hesabınıza yapılan erişimleri kontrol edin."),

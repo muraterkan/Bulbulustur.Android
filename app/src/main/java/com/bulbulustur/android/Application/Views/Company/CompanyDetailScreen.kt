@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Company
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -194,9 +196,9 @@ private fun CompanyDetailContent(
             .fillMaxSize()
             .padding(innerPadding),
         contentPadding = PaddingValues(
-            start = BBSpacing.PageHorizontal,
+            start = BBSpacing.None,
             top = BBSpacing.PageTopCompact,
-            end = BBSpacing.PageHorizontal,
+            end = BBSpacing.None,
             bottom = BBSpacing.PageBottom
         ),
         verticalArrangement = Arrangement.spacedBy(BBSpacing.SectionGapCompact)
@@ -211,11 +213,11 @@ private fun CompanyDetailContent(
             }
         }
 
-        item {
+        bbPageItem {
             CompanyDetailHero(company = company)
         }
 
-        item {
+        bbPageItem {
             CompanyDetailMainActions(
                 company = company,
                 onProductListClick = onProductListClick,
@@ -223,7 +225,7 @@ private fun CompanyDetailContent(
             )
         }
 
-        item {
+        bbPageItem {
             CompanyDetailTabs(
                 company = company,
                 onHomeClick = onHomeClick,
@@ -316,7 +318,7 @@ private fun CompanyDetailContent(
             }
         }
 
-        item {
+        bbPageItem {
             CompanyTrustPanel(
                 company = company,
                 certificateCount = companyCertificates.size,
@@ -329,7 +331,7 @@ private fun CompanyDetailContent(
             )
         }
 
-        item {
+        bbPageItem {
             Spacer(modifier = Modifier.height(BBSpacing.Space4))
         }
     }

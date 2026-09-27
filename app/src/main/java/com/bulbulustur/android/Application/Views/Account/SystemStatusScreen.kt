@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -114,22 +116,22 @@ private fun SystemStatusContent(
             .background(MaterialTheme.colorScheme.surfaceVariant)
             .navigationBarsPadding(),
         contentPadding = PaddingValues(
-            start = BBSpacing.PageHorizontal,
+            start = BBSpacing.None,
             top = BBSpacing.PageTopCompact,
-            end = BBSpacing.PageHorizontal,
+            end = BBSpacing.None,
             bottom = BBSpacing.PageBottom
         ),
         verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
     ) {
-        item {
+        bbPageItem {
             SystemStatusHeroCard(overview = overview)
         }
 
-        item {
+        bbPageItem {
             SystemStatusComponentCard(components = overview.Components)
         }
 
-        item {
+        bbPageItem {
             SystemStatusIncidentCard(
                 title = BBLocalization.Current.Get(key = "479c3d5b-b12e-4619-b00c-3125547e6fe0", fallback = "Aktif Olaylar"),
                 subtitle = BBLocalization.Current.Get(key = "bea8c8c3-547e-434b-bebd-60e878bae104", fallback = "Şu anda kullanıcıları etkileyen olaylar."),
@@ -138,13 +140,13 @@ private fun SystemStatusContent(
             )
         }
 
-        item {
+        bbPageItem {
             SystemStatusMaintenanceCard(
                 maintenances = overview.ScheduledMaintenances
             )
         }
 
-        item {
+        bbPageItem {
             SystemStatusIncidentCard(
                 title = BBLocalization.Current.Get(key = "a236800c-25c4-4377-9a7b-688e6f688834", fallback = "Son Olaylar"),
                 subtitle = BBLocalization.Current.Get(key = "cc1223c8-2ffa-4d21-bfb0-5c2063eb45ea", fallback = "Yakın dönemde kapatılmış operasyon kayıtları."),
@@ -153,7 +155,7 @@ private fun SystemStatusContent(
             )
         }
 
-        item {
+        bbPageItem {
             BbButton(
                 text = BBLocalization.Current.Get(key = "1d59e1e3-6fd3-4ee1-aab7-19c6d1f6c30e", fallback = "Detaylı Durum Sayfasını Aç"),
                 onClick = onOpenStatusPageClick,

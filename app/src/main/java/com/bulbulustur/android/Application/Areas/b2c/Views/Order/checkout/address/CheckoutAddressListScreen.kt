@@ -1,7 +1,6 @@
+package com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.address
 
-            package com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.address
-        
-
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItems
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -73,9 +72,9 @@ fun CheckoutAddressListScreen(
                 .background(MaterialTheme.colorScheme.background)
                 .padding(innerPadding),
             contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
+                start = BBSpacing.None,
                 top = BBSpacing.PageTopCompact,
-                end = BBSpacing.PageHorizontal,
+                end = BBSpacing.None,
                 bottom = BBSpacing.PageBottom
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
@@ -109,7 +108,7 @@ fun CheckoutAddressListScreen(
                 return@LazyColumn
             }
 
-            items(
+            bbPageItems(
                 items = addresses,
                 key = { address -> address.MemberAddressId }
             ) { address ->
@@ -178,7 +177,7 @@ private fun AddressCard(
                     horizontalArrangement = Arrangement.spacedBy(BBSpacing.Space2)
                 ) {
                     BbButton(
-                        
+
 text = BBLocalization.Current.Get(key = "6a23f3ad-9109-471d-a670-7b5a40cf3cd9", fallback = "Düzenle"),
                         onClick = {
                             onEditAddressClick(address.AddressKey)
@@ -198,7 +197,7 @@ text = BBLocalization.Current.Get(key = "6a23f3ad-9109-471d-a670-7b5a40cf3cd9", 
                     )
 
                     BbButton(
-                        
+
 text = if (isSelected) "Seçildi" else "Seç"
 ,
                         onClick = {

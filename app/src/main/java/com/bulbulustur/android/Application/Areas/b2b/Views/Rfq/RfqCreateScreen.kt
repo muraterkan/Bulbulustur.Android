@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2b.Views.Rfq
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -192,14 +194,14 @@ fun RfqCreateScreen(
                 .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding),
             contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
+                start = BBSpacing.None,
                 top = BBSpacing.PageTopCompact,
-                end = BBSpacing.PageHorizontal,
+                end = BBSpacing.None,
                 bottom = BBSpacing.PageBottom
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
-            item {
+            bbPageItem {
                 BbCard(
                     modifier = Modifier.fillMaxWidth(),
                     variant = BbCardVariant.Outlined,
@@ -269,7 +271,7 @@ fun RfqCreateScreen(
                 }
             }
 
-            item {
+            bbPageItem {
                 RfqCreateSection(title = BBLocalization.Current.Get(key = "90509413-3f80-4a57-b43b-21738dc74b50", fallback = "Ürün Bilgileri")) {
                     BbTextInput(
                         value = productName,
@@ -316,7 +318,7 @@ fun RfqCreateScreen(
                 }
             }
 
-            item {
+            bbPageItem {
                 RfqCreateSection(title = BBLocalization.Current.Get(key = "bd347300-ac91-49d1-921b-ea7734a6be05", fallback = "Miktar ve Fiyat")) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -380,7 +382,7 @@ fun RfqCreateScreen(
                 }
             }
 
-            item {
+            bbPageItem {
                 RfqCreateSection(title = BBLocalization.Current.Get(key = "d036fcbd-c864-40cf-8899-cbdae6a6b913", fallback = "Ürün Özellikleri")) {
                     BbSelectInput(
                         selectedValue = colorId,
@@ -408,7 +410,7 @@ fun RfqCreateScreen(
                 }
             }
 
-            item {
+            bbPageItem {
                 RfqCreateSection(title = BBLocalization.Current.Get(key = "b57feb8b-30a7-4c26-a638-cce10d96c69d", fallback = "Ticari Koşullar")) {
                     BbSelectInput(
                         selectedValue = paymentTermId,
@@ -465,7 +467,7 @@ fun RfqCreateScreen(
                 }
             }
 
-            item {
+            bbPageItem {
                 BbButton(
                     text = BBLocalization.Current.Get(key = "9795306e-334f-4b00-8535-097e26c0fda6", fallback = "Teklif Talebini Gönder"),
                     onClick = {

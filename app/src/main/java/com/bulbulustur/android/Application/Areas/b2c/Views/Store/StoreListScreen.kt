@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.Store
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -183,20 +185,20 @@ fun StoreListScreen(
                 .padding(innerPadding)
                 .navigationBarsPadding(),
             contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
+                start = BBSpacing.None,
                 top = BBSpacing.SectionGapCompact,
-                end = BBSpacing.PageHorizontal,
+                end = BBSpacing.None,
                 bottom = BBSpacing.PageBottom
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
-            item {
+            bbPageItem {
                 StoreListHeroCard(
                     onHowItWorksClick = onHowItWorksClick
                 )
             }
 
-            item {
+            bbPageItem {
                 StoreListSearchCard(
                     searchText = searchText,
                     onSearchTextChange = {
@@ -205,7 +207,7 @@ fun StoreListScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 StoreAlphabetFilterRow(
                     filters = alphabetFilters,
                     selectedFilter = selectedAlphabetFilter,
@@ -215,7 +217,7 @@ fun StoreListScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 StoreListResultHeader(
                     storeCount = filteredStores.size,
                     selectedFilter = selectedAlphabetFilter,

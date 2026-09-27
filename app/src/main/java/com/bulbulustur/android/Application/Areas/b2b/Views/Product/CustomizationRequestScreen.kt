@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2b.Views.Product
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
@@ -84,34 +86,34 @@ fun CustomizationRequestScreen(
                 .fillMaxSize()
                 .padding(innerPadding),
             contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
+                start = BBSpacing.None,
                 top = BBSpacing.PageTopCompact,
-                end = BBSpacing.PageHorizontal,
+                end = BBSpacing.None,
                 bottom = BBSpacing.PageBottom
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
-            item {
+            bbPageItem {
                 CustomizationRequestHeader(
                     productName = productName
                 )
             }
 
-            item {
+            bbPageItem {
                 CustomizationProductSummaryCard(
                     productName = productName,
                     companyName = companyName
                 )
             }
 
-            item {
+            bbPageItem {
                 BbSectionHeader(
                     title = BBLocalization.Current.Get(key = "0cc7e89c-1933-4ec9-8cd4-f3cf9a6d55b4", fallback = "Özelleştirme Detayları"),
                     subtitle = BBLocalization.Current.Get(key = "623167d9-dcfe-4ff4-ba73-72051793fe97", fallback = "Tedarikçinin doğru dönüş yapabilmesi için değişiklikleri açık yazın")
                 )
             }
 
-            item {
+            bbPageItem {
                 CustomizationLongTextField(
                     value = detail.value,
                     onValueChange = {
@@ -122,7 +124,7 @@ fun CustomizationRequestScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 CustomizationSuggestionChips(
                     onSuggestionClick = {
                         detail.value = it
@@ -130,14 +132,14 @@ fun CustomizationRequestScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 BbSectionHeader(
                     title = BBLocalization.Current.Get(key = "b9c5b4b4-1ba6-4a6a-95be-9e08acd2f3c8", fallback = "Hızlı Detay Alanları"),
                     subtitle = BBLocalization.Current.Get(key = "e6ed8a08-71de-4aae-880b-fa6dc43c0981", fallback = "İsterseniz özelleştirme bilgisini ayrı ayrı da yazabilirsiniz")
                 )
             }
 
-            item {
+            bbPageItem {
                 CustomizationTextField(
                     value = colorMaterial.value,
                     onValueChange = {
@@ -149,7 +151,7 @@ fun CustomizationRequestScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 CustomizationTextField(
                     value = sizeTechnical.value,
                     onValueChange = {
@@ -161,7 +163,7 @@ fun CustomizationRequestScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 CustomizationTextField(
                     value = packageLogo.value,
                     onValueChange = {
@@ -173,11 +175,11 @@ fun CustomizationRequestScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 CustomizationHintCard()
             }
 
-            item {
+            bbPageItem {
                 CustomizationSendCard(
                     onSendClick = {
                         onSendClick(
@@ -190,7 +192,7 @@ fun CustomizationRequestScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 Spacer(modifier = Modifier.height(BBSpacing.Space4))
             }
         }

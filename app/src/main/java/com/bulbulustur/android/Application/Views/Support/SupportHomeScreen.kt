@@ -1,5 +1,9 @@
 package com.bulbulustur.android.Application.Views.Support
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItems
+
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -67,31 +71,31 @@ fun SupportHomeScreen(
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background),
             contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
+                start = BBSpacing.None,
                 top = innerPadding.calculateTopPadding() + BBSpacing.PageTopCompact,
-                end = BBSpacing.PageHorizontal,
+                end = BBSpacing.None,
                 bottom = innerPadding.calculateBottomPadding() + BBSpacing.PageBottom
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.SectionGapCompact)
         ) {
-            item {
+            bbPageItem {
                 SupportIntroCard()
             }
 
-            item {
+            bbPageItem {
                 SupportQuickSearchChips(
                     onSearchClick = onSearchClick
                 )
             }
 
-            item {
+            bbPageItem {
                 BbSectionHeader(
                     title = BBLocalization.Current.Get(key = "89c528e0-4de6-4ad6-ad4b-c933fd87b176", fallback = "Doğru Alandan Başlayın"),
                     subtitle = BBLocalization.Current.Get(key = "905cc9c9-e211-4909-a02a-84fc5f98b5d1", fallback = "Kullandığınız alana göre yardım kategorisini seçin")
                 )
             }
 
-            items(
+            bbPageItems(
                 items = getSupportCategoryItems(),
                 key = { category ->
                     category.categoryId
@@ -105,14 +109,14 @@ fun SupportHomeScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 BbSectionHeader(
                     title = BBLocalization.Current.Get(key = "c8244897-d3be-4c63-8f5e-ea505a080a38", fallback = "Video Rehberler"),
                     subtitle = BBLocalization.Current.Get(key = "9588b46a-9197-4e68-99fd-6df86367371d", fallback = "Sık kullanılan işlemleri hızlıca öğrenin")
                 )
             }
 
-            items(
+            bbPageItems(
                 items = getSupportVideoGuideItems(),
                 key = { videoGuide ->
                     videoGuide.videoGuideId
@@ -126,14 +130,14 @@ fun SupportHomeScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 BbSectionHeader(
                     title = BBLocalization.Current.Get(key = "85f5b9bd-1298-4460-a2df-60aedf0d6b99", fallback = "Popüler Yardım Başlıkları"),
                     subtitle = BBLocalization.Current.Get(key = "d719bc4c-2fd5-41f8-a9a4-bd5d5820338b", fallback = "En çok aranan destek konuları")
                 )
             }
 
-            items(
+            bbPageItems(
                 items = getSupportPopularArticleItems(),
                 key = { article ->
                     article.articleId
@@ -147,7 +151,7 @@ fun SupportHomeScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 Spacer(modifier = Modifier.height(BBSpacing.Space4))
             }
         }

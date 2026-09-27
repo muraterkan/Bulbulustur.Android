@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2c.Views.order
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -113,21 +115,21 @@ fun OrderReviewCreateScreen(
                 .padding(innerPadding)
                 .navigationBarsPadding(),
             contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
+                start = BBSpacing.None,
                 top = BBSpacing.PageTopCompact,
-                end = BBSpacing.PageHorizontal,
+                end = BBSpacing.None,
                 bottom = BBSpacing.PageBottom
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
-            item {
+            bbPageItem {
                 OrderReviewProductCard(
                     productId = productId,
                     orderStoreLineId = orderStoreLineId
                 )
             }
 
-            item {
+            bbPageItem {
                 OrderReviewRatingCard(
                     rating = rating,
                     onRatingChange = { value ->
@@ -136,7 +138,7 @@ fun OrderReviewCreateScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 OrderReviewContentCard(
                     content = content,
                     onContentChange = { value ->
@@ -145,7 +147,7 @@ fun OrderReviewCreateScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 OrderReviewAgreementCard(
                     accepted = accepted,
                     onAcceptedChange = { value ->
@@ -166,7 +168,7 @@ fun OrderReviewCreateScreen(
                     }
                 }
 
-            item {
+            bbPageItem {
                 OrderReviewActionCard(
                     canSubmit = canSubmit,
                     isLoading = state.IsLoading &&

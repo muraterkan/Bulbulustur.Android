@@ -212,9 +212,9 @@ fun WholesaleCategoryLevel2Screen(
                 )
                 .navigationBarsPadding(),
             contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
+                start = BBSpacing.None,
                 top = BBSpacing.PageTopCompact,
-                end = BBSpacing.PageHorizontal,
+                end = BBSpacing.None,
                 bottom = BBSpacing.PageBottom
             ),
             verticalArrangement = Arrangement.spacedBy(
@@ -250,7 +250,8 @@ fun WholesaleCategoryLevel2Screen(
                             childCategoryCount = validChildCategories.size,
                             hasShowcases = categoryContents.isNotEmpty()
                         )
-                    }
+                    }
+
 
                     item {
                         WholesaleCategorySectionTitle(

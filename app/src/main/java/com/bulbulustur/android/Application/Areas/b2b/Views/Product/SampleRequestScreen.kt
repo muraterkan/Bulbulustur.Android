@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2b.Views.Product
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
@@ -73,34 +75,34 @@ fun SampleRequestScreen(
                 .fillMaxSize()
                 .padding(innerPadding),
             contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
+                start = BBSpacing.None,
                 top = BBSpacing.PageTopCompact,
-                end = BBSpacing.PageHorizontal,
+                end = BBSpacing.None,
                 bottom = BBSpacing.PageBottom
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.Space4)
         ) {
-            item {
+            bbPageItem {
                 SampleRequestHeader(
                     productName = productName
                 )
             }
 
-            item {
+            bbPageItem {
                 SampleProductSummaryCard(
                     productName = productName,
                     companyName = companyName
                 )
             }
 
-            item {
+            bbPageItem {
                 BbSectionHeader(
                     title = BBLocalization.Current.Get(key = "227128f4-0b5c-41c2-942a-cb05d069ed9a", fallback = "Numune Detayları"),
                     subtitle = BBLocalization.Current.Get(key = "d7abde99-4d5f-48c4-9eba-e1f4d0593a66", fallback = "Kaç adet numune istediğinizi ve özel notlarınızı yazın")
                 )
             }
 
-            item {
+            bbPageItem {
                 SampleRequestTextField(
                     value = quantity.value,
                     onValueChange = {
@@ -112,7 +114,7 @@ fun SampleRequestScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 SampleRequestLongTextField(
                     value = detail.value,
                     onValueChange = {
@@ -123,11 +125,11 @@ fun SampleRequestScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 SampleRequestHintCard()
             }
 
-            item {
+            bbPageItem {
                 SampleRequestSendCard(
                     onSendClick = {
                         onSendClick(
@@ -138,7 +140,7 @@ fun SampleRequestScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 Spacer(modifier = Modifier.height(BBSpacing.Space4))
             }
         }

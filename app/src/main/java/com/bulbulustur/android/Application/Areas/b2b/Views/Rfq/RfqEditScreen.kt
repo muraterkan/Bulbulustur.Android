@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2b.Views.Rfq
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -115,10 +117,10 @@ fun RfqEditScreen(
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surfaceVariant).padding(innerPadding),
-            contentPadding = PaddingValues(start = BBSpacing.PageHorizontal, top = BBSpacing.PageTopCompact, end = BBSpacing.PageHorizontal, bottom = BBSpacing.PageBottom),
+            contentPadding = PaddingValues(start = BBSpacing.None, top = BBSpacing.PageTopCompact, end = BBSpacing.None, bottom = BBSpacing.PageBottom),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
-            if (isLoading || !initialized) item { RfqEditMessageCard(BBLocalization.Current.Get(key = "b31264eb-9873-46b7-af43-1b1eeadde164", fallback = "RFQ bilgileri yükleniyor...")) }
+            if (isLoading || !initialized) bbPageItem { RfqEditMessageCard(BBLocalization.Current.Get(key = "b31264eb-9873-46b7-af43-1b1eeadde164", fallback = "RFQ bilgileri yükleniyor...")) }
 
             if (!errorMessage.isNullOrBlank()) {
                 item {

@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Account
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -107,25 +109,25 @@ fun RequestDetailScreen(
                         .background(MaterialTheme.colorScheme.background)
                         .padding(innerPadding),
                     contentPadding = PaddingValues(
-                        start = BBSpacing.PageHorizontal,
+                        start = BBSpacing.None,
                         top = BBSpacing.PageTopCompact,
-                        end = BBSpacing.PageHorizontal,
+                        end = BBSpacing.None,
                         bottom = BBSpacing.PageBottom
                     ),
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
                 ) {
-                    item {
+                    bbPageItem {
                         RequestDetailSummaryCard(request = request)
                     }
 
-                    item {
+                    bbPageItem {
                         RequestDetailProductCard(
                             request = request,
                             onStoreClick = onStoreClick
                         )
                     }
 
-                    item {
+                    bbPageItem {
                         RequestDetailReasonCard(request = request)
                     }
 
@@ -135,11 +137,11 @@ fun RequestDetailScreen(
                         }
                     }
 
-                    item {
+                    bbPageItem {
                         RequestDetailPropertiesCard(request = request)
                     }
 
-                    item {
+                    bbPageItem {
                         RequestDetailPhotosCard(pictures = request.Pictures.orEmpty())
                     }
 

@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Areas.b2b.Views.Product
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItems
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -93,14 +95,14 @@ fun WholesaleFeaturedProductsScreen(
                         .padding(innerPadding)
                         .navigationBarsPadding(),
                     contentPadding = PaddingValues(
-                        start = BBSpacing.PageHorizontal,
+                        start = BBSpacing.None,
                         top = BBSpacing.PageTopCompact,
-                        end = BBSpacing.PageHorizontal,
+                        end = BBSpacing.None,
                         bottom = BBSpacing.PageBottom
                     ),
                     verticalArrangement = Arrangement.spacedBy(BBSpacing.Space3)
                 ) {
-                    items(
+                    bbPageItems(
                         items = products.chunked(2),
                         key = { row ->
                             row.joinToString("-") {

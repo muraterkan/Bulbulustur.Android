@@ -1,5 +1,7 @@
 package com.bulbulustur.android.Application.Views.Preference
 
+import com.bulbulustur.android.Application.Views.Shared.Components.bbPageItem
+
 import com.bulbulustur.android.Application.Localization.BBLocalization
 
 import androidx.compose.foundation.background
@@ -63,18 +65,18 @@ fun UsagePurposeScreen(
                 .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(innerPadding),
             contentPadding = PaddingValues(
-                start = BBSpacing.PageHorizontal,
+                start = BBSpacing.None,
                 top = BBSpacing.PageTopCompact,
-                end = BBSpacing.PageHorizontal,
+                end = BBSpacing.None,
                 bottom = BBSpacing.PageBottom
             ),
             verticalArrangement = Arrangement.spacedBy(BBSpacing.CardGap)
         ) {
-            item {
+            bbPageItem {
                 UsagePurposeIntroCard()
             }
 
-            item {
+            bbPageItem {
                 UsagePurposeOptionCard(
                     title = BBLocalization.Current.Get(key = "275f5656-d923-4853-b4f6-56a67a24d4ef", fallback = "Perakende Alışveriş Yapıyorum"),
                     description = BBLocalization.Current.Get(key = "58e82096-5777-4dff-86a4-9e2088fa4080", fallback = "Ürün Keşfi, sepet, sipariş ve favoriler benim için önemli."),
@@ -84,7 +86,7 @@ fun UsagePurposeScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 UsagePurposeOptionCard(
                     title = BBLocalization.Current.Get(key = "72ac1a72-61e2-4ac4-820d-07504f196bbc", fallback = "Toptan Alım Yapıyorum"),
                     description = BBLocalization.Current.Get(key = "263d305f-474b-42df-9b33-0542e4350685", fallback = "Tedarikçi, RFQ, teklif ve şirket profilleriyle ilerlemek istiyorum."),
@@ -94,7 +96,7 @@ fun UsagePurposeScreen(
                 )
             }
 
-            item {
+            bbPageItem {
                 UsagePurposeOptionCard(
                     title = BBLocalization.Current.Get(key = "0cdeacf1-ae0f-414b-ae02-26085aaef637", fallback = "Her İkisini de Kullanıyorum"),
                     description = BBLocalization.Current.Get(key = "fed718f4-5532-47dd-9ac6-ac9bbf49a37c", fallback = "Hem perakende alışveriş hem de toptan ticaret akışlarını görmek istiyorum."),

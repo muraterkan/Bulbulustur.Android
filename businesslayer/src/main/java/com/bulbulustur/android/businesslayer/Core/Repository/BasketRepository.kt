@@ -4,6 +4,7 @@ import com.bulbulustur.android.businesslayer.Core.DTO.BasketDTO
 import com.bulbulustur.android.businesslayer.Core.DTO.BasketInsertResponse
 import com.bulbulustur.android.businesslayer.Core.DTO.BasketQuantityUpdateResponse
 import com.bulbulustur.android.businesslayer.Core.DTO.BasketSummaryDTO
+import com.bulbulustur.android.businesslayer.Core.DTO.GatewayCargoQuoteResponse
 import com.bulbulustur.android.businesslayer.Core.Interface.IBasketRepository
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.BasketInsertRequest
 import com.bulbulustur.android.businesslayer.Core.Model.UpdateModels.BasketQuantityUpdateModel
@@ -26,13 +27,50 @@ class BasketRepository(
         )
     }
 
-    override suspend fun GetBasketSummaryAsync(
-        memberId: Int
-    ): Result<BasketSummaryDTO> {
-        return apiClient.GetAsync(
-            baseUrl = ApiRoutes.COMMERCE_SUPPORT_BASKET_BASE_URL,
-            method = "GetBasketSummaryAsync",
-            query = "memberId=$memberId"
+    override suspend fun GetBasketSummaryAsync(memberId: Int): Result<BasketSummaryDTO>
+    {
+        if (memberId <= 0)
+        {
+            return Result(
+                Success = false,
+                Message = "MemberId is required."
+            )
+        }
+
+        val cargoQuoteResult = apiClient.GetRawAsync<GatewayCargoQuoteResponse>(
+            baseUrl = ApiRoutes.PAYMENT_BASE_URL,
+            method = "cargo/quote/$memberId"
+        )
+
+        if (!cargoQuoteResult.Success || cargoQuoteResult.Data == null)
+        {
+            return Result(
+                Success = false,
+                Message = cargoQuoteResult.Message
+            )
+        }
+
+        val quote = cargoQuoteResult.Data
+
+        if (!quote.Success)
+        {
+            return Result(
+                Success = false,
+                Message = quote.Message ?: "Kargo ve sepet özeti alınamadı."
+            )
+        }
+
+        return Result(
+            Success = true,
+            Data = BasketSummaryDTO(
+                NetTotal = quote.NetTotal,
+                VatTotal = quote.Vat,
+                SubTotal = quote.SubTotal,
+                ShippingCost = quote.ShippingTotal,
+                GrossTotal = quote.GrandTotal,
+                FinalDesi = quote.FinalDesi,
+                StoreShippingBreakdown = quote.StoreShippingBreakdown
+            )
         )
     }
 

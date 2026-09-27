@@ -54,6 +54,14 @@ object ApiClient {
         return ParseResult(response = response)
     }
 
+    suspend inline fun <reified T> GetRawAsync(baseUrl: String, method: String, query: String? = null): Result<T>
+    {
+        val url = BuildUrl(baseUrl = baseUrl, method = method, query = query)
+        val response = genericApi.GetAsync(url = url)
+
+        return ParseRawResult(response = response)
+    }
+
     suspend inline fun <reified TRequest, reified TResponse> PostAsync(
         baseUrl: String,
         method: String,

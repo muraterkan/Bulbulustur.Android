@@ -11,6 +11,7 @@ import com.bulbulustur.android.businesslayer.Core.Interface.ICheckoutSnapshotRep
 import com.bulbulustur.android.businesslayer.Core.Interface.IContractRepository
 import com.bulbulustur.android.businesslayer.Core.Interface.IMemberAddressRepository
 import com.bulbulustur.android.businesslayer.Core.Model.CheckoutContractRequestModel
+import com.bulbulustur.android.businesslayer.Core.Model.BasketSummaryModel
 import com.bulbulustur.android.businesslayer.Core.Model.RequestModels.GatewayPaymentCard
 import com.bulbulustur.android.businesslayer.Core.Model.RequestModels.GatewayPaymentCreateRequest
 import com.bulbulustur.android.businesslayer.Core.Model.RequestModels.GatewayPaymentLineItem
@@ -614,7 +615,14 @@ class CheckoutController(
             val immutableBasketSnapshot =
                 CheckoutBasketSnapshotDTO(
                     Items = basketItems,
-                    Totals = basketSummary
+                    Totals = BasketSummaryModel(
+                        SubTotal = basketSummary.SubTotal,
+                        ShippingTotal = basketSummary.ShippingCost,
+                        Vat = basketSummary.VatTotal,
+                        GrandTotal = basketSummary.GrossTotal,
+                        NetTotal = basketSummary.NetTotal,
+                        StoreShippingBreakdown = basketSummary.StoreShippingBreakdown
+                    )
                 )
 
             val basketSnapshotJson =

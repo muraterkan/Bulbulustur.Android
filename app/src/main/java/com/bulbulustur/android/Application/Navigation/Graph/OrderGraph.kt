@@ -879,6 +879,10 @@ fun NavGraphBuilder.orderGraph(
             },
 
             onCompleteOrderClick = {
+                checkoutController.CompleteCheckout(
+                    memberId = memberId,
+                    languageId = languageId
+                )
             }
         )
     }

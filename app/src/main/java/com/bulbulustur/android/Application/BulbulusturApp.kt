@@ -77,6 +77,7 @@ import com.bulbulustur.android.businesslayer.Core.Repository.BuyerRequestReposit
 import com.bulbulustur.android.businesslayer.Core.Repository.CampaignRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.CompanyRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.ContractRepository
+import com.bulbulustur.android.businesslayer.Core.Repository.CheckoutSnapshotRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.DealsOfTheDayRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.LocalizationRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.MemberAddressRepository
@@ -126,6 +127,7 @@ import com.bulbulustur.android.businesslayer.Core.Repository.WholesaleHomepageFe
 import com.bulbulustur.android.businesslayer.Core.Repository.WholesaleHomepageSpecialContentRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.WholesaleMessageRepository
 import com.bulbulustur.android.businesslayer.Core.Repository.WholesaleProductRepository
+import com.bulbulustur.android.businesslayer.Core.Service.PaymentService
 import com.bulbulustur.android.businesslayer.Core.Security.SecureTokenStore
 import com.bulbulustur.android.businesslayer.Core.Util.Execute.ExecuteService
 
@@ -435,12 +437,24 @@ private fun BulbulusturApplicationContent(
     }
 
     val contractRepository = remember { ContractRepository() }
+    val checkoutSnapshotRepository = remember { CheckoutSnapshotRepository() }
+    val paymentService = remember { PaymentService() }
 
-    val checkoutController = remember(executeService, memberAddressRepository, contractRepository) {
+    val checkoutController = remember(
+        executeService,
+        memberAddressRepository,
+        contractRepository,
+        basketRepository,
+        checkoutSnapshotRepository,
+        paymentService
+    ) {
         com.bulbulustur.android.Application.Areas.b2c.Controllers.CheckoutController(
             executeService = executeService,
             memberAddressRepository = memberAddressRepository,
-            contractRepository = contractRepository
+            contractRepository = contractRepository,
+            basketRepository = basketRepository,
+            checkoutSnapshotRepository = checkoutSnapshotRepository,
+            paymentService = paymentService
         )
     }
 

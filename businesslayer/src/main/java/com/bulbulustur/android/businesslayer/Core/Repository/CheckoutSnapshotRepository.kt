@@ -26,7 +26,7 @@ class CheckoutSnapshotRepository(
     ): Result<CheckoutSnapshotDTO> {
         return apiClient.GetAsync(
             baseUrl = ApiRoutes.PAYMENT_BASE_URL,
-            method = "CheckoutSnapshot/GetByCheckoutKey/"
+            method = "CheckoutSnapshot/GetByCheckoutKey/$checkoutKey"
         )
     }
 }

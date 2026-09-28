@@ -34,6 +34,7 @@ import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.Checko
 import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.CheckoutSummaryTotal
 import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.OrderSuccessScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.payment.CheckoutPaymentCardUiModel
+import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.payment.CheckoutThreeDSecureScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.payment.CheckoutInstallmentUiModel
 import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.address.CheckoutAddressCreateScreen
 import com.bulbulustur.android.Application.Areas.b2c.Views.order.checkout.address.CheckoutAddressEditScreen
@@ -881,11 +882,68 @@ fun NavGraphBuilder.orderGraph(
             onCompleteOrderClick = {
                 checkoutController.CompleteCheckout(
                     memberId = memberId,
-                    languageId = languageId
+                    languageId = languageId,
+                    onThreeDsRequired = {
+                        navigator.navController.navigate(
+                            OrderRoutes.CheckoutThreeDSecure
+                        )
+                    },
+                    onSuccess = { orderId, orderKey ->
+                        navigator.navController.navigate(
+                            OrderRoutes.success(
+                                orderId = orderId,
+                                orderKey = orderKey
+                            )
+                        )
+                    }
                 )
             }
         )
     }
+
+    composable(OrderRoutes.CheckoutThreeDSecure) {
+        val checkoutState =
+            checkoutController.State
+                .collectAsState()
+                .value
+
+        CheckoutThreeDSecureScreen(
+            htmlContent =
+                checkoutState.PaymentHtmlContent,
+
+            redirectUrl =
+                checkoutState.PaymentRedirectUrl,
+
+            onSuccess = {
+                checkoutController.CompletePaymentReturn(
+                    checkoutKey =
+                        checkoutState.CheckoutKey,
+
+                    onSuccess = { orderId, orderKey ->
+                        navigator.navController.navigate(
+                            OrderRoutes.success(
+                                orderId = orderId,
+                                orderKey = orderKey
+                            )
+                        ) {
+                            popUpTo(OrderRoutes.Checkout) {
+                                inclusive = true
+                            }
+                        }
+                    }
+                )
+            },
+
+            onFailure = {
+                navigator.back()
+            },
+
+            onBackClick = {
+                navigator.back()
+            }
+        )
+    }
+
 
     composable(
         route = OrderRoutes.Success,

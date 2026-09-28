@@ -461,7 +461,9 @@ class CheckoutController(
 
     fun CompleteCheckout(
         memberId: Int,
-        languageId: Int
+        languageId: Int,
+        onThreeDsRequired: () -> Unit = {},
+        onSuccess: (Int, String) -> Unit = { _, _ -> }
     ) {
         val currentState = _state.value
         val card = currentState.PaymentCard
@@ -906,7 +908,141 @@ class CheckoutController(
                         payment.Message
                 )
             }
+
+            if (
+                !payment.HtmlContent.isNullOrBlank() ||
+                !payment.RedirectUrl.isNullOrBlank()
+            ) {
+                onThreeDsRequired()
+                return@launch
+            }
+
+            if (payment.Status == 100) {
+                ResolveCompletedOrder(
+                    checkoutKey = checkoutKey,
+                    onSuccess = onSuccess
+                )
+            }
         }
+    }
+
+
+    fun CompletePaymentReturn(
+        checkoutKey: String,
+        onSuccess: (Int, String) -> Unit
+    ) {
+        if (checkoutKey.isBlank()) return
+
+        viewModelScope.launch {
+            ResolveCompletedOrder(
+                checkoutKey = checkoutKey,
+                onSuccess = onSuccess
+            )
+        }
+    }
+
+    private suspend fun ResolveCompletedOrder(
+        checkoutKey: String,
+        onSuccess: (Int, String) -> Unit
+    ) {
+        val paymentStatusResult =
+            paymentService.GetGatewayPaymentStatusAsync(
+                checkoutKey
+            )
+
+        val paymentStatus =
+            paymentStatusResult.Data
+
+        if (
+            !paymentStatusResult.Success ||
+            paymentStatus == null
+        ) {
+            _state.update {
+                it.copy(
+                    IsPaymentLoading = false,
+                    PaymentErrorMessage =
+                        paymentStatusResult.Message.ifBlank {
+                            "Ödeme durumu alınamadı."
+                        }
+                )
+            }
+
+            return
+        }
+
+        if (paymentStatus.Status != 100) {
+            _state.update {
+                it.copy(
+                    IsPaymentLoading = false,
+                    PaymentStatus = paymentStatus.Status,
+                    PaymentErrorMessage =
+                        "Ödeme henüz tamamlanmadı. Durum: ${paymentStatus.Status}"
+                )
+            }
+
+            return
+        }
+
+        val snapshotResult =
+            checkoutSnapshotRepository.GetByCheckoutKey(
+                checkoutKey
+            )
+
+        val snapshot =
+            snapshotResult.Data
+
+        if (
+            !snapshotResult.Success ||
+            snapshot == null
+        ) {
+            _state.update {
+                it.copy(
+                    IsPaymentLoading = false,
+                    PaymentStatus = paymentStatus.Status,
+                    PaymentErrorMessage =
+                        snapshotResult.Message.ifBlank {
+                            "Checkout kaydı alınamadı."
+                        }
+                )
+            }
+
+            return
+        }
+
+        val orderId =
+            snapshot.OrderId ?: 0
+
+        val orderKey =
+            snapshot.OrderKey
+                ?.takeIf { it.isNotBlank() }
+                ?: checkoutKey
+
+        if (orderId <= 0) {
+            _state.update {
+                it.copy(
+                    IsPaymentLoading = false,
+                    PaymentStatus = paymentStatus.Status,
+                    PaymentErrorMessage =
+                        "Ödeme başarılı ancak sipariş henüz oluşturulamadı."
+                )
+            }
+
+            return
+        }
+
+        _state.update {
+            it.copy(
+                IsPaymentLoading = false,
+                PaymentStatus = paymentStatus.Status,
+                PaymentErrorCode = null,
+                PaymentErrorMessage = null
+            )
+        }
+
+        onSuccess(
+            orderId,
+            orderKey
+        )
     }
 
 }

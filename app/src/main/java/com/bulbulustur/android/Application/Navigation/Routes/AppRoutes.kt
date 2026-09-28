@@ -260,6 +260,7 @@ object OrderRoutes {
     const val Checkout = "order/checkout"
 
     const val CheckoutSummary = "order/checkout/summary"
+    const val CheckoutThreeDSecure = "order/checkout/3ds"
     const val ArgCheckoutAddressType = "addressType"
     const val ArgCheckoutAddressKey = "addressKey"
 

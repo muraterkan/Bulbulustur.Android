@@ -1,5 +1,6 @@
 package com.bulbulustur.android.businesslayer.Core.Repository
 
+import com.bulbulustur.android.businesslayer.Core.DTO.CheckoutSnapshotDTO
 import com.bulbulustur.android.businesslayer.Core.Interface.ICheckoutSnapshotRepository
 import com.bulbulustur.android.businesslayer.Core.Model.InsertModels.CheckoutSnapshotInsertModel
 import com.bulbulustur.android.businesslayer.Core.Network.ApiClient
@@ -17,6 +18,15 @@ class CheckoutSnapshotRepository(
             baseUrl = ApiRoutes.PAYMENT_BASE_URL,
             method = "CheckoutSnapshot/Insert",
             data = checkoutSnapshot
+        )
+    }
+
+    override suspend fun GetByCheckoutKey(
+        checkoutKey: String
+    ): Result<CheckoutSnapshotDTO> {
+        return apiClient.GetAsync(
+            baseUrl = ApiRoutes.PAYMENT_BASE_URL,
+            method = "CheckoutSnapshot/GetByCheckoutKey/"
         )
     }
 }
